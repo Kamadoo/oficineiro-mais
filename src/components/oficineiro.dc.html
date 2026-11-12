@@ -170,10 +170,10 @@
     <div class="pagina espaco-navegacao-inferior p-28 d-flex eixo-column gap-20 max-w-1280 w-100pc">
 
 <sc-if value="{{ semInternet }}" hint-placeholder-val="{{ false }}">
-  <div class="d-flex gap-12 alinha-flex-start fundo-fdf6e7 borda-1-solid-e3b45c raio-12 p-12-16 cor-5e4a26">
-    <svg class="icone flex-none cor-9a6212 mt-1" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M2 2l20 20"></path><path d="M8.5 16.4a5 5 0 0 1 7 0"></path><path d="M5 12.6a10 10 0 0 1 4.6-2.4"></path><path d="M19 12.6a10 10 0 0 0-2.3-1.6"></path><path d="M12 20h.01"></path></svg>
+  <div class="d-flex gap-12 alinha-flex-start fundo-ambar-55 borda-1-solid-e3b45c raio-12 p-12-16 cor-ambar-740">
+    <svg class="icone flex-none cor-ambar-660 mt-1" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M2 2l20 20"></path><path d="M8.5 16.4a5 5 0 0 1 7 0"></path><path d="M5 12.6a10 10 0 0 1 4.6-2.4"></path><path d="M19 12.6a10 10 0 0 0-2.3-1.6"></path><path d="M12 20h.01"></path></svg>
     <div class="d-flex eixo-column gap-6 flex-1 min-w-0">
-      <b class="cor-7a4e0b fs-14">Sem internet</b>
+      <b class="cor-ambar-745 fs-14">Sem internet</b>
       <span class="fs-13 lh-1p5 texto-quebra-pretty">A presença e os registros de atividade precisam de conexão. A grade e as turmas mostradas são as da última sincronização ({{ sincronizadoTexto }}).</span>
     </div>
   </div>
@@ -188,185 +188,185 @@
   </main>
 </div>
 
-<nav class="navegacao-inferior pos-fixed esquerda-0 direita-0 base-0 z-40 fundo-ffffff borda-t-dde6e8 justifica-space-around gap-2" style="padding:6px 6px calc(6px + env(safe-area-inset-bottom))" aria-label="Menu principal">
+<nav class="navegacao-inferior pos-fixed esquerda-0 direita-0 base-0 z-40 fundo-branco borda-t-cinza-110 justifica-space-around gap-2" style="padding:6px 6px calc(6px + env(safe-area-inset-bottom))" aria-label="Menu principal">
   <button onClick="{{ navegacao.presenca.abrir }}" class="flex-1 borda-0 fundo-transparent d-flex eixo-column alinha-center gap-2 fs-11 fw-600 p-6-0 min-h-52" style="color:{{ navegacao.presenca.cor }}"><svg class="icone" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Presença</button>
   <button onClick="{{ navegacao.grade.abrir }}" class="flex-1 borda-0 fundo-transparent d-flex eixo-column alinha-center gap-2 fs-11 fw-600 p-6-0 min-h-52" style="color:{{ navegacao.grade.cor }}"><svg class="icone" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M3 9h18M8 2v4M16 2v4"></path></svg>Grade</button>
   <button onClick="{{ navegacao.registro.abrir }}" class="flex-1 borda-0 fundo-transparent d-flex eixo-column alinha-center gap-2 fs-11 fw-600 p-6-0 min-h-52" style="color:{{ navegacao.registro.cor }}"><svg class="icone" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13 7l4 4"></path></svg>Registro</button>
-  <button onClick="{{ navegacao.horas.abrir }}" class="flex-1 borda-0 fundo-transparent d-flex eixo-column alinha-center gap-2 fs-11 fw-600 p-6-0 min-h-52 pos-relative" style="color:{{ navegacao.horas.cor }}"><svg class="icone" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Relatório<span class="pos-absolute topo-2 fs-10 fw-700 cor-13252c raio-999 p-0-5" style="left:calc(50% + 6px);background:{{ navegacao.horas.seloFundo }}">{{ navegacao.horas.selo }}</span></button>
+  <button onClick="{{ navegacao.horas.abrir }}" class="flex-1 borda-0 fundo-transparent d-flex eixo-column alinha-center gap-2 fs-11 fw-600 p-6-0 min-h-52 pos-relative" style="color:{{ navegacao.horas.cor }}"><svg class="icone" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Relatório<span class="pos-absolute topo-2 fs-10 fw-700 cor-ciano-880 raio-999 p-0-5" style="left:calc(50% + 6px);background:{{ navegacao.horas.seloFundo }}">{{ navegacao.horas.selo }}</span></button>
 </nav>
 
 <sc-if value="{{ temGaveta }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharGaveta }}" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
-  <aside class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(520px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><h3 class="m-0 fs-17 flex-1">{{ gavetaTitulo }}</h3><button onClick="{{ fecharGaveta }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 largura-fundo">×</button></div>
+  <div onClick="{{ fecharGaveta }}" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(520px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><h3 class="m-0 fs-17 flex-1">{{ gavetaTitulo }}</h3><button onClick="{{ fecharGaveta }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 largura-fundo">×</button></div>
     <sc-if value="{{ gavetaDaAtividade }}" hint-placeholder-val="{{ true }}">
       <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
-        <div class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Escola</span><div class="min-h-40 raio-8 fundo-eef3f4 d-flex alinha-center p-0-12 fs-14 espaco-nowrap rolagem-hidden reticencias-ellipsis">{{ escolaNome }}</div></div>
+        <div class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Escola</span><div class="min-h-40 raio-8 fundo-cinza-55 d-flex alinha-center p-0-12 fs-14 espaco-nowrap rolagem-hidden reticencias-ellipsis">{{ escolaNome }}</div></div>
         <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
-          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Dia da semana *</span><select value="{{ edicao.dia }}" onChange="{{ mudarDia }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ diasDaSemana }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Horário *</span><select value="{{ edicao.horario }}" onChange="{{ mudarHorario }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Selecione o horário</option><sc-for list="{{ horarios }}" as="opcao" hint-placeholder-count="12"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Dia da semana *</span><select value="{{ edicao.dia }}" onChange="{{ mudarDia }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ diasDaSemana }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Horário *</span><select value="{{ edicao.horario }}" onChange="{{ mudarHorario }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><option value="">Selecione o horário</option><sc-for list="{{ horarios }}" as="opcao" hint-placeholder-count="12"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
         </div>
-        <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Hora de início *</span><input type="time" min="07:00" max="16:10" value="{{ edicao.hora }}" onChange="{{ mudarHora }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input><span class="fs-12 cor-5b6b70">Cada horário tem 50 minutos. As atividades vão das 07:00 às 17:00.</span></label>
-        <div class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Nº de horários · término {{ termino }}</span><div class="d-flex gap-6" role="group" aria-label="Número de horários"><sc-for list="{{ tempos }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" disabled="{{ opcao.desligada }}" class="flex-1 h-40 raio-8 fs-14 fw-600 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }};opacity:{{ opcao.opacidade }}">{{ opcao.rotulo }}</button></sc-for></div></div>
-        <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-5b6b70 fw-600">Tipo de atividade *</span><div class="d-flex eixo-column gap-6" role="group" aria-label="Tipo de atividade"><sc-for list="{{ tipos }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="texto-left raio-8 p-10-12 fs-14 fw-500 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div></div>
+        <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Hora de início *</span><input type="time" min="07:00" max="16:10" value="{{ edicao.hora }}" onChange="{{ mudarHora }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco fonte-inherit min-w-0 largura-fundo"></input><span class="fs-12 cor-cinza-600">Cada horário tem 50 minutos. As atividades vão das 07:00 às 17:00.</span></label>
+        <div class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Nº de horários · término {{ termino }}</span><div class="d-flex gap-6" role="group" aria-label="Número de horários"><sc-for list="{{ tempos }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" disabled="{{ opcao.desligada }}" class="flex-1 h-40 raio-8 fs-14 fw-600 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }};opacity:{{ opcao.opacidade }}">{{ opcao.rotulo }}</button></sc-for></div></div>
+        <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-cinza-600 fw-600">Tipo de atividade *</span><div class="d-flex eixo-column gap-6" role="group" aria-label="Tipo de atividade"><sc-for list="{{ tipos }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="texto-left raio-8 p-10-12 fs-14 fw-500 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div></div>
         <sc-if value="{{ comTurma }}" hint-placeholder-val="{{ true }}"><div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
-          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Ano *</span><select value="{{ edicao.ano }}" onChange="{{ mudarAno }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Selecione o ano</option><sc-for list="{{ anos }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Turma *</span><select value="{{ edicao.turma }}" onChange="{{ mudarTurma }}" disabled="{{ semAno }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">{{ turmaVazia }}</option><sc-for list="{{ turmasDoAno }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">Turma {{ opcao }}</option></sc-for></select></label>
+          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Ano *</span><select value="{{ edicao.ano }}" onChange="{{ mudarAno }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><option value="">Selecione o ano</option><sc-for list="{{ anos }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Turma *</span><select value="{{ edicao.turma }}" onChange="{{ mudarTurma }}" disabled="{{ semAno }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><option value="">{{ turmaVazia }}</option><sc-for list="{{ turmasDoAno }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">Turma {{ opcao }}</option></sc-for></select></label>
         </div></sc-if>
-        <sc-if value="{{ ehRegular }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Componente curricular *</span><select value="{{ edicao.componente }}" onChange="{{ mudarComponente }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Selecione o componente curricular</option><sc-for list="{{ componentes }}" as="opcao" hint-placeholder-count="9"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
-        <sc-if value="{{ ehIntegral }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Oficina *</span><select value="{{ edicao.oficina }}" onChange="{{ mudarOficina }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Selecione</option><sc-for list="{{ oficinas }}" as="opcao" hint-placeholder-count="10"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
-        <sc-if value="{{ temOutraOficina }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Qual oficina? *</span><input value="{{ edicao.outraOficina }}" onChange="{{ mudarOutraOficina }}" maxlength="60" placeholder="Nome da oficina" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input></label></sc-if>
-        <span class="fs-12 cor-5b6b70 lh-1p45 mt-n8">Vale para o ano todo. Em semanas específicas, o componente curricular/oficina, o tipo de atividade e a solução podem ser trocados em ‘Por semana’.</span>
+        <sc-if value="{{ ehRegular }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Componente curricular *</span><select value="{{ edicao.componente }}" onChange="{{ mudarComponente }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><option value="">Selecione o componente curricular</option><sc-for list="{{ componentes }}" as="opcao" hint-placeholder-count="9"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+        <sc-if value="{{ ehIntegral }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Oficina *</span><select value="{{ edicao.oficina }}" onChange="{{ mudarOficina }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><option value="">Selecione</option><sc-for list="{{ oficinas }}" as="opcao" hint-placeholder-count="10"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+        <sc-if value="{{ temOutraOficina }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Qual oficina? *</span><input value="{{ edicao.outraOficina }}" onChange="{{ mudarOutraOficina }}" maxlength="60" placeholder="Nome da oficina" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco fonte-inherit min-w-0 largura-fundo"></input></label></sc-if>
+        <span class="fs-12 cor-cinza-600 lh-1p45 mt-n8">Vale para o ano todo. Em semanas específicas, o componente curricular/oficina, o tipo de atividade e a solução podem ser trocados em ‘Por semana’.</span>
         <sc-if value="{{ ehRegular }}" hint-placeholder-val="{{ true }}">
-          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Professor(a) regente *</span><input value="{{ edicao.professor }}" onChange="{{ mudarProfessor }}" maxlength="120" placeholder="Nome do professor da turma" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input></label>
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Professor(a) regente *</span><input value="{{ edicao.professor }}" onChange="{{ mudarProfessor }}" maxlength="120" placeholder="Nome do professor da turma" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco fonte-inherit min-w-0 largura-fundo"></input></label>
         </sc-if>
-        <sc-if value="{{ escolheSolucao }}" hint-placeholder-val="{{ true }}"><div class="d-flex eixo-column gap-8"><span class="fs-12 cor-5b6b70 fw-600">Solução prevista *</span>
+        <sc-if value="{{ escolheSolucao }}" hint-placeholder-val="{{ true }}"><div class="d-flex eixo-column gap-8"><span class="fs-12 cor-cinza-600 fw-600">Solução prevista *</span>
           <sc-if value="{{ escolheSolucao }}" hint-placeholder-val="{{ true }}"><div class="d-flex gap-8 quebra-wrap" role="group" aria-label="Solução prevista"><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="raio-8 p-8-12 fs-13 fw-500 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div></sc-if>
-          <sc-if value="{{ temOutraSolucao }}" hint-placeholder-val="{{ false }}"><input value="{{ edicao.outraSolucao }}" onChange="{{ mudarOutraSolucao }}" maxlength="80" aria-label="Qual solução" placeholder="Qual solução?" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input></sc-if>
+          <sc-if value="{{ temOutraSolucao }}" hint-placeholder-val="{{ false }}"><input value="{{ edicao.outraSolucao }}" onChange="{{ mudarOutraSolucao }}" maxlength="80" aria-label="Qual solução" placeholder="Qual solução?" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco fonte-inherit min-w-0 largura-fundo"></input></sc-if>
         </div></sc-if>
         <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
-          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Espaço</span><select value="{{ edicao.espaco }}" onChange="{{ mudarEspaco }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="Laboratório">Laboratório</option><option value="Sala da turma">Sala da turma</option><option value="Biblioteca">Biblioteca</option><option value="Outro">Outro</option></select></label>
-          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Observações</span><input value="{{ edicao.observacao }}" onChange="{{ mudarObservacaoDaAtividade }}" maxlength="300" placeholder="Opcional" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input></label>
+          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Espaço</span><select value="{{ edicao.espaco }}" onChange="{{ mudarEspaco }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><option value="Laboratório">Laboratório</option><option value="Sala da turma">Sala da turma</option><option value="Biblioteca">Biblioteca</option><option value="Outro">Outro</option></select></label>
+          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Observações</span><input value="{{ edicao.observacao }}" onChange="{{ mudarObservacaoDaAtividade }}" maxlength="300" placeholder="Opcional" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco fonte-inherit min-w-0 largura-fundo"></input></label>
         </div>
-        <sc-if value="{{ edicaoComErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-b42318 fundo-fbedeb raio-8 p-10-12 lh-1p45">{{ edicao.erro }}</span></sc-if>
+        <sc-if value="{{ edicaoComErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-vermelho-600 fundo-vermelho-50 raio-8 p-10-12 lh-1p45">{{ edicao.erro }}</span></sc-if>
       </div>
-      <div class="borda-t-dde6e8 d-flex quebra-wrap gap-8 alinha-center" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
-        <button onClick="{{ salvarAtividade }}" disabled="{{ edicao.salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 botao-texto {{ salvarClasse }}" style="background:{{ salvarFundo }}">{{ salvarTexto }}</button>
+      <div class="borda-t-cinza-110 d-flex quebra-wrap gap-8 alinha-center" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+        <button onClick="{{ salvarAtividade }}" disabled="{{ edicao.salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 botao-texto {{ salvarClasse }}" style="background:{{ salvarFundo }}">{{ salvarTexto }}</button>
         <span class="flex-1"></span>
         <sc-if value="{{ editando }}" hint-placeholder-val="{{ false }}"><button onClick="{{ excluirAtividade }}" disabled="{{ edicao.salvando }}" class="h-40 borda-1p5-solid-b42318 raio-8 p-0-14 fs-14 fw-600 botao-opcao botao-texto {{ excluirClasse }}" style="background:{{ excluirFundo }};color:{{ excluirCor }}">{{ excluirTexto }}</button></sc-if>
       </div>
     </sc-if>
     <sc-if value="{{ gavetaDeNotificacoes }}" hint-placeholder-val="{{ false }}">
       <div class="p-20 d-flex eixo-column gap-12 rolagem-auto flex-1">
-        <sc-if value="{{ temVariasNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex justifica-flex-end"><button onClick="{{ lerTodasNotif }}" class="h-34 borda-0 fundo-transparent cor-0b7ea3 fs-13 fw-600 p-0-4 botao-texto">Marcar todas como lidas</button></div></sc-if>
-        <sc-if value="{{ semNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column alinha-center gap-6 p-32-12 texto-center"><b class="fs-15">Tudo em dia</b><span class="fs-13 cor-5b6b70">Nenhuma notificação nova.</span></div></sc-if>
+        <sc-if value="{{ temVariasNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex justifica-flex-end"><button onClick="{{ lerTodasNotif }}" class="h-34 borda-0 fundo-transparent cor-ciano-660 fs-13 fw-600 p-0-4 botao-texto">Marcar todas como lidas</button></div></sc-if>
+        <sc-if value="{{ semNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column alinha-center gap-6 p-32-12 texto-center"><b class="fs-15">Tudo em dia</b><span class="fs-13 cor-cinza-600">Nenhuma notificação nova.</span></div></sc-if>
         <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="3">
-          <div class="raio-10 p-12-14 d-flex eixo-column gap-6 fundo-ffffff largura-fundo" style="border:1px solid var(--borda-dde6e8);border-left:4px solid {{ n.cor }}">
+          <div class="raio-10 p-12-14 d-flex eixo-column gap-6 fundo-branco largura-fundo" style="border:1px solid var(--borda-cinza-110);border-left:4px solid {{ n.cor }}">
             <b class="fs-14">{{ n.tit }}</b>
-            <span class="fs-13 cor-34464d lh-1p5">{{ n.txt }}</span>
-            <div class="d-flex quebra-wrap gap-8 mt-2"><sc-if value="{{ n.temAcao }}" hint-placeholder-val="{{ true }}"><button onClick="{{ n.go }}" class="h-36 borda-1-solid-0b7ea3 fundo-ffffff cor-08617e raio-8 p-0-12 fs-13 fw-600">{{ n.acao }}</button></sc-if><button onClick="{{ n.marcarLida }}" aria-label="{{ n.ariaLida }}" class="h-36 borda-cfdadd fundo-ffffff cor-34464d raio-8 p-0-12 fs-13 fw-600 botao-secundario">Marcar como lida</button></div>
+            <span class="fs-13 cor-cinza-750 lh-1p5">{{ n.txt }}</span>
+            <div class="d-flex quebra-wrap gap-8 mt-2"><sc-if value="{{ n.temAcao }}" hint-placeholder-val="{{ true }}"><button onClick="{{ n.go }}" class="h-36 borda-1-solid-0b7ea3 fundo-branco cor-ciano-740 raio-8 p-0-12 fs-13 fw-600">{{ n.acao }}</button></sc-if><button onClick="{{ n.marcarLida }}" aria-label="{{ n.ariaLida }}" class="h-36 borda-cinza-160 fundo-branco cor-cinza-750 raio-8 p-0-12 fs-13 fw-600 botao-secundario">Marcar como lida</button></div>
           </div>
         </sc-for>
       </div>
     </sc-if>
     <sc-if value="{{ gavetaDaSemana }}" hint-placeholder-val="{{ false }}">
       <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
-        <div class="d-flex eixo-column gap-4 fundo-f7fafb raio-10 p-12-14">
+        <div class="d-flex eixo-column gap-4 fundo-cinza-20 raio-10 p-12-14">
           <b class="fs-15">{{ resumoDaSemana.titulo }}</b>
-          <span class="fs-13 cor-34464d">{{ resumoDaSemana.quando }}</span>
-          <span class="fs-13 cor-5b6b70">Na grade padrão: {{ resumoDaSemana.padrao }}</span>
+          <span class="fs-13 cor-cinza-750">{{ resumoDaSemana.quando }}</span>
+          <span class="fs-13 cor-cinza-600">Na grade padrão: {{ resumoDaSemana.padrao }}</span>
         </div>
-        <span class="fs-13 cor-5b6b70 lh-1p5">A mudança vale só para a semana de {{ resumoDaSemana.semana }}. As outras semanas continuam como estão.</span>
-        <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-5b6b70 fw-600">Tipo de atividade nesta semana *</span><div class="d-flex eixo-column gap-6" role="group" aria-label="Tipo de atividade nesta semana"><sc-for list="{{ tiposNaSemana }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="texto-left raio-8 p-10-12 fs-14 fw-600 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div></div>
-        <sc-if value="{{ semanaRegular }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Componente curricular nesta semana *</span><select value="{{ edicaoDaSemana.componente }}" onChange="{{ mudarComponenteNaSemana }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Selecione o componente curricular</option><sc-for list="{{ componentes }}" as="opcao" hint-placeholder-count="9"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
-        <sc-if value="{{ semanaIntegral }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Oficina nesta semana *</span><select value="{{ edicaoDaSemana.oficina }}" onChange="{{ mudarOficinaNaSemana }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Selecione</option><sc-for list="{{ oficinas }}" as="opcao" hint-placeholder-count="10"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
-        <sc-if value="{{ temOutraOficinaNaSemana }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Qual oficina? *</span><input value="{{ edicaoDaSemana.outraOficina }}" onChange="{{ mudarOutraOficinaNaSemana }}" maxlength="60" placeholder="Nome da oficina" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input></label></sc-if>
-        <sc-if value="{{ escolheSolucaoNaSemana }}" hint-placeholder-val="{{ true }}"><div class="d-flex eixo-column gap-8"><span class="fs-12 cor-5b6b70 fw-600">Solução prevista nesta semana *</span>
+        <span class="fs-13 cor-cinza-600 lh-1p5">A mudança vale só para a semana de {{ resumoDaSemana.semana }}. As outras semanas continuam como estão.</span>
+        <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-cinza-600 fw-600">Tipo de atividade nesta semana *</span><div class="d-flex eixo-column gap-6" role="group" aria-label="Tipo de atividade nesta semana"><sc-for list="{{ tiposNaSemana }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="texto-left raio-8 p-10-12 fs-14 fw-600 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div></div>
+        <sc-if value="{{ semanaRegular }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Componente curricular nesta semana *</span><select value="{{ edicaoDaSemana.componente }}" onChange="{{ mudarComponenteNaSemana }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><option value="">Selecione o componente curricular</option><sc-for list="{{ componentes }}" as="opcao" hint-placeholder-count="9"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+        <sc-if value="{{ semanaIntegral }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Oficina nesta semana *</span><select value="{{ edicaoDaSemana.oficina }}" onChange="{{ mudarOficinaNaSemana }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><option value="">Selecione</option><sc-for list="{{ oficinas }}" as="opcao" hint-placeholder-count="10"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+        <sc-if value="{{ temOutraOficinaNaSemana }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Qual oficina? *</span><input value="{{ edicaoDaSemana.outraOficina }}" onChange="{{ mudarOutraOficinaNaSemana }}" maxlength="60" placeholder="Nome da oficina" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco fonte-inherit min-w-0 largura-fundo"></input></label></sc-if>
+        <sc-if value="{{ escolheSolucaoNaSemana }}" hint-placeholder-val="{{ true }}"><div class="d-flex eixo-column gap-8"><span class="fs-12 cor-cinza-600 fw-600">Solução prevista nesta semana *</span>
           <sc-if value="{{ escolheSolucaoNaSemana }}" hint-placeholder-val="{{ true }}"><div class="d-flex gap-8 quebra-wrap" role="group" aria-label="Solução prevista nesta semana"><sc-for list="{{ solucoesNaSemana }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="raio-8 p-8-12 fs-13 fw-600 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div></sc-if>
-          <sc-if value="{{ temOutraSolucaoNaSemana }}" hint-placeholder-val="{{ false }}"><input value="{{ edicaoDaSemana.outraSolucao }}" onChange="{{ mudarOutraSolucaoNaSemana }}" maxlength="80" aria-label="Qual solução" placeholder="Qual solução?" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input></sc-if>
+          <sc-if value="{{ temOutraSolucaoNaSemana }}" hint-placeholder-val="{{ false }}"><input value="{{ edicaoDaSemana.outraSolucao }}" onChange="{{ mudarOutraSolucaoNaSemana }}" maxlength="80" aria-label="Qual solução" placeholder="Qual solução?" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco fonte-inherit min-w-0 largura-fundo"></input></sc-if>
         </div></sc-if>
-        <sc-if value="{{ semanaComErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-b42318 fundo-fbedeb raio-8 p-10-12 lh-1p45">{{ edicaoDaSemana.erro }}</span></sc-if>
+        <sc-if value="{{ semanaComErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-vermelho-600 fundo-vermelho-50 raio-8 p-10-12 lh-1p45">{{ edicaoDaSemana.erro }}</span></sc-if>
       </div>
-      <div class="borda-t-dde6e8 d-flex quebra-wrap gap-8 alinha-center" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
-        <button onClick="{{ salvarNaSemana }}" disabled="{{ edicaoDaSemana.salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 botao-texto {{ salvarNaSemanaClasse }}" style="background:{{ salvarNaSemanaFundo }}">{{ salvarNaSemanaTexto }}</button>
+      <div class="borda-t-cinza-110 d-flex quebra-wrap gap-8 alinha-center" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+        <button onClick="{{ salvarNaSemana }}" disabled="{{ edicaoDaSemana.salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 botao-texto {{ salvarNaSemanaClasse }}" style="background:{{ salvarNaSemanaFundo }}">{{ salvarNaSemanaTexto }}</button>
         <span class="flex-1"></span>
-        <sc-if value="{{ semanaAlterada }}" hint-placeholder-val="{{ false }}"><button onClick="{{ usarGradePadrao }}" disabled="{{ edicaoDaSemana.salvando }}" class="h-40 borda-cfdadd fundo-ffffff cor-34464d raio-8 p-0-14 fs-14 fw-600 botao-secundario">Usar a grade padrão</button></sc-if>
+        <sc-if value="{{ semanaAlterada }}" hint-placeholder-val="{{ false }}"><button onClick="{{ usarGradePadrao }}" disabled="{{ edicaoDaSemana.salvando }}" class="h-40 borda-cinza-160 fundo-branco cor-cinza-750 raio-8 p-0-14 fs-14 fw-600 botao-secundario">Usar a grade padrão</button></sc-if>
       </div>
     </sc-if>
     <sc-if value="{{ gavetaDaCopia }}" hint-placeholder-val="{{ false }}">
       <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
-        <span class="fs-14 cor-34464d lh-1p5">{{ copiaTexto }}</span>
+        <span class="fs-14 cor-cinza-750 lh-1p5">{{ copiaTexto }}</span>
         <div class="d-flex eixo-column gap-6" role="group" aria-label="Para quais semanas"><sc-for list="{{ modosDaCopia }}" as="opcao" hint-placeholder-count="4"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="texto-left raio-8 p-10-12 fs-14 fw-600 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div>
         <sc-if value="{{ escolheSemanas }}" hint-placeholder-val="{{ false }}">
           <div class="d-flex eixo-column gap-10">
             <sc-for list="{{ ciclosDaCopia }}" as="ciclo" hint-placeholder-count="3">
-              <div class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">{{ ciclo.nome }}</span>
+              <div class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">{{ ciclo.nome }}</span>
                 <div class="d-flex quebra-wrap gap-6"><sc-for list="{{ ciclo.semanas }}" as="semana" hint-placeholder-count="4"><button onClick="{{ semana.escolher }}" aria-pressed="{{ semana.marcada }}" aria-label="{{ semana.aria }}" class="min-h-36 raio-8 p-4-10 fs-13 fw-600 num-tabular-nums botao-opcao segmentado {{ semana.classe }}" style="border:1.5px solid {{ semana.borda }};background:{{ semana.fundo }};color:{{ semana.cor }}">{{ semana.texto }}</button></sc-for></div>
               </div>
             </sc-for>
           </div>
         </sc-if>
-        <span role="status" class="fs-13 cor-5b6b70 lh-1p5">{{ copiaResumo }}</span>
-        <sc-if value="{{ copiaComErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-b42318 fundo-fbedeb raio-8 p-10-12 lh-1p45">{{ copia.erro }}</span></sc-if>
+        <span role="status" class="fs-13 cor-cinza-600 lh-1p5">{{ copiaResumo }}</span>
+        <sc-if value="{{ copiaComErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-vermelho-600 fundo-vermelho-50 raio-8 p-10-12 lh-1p45">{{ copia.erro }}</span></sc-if>
       </div>
-      <div class="borda-t-dde6e8 d-flex gap-8 alinha-center" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
-        <button onClick="{{ copiar }}" disabled="{{ copia.salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 botao-texto {{ copiarClasse }}" style="background:{{ copiarFundo }}">{{ copiarTexto }}</button>
+      <div class="borda-t-cinza-110 d-flex gap-8 alinha-center" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+        <button onClick="{{ copiar }}" disabled="{{ copia.salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 botao-texto {{ copiarClasse }}" style="background:{{ copiarFundo }}">{{ copiarTexto }}</button>
       </div>
     </sc-if>
   </aside>
 </sc-if>
 
 <sc-if value="{{ temResumo }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharResumo }}" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
-  <aside role="dialog" aria-label="Resumo da atividade registrada" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">Resumo do registro</span><h3 class="m-0 fs-17">{{ resumo.titulo }}</h3></div><button onClick="{{ fecharResumo }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 flex-none largura-fundo">×</button></div>
+  <div onClick="{{ fecharResumo }}" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-label="Resumo da atividade registrada" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Resumo do registro</span><h3 class="m-0 fs-17">{{ resumo.titulo }}</h3></div><button onClick="{{ fecharResumo }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 flex-none largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
       <sc-if value="{{ resumo.temRevisao }}" hint-placeholder-val="{{ false }}"><div class="raio-10 p-10-14 fs-13 fw-600 lh-1p5" style="color:{{ resumo.revisaoCor }};background:{{ resumo.revisaoFundo }}">{{ resumo.revisao }}</div></sc-if>
-      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ resumo.itens }}" as="item" hint-placeholder-count="6"><dt class="cor-5b6b70 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
-      <sc-for list="{{ resumo.textos }}" as="texto" hint-placeholder-count="2"><div class="fundo-f7fafb raio-10 p-12-14 d-flex eixo-column gap-4"><span class="fs-12 cor-5b6b70 fw-600">{{ texto.rotulo }}</span><span class="fs-14 lh-1p5 espaco-pre-wrap quebra-palavra-anywhere">{{ texto.valor }}</span></div></sc-for>
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ resumo.itens }}" as="item" hint-placeholder-count="6"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
+      <sc-for list="{{ resumo.textos }}" as="texto" hint-placeholder-count="2"><div class="fundo-cinza-20 raio-10 p-12-14 d-flex eixo-column gap-4"><span class="fs-12 cor-cinza-600 fw-600">{{ texto.rotulo }}</span><span class="fs-14 lh-1p5 espaco-pre-wrap quebra-palavra-anywhere">{{ texto.valor }}</span></div></sc-for>
     </div>
-    <div class="borda-t-dde6e8 d-flex gap-8 justifica-flex-end quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
-      <sc-if value="{{ resumo.podeCorrigir }}" hint-placeholder-val="{{ false }}"><button onClick="{{ resumo.corrigir }}" class="h-40 borda-1p5-solid-0b7ea3 fundo-ffffff cor-08617e raio-8 p-0-16 fs-14 fw-600 mr-auto botao-opcao">Corrigir registro</button></sc-if>
-      <button onClick="{{ fecharResumo }}" class="h-40 borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Fechar</button>
+    <div class="borda-t-cinza-110 d-flex gap-8 justifica-flex-end quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+      <sc-if value="{{ resumo.podeCorrigir }}" hint-placeholder-val="{{ false }}"><button onClick="{{ resumo.corrigir }}" class="h-40 borda-1p5-solid-0b7ea3 fundo-branco cor-ciano-740 raio-8 p-0-16 fs-14 fw-600 mr-auto botao-opcao">Corrigir registro</button></sc-if>
+      <button onClick="{{ fecharResumo }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Fechar</button>
     </div>
   </aside>
 </sc-if>
 
 
 <sc-if value="{{ documentoAberto }}" hint-placeholder-val="{{ false }}">
-  <div id="rel-overlay" class="pos-fixed inset-0 z-90 fundo-2e464e rolagem-auto p-0-0-40">
-    <div id="rel-toolbar" class="pos-sticky topo-0 esquerda-0 z-2 d-flex eixo-column gap-10 p-12-16 fundo-13252c cor-fff">
+  <div id="rel-overlay" class="pos-fixed inset-0 z-90 fundo-ciano-760 rolagem-auto p-0-0-40">
+    <div id="rel-toolbar" class="pos-sticky topo-0 esquerda-0 z-2 d-flex eixo-column gap-10 p-12-16 fundo-ciano-880 cor-branco">
       <div class="d-flex quebra-wrap alinha-center gap-12">
-        <div class="d-flex eixo-column flex-1 min-w-200"><b class="fs-15">Documentos do ciclo · {{ cicloNome }}</b><span class="fs-12 cor-b4c2c6">Prévia de impressão · A4 · {{ documento.situacao }}</span></div>
-        <button onClick="{{ fecharDocumento }}" class="h-38 borda-1-solid-rgba-255-255-255-0p3 fundo-transparent cor-fff raio-8 p-0-14 fs-14 fw-600 botao-texto">Fechar</button>
-        <button onClick="{{ imprimir }}" disabled="{{ documento.bloqueado }}" aria-describedby="rel-bloqueio" class="h-38 borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 botao-texto {{ documento.botaoClasse }}" style="background:{{ documento.botaoFundo }}">Imprimir / salvar PDF</button>
+        <div class="d-flex eixo-column flex-1 min-w-200"><b class="fs-15">Documentos do ciclo · {{ cicloNome }}</b><span class="fs-12 cor-cinza-260">Prévia de impressão · A4 · {{ documento.situacao }}</span></div>
+        <button onClick="{{ fecharDocumento }}" class="h-38 borda-1-solid-branco-a30 fundo-transparent cor-branco raio-8 p-0-14 fs-14 fw-600 botao-texto">Fechar</button>
+        <button onClick="{{ imprimir }}" disabled="{{ documento.bloqueado }}" aria-describedby="rel-bloqueio" class="h-38 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 botao-texto {{ documento.botaoClasse }}" style="background:{{ documento.botaoFundo }}">Imprimir / salvar PDF</button>
       </div>
-      <div role="tablist" aria-label="Documento" class="d-flex gap-4 fundo-rgba-255-255-255-0p08 p-4 raio-10 alinha-si-flex-start quebra-wrap"><button role="tab" aria-selected="{{ abaPresenca }}" onClick="{{ verPresenca }}" class="min-h-36 borda-0 raio-8 p-0-14 fs-13 fw-700 botao-texto {{ abaPresencaClasse }}" style="background:{{ abaPresencaFundo }};color:{{ abaPresencaCor }}">Relatório de Presença na Escola</button><button role="tab" aria-selected="{{ abaAtividades }}" onClick="{{ verAtividades }}" class="min-h-36 borda-0 raio-8 p-0-14 fs-13 fw-700 botao-texto {{ abaAtividadesClasse }}" style="background:{{ abaAtividadesFundo }};color:{{ abaAtividadesCor }}">Relatório de Atividades</button></div>
+      <div role="tablist" aria-label="Documento" class="d-flex gap-4 fundo-branco-a8 p-4 raio-10 alinha-si-flex-start quebra-wrap"><button role="tab" aria-selected="{{ abaPresenca }}" onClick="{{ verPresenca }}" class="min-h-36 borda-0 raio-8 p-0-14 fs-13 fw-700 botao-texto {{ abaPresencaClasse }}" style="background:{{ abaPresencaFundo }};color:{{ abaPresencaCor }}">Relatório de Presença na Escola</button><button role="tab" aria-selected="{{ abaAtividades }}" onClick="{{ verAtividades }}" class="min-h-36 borda-0 raio-8 p-0-14 fs-13 fw-700 botao-texto {{ abaAtividadesClasse }}" style="background:{{ abaAtividadesFundo }};color:{{ abaAtividadesCor }}">Relatório de Atividades</button></div>
       <sc-if value="{{ documento.bloqueado }}" hint-placeholder-val="{{ false }}">
-        <div id="rel-bloqueio" role="status" class="d-flex eixo-column gap-6 fundo-rgba-255-255-255-0p08 raio-8 p-10-12 fs-13 lh-1p5">
+        <div id="rel-bloqueio" role="status" class="d-flex eixo-column gap-6 fundo-branco-a8 raio-8 p-10-12 fs-13 lh-1p5">
           <span>{{ documento.bloqueio }}</span>
           <sc-if value="{{ documento.temPendencias }}" hint-placeholder-val="{{ false }}"><ul class="m-0 pl-18 d-flex eixo-column gap-2"><sc-for list="{{ documento.pendencias }}" as="pendencia" hint-placeholder-count="3"><li>{{ pendencia }}</li></sc-for></ul></sc-if>
         </div>
       </sc-if>
-      <label class="d-flex eixo-column gap-6 fs-12 cor-b4c2c6">Observações do(a) oficineiro(a) (opcional, saem no relatório)<textarea value="{{ observacao }}" onChange="{{ mudarObservacao }}" rows="2" maxlength="600" placeholder="Exemplo: turmas do 4º ano usaram o Matific em dupla por falta de tablets carregados" class="borda-1-solid-rgba-255-255-255-0p3 raio-8 p-8-10 fs-14 fonte-inherit redim-vertical lh-1p5 fundo-1b3038 cor-fff"></textarea></label>
+      <label class="d-flex eixo-column gap-6 fs-12 cor-cinza-260">Observações do(a) oficineiro(a) (opcional, saem no relatório)<textarea value="{{ observacao }}" onChange="{{ mudarObservacao }}" rows="2" maxlength="600" placeholder="Exemplo: turmas do 4º ano usaram o Matific em dupla por falta de tablets carregados" class="borda-1-solid-branco-a30 raio-8 p-8-10 fs-14 fonte-inherit redim-vertical lh-1p5 fundo-ciano-840 cor-branco"></textarea></label>
     </div>
-    <div id="rel-horas" class="w-210mm min-h-297mm m-28-auto-0 fundo-fefefe sombra-0-12-40-rgba-0-0-0-0p35 p-11mm-12mm cor-1a2b34 fs-9pt lh-1p3 d-flex eixo-column gap-0 largura-fundo" style="max-width:calc(100% - 32px);font-family:Arial,Helvetica,sans-serif">
+    <div id="rel-horas" class="w-210mm min-h-297mm m-28-auto-0 fundo-cinza-0 sombra-0-12-40-rgba-0-0-0-0p35 p-11mm-12mm cor-ciano-855 fs-9pt lh-1p3 d-flex eixo-column gap-0 largura-fundo" style="max-width:calc(100% - 32px);font-family:Arial,Helvetica,sans-serif">
       <div class="d-flex alinha-center gap-12 borda-b-2-solid-0b7ea4 pb-8">
         <img src="../public/brand/logo-cliente.png" alt="{{ cliente.orgao }}" class="w-120 h-46 obj-ajuste-contain obj-pos-left-center"></img>
-        <div class="flex-1 texto-center d-flex eixo-column gap-2"><b class="ls-0p3" style="font-size:12.5pt">{{ cliente.orgaoTitulo }}</b><b class="fs-10pt cor-08617f">{{ oficial.titulo }}</b></div>
-        <div class="w-120 h-46 d-flex alinha-center justifica-center gap-7"><svg role="img" aria-label="Oficineiro+" viewBox="0 0 31 31" width="30" height="30"><rect x="0" y="0" width="14" height="14" rx="3" fill="#DD2287"></rect><rect x="17" y="0" width="14" height="14" rx="3" fill="#6C60E7"></rect><rect x="0" y="17" width="14" height="14" rx="3" fill="#3ECDF3"></rect><rect x="17" y="17" width="14" height="14" rx="3" fill="#35E47D"></rect></svg><span class="fs-13pt fw-800 ls-n0p2 cor-1a2b34">Oficineiro<b class="cor-0b7ea4">+</b></span></div>
+        <div class="flex-1 texto-center d-flex eixo-column gap-2"><b class="ls-0p3" style="font-size:12.5pt">{{ cliente.orgaoTitulo }}</b><b class="fs-10pt cor-ciano-745">{{ oficial.titulo }}</b></div>
+        <div class="w-120 h-46 d-flex alinha-center justifica-center gap-7"><svg role="img" aria-label="Oficineiro+" viewBox="0 0 31 31" width="30" height="30"><rect x="0" y="0" width="14" height="14" rx="3" fill="#DD2287"></rect><rect x="17" y="0" width="14" height="14" rx="3" fill="#6C60E7"></rect><rect x="0" y="17" width="14" height="14" rx="3" fill="#3ECDF3"></rect><rect x="17" y="17" width="14" height="14" rx="3" fill="#35E47D"></rect></svg><span class="fs-13pt fw-800 ls-n0p2 cor-ciano-855">Oficineiro<b class="cor-ciano-665">+</b></span></div>
       </div>
       <div class="d-grid colunas-2fr-1fr borda-1-solid-9fb0b6 mt-8">
-        <div class="p-4-6 borda-b-1-solid-dde6e9 borda-d-1-solid-dde6e9"><small class="cor-5b6b71 d-block fs-7pt caixa-uppercase">Oficineiro(a)</small>{{ oficial.nome }}</div>
-        <div class="p-4-6 borda-b-1-solid-dde6e9"><small class="cor-5b6b71 d-block fs-7pt caixa-uppercase">{{ oficial.documentoRotulo }}</small>{{ oficial.documento }}</div>
-        <div class="p-4-6 borda-d-1-solid-dde6e9"><small class="cor-5b6b71 d-block fs-7pt caixa-uppercase">Escola</small>{{ oficial.escola }}</div>
-        <div class="p-4-6"><small class="cor-5b6b71 d-block fs-7pt caixa-uppercase">Oficina</small>{{ oficial.oficina }}</div>
+        <div class="p-4-6 borda-b-1-solid-dde6e9 borda-d-1-solid-dde6e9"><small class="cor-cinza-605 d-block fs-7pt caixa-uppercase">Oficineiro(a)</small>{{ oficial.nome }}</div>
+        <div class="p-4-6 borda-b-1-solid-dde6e9"><small class="cor-cinza-605 d-block fs-7pt caixa-uppercase">{{ oficial.documentoRotulo }}</small>{{ oficial.documento }}</div>
+        <div class="p-4-6 borda-d-1-solid-dde6e9"><small class="cor-cinza-605 d-block fs-7pt caixa-uppercase">Escola</small>{{ oficial.escola }}</div>
+        <div class="p-4-6"><small class="cor-cinza-605 d-block fs-7pt caixa-uppercase">Oficina</small>{{ oficial.oficina }}</div>
       </div>
       <sc-if value="{{ abaPresenca }}" hint-placeholder-val="{{ true }}">
         <table class="w-100pc colapso-collapse mt-8">
-          <thead><tr class="fundo-e3ebee"><th class="w-9pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Data</th><th class="w-6pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Dia</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Entrada</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Saída almoço</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Volta almoço</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Saída</th><th class="w-9pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Total</th><th class="w-30pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Observação</th></tr></thead>
-          <tbody><sc-for list="{{ oficial.linhas }}" as="linha" hint-placeholder-count="8"><tr class="quebra-dentro-avoid"><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ linha.data }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ linha.dia }}</td><td colspan="6" rowspan="{{ linha.rs }}" class="borda-1-solid-9fb0b6 p-2p4-4 texto-center fundo-f2f5f6 cor-5b6b71 fw-bold" style="display:{{ linha.mostraM }}">{{ linha.offTxt }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.c1 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.c2 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.c3 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.c4 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.total }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-left cor-3a4b52" style="display:{{ linha.mostraN }};font-size:7.6pt">{{ linha.obs }}</td></tr></sc-for></tbody>
-          <tfoot><tr class="fundo-e3ebee fw-bold"><td colspan="6" class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">TOTAL DE HORAS CONTABILIZADAS NO CICLO</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ oficial.total }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-left cor-3a4b52" style="font-size:7.6pt">Limite de 8h por dia, sem contar o almoço</td></tr></tfoot>
+          <thead><tr class="fundo-cinza-95"><th class="w-9pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Data</th><th class="w-6pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Dia</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Entrada</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Saída almoço</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Volta almoço</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Saída</th><th class="w-9pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Total</th><th class="w-30pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Observação</th></tr></thead>
+          <tbody><sc-for list="{{ oficial.linhas }}" as="linha" hint-placeholder-count="8"><tr class="quebra-dentro-avoid"><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ linha.data }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ linha.dia }}</td><td colspan="6" rowspan="{{ linha.rs }}" class="borda-1-solid-9fb0b6 p-2p4-4 texto-center fundo-cinza-45 cor-cinza-605 fw-bold" style="display:{{ linha.mostraM }}">{{ linha.offTxt }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.c1 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.c2 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.c3 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.c4 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.total }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-left cor-cinza-730" style="display:{{ linha.mostraN }};font-size:7.6pt">{{ linha.obs }}</td></tr></sc-for></tbody>
+          <tfoot><tr class="fundo-cinza-95 fw-bold"><td colspan="6" class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">TOTAL DE HORAS CONTABILIZADAS NO CICLO</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ oficial.total }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-left cor-cinza-730" style="font-size:7.6pt">Limite de 8h por dia, sem contar o almoço</td></tr></tfoot>
         </table>
       </sc-if>
-      <div class="d-grid colunas-repeat-5-1fr gap-6 mt-8 quebra-dentro-avoid"><sc-for list="{{ oficial.resumo }}" as="item" hint-placeholder-count="5"><div class="borda-1-solid-9fb0b6 p-4-6"><small class="d-block cor-5b6b71 fs-7pt caixa-uppercase">{{ item.l }}</small><b class="fs-11pt">{{ item.v }}</b></div></sc-for></div>
+      <div class="d-grid colunas-repeat-5-1fr gap-6 mt-8 quebra-dentro-avoid"><sc-for list="{{ oficial.resumo }}" as="item" hint-placeholder-count="5"><div class="borda-1-solid-9fb0b6 p-4-6"><small class="d-block cor-cinza-605 fs-7pt caixa-uppercase">{{ item.l }}</small><b class="fs-11pt">{{ item.v }}</b></div></sc-for></div>
       <sc-if value="{{ abaAtividades }}" hint-placeholder-val="{{ false }}">
         <table class="w-100pc colapso-collapse mt-8">
-          <thead><tr class="fundo-e3ebee"><th class="w-7pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Data</th><th class="w-10pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Horário</th><th class="w-8pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Turma</th><th class="w-20pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Atividade agendada</th><th class="w-10pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Situação</th><th class="w-7pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Estud.</th><th class="borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Registro: como foi feita</th></tr></thead>
+          <thead><tr class="fundo-cinza-95"><th class="w-7pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Data</th><th class="w-10pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Horário</th><th class="w-8pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Turma</th><th class="w-20pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Atividade agendada</th><th class="w-10pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Situação</th><th class="w-7pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Estud.</th><th class="borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Registro: como foi feita</th></tr></thead>
           <tbody><sc-for list="{{ oficial.atividades }}" as="linha" hint-placeholder-count="6"><tr class="quebra-dentro-avoid"><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top" style="font-size:7.8pt">{{ linha.data }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top espaco-nowrap" style="font-size:7.8pt">{{ linha.horario }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top texto-center" style="font-size:7.8pt">{{ linha.turma }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top" style="font-size:7.8pt">{{ linha.atividade }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top fw-bold espaco-nowrap" style="font-size:7.8pt;color:{{ linha.sitCor }}">{{ linha.sit }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top texto-center" style="font-size:7.8pt">{{ linha.estud }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top" style="font-size:7.8pt">{{ linha.registro }}</td></tr></sc-for></tbody>
         </table>
-        <sc-if value="{{ oficial.semAtividades }}" hint-placeholder-val="{{ false }}"><span class="mt-6 cor-5b6b71" style="font-size:8.5pt">Nenhuma atividade agendada neste ciclo.</span></sc-if>
+        <sc-if value="{{ oficial.semAtividades }}" hint-placeholder-val="{{ false }}"><span class="mt-6 cor-cinza-605" style="font-size:8.5pt">Nenhuma atividade agendada neste ciclo.</span></sc-if>
         <sc-if value="{{ documento.temObservacoes }}" hint-placeholder-val="{{ false }}"><div class="mt-8 borda-1-solid-9fb0b6 p-4-6 fs-8pt"><b>Observações do(a) oficineiro(a):</b> {{ observacao }}</div></sc-if>
       </sc-if>
-      <p class="m-8-0-0 fs-8pt cor-3a4b52">{{ declaracao }}</p>
-      <div class="d-grid colunas-repeat-3-1fr gap-14 mt-24 quebra-dentro-avoid"><sc-for list="{{ oficial.assinaturas }}" as="assinatura" hint-placeholder-count="3"><div class="texto-center fs-8pt d-flex eixo-column gap-2"><div class="borda-t-1-solid-1a2b34 pt-3 fw-bold">{{ assinatura.papel }}</div><sc-if value="{{ assinatura.temNome }}" hint-placeholder-val="{{ true }}"><span>{{ assinatura.nome }}</span></sc-if><sc-if value="{{ assinatura.temStamp }}" hint-placeholder-val="{{ false }}"><span class="cor-08617f" style="font-size:7.2pt">{{ assinatura.stamp }}</span></sc-if></div></sc-for></div>
-      <div class="mt-10 borda-t-1-solid-dde6e9 pt-4 fs-7pt cor-5b6b71 d-flex justifica-space-between gap-12 quebra-wrap"><span>{{ oficial.gerado }}</span><span>{{ oficial.codigo }}</span></div>
+      <p class="m-8-0-0 fs-8pt cor-cinza-730">{{ declaracao }}</p>
+      <div class="d-grid colunas-repeat-3-1fr gap-14 mt-24 quebra-dentro-avoid"><sc-for list="{{ oficial.assinaturas }}" as="assinatura" hint-placeholder-count="3"><div class="texto-center fs-8pt d-flex eixo-column gap-2"><div class="borda-t-1-solid-1a2b34 pt-3 fw-bold">{{ assinatura.papel }}</div><sc-if value="{{ assinatura.temNome }}" hint-placeholder-val="{{ true }}"><span>{{ assinatura.nome }}</span></sc-if><sc-if value="{{ assinatura.temStamp }}" hint-placeholder-val="{{ false }}"><span class="cor-ciano-745" style="font-size:7.2pt">{{ assinatura.stamp }}</span></sc-if></div></sc-for></div>
+      <div class="mt-10 borda-t-1-solid-dde6e9 pt-4 fs-7pt cor-cinza-605 d-flex justifica-space-between gap-12 quebra-wrap"><span>{{ oficial.gerado }}</span><span>{{ oficial.codigo }}</span></div>
     </div>
   </div>
 </sc-if>
 
 <sc-if value="{{ aviso }}" hint-placeholder-val="{{ false }}">
-  <div class="pos-fixed base-96 esquerda-50pc w-max-content fundo-13252c cor-fff p-12-18 raio-10 fs-14 z-95 sombra-0-8-24-rgba-0-0-0-0p2 largura-fundo" style="transform:translateX(-50%);max-width:calc(100% - 32px)">{{ aviso }}</div>
+  <div class="pos-fixed base-96 esquerda-50pc w-max-content fundo-ciano-880 cor-branco p-12-18 raio-10 fs-14 z-95 sombra-0-8-24-rgba-0-0-0-0p2 largura-fundo" style="transform:translateX(-50%);max-width:calc(100% - 32px)">{{ aviso }}</div>
 </sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -419,32 +419,32 @@ const TIPOS_DE_ATIVIDADE = {
   R: {
     nome: 'Aula regular',
     curto: 'Aula regular',
-    cor: 'var(--texto-1f4fc4)',
-    fundo: 'var(--fundo-eff3fd)',
-    corDoTexto: 'var(--texto-1a3f9c)'
+    cor: 'var(--texto-azul-550)',
+    fundo: 'var(--fundo-azul-40)',
+    corDoTexto: 'var(--texto-azul-640)'
   },
   P: {
     nome: 'Projeto tempo integral',
     curto: 'Projeto tempo integral',
-    cor: 'var(--texto-9a6212)',
-    fundo: 'var(--fundo-fcf5e8)',
-    corDoTexto: 'var(--texto-7a4e0b)'
+    cor: 'var(--texto-ambar-660)',
+    fundo: 'var(--fundo-ambar-50)',
+    corDoTexto: 'var(--texto-ambar-745)'
   },
   F: {
     nome: 'Formação de professores',
     curto: 'Formação de professores',
-    cor: 'var(--texto-6c60e6)',
-    fundo: 'var(--fundo-ecebfc)',
-    corDoTexto: 'var(--texto-4b41b8)'
+    cor: 'var(--texto-indigo-360)',
+    fundo: 'var(--fundo-indigo-50)',
+    corDoTexto: 'var(--texto-indigo-510)'
   },
   C: {
     nome: 'Oficina de tecnologia',
     curto: 'Oficina de tecnologia',
-    cor: 'var(--texto-23773a)',
-    fundo: 'var(--fundo-edf7ef)',
-    corDoTexto: 'var(--texto-1b5e2e)'
+    cor: 'var(--texto-verde-700)',
+    fundo: 'var(--fundo-verde-50)',
+    corDoTexto: 'var(--texto-verde-760)'
   },
-  X: { nome: 'Planejamento', curto: 'Planejamento', cor: 'var(--texto-5b6b70)', fundo: 'var(--fundo-e8eef0)' }
+  X: { nome: 'Planejamento', curto: 'Planejamento', cor: 'var(--texto-cinza-600)', fundo: 'var(--fundo-cinza-70)' }
 };
 const tipoDe = chave => TIPOS_DE_ATIVIDADE[chave] || TIPOS_DE_ATIVIDADE.R;
 const TIPOS_DA_GRADE = ['R', 'P', 'F'];
@@ -1609,15 +1609,15 @@ class Component extends DCLogic {
     return marcada
       ? {
           borda: cor || '#0B7EA3',
-          fundo: cor ? 'var(--fundo-ffffff)' : 'var(--fundo-e4f5fa)',
-          cor: cor || 'var(--texto-08617e)',
-          classe: cor ? 'fundo-ffffff' : ''
+          fundo: cor ? 'var(--fundo-branco)' : 'var(--fundo-ciano-60)',
+          cor: cor || 'var(--texto-ciano-740)',
+          classe: cor ? 'fundo-branco' : ''
         }
       : {
-          borda: 'var(--borda-cfdadd)',
-          fundo: 'var(--fundo-ffffff)',
-          cor: 'var(--texto-1a2b33)',
-          classe: 'fundo-ffffff botao-secundario'
+          borda: 'var(--borda-cinza-160)',
+          fundo: 'var(--fundo-branco)',
+          cor: 'var(--texto-ciano-850)',
+          classe: 'fundo-branco botao-secundario'
         };
   }
   avisar(texto) {
@@ -1785,12 +1785,12 @@ class Component extends DCLogic {
             ? 'Acima de 8h · ' + (minutos - LIMITE_DO_DIA) + ' min não contabilizados'
             : 'Regular';
         const cores = /^Pendente/.test(situacao)
-          ? ['var(--texto-34464d)', 'var(--fundo-e3ebed)']
+          ? ['var(--texto-cinza-750)', 'var(--fundo-cinza-90)']
           : /^Acima/.test(situacao)
-            ? ['var(--texto-7a4e0b)', 'var(--fundo-faefd9)']
+            ? ['var(--texto-ambar-745)', 'var(--fundo-ambar-80)']
             : /andamento/.test(situacao)
-              ? ['var(--texto-08617e)', 'var(--fundo-e3ebed)']
-              : ['var(--texto-1b5e2e)', 'var(--fundo-e2f2e5)'];
+              ? ['var(--texto-ciano-740)', 'var(--fundo-cinza-90)']
+              : ['var(--texto-verde-760)', 'var(--fundo-verde-80)'];
         const dia = dataDe(presenca.data),
           faixa =
             Base.hm(inicio.getHours() * 60 + inicio.getMinutes()) +
@@ -1918,7 +1918,7 @@ class Component extends DCLogic {
             : 'Ciclo fechado · aguardando assinaturas',
         bloqueado: !!bloqueio || !s.carregado,
         bloqueio: s.carregado ? bloqueio : 'Carregando os dados…',
-        botaoClasse: bloqueio || !s.carregado ? '' : 'fundo-0b7ea3',
+        botaoClasse: bloqueio || !s.carregado ? '' : 'fundo-ciano-660',
         botaoFundo: bloqueio || !s.carregado ? '#5B6B70' : '#0B7EA3',
         temPendencias: !cicloAtual && textos.length > 0,
         pendencias: textos,
@@ -2035,7 +2035,7 @@ class Component extends DCLogic {
             txt: 'Sua primeira atividade hoje é às ' + Base.hm(primeira) + '. Registre a entrada ao chegar na escola.',
             acao: 'Ir para a presença',
             go: abrirTela('presenca'),
-            cor: 'var(--texto-0b7ea3)'
+            cor: 'var(--texto-ciano-660)'
           });
         if (proxima && proxima !== 'entrada' && agora >= ultima + 30)
           lista.push({
@@ -2044,7 +2044,7 @@ class Component extends DCLogic {
             txt: 'Sua última atividade terminou às ' + Base.hm(ultima) + '. Registre a saída antes de sair da escola.',
             acao: 'Ir para a presença',
             go: abrirTela('presenca'),
-            cor: 'var(--texto-0b7ea3)'
+            cor: 'var(--texto-ciano-660)'
           });
       }
     }
@@ -2064,7 +2064,7 @@ class Component extends DCLogic {
           this.setState({ gaveta: null });
           this.irParaRegistro(lembrete.data, lembrete.grade_aula_id);
         },
-        cor: 'var(--texto-9a6212)'
+        cor: 'var(--texto-ambar-660)'
       });
     });
     const doCiclo = this.pendenciasDoCicloAtual || { pendencias: [], relatorioDoCiclo: null },
@@ -2078,7 +2078,7 @@ class Component extends DCLogic {
         this.setState({ gaveta: null });
         pendencia.executar();
       },
-      cor: 'var(--texto-9a6212)'
+      cor: 'var(--texto-ambar-660)'
     });
     pendencias
       .filter(
@@ -2105,7 +2105,7 @@ class Component extends DCLogic {
               this.irParaRegistro(registro.data, registro.grade_aula_id);
             }
           : null,
-        cor: 'var(--texto-b42318)'
+        cor: 'var(--texto-vermelho-600)'
       });
     });
     const anterior = s.relatorioAnterior;
@@ -2140,7 +2140,7 @@ class Component extends DCLogic {
             () => this.carregarRelatorio(competencia)
           );
         },
-        cor: 'var(--texto-b42318)'
+        cor: 'var(--texto-vermelho-600)'
       });
     }
     if (doCiclo.relatorioDoCiclo && doCiclo.relatorioDoCiclo.status === 'devolvido')
@@ -2155,7 +2155,7 @@ class Component extends DCLogic {
           (doCiclo.relatorioDoCiclo.motivo_devolucao ? ': ' + doCiclo.relatorioDoCiclo.motivo_devolucao : '.'),
         acao: 'Abrir relatório',
         go: abrirTela('horas'),
-        cor: 'var(--texto-b42318)'
+        cor: 'var(--texto-vermelho-600)'
       });
     pendencias
       .filter(pendencia => pendencia.acao === 'Solicitar ajuste' && pendencia.temAcao)
@@ -2177,7 +2177,7 @@ class Component extends DCLogic {
         txt: 'O prazo para registrar vai até ' + Base.prazo(new Date()) + ', último dia do ciclo.',
         acao: 'Ver pendências',
         go: abrirTela('horas'),
-        cor: 'var(--texto-9a6212)'
+        cor: 'var(--texto-ambar-660)'
       });
     if (s.carregado && !s.carregandoGrade) {
       const envio = s.envioDaGrade,
@@ -2188,7 +2188,7 @@ class Component extends DCLogic {
           txt: 'A grade de ' + s.anoLetivo + ' ainda não tem atividades.',
           acao: 'Abrir a grade',
           go: abrirTela('grade'),
-          cor: 'var(--texto-9a6212)'
+          cor: 'var(--texto-ambar-660)'
         });
       else if (situacao === 'devolvida')
         lista.push({
@@ -2197,7 +2197,7 @@ class Component extends DCLogic {
           txt: envio.comentario ? envio.comentario : 'Ajuste a grade e envie novamente.',
           acao: 'Abrir a grade',
           go: abrirTela('grade'),
-          cor: 'var(--texto-b42318)'
+          cor: 'var(--texto-vermelho-600)'
         });
       else if (!envio)
         lista.push({
@@ -2205,7 +2205,7 @@ class Component extends DCLogic {
           txt: 'A direção da escola precisa validar a grade de ' + s.anoLetivo + '.',
           acao: 'Abrir a grade',
           go: abrirTela('grade'),
-          cor: 'var(--texto-9a6212)'
+          cor: 'var(--texto-ambar-660)'
         });
       else if (situacao === 'alterada')
         lista.push({
@@ -2214,7 +2214,7 @@ class Component extends DCLogic {
           txt: 'Envie a grade novamente para a direção da escola validar as mudanças.',
           acao: 'Abrir a grade',
           go: abrirTela('grade'),
-          cor: 'var(--texto-9a6212)'
+          cor: 'var(--texto-ambar-660)'
         });
     }
     pendencias
@@ -2225,7 +2225,7 @@ class Component extends DCLogic {
           txt: pendencia.data + ' · a presença ficou aberta e vai para a conferência da direção.',
           acao: '',
           go: null,
-          cor: 'var(--texto-5b6b70)'
+          cor: 'var(--texto-cinza-600)'
         })
       );
     const mudanca = s.mudancaDeEscola;
@@ -2242,7 +2242,7 @@ class Component extends DCLogic {
             '. A grade da nova escola começa sem atividades e precisa ser montada e validada.',
         acao: mudanca.ja_vale ? 'Abrir a grade' : '',
         go: mudanca.ja_vale ? abrirTela('grade') : null,
-        cor: 'var(--texto-1a3f9c)'
+        cor: 'var(--texto-azul-640)'
       });
     }
     return lista.map(notificacao => ({ ...notificacao, temAcao: !!(notificacao.acao && notificacao.go) }));
@@ -2427,13 +2427,13 @@ class Component extends DCLogic {
       .filter(x => x[1])
       .map(([rotulo, valor]) => ({ rotulo, valor }));
     const revisao = anulada
-      ? ['Anulada pelo coordenador', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)']
+      ? ['Anulada pelo coordenador', 'var(--texto-cinza-600)', 'var(--fundo-cinza-70)']
       : devolvida
-        ? ['Devolvida para ajuste', 'var(--texto-b42318)', 'var(--fundo-fbedeb)']
+        ? ['Devolvida para ajuste', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)']
         : registro.revisao_status === 'revisado'
-          ? ['Revisada pelo coordenador', 'var(--texto-1b5e2e)', 'var(--fundo-e2f2e5)']
+          ? ['Revisada pelo coordenador', 'var(--texto-verde-760)', 'var(--fundo-verde-80)']
           : registro.revisao_status === 'corrigido'
-            ? ['Corrigida · aguardando revisão', 'var(--texto-1a3f9c)', 'var(--fundo-eff3fd)']
+            ? ['Corrigida · aguardando revisão', 'var(--texto-azul-640)', 'var(--fundo-azul-40)']
             : null;
     return {
       temResumo: true,
@@ -2491,8 +2491,8 @@ class Component extends DCLogic {
           rotulo: TIPOS_DE_ATIVIDADE[chave].nome,
           marcada: marcada ? 'true' : 'false',
           ...this.opcao(marcada, marcada ? TIPOS_DE_ATIVIDADE[chave].cor : null),
-          classe: marcada ? '' : 'fundo-ffffff',
-          fundo: marcada ? TIPOS_DE_ATIVIDADE[chave].fundo : 'var(--fundo-ffffff)',
+          classe: marcada ? '' : 'fundo-branco',
+          fundo: marcada ? TIPOS_DE_ATIVIDADE[chave].fundo : 'var(--fundo-branco)',
           escolher: () =>
             edicaoDaSemana.tipo !== chave &&
             this.preencherNaSemana({
@@ -2530,7 +2530,7 @@ class Component extends DCLogic {
       salvarNaSemana: () => this.salvarAtividadeDaSemana(false),
       usarGradePadrao: () => this.salvarAtividadeDaSemana(true),
       salvarNaSemanaTexto: edicaoDaSemana.salvando ? 'Salvando…' : 'Salvar só nesta semana',
-      salvarNaSemanaClasse: edicaoDaSemana.salvando ? '' : 'fundo-0b7ea3',
+      salvarNaSemanaClasse: edicaoDaSemana.salvando ? '' : 'fundo-ciano-660',
       salvarNaSemanaFundo: edicaoDaSemana.salvando ? '#A9B8BD' : '#0B7EA3',
       copia,
       copiaComErro: !!copia.erro,
@@ -2557,8 +2557,8 @@ class Component extends DCLogic {
           rotulo,
           marcada: marcada ? 'true' : 'false',
           ...this.opcao(marcada),
-          classe: marcada ? '' : 'fundo-ffffff',
-          fundo: marcada ? 'var(--fundo-eff9fc)' : 'var(--fundo-ffffff)',
+          classe: marcada ? '' : 'fundo-branco',
+          fundo: marcada ? 'var(--fundo-ciano-40)' : 'var(--fundo-branco)',
           escolher: () => this.setState({ copia: { ...copia, modo: chave, erro: '' } })
         };
       }),
@@ -2572,8 +2572,8 @@ class Component extends DCLogic {
               texto: dmIso(outra),
               marcada: marcada ? 'true' : 'false',
               ...this.opcao(marcada),
-              classe: marcada ? '' : 'fundo-ffffff',
-              fundo: marcada ? 'var(--fundo-eff9fc)' : 'var(--fundo-ffffff)',
+              classe: marcada ? '' : 'fundo-branco',
+              fundo: marcada ? 'var(--fundo-ciano-40)' : 'var(--fundo-branco)',
               aria: 'Semana de ' + dmIso(outra) + ' a ' + dmIso(somarDias(outra, 4)),
               escolher: () =>
                 this.setState({
@@ -2592,7 +2592,7 @@ class Component extends DCLogic {
         : 'Nenhuma semana escolhida.',
       copiar: () => this.copiarSemana(),
       copiarTexto: copia.salvando ? 'Copiando…' : 'Copiar semana',
-      copiarClasse: copia.salvando ? '' : 'fundo-0b7ea3',
+      copiarClasse: copia.salvando ? '' : 'fundo-ciano-660',
       copiarFundo: copia.salvando ? '#A9B8BD' : '#0B7EA3'
     };
   }
@@ -2645,8 +2645,8 @@ class Component extends DCLogic {
           rotulo: TIPOS_DE_ATIVIDADE[chave].nome,
           marcada: marcada ? 'true' : 'false',
           ...this.opcao(marcada, marcada ? TIPOS_DE_ATIVIDADE[chave].cor : null),
-          classe: marcada ? '' : 'fundo-ffffff',
-          fundo: marcada ? TIPOS_DE_ATIVIDADE[chave].fundo : 'var(--fundo-ffffff)',
+          classe: marcada ? '' : 'fundo-branco',
+          fundo: marcada ? TIPOS_DE_ATIVIDADE[chave].fundo : 'var(--fundo-branco)',
           escolher: () =>
             edicao.tipo !== chave &&
             this.preencherEdicao({
@@ -2691,12 +2691,12 @@ class Component extends DCLogic {
       edicaoComErro: !!edicao.erro,
       editando: !!edicao.id,
       salvarTexto: edicao.salvando ? 'Salvando…' : edicao.id ? 'Salvar edição' : 'Adicionar à grade',
-      salvarClasse: edicao.salvando ? '' : 'fundo-0b7ea3',
+      salvarClasse: edicao.salvando ? '' : 'fundo-ciano-660',
       salvarFundo: edicao.salvando ? '#A9B8BD' : '#0B7EA3',
       excluirTexto: edicao.confirmarExcluir ? 'Confirmar exclusão' : 'Excluir atividade',
-      excluirClasse: edicao.confirmarExcluir ? '' : 'fundo-ffffff',
-      excluirFundo: edicao.confirmarExcluir ? '#B42318' : 'var(--fundo-ffffff)',
-      excluirCor: edicao.confirmarExcluir ? '#fff' : 'var(--texto-b42318)',
+      excluirClasse: edicao.confirmarExcluir ? '' : 'fundo-branco',
+      excluirFundo: edicao.confirmarExcluir ? '#B42318' : 'var(--fundo-branco)',
+      excluirCor: edicao.confirmarExcluir ? '#fff' : 'var(--texto-vermelho-600)',
       salvarAtividade: () => this.salvarAtividade(),
       excluirAtividade: () => this.excluirAtividade()
     };
@@ -2719,7 +2719,7 @@ class Component extends DCLogic {
         abrir = () => this.irPara(chave);
       navegacao[chave] = {
         abrir,
-        cor: atual ? 'var(--texto-0b7ea3)' : 'var(--texto-5b6b70)',
+        cor: atual ? 'var(--texto-ciano-660)' : 'var(--texto-cinza-600)',
         selo: tag,
         seloFundo: tagBg
       };
@@ -2728,7 +2728,7 @@ class Component extends DCLogic {
         tag,
         tagBg,
         go: abrir,
-        classe: atual ? 'fundo-rgba-255-255-255-0p09' : 'fundo-transparent',
+        classe: atual ? 'fundo-branco-a9' : 'fundo-transparent',
         bg: atual ? 'rgba(255,255,255,.09)' : 'transparent',
         fg: atual ? '#fff' : '#C9D4D7',
         dot: atual ? '#3ECDF3' : 'transparent',

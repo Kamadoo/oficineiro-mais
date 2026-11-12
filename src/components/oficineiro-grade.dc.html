@@ -9,43 +9,43 @@
 <body>
 <x-dc>
   <div class="d-flex quebra-wrap alinha-center gap-12-16">
-    <span class="fs-13 cor-5b6b70">Ano letivo {{ anoLetivo }} · das 07:00 às 17:00</span>
+    <span class="fs-13 cor-cinza-600">Ano letivo {{ anoLetivo }} · das 07:00 às 17:00</span>
     <span class="fs-12 fw-600 p-5-10 raio-999 espaco-nowrap" style="color:{{ envio.cor }};background:{{ envio.fundo }}">{{ envio.texto }}</span>
     <div class="oculto-celular flex-1"></div>
     <div class="largura-total-celular d-flex gap-8 quebra-wrap">
-      <button onClick="{{ novaAtividade }}" class="h-40 flex-1-1-auto borda-cfdadd fundo-ffffff cor-34464d raio-8 p-0-16 fs-14 fw-600 botao-secundario">+ Nova atividade</button>
-      <sc-if value="{{ podeEnviar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ enviarGrade }}" disabled="{{ enviando }}" class="h-40 flex-1-1-auto borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">{{ enviarTexto }}</button></sc-if>
+      <button onClick="{{ novaAtividade }}" class="h-40 flex-1-1-auto borda-cinza-160 fundo-branco cor-cinza-750 raio-8 p-0-16 fs-14 fw-600 botao-secundario">+ Nova atividade</button>
+      <sc-if value="{{ podeEnviar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ enviarGrade }}" disabled="{{ enviando }}" class="h-40 flex-1-1-auto borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ enviarTexto }}</button></sc-if>
     </div>
   </div>
-  <sc-if value="{{ devolvida }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-13 cor-7a1f17 fundo-fbedeb raio-10 p-12-14 lh-1p5">{{ devolvidaTexto }}</span></sc-if>
-  <span class="fs-13 cor-5b6b70 lh-1p5">{{ ajuda }}</span>
-  <section aria-label="Semanas do ano" class="borda-dde6e8 raio-12 p-14-16 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)">
+  <sc-if value="{{ devolvida }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-13 cor-vermelho-720 fundo-vermelho-50 raio-10 p-12-14 lh-1p5">{{ devolvidaTexto }}</span></sc-if>
+  <span class="fs-13 cor-cinza-600 lh-1p5">{{ ajuda }}</span>
+  <section aria-label="Semanas do ano" class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
     <div class="d-flex quebra-wrap alinha-center gap-10-14">
-      <div class="largura-total-celular d-flex gap-4 fundo-e3ebed p-4 raio-10 segmentado" role="group" aria-label="Como ver a grade">
+      <div class="largura-total-celular d-flex gap-4 fundo-cinza-90 p-4 raio-10 segmentado" role="group" aria-label="Como ver a grade">
         <sc-for list="{{ modos }}" as="modo" hint-placeholder-count="2"><button onClick="{{ modo.escolher }}" aria-pressed="{{ modo.marcado }}" class="borda-0 raio-7 p-8-14 fs-14 fw-600 espaco-nowrap {{ modo.classe }}" style="flex:1 1 auto;background:{{ modo.fundo }};color:{{ modo.cor }}">{{ modo.rotulo }}</button></sc-for>
       </div>
-      <span class="fs-13 cor-5b6b70 flex-1-1-240 lh-1p45">{{ modoTexto }}</span>
+      <span class="fs-13 cor-cinza-600 flex-1-1-240 lh-1p45">{{ modoTexto }}</span>
     </div>
     <sc-if value="{{ porSemana }}" hint-placeholder-val="{{ false }}">
       <div class="d-flex eixo-column gap-12">
         <div class="d-flex quebra-wrap alinha-center gap-8">
           <div class="d-flex alinha-center gap-6">
-            <button onClick="{{ cicloAnterior }}" aria-label="Ciclo anterior" class="w-36 h-36 borda-cfdadd fundo-ffffff raio-8 fs-16 cor-34464d largura-fundo botao-secundario">‹</button>
-            <div class="d-flex eixo-column alinha-center min-w-132 lh-1p2" aria-live="polite"><b class="fs-15">{{ cicloNome }}</b><span class="fs-11 cor-5b6b70">{{ cicloTexto }}</span></div>
-            <button onClick="{{ cicloSeguinte }}" aria-label="Próximo ciclo" class="w-36 h-36 borda-cfdadd fundo-ffffff raio-8 fs-16 cor-34464d largura-fundo botao-secundario">›</button>
+            <button onClick="{{ cicloAnterior }}" aria-label="Ciclo anterior" class="w-36 h-36 borda-cinza-160 fundo-branco raio-8 fs-16 cor-cinza-750 largura-fundo botao-secundario">‹</button>
+            <div class="d-flex eixo-column alinha-center min-w-132 lh-1p2" aria-live="polite"><b class="fs-15">{{ cicloNome }}</b><span class="fs-11 cor-cinza-600">{{ cicloTexto }}</span></div>
+            <button onClick="{{ cicloSeguinte }}" aria-label="Próximo ciclo" class="w-36 h-36 borda-cinza-160 fundo-branco raio-8 fs-16 cor-cinza-750 largura-fundo botao-secundario">›</button>
           </div>
           <div role="group" aria-label="Semanas do ciclo" class="d-flex quebra-wrap gap-6">
-            <sc-for list="{{ semanas }}" as="semana" hint-placeholder-count="5"><button onClick="{{ semana.escolher }}" aria-pressed="{{ semana.marcada }}" aria-label="{{ semana.aria }}" class="min-h-36 raio-8 p-4-10 fs-13 fw-600 d-flex alinha-center gap-6 num-tabular-nums botao-opcao segmentado {{ semana.classe }}" style="border:1.5px solid {{ semana.borda }};background:{{ semana.fundo }};color:{{ semana.cor }}">{{ semana.texto }}<span aria-hidden="true" class="w-7 h-7 raio-4 fundo-0b7ea3 largura-fundo" style="display:{{ semana.ponto }}"></span></button></sc-for>
+            <sc-for list="{{ semanas }}" as="semana" hint-placeholder-count="5"><button onClick="{{ semana.escolher }}" aria-pressed="{{ semana.marcada }}" aria-label="{{ semana.aria }}" class="min-h-36 raio-8 p-4-10 fs-13 fw-600 d-flex alinha-center gap-6 num-tabular-nums botao-opcao segmentado {{ semana.classe }}" style="border:1.5px solid {{ semana.borda }};background:{{ semana.fundo }};color:{{ semana.cor }}">{{ semana.texto }}<span aria-hidden="true" class="w-7 h-7 raio-4 fundo-ciano-660 largura-fundo" style="display:{{ semana.ponto }}"></span></button></sc-for>
           </div>
         </div>
-        <div class="d-flex quebra-wrap alinha-center gap-8-12 borda-t-e9eff1 pt-12">
+        <div class="d-flex quebra-wrap alinha-center gap-8-12 borda-t-cinza-75 pt-12">
           <b class="fs-14">{{ semanaTitulo }}</b>
           <span role="status" class="fs-12 fw-600 p-4-10 raio-999 segmentado" style="color:{{ semanaSituacao.cor }};background:{{ semanaSituacao.fundo }}">{{ semanaSituacao.texto }}</span>
           <span class="oculto-celular flex-1"></span>
           <sc-if value="{{ semanaEditavel }}" hint-placeholder-val="{{ true }}">
             <div class="largura-total-celular d-flex quebra-wrap gap-8">
-              <button onClick="{{ copiarSemana }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-34464d flex-1-1-auto botao-secundario">Copiar para outras semanas</button>
-              <sc-if value="{{ semanaAlterada }}" hint-placeholder-val="{{ false }}"><button onClick="{{ voltarAoPadrao }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-34464d flex-1-1-auto botao-secundario">Voltar à grade padrão</button></sc-if>
+              <button onClick="{{ copiarSemana }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-cinza-750 flex-1-1-auto botao-secundario">Copiar para outras semanas</button>
+              <sc-if value="{{ semanaAlterada }}" hint-placeholder-val="{{ false }}"><button onClick="{{ voltarAoPadrao }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-cinza-750 flex-1-1-auto botao-secundario">Voltar à grade padrão</button></sc-if>
             </div>
           </sc-if>
         </div>
@@ -53,27 +53,27 @@
     </sc-if>
   </section>
 
-  <section class="oculto-celular borda-dde6e8 raio-12 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}" aria-busy="{{ ocupada }}" aria-label="Grade semanal">
+  <section class="oculto-celular borda-cinza-110 raio-12 rolagem-hidden fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}" aria-busy="{{ ocupada }}" aria-label="Grade semanal">
     <div class="d-grid colunas-72-repeat-5-minmax-0-1fr" style="grid-template-rows:{{ linhas }}">
       <sc-for list="{{ celulas }}" as="celula" hint-placeholder-count="12">
         <sc-if value="{{ celula.ehHora }}" hint-placeholder-val="{{ false }}">
-          <div class="col-1 p-4-0-0-16 fs-13 cor-5b6b70 num-tabular-nums borda-t-e9eff1" style="grid-row:{{ celula.linha }};font-weight:{{ celula.peso }}">{{ celula.texto }}</div>
+          <div class="col-1 p-4-0-0-16 fs-13 cor-cinza-600 num-tabular-nums borda-t-cinza-75" style="grid-row:{{ celula.linha }};font-weight:{{ celula.peso }}">{{ celula.texto }}</div>
         </sc-if>
         <sc-if value="{{ celula.ehDia }}" hint-placeholder-val="{{ false }}">
-          <div class="lin-1 p-14-8-10 fs-13 fw-600 d-flex alinha-center gap-6" style="grid-column:{{ celula.coluna }};color:{{ celula.cor }}">{{ celula.texto }}<span class="w-6 h-6 raio-3 fundo-0b7ea3 largura-fundo" style="display:{{ celula.ponto }}" aria-hidden="true"></span></div>
+          <div class="lin-1 p-14-8-10 fs-13 fw-600 d-flex alinha-center gap-6" style="grid-column:{{ celula.coluna }};color:{{ celula.cor }}">{{ celula.texto }}<span class="w-6 h-6 raio-3 fundo-ciano-660 largura-fundo" style="display:{{ celula.ponto }}" aria-hidden="true"></span></div>
         </sc-if>
         <sc-if value="{{ celula.ehVazio }}" hint-placeholder-val="{{ true }}">
-          <div class="borda-t-e9eff1 p-4 d-flex" style="grid-row:{{ celula.linha }};grid-column:{{ celula.coluna }}">
-            <button onClick="{{ celula.abrir }}" aria-label="{{ celula.aria }}" class="grade-vazio flex-1 borda-1p5-dashed-transparent fundo-transparent raio-8 cor-7e8e93 fs-13 fw-600 min-h-0">+</button>
+          <div class="borda-t-cinza-75 p-4 d-flex" style="grid-row:{{ celula.linha }};grid-column:{{ celula.coluna }}">
+            <button onClick="{{ celula.abrir }}" aria-label="{{ celula.aria }}" class="grade-vazio flex-1 borda-1p5-dashed-transparent fundo-transparent raio-8 cor-cinza-460 fs-13 fw-600 min-h-0">+</button>
           </div>
         </sc-if>
         <sc-if value="{{ celula.ehAtividade }}" hint-placeholder-val="{{ false }}">
           <div class="p-2-4 d-flex pos-relative z-1 min-h-0" style="grid-row:{{ celula.linha }};grid-column:{{ celula.coluna }}">
-            <button onClick="{{ celula.abrir }}" aria-label="{{ celula.aria }}" title="{{ celula.aria }}" class="grade-aula flex-1 min-w-0 min-h-0 rolagem-hidden texto-left raio-8 p-6-10 cor-1a2b33 d-flex eixo-column justifica-flex-start gap-2 largura-fundo" style="border:0;border-left:4px solid {{ celula.cor }};background:{{ celula.fundo }}">
-              <span class="fs-11 fw-600 cor-45575e num-tabular-nums espaco-nowrap rolagem-hidden reticencias-ellipsis">{{ celula.horario }}</span>
+            <button onClick="{{ celula.abrir }}" aria-label="{{ celula.aria }}" title="{{ celula.aria }}" class="grade-aula flex-1 min-w-0 min-h-0 rolagem-hidden texto-left raio-8 p-6-10 cor-ciano-850 d-flex eixo-column justifica-flex-start gap-2 largura-fundo" style="border:0;border-left:4px solid {{ celula.cor }};background:{{ celula.fundo }}">
+              <span class="fs-11 fw-600 cor-cinza-680 num-tabular-nums espaco-nowrap rolagem-hidden reticencias-ellipsis">{{ celula.horario }}</span>
               <span class="fs-13 fw-700 lh-1p25 espaco-nowrap rolagem-hidden reticencias-ellipsis">{{ celula.turma }}</span>
-              <span class="fs-12 lh-1p3 d--webkit-box linhas-2 orienta-vertical rolagem-hidden"><b class="fw-600" style="color:{{ celula.corDoTexto }}">{{ celula.tipo }}</b><sc-if value="{{ celula.temDetalhe }}" hint-placeholder-val="{{ true }}"><span class="cor-45575e"> · {{ celula.detalhe }}</span></sc-if></span>
-              <sc-if value="{{ celula.alterada }}" hint-placeholder-val="{{ false }}"><span class="alinha-si-flex-start fs-11 fw-600 cor-7a4e0b fundo-faefd9 raio-999 p-2-8">Só nesta semana</span></sc-if>
+              <span class="fs-12 lh-1p3 d--webkit-box linhas-2 orienta-vertical rolagem-hidden"><b class="fw-600" style="color:{{ celula.corDoTexto }}">{{ celula.tipo }}</b><sc-if value="{{ celula.temDetalhe }}" hint-placeholder-val="{{ true }}"><span class="cor-cinza-680"> · {{ celula.detalhe }}</span></sc-if></span>
+              <sc-if value="{{ celula.alterada }}" hint-placeholder-val="{{ false }}"><span class="alinha-si-flex-start fs-11 fw-600 cor-ambar-745 fundo-ambar-80 raio-999 p-2-8">Só nesta semana</span></sc-if>
             </button>
           </div>
         </sc-if>
@@ -83,23 +83,23 @@
 
   <div class="so-celular-flex eixo-column gap-12" style="opacity:{{ opacidade }}">
     <sc-for list="{{ dias }}" as="dia" hint-placeholder-count="5">
-      <section class="borda-dde6e8 raio-12 p-14 d-flex eixo-column gap-10 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-label="{{ dia.nome }}">
+      <section class="borda-cinza-110 raio-12 p-14 d-flex eixo-column gap-10 fundo-branco" style="background:var(--fundo-branco)" aria-label="{{ dia.nome }}">
         <div class="d-flex alinha-center gap-8">
           <h3 class="m-0 fs-15" style="color:{{ dia.cor }}">{{ dia.nome }}</h3>
           <span class="flex-1"></span>
-          <button onClick="{{ dia.adicionar }}" aria-label="{{ dia.adicionarAria }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-34464d botao-secundario">+ Atividade</button>
+          <button onClick="{{ dia.adicionar }}" aria-label="{{ dia.adicionarAria }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-cinza-750 botao-secundario">+ Atividade</button>
         </div>
         <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="2">
-          <button onClick="{{ atividade.abrir }}" aria-label="{{ atividade.aria }}" class="d-grid colunas-52-minmax-0-1fr gap-2-12 alinha-start texto-left raio-8 p-10-12 cor-1a2b33 largura-fundo" style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }}">
-            <span class="fs-14 fw-600 num-tabular-nums cor-34464d" style="grid-row:1 / span 6">{{ atividade.hora }}</span>
-            <span class="fs-12 fw-600 cor-45575e num-tabular-nums">{{ atividade.horario }}</span>
+          <button onClick="{{ atividade.abrir }}" aria-label="{{ atividade.aria }}" class="d-grid colunas-52-minmax-0-1fr gap-2-12 alinha-start texto-left raio-8 p-10-12 cor-ciano-850 largura-fundo" style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }}">
+            <span class="fs-14 fw-600 num-tabular-nums cor-cinza-750" style="grid-row:1 / span 6">{{ atividade.hora }}</span>
+            <span class="fs-12 fw-600 cor-cinza-680 num-tabular-nums">{{ atividade.horario }}</span>
             <span class="fs-14 fw-700">{{ atividade.turma }}</span>
             <span class="fs-12 fw-600" style="color:{{ atividade.corDoTexto }}">{{ atividade.tipo }}</span>
-            <sc-if value="{{ atividade.temDetalhe }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-45575e">{{ atividade.detalhe }}</span></sc-if>
-            <sc-if value="{{ atividade.alterada }}" hint-placeholder-val="{{ false }}"><span class="justifica-si-start fs-11 fw-600 cor-7a4e0b fundo-faefd9 raio-999 p-2-8">Só nesta semana</span></sc-if>
+            <sc-if value="{{ atividade.temDetalhe }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-cinza-680">{{ atividade.detalhe }}</span></sc-if>
+            <sc-if value="{{ atividade.alterada }}" hint-placeholder-val="{{ false }}"><span class="justifica-si-start fs-11 fw-600 cor-ambar-745 fundo-ambar-80 raio-999 p-2-8">Só nesta semana</span></sc-if>
           </button>
         </sc-for>
-        <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-7d8c91">Sem atividades</span></sc-if>
+        <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-470">Sem atividades</span></sc-if>
       </section>
     </sc-for>
   </div>
@@ -177,7 +177,7 @@ class Component extends DCLogic {
         ehDia: true,
         coluna: dia + 1,
         texto: DIAS[dia],
-        cor: dia === diaDeHoje ? 'var(--texto-08617e)' : 'var(--texto-1a2b33)',
+        cor: dia === diaDeHoje ? 'var(--texto-ciano-740)' : 'var(--texto-ciano-850)',
         ponto: dia === diaDeHoje ? 'inline-block' : 'none'
       })
     );
@@ -215,7 +215,7 @@ class Component extends DCLogic {
         .map(cartaoDe);
       return {
         nome: DIAS[dia] + (dia === diaDeHoje ? ' · hoje' : ''),
-        cor: dia === diaDeHoje ? 'var(--texto-08617e)' : 'var(--texto-1a2b33)',
+        cor: dia === diaDeHoje ? 'var(--texto-ciano-740)' : 'var(--texto-ciano-850)',
         atividades,
         vazio: !atividades.length,
         adicionar: () => (porSemana ? semAdicionar() : contexto.abrirAtividade(null, dia, null)),
@@ -253,20 +253,20 @@ class Component extends DCLogic {
           ? {
               texto:
                 'Validada pela direção' + (envioDaGrade.decidido_em ? ' em ' + diaMes(envioDaGrade.decidido_em) : ''),
-              cor: 'var(--texto-1b5e2e)',
-              fundo: 'var(--fundo-e2f2e5)'
+              cor: 'var(--texto-verde-760)',
+              fundo: 'var(--fundo-verde-80)'
             }
           : situacaoDoEnvio === 'enviada'
-            ? { texto: 'Enviada · aguardando a direção', cor: 'var(--texto-1a3f9c)', fundo: 'var(--fundo-eff3fd)' }
+            ? { texto: 'Enviada · aguardando a direção', cor: 'var(--texto-azul-640)', fundo: 'var(--fundo-azul-40)' }
             : situacaoDoEnvio === 'devolvida'
-              ? { texto: 'Devolvida para ajuste', cor: 'var(--texto-b42318)', fundo: 'var(--fundo-fbedeb)' }
+              ? { texto: 'Devolvida para ajuste', cor: 'var(--texto-vermelho-600)', fundo: 'var(--fundo-vermelho-50)' }
               : situacaoDoEnvio === 'alterada'
                 ? {
                     texto: 'Alterada depois do envio · envie novamente',
-                    cor: 'var(--texto-7a4e0b)',
-                    fundo: 'var(--fundo-faefd9)'
+                    cor: 'var(--texto-ambar-745)',
+                    fundo: 'var(--fundo-ambar-80)'
                   }
-                : { texto: 'Ainda não enviada à direção', cor: 'var(--texto-7a4e0b)', fundo: 'var(--fundo-faefd9)' },
+                : { texto: 'Ainda não enviada à direção', cor: 'var(--texto-ambar-745)', fundo: 'var(--fundo-ambar-80)' },
       novaAtividade: () => contexto.abrirAtividade(null, diaDeHoje >= 1 && diaDeHoje <= 5 ? diaDeHoje : 1),
       podeEnviar: !envioDaGrade || ['devolvida', 'alterada'].includes(envioDaGrade.status),
       enviando: contexto.enviandoGrade,
@@ -284,9 +284,9 @@ class Component extends DCLogic {
         rotulo,
         marcado: memoria.modo === chave ? 'true' : 'false',
         escolher: () => this.lembrar({ modo: chave }),
-        classe: memoria.modo === chave ? 'fundo-ffffff' : 'fundo-transparent',
-        fundo: memoria.modo === chave ? 'var(--fundo-ffffff)' : 'transparent',
-        cor: memoria.modo === chave ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)'
+        classe: memoria.modo === chave ? 'fundo-branco' : 'fundo-transparent',
+        fundo: memoria.modo === chave ? 'var(--fundo-branco)' : 'transparent',
+        cor: memoria.modo === chave ? 'var(--texto-ciano-850)' : 'var(--texto-cinza-600)'
       })),
       porSemana,
       modoTexto: porSemana
@@ -308,10 +308,10 @@ class Component extends DCLogic {
           texto: dmIso(d) + (d === semanaDeHoje ? ' · atual' : ''),
           marcada: marcada ? 'true' : 'false',
           ponto: alteradas.has(d) ? 'inline-block' : 'none',
-          borda: marcada ? '#0B7EA3' : 'var(--borda-cfdadd)',
-          classe: marcada ? '' : 'fundo-ffffff botao-secundario',
-          fundo: marcada ? 'var(--fundo-eff9fc)' : 'var(--fundo-ffffff)',
-          cor: marcada ? 'var(--texto-08617e)' : passada ? 'var(--texto-7d8c91)' : 'var(--texto-1a2b33)',
+          borda: marcada ? '#0B7EA3' : 'var(--borda-cinza-160)',
+          classe: marcada ? '' : 'fundo-branco botao-secundario',
+          fundo: marcada ? 'var(--fundo-ciano-40)' : 'var(--fundo-branco)',
+          cor: marcada ? 'var(--texto-ciano-740)' : passada ? 'var(--texto-cinza-470)' : 'var(--texto-ciano-850)',
           aria:
             'Semana de ' +
             dmIso(d) +
@@ -333,10 +333,10 @@ class Component extends DCLogic {
               alteracoesNaSemana === 1
                 ? '1 atividade diferente da grade padrão'
                 : alteracoesNaSemana + ' atividades diferentes da grade padrão',
-            cor: 'var(--texto-7a4e0b)',
-            fundo: 'var(--fundo-faefd9)'
+            cor: 'var(--texto-ambar-745)',
+            fundo: 'var(--fundo-ambar-80)'
           }
-        : { texto: 'Segue a grade padrão', cor: 'var(--texto-1b5e2e)', fundo: 'var(--fundo-e2f2e5)' },
+        : { texto: 'Segue a grade padrão', cor: 'var(--texto-verde-760)', fundo: 'var(--fundo-verde-80)' },
       semanaEditavel: semana >= semanaDeHoje,
       semanaAlterada: alteracoesNaSemana > 0,
       copiarSemana: () => contexto.abrirCopia(),

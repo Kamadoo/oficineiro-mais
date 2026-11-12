@@ -8,53 +8,53 @@
 </head>
 <body>
 <x-dc>
-  <section class="espaco-celular borda-dde6e8 raio-12 p-18-20 d-flex eixo-column gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="dir-h-fluxo">
-    <div class="d-flex quebra-wrap gap-10 alinha-center"><h3 id="dir-h-fluxo" class="m-0 fs-15 flex-1 min-w-220">Fluxo de aprovação do relatório de atividades · mensal</h3><select aria-label="Mês do relatório" value="{{ ciclo }}" onChange="{{ escolherCiclo }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesCiclo }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></div>
+  <section class="espaco-celular borda-cinza-110 raio-12 p-18-20 d-flex eixo-column gap-14 fundo-branco" style="background:var(--fundo-branco)" aria-labelledby="dir-h-fluxo">
+    <div class="d-flex quebra-wrap gap-10 alinha-center"><h3 id="dir-h-fluxo" class="m-0 fs-15 flex-1 min-w-220">Fluxo de aprovação do relatório de atividades · mensal</h3><select aria-label="Mês do relatório" value="{{ ciclo }}" onChange="{{ escolherCiclo }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesCiclo }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></div>
     <ol class="lista-none m-0 p-0 d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
       <sc-for list="{{ etapas }}" as="etapa" hint-placeholder-count="4">
         <li class="raio-10 p-12-14 d-flex eixo-column gap-4" style="background:{{ etapa.fundo }};border:1.5px solid {{ etapa.borda }}">
           <span class="num-tabular-nums fs-11 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ etapa.cor }}">{{ etapa.numero }}</span>
-          <b class="fs-14">{{ etapa.titulo }}</b><span class="fs-12 cor-34464d">{{ etapa.situacao }}</span>
+          <b class="fs-14">{{ etapa.titulo }}</b><span class="fs-12 cor-cinza-750">{{ etapa.situacao }}</span>
         </li>
       </sc-for>
     </ol>
   </section>
-  <section aria-label="Relatórios dos oficineiros" class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+  <section aria-label="Relatórios dos oficineiros" class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div class="dir-tab min-w-960" role="table" aria-label="Relatórios dos oficineiros">
-      <div class="dir-cab d-grid gap-10 p-12-20 fs-12 fw-600 cor-5b6b70 borda-b-dde6e8" style="grid-template-columns:1.5fr .7fr .9fr .9fr .9fr .9fr 1.4fr 230px" role="row"><span role="columnheader">Oficineiro</span><span role="columnheader">Dias</span><span role="columnheader">Horas válidas</span><span role="columnheader">Atividades realizadas</span><span role="columnheader">Não realizadas</span><span role="columnheader">Check da escola</span><span role="columnheader">Situação</span><span role="columnheader"><span class="sr-only">Ações</span></span></div>
+      <div class="dir-cab d-grid gap-10 p-12-20 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110" style="grid-template-columns:1.5fr .7fr .9fr .9fr .9fr .9fr 1.4fr 230px" role="row"><span role="columnheader">Oficineiro</span><span role="columnheader">Dias</span><span role="columnheader">Horas válidas</span><span role="columnheader">Atividades realizadas</span><span role="columnheader">Não realizadas</span><span role="columnheader">Check da escola</span><span role="columnheader">Situação</span><span role="columnheader"><span class="sr-only">Ações</span></span></div>
       <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="2">
-        <div class="dir-linha d-grid gap-10 p-14-20 fs-13 borda-b-e9eff1 alinha-center" style="grid-template-columns:1.5fr .7fr .9fr .9fr .9fr .9fr 1.4fr 230px" role="row">
-          <span role="cell" class="dir-larga d-flex eixo-column min-w-0"><b class="quebra-palavra-anywhere">{{ linha.nome }}</b><span class="fs-11 cor-5b6b70">{{ linha.fechamento }}</span></span>
+        <div class="dir-linha d-grid gap-10 p-14-20 fs-13 borda-b-cinza-75 alinha-center" style="grid-template-columns:1.5fr .7fr .9fr .9fr .9fr .9fr 1.4fr 230px" role="row">
+          <span role="cell" class="dir-larga d-flex eixo-column min-w-0"><b class="quebra-palavra-anywhere">{{ linha.nome }}</b><span class="fs-11 cor-cinza-600">{{ linha.fechamento }}</span></span>
           <span role="cell" data-r="Dias" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ linha.dias }}</span><span role="cell" data-r="Horas válidas" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ linha.horas }}</span><span role="cell" data-r="Aulas realizadas" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ linha.realizadas }}</span><span role="cell" data-r="Não realizadas" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ linha.naoRealizadas }}</span><span role="cell" data-r="Check da escola" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.checkCor }}">{{ linha.check }}</span>
-          <span role="cell" class="d-flex eixo-column gap-4 alinha-flex-start min-w-0"><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ linha.situacaoCor }};background:{{ linha.situacaoFundo }}">{{ linha.situacao }}</span><sc-if value="{{ linha.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-5b6b70 quebra-palavra-anywhere">{{ linha.observacao }}</span></sc-if></span>
+          <span role="cell" class="d-flex eixo-column gap-4 alinha-flex-start min-w-0"><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ linha.situacaoCor }};background:{{ linha.situacaoFundo }}">{{ linha.situacao }}</span><sc-if value="{{ linha.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-cinza-600 quebra-palavra-anywhere">{{ linha.observacao }}</span></sc-if></span>
           <span role="cell" class="dir-larga dir-acoes d-flex gap-6 justifica-flex-end quebra-wrap">
-            <button onClick="{{ linha.ver }}" aria-haspopup="dialog" aria-label="{{ linha.rotuloVer }}" class="h-32 borda-cfdadd fundo-ffffff raio-6 p-0-10 fs-12 fw-500 cor-1a2b33 botao-secundario">Ver relatório</button>
-            <sc-if value="{{ linha.podeAprovar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ linha.aprovar }}" disabled="{{ salvando }}" aria-label="{{ linha.rotuloAprovar }}" class="h-32 borda-0 cor-fff raio-6 p-0-12 fs-12 fw-600 fundo-0b7ea3" style="background:#0B7EA3">{{ linha.aprovarTexto }}</button></sc-if>
+            <button onClick="{{ linha.ver }}" aria-haspopup="dialog" aria-label="{{ linha.rotuloVer }}" class="h-32 borda-cinza-160 fundo-branco raio-6 p-0-10 fs-12 fw-500 cor-ciano-850 botao-secundario">Ver relatório</button>
+            <sc-if value="{{ linha.podeAprovar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ linha.aprovar }}" disabled="{{ salvando }}" aria-label="{{ linha.rotuloAprovar }}" class="h-32 borda-0 cor-branco raio-6 p-0-12 fs-12 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ linha.aprovarTexto }}</button></sc-if>
           </span>
         </div>
       </sc-for>
     </div>
-    <sc-if value="{{ semLinhas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-24-20 texto-center fs-14 cor-5b6b70">{{ semLinhasTexto }}</p></sc-if>
+    <sc-if value="{{ semLinhas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-24-20 texto-center fs-14 cor-cinza-600">{{ semLinhasTexto }}</p></sc-if>
   </section>
-  <div class="fs-12 cor-5b6b70 lh-1p5">Após a aprovação da direção, o relatório segue para a coordenação do núcleo. Devolvido ao oficineiro, volta para ajuste e precisa ser reenviado. Os meses fecham sozinhos depois do último dia.</div>
+  <div class="fs-12 cor-cinza-600 lh-1p5">Após a aprovação da direção, o relatório segue para a coordenação do núcleo. Devolvido ao oficineiro, volta para ajuste e precisa ser reenviado. Os meses fecham sozinhos depois do último dia.</div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 const Base = window.FSM_BASE;
 const { dataDe, hmTs, dmTs, dmIso, cicloFimIso, mesTxt, prazoDe } = Base;
 const SITUACOES = {
-  fechado: ['Aguardando sua aprovação', 'var(--texto-08617e)', 'var(--fundo-e4f5fa)'],
-  aprovado_direcao: ['Aprovado · com a coordenação', 'var(--texto-1a3f9c)', 'var(--fundo-eff3fd)'],
-  aprovado_coordenacao: ['Aprovado pela coordenação', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)'],
-  devolvido: ['Devolvido ao oficineiro', 'var(--texto-b42318)', 'var(--fundo-fbedeb)']
+  fechado: ['Aguardando sua aprovação', 'var(--texto-ciano-740)', 'var(--fundo-ciano-60)'],
+  aprovado_direcao: ['Aprovado · com a coordenação', 'var(--texto-azul-640)', 'var(--fundo-azul-40)'],
+  aprovado_coordenacao: ['Aprovado pela coordenação', 'var(--texto-verde-700)', 'var(--fundo-verde-80)'],
+  devolvido: ['Devolvido ao oficineiro', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)']
 };
 const etapa = (numero, titulo, situacao, estado) => ({
   numero: 'ETAPA ' + numero,
   titulo,
   situacao,
   fundo:
-    estado === 'feita' ? 'var(--fundo-e2f2e5)' : estado === 'atual' ? 'var(--fundo-e4f5fa)' : 'var(--fundo-f7fafb)',
-  borda: estado === 'feita' ? '#23773A' : estado === 'atual' ? '#0B7EA3' : 'var(--borda-dde6e8)',
-  cor: estado === 'feita' ? 'var(--texto-23773a)' : estado === 'atual' ? 'var(--texto-08617e)' : 'var(--texto-5b6b70)'
+    estado === 'feita' ? 'var(--fundo-verde-80)' : estado === 'atual' ? 'var(--fundo-ciano-60)' : 'var(--fundo-cinza-20)',
+  borda: estado === 'feita' ? '#23773A' : estado === 'atual' ? '#0B7EA3' : 'var(--borda-cinza-110)',
+  cor: estado === 'feita' ? 'var(--texto-verde-700)' : estado === 'atual' ? 'var(--texto-ciano-740)' : 'var(--texto-cinza-600)'
 });
 class Component extends DCLogic {
   renderVals() {
@@ -141,7 +141,7 @@ class Component extends DCLogic {
           realizadas: String(r.realizadas),
           naoRealizadas: String(r.nao_realizadas),
           check: r.confirmadas + ' de ' + r.registradas,
-          checkCor: r.registradas && r.confirmadas === r.registradas ? 'var(--texto-23773a)' : 'var(--texto-9a6212)',
+          checkCor: r.registradas && r.confirmadas === r.registradas ? 'var(--texto-verde-700)' : 'var(--texto-ambar-660)',
           situacao: situacao[0],
           situacaoCor: situacao[1],
           situacaoFundo: situacao[2],

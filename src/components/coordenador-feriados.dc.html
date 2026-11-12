@@ -8,28 +8,28 @@
 </head>
 <body>
 <x-dc>
-  <p class="m-0 fs-13 cor-5b6b70 lh-1p5 max-w-760">Os feriados nacionais e os móveis (Carnaval, Sexta-feira Santa e Corpus Christi) já são considerados automaticamente. Cadastre aqui feriados municipais, recessos escolares e pontos facultativos: nesses dias não há horas previstas de trabalho nem atividades esperadas.</p>
-  <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erro }}</div></sc-if>
+  <p class="m-0 fs-13 cor-cinza-600 lh-1p5 max-w-760">Os feriados nacionais e os móveis (Carnaval, Sexta-feira Santa e Corpus Christi) já são considerados automaticamente. Cadastre aqui feriados municipais, recessos escolares e pontos facultativos: nesses dias não há horas previstas de trabalho nem atividades esperadas.</p>
+  <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erro }}</div></sc-if>
   <div role="group" aria-label="Incluir data" class="d-flex gap-10-12 alinha-flex-end quebra-wrap">
-    <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Data *</span><input type="date" value="{{ novoFeriado.data }}" onChange="{{ novoFeriado.escolherData }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff"></input></label>
-    <label class="largura-total-celular d-flex eixo-column gap-6 flex-1 min-w-200 max-w-340"><span class="fs-12 cor-5b6b70 fw-600">Nome *</span><input value="{{ novoFeriado.nome }}" onChange="{{ novoFeriado.escreverNome }}" maxlength="80" placeholder="Ex.: Aniversário da cidade" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
-    <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Tipo</span><select value="{{ novoFeriado.tipo }}" onChange="{{ novoFeriado.escolherTipo }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="feriado">Feriado</option><option value="recesso">Recesso escolar</option><option value="ponto_facultativo">Ponto facultativo</option></select></label>
-    <button onClick="{{ novoFeriado.incluir }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-0b7ea3" style="background:#0B7EA3">Incluir</button>
+    <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Data *</span><input type="date" value="{{ novoFeriado.data }}" onChange="{{ novoFeriado.escolherData }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"></input></label>
+    <label class="largura-total-celular d-flex eixo-column gap-6 flex-1 min-w-200 max-w-340"><span class="fs-12 cor-cinza-600 fw-600">Nome *</span><input value="{{ novoFeriado.nome }}" onChange="{{ novoFeriado.escreverNome }}" maxlength="80" placeholder="Ex.: Aniversário da cidade" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
+    <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Tipo</span><select value="{{ novoFeriado.tipo }}" onChange="{{ novoFeriado.escolherTipo }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco" style="background:var(--fundo-branco)"><option value="feriado">Feriado</option><option value="recesso">Recesso escolar</option><option value="ponto_facultativo">Ponto facultativo</option></select></label>
+    <button onClick="{{ novoFeriado.incluir }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">Incluir</button>
   </div>
-  <section aria-labelledby="adm-h-fer" class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff)">
+  <section aria-labelledby="adm-h-fer" class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco)">
     <h3 id="adm-h-fer" class="sr-only">Feriados e recessos cadastrados</h3>
     <div role="table" aria-labelledby="adm-h-fer" class="min-w-560">
-      <div role="row" class="d-grid colunas-130-minmax-0-2fr-160-170 gap-10 p-12-20 fs-12 fw-600 cor-5b6b70 borda-b-dde6e8"><span role="columnheader">Data</span><span role="columnheader">Nome</span><span role="columnheader">Tipo</span><span role="columnheader"><span class="sr-only">Ação</span></span></div>
+      <div role="row" class="d-grid colunas-130-minmax-0-2fr-160-170 gap-10 p-12-20 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110"><span role="columnheader">Data</span><span role="columnheader">Nome</span><span role="columnheader">Tipo</span><span role="columnheader"><span class="sr-only">Ação</span></span></div>
       <sc-for list="{{ novoFeriado.feriados }}" as="feriado" hint-placeholder-count="4">
-        <div role="row" class="d-grid colunas-130-minmax-0-2fr-160-170 gap-10 p-10-20 fs-13 borda-b-e8eef0 alinha-center">
+        <div role="row" class="d-grid colunas-130-minmax-0-2fr-160-170 gap-10 p-10-20 fs-13 borda-b-cinza-70 alinha-center">
           <span role="cell" class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ feriado.data }}</span>
           <span role="cell" class="min-w-0 quebra-palavra-anywhere">{{ feriado.nome }}</span>
           <span role="cell">{{ feriado.tipo }}</span>
-          <span role="cell"><button onClick="{{ feriado.remover }}" disabled="{{ salvando }}" aria-label="{{ feriado.aria }}" class="h-32 fundo-ffffff raio-8 p-0-10 fs-13 fw-600 fonte-inherit {{ feriado.classe }}" style="border:1px solid {{ feriado.borda }};color:{{ feriado.cor }}">{{ feriado.botao }}</button></span>
+          <span role="cell"><button onClick="{{ feriado.remover }}" disabled="{{ salvando }}" aria-label="{{ feriado.aria }}" class="h-32 fundo-branco raio-8 p-0-10 fs-13 fw-600 fonte-inherit {{ feriado.classe }}" style="border:1px solid {{ feriado.borda }};color:{{ feriado.cor }}">{{ feriado.botao }}</button></span>
         </div>
       </sc-for>
     </div>
-    <sc-if value="{{ novoFeriado.semFeriados }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-18-20 fs-13 cor-5b6b70">Nenhuma data cadastrada além dos feriados nacionais.</p></sc-if>
+    <sc-if value="{{ novoFeriado.semFeriados }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-18-20 fs-13 cor-cinza-600">Nenhuma data cadastrada além dos feriados nacionais.</p></sc-if>
   </section>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -58,8 +58,8 @@ class Component extends DCLogic {
             nome: f.nome,
             tipo: TIPO_FER[f.tipo] || f.tipo,
             botao: conf ? 'Confirmar remoção' : 'Remover',
-            cor: conf ? 'var(--texto-b42318)' : 'var(--texto-1a2b33)',
-            borda: conf ? '#B42318' : 'var(--borda-cfdadd)',
+            cor: conf ? 'var(--texto-vermelho-600)' : 'var(--texto-ciano-850)',
+            borda: conf ? '#B42318' : 'var(--borda-cinza-160)',
             classe: conf ? '' : 'botao-secundario',
             aria: (conf ? 'Confirmar a remoção de ' : 'Remover ') + f.nome + ', ' + dmaIso(d),
             remover: () => contexto.removerFeriado(d)

@@ -320,11 +320,11 @@ window.FSM_BASE = (() => {
     Formação: ['Formação de professores', 'Formação de servidores', 'Formação com Oficineiros']
   };
   const ORIGEM_VISITA = {
-    mapa_calor: ['Mapa de calor · Jornada do Usuário', '#E0892B', 'var(--fundo-faefd9)', 'var(--texto-7a4e0b)'],
-    relatorio: ['Mapa de calor · Jornada do Usuário', '#E0892B', 'var(--fundo-faefd9)', 'var(--texto-7a4e0b)'],
-    demanda: ['Demanda da escola', 'var(--texto-8a999e)', 'var(--fundo-eef3f4)', 'var(--texto-45575e)'],
-    gerencia: ['Vinculada pela gerência', 'var(--texto-0b7ea3)', 'var(--fundo-e4f5fa)', 'var(--texto-08617e)'],
-    analista: ['Iniciativa do analista', 'var(--texto-6c60e6)', 'var(--fundo-ecebfc)', 'var(--texto-4b41b8)']
+    mapa_calor: ['Mapa de calor · Jornada do Usuário', '#E0892B', 'var(--fundo-ambar-80)', 'var(--texto-ambar-745)'],
+    relatorio: ['Mapa de calor · Jornada do Usuário', '#E0892B', 'var(--fundo-ambar-80)', 'var(--texto-ambar-745)'],
+    demanda: ['Demanda da escola', 'var(--texto-cinza-420)', 'var(--fundo-cinza-55)', 'var(--texto-cinza-680)'],
+    gerencia: ['Vinculada pela gerência', 'var(--texto-ciano-660)', 'var(--fundo-ciano-60)', 'var(--texto-ciano-740)'],
+    analista: ['Iniciativa do analista', 'var(--texto-indigo-360)', 'var(--fundo-indigo-50)', 'var(--texto-indigo-510)']
   };
   const ORIGENS_VISITA = ['mapa_calor', 'demanda', 'gerencia', 'analista'];
   function origemVisita(k) {
@@ -387,10 +387,10 @@ window.FSM_BASE = (() => {
   }
 
   const TIPOS = {
-    R: ['Aula regular', 'var(--texto-1f4fc4)', 'var(--fundo-e7edfc)'],
-    P: ['Projeto tempo integral', 'var(--texto-9a6212)', 'var(--fundo-faefd9)'],
-    F: ['Formação de professores', 'var(--texto-6c60e6)', 'var(--fundo-ecebfc)'],
-    C: ['Oficina de tecnologia', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)']
+    R: ['Aula regular', 'var(--texto-azul-550)', 'var(--fundo-azul-50)'],
+    P: ['Projeto tempo integral', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)'],
+    F: ['Formação de professores', 'var(--texto-indigo-360)', 'var(--fundo-indigo-50)'],
+    C: ['Oficina de tecnologia', 'var(--texto-verde-700)', 'var(--fundo-verde-80)']
   };
   function detTipo(g) {
     return !g ? '' : g.tipo === 'P' ? g.oficina || '' : g.solucao || '';
@@ -456,14 +456,14 @@ window.FSM_BASE = (() => {
   }
   function exC(v) {
     return v == null
-      ? 'var(--texto-8a999e)'
+      ? 'var(--texto-cinza-420)'
       : v >= 90
-        ? 'var(--texto-23773a)'
+        ? 'var(--texto-verde-700)'
         : v >= 75
-          ? 'var(--texto-6c60e6)'
+          ? 'var(--texto-indigo-360)'
           : v >= 50
             ? '#E0892B'
-            : 'var(--texto-b42318)';
+            : 'var(--texto-vermelho-600)';
   }
   function numero(n) {
     return Number(n || 0).toLocaleString('pt-BR');

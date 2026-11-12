@@ -9,31 +9,31 @@
 <body>
 <x-dc>
 <div class="veu {{ navCls }}" onClick="{{ closeNav }}"></div>
-<aside class="menu-lateral {{ navCls }} fundo-13252c cor-e3ecee d-flex eixo-column p-20-14 gap-22 pos-sticky topo-0 h-100vh">
+<aside class="menu-lateral {{ navCls }} fundo-ciano-880 cor-cinza-100 d-flex eixo-column p-20-14 gap-22 pos-sticky topo-0 h-100vh">
   <div class="d-flex alinha-center gap-8 pr-2">
   <div aria-label="Oficineiro+" role="img" class="d-flex alinha-center gap-10 p-0-6 min-w-0">
     <svg aria-hidden="true" viewBox="0 0 31 31" width="30" height="30" class="d-block flex-none"><rect x="0" y="0" width="14" height="14" rx="3" fill="#DD2287"></rect><rect x="17" y="0" width="14" height="14" rx="3" fill="#6C60E6"></rect><rect x="0" y="17" width="14" height="14" rx="3" fill="#3ECDF3"></rect><rect x="17" y="17" width="14" height="14" rx="3" fill="#35E47D"></rect></svg>
-    <div class="d-flex eixo-column lh-1p2"><span class="fw-800 fs-17 ls-n0p02em">Oficineiro<span class="cor-3ecdf3">+</span></span></div>
+    <div class="d-flex eixo-column lh-1p2"><span class="fw-800 fs-17 ls-n0p02em">Oficineiro<span class="cor-ciano-400">+</span></span></div>
   </div>
-    <sc-if value="{{ temSino !== false }}" hint-placeholder-val="{{ true }}"><button onClick="{{ abrirNotif }}" aria-label="{{ notifAria }}" title="Notificações" class="pos-relative ml-auto w-36 h-36 flex-none fundo-rgba-255-255-255-0p06 raio-10 cor-e3ecee p-0 d-flex alinha-center justifica-center largura-fundo" style="border:1px solid rgba(255,255,255,.16)"><svg class="icone" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg><sc-if value="{{ temNotif }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" class="pos-absolute topo-n7 direita-n7 min-w-20 h-20 raio-10 fundo-dd2287 cor-fff fs-11 fw-700 d-flex alinha-center justifica-center p-0-5 largura-fundo">{{ notifN }}</span></sc-if></button></sc-if>
+    <sc-if value="{{ temSino !== false }}" hint-placeholder-val="{{ true }}"><button onClick="{{ abrirNotif }}" aria-label="{{ notifAria }}" title="Notificações" class="pos-relative ml-auto w-36 h-36 flex-none fundo-branco-a6 raio-10 cor-cinza-100 p-0 d-flex alinha-center justifica-center largura-fundo" style="border:1px solid rgba(255,255,255,.16)"><svg class="icone" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg><sc-if value="{{ temNotif }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" class="pos-absolute topo-n7 direita-n7 min-w-20 h-20 raio-10 fundo-rosa-500 cor-branco fs-11 fw-700 d-flex alinha-center justifica-center p-0-5 largura-fundo">{{ notifN }}</span></sc-if></button></sc-if>
   </div>
-  <div class="fundo-rgba-255-255-255-0p06 raio-10 p-12 d-flex eixo-column gap-4">
-    <span class="fs-11 cor-8fa5ac caixa-uppercase ls-0p06em">Perfil</span>
+  <div class="fundo-branco-a6 raio-10 p-12 d-flex eixo-column gap-4">
+    <span class="fs-11 cor-cinza-380 caixa-uppercase ls-0p06em">Perfil</span>
     <span class="fs-14 fw-600">{{ perfilTitulo }}</span>
-    <sc-if value="{{ perfilLinha !== undefined }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-b4c2c6">{{ perfilLinha }}</span></sc-if>
+    <sc-if value="{{ perfilLinha !== undefined }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-cinza-260">{{ perfilLinha }}</span></sc-if>
   </div>
   <nav aria-label="Menu principal" class="d-flex eixo-column gap-2">
     <sc-for list="{{ menu }}" as="m" hint-placeholder-count="7">
       <button onClick="{{ m.go }}" aria-current="{{ m.atual }}" class="d-flex alinha-center gap-10 texto-left borda-0 raio-8 p-10 fs-14 fw-500 {{ m.classe }}" style="background:{{ m.bg }};color:{{ m.fg }}">
         <span class="w-6 h-6 raio-3 flex-none largura-fundo" style="background:{{ m.dot }}"></span>
         <span class="flex-1">{{ m.label }}</span>
-        <span class="fs-11 fw-600 cor-13252c raio-999 p-0-6" style="background:{{ m.tagBg }}">{{ m.tag }}</span>
+        <span class="fs-11 fw-600 cor-ciano-880 raio-999 p-0-6" style="background:{{ m.tagBg }}">{{ m.tag }}</span>
       </button>
     </sc-for>
   </nav>
-  <div class="mt-auto d-flex eixo-column gap-6 p-0-6 fs-12 cor-8fa5ac">
-    <sc-if value="{{ temConfig }}" hint-placeholder-val="{{ true }}"><button onClick="{{ abrirConfig }}" aria-haspopup="dialog" class="d-flex alinha-center gap-10 w-100pc texto-left fundo-transparent cor-e3ecee borda-0 raio-8 p-10 fs-14 fw-500 fonte-inherit largura-fundo" style="cursor:pointer"><svg class="icone" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Configurações</button></sc-if>
-    <sc-if value="{{ temSair }}" hint-placeholder-val="{{ true }}"><button onClick="{{ sairConta }}" class="d-flex alinha-center gap-10 w-100pc texto-left fundo-transparent cor-e3ecee raio-8 p-10 fs-14 fw-500 fonte-inherit largura-fundo" style="border:1px solid rgba(255,255,255,.14);cursor:pointer"><svg class="icone" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h3"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>Sair da conta</button></sc-if>
+  <div class="mt-auto d-flex eixo-column gap-6 p-0-6 fs-12 cor-cinza-380">
+    <sc-if value="{{ temConfig }}" hint-placeholder-val="{{ true }}"><button onClick="{{ abrirConfig }}" aria-haspopup="dialog" class="d-flex alinha-center gap-10 w-100pc texto-left fundo-transparent cor-cinza-100 borda-0 raio-8 p-10 fs-14 fw-500 fonte-inherit largura-fundo" style="cursor:pointer"><svg class="icone" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Configurações</button></sc-if>
+    <sc-if value="{{ temSair }}" hint-placeholder-val="{{ true }}"><button onClick="{{ sairConta }}" class="d-flex alinha-center gap-10 w-100pc texto-left fundo-transparent cor-cinza-100 raio-8 p-10 fs-14 fw-500 fonte-inherit largura-fundo" style="border:1px solid rgba(255,255,255,.14);cursor:pointer"><svg class="icone" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h3"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>Sair da conta</button></sc-if>
   </div>
 </aside>
 </x-dc>

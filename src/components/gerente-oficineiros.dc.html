@@ -10,52 +10,52 @@
 <x-dc>
 <sc-if value="{{ is.oficineirosPresenca }}" hint-placeholder-val="{{ false }}">
   <section aria-label="Resumo dos oficineiros" class="duas-colunas-celular d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));opacity:{{ opacidade }}">
-    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="5"><div class="borda-dde6e8 raio-12 p-14-16 d-flex eixo-column gap-2 min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-22 fw-600 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-12 cor-34464d">{{ indicador.titulo }}</span><span class="fs-11 cor-5b6b70">{{ indicador.nota }}</span></div></sc-for>
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="5"><div class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-2 min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><span class="fs-22 fw-600 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-12 cor-cinza-750">{{ indicador.titulo }}</span><span class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for>
   </section>
-  <section class="grade-imprimir borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
-    <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-240">Presença, horas e execução das atividades</h3><span class="fs-12 cor-5b6b70">{{ periodoTexto }}</span></div>
+  <section class="grade-imprimir borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
+    <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-240">Presença, horas e execução das atividades</h3><span class="fs-12 cor-cinza-600">{{ periodoTexto }}</span></div>
     <div role="table" aria-label="Oficineiros" class="min-w-1000">
-      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-5b6b70 borda-t-dde6e8 borda-b-dde6e8" style="grid-template-columns:1.5fr 1.6fr .9fr .8fr .9fr 1.1fr 1fr .7fr 1fr"><span role="columnheader">Oficineiro</span><span role="columnheader">Escola de atuação</span><span role="columnheader">Carteira</span><span role="columnheader">Presença</span><span role="columnheader">Horas válidas</span><span role="columnheader">Acima de 8h</span><span role="columnheader">Execução</span><span role="columnheader">Sem reg.</span><span role="columnheader">Situação</span></div>
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-cinza-600 borda-t-cinza-110 borda-b-cinza-110" style="grid-template-columns:1.5fr 1.6fr .9fr .8fr .9fr 1.1fr 1fr .7fr 1fr"><span role="columnheader">Oficineiro</span><span role="columnheader">Escola de atuação</span><span role="columnheader">Carteira</span><span role="columnheader">Presença</span><span role="columnheader">Horas válidas</span><span role="columnheader">Acima de 8h</span><span role="columnheader">Execução</span><span role="columnheader">Sem reg.</span><span role="columnheader">Situação</span></div>
       <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="4">
-        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-e9eff1 alinha-center" style="grid-template-columns:1.5fr 1.6fr .9fr .8fr .9fr 1.1fr 1fr .7fr 1fr">
+        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-cinza-75 alinha-center" style="grid-template-columns:1.5fr 1.6fr .9fr .8fr .9fr 1.1fr 1fr .7fr 1fr">
           <b role="cell" class="quebra-palavra-anywhere">{{ linha.nome }}</b><span role="cell" class="fs-12 quebra-palavra-anywhere">{{ linha.escola }}</span><span role="cell" class="fs-12">{{ linha.carteira }}</span>
           <span role="cell" class="num-tabular-nums">{{ linha.presenca }}</span><span role="cell" class="num-tabular-nums">{{ linha.horas }}</span><span role="cell" class="num-tabular-nums fs-12">{{ linha.excedente }}</span>
-          <span role="cell" class="d-flex eixo-column gap-4"><b class="num-tabular-nums">{{ linha.execucao }}</b><span class="h-4 fundo-e8eef0 raio-2"><span class="d-block h-4 raio-2 largura-fundo" style="width:{{ linha.largura }};background:{{ linha.cor }}"></span></span></span>
+          <span role="cell" class="d-flex eixo-column gap-4"><b class="num-tabular-nums">{{ linha.execucao }}</b><span class="h-4 fundo-cinza-70 raio-2"><span class="d-block h-4 raio-2 largura-fundo" style="width:{{ linha.largura }};background:{{ linha.cor }}"></span></span></span>
           <span role="cell" class="num-tabular-nums" style="color:{{ linha.semRegistroCor }}">{{ linha.semRegistro }}</span>
           <span role="cell" class="justifica-si-start fs-12 fw-600 p-3-10 raio-999" style="color:{{ linha.cor }};background:{{ linha.fundo }}">{{ linha.situacao }}</span>
         </div>
       </sc-for>
     </div>
-    <sc-if value="{{ semLinhas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhum oficineiro ativo com esses filtros.</p></sc-if>
+    <sc-if value="{{ semLinhas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhum oficineiro ativo com esses filtros.</p></sc-if>
   </section>
 </sc-if>
 
 <sc-if value="{{ is.oficineirosGrade }}" hint-placeholder-val="{{ false }}">
-  <section class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
-    <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-240">Escola de atuação e grade de cada oficineiro</h3><span class="fs-12 cor-5b6b70">{{ gradesTexto }}</span></div>
+  <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
+    <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-240">Escola de atuação e grade de cada oficineiro</h3><span class="fs-12 cor-cinza-600">{{ gradesTexto }}</span></div>
     <div role="table" aria-label="Escolas e grade" class="min-w-960">
-      <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-5b6b70 borda-t-dde6e8 borda-b-dde6e8" style="grid-template-columns:1.5fr 1.8fr .9fr .9fr 1.4fr 130px"><span role="columnheader">Oficineiro</span><span role="columnheader">Escola de atuação</span><span role="columnheader">Carteira</span><span role="columnheader">Horas-aula/sem.</span><span role="columnheader">Situação da grade</span><span role="columnheader"><span class="sr-only">Ações</span></span></div>
+      <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-cinza-600 borda-t-cinza-110 borda-b-cinza-110" style="grid-template-columns:1.5fr 1.8fr .9fr .9fr 1.4fr 130px"><span role="columnheader">Oficineiro</span><span role="columnheader">Escola de atuação</span><span role="columnheader">Carteira</span><span role="columnheader">Horas-aula/sem.</span><span role="columnheader">Situação da grade</span><span role="columnheader"><span class="sr-only">Ações</span></span></div>
       <sc-for list="{{ grades }}" as="grade" hint-placeholder-count="4">
-        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-e9eff1 alinha-center" style="grid-template-columns:1.5fr 1.8fr .9fr .9fr 1.4fr 130px">
-          <span role="cell" class="d-flex eixo-column min-w-0"><b class="quebra-palavra-anywhere">{{ grade.nome }}</b><sc-if value="{{ grade.temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-1a3f9c">{{ grade.nota }}</span></sc-if></span><span role="cell" class="fs-12 quebra-palavra-anywhere">{{ grade.escola }}</span><span role="cell" class="fs-12">{{ grade.carteira }}</span><span role="cell" class="num-tabular-nums">{{ grade.horasAula }}</span>
+        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-cinza-75 alinha-center" style="grid-template-columns:1.5fr 1.8fr .9fr .9fr 1.4fr 130px">
+          <span role="cell" class="d-flex eixo-column min-w-0"><b class="quebra-palavra-anywhere">{{ grade.nome }}</b><sc-if value="{{ grade.temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-azul-640">{{ grade.nota }}</span></sc-if></span><span role="cell" class="fs-12 quebra-palavra-anywhere">{{ grade.escola }}</span><span role="cell" class="fs-12">{{ grade.carteira }}</span><span role="cell" class="num-tabular-nums">{{ grade.horasAula }}</span>
           <span role="cell" class="justifica-si-start fs-12 fw-600 p-3-10 raio-999" style="color:{{ grade.cor }};background:{{ grade.fundo }}">{{ grade.situacao }}</span>
-          <span role="cell"><button onClick="{{ grade.alterar }}" aria-haspopup="dialog" aria-label="{{ grade.aria }}" class="h-32 borda-cfdadd fundo-ffffff raio-6 p-0-10 fs-12 fw-600 cor-1a2b33 botao-secundario">Alterar escola</button></span>
+          <span role="cell"><button onClick="{{ grade.alterar }}" aria-haspopup="dialog" aria-label="{{ grade.aria }}" class="h-32 borda-cinza-160 fundo-branco raio-6 p-0-10 fs-12 fw-600 cor-ciano-850 botao-secundario">Alterar escola</button></span>
         </div>
       </sc-for>
     </div>
-    <sc-if value="{{ semGrades }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhum oficineiro ativo com esses filtros.</p></sc-if>
+    <sc-if value="{{ semGrades }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhum oficineiro ativo com esses filtros.</p></sc-if>
   </section>
-  <div class="fs-12 cor-5b6b70">A grade de atividades continua sendo montada pelo oficineiro e validada pela direção da escola.</div>
+  <div class="fs-12 cor-cinza-600">A grade de atividades continua sendo montada pelo oficineiro e validada pela direção da escola.</div>
 </sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 const Base = window.FSM_BASE;
 const { minDe, dmIso, pctTxt, exC, numero, plural } = Base;
 const SITUACOES_DA_GRADE = {
-  enviada: ['Aguardando validação', 'var(--texto-1a3f9c)', 'var(--fundo-eff3fd)'],
-  validada: ['Grade validada', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)'],
-  devolvida: ['Devolvida para ajuste', 'var(--texto-b42318)', 'var(--fundo-fbedeb)'],
-  alterada: ['Alterada · aguardando novo envio', 'var(--texto-9a6212)', 'var(--fundo-faefd9)']
+  enviada: ['Aguardando validação', 'var(--texto-azul-640)', 'var(--fundo-azul-40)'],
+  validada: ['Grade validada', 'var(--texto-verde-700)', 'var(--fundo-verde-80)'],
+  devolvida: ['Devolvida para ajuste', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)'],
+  alterada: ['Alterada · aguardando novo envio', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)']
 };
 const temposDeAula = (ini, fim) => Math.max(1, Math.round((minDe(fim) - minDe(ini)) / 50));
 class Component extends DCLogic {
@@ -103,11 +103,11 @@ class Component extends DCLogic {
           excedente: o.exc ? horasTexto(o.exc) : '—',
           execucao: pctTxt(o.t.ex),
           largura: larguraDaBarra(o.t.ex),
-          cor: f ? f[2] : 'var(--texto-5b6b70)',
-          fundo: f ? f[3] : 'var(--fundo-e8eef0)',
+          cor: f ? f[2] : 'var(--texto-cinza-600)',
+          fundo: f ? f[3] : 'var(--fundo-cinza-70)',
           situacao: f ? f[0] : 'Sem atividades',
           semRegistro: String(o.t.sreg),
-          semRegistroCor: o.t.sreg ? 'var(--texto-b42318)' : 'var(--texto-1a2b33)'
+          semRegistroCor: o.t.sreg ? 'var(--texto-vermelho-600)' : 'var(--texto-ciano-850)'
         };
       });
     const resumoGeralDosOficineiros = resumir(atividades.filter(i => oficineirosFiltrados.some(c => c.id === i.of)));
@@ -116,19 +116,19 @@ class Component extends DCLogic {
         valor: String(oficineirosFiltrados.length),
         titulo: 'Oficineiros ativos',
         nota: 'em ' + plural(new Set(oficineirosFiltrados.map(escolaAtualDe)).size, 'escola', 'escolas'),
-        cor: 'var(--texto-1a2b33)'
+        cor: 'var(--texto-ciano-850)'
       },
       {
         valor: pctTxt(presencaMedia),
         titulo: 'Presença média',
         nota: 'dias com presença ÷ dias letivos',
-        cor: 'var(--texto-1a2b33)'
+        cor: 'var(--texto-ciano-850)'
       },
       {
         valor: horasTexto(minutosValidosTotais),
         titulo: 'Horas válidas',
         nota: 'conferidas no período',
-        cor: 'var(--texto-1a2b33)'
+        cor: 'var(--texto-ciano-850)'
       },
       {
         valor: pctTxt(resumoGeralDosOficineiros.ex),
@@ -140,7 +140,7 @@ class Component extends DCLogic {
         valor: numero(semRegistroTotal),
         titulo: 'Atividades sem registro',
         nota: 'previstas e ainda não registradas',
-        cor: semRegistroTotal ? 'var(--texto-b42318)' : 'var(--texto-1a2b33)'
+        cor: semRegistroTotal ? 'var(--texto-vermelho-600)' : 'var(--texto-ciano-850)'
       }
     ];
     const envioDe = id => contexto.envios.find(g => g.oficineiro_id === id);
@@ -155,8 +155,8 @@ class Component extends DCLogic {
             en && SITUACOES_DA_GRADE[en.status]
               ? SITUACOES_DA_GRADE[en.status]
               : gr.length
-                ? ['Em montagem · não enviada', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)']
-                : ['Sem grade', 'var(--texto-b42318)', 'var(--fundo-fbedeb)'],
+                ? ['Em montagem · não enviada', 'var(--texto-cinza-600)', 'var(--fundo-cinza-70)']
+                : ['Sem grade', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)'],
           e = escolaAtualDe(c);
         return {
           nome: c.nome,

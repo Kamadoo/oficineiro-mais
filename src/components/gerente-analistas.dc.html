@@ -9,30 +9,30 @@
 <body>
 <x-dc>
 <sc-if value="{{ is.analistasCarteiras }}" hint-placeholder-val="{{ false }}">
-  <sc-if value="{{ semVisitas }}" hint-placeholder-val="{{ false }}"><div class="fundo-fafcfc borda-dde6e8 raio-12 p-12-18 fs-13 cor-34464d lh-1p5">Nenhuma visita registrada no período. As visitas passam a aparecer aqui quando os analistas registrarem no perfil deles.</div></sc-if>
-  <section class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+  <sc-if value="{{ semVisitas }}" hint-placeholder-val="{{ false }}"><div class="fundo-cinza-35 borda-cinza-110 raio-12 p-12-18 fs-13 cor-cinza-750 lh-1p5">Nenhuma visita registrada no período. As visitas passam a aparecer aqui quando os analistas registrarem no perfil deles.</div></sc-if>
+  <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div class="p-16-20"><h3 class="m-0 fs-15">Analistas · visitas e adoção da carteira</h3></div>
     <div role="table" aria-label="Analistas" class="min-w-1060">
-      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-5b6b70 borda-t-dde6e8 borda-b-dde6e8" style="grid-template-columns:1.3fr .6fr .6fr .9fr 1fr .8fr 1.2fr 1.5fr"><span role="columnheader">Analista</span><span role="columnheader">Escolas</span><span role="columnheader">Visitas</span><span role="columnheader">Em campo</span><span role="columnheader">Carteira visitada</span><span role="columnheader">Presença ofic.</span><span role="columnheader">Execução das atividades</span><span role="columnheader">Origem das visitas agendadas</span></div>
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-cinza-600 borda-t-cinza-110 borda-b-cinza-110" style="grid-template-columns:1.3fr .6fr .6fr .9fr 1fr .8fr 1.2fr 1.5fr"><span role="columnheader">Analista</span><span role="columnheader">Escolas</span><span role="columnheader">Visitas</span><span role="columnheader">Em campo</span><span role="columnheader">Carteira visitada</span><span role="columnheader">Presença ofic.</span><span role="columnheader">Execução das atividades</span><span role="columnheader">Origem das visitas agendadas</span></div>
       <sc-for list="{{ analistas }}" as="analista" hint-placeholder-count="3">
-        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-e9eff1 alinha-center" style="grid-template-columns:1.3fr .6fr .6fr .9fr 1fr .8fr 1.2fr 1.5fr;background:{{ analista.fundo }}">
-          <span role="cell"><button onClick="{{ analista.escolher }}" aria-pressed="{{ analista.marcado }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-1a2b33 texto-left sublinha-3 botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:#CFDADD">{{ analista.nome }}</button></span><span role="cell" class="num-tabular-nums">{{ analista.escolas }}</span><span role="cell" class="num-tabular-nums">{{ analista.visitas }}</span><span role="cell" class="num-tabular-nums fs-12">{{ analista.campo }}</span><span role="cell" class="num-tabular-nums">{{ analista.cobertura }}</span><span role="cell" class="num-tabular-nums">{{ analista.presenca }}</span>
-          <span role="cell" class="d-flex alinha-center gap-8"><b class="w-38 num-tabular-nums">{{ analista.execucao }}</b><span class="flex-1 h-6 fundo-e8eef0 raio-3"><span class="d-block h-6 raio-3 largura-fundo" style="width:{{ analista.largura }};background:{{ analista.cor }}"></span></span></span>
-          <span role="cell" title="{{ analista.origensTexto }}" class="d-flex h-10 raio-5 rolagem-hidden fundo-e8eef0"><sc-for list="{{ analista.origens }}" as="origem" hint-placeholder-count="3"><span class="largura-fundo" style="width:{{ origem.largura }};background:{{ origem.cor }}"></span></sc-for></span>
+        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-cinza-75 alinha-center" style="grid-template-columns:1.3fr .6fr .6fr .9fr 1fr .8fr 1.2fr 1.5fr;background:{{ analista.fundo }}">
+          <span role="cell"><button onClick="{{ analista.escolher }}" aria-pressed="{{ analista.marcado }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-ciano-850 texto-left sublinha-3 botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:#CFDADD">{{ analista.nome }}</button></span><span role="cell" class="num-tabular-nums">{{ analista.escolas }}</span><span role="cell" class="num-tabular-nums">{{ analista.visitas }}</span><span role="cell" class="num-tabular-nums fs-12">{{ analista.campo }}</span><span role="cell" class="num-tabular-nums">{{ analista.cobertura }}</span><span role="cell" class="num-tabular-nums">{{ analista.presenca }}</span>
+          <span role="cell" class="d-flex alinha-center gap-8"><b class="w-38 num-tabular-nums">{{ analista.execucao }}</b><span class="flex-1 h-6 fundo-cinza-70 raio-3"><span class="d-block h-6 raio-3 largura-fundo" style="width:{{ analista.largura }};background:{{ analista.cor }}"></span></span></span>
+          <span role="cell" title="{{ analista.origensTexto }}" class="d-flex h-10 raio-5 rolagem-hidden fundo-cinza-70"><sc-for list="{{ analista.origens }}" as="origem" hint-placeholder-count="3"><span class="largura-fundo" style="width:{{ origem.largura }};background:{{ origem.cor }}"></span></sc-for></span>
         </div>
       </sc-for>
     </div>
-    <sc-if value="{{ semAnalistas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhum analista ativo com carteira.</p></sc-if>
-    <div class="d-flex quebra-wrap gap-8-16 p-12-20 fs-12 cor-34464d"><sc-for list="{{ origens }}" as="origem" hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ origem.cor }}"></span>{{ origem.rotulo }}</span></sc-for></div>
+    <sc-if value="{{ semAnalistas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhum analista ativo com carteira.</p></sc-if>
+    <div class="d-flex quebra-wrap gap-8-16 p-12-20 fs-12 cor-cinza-750"><sc-for list="{{ origens }}" as="origem" hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ origem.cor }}"></span>{{ origem.rotulo }}</span></sc-for></div>
   </section>
   <sc-if value="{{ temCarteira }}" hint-placeholder-val="{{ true }}">
-  <section class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
-    <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-200">Carteira · {{ carteiraTitulo }}</h3><span class="fs-12 cor-5b6b70">Escolha um analista acima para trocar</span></div>
+  <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
+    <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-200">Carteira · {{ carteiraTitulo }}</h3><span class="fs-12 cor-cinza-600">Escolha um analista acima para trocar</span></div>
     <div role="table" aria-label="Escolas da carteira" class="min-w-900">
-      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-5b6b70 borda-t-dde6e8 borda-b-dde6e8" style="grid-template-columns:1.8fr 1.8fr 1fr .8fr 1.1fr 1.3fr"><span role="columnheader">Escola</span><span role="columnheader">Oficineiros</span><span role="columnheader">Execução</span><span role="columnheader">Visitas</span><span role="columnheader">Última visita</span><span role="columnheader">Próxima na agenda</span></div>
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-cinza-600 borda-t-cinza-110 borda-b-cinza-110" style="grid-template-columns:1.8fr 1.8fr 1fr .8fr 1.1fr 1.3fr"><span role="columnheader">Escola</span><span role="columnheader">Oficineiros</span><span role="columnheader">Execução</span><span role="columnheader">Visitas</span><span role="columnheader">Última visita</span><span role="columnheader">Próxima na agenda</span></div>
       <sc-for list="{{ escolasDaCarteira }}" as="escola" hint-placeholder-count="4">
-        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-e9eff1 alinha-center" style="grid-template-columns:1.8fr 1.8fr 1fr .8fr 1.1fr 1.3fr">
-          <b role="cell" class="quebra-palavra-anywhere">{{ escola.nome }}</b><span role="cell" class="fs-12 cor-34464d quebra-palavra-anywhere">{{ escola.oficineiros }}</span>
+        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-cinza-75 alinha-center" style="grid-template-columns:1.8fr 1.8fr 1fr .8fr 1.1fr 1.3fr">
+          <b role="cell" class="quebra-palavra-anywhere">{{ escola.nome }}</b><span role="cell" class="fs-12 cor-cinza-750 quebra-palavra-anywhere">{{ escola.oficineiros }}</span>
           <b role="cell" class="num-tabular-nums" style="color:{{ escola.cor }}">{{ escola.execucao }}</b><span role="cell" class="num-tabular-nums">{{ escola.visitas }}</span><span role="cell" class="num-tabular-nums fs-12">{{ escola.ultimaVisita }}</span><span role="cell" class="fs-12">{{ escola.proximaVisita }}</span>
         </div>
       </sc-for>
@@ -44,55 +44,55 @@
 <sc-if value="{{ is.analistasAgendas }}" hint-placeholder-val="{{ false }}">
   <div class="d-flex quebra-wrap gap-10-12 alinha-center">
     <div role="group" aria-label="Semana" class="d-flex alinha-center gap-6">
-      <button onClick="{{ semanaAnterior }}" aria-label="Semana anterior" class="w-36 h-36 borda-cfdadd fundo-ffffff raio-8 cor-1a2b33 fs-16 p-0 largura-fundo botao-secundario">‹</button>
+      <button onClick="{{ semanaAnterior }}" aria-label="Semana anterior" class="w-36 h-36 borda-cinza-160 fundo-branco raio-8 cor-ciano-850 fs-16 p-0 largura-fundo botao-secundario">‹</button>
       <span class="fs-13 fw-600 min-w-170 texto-center">{{ semanaTexto }}</span>
-      <button onClick="{{ semanaSeguinte }}" aria-label="Próxima semana" class="w-36 h-36 borda-cfdadd fundo-ffffff raio-8 cor-1a2b33 fs-16 p-0 largura-fundo botao-secundario">›</button>
-      <sc-if value="{{ foraDaSemanaAtual }}" hint-placeholder-val="{{ false }}"><button onClick="{{ semanaAtual }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-1a2b33 botao-secundario">Esta semana</button></sc-if>
+      <button onClick="{{ semanaSeguinte }}" aria-label="Próxima semana" class="w-36 h-36 borda-cinza-160 fundo-branco raio-8 cor-ciano-850 fs-16 p-0 largura-fundo botao-secundario">›</button>
+      <sc-if value="{{ foraDaSemanaAtual }}" hint-placeholder-val="{{ false }}"><button onClick="{{ semanaAtual }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-ciano-850 botao-secundario">Esta semana</button></sc-if>
     </div>
-    <div role="tablist" aria-label="Agenda de" class="d-flex gap-4 fundo-e3ebed p-4 raio-10 segmentado"><button role="tab" aria-selected="{{ abaAnalistas }}" onClick="{{ verAbaAnalistas }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 espaco-nowrap {{ abaAnalistasClasse }}" style="background:{{ abaAnalistasFundo }};color:{{ abaAnalistasCor }}">Analistas</button><button role="tab" aria-selected="{{ abaOficineiros }}" onClick="{{ verAbaOficineiros }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 espaco-nowrap {{ abaOficineirosClasse }}" style="background:{{ abaOficineirosFundo }};color:{{ abaOficineirosCor }}">Oficineiros</button></div>
+    <div role="tablist" aria-label="Agenda de" class="d-flex gap-4 fundo-cinza-90 p-4 raio-10 segmentado"><button role="tab" aria-selected="{{ abaAnalistas }}" onClick="{{ verAbaAnalistas }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 espaco-nowrap {{ abaAnalistasClasse }}" style="background:{{ abaAnalistasFundo }};color:{{ abaAnalistasCor }}">Analistas</button><button role="tab" aria-selected="{{ abaOficineiros }}" onClick="{{ verAbaOficineiros }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 espaco-nowrap {{ abaOficineirosClasse }}" style="background:{{ abaOficineirosFundo }};color:{{ abaOficineirosCor }}">Oficineiros</button></div>
     <div class="oculto-celular flex-1"></div>
-    <sc-if value="{{ abaAnalistas }}" hint-placeholder-val="{{ true }}"><button class="largura-total-celular h-38 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3" onClick="{{ agendarVisita }}" aria-haspopup="dialog">+ Vincular visita a analista</button></sc-if>
+    <sc-if value="{{ abaAnalistas }}" hint-placeholder-val="{{ true }}"><button class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3" onClick="{{ agendarVisita }}" aria-haspopup="dialog">+ Vincular visita a analista</button></sc-if>
   </div>
-  <sc-if value="{{ temErroDaSemana }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroDaSemana }}</div></sc-if>
+  <sc-if value="{{ temErroDaSemana }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroDaSemana }}</div></sc-if>
   <sc-if value="{{ abaAnalistas }}" hint-placeholder-val="{{ true }}">
-  <section class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+  <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div role="table" aria-label="Agenda da semana" class="d-grid colunas-150-repeat-5-minmax-150-1fr min-w-900">
-      <div role="columnheader" class="p-12-14 fs-12 cor-5b6b70 fw-600 borda-b-dde6e8">Analista</div>
-      <sc-for list="{{ diasDaSemana }}" as="dia" hint-placeholder-count="5"><div role="columnheader" class="p-12-14 fs-13 fw-600 borda-b-dde6e8 borda-e-e9eff1" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</div></sc-for>
+      <div role="columnheader" class="p-12-14 fs-12 cor-cinza-600 fw-600 borda-b-cinza-110">Analista</div>
+      <sc-for list="{{ diasDaSemana }}" as="dia" hint-placeholder-count="5"><div role="columnheader" class="p-12-14 fs-13 fw-600 borda-b-cinza-110 borda-e-cinza-75" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</div></sc-for>
       <sc-for list="{{ agendaDosAnalistas }}" as="analista" hint-placeholder-count="3">
-        <div role="rowheader" class="p-12-14 borda-b-e9eff1 fw-600 fs-14 quebra-palavra-anywhere">{{ analista.nome }}</div>
+        <div role="rowheader" class="p-12-14 borda-b-cinza-75 fw-600 fs-14 quebra-palavra-anywhere">{{ analista.nome }}</div>
         <sc-for list="{{ analista.dias }}" as="dia" hint-placeholder-count="5">
-          <div role="cell" class="borda-b-e9eff1 borda-e-e9eff1 p-6 d-flex eixo-column gap-6 min-h-84">
+          <div role="cell" class="borda-b-cinza-75 borda-e-cinza-75 p-6 d-flex eixo-column gap-6 min-h-84">
             <sc-for list="{{ dia.visitas }}" as="visita" hint-placeholder-count="1">
-              <button onClick="{{ visita.abrir }}" aria-haspopup="dialog" aria-label="{{ visita.aria }}" class="borda-0 raio-8 p-8-10 d-flex eixo-column gap-2 texto-left cor-1a2b33 w-100pc largura-fundo" style="background:{{ visita.fundo }};cursor:pointer"><span class="fs-11 num-tabular-nums cor-34464d">{{ visita.hora }}</span><span class="fs-12 fw-600">{{ visita.escola }}</span><span class="fs-11" style="color:{{ visita.cor }}">{{ visita.rotulo }}</span></button>
+              <button onClick="{{ visita.abrir }}" aria-haspopup="dialog" aria-label="{{ visita.aria }}" class="borda-0 raio-8 p-8-10 d-flex eixo-column gap-2 texto-left cor-ciano-850 w-100pc largura-fundo" style="background:{{ visita.fundo }};cursor:pointer"><span class="fs-11 num-tabular-nums cor-cinza-750">{{ visita.hora }}</span><span class="fs-12 fw-600">{{ visita.escola }}</span><span class="fs-11" style="color:{{ visita.cor }}">{{ visita.rotulo }}</span></button>
             </sc-for>
           </div>
         </sc-for>
       </sc-for>
     </div>
-    <sc-if value="{{ semAgendaDosAnalistas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhum analista ativo com carteira.</p></sc-if>
+    <sc-if value="{{ semAgendaDosAnalistas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhum analista ativo com carteira.</p></sc-if>
   </section>
-  <div class="d-flex quebra-wrap gap-8-16 fs-12 cor-34464d"><sc-for list="{{ origens }}" as="origem" hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ origem.cor }}"></span>{{ origem.rotulo }}</span></sc-for><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 fundo-e2f2e5 borda-1-solid-23773a largura-fundo"></span>Visita registrada pelo analista</span></div>
+  <div class="d-flex quebra-wrap gap-8-16 fs-12 cor-cinza-750"><sc-for list="{{ origens }}" as="origem" hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ origem.cor }}"></span>{{ origem.rotulo }}</span></sc-for><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 fundo-verde-80 borda-1-solid-23773a largura-fundo"></span>Visita registrada pelo analista</span></div>
   </sc-if>
   <sc-if value="{{ abaOficineiros }}" hint-placeholder-val="{{ false }}">
-  <section class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+  <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div role="table" aria-label="Agenda dos oficineiros na semana" class="d-grid colunas-170-repeat-5-minmax-140-1fr min-w-900">
-      <div role="columnheader" class="p-12-14 fs-12 cor-5b6b70 fw-600 borda-b-dde6e8">Oficineiro</div>
-      <sc-for list="{{ diasDaSemana }}" as="dia" hint-placeholder-count="5"><div role="columnheader" class="p-12-14 fs-13 fw-600 borda-b-dde6e8 borda-e-e9eff1" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</div></sc-for>
+      <div role="columnheader" class="p-12-14 fs-12 cor-cinza-600 fw-600 borda-b-cinza-110">Oficineiro</div>
+      <sc-for list="{{ diasDaSemana }}" as="dia" hint-placeholder-count="5"><div role="columnheader" class="p-12-14 fs-13 fw-600 borda-b-cinza-110 borda-e-cinza-75" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</div></sc-for>
       <sc-for list="{{ agendaDosOficineiros }}" as="oficineiro" hint-placeholder-count="3">
-        <div role="rowheader" class="p-12-14 borda-b-e9eff1 d-flex eixo-column gap-2 min-w-0"><b class="fs-14 quebra-palavra-anywhere">{{ oficineiro.nome }}</b><span class="fs-12 cor-5b6b70">{{ oficineiro.escola }}</span></div>
+        <div role="rowheader" class="p-12-14 borda-b-cinza-75 d-flex eixo-column gap-2 min-w-0"><b class="fs-14 quebra-palavra-anywhere">{{ oficineiro.nome }}</b><span class="fs-12 cor-cinza-600">{{ oficineiro.escola }}</span></div>
         <sc-for list="{{ oficineiro.dias }}" as="dia" hint-placeholder-count="5">
-          <div role="cell" class="borda-b-e9eff1 borda-e-e9eff1 p-6 d-flex eixo-column gap-6 min-h-70">
+          <div role="cell" class="borda-b-cinza-75 borda-e-cinza-75 p-6 d-flex eixo-column gap-6 min-h-70">
             <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="1">
-              <button onClick="{{ atividade.abrir }}" aria-haspopup="dialog" aria-label="{{ atividade.aria }}" class="borda-0 raio-8 p-7-10 d-flex eixo-column gap-1 texto-left cor-1a2b33 w-100pc largura-fundo" style="background:{{ atividade.fundo }};cursor:pointer"><span class="fs-11 num-tabular-nums cor-34464d">{{ atividade.horario }}</span><b class="fs-13">{{ atividade.turma }}</b><span class="fs-12" style="color:{{ atividade.cor }}">{{ atividade.situacao }}</span></button>
+              <button onClick="{{ atividade.abrir }}" aria-haspopup="dialog" aria-label="{{ atividade.aria }}" class="borda-0 raio-8 p-7-10 d-flex eixo-column gap-1 texto-left cor-ciano-850 w-100pc largura-fundo" style="background:{{ atividade.fundo }};cursor:pointer"><span class="fs-11 num-tabular-nums cor-cinza-750">{{ atividade.horario }}</span><b class="fs-13">{{ atividade.turma }}</b><span class="fs-12" style="color:{{ atividade.cor }}">{{ atividade.situacao }}</span></button>
             </sc-for>
           </div>
         </sc-for>
       </sc-for>
     </div>
-    <sc-if value="{{ semAgendaDosOficineiros }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhum oficineiro ativo com esses filtros.</p></sc-if>
+    <sc-if value="{{ semAgendaDosOficineiros }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhum oficineiro ativo com esses filtros.</p></sc-if>
   </section>
-  <div class="d-flex quebra-wrap gap-8-16 fs-12 cor-34464d"><sc-for list="{{ situacoes }}" as="situacao" hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ situacao.cor }}"></span>{{ situacao.rotulo }}</span></sc-for></div>
+  <div class="d-flex quebra-wrap gap-8-16 fs-12 cor-cinza-750"><sc-for list="{{ situacoes }}" as="situacao" hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ situacao.cor }}"></span>{{ situacao.rotulo }}</span></sc-for></div>
   </sc-if>
 </sc-if>
 </x-dc>
@@ -174,7 +174,7 @@ class Component extends DCLogic {
         return {
           nome: c.nome,
           marcado: on ? 'true' : 'false',
-          fundo: on ? 'var(--fundo-eff9fc)' : 'var(--fundo-ffffff)',
+          fundo: on ? 'var(--fundo-ciano-40)' : 'var(--fundo-branco)',
           escolher: () => {
             contexto.registrarConsulta({
               tela: 'Analistas',
@@ -230,8 +230,8 @@ class Component extends DCLogic {
         fer = Base.feriado(dataDe(d));
       return {
         rotulo: DIAS[dataDe(d).getDay()].slice(0, 3) + ' ' + dmIso(d) + (fer ? ' · feriado' : ''),
-        fundo: h ? 'var(--fundo-e4f5fa)' : 'var(--fundo-ffffff)',
-        cor: h ? 'var(--texto-08617e)' : 'var(--texto-1a2b33)'
+        fundo: h ? 'var(--fundo-ciano-60)' : 'var(--fundo-branco)',
+        cor: h ? 'var(--texto-ciano-740)' : 'var(--texto-ciano-850)'
       };
     });
     const agendaDosAnalistas = analistasFiltrados
@@ -249,8 +249,8 @@ class Component extends DCLogic {
                 hora: v.hora ? hmDe(v.hora) : 'sem horário',
                 escola: siglaDaEscola(v.escola_id),
                 rotulo: feita ? 'Realizada · ' + o[0] : o[0],
-                fundo: feita ? 'var(--fundo-e2f2e5)' : o[2],
-                cor: feita ? 'var(--texto-1b5e2e)' : o[3],
+                fundo: feita ? 'var(--fundo-verde-80)' : o[2],
+                cor: feita ? 'var(--texto-verde-760)' : o[3],
                 aria: 'Ver visita de ' + c.nome + ' em ' + nomeDaEscola(v.escola_id) + ', ' + dmIso(d),
                 abrir: () => contexto.abrirVisita({ t: 'a', id: v.id })
               };
@@ -262,8 +262,8 @@ class Component extends DCLogic {
               hora: 'registrada',
               escola: siglaDaEscola(v.escola_id),
               rotulo: v.tipo || 'Visita registrada',
-              fundo: 'var(--fundo-e2f2e5)',
-              cor: 'var(--texto-1b5e2e)',
+              fundo: 'var(--fundo-verde-80)',
+              cor: 'var(--texto-verde-760)',
               aria: 'Ver visita registrada por ' + c.nome + ' em ' + nomeDaEscola(v.escola_id) + ', ' + dmIso(d),
               abrir: () => contexto.abrirVisita({ t: 'v', id: v.id })
             }));
@@ -370,12 +370,12 @@ class Component extends DCLogic {
       semAgendaDosAnalistas: agendaDosAnalistas.length === 0,
       abaAnalistas: memoria.agenda !== 'ofic',
       abaOficineiros: memoria.agenda === 'ofic',
-      abaAnalistasClasse: memoria.agenda !== 'ofic' ? 'fundo-ffffff' : 'fundo-transparent',
-      abaAnalistasFundo: memoria.agenda !== 'ofic' ? 'var(--fundo-ffffff)' : 'transparent',
-      abaAnalistasCor: memoria.agenda !== 'ofic' ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)',
-      abaOficineirosClasse: memoria.agenda === 'ofic' ? 'fundo-ffffff' : 'fundo-transparent',
-      abaOficineirosFundo: memoria.agenda === 'ofic' ? 'var(--fundo-ffffff)' : 'transparent',
-      abaOficineirosCor: memoria.agenda === 'ofic' ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)',
+      abaAnalistasClasse: memoria.agenda !== 'ofic' ? 'fundo-branco' : 'fundo-transparent',
+      abaAnalistasFundo: memoria.agenda !== 'ofic' ? 'var(--fundo-branco)' : 'transparent',
+      abaAnalistasCor: memoria.agenda !== 'ofic' ? 'var(--texto-ciano-850)' : 'var(--texto-cinza-600)',
+      abaOficineirosClasse: memoria.agenda === 'ofic' ? 'fundo-branco' : 'fundo-transparent',
+      abaOficineirosFundo: memoria.agenda === 'ofic' ? 'var(--fundo-branco)' : 'transparent',
+      abaOficineirosCor: memoria.agenda === 'ofic' ? 'var(--texto-ciano-850)' : 'var(--texto-cinza-600)',
       verAbaAnalistas: () => this.lembrar({ agenda: 'anal' }),
       verAbaOficineiros: () => this.lembrar({ agenda: 'ofic' }),
       agendaDosOficineiros: agendaDosOficineiros,

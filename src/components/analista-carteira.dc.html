@@ -9,58 +9,58 @@
 <body>
 <x-dc>
   <div class="filtros d-flex quebra-wrap gap-8 alinha-center">
-    <select aria-label="Período" value="{{ periodo }}" onChange="{{ escolherPeriodo }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fw-600 fundo-ffffff" style="flex:1 1 140px;background:var(--fundo-ffffff)"><sc-for list="{{ periodos }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-    <select aria-label="Escola" value="{{ escola }}" onChange="{{ escolherEscola }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="flex:1 1 140px;background:var(--fundo-ffffff)"><option value="">Todas as escolas da carteira</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-    <select aria-label="Solução" value="{{ solucao }}" onChange="{{ escolherSolucao }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="flex:1 1 140px;background:var(--fundo-ffffff)"><option value="">Todas as soluções</option><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
-    <select aria-label="Tipo de atividade" value="{{ tipo }}" onChange="{{ escolherTipo }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="flex:1 1 140px;background:var(--fundo-ffffff)"><option value="">Todos os tipos de aula</option><option value="R">Aula regular</option><option value="P">Projeto tempo integral</option><option value="F">Formação de professores</option></select>
+    <select aria-label="Período" value="{{ periodo }}" onChange="{{ escolherPeriodo }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fw-600 fundo-branco" style="flex:1 1 140px;background:var(--fundo-branco)"><sc-for list="{{ periodos }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select aria-label="Escola" value="{{ escola }}" onChange="{{ escolherEscola }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="flex:1 1 140px;background:var(--fundo-branco)"><option value="">Todas as escolas da carteira</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select aria-label="Solução" value="{{ solucao }}" onChange="{{ escolherSolucao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="flex:1 1 140px;background:var(--fundo-branco)"><option value="">Todas as soluções</option><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
+    <select aria-label="Tipo de atividade" value="{{ tipo }}" onChange="{{ escolherTipo }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="flex:1 1 140px;background:var(--fundo-branco)"><option value="">Todos os tipos de aula</option><option value="R">Aula regular</option><option value="P">Projeto tempo integral</option><option value="F">Formação de professores</option></select>
     <div class="oculto-celular flex-1"></div>
-    <span role="status" aria-live="polite" class="fs-12 cor-5b6b70">{{ periodoTexto }}</span>
-    <button onClick="{{ exportar }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-1a2b33 botao-secundario">Exportar Excel</button>
+    <span role="status" aria-live="polite" class="fs-12 cor-cinza-600">{{ periodoTexto }}</span>
+    <button onClick="{{ exportar }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-ciano-850 botao-secundario">Exportar Excel</button>
   </div>
   <div class="duas-colunas-celular d-grid colunas-repeat-3-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
-    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="6"><div class="borda-dde6e8 raio-10 p-14-16 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-12 cor-5b6b70">{{ indicador.titulo }}</span><span class="fs-26 fw-600 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-11 cor-5b6b70">{{ indicador.nota }}</span></div></sc-for>
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="6"><div class="borda-cinza-110 raio-10 p-14-16 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><span class="fs-12 cor-cinza-600">{{ indicador.titulo }}</span><span class="fs-26 fw-600 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for>
   </div>
-  <section class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
-    <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-200">Execução e adoção por escola</h3><span class="fs-12 cor-5b6b70">Execução = realizadas ÷ previstas líquidas · extras fora da taxa</span></div>
+  <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
+    <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-200">Execução e adoção por escola</h3><span class="fs-12 cor-cinza-600">Execução = realizadas ÷ previstas líquidas · extras fora da taxa</span></div>
     <div role="table" aria-label="Execução e adoção por escola" class="min-w-1180">
-      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-5b6b70 borda-t-dde6e8 borda-b-dde6e8" style="grid-template-columns:1.6fr 1.1fr .7fr .7fr 1.2fr .7fr .7fr .5fr 1fr .5fr .9fr"><span role="columnheader">Escola</span><span role="columnheader">Oficineiro(s)</span><span role="columnheader">Prev. líquidas</span><span role="columnheader">Realizadas</span><span role="columnheader">Execução</span><span role="columnheader">Estudantes</span><span role="columnheader">Presença</span><span role="columnheader">Eng.</span><span role="columnheader">Solução principal</span><span role="columnheader">Não real.</span><span role="columnheader">Visitas</span></div>
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-cinza-600 borda-t-cinza-110 borda-b-cinza-110" style="grid-template-columns:1.6fr 1.1fr .7fr .7fr 1.2fr .7fr .7fr .5fr 1fr .5fr .9fr"><span role="columnheader">Escola</span><span role="columnheader">Oficineiro(s)</span><span role="columnheader">Prev. líquidas</span><span role="columnheader">Realizadas</span><span role="columnheader">Execução</span><span role="columnheader">Estudantes</span><span role="columnheader">Presença</span><span role="columnheader">Eng.</span><span role="columnheader">Solução principal</span><span role="columnheader">Não real.</span><span role="columnheader">Visitas</span></div>
       <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="5">
-        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-e8eef0 alinha-center" style="grid-template-columns:1.6fr 1.1fr .7fr .7fr 1.2fr .7fr .7fr .5fr 1fr .5fr .9fr;background:{{ linha.fundo }};font-weight:{{ linha.peso }}">
-          <span role="cell" class="quebra-palavra-anywhere">{{ linha.escola }}</span><span role="cell" class="fs-12 cor-34464d quebra-palavra-anywhere">{{ linha.oficineiros }}</span><span role="cell" class="num-tabular-nums">{{ linha.previstas }}</span><span role="cell" class="num-tabular-nums">{{ linha.realizadas }}</span>
-          <span role="cell" class="d-flex alinha-center gap-8"><b class="w-38 num-tabular-nums">{{ linha.execucao }}</b><span class="flex-1 h-6 fundo-e8eef0 raio-3"><span class="d-block h-6 raio-3 largura-fundo" style="width:{{ linha.execucaoLargura }};background:{{ linha.execucaoCor }}"></span></span></span>
+        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-cinza-70 alinha-center" style="grid-template-columns:1.6fr 1.1fr .7fr .7fr 1.2fr .7fr .7fr .5fr 1fr .5fr .9fr;background:{{ linha.fundo }};font-weight:{{ linha.peso }}">
+          <span role="cell" class="quebra-palavra-anywhere">{{ linha.escola }}</span><span role="cell" class="fs-12 cor-cinza-750 quebra-palavra-anywhere">{{ linha.oficineiros }}</span><span role="cell" class="num-tabular-nums">{{ linha.previstas }}</span><span role="cell" class="num-tabular-nums">{{ linha.realizadas }}</span>
+          <span role="cell" class="d-flex alinha-center gap-8"><b class="w-38 num-tabular-nums">{{ linha.execucao }}</b><span class="flex-1 h-6 fundo-cinza-70 raio-3"><span class="d-block h-6 raio-3 largura-fundo" style="width:{{ linha.execucaoLargura }};background:{{ linha.execucaoCor }}"></span></span></span>
           <span role="cell" class="num-tabular-nums">{{ linha.estudantes }}</span><span role="cell" class="num-tabular-nums">{{ linha.presenca }}</span><span role="cell" class="num-tabular-nums">{{ linha.engajamento }}</span><span role="cell" class="quebra-palavra-anywhere">{{ linha.solucao }}</span><span role="cell" class="num-tabular-nums" style="color:{{ linha.naoRealizadasCor }}">{{ linha.naoRealizadas }}</span>
-          <span role="cell" class="d-flex eixo-column fs-11 cor-34464d fw-400"><span>{{ linha.ultimaVisita }}</span><span style="color:{{ linha.proximaVisitaCor }}">{{ linha.proximaVisita }}</span></span>
+          <span role="cell" class="d-flex eixo-column fs-11 cor-cinza-750 fw-400"><span>{{ linha.ultimaVisita }}</span><span style="color:{{ linha.proximaVisitaCor }}">{{ linha.proximaVisita }}</span></span>
         </div>
       </sc-for>
     </div>
-    <sc-if value="{{ semEscolas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhuma escola ativa na carteira com esses filtros.</p></sc-if>
+    <sc-if value="{{ semEscolas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhuma escola ativa na carteira com esses filtros.</p></sc-if>
   </section>
   <div class="empilha-celular d-grid colunas-repeat-2-minmax-0-1fr gap-20" style="opacity:{{ opacidade }}">
-    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)">
+    <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco" style="background:var(--fundo-branco)">
       <h3 class="m-0 fs-15">Uso por solução</h3>
       <sc-for list="{{ usoPorSolucao }}" as="item" hint-placeholder-count="4">
-        <div class="d-flex eixo-column gap-6"><div class="d-flex quebra-wrap justifica-space-between gap-2-8 fs-13"><b>{{ item.nome }}</b><span class="cor-5b6b70">{{ item.detalhe }}</span></div><div class="d-flex alinha-center gap-10"><span class="flex-1 h-8 fundo-e8eef0 raio-4"><span class="d-block h-8 raio-4 largura-fundo" style="width:{{ item.parcela }};background:{{ item.cor }}"></span></span><b class="num-tabular-nums fs-13 w-40 texto-right">{{ item.parcela }}</b></div></div>
+        <div class="d-flex eixo-column gap-6"><div class="d-flex quebra-wrap justifica-space-between gap-2-8 fs-13"><b>{{ item.nome }}</b><span class="cor-cinza-600">{{ item.detalhe }}</span></div><div class="d-flex alinha-center gap-10"><span class="flex-1 h-8 fundo-cinza-70 raio-4"><span class="d-block h-8 raio-4 largura-fundo" style="width:{{ item.parcela }};background:{{ item.cor }}"></span></span><b class="num-tabular-nums fs-13 w-40 texto-right">{{ item.parcela }}</b></div></div>
       </sc-for>
     </section>
-    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)">
+    <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco" style="background:var(--fundo-branco)">
       <h3 class="m-0 fs-15">Aulas por tipo</h3>
       <sc-for list="{{ aulasPorTipo }}" as="item" hint-placeholder-count="3">
-        <div class="d-grid colunas-minmax-0-1fr-auto gap-4-12 p-10-12 raio-8" style="background:{{ item.fundo }}"><b class="fs-14" style="color:{{ item.cor }}">{{ item.nome }}</b><b class="num-tabular-nums" style="color:{{ item.cor }}">{{ item.execucao }}</b><span class="fs-12 cor-34464d">{{ item.detalhe }}</span><span class="fs-11 cor-5b6b70">execução</span></div>
+        <div class="d-grid colunas-minmax-0-1fr-auto gap-4-12 p-10-12 raio-8" style="background:{{ item.fundo }}"><b class="fs-14" style="color:{{ item.cor }}">{{ item.nome }}</b><b class="num-tabular-nums" style="color:{{ item.cor }}">{{ item.execucao }}</b><span class="fs-12 cor-cinza-750">{{ item.detalhe }}</span><span class="fs-11 cor-cinza-600">execução</span></div>
       </sc-for>
     </section>
-    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)">
+    <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
       <h3 class="m-0 fs-15">Motivos de não realização</h3>
-      <sc-if value="{{ semMotivos }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Nenhuma aula não realizada no período.</span></sc-if>
+      <sc-if value="{{ semMotivos }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma aula não realizada no período.</span></sc-if>
       <sc-for list="{{ motivos }}" as="item" hint-placeholder-count="4">
-        <div class="d-grid colunas-minmax-0-150-minmax-0-1fr-28 gap-10 alinha-center fs-13"><span class="quebra-palavra-anywhere">{{ item.nome }}</span><span class="h-8 fundo-e8eef0 raio-4"><span class="d-block h-8 fundo-b42318 raio-4 largura-fundo" style="width:{{ item.largura }}"></span></span><b class="num-tabular-nums texto-right">{{ item.total }}</b></div>
+        <div class="d-grid colunas-minmax-0-150-minmax-0-1fr-28 gap-10 alinha-center fs-13"><span class="quebra-palavra-anywhere">{{ item.nome }}</span><span class="h-8 fundo-cinza-70 raio-4"><span class="d-block h-8 fundo-vermelho-600 raio-4 largura-fundo" style="width:{{ item.largura }}"></span></span><b class="num-tabular-nums texto-right">{{ item.total }}</b></div>
       </sc-for>
-      <span class="fs-12 cor-5b6b70">Motivos informados pelos oficineiros no registro das aulas.</span>
+      <span class="fs-12 cor-cinza-600">Motivos informados pelos oficineiros no registro das aulas.</span>
     </section>
-    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)">
+    <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
       <h3 class="m-0 fs-15">Engajamento e objetivos por solução</h3>
-      <sc-if value="{{ semEngajamento }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Nenhuma aula com engajamento informado no período.</span></sc-if>
+      <sc-if value="{{ semEngajamento }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma aula com engajamento informado no período.</span></sc-if>
       <sc-for list="{{ engajamentoPorSolucao }}" as="item" hint-placeholder-count="4">
-        <div class="d-grid colunas-minmax-0-1fr-70-minmax-0-170 gap-10 alinha-center fs-13 p-8-0 borda-t-e8eef0"><b class="quebra-palavra-anywhere">{{ item.nome }}</b><span class="num-tabular-nums">{{ item.nota }} / 5</span><span class="cor-23773a fs-12">{{ item.objetivo }}</span></div>
+        <div class="d-grid colunas-minmax-0-1fr-70-minmax-0-170 gap-10 alinha-center fs-13 p-8-0 borda-t-cinza-70"><b class="quebra-palavra-anywhere">{{ item.nome }}</b><span class="num-tabular-nums">{{ item.nota }} / 5</span><span class="cor-verde-700 fs-12">{{ item.objetivo }}</span></div>
       </sc-for>
     </section>
   </div>
@@ -69,11 +69,11 @@
 const Base = window.FSM_BASE;
 const { TIPOS, dataDe, minDe, dmIso, cicloIniIso, cicloFimIso, mesTxt, pct, pctTxt, exC, numero, plural } = Base;
 const CORES_DAS_SOLUCOES = [
-  'var(--texto-23773a)',
-  'var(--texto-1f4fc4)',
-  'var(--texto-9a6212)',
-  'var(--texto-6c60e6)',
-  'var(--texto-5b6b70)'
+  'var(--texto-verde-700)',
+  'var(--texto-azul-550)',
+  'var(--texto-ambar-660)',
+  'var(--texto-indigo-360)',
+  'var(--texto-cinza-600)'
 ];
 const larguraDaBarra = valor => (valor == null ? '0%' : Math.min(100, valor) + '%');
 const minutosDaAula = aula =>
@@ -158,11 +158,11 @@ class Component extends DCLogic {
       engajamento: resumo.engajamento,
       solucao,
       naoRealizadas: numero(resumo.nao),
-      naoRealizadasCor: resumo.nao > 4 ? 'var(--texto-b42318)' : 'var(--texto-1a2b33)',
+      naoRealizadasCor: resumo.nao > 4 ? 'var(--texto-vermelho-600)' : 'var(--texto-ciano-850)',
       ultimaVisita,
       proximaVisita,
-      proximaVisitaCor: proximaVisitaCor || 'var(--texto-34464d)',
-      fundo: ehTotal ? 'var(--fundo-f7fafb)' : 'var(--fundo-ffffff)',
+      proximaVisitaCor: proximaVisitaCor || 'var(--texto-cinza-750)',
+      fundo: ehTotal ? 'var(--fundo-cinza-20)' : 'var(--fundo-branco)',
       peso: ehTotal ? '600' : '400'
     });
     const linhas = escolas
@@ -182,7 +182,7 @@ class Component extends DCLogic {
           ultima ? 'Última ' + dmIso(ultima.data) : 'Sem visita',
           proxima ? 'Próxima ' + dmIso(proxima.data) : 'Sem agendada',
           false,
-          !proxima && antiga ? 'var(--texto-b42318)' : 'var(--texto-34464d)'
+          !proxima && antiga ? 'var(--texto-vermelho-600)' : 'var(--texto-cinza-750)'
         );
       })
       .concat(
@@ -278,31 +278,31 @@ class Component extends DCLogic {
           titulo: 'Aulas realizadas',
           valor: numero(total.real) + ' / ' + numero(total.liquidas),
           nota: total.extra ? numero(total.extra) + ' fora da grade' : 'todas da grade',
-          cor: 'var(--texto-1a2b33)'
+          cor: 'var(--texto-ciano-850)'
         },
         {
           titulo: 'Horas-aula realizadas',
           valor: numero(horasAula(aulas)),
           nota: 'tempos de 50 minutos',
-          cor: 'var(--texto-1a2b33)'
+          cor: 'var(--texto-ciano-850)'
         },
         {
           titulo: 'Estudantes atendidos',
           valor: numero(total.estudantes),
           nota: 'soma de presentes',
-          cor: 'var(--texto-1a2b33)'
+          cor: 'var(--texto-ciano-850)'
         },
         {
           titulo: 'Taxa de presença',
           valor: pctTxt(total.presenca),
           nota: 'presentes ÷ matriculados',
-          cor: 'var(--texto-1a2b33)'
+          cor: 'var(--texto-ciano-850)'
         },
         {
           titulo: 'Cobertura das turmas',
           valor: pctTxt(pct(turmas.atendidas, turmas.todas)),
           nota: 'turmas atendidas ÷ turmas da grade',
-          cor: 'var(--texto-1a2b33)'
+          cor: 'var(--texto-ciano-850)'
         }
       ],
       linhas,
@@ -321,7 +321,7 @@ class Component extends DCLogic {
               ),
             cor: CORES_DAS_SOLUCOES[i]
           }))
-        : [{ nome: 'Nenhuma aula realizada', parcela: '0%', detalhe: 'no período', cor: 'var(--borda-cfdadd)' }],
+        : [{ nome: 'Nenhuma aula realizada', parcela: '0%', detalhe: 'no período', cor: 'var(--borda-cinza-160)' }],
       aulasPorTipo: ['R', 'P', 'F']
         .filter(tipo => tipo !== 'F' || aulas.some(aula => aula.tipo === 'F'))
         .map(tipo => {

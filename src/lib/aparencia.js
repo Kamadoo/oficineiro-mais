@@ -42,11 +42,68 @@ window.FSM_APARENCIA =
       ]
     };
 
+    const NOME_DA_COR = {
+      '#08617E': 'ciano-740',
+      '#0B7EA3': 'ciano-660',
+      '#1A2B33': 'ciano-850',
+      '#1A3F9C': 'azul-640',
+      '#1B5E2E': 'verde-760',
+      '#1F4FC4': 'azul-550',
+      '#23773A': 'verde-700',
+      '#333333': 'cinza-800',
+      '#34464D': 'cinza-750',
+      '#45575E': 'cinza-680',
+      '#4B41B8': 'indigo-510',
+      '#555555': 'cinza-670',
+      '#5B6B70': 'cinza-600',
+      '#5E4A26': 'ambar-740',
+      '#6C60E6': 'indigo-360',
+      '#7A1F17': 'vermelho-720',
+      '#7A4E0B': 'ambar-745',
+      '#7D8C91': 'cinza-470',
+      '#7E8E93': 'cinza-460',
+      '#8A1C12': 'vermelho-690',
+      '#8A999E': 'cinza-420',
+      '#9A6212': 'ambar-660',
+      '#B42318': 'vermelho-600',
+      '#B5C3C7': 'cinza-250',
+      '#BEE9F5': 'ciano-150',
+      '#C3CFD2': 'cinza-210',
+      '#C9ECF6': 'ciano-120',
+      '#CCCCCC': 'cinza-200',
+      '#CFDADD': 'cinza-160',
+      '#DDDDDD': 'cinza-130',
+      '#DDE6E8': 'cinza-110',
+      '#E2F2E5': 'verde-80',
+      '#E3EBED': 'cinza-90',
+      '#E4F5FA': 'ciano-60',
+      '#E7EDFC': 'azul-50',
+      '#E8EEF0': 'cinza-70',
+      '#E9EFF1': 'cinza-75',
+      '#EBF1F2': 'cinza-60',
+      '#ECEBFC': 'indigo-50',
+      '#EDF2F3': 'cinza-65',
+      '#EDF7EF': 'verde-50',
+      '#EEF3F4': 'cinza-55',
+      '#EFF3FD': 'azul-40',
+      '#EFF9FC': 'ciano-40',
+      '#F5F9FA': 'cinza-40',
+      '#F7FAFB': 'cinza-20',
+      '#F8FBFB': 'cinza-25',
+      '#F9FBFC': 'cinza-30',
+      '#FAEFD9': 'ambar-80',
+      '#FAFCFC': 'cinza-35',
+      '#FBEDEB': 'vermelho-50',
+      '#FCF5E8': 'ambar-50',
+      '#FDF6E7': 'ambar-55',
+      '#FFFFFF': 'branco'
+    };
+
     const variaveis = escuro =>
       Object.entries(PALETA)
         .flatMap(([papel, pares]) =>
           pares.flatMap(([cor, claras]) =>
-            claras.map(clara => `--${papel}-${clara.slice(1).toLowerCase()}:${escuro ? cor : clara}`)
+            claras.map(clara => `--${papel}-${NOME_DA_COR[clara]}:${escuro ? cor : clara}`)
           )
         )
         .join(';');
@@ -54,12 +111,12 @@ window.FSM_APARENCIA =
     const css = () => {
       const E = 'html[data-tema="escuro"]';
       return (
-        `:root{${variaveis(false)};--fundo-13252c:#13252C;--fundo-mapa:#EBF1F2;--grade-mapa:#D7E2E5}` +
+        `:root{${variaveis(false)};--fundo-ciano-880:#13252C;--fundo-mapa:#EBF1F2;--grade-mapa:#D7E2E5}` +
         '@media screen{' +
         `${E}{color-scheme:dark}` +
         `${E} body{background:#0E1A1E!important}` +
         `${E} #area-logada{${variaveis(true)};--fundo-mapa:#1B2D34;--grade-mapa:rgba(255,255,255,.05);color:#E6EEF0}` +
-        `${E} #area-logada main{--fundo-13252c:#1F3B47}` +
+        `${E} #area-logada main{--fundo-ciano-880:#1F3B47}` +
         `${E} #area-logada input,${E} #area-logada select,${E} #area-logada textarea{color:#E6EEF0}` +
         `${E} #area-logada input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),${E} #area-logada select,${E} #area-logada textarea{background-color:#15252B}` +
         `${E} #area-logada input::placeholder,${E} #area-logada textarea::placeholder{color:#7F959C}` +

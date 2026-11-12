@@ -305,119 +305,119 @@ select {
   font-size: 9pt;
 }
 
-.cor-08617e {
-  color: var(--texto-08617e);
+.cor-ciano-740 {
+  color: var(--texto-ciano-740);
 }
 
-.cor-08617f {
+.cor-ciano-745 {
   color: #08617F;
 }
 
-.cor-0b7ea3 {
-  color: var(--texto-0b7ea3);
+.cor-ciano-660 {
+  color: var(--texto-ciano-660);
 }
 
-.cor-0b7ea4 {
+.cor-ciano-665 {
   color: #0B7EA4;
 }
 
-.cor-13252c {
+.cor-ciano-880 {
   color: #13252C;
 }
 
-.cor-1a2b33 {
-  color: var(--texto-1a2b33);
+.cor-ciano-850 {
+  color: var(--texto-ciano-850);
 }
 
-.cor-1a2b34 {
+.cor-ciano-855 {
   color: #1A2B34;
 }
 
-.cor-1a3f9c {
-  color: var(--texto-1a3f9c);
+.cor-azul-640 {
+  color: var(--texto-azul-640);
 }
 
-.cor-1b5e2e {
-  color: var(--texto-1b5e2e);
+.cor-verde-760 {
+  color: var(--texto-verde-760);
 }
 
-.cor-23773a {
-  color: var(--texto-23773a);
+.cor-verde-700 {
+  color: var(--texto-verde-700);
 }
 
-.cor-34464d {
-  color: var(--texto-34464d);
+.cor-cinza-750 {
+  color: var(--texto-cinza-750);
 }
 
-.cor-3a4b52 {
+.cor-cinza-730 {
   color: #3A4B52;
 }
 
-.cor-3ecdf3 {
+.cor-ciano-400 {
   color: #3ECDF3;
 }
 
-.cor-45575e {
-  color: var(--texto-45575e);
+.cor-cinza-680 {
+  color: var(--texto-cinza-680);
 }
 
-.cor-5b6b70 {
-  color: var(--texto-5b6b70);
+.cor-cinza-600 {
+  color: var(--texto-cinza-600);
 }
 
-.cor-5b6b71 {
+.cor-cinza-605 {
   color: #5B6B71;
 }
 
-.cor-5e4a26 {
-  color: var(--texto-5e4a26);
+.cor-ambar-740 {
+  color: var(--texto-ambar-740);
 }
 
-.cor-7a1f17 {
-  color: var(--texto-7a1f17);
+.cor-vermelho-720 {
+  color: var(--texto-vermelho-720);
 }
 
-.cor-7a4e0b {
-  color: var(--texto-7a4e0b);
+.cor-ambar-745 {
+  color: var(--texto-ambar-745);
 }
 
-.cor-7d8c91 {
-  color: var(--texto-7d8c91);
+.cor-cinza-470 {
+  color: var(--texto-cinza-470);
 }
 
-.cor-7e8e93 {
-  color: var(--texto-7e8e93);
+.cor-cinza-460 {
+  color: var(--texto-cinza-460);
 }
 
-.cor-8a1c12 {
-  color: var(--texto-8a1c12);
+.cor-vermelho-690 {
+  color: var(--texto-vermelho-690);
 }
 
-.cor-8a999e {
-  color: var(--texto-8a999e);
+.cor-cinza-420 {
+  color: var(--texto-cinza-420);
 }
 
-.cor-8fa5ac {
+.cor-cinza-380 {
   color: #8FA5AC;
 }
 
-.cor-9a6212 {
-  color: var(--texto-9a6212);
+.cor-ambar-660 {
+  color: var(--texto-ambar-660);
 }
 
-.cor-b42318 {
-  color: var(--texto-b42318);
+.cor-vermelho-600 {
+  color: var(--texto-vermelho-600);
 }
 
-.cor-b4c2c6 {
+.cor-cinza-260 {
   color: #B4C2C6;
 }
 
-.cor-e3ecee {
+.cor-cinza-100 {
   color: #E3ECEE;
 }
 
-.cor-fff {
+.cor-branco {
   color: #fff;
 }
 
@@ -545,124 +545,124 @@ select {
   gap: 8px;
 }
 
-.fundo-08617e {
+.fundo-ciano-740 {
   background: #08617E;
 }
 
-.fundo-0b7ea3 {
+.fundo-ciano-660 {
   background: #0B7EA3;
 }
 
-.fundo-13252c {
-  background: var(--fundo-13252c);
+.fundo-ciano-880 {
+  background: var(--fundo-ciano-880);
 }
 
-.fundo-1b3038 {
+.fundo-ciano-840 {
   background: #1B3038;
 }
 
-.fundo-23773a {
+.fundo-verde-700 {
   background: #23773A;
 }
 
-.fundo-2e464e {
+.fundo-ciano-760 {
   background: #2E464E;
 }
 
-.fundo-6c60e6 {
+.fundo-indigo-360 {
   background: #6C60E6;
 }
 
-.fundo-b42318 {
+.fundo-vermelho-600 {
   background: #B42318;
 }
 
-.fundo-dd2287 {
+.fundo-rosa-500 {
   background: #DD2287;
 }
 
-.fundo-dde6e8 {
-  background: var(--fundo-dde6e8);
+.fundo-cinza-110 {
+  background: var(--fundo-cinza-110);
 }
 
-.fundo-e2f2e5 {
-  background: var(--fundo-e2f2e5);
+.fundo-verde-80 {
+  background: var(--fundo-verde-80);
 }
 
-.fundo-e3b45c {
+.fundo-ambar-370 {
   background: #E3B45C;
 }
 
-.fundo-e3ebed {
-  background: var(--fundo-e3ebed);
+.fundo-cinza-90 {
+  background: var(--fundo-cinza-90);
 }
 
-.fundo-e3ebee {
+.fundo-cinza-95 {
   background: #E3EBEE;
 }
 
-.fundo-e4f5fa {
-  background: var(--fundo-e4f5fa);
+.fundo-ciano-60 {
+  background: var(--fundo-ciano-60);
 }
 
-.fundo-e8eef0 {
-  background: var(--fundo-e8eef0);
+.fundo-cinza-70 {
+  background: var(--fundo-cinza-70);
 }
 
-.fundo-edf2f3 {
-  background: var(--fundo-edf2f3);
+.fundo-cinza-65 {
+  background: var(--fundo-cinza-65);
 }
 
-.fundo-eef3f4 {
-  background: var(--fundo-eef3f4);
+.fundo-cinza-55 {
+  background: var(--fundo-cinza-55);
 }
 
-.fundo-eff3fd {
-  background: var(--fundo-eff3fd);
+.fundo-azul-40 {
+  background: var(--fundo-azul-40);
 }
 
-.fundo-eff9fc {
-  background: var(--fundo-eff9fc);
+.fundo-ciano-40 {
+  background: var(--fundo-ciano-40);
 }
 
-.fundo-f2f5f6 {
+.fundo-cinza-45 {
   background: #F2F5F6;
 }
 
-.fundo-f4f7f8 {
+.fundo-cinza-50 {
   background: #F4F7F8;
 }
 
-.fundo-f7fafb {
-  background: var(--fundo-f7fafb);
+.fundo-cinza-20 {
+  background: var(--fundo-cinza-20);
 }
 
-.fundo-f9fbfc {
-  background: var(--fundo-f9fbfc);
+.fundo-cinza-30 {
+  background: var(--fundo-cinza-30);
 }
 
-.fundo-faefd9 {
-  background: var(--fundo-faefd9);
+.fundo-ambar-80 {
+  background: var(--fundo-ambar-80);
 }
 
-.fundo-fafcfc {
-  background: var(--fundo-fafcfc);
+.fundo-cinza-35 {
+  background: var(--fundo-cinza-35);
 }
 
-.fundo-fbedeb {
-  background: var(--fundo-fbedeb);
+.fundo-vermelho-50 {
+  background: var(--fundo-vermelho-50);
 }
 
-.fundo-fdf6e7 {
-  background: var(--fundo-fdf6e7);
+.fundo-ambar-55 {
+  background: var(--fundo-ambar-55);
 }
 
-.fundo-fefefe {
+.fundo-cinza-0 {
   background: #FEFEFE;
 }
 
-.fundo-ffffff {
-  background: var(--fundo-ffffff);
+.fundo-branco {
+  background: var(--fundo-branco);
 }
 
 .fundo-none {
@@ -757,20 +757,20 @@ select {
   border: 0;
 }
 
-.borda-bee9f5 {
-  border: 1px solid var(--borda-bee9f5);
+.borda-ciano-150 {
+  border: 1px solid var(--borda-ciano-150);
 }
 
-.borda-cfdadd {
-  border: 1px solid var(--borda-cfdadd);
+.borda-cinza-160 {
+  border: 1px solid var(--borda-cinza-160);
 }
 
-.borda-dde6e8 {
-  border: 1px solid var(--borda-dde6e8);
+.borda-cinza-110 {
+  border: 1px solid var(--borda-cinza-110);
 }
 
-.borda-e8eef0 {
-  border: 1px solid var(--borda-e8eef0);
+.borda-cinza-70 {
+  border: 1px solid var(--borda-cinza-70);
 }
 
 .eixo-column {
@@ -1221,28 +1221,28 @@ select {
   position: sticky;
 }
 
-.borda-t-dde6e8 {
-  border-top: 1px solid var(--borda-dde6e8);
+.borda-t-cinza-110 {
+  border-top: 1px solid var(--borda-cinza-110);
 }
 
-.borda-t-e8eef0 {
-  border-top: 1px solid var(--borda-e8eef0);
+.borda-t-cinza-70 {
+  border-top: 1px solid var(--borda-cinza-70);
 }
 
-.borda-t-e9eff1 {
-  border-top: 1px solid var(--borda-e9eff1);
+.borda-t-cinza-75 {
+  border-top: 1px solid var(--borda-cinza-75);
 }
 
-.borda-b-dde6e8 {
-  border-bottom: 1px solid var(--borda-dde6e8);
+.borda-b-cinza-110 {
+  border-bottom: 1px solid var(--borda-cinza-110);
 }
 
-.borda-b-e8eef0 {
-  border-bottom: 1px solid var(--borda-e8eef0);
+.borda-b-cinza-70 {
+  border-bottom: 1px solid var(--borda-cinza-70);
 }
 
-.borda-b-e9eff1 {
-  border-bottom: 1px solid var(--borda-e9eff1);
+.borda-b-cinza-75 {
+  border-bottom: 1px solid var(--borda-cinza-75);
 }
 
 .quebra-palavra-anywhere {
@@ -1749,8 +1749,8 @@ select {
   grid-row: 1;
 }
 
-.borda-e-e9eff1 {
-  border-left: 1px solid var(--borda-e9eff1);
+.borda-e-cinza-75 {
+  border-left: 1px solid var(--borda-cinza-75);
 }
 
 .linhas-2 {
@@ -1773,7 +1773,7 @@ select {
   justify-self: start;
 }
 
-.destaque-0b7ea3 {
+.destaque-ciano-660 {
   accent-color: #0B7EA3;
 }
 
@@ -1830,7 +1830,7 @@ select {
 }
 
 .borda-1-dashed-cfdadd {
-  border: 1px dashed var(--borda-cfdadd);
+  border: 1px dashed var(--borda-cinza-160);
 }
 
 .borda-1-solid-0b7ea3 {
@@ -1853,7 +1853,7 @@ select {
   border: 1px solid #E3B45C;
 }
 
-.borda-1-solid-rgba-255-255-255-0p3 {
+.borda-1-solid-branco-a30 {
   border: 1px solid rgba(255,255,255,.3);
 }
 
@@ -2153,27 +2153,27 @@ select {
   flex: 2 1 200px;
 }
 
-.fundo-rgba-11-126-163-0p10 {
+.fundo-ciano-660-a10 {
   background: rgba(11,126,163,.10);
 }
 
-.fundo-rgba-19-37-44-0p45 {
+.fundo-ciano-880-a45 {
   background: rgba(19,37,44,.45);
 }
 
-.fundo-rgba-19-37-44-0p72 {
+.fundo-ciano-880-a72 {
   background: rgba(19,37,44,.72);
 }
 
-.fundo-rgba-255-255-255-0p06 {
+.fundo-branco-a6 {
   background: rgba(255,255,255,.06);
 }
 
-.fundo-rgba-255-255-255-0p08 {
+.fundo-branco-a8 {
   background: rgba(255,255,255,.08);
 }
 
-.fundo-rgba-255-255-255-0p12 {
+.fundo-branco-a12 {
   background: rgba(255,255,255,.12);
 }
 

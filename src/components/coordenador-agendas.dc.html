@@ -9,30 +9,30 @@
 <body>
 <x-dc>
 <sc-if value="{{ is.agendasOficineiros }}" hint-placeholder-val="{{ false }}">
-  <sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-dde6e8 raio-12 p-24 texto-center cor-5b6b70 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)">Entre com a conta do coordenador para ver as grades dos oficineiros.</div></sc-if>
+  <sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-cinza-110 raio-12 p-24 texto-center cor-cinza-600 fs-14 fundo-branco" style="background:var(--fundo-branco)">Entre com a conta do coordenador para ver as grades dos oficineiros.</div></sc-if>
   <div class="d-flex quebra-wrap gap-10-12 alinha-center">
-    <label class="largura-total-celular d-flex alinha-center gap-8 flex-1-1-320 max-w-520"><span class="oculto-celular fs-12 cor-5b6b70 fw-600">Oficineiro</span><select value="{{ oficineiro }}" onChange="{{ escolherOficineiro }}" aria-label="Oficineiro" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit min-w-0 flex-1 fw-600 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesDeOficineiro }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <label class="largura-total-celular d-flex alinha-center gap-8 flex-1-1-320 max-w-520"><span class="oculto-celular fs-12 cor-cinza-600 fw-600">Oficineiro</span><select value="{{ oficineiro }}" onChange="{{ escolherOficineiro }}" aria-label="Oficineiro" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 flex-1 fw-600 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeOficineiro }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
     <span class="fs-12 fw-600 p-4-10 raio-999 espaco-nowrap segmentado" style="color:{{ situacao.cor }};background:{{ situacao.fundo }}">{{ situacao.texto }}</span>
-    <sc-if value="{{ temProximoAno }}" hint-placeholder-val="{{ false }}"><label class="largura-total-celular d-flex alinha-center gap-8"><span class="oculto-celular fs-12 cor-5b6b70 fw-600">Ano letivo</span><select value="{{ ano }}" onChange="{{ escolherAno }}" aria-label="Ano letivo" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit min-w-0 fw-600 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesDeAno }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+    <sc-if value="{{ temProximoAno }}" hint-placeholder-val="{{ false }}"><label class="largura-total-celular d-flex alinha-center gap-8"><span class="oculto-celular fs-12 cor-cinza-600 fw-600">Ano letivo</span><select value="{{ ano }}" onChange="{{ escolherAno }}" aria-label="Ano letivo" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 fw-600 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeAno }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
   </div>
   <div class="duas-colunas-celular d-grid colunas-repeat-3-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
-    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="3"><div class="borda-dde6e8 raio-12 p-16 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-13 cor-5b6b70">{{ indicador.titulo }}</span><span class="fs-24 fw-700 num-tabular-nums">{{ indicador.valor }}</span><span class="fs-12 cor-5b6b70 rolagem-hidden reticencias-ellipsis espaco-nowrap quebra-celular">{{ indicador.nota }}</span></div></sc-for>
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="3"><div class="borda-cinza-110 raio-12 p-16 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><span class="fs-13 cor-cinza-600">{{ indicador.titulo }}</span><span class="fs-24 fw-700 num-tabular-nums">{{ indicador.valor }}</span><span class="fs-12 cor-cinza-600 rolagem-hidden reticencias-ellipsis espaco-nowrap quebra-celular">{{ indicador.nota }}</span></div></sc-for>
   </div>
-  <sc-if value="{{ temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-34464d fundo-f7fafb raio-10 p-10-14 lh-1p5">{{ nota }}</span></sc-if>
-  <sc-if value="{{ gradeVazia }}" hint-placeholder-val="{{ false }}"><div class="oculto-celular borda-dde6e8 raio-12 p-24 texto-center cor-5b6b70 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">Este oficineiro ainda não cadastrou atividades na grade de {{ anoTexto }}.</div></sc-if>
+  <sc-if value="{{ temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-750 fundo-cinza-20 raio-10 p-10-14 lh-1p5">{{ nota }}</span></sc-if>
+  <sc-if value="{{ gradeVazia }}" hint-placeholder-val="{{ false }}"><div class="oculto-celular borda-cinza-110 raio-12 p-24 texto-center cor-cinza-600 fs-14 fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">Este oficineiro ainda não cadastrou atividades na grade de {{ anoTexto }}.</div></sc-if>
   <sc-if value="{{ temGrade }}" hint-placeholder-val="{{ true }}">
-  <section class="oculto-celular borda-dde6e8 raio-12 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}" aria-label="Grade semanal do oficineiro">
+  <section class="oculto-celular borda-cinza-110 raio-12 rolagem-hidden fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}" aria-label="Grade semanal do oficineiro">
     <div class="d-grid colunas-72-repeat-5-minmax-0-1fr" style="grid-template-rows:{{ linhasDaGrade }}">
       <sc-for list="{{ celulas }}" as="celula" hint-placeholder-count="12">
-        <sc-if value="{{ celula.ehHora }}" hint-placeholder-val="{{ false }}"><div class="col-1 p-4-0-0-16 fs-13 cor-5b6b70 num-tabular-nums borda-t-e9eff1" style="grid-row:{{ celula.linha }};font-weight:{{ celula.peso }}">{{ celula.texto }}</div></sc-if>
+        <sc-if value="{{ celula.ehHora }}" hint-placeholder-val="{{ false }}"><div class="col-1 p-4-0-0-16 fs-13 cor-cinza-600 num-tabular-nums borda-t-cinza-75" style="grid-row:{{ celula.linha }};font-weight:{{ celula.peso }}">{{ celula.texto }}</div></sc-if>
         <sc-if value="{{ celula.ehDia }}" hint-placeholder-val="{{ false }}"><div class="lin-1 p-14-8-10 fs-13 fw-600" style="grid-column:{{ celula.coluna }}">{{ celula.texto }}</div></sc-if>
-        <sc-if value="{{ celula.ehVazio }}" hint-placeholder-val="{{ true }}"><div class="borda-t-e9eff1" style="grid-row:{{ celula.linha }};grid-column:{{ celula.coluna }}"></div></sc-if>
+        <sc-if value="{{ celula.ehVazio }}" hint-placeholder-val="{{ true }}"><div class="borda-t-cinza-75" style="grid-row:{{ celula.linha }};grid-column:{{ celula.coluna }}"></div></sc-if>
         <sc-if value="{{ celula.ehAula }}" hint-placeholder-val="{{ false }}">
           <div class="p-2-4 d-flex pos-relative z-1 min-h-0" style="grid-row:{{ celula.linha }};grid-column:{{ celula.coluna }}">
-            <button onClick="{{ celula.abrir }}" title="{{ celula.aria }}" aria-label="{{ celula.ariaVer }}" class="flex-1 min-w-0 min-h-0 rolagem-hidden raio-8 p-6-10 d-flex eixo-column alinha-flex-start justifica-flex-start gap-2 texto-left cor-1a2b33 largura-fundo" style="border:0;border-left:4px solid {{ celula.cor }};background:{{ celula.fundo }};cursor:pointer;font:inherit">
-              <span class="fs-11 fw-600 cor-45575e num-tabular-nums espaco-nowrap rolagem-hidden reticencias-ellipsis max-w-100pc">{{ celula.faixa }}</span>
+            <button onClick="{{ celula.abrir }}" title="{{ celula.aria }}" aria-label="{{ celula.ariaVer }}" class="flex-1 min-w-0 min-h-0 rolagem-hidden raio-8 p-6-10 d-flex eixo-column alinha-flex-start justifica-flex-start gap-2 texto-left cor-ciano-850 largura-fundo" style="border:0;border-left:4px solid {{ celula.cor }};background:{{ celula.fundo }};cursor:pointer;font:inherit">
+              <span class="fs-11 fw-600 cor-cinza-680 num-tabular-nums espaco-nowrap rolagem-hidden reticencias-ellipsis max-w-100pc">{{ celula.faixa }}</span>
               <span class="fs-13 fw-700 lh-1p25 espaco-nowrap rolagem-hidden reticencias-ellipsis max-w-100pc">{{ celula.anoTurma }}</span>
-              <span class="fs-12 lh-1p3 d--webkit-box linhas-2 orienta-vertical rolagem-hidden"><b class="fw-600" style="color:{{ celula.cor }}">{{ celula.tipo }}</b><sc-if value="{{ celula.temSolucao }}" hint-placeholder-val="{{ true }}"><span class="cor-45575e"> · {{ celula.solucao }}</span></sc-if></span>
+              <span class="fs-12 lh-1p3 d--webkit-box linhas-2 orienta-vertical rolagem-hidden"><b class="fw-600" style="color:{{ celula.cor }}">{{ celula.tipo }}</b><sc-if value="{{ celula.temSolucao }}" hint-placeholder-val="{{ true }}"><span class="cor-cinza-680"> · {{ celula.solucao }}</span></sc-if></span>
             </button>
           </div>
         </sc-if>
@@ -42,103 +42,103 @@
   </sc-if>
   <div class="so-celular-flex eixo-column gap-12">
     <sc-for list="{{ diasDaGrade }}" as="dia" hint-placeholder-count="5">
-      <section class="borda-dde6e8 raio-12 p-14 d-flex eixo-column gap-8 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-label="{{ dia.nome }}">
+      <section class="borda-cinza-110 raio-12 p-14 d-flex eixo-column gap-8 fundo-branco" style="background:var(--fundo-branco)" aria-label="{{ dia.nome }}">
         <h3 class="m-0 fs-15">{{ dia.nome }}</h3>
-        <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="2"><button onClick="{{ atividade.abrir }}" aria-label="{{ atividade.ariaVer }}" class="d-grid colunas-52-minmax-0-1fr gap-2-12 raio-8 p-10-12 texto-left cor-1a2b33 w-100pc largura-fundo" style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }};cursor:pointer;font:inherit"><span class="fw-600 num-tabular-nums" style="grid-row:1 / span 4">{{ atividade.hora }}</span><span class="fs-12 fw-600 cor-45575e num-tabular-nums">{{ atividade.faixa }}</span><b class="fs-14">{{ atividade.anoTurma }}</b><span class="fs-12 fw-600" style="color:{{ atividade.cor }}">{{ atividade.tipo }}</span><sc-if value="{{ atividade.temSolucao }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-45575e">{{ atividade.solucao }}</span></sc-if></button></sc-for>
-        <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-7d8c91">Sem atividades</span></sc-if>
+        <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="2"><button onClick="{{ atividade.abrir }}" aria-label="{{ atividade.ariaVer }}" class="d-grid colunas-52-minmax-0-1fr gap-2-12 raio-8 p-10-12 texto-left cor-ciano-850 w-100pc largura-fundo" style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }};cursor:pointer;font:inherit"><span class="fw-600 num-tabular-nums" style="grid-row:1 / span 4">{{ atividade.hora }}</span><span class="fs-12 fw-600 cor-cinza-680 num-tabular-nums">{{ atividade.faixa }}</span><b class="fs-14">{{ atividade.anoTurma }}</b><span class="fs-12 fw-600" style="color:{{ atividade.cor }}">{{ atividade.tipo }}</span><sc-if value="{{ atividade.temSolucao }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-cinza-680">{{ atividade.solucao }}</span></sc-if></button></sc-for>
+        <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-470">Sem atividades</span></sc-if>
       </section>
     </sc-for>
   </div>
-  <section aria-label="Semanas com alterações" class="borda-dde6e8 raio-12 p-16 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)">
-    <div class="d-flex alinha-baseline gap-6-10 quebra-wrap"><h3 class="m-0 fs-15">Semanas com alterações</h3><span class="fs-13 cor-5b6b70">{{ semanasResumo }}</span></div>
-    <sc-if value="{{ semAlteracoes }}" hint-placeholder-val="{{ true }}"><span class="fs-13 cor-5b6b70">Todas as semanas do ano seguem a grade padrão acima.</span></sc-if>
+  <section aria-label="Semanas com alterações" class="borda-cinza-110 raio-12 p-16 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
+    <div class="d-flex alinha-baseline gap-6-10 quebra-wrap"><h3 class="m-0 fs-15">Semanas com alterações</h3><span class="fs-13 cor-cinza-600">{{ semanasResumo }}</span></div>
+    <sc-if value="{{ semAlteracoes }}" hint-placeholder-val="{{ true }}"><span class="fs-13 cor-cinza-600">Todas as semanas do ano seguem a grade padrão acima.</span></sc-if>
     <sc-for list="{{ semanas }}" as="semana" hint-placeholder-count="2">
-      <div class="borda-e8eef0 raio-10 p-10-12 d-flex eixo-column gap-8">
+      <div class="borda-cinza-70 raio-10 p-10-12 d-flex eixo-column gap-8">
         <b class="fs-13">{{ semana.titulo }}</b>
-        <sc-for list="{{ semana.alteracoes }}" as="alteracao" hint-placeholder-count="2"><div class="d-flex eixo-column gap-2 fs-13 lh-1p4"><span class="cor-34464d fw-600">{{ alteracao.atividade }}</span><span class="cor-5b6b70">{{ alteracao.de }} → <b class="cor-7a4e0b">{{ alteracao.para }}</b></span></div></sc-for>
+        <sc-for list="{{ semana.alteracoes }}" as="alteracao" hint-placeholder-count="2"><div class="d-flex eixo-column gap-2 fs-13 lh-1p4"><span class="cor-cinza-750 fw-600">{{ alteracao.atividade }}</span><span class="cor-cinza-600">{{ alteracao.de }} → <b class="cor-ambar-745">{{ alteracao.para }}</b></span></div></sc-for>
       </div>
     </sc-for>
-    <sc-if value="{{ temMaisSemanas }}" hint-placeholder-val="{{ false }}"><button onClick="{{ alternarSemanas }}" class="alinha-si-flex-start h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-34464d botao-secundario">{{ maisSemanasTexto }}</button></sc-if>
+    <sc-if value="{{ temMaisSemanas }}" hint-placeholder-val="{{ false }}"><button onClick="{{ alternarSemanas }}" class="alinha-si-flex-start h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-cinza-750 botao-secundario">{{ maisSemanasTexto }}</button></sc-if>
   </section>
 </sc-if>
 <sc-if value="{{ detalheAberto }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharDetalhe }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="ag-info-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(460px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">Detalhes da atividade · somente visualização</span><h3 id="ag-info-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ detalhe.titulo }}</h3></div><button onClick="{{ fecharDetalhe }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+  <div onClick="{{ fecharDetalhe }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="ag-info-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(460px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Detalhes da atividade · somente visualização</span><h3 id="ag-info-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ detalhe.titulo }}</h3></div><button onClick="{{ fecharDetalhe }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
       <div class="d-flex eixo-column gap-6 raio-10 p-12-14" style="border-left:4px solid {{ detalhe.cor }};background:{{ detalhe.fundo }}">
-        <span class="fs-12 cor-5b6b70 fw-600">{{ detalhe.proximaRotulo }}</span>
+        <span class="fs-12 cor-cinza-600 fw-600">{{ detalhe.proximaRotulo }}</span>
         <b class="fs-15">{{ detalhe.proximaData }}</b>
-        <span class="fs-14 cor-1a2b33">{{ detalhe.proximaTexto }}</span>
-        <sc-if value="{{ detalhe.proximaAlterada }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-7a4e0b">Alterada pelo oficineiro só nesta semana</span></sc-if>
-        <sc-if value="{{ detalhe.temFeriado }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-b42318">{{ detalhe.feriado }}</span></sc-if>
+        <span class="fs-14 cor-ciano-850">{{ detalhe.proximaTexto }}</span>
+        <sc-if value="{{ detalhe.proximaAlterada }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-ambar-745">Alterada pelo oficineiro só nesta semana</span></sc-if>
+        <sc-if value="{{ detalhe.temFeriado }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-vermelho-600">{{ detalhe.feriado }}</span></sc-if>
       </div>
-      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ detalhe.itens }}" as="item" hint-placeholder-count="6"><dt class="cor-5b6b70 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ detalhe.itens }}" as="item" hint-placeholder-count="6"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
       <div class="d-flex eixo-column gap-8">
         <b class="fs-14">Próximas datas</b>
-        <sc-for list="{{ detalhe.proximas }}" as="data" hint-placeholder-count="4"><div class="d-flex eixo-column gap-2 borda-e8eef0 raio-8 p-8-12 fs-13"><span class="fw-600">{{ data.data }}</span><span style="color:{{ data.cor }}">{{ data.texto }}</span></div></sc-for>
+        <sc-for list="{{ detalhe.proximas }}" as="data" hint-placeholder-count="4"><div class="d-flex eixo-column gap-2 borda-cinza-70 raio-8 p-8-12 fs-13"><span class="fw-600">{{ data.data }}</span><span style="color:{{ data.cor }}">{{ data.texto }}</span></div></sc-for>
       </div>
-      <p class="m-0 fs-12 cor-5b6b70 lh-1p45">A grade é editada somente pelo oficineiro. Se algo estiver errado, devolva a grade explicando o ajuste.</p>
+      <p class="m-0 fs-12 cor-cinza-600 lh-1p45">A grade é editada somente pelo oficineiro. Se algo estiver errado, devolva a grade explicando o ajuste.</p>
     </div>
-    <div class="borda-t-dde6e8 d-flex justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharDetalhe }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-0b7ea3" style="background:#0B7EA3">Fechar</button></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharDetalhe }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">Fechar</button></div>
   </aside>
 </sc-if>
 <sc-if value="{{ is.agendasEscolas }}" hint-placeholder-val="{{ false }}">
-  <sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-dde6e8 raio-12 p-24 texto-center cor-5b6b70 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)">Entre com a conta do coordenador para ver as grades dos oficineiros.</div></sc-if>
+  <sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-cinza-110 raio-12 p-24 texto-center cor-cinza-600 fs-14 fundo-branco" style="background:var(--fundo-branco)">Entre com a conta do coordenador para ver as grades dos oficineiros.</div></sc-if>
   <div class="d-flex quebra-wrap gap-10-12 alinha-center">
-    <label class="largura-total-celular d-flex alinha-center gap-8 flex-1-1-320 max-w-520"><span class="oculto-celular fs-12 cor-5b6b70 fw-600">Escola</span><select value="{{ escola }}" onChange="{{ escolherEscola }}" aria-label="Escola" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit min-w-0 flex-1 fw-600 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-    <sc-if value="{{ temProximoAno }}" hint-placeholder-val="{{ false }}"><label class="largura-total-celular d-flex alinha-center gap-8"><span class="oculto-celular fs-12 cor-5b6b70 fw-600">Ano letivo</span><select value="{{ ano }}" onChange="{{ escolherAno }}" aria-label="Ano letivo" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit min-w-0 fw-600 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesDeAno }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+    <label class="largura-total-celular d-flex alinha-center gap-8 flex-1-1-320 max-w-520"><span class="oculto-celular fs-12 cor-cinza-600 fw-600">Escola</span><select value="{{ escola }}" onChange="{{ escolherEscola }}" aria-label="Escola" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 flex-1 fw-600 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <sc-if value="{{ temProximoAno }}" hint-placeholder-val="{{ false }}"><label class="largura-total-celular d-flex alinha-center gap-8"><span class="oculto-celular fs-12 cor-cinza-600 fw-600">Ano letivo</span><select value="{{ ano }}" onChange="{{ escolherAno }}" aria-label="Ano letivo" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 fw-600 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeAno }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
   </div>
   <div class="empilha-celular d-grid colunas-repeat-5-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
     <sc-for list="{{ diasDaEscola }}" as="dia" hint-placeholder-count="5">
-      <section class="borda-dde6e8 raio-12 p-12 d-flex eixo-column gap-8 alinha-si-start fundo-ffffff" style="background:var(--fundo-ffffff)" aria-label="{{ dia.nome }}">
+      <section class="borda-cinza-110 raio-12 p-12 d-flex eixo-column gap-8 alinha-si-start fundo-branco" style="background:var(--fundo-branco)" aria-label="{{ dia.nome }}">
         <h3 class="m-0-0-2 fs-14">{{ dia.nome }}</h3>
-        <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="2"><button onClick="{{ atividade.abrir }}" aria-label="{{ atividade.ariaVer }}" class="d-flex eixo-column alinha-flex-start gap-3 raio-8 p-9-10 texto-left cor-1a2b33 w-100pc largura-fundo" style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }};cursor:pointer;font:inherit"><span class="fs-12 fw-600 cor-34464d num-tabular-nums">{{ atividade.faixa }}</span><b class="fs-13">{{ atividade.anoTurma }}</b><span class="fs-12 fw-600" style="color:{{ atividade.cor }}">{{ atividade.tipo }}<sc-if value="{{ atividade.temSolucao }}" hint-placeholder-val="{{ true }}"> · {{ atividade.solucao }}</sc-if></span><span class="fs-12 cor-45575e">{{ atividade.oficineiro }}</span></button></sc-for>
-        <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-7d8c91">Sem atividades</span></sc-if>
+        <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="2"><button onClick="{{ atividade.abrir }}" aria-label="{{ atividade.ariaVer }}" class="d-flex eixo-column alinha-flex-start gap-3 raio-8 p-9-10 texto-left cor-ciano-850 w-100pc largura-fundo" style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }};cursor:pointer;font:inherit"><span class="fs-12 fw-600 cor-cinza-750 num-tabular-nums">{{ atividade.faixa }}</span><b class="fs-13">{{ atividade.anoTurma }}</b><span class="fs-12 fw-600" style="color:{{ atividade.cor }}">{{ atividade.tipo }}<sc-if value="{{ atividade.temSolucao }}" hint-placeholder-val="{{ true }}"> · {{ atividade.solucao }}</sc-if></span><span class="fs-12 cor-cinza-680">{{ atividade.oficineiro }}</span></button></sc-for>
+        <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-470">Sem atividades</span></sc-if>
       </section>
     </sc-for>
   </div>
 </sc-if>
 <sc-if value="{{ is.agendasDia }}" hint-placeholder-val="{{ false }}">
-  <sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-dde6e8 raio-12 p-24 texto-center cor-5b6b70 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)">Entre com a conta do coordenador para ver as grades dos oficineiros.</div></sc-if>
-  <div role="group" aria-label="Dia da semana" class="d-flex gap-4 fundo-e3ebed p-4 raio-10 alinha-si-flex-start quebra-wrap segmentado"><sc-for list="{{ dias }}" as="dia" hint-placeholder-count="5"><button onClick="{{ dia.escolher }}" aria-pressed="{{ dia.marcado }}" class="borda-0 raio-7 p-8-14 fs-14 fw-600 {{ dia.classe }}" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</button></sc-for></div>
-  <section class="borda-dde6e8 raio-12 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+  <sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-cinza-110 raio-12 p-24 texto-center cor-cinza-600 fs-14 fundo-branco" style="background:var(--fundo-branco)">Entre com a conta do coordenador para ver as grades dos oficineiros.</div></sc-if>
+  <div role="group" aria-label="Dia da semana" class="d-flex gap-4 fundo-cinza-90 p-4 raio-10 alinha-si-flex-start quebra-wrap segmentado"><sc-for list="{{ dias }}" as="dia" hint-placeholder-count="5"><button onClick="{{ dia.escolher }}" aria-pressed="{{ dia.marcado }}" class="borda-0 raio-7 p-8-14 fs-14 fw-600 {{ dia.classe }}" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</button></sc-for></div>
+  <section class="borda-cinza-110 raio-12 rolagem-hidden fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div role="table" aria-label="Atividades do dia">
-      <div role="row" class="oculto-celular d-grid gap-12 p-10-16 fs-12 fw-600 cor-5b6b70" style="background:var(--fundo-f9fbfc);grid-template-columns:110px minmax(0,1.2fr) minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.2fr) 130px">
+      <div role="row" class="oculto-celular d-grid gap-12 p-10-16 fs-12 fw-600 cor-cinza-600" style="background:var(--fundo-cinza-30);grid-template-columns:110px minmax(0,1.2fr) minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.2fr) 130px">
         <span role="columnheader">Horário</span><span role="columnheader">Escola</span><span role="columnheader">Turma</span><span role="columnheader">Tipo · solução</span><span role="columnheader">Oficineiro</span><span role="columnheader">Registro</span>
       </div>
       <sc-for list="{{ atividadesDoDia }}" as="atividade" hint-placeholder-count="6">
-        <div role="row" class="agenda-linha d-grid gap-4-12 alinha-center borda-t-e9eff1 p-12-16 fs-14" style="grid-template-columns:110px minmax(0,1.2fr) minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.2fr) 130px">
+        <div role="row" class="agenda-linha d-grid gap-4-12 alinha-center borda-t-cinza-75 p-12-16 fs-14" style="grid-template-columns:110px minmax(0,1.2fr) minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.2fr) 130px">
           <span class="fw-600 num-tabular-nums">{{ atividade.faixa }}</span>
-          <span class="fs-13 cor-34464d">{{ atividade.escola }}</span>
-          <span class="d-flex eixo-column min-w-0"><b>{{ atividade.anoTurma }}</b><sc-if value="{{ atividade.temMateria }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70">{{ atividade.materia }}</span></sc-if></span>
-          <span class="d-flex eixo-column min-w-0"><span class="fs-13 fw-600" style="color:{{ atividade.cor }}">{{ atividade.tipo }}</span><span class="fs-12 cor-5b6b70">{{ atividade.solucao }}</span><sc-if value="{{ atividade.alterada }}" hint-placeholder-val="{{ false }}"><span class="fs-11 fw-600 cor-7a4e0b">Alterada nesta semana</span></sc-if></span>
+          <span class="fs-13 cor-cinza-750">{{ atividade.escola }}</span>
+          <span class="d-flex eixo-column min-w-0"><b>{{ atividade.anoTurma }}</b><sc-if value="{{ atividade.temMateria }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">{{ atividade.materia }}</span></sc-if></span>
+          <span class="d-flex eixo-column min-w-0"><span class="fs-13 fw-600" style="color:{{ atividade.cor }}">{{ atividade.tipo }}</span><span class="fs-12 cor-cinza-600">{{ atividade.solucao }}</span><sc-if value="{{ atividade.alterada }}" hint-placeholder-val="{{ false }}"><span class="fs-11 fw-600 cor-ambar-745">Alterada nesta semana</span></sc-if></span>
           <span class="fs-13">{{ atividade.oficineiro }}</span>
           <span class="fs-12 fw-600 p-4-10 raio-999 espaco-nowrap justifica-si-start segmentado" style="color:{{ atividade.situacaoCor }};background:{{ atividade.situacaoFundo }}">{{ atividade.situacao }}</span>
         </div>
       </sc-for>
-      <sc-if value="{{ semAtividadesNoDia }}" hint-placeholder-val="{{ false }}"><div class="p-28-16 texto-center fs-14 cor-5b6b70">Nenhuma atividade nas grades para este dia.</div></sc-if>
+      <sc-if value="{{ semAtividadesNoDia }}" hint-placeholder-val="{{ false }}"><div class="p-28-16 texto-center fs-14 cor-cinza-600">Nenhuma atividade nas grades para este dia.</div></sc-if>
     </div>
   </section>
 </sc-if>
 <sc-if value="{{ is.agendasConsolidado }}" hint-placeholder-val="{{ false }}">
-  <sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-dde6e8 raio-12 p-24 texto-center cor-5b6b70 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)">Entre com a conta do coordenador para ver as grades dos oficineiros.</div></sc-if>
-  <sc-if value="{{ temProximoAno }}" hint-placeholder-val="{{ false }}"><div class="d-flex"><label class="largura-total-celular d-flex alinha-center gap-8"><span class="oculto-celular fs-12 cor-5b6b70 fw-600">Ano letivo</span><select value="{{ ano }}" onChange="{{ escolherAno }}" aria-label="Ano letivo" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit min-w-0 fw-600 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesDeAno }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></div></sc-if>
-  <sc-if value="{{ temOutroAno }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-14 cor-7a4e0b fundo-faefd9 raio-10 p-12-14">{{ outroAnoTexto }}</span></sc-if>
-  <sc-if value="{{ temAguardando }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-14 cor-1a3f9c fundo-eff3fd raio-10 p-12-14">{{ aguardandoTexto }}</span></sc-if>
-  <section class="borda-dde6e8 raio-12 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+  <sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-cinza-110 raio-12 p-24 texto-center cor-cinza-600 fs-14 fundo-branco" style="background:var(--fundo-branco)">Entre com a conta do coordenador para ver as grades dos oficineiros.</div></sc-if>
+  <sc-if value="{{ temProximoAno }}" hint-placeholder-val="{{ false }}"><div class="d-flex"><label class="largura-total-celular d-flex alinha-center gap-8"><span class="oculto-celular fs-12 cor-cinza-600 fw-600">Ano letivo</span><select value="{{ ano }}" onChange="{{ escolherAno }}" aria-label="Ano letivo" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 fw-600 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeAno }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></div></sc-if>
+  <sc-if value="{{ temOutroAno }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-14 cor-ambar-745 fundo-ambar-80 raio-10 p-12-14">{{ outroAnoTexto }}</span></sc-if>
+  <sc-if value="{{ temAguardando }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-14 cor-azul-640 fundo-azul-40 raio-10 p-12-14">{{ aguardandoTexto }}</span></sc-if>
+  <section class="borda-cinza-110 raio-12 rolagem-hidden fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div role="table" aria-label="Grades de todos os oficineiros">
-      <div role="row" class="oculto-celular d-grid gap-12 p-10-16 fs-12 fw-600 cor-5b6b70" style="background:var(--fundo-f9fbfc);grid-template-columns:minmax(0,1.4fr) minmax(0,1.4fr) 110px 80px minmax(0,1.2fr)">
+      <div role="row" class="oculto-celular d-grid gap-12 p-10-16 fs-12 fw-600 cor-cinza-600" style="background:var(--fundo-cinza-30);grid-template-columns:minmax(0,1.4fr) minmax(0,1.4fr) 110px 80px minmax(0,1.2fr)">
         <span role="columnheader">Oficineiro</span><span role="columnheader">Escola</span><span role="columnheader">Horas-aula/sem.</span><span role="columnheader">Turmas</span><span role="columnheader">Situação da grade</span>
       </div>
       <sc-for list="{{ consolidado }}" as="linha" hint-placeholder-count="6">
-        <button role="row" onClick="{{ linha.abrir }}" aria-label="{{ linha.aria }}" class="agenda-linha agenda-clicavel d-grid gap-4-12 alinha-center w-100pc texto-left p-12-16 fs-14 cor-1a2b33 fonte-inherit largura-fundo fundo-ffffff" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1.4fr) 110px 80px minmax(0,1.2fr);border:0;border-top:1px solid var(--borda-e9eff1);background:var(--fundo-ffffff);cursor:pointer">
-          <b>{{ linha.nome }}</b><span class="fs-13 cor-34464d">{{ linha.escola }}</span><span class="num-tabular-nums"><span class="so-celular cor-5b6b70">Horas-aula/sem. </span>{{ linha.horas }}</span><span class="num-tabular-nums"><span class="so-celular cor-5b6b70">Turmas </span>{{ linha.turmas }}</span>
+        <button role="row" onClick="{{ linha.abrir }}" aria-label="{{ linha.aria }}" class="agenda-linha agenda-clicavel d-grid gap-4-12 alinha-center w-100pc texto-left p-12-16 fs-14 cor-ciano-850 fonte-inherit largura-fundo fundo-branco" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1.4fr) 110px 80px minmax(0,1.2fr);border:0;border-top:1px solid var(--borda-cinza-75);background:var(--fundo-branco);cursor:pointer">
+          <b>{{ linha.nome }}</b><span class="fs-13 cor-cinza-750">{{ linha.escola }}</span><span class="num-tabular-nums"><span class="so-celular cor-cinza-600">Horas-aula/sem. </span>{{ linha.horas }}</span><span class="num-tabular-nums"><span class="so-celular cor-cinza-600">Turmas </span>{{ linha.turmas }}</span>
           <span class="fs-12 fw-600 p-4-10 raio-999 espaco-nowrap justifica-si-start segmentado" style="color:{{ linha.cor }};background:{{ linha.fundo }}">{{ linha.situacao }}</span>
         </button>
       </sc-for>
-      <div role="row" class="agenda-linha d-grid gap-4-12 alinha-center borda-t-dde6e8 p-12-16 fs-14 fw-700" style="background:var(--fundo-f7fafb);grid-template-columns:minmax(0,1.4fr) minmax(0,1.4fr) 110px 80px minmax(0,1.2fr)">
-        <span role="rowheader">Total</span><span class="oculto-celular"></span><span class="num-tabular-nums"><span class="so-celular fw-400 cor-5b6b70">Horas-aula/sem. </span>{{ total.horas }}</span><span class="num-tabular-nums"><span class="so-celular fw-400 cor-5b6b70">Turmas </span>{{ total.turmas }}</span><span class="oculto-celular"></span>
+      <div role="row" class="agenda-linha d-grid gap-4-12 alinha-center borda-t-cinza-110 p-12-16 fs-14 fw-700" style="background:var(--fundo-cinza-20);grid-template-columns:minmax(0,1.4fr) minmax(0,1.4fr) 110px 80px minmax(0,1.2fr)">
+        <span role="rowheader">Total</span><span class="oculto-celular"></span><span class="num-tabular-nums"><span class="so-celular fw-400 cor-cinza-600">Horas-aula/sem. </span>{{ total.horas }}</span><span class="num-tabular-nums"><span class="so-celular fw-400 cor-cinza-600">Turmas </span>{{ total.turmas }}</span><span class="oculto-celular"></span>
       </div>
     </div>
   </section>
@@ -177,16 +177,16 @@ class Component extends DCLogic {
       contexto.enviosDaGrade.some(e => e.ano_letivo === anoAtual + 1);
     const envioDe = id => contexto.enviosDaGrade.find(e => e.oficineiro_id === id && e.ano_letivo === anoDaAgenda);
     const SITUACOES_DA_GRADE = {
-      enviada: ['Em validação pela direção', 'var(--texto-1a3f9c)', 'var(--fundo-eff3fd)'],
-      validada: ['Validada pela direção', 'var(--texto-1b5e2e)', 'var(--fundo-e2f2e5)'],
-      devolvida: ['Não validada · devolvida pela direção', 'var(--texto-b42318)', 'var(--fundo-fbedeb)'],
-      alterada: ['Não validada · alterada após validação', 'var(--texto-7a4e0b)', 'var(--fundo-faefd9)']
+      enviada: ['Em validação pela direção', 'var(--texto-azul-640)', 'var(--fundo-azul-40)'],
+      validada: ['Validada pela direção', 'var(--texto-verde-760)', 'var(--fundo-verde-80)'],
+      devolvida: ['Não validada · devolvida pela direção', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)'],
+      alterada: ['Não validada · alterada após validação', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)']
     };
     const situacaoDaGrade = id => {
       const e = envioDe(id);
       return e
         ? SITUACOES_DA_GRADE[e.status]
-        : ['Não validada · ainda não enviada', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)'];
+        : ['Não validada · ainda não enviada', 'var(--texto-cinza-600)', 'var(--fundo-cinza-70)'];
     };
     const gradeDoOficineiro = id => {
       const o = contexto.oficineiros.find(x => x.id === id);
@@ -328,7 +328,7 @@ class Component extends DCLogic {
           return {
             data: DIAS_DA_SEMANA[d.getDay()] + ', ' + Base.dm(d),
             texto: f ? 'Feriado: ' + f : x.txt + (x.e.personalizada ? ' · alterada nesta semana' : ''),
-            cor: f ? 'var(--texto-b42318)' : x.e.personalizada ? 'var(--texto-7a4e0b)' : 'var(--texto-34464d)'
+            cor: f ? 'var(--texto-vermelho-600)' : x.e.personalizada ? 'var(--texto-ambar-745)' : 'var(--texto-cinza-750)'
           };
         })
       };
@@ -379,14 +379,14 @@ class Component extends DCLogic {
             minDeHora(g.fim) <= new Date().getHours() * 60 + new Date().getMinutes();
         const st =
           diaEscolhido !== diaDaSemanaHoje
-            ? ['—', 'var(--texto-5b6b70)', 'transparent']
+            ? ['—', 'var(--texto-cinza-600)', 'transparent']
             : reg
               ? reg.situacao === 'Não realizada'
-                ? ['Não realizada', 'var(--texto-b42318)', 'var(--fundo-fbedeb)']
-                : ['Registrada', 'var(--texto-1b5e2e)', 'var(--fundo-e2f2e5)']
+                ? ['Não realizada', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)']
+                : ['Registrada', 'var(--texto-verde-760)', 'var(--fundo-verde-80)']
               : passou
-                ? ['Pendente', 'var(--texto-7a4e0b)', 'var(--fundo-faefd9)']
-                : ['A acontecer', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)'];
+                ? ['Pendente', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)']
+                : ['A acontecer', 'var(--texto-cinza-600)', 'var(--fundo-cinza-70)'];
         return {
           ...cartaoDaAtividade(g),
           escola: escolaDe(g.escola_id).split(' - ')[0],
@@ -524,9 +524,9 @@ class Component extends DCLogic {
           rotulo: DIAS_DA_SEMANA[dw] + (dw === diaDaSemanaHoje ? ' · hoje' : ''),
           marcado: marcado ? 'true' : 'false',
           escolher: () => contexto.setState({ diaDaAgenda: dw }),
-          classe: marcado ? 'fundo-ffffff' : 'fundo-transparent',
-          fundo: marcado ? 'var(--fundo-ffffff)' : 'transparent',
-          cor: marcado ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)'
+          classe: marcado ? 'fundo-branco' : 'fundo-transparent',
+          fundo: marcado ? 'var(--fundo-branco)' : 'transparent',
+          cor: marcado ? 'var(--texto-ciano-850)' : 'var(--texto-cinza-600)'
         };
       }),
       atividadesDoDia,

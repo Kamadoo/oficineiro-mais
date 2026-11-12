@@ -9,81 +9,81 @@
 <body>
 <x-dc>
   <sc-if value="{{ temOnboarding }}" hint-placeholder-val="{{ false }}">
-    <div class="fundo-eff9fc borda-bee9f5 raio-12 p-14-16 d-flex quebra-wrap alinha-center gap-10-14">
-      <span class="num-tabular-nums fs-22 fw-600 cor-08617e">{{ onboardingTotal }}</span>
-      <div class="flex-1-1-260 d-flex eixo-column gap-2"><span class="fs-14 fw-600 cor-1a2b33">{{ onboardingTitulo }}</span><span class="fs-12 cor-34464d">{{ onboardingDetalhe }}</span></div>
-      <button onClick="{{ verOnboarding }}" class="largura-total-celular h-38 borda-0 cor-fff raio-8 p-0-14 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Ver pendências</button>
+    <div class="fundo-ciano-40 borda-ciano-150 raio-12 p-14-16 d-flex quebra-wrap alinha-center gap-10-14">
+      <span class="num-tabular-nums fs-22 fw-600 cor-ciano-740">{{ onboardingTotal }}</span>
+      <div class="flex-1-1-260 d-flex eixo-column gap-2"><span class="fs-14 fw-600 cor-ciano-850">{{ onboardingTitulo }}</span><span class="fs-12 cor-cinza-750">{{ onboardingDetalhe }}</span></div>
+      <button onClick="{{ verOnboarding }}" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Ver pendências</button>
     </div>
   </sc-if>
   <div class="empilha-celular d-grid colunas-minmax-0-1p3fr-minmax-0-1fr gap-20">
-    <section aria-labelledby="an-h-pres" class="borda-dde6e8 raio-12 rolagem-hidden d-flex eixo-column fundo-ffffff" style="background:var(--fundo-ffffff)">
+    <section aria-labelledby="an-h-pres" class="borda-cinza-110 raio-12 rolagem-hidden d-flex eixo-column fundo-branco" style="background:var(--fundo-branco)">
       <div class="mapa-celular pos-relative isola-isolate h-240 rolagem-hidden" style="background:var(--fundo-mapa);background-image:linear-gradient(var(--grade-mapa) 1px,transparent 1px),linear-gradient(90deg,var(--grade-mapa) 1px,transparent 1px);background-size:32px 32px">
         <div id="mapa-analista" class="pos-absolute inset-0 z-0" style="opacity:{{ mapaOpacidade }}"></div>
         <sc-if value="{{ semMapa }}" hint-placeholder-val="{{ true }}">
-          <div class="pos-absolute esquerda-50pc topo-50pc w-150 h-150 m-n75-0-0-n75 raio-50pc fundo-rgba-11-126-163-0p10 borda-2-dashed-6c60e6 largura-fundo"></div>
-          <div class="pos-absolute esquerda-50pc topo-50pc d-flex eixo-column alinha-center gap-4" style="transform:translate(-50%,-50%)"><div class="w-14 h-14 raio-7 fundo-0b7ea3 borda-3-solid-fff sombra-0-0-0-1-0b7ea3 largura-fundo"></div><span class="fs-12 fw-600 fundo-ffffff p-2-8 raio-4 espaco-nowrap">{{ escola.sigla }}</span></div>
+          <div class="pos-absolute esquerda-50pc topo-50pc w-150 h-150 m-n75-0-0-n75 raio-50pc fundo-ciano-660-a10 borda-2-dashed-6c60e6 largura-fundo"></div>
+          <div class="pos-absolute esquerda-50pc topo-50pc d-flex eixo-column alinha-center gap-4" style="transform:translate(-50%,-50%)"><div class="w-14 h-14 raio-7 fundo-ciano-660 borda-3-solid-fff sombra-0-0-0-1-0b7ea3 largura-fundo"></div><span class="fs-12 fw-600 fundo-branco p-2-8 raio-4 espaco-nowrap">{{ escola.sigla }}</span></div>
         </sc-if>
-        <div class="pos-absolute esquerda-12 direita-12 base-12 d-flex z-1001 ponteiro-none"><span class="fundo-ffffff raio-6 p-6-10 fs-12 num-tabular-nums cor-34464d max-w-100pc rolagem-hidden reticencias-ellipsis espaco-nowrap largura-fundo quebra-celular">{{ linhaDoGps }}</span></div>
-        <button onClick="{{ atualizarLocal }}" class="pos-absolute z-1001 direita-12 topo-12 borda-dde6e8 raio-8 p-6-10 fs-12 fw-600 cor-34464d d-flex alinha-center gap-6 fundo-ffffff" style="background:var(--fundo-ffffff)"><svg class="icone" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>Atualizar local</button>
+        <div class="pos-absolute esquerda-12 direita-12 base-12 d-flex z-1001 ponteiro-none"><span class="fundo-branco raio-6 p-6-10 fs-12 num-tabular-nums cor-cinza-750 max-w-100pc rolagem-hidden reticencias-ellipsis espaco-nowrap largura-fundo quebra-celular">{{ linhaDoGps }}</span></div>
+        <button onClick="{{ atualizarLocal }}" class="pos-absolute z-1001 direita-12 topo-12 borda-cinza-110 raio-8 p-6-10 fs-12 fw-600 cor-cinza-750 d-flex alinha-center gap-6 fundo-branco" style="background:var(--fundo-branco)"><svg class="icone" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>Atualizar local</button>
       </div>
       <div class="espaco-celular p-20 d-flex eixo-column gap-16">
         <h3 id="an-h-pres" class="sr-only">Presença na escola</h3>
-        <div class="d-flex quebra-wrap alinha-center gap-6-10"><span class="fs-12 fw-600 p-4-10 raio-999 segmentado" style="color:{{ situacao.cor }};background:{{ situacao.fundo }}">{{ situacao.rotulo }}</span><span class="fs-13 cor-5b6b70">{{ situacao.detalhe }}</span></div>
+        <div class="d-flex quebra-wrap alinha-center gap-6-10"><span class="fs-12 fw-600 p-4-10 raio-999 segmentado" style="color:{{ situacao.cor }};background:{{ situacao.fundo }}">{{ situacao.rotulo }}</span><span class="fs-13 cor-cinza-600">{{ situacao.detalhe }}</span></div>
         <sc-if value="{{ podeEscolher }}" hint-placeholder-val="{{ true }}">
           <label class="d-flex eixo-column gap-8">
-            <span class="fs-12 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em">Escola da visita</span>
-            <select id="an-escola" value="{{ escolaId }}" onChange="{{ escolherEscola }}" class="h-44 w-100pc borda-1p5-solid-0b7ea3 raio-10 p-0-12 fs-14 fw-500 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)">
+            <span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">Escola da visita</span>
+            <select id="an-escola" value="{{ escolaId }}" onChange="{{ escolherEscola }}" class="h-44 w-100pc borda-1p5-solid-0b7ea3 raio-10 p-0-12 fs-14 fw-500 largura-fundo fundo-branco" style="background:var(--fundo-branco)">
               <option value="">Escolha a escola</option>
               <sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for>
             </select>
-            <span class="fs-12 cor-5b6b70">{{ escola.endereco }}</span>
+            <span class="fs-12 cor-cinza-600">{{ escola.endereco }}</span>
           </label>
         </sc-if>
         <sc-if value="{{ temVisitaDaAgenda }}" hint-placeholder-val="{{ true }}">
-          <div class="fundo-f7fafb raio-10 p-12-14 d-flex eixo-column gap-6">
-            <div class="d-flex justifica-space-between gap-10 alinha-baseline"><span class="fs-12 cor-5b6b70 fw-600">Visita na agenda</span><span class="fs-12 num-tabular-nums cor-5b6b70">{{ visitaDaAgenda.hora }}</span></div>
+          <div class="fundo-cinza-20 raio-10 p-12-14 d-flex eixo-column gap-6">
+            <div class="d-flex justifica-space-between gap-10 alinha-baseline"><span class="fs-12 cor-cinza-600 fw-600">Visita na agenda</span><span class="fs-12 num-tabular-nums cor-cinza-600">{{ visitaDaAgenda.hora }}</span></div>
             <span class="fs-14 fw-600">{{ visitaDaAgenda.tipo }}</span>
             <span class="alinha-si-flex-start fs-12 fw-600 p-3-8 raio-4" style="color:{{ visitaDaAgenda.origemCor }};background:{{ visitaDaAgenda.origemFundo }}">Origem: {{ visitaDaAgenda.origem }}</span>
-            <sc-if value="{{ visitaDaAgenda.temOrientacao }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-34464d texto-quebra-pretty">{{ visitaDaAgenda.orientacao }}</span></sc-if>
+            <sc-if value="{{ visitaDaAgenda.temOrientacao }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-cinza-750 texto-quebra-pretty">{{ visitaDaAgenda.orientacao }}</span></sc-if>
           </div>
         </sc-if>
         <sc-if value="{{ temBloqueio }}" hint-placeholder-val="{{ false }}">
-          <div role="status" class="fundo-fbedeb raio-10 p-12-14 cor-8a1c12 fw-600 fs-14">{{ bloqueio }}</div>
+          <div role="status" class="fundo-vermelho-50 raio-10 p-12-14 cor-vermelho-690 fw-600 fs-14">{{ bloqueio }}</div>
         </sc-if>
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em">Observação (opcional)</span><input value="{{ observacao }}" onChange="{{ escreverObservacao }}" maxlength="300" placeholder="ex.: reunião com a direção, sinal de GPS fraco" class="h-44 borda-cfdadd raio-8 p-0-12 fs-14"></input></label>
-        <button onClick="{{ alternarPresenca }}" disabled="{{ presencaBloqueada }}" class="h-52 borda-0 raio-10 cor-fff fs-16 fw-600 {{ botao.classe }}" style="background:{{ botao.fundo }}">{{ botao.rotulo }}</button>
-        <p class="m-0 fs-12 cor-5b6b70 lh-1p5">A posição é conferida no início e no encerramento, e a hora é registrada pelo servidor. A presença só pode ser registrada dentro do raio da escola.</p>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">Observação (opcional)</span><input value="{{ observacao }}" onChange="{{ escreverObservacao }}" maxlength="300" placeholder="ex.: reunião com a direção, sinal de GPS fraco" class="h-44 borda-cinza-160 raio-8 p-0-12 fs-14"></input></label>
+        <button onClick="{{ alternarPresenca }}" disabled="{{ presencaBloqueada }}" class="h-52 borda-0 raio-10 cor-branco fs-16 fw-600 {{ botao.classe }}" style="background:{{ botao.fundo }}">{{ botao.rotulo }}</button>
+        <p class="m-0 fs-12 cor-cinza-600 lh-1p5">A posição é conferida no início e no encerramento, e a hora é registrada pelo servidor. A presença só pode ser registrada dentro do raio da escola.</p>
       </div>
     </section>
     <div class="d-flex eixo-column gap-20 min-w-0">
-      <section class="espaco-celular borda-dde6e8 raio-12 p-18-20 d-flex eixo-column gap-10 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="an-h-pend">
-        <div class="d-flex alinha-baseline gap-10 quebra-wrap"><h3 id="an-h-pend" class="m-0 fs-15 flex-1">Pendências da carteira</h3><span class="fs-12 cor-5b6b70">{{ pendenciasResumo }}</span></div>
-        <sc-if value="{{ semPendencias }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-13 cor-23773a fw-600">Carteira em dia.</p></sc-if>
+      <section class="espaco-celular borda-cinza-110 raio-12 p-18-20 d-flex eixo-column gap-10 fundo-branco" style="background:var(--fundo-branco)" aria-labelledby="an-h-pend">
+        <div class="d-flex alinha-baseline gap-10 quebra-wrap"><h3 id="an-h-pend" class="m-0 fs-15 flex-1">Pendências da carteira</h3><span class="fs-12 cor-cinza-600">{{ pendenciasResumo }}</span></div>
+        <sc-if value="{{ semPendencias }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-13 cor-verde-700 fw-600">Carteira em dia.</p></sc-if>
         <sc-for list="{{ pendencias }}" as="pendencia" hint-placeholder-count="3">
-          <div class="geral-pendencia d-grid colunas-10-minmax-0-1fr-auto gap-2-12 alinha-center p-10-0 borda-t-e9eff1">
+          <div class="geral-pendencia d-grid colunas-10-minmax-0-1fr-auto gap-2-12 alinha-center p-10-0 borda-t-cinza-75">
             <span aria-hidden="true" class="w-10 h-10 raio-5 largura-fundo" style="background:{{ pendencia.cor }}"></span>
-            <div class="d-flex eixo-column gap-2 min-w-0"><b class="fs-14">{{ pendencia.titulo }}</b><span class="fs-12 cor-5b6b70 quebra-palavra-anywhere">{{ pendencia.detalhe }}</span></div>
-            <button onClick="{{ pendencia.resolver }}" aria-label="{{ pendencia.aria }}" class="h-32 borda-cfdadd fundo-ffffff cor-08617e raio-8 p-0-12 fs-13 fw-600 espaco-nowrap botao-secundario">Resolver →</button>
+            <div class="d-flex eixo-column gap-2 min-w-0"><b class="fs-14">{{ pendencia.titulo }}</b><span class="fs-12 cor-cinza-600 quebra-palavra-anywhere">{{ pendencia.detalhe }}</span></div>
+            <button onClick="{{ pendencia.resolver }}" aria-label="{{ pendencia.aria }}" class="h-32 borda-cinza-160 fundo-branco cor-ciano-740 raio-8 p-0-12 fs-13 fw-600 espaco-nowrap botao-secundario">Resolver →</button>
           </div>
         </sc-for>
       </section>
-      <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="an-h-dia">
-        <div class="d-flex justifica-space-between alinha-baseline gap-10"><h3 id="an-h-dia" class="m-0 fs-15">Resumo do dia</h3><span class="fs-12 cor-5b6b70">{{ dataDeHoje }}</span></div>
-        <sc-if value="{{ semPresencasDeHoje }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Nenhuma visita iniciada hoje.</span></sc-if>
+      <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)" aria-labelledby="an-h-dia">
+        <div class="d-flex justifica-space-between alinha-baseline gap-10"><h3 id="an-h-dia" class="m-0 fs-15">Resumo do dia</h3><span class="fs-12 cor-cinza-600">{{ dataDeHoje }}</span></div>
+        <sc-if value="{{ semPresencasDeHoje }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma visita iniciada hoje.</span></sc-if>
         <sc-for list="{{ presencasDeHoje }}" as="presenca" hint-placeholder-count="2">
-          <div class="d-grid colunas-minmax-0-1fr-auto gap-4-10 p-12 raio-8 fundo-f7fafb alinha-center">
+          <div class="d-grid colunas-minmax-0-1fr-auto gap-4-10 p-12 raio-8 fundo-cinza-20 alinha-center">
             <span class="fw-600 fs-14 min-w-0 quebra-palavra-anywhere">{{ presenca.escola }}</span><span class="num-tabular-nums fw-600 fs-13">{{ presenca.tempo }}</span>
-            <span class="fs-12 cor-5b6b70 num-tabular-nums">{{ presenca.faixa }} · {{ presenca.origem }}</span><span class="fs-12 texto-right" style="color:{{ presenca.cor }}">{{ presenca.situacao }}</span>
-            <sc-if value="{{ presenca.faltaRegistrar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ presenca.registrar }}" class="justifica-si-start h-32 borda-0 cor-fff raio-8 p-0-12 fs-13 fw-600 fundo-0b7ea3" style="grid-column:1/-1;background:#0B7EA3">Registrar esta visita</button></sc-if>
+            <span class="fs-12 cor-cinza-600 num-tabular-nums">{{ presenca.faixa }} · {{ presenca.origem }}</span><span class="fs-12 texto-right" style="color:{{ presenca.cor }}">{{ presenca.situacao }}</span>
+            <sc-if value="{{ presenca.faltaRegistrar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ presenca.registrar }}" class="justifica-si-start h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 fundo-ciano-660" style="grid-column:1/-1;background:#0B7EA3">Registrar esta visita</button></sc-if>
           </div>
         </sc-for>
       </section>
-      <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-4 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="an-h-ult">
+      <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco" style="background:var(--fundo-branco)" aria-labelledby="an-h-ult">
         <h3 id="an-h-ult" class="m-0-0-8 fs-15">Minhas presenças · últimos 5 dias</h3>
-        <sc-if value="{{ semPresencasRecentes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Nenhuma presença registrada nos últimos 5 dias letivos.</span></sc-if>
+        <sc-if value="{{ semPresencasRecentes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma presença registrada nos últimos 5 dias letivos.</span></sc-if>
         <sc-for list="{{ presencasRecentes }}" as="presenca" hint-placeholder-count="5">
-          <div class="analista-presenca d-grid colunas-44-minmax-0-1fr-auto gap-2-10 p-10-0 borda-t-e8eef0 fs-13 alinha-center">
-            <span class="num-tabular-nums">{{ presenca.data }}</span><b class="min-w-0 quebra-palavra-anywhere">{{ presenca.escola }}</b><span class="num-tabular-nums cor-5b6b70 fs-12">{{ presenca.faixa }}</span>
+          <div class="analista-presenca d-grid colunas-44-minmax-0-1fr-auto gap-2-10 p-10-0 borda-t-cinza-70 fs-13 alinha-center">
+            <span class="num-tabular-nums">{{ presenca.data }}</span><b class="min-w-0 quebra-palavra-anywhere">{{ presenca.escola }}</b><span class="num-tabular-nums cor-cinza-600 fs-12">{{ presenca.faixa }}</span>
             <span></span><span class="fs-12" style="color:{{ presenca.notaCor }}">{{ presenca.nota }}</span><span class="fs-11 fw-600 p-2-8 raio-4 justifica-si-end" style="color:{{ presenca.origemCor }};background:{{ presenca.origemFundo }}">{{ presenca.origem }}</span>
           </div>
         </sc-for>
@@ -99,7 +99,7 @@ function rotuloSeguro(texto) {
   rotulo.textContent = String(texto);
   return rotulo;
 }
-const FORA_DA_AGENDA = ['Fora da agenda', 'var(--texto-8a999e)', 'var(--fundo-eef3f4)', 'var(--texto-45575e)'];
+const FORA_DA_AGENDA = ['Fora da agenda', 'var(--texto-cinza-420)', 'var(--fundo-cinza-55)', 'var(--texto-cinza-680)'];
 const minutosDe = instante => {
   const hora = hmTs(instante);
   return hora ? minDe(hora) : null;
@@ -385,7 +385,7 @@ class Component extends DCLogic {
           tempo: duracao(Math.max(0, (fim == null ? agora : fim) - inicio)),
           origem: visita ? origemDe(visita.origem)[0] : 'Fora da agenda',
           situacao: !p.fim ? 'Em andamento' : registrada ? 'Visita registrada' : 'Falta registrar a visita',
-          cor: !p.fim ? 'var(--texto-1f4fc4)' : registrada ? 'var(--texto-23773a)' : 'var(--texto-b42318)',
+          cor: !p.fim ? 'var(--texto-azul-550)' : registrada ? 'var(--texto-verde-700)' : 'var(--texto-vermelho-600)',
           faltaRegistrar: !!p.fim && !registrada,
           registrar: () => contexto.abrirRegistro({ presenca: p })
         };
@@ -418,10 +418,10 @@ class Component extends DCLogic {
                 : 'Sem registro de visita',
           notaCor:
             !p.fim || p.conferencia
-              ? 'var(--texto-9a6212)'
+              ? 'var(--texto-ambar-660)'
               : registrada
-                ? 'var(--texto-5b6b70)'
-                : 'var(--texto-b42318)',
+                ? 'var(--texto-cinza-600)'
+                : 'var(--texto-vermelho-600)',
           origem: origem[0],
           origemCor: origem[3],
           origemFundo: origem[2]
@@ -488,16 +488,16 @@ class Component extends DCLogic {
               ' · desde ' +
               hmTs(presencaAberta.inicio) +
               (presencaAberta.data < hoje ? ' de ' + dmIso(presencaAberta.data) : ''),
-            cor: 'var(--texto-1f4fc4)',
-            fundo: 'var(--fundo-e7edfc)'
+            cor: 'var(--texto-azul-550)',
+            fundo: 'var(--fundo-azul-50)'
           }
         : {
             rotulo: 'Sem presença em andamento',
             detalhe: agendaDeHoje.length
               ? plural(agendaDeHoje.length, 'visita na agenda de hoje', 'visitas na agenda de hoje')
               : 'Selecione a escola da visita',
-            cor: 'var(--texto-34464d)',
-            fundo: 'var(--fundo-e8eef0)'
+            cor: 'var(--texto-cinza-750)',
+            fundo: 'var(--fundo-cinza-70)'
           },
       observacao: memoria.observacao,
       escreverObservacao: e => this.lembrar({ observacao: e.target.value }),
@@ -508,7 +508,7 @@ class Component extends DCLogic {
           }
         : {
             rotulo: contexto.presencaSalvando ? 'Iniciando…' : 'Iniciar atividades na escola',
-            classe: escolaId && !bloqueio ? 'fundo-0b7ea3' : '',
+            classe: escolaId && !bloqueio ? 'fundo-ciano-660' : '',
             fundo: escolaId && !bloqueio ? '#0B7EA3' : '#A9B8BD'
           },
       alternarPresenca: () =>

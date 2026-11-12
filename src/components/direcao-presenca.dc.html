@@ -9,36 +9,36 @@
 <body>
 <x-dc>
   <div class="d-flex quebra-wrap alinha-flex-end justifica-space-between gap-10">
-    <div class="d-flex eixo-column gap-2"><h2 class="m-0 fs-20 fw-800">Presença de hoje</h2><span class="fs-13 cor-5b6b70">{{ atualizadoTexto }}</span></div>
+    <div class="d-flex eixo-column gap-2"><h2 class="m-0 fs-20 fw-800">Presença de hoje</h2><span class="fs-13 cor-cinza-600">{{ atualizadoTexto }}</span></div>
   </div>
-  <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))"><sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="4"><div class="borda-dde6e8 raio-14 p-12-14 d-flex eixo-column gap-4 fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-12 cor-5b6b70 fw-600">{{ indicador.titulo }}</span><b class="fs-24 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</b><span class="fs-12 cor-5b6b70">{{ indicador.nota }}</span></div></sc-for></div>
+  <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))"><sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="4"><div class="borda-cinza-110 raio-14 p-12-14 d-flex eixo-column gap-4 fundo-branco" style="background:var(--fundo-branco)"><span class="fs-12 cor-cinza-600 fw-600">{{ indicador.titulo }}</span><b class="fs-24 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</b><span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for></div>
   <div class="direcao-ponto-grade d-grid colunas-minmax-0-1fr-320 gap-16 alinha-start">
-    <section class="borda-dde6e8 raio-14 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff)">
+    <section class="borda-cinza-110 raio-14 rolagem-hidden fundo-branco" style="background:var(--fundo-branco)">
       <h3 class="m-0 p-14-16 fs-15">Oficineiros da escola</h3>
       <div class="rolagem-x-auto">
         <table class="w-100pc min-w-600 colapso-collapse fs-13">
-          <thead><tr class="fundo-eef3f4 cor-5b6b70 texto-left"><th class="p-8-10 fw-600">Oficineiro</th><th class="p-8-10 fw-600">Entrada</th><th class="p-8-10 fw-600">Almoço</th><th class="p-8-10 fw-600">Saída</th><th class="p-8-10 fw-600">Horas hoje</th><th class="p-8-10 fw-600">Situação</th><th class="p-8-10 fw-600">Espelho</th></tr></thead>
+          <thead><tr class="fundo-cinza-55 cor-cinza-600 texto-left"><th class="p-8-10 fw-600">Oficineiro</th><th class="p-8-10 fw-600">Entrada</th><th class="p-8-10 fw-600">Almoço</th><th class="p-8-10 fw-600">Saída</th><th class="p-8-10 fw-600">Horas hoje</th><th class="p-8-10 fw-600">Situação</th><th class="p-8-10 fw-600">Espelho</th></tr></thead>
           <tbody>
-            <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="3"><tr class="borda-t-dde6e8"><td class="p-10 fw-700">{{ linha.nome }}</td><td class="p-10 num-tabular-nums">{{ linha.entrada }}</td><td class="p-10 num-tabular-nums">{{ linha.almoco }}</td><td class="p-10 num-tabular-nums">{{ linha.saida }}</td><td class="p-10 num-tabular-nums fw-700">{{ linha.horas }}</td><td class="p-10"><span class="fs-12 fw-700 raio-999 p-3-10 espaco-nowrap" style="background:{{ linha.fundo }};color:{{ linha.cor }}">{{ linha.situacao }}</span></td><td class="p-10"><button onClick="{{ linha.verEspelho }}" aria-label="{{ linha.rotuloEspelho }}" class="min-h-36 borda-cfdadd fundo-ffffff cor-08617e raio-8 p-0-10 fs-13 fw-600 espaco-nowrap botao-secundario">Espelho</button></td></tr></sc-for>
+            <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="3"><tr class="borda-t-cinza-110"><td class="p-10 fw-700">{{ linha.nome }}</td><td class="p-10 num-tabular-nums">{{ linha.entrada }}</td><td class="p-10 num-tabular-nums">{{ linha.almoco }}</td><td class="p-10 num-tabular-nums">{{ linha.saida }}</td><td class="p-10 num-tabular-nums fw-700">{{ linha.horas }}</td><td class="p-10"><span class="fs-12 fw-700 raio-999 p-3-10 espaco-nowrap" style="background:{{ linha.fundo }};color:{{ linha.cor }}">{{ linha.situacao }}</span></td><td class="p-10"><button onClick="{{ linha.verEspelho }}" aria-label="{{ linha.rotuloEspelho }}" class="min-h-36 borda-cinza-160 fundo-branco cor-ciano-740 raio-8 p-0-10 fs-13 fw-600 espaco-nowrap botao-secundario">Espelho</button></td></tr></sc-for>
           </tbody>
         </table>
       </div>
-      <sc-if value="{{ semLinhas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-16 fs-13 cor-5b6b70">Nenhum oficineiro ativo na escola.</p></sc-if>
+      <sc-if value="{{ semLinhas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-16 fs-13 cor-cinza-600">Nenhum oficineiro ativo na escola.</p></sc-if>
     </section>
-    <section class="borda-dde6e8 raio-14 p-6-14-12 fundo-ffffff" style="background:var(--fundo-ffffff)">
+    <section class="borda-cinza-110 raio-14 p-6-14-12 fundo-branco" style="background:var(--fundo-branco)">
       <h3 class="m-10-0-4 fs-15">Justificativas</h3>
-      <sc-if value="{{ semJustificativas }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Nenhuma justificativa aguardando a direção.</span></sc-if>
+      <sc-if value="{{ semJustificativas }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma justificativa aguardando a direção.</span></sc-if>
       <sc-for list="{{ justificativas }}" as="justificativa" hint-placeholder-count="2">
-        <div class="d-flex eixo-column gap-6 p-10-0 borda-t-dde6e8">
+        <div class="d-flex eixo-column gap-6 p-10-0 borda-t-cinza-110">
           <b class="fs-14">{{ justificativa.nome }}</b>
-          <span class="fs-13 cor-34464d">{{ justificativa.tipo }} · {{ justificativa.data }}</span>
-          <sc-if value="{{ justificativa.temHorarios }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70 num-tabular-nums">{{ justificativa.horarios }}</span></sc-if>
-          <span class="fs-13 cor-5b6b70">{{ justificativa.motivo }}</span>
-          <sc-if value="{{ justificativa.temSinal }}" hint-placeholder-val="{{ false }}"><div role="note" class="d-flex eixo-column gap-2 fundo-faefd9 cor-7a4e0b raio-8 p-8-10 fs-12"><b>Sinalizada pela coordenação · {{ justificativa.sinalEm }}</b><span class="quebra-palavra-anywhere">{{ justificativa.sinal }}</span></div></sc-if>
+          <span class="fs-13 cor-cinza-750">{{ justificativa.tipo }} · {{ justificativa.data }}</span>
+          <sc-if value="{{ justificativa.temHorarios }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600 num-tabular-nums">{{ justificativa.horarios }}</span></sc-if>
+          <span class="fs-13 cor-cinza-600">{{ justificativa.motivo }}</span>
+          <sc-if value="{{ justificativa.temSinal }}" hint-placeholder-val="{{ false }}"><div role="note" class="d-flex eixo-column gap-2 fundo-ambar-80 cor-ambar-745 raio-8 p-8-10 fs-12"><b>Sinalizada pela coordenação · {{ justificativa.sinalEm }}</b><span class="quebra-palavra-anywhere">{{ justificativa.sinal }}</span></div></sc-if>
           <sc-if value="{{ justificativa.pendente }}" hint-placeholder-val="{{ true }}">
-            <input value="{{ justificativa.comentario }}" onInput="{{ justificativa.escreverComentario }}" aria-label="{{ justificativa.rotuloComentario }}" placeholder="Comentário (obrigatório para recusar)" maxlength="500" class="h-38 borda-cfdadd raio-8 p-0-10 fs-13 fundo-ffffff"></input>
-            <sc-if value="{{ justificativa.temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-12 cor-b42318">{{ justificativa.erro }}</span></sc-if>
-            <div class="d-flex gap-8"><button onClick="{{ justificativa.aprovar }}" disabled="{{ justificativa.ocupado }}" class="flex-1 min-h-40 borda-0 raio-10 cor-fff fs-13 fw-700 fundo-0b7ea3" style="background:#0B7EA3">Aprovar</button><button onClick="{{ justificativa.recusar }}" disabled="{{ justificativa.ocupado }}" class="flex-1 min-h-40 borda-cfdadd raio-10 fundo-ffffff cor-b42318 fs-13 fw-700 botao-secundario">Recusar</button></div>
+            <input value="{{ justificativa.comentario }}" onInput="{{ justificativa.escreverComentario }}" aria-label="{{ justificativa.rotuloComentario }}" placeholder="Comentário (obrigatório para recusar)" maxlength="500" class="h-38 borda-cinza-160 raio-8 p-0-10 fs-13 fundo-branco"></input>
+            <sc-if value="{{ justificativa.temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-12 cor-vermelho-600">{{ justificativa.erro }}</span></sc-if>
+            <div class="d-flex gap-8"><button onClick="{{ justificativa.aprovar }}" disabled="{{ justificativa.ocupado }}" class="flex-1 min-h-40 borda-0 raio-10 cor-branco fs-13 fw-700 fundo-ciano-660" style="background:#0B7EA3">Aprovar</button><button onClick="{{ justificativa.recusar }}" disabled="{{ justificativa.ocupado }}" class="flex-1 min-h-40 borda-cinza-160 raio-10 fundo-branco cor-vermelho-600 fs-13 fw-700 botao-secundario">Recusar</button></div>
           </sc-if>
           <sc-if value="{{ justificativa.decidida }}" hint-placeholder-val="{{ false }}"><span class="alinha-si-flex-start fs-12 fw-700 raio-999 p-3-10" style="background:{{ justificativa.fundo }};color:{{ justificativa.cor }}">{{ justificativa.status }}</span></sc-if>
         </div>
@@ -46,19 +46,19 @@
     </section>
   </div>
   <sc-if value="{{ espelho.aberto }}" hint-placeholder-val="{{ false }}">
-    <section aria-label="{{ espelho.titulo }}" class="borda-dde6e8 raio-14 p-6-16-12 d-flex eixo-column fundo-ffffff" style="background:var(--fundo-ffffff)">
+    <section aria-label="{{ espelho.titulo }}" class="borda-cinza-110 raio-14 p-6-16-12 d-flex eixo-column fundo-branco" style="background:var(--fundo-branco)">
       <div class="d-flex alinha-center justifica-space-between gap-8 quebra-wrap p-10-0">
         <h3 class="m-0 fs-15">{{ espelho.titulo }}</h3>
-        <div class="d-flex alinha-center gap-4"><button onClick="{{ espelho.anterior }}" aria-label="Mês anterior" class="w-40 h-40 borda-0 fundo-transparent cor-08617e fs-18 fw-700 largura-fundo">‹</button><span class="fs-13 fw-700">{{ espelho.mes }}</span><button onClick="{{ espelho.proximo }}" disabled="{{ espelho.semProximo }}" aria-label="Próximo mês" class="w-40 h-40 borda-0 fundo-transparent cor-08617e fs-18 fw-700 largura-fundo">›</button><button onClick="{{ espelho.fechar }}" aria-label="Fechar espelho" class="w-40 h-40 borda-0 fundo-transparent cor-5b6b70 fs-18 largura-fundo">×</button></div>
+        <div class="d-flex alinha-center gap-4"><button onClick="{{ espelho.anterior }}" aria-label="Mês anterior" class="w-40 h-40 borda-0 fundo-transparent cor-ciano-740 fs-18 fw-700 largura-fundo">‹</button><span class="fs-13 fw-700">{{ espelho.mes }}</span><button onClick="{{ espelho.proximo }}" disabled="{{ espelho.semProximo }}" aria-label="Próximo mês" class="w-40 h-40 borda-0 fundo-transparent cor-ciano-740 fs-18 fw-700 largura-fundo">›</button><button onClick="{{ espelho.fechar }}" aria-label="Fechar espelho" class="w-40 h-40 borda-0 fundo-transparent cor-cinza-600 fs-18 largura-fundo">×</button></div>
       </div>
-      <span class="fs-13 cor-5b6b70">{{ espelho.resumo }}</span>
+      <span class="fs-13 cor-cinza-600">{{ espelho.resumo }}</span>
       <sc-for list="{{ espelho.dias }}" as="dia" hint-placeholder-count="3">
-        <div class="d-grid colunas-minmax-0-1fr-auto gap-4-12 p-10-0 borda-t-dde6e8">
+        <div class="d-grid colunas-minmax-0-1fr-auto gap-4-12 p-10-0 borda-t-cinza-110">
           <span class="fs-14 fw-700">{{ dia.data }}</span>
           <span class="fs-14 fw-700 num-tabular-nums texto-right">{{ dia.total }}</span>
-          <span class="fs-13 cor-5b6b70 num-tabular-nums">{{ dia.horarios }}</span>
+          <span class="fs-13 cor-cinza-600 num-tabular-nums">{{ dia.horarios }}</span>
           <span class="justifica-si-end fs-12 fw-700 raio-999 p-3-10" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.situacao }}</span>
-          <sc-if value="{{ dia.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70" style="grid-column:1 / -1">{{ dia.observacao }}</span></sc-if>
+          <sc-if value="{{ dia.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600" style="grid-column:1 / -1">{{ dia.observacao }}</span></sc-if>
         </div>
       </sc-for>
     </section>
@@ -68,17 +68,17 @@
 const Base = window.FSM_BASE;
 const { dataDe, msgErro } = Base;
 const SITUACOES_AGORA = {
-  trabalhando: ['Trabalhando', 'var(--fundo-e2f2e5)', 'var(--texto-1b5e2e)'],
-  almoco: ['Em almoço', 'var(--fundo-e3ebed)', 'var(--texto-08617e)'],
-  perto_limite: ['Perto do limite', 'var(--fundo-faefd9)', 'var(--texto-7a4e0b)'],
-  encerrado: ['Encerrado', 'var(--fundo-e3ebed)', 'var(--texto-34464d)'],
-  sem_registro: ['Sem registro', 'var(--fundo-fbedeb)', 'var(--texto-b42318)']
+  trabalhando: ['Trabalhando', 'var(--fundo-verde-80)', 'var(--texto-verde-760)'],
+  almoco: ['Em almoço', 'var(--fundo-cinza-90)', 'var(--texto-ciano-740)'],
+  perto_limite: ['Perto do limite', 'var(--fundo-ambar-80)', 'var(--texto-ambar-745)'],
+  encerrado: ['Encerrado', 'var(--fundo-cinza-90)', 'var(--texto-cinza-750)'],
+  sem_registro: ['Sem registro', 'var(--fundo-vermelho-50)', 'var(--texto-vermelho-600)']
 };
 const SITUACOES_DIA = {
-  regular: ['Regular', 'var(--fundo-e2f2e5)', 'var(--texto-1b5e2e)'],
-  acima_8h: ['Acima de 8h', 'var(--fundo-faefd9)', 'var(--texto-7a4e0b)'],
-  pendente: ['Pendente', 'var(--fundo-e3ebed)', 'var(--texto-34464d)'],
-  falta: ['Falta', 'var(--fundo-fbedeb)', 'var(--texto-b42318)']
+  regular: ['Regular', 'var(--fundo-verde-80)', 'var(--texto-verde-760)'],
+  acima_8h: ['Acima de 8h', 'var(--fundo-ambar-80)', 'var(--texto-ambar-745)'],
+  pendente: ['Pendente', 'var(--fundo-cinza-90)', 'var(--texto-cinza-750)'],
+  falta: ['Falta', 'var(--fundo-vermelho-50)', 'var(--texto-vermelho-600)']
 };
 const TIPOS_JUSTIFICATIVA = {
   falta: 'Falta',
@@ -210,25 +210,25 @@ class Component extends DCLogic {
           titulo: 'Na escola agora',
           valor: String(quantos('trabalhando') + quantos('perto_limite') + quantos('almoco')),
           nota: quantos('almoco') + ' em almoço',
-          cor: 'var(--texto-1a2b33)'
+          cor: 'var(--texto-ciano-850)'
         },
         {
           titulo: 'Perto do limite de 8h',
           valor: String(quantos('perto_limite')),
           nota: '30 min ou menos',
-          cor: 'var(--texto-7a4e0b)'
+          cor: 'var(--texto-ambar-745)'
         },
         {
           titulo: 'Sem registro hoje',
           valor: String(quantos('sem_registro')),
           nota: 'nenhuma marcação',
-          cor: 'var(--texto-b42318)'
+          cor: 'var(--texto-vermelho-600)'
         },
         {
           titulo: 'Justificativas',
           valor: String(pendentes.length),
           nota: 'aguardando a direção',
-          cor: 'var(--texto-1a2b33)'
+          cor: 'var(--texto-ciano-850)'
         }
       ],
       linhas: linhas.map(linha => {
@@ -278,8 +278,8 @@ class Component extends DCLogic {
           pendente: j.status === 'em_analise',
           decidida: j.status !== 'em_analise',
           status: aprovada ? 'Aprovada' : 'Recusada',
-          fundo: aprovada ? 'var(--fundo-e2f2e5)' : 'var(--fundo-fbedeb)',
-          cor: aprovada ? 'var(--texto-1b5e2e)' : 'var(--texto-b42318)',
+          fundo: aprovada ? 'var(--fundo-verde-80)' : 'var(--fundo-vermelho-50)',
+          cor: aprovada ? 'var(--texto-verde-760)' : 'var(--texto-vermelho-600)',
           comentario: decisao.comentario || '',
           rotuloComentario: 'Comentário sobre a justificativa de ' + j.nome,
           escreverComentario: e => this.lembrarDecisao(j.id, { comentario: e.target.value, erro: '' }),

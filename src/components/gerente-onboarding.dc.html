@@ -10,59 +10,59 @@
 <x-dc>
     <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
       <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="4">
-        <div class="fundo-ffffff raio-12 p-14-16 d-flex eixo-column gap-4 largura-fundo cartao-indicador" style="border-width:3px 1px 1px;border-style:solid;border-color:{{ indicador.cor }} var(--borda-dde6e8) var(--borda-dde6e8)"><span class="fs-12 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span><span class="num-tabular-nums fs-24 fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ indicador.valor }}</span><span class="fs-12 cor-5b6b70">{{ indicador.nota }}</span></div>
+        <div class="fundo-branco raio-12 p-14-16 d-flex eixo-column gap-4 largura-fundo cartao-indicador" style="border-width:3px 1px 1px;border-style:solid;border-color:{{ indicador.cor }} var(--borda-cinza-110) var(--borda-cinza-110)"><span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span><span class="num-tabular-nums fs-24 fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ indicador.valor }}</span><span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span></div>
       </sc-for>
     </div>
-    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex quebra-wrap alinha-center gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)">
-      <div class="flex-1-1-320 d-flex eixo-column gap-4"><h3 class="m-0 fs-15">Carregar OS de ativação</h3><span class="fs-13 cor-34464d lh-1p5">Envie o anexo da Ordem de Serviço (.xlsx). O sistema lê a aba <b>Relação de Usuários-Ativação</b>, reconhece a escola da lotação e envia cada novo usuário para o analista responsável pela escola.</span></div>
-      <label class="h-42 d-inline-flex alinha-center gap-8 borda-0 fundo-0b7ea3 cor-fff raio-8 p-0-16 fs-14 fw-600 cursor-pointer espaco-nowrap">Selecionar arquivo da OS<input type="file" accept=".xlsx" onChange="{{ lerArquivo }}" aria-label="Selecionar arquivo da OS" class="pos-absolute w-1 h-1 opac-0"></input></label>
+    <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex quebra-wrap alinha-center gap-14 fundo-branco" style="background:var(--fundo-branco)">
+      <div class="flex-1-1-320 d-flex eixo-column gap-4"><h3 class="m-0 fs-15">Carregar OS de ativação</h3><span class="fs-13 cor-cinza-750 lh-1p5">Envie o anexo da Ordem de Serviço (.xlsx). O sistema lê a aba <b>Relação de Usuários-Ativação</b>, reconhece a escola da lotação e envia cada novo usuário para o analista responsável pela escola.</span></div>
+      <label class="h-42 d-inline-flex alinha-center gap-8 borda-0 fundo-ciano-660 cor-branco raio-8 p-0-16 fs-14 fw-600 cursor-pointer espaco-nowrap">Selecionar arquivo da OS<input type="file" accept=".xlsx" onChange="{{ lerArquivo }}" aria-label="Selecionar arquivo da OS" class="pos-absolute w-1 h-1 opac-0"></input></label>
     </section>
-    <sc-if value="{{ erro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-8a1c12 raio-10 p-12-14 fs-14 fw-600">{{ erro }}</div></sc-if>
-    <sc-if value="{{ resultado.tem }}" hint-placeholder-val="{{ false }}"><div role="status" class="fundo-e2f2e5 cor-1b5e2e raio-10 p-12-14 fs-13 lh-1p5">{{ resultado.texto }}</div></sc-if>
+    <sc-if value="{{ erro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-690 raio-10 p-12-14 fs-14 fw-600">{{ erro }}</div></sc-if>
+    <sc-if value="{{ resultado.tem }}" hint-placeholder-val="{{ false }}"><div role="status" class="fundo-verde-80 cor-verde-760 raio-10 p-12-14 fs-13 lh-1p5">{{ resultado.texto }}</div></sc-if>
     <sc-if value="{{ previa.aberta }}" hint-placeholder-val="{{ false }}">
-      <section class="espaco-celular fundo-ffffff borda-bee9f5 raio-12 p-20 d-flex eixo-column gap-12">
-        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Prévia · OS {{ previa.secretaria }} {{ previa.numero }}</h3><span class="fs-12 cor-5b6b70">{{ previa.arquivo }} · {{ previa.resumo }}</span></div>
+      <section class="espaco-celular fundo-branco borda-ciano-150 raio-12 p-20 d-flex eixo-column gap-12">
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Prévia · OS {{ previa.secretaria }} {{ previa.numero }}</h3><span class="fs-12 cor-cinza-600">{{ previa.arquivo }} · {{ previa.resumo }}</span></div>
         <div class="rolagem-x-auto m-0-n4"><div class="min-w-980 d-flex eixo-column p-0-4">
-          <div class="d-grid gap-8 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em pb-8" style="grid-template-columns:40px minmax(180px,1.3fr) 130px minmax(180px,1.2fr) minmax(220px,1.4fr) 190px 120px;font-size:12px;font-size:11px"><span>Seq.</span><span>Usuário</span><span>Cargo</span><span>Lotação na OS</span><span>Escola reconhecida</span><span>Analista</span><span>Situação</span></div>
+          <div class="d-grid gap-8 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em pb-8" style="grid-template-columns:40px minmax(180px,1.3fr) 130px minmax(180px,1.2fr) minmax(220px,1.4fr) 190px 120px;font-size:12px;font-size:11px"><span>Seq.</span><span>Usuário</span><span>Cargo</span><span>Lotação na OS</span><span>Escola reconhecida</span><span>Analista</span><span>Situação</span></div>
           <sc-for list="{{ previa.linhas }}" as="pessoa" hint-placeholder-count="5">
-            <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-e9eff1" style="grid-template-columns:40px minmax(180px,1.3fr) 130px minmax(180px,1.2fr) minmax(220px,1.4fr) 190px 120px">
-              <span class="num-tabular-nums cor-5b6b70" style="font-family:'Inter',system-ui,sans-serif">{{ pessoa.numero }}</span>
-              <div class="d-flex eixo-column min-w-0"><span class="fw-600">{{ pessoa.nome }}</span><span class="fs-12 cor-5b6b70 rolagem-hidden reticencias-ellipsis">{{ pessoa.email }}</span></div>
-              <span class="cor-34464d">{{ pessoa.cargo }}</span>
-              <span class="cor-34464d">{{ pessoa.lotacao }}</span>
-              <select onChange="{{ pessoa.escolherEscola }}" value="{{ pessoa.escola }}" class="h-36 raio-8 p-0-8 fs-13 w-100pc largura-fundo fundo-ffffff" style="border:1px solid var(--borda-cfdadd);background:var(--fundo-ffffff);border-color:{{ pessoa.escolaBorda }}"><option value="">Não reconhecida · selecione</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-              <select onChange="{{ pessoa.escolherCarteira }}" value="{{ pessoa.carteira }}" class="h-36 raio-8 p-0-8 fs-13 w-100pc largura-fundo fundo-ffffff" style="border:1px solid var(--borda-cfdadd);background:var(--fundo-ffffff);border-color:{{ pessoa.carteiraBorda }}"><option value="">Sem analista · atribuir</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+            <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:40px minmax(180px,1.3fr) 130px minmax(180px,1.2fr) minmax(220px,1.4fr) 190px 120px">
+              <span class="num-tabular-nums cor-cinza-600" style="font-family:'Inter',system-ui,sans-serif">{{ pessoa.numero }}</span>
+              <div class="d-flex eixo-column min-w-0"><span class="fw-600">{{ pessoa.nome }}</span><span class="fs-12 cor-cinza-600 rolagem-hidden reticencias-ellipsis">{{ pessoa.email }}</span></div>
+              <span class="cor-cinza-750">{{ pessoa.cargo }}</span>
+              <span class="cor-cinza-750">{{ pessoa.lotacao }}</span>
+              <select onChange="{{ pessoa.escolherEscola }}" value="{{ pessoa.escola }}" class="h-36 raio-8 p-0-8 fs-13 w-100pc largura-fundo fundo-branco" style="border:1px solid var(--borda-cinza-160);background:var(--fundo-branco);border-color:{{ pessoa.escolaBorda }}"><option value="">Não reconhecida · selecione</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+              <select onChange="{{ pessoa.escolherCarteira }}" value="{{ pessoa.carteira }}" class="h-36 raio-8 p-0-8 fs-13 w-100pc largura-fundo fundo-branco" style="border:1px solid var(--borda-cinza-160);background:var(--fundo-branco);border-color:{{ pessoa.carteiraBorda }}"><option value="">Sem analista · atribuir</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
               <span class="fs-11 fw-700 p-3-8 raio-999 justifica-si-start" style="color:{{ pessoa.situacaoCor }};background:{{ pessoa.situacaoFundo }}">{{ pessoa.situacao }}</span>
             </div>
           </sc-for>
         </div></div>
-        <div class="d-flex quebra-wrap gap-10 justifica-flex-end alinha-center"><span class="fs-12 cor-5b6b70 mr-auto">Usuários já importados em outra OS (mesmo CPF ou CNPJ) são ignorados pelo banco. Os analistas recebem a pendência na tela deles.</span><button onClick="{{ cancelarPrevia }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-16 fs-14 fw-600 botao-secundario">Cancelar</button><button onClick="{{ importar }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">{{ previa.botao }}</button></div>
+        <div class="d-flex quebra-wrap gap-10 justifica-flex-end alinha-center"><span class="fs-12 cor-cinza-600 mr-auto">Usuários já importados em outra OS (mesmo CPF ou CNPJ) são ignorados pelo banco. Os analistas recebem a pendência na tela deles.</span><button onClick="{{ cancelarPrevia }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-16 fs-14 fw-600 botao-secundario">Cancelar</button><button onClick="{{ importar }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ previa.botao }}</button></div>
       </section>
     </sc-if>
-    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)">
+    <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
       <div class="d-flex quebra-wrap alinha-center gap-8-10">
         <h3 class="m-0 fs-15 flex-1-1-220">Pendências de onboarding</h3>
-        <select onChange="{{ escolherOrdem }}" value="{{ filtro.ordem }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as OS</option><sc-for list="{{ opcoesDeOrdem }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-        <select onChange="{{ escolherCarteira }}" value="{{ filtro.carteira }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todos os analistas</option><option value="-">Sem analista</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-        <select onChange="{{ escolherSituacao }}" value="{{ filtro.situacao }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as situações</option><option value="pendente">Pendente</option><option value="concluido">Concluído</option></select>
+        <select onChange="{{ escolherOrdem }}" value="{{ filtro.ordem }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><option value="">Todas as OS</option><sc-for list="{{ opcoesDeOrdem }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+        <select onChange="{{ escolherCarteira }}" value="{{ filtro.carteira }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><option value="">Todos os analistas</option><option value="-">Sem analista</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+        <select onChange="{{ escolherSituacao }}" value="{{ filtro.situacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><option value="">Todas as situações</option><option value="pendente">Pendente</option><option value="concluido">Concluído</option></select>
       </div>
       <div class="rolagem-x-auto m-0-n4"><div class="min-w-1040 d-flex eixo-column p-0-4">
-        <div class="d-grid gap-8 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em pb-8" style="grid-template-columns:90px minmax(200px,1.4fr) 130px minmax(200px,1.3fr) 190px 90px 80px minmax(170px,1fr);font-size:12px;font-size:11px"><span>OS</span><span>Usuário</span><span>Cargo</span><span>Escola</span><span>Analista</span><span>Recebido</span><span class="texto-right">Em aberto</span><span>Situação</span></div>
+        <div class="d-grid gap-8 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em pb-8" style="grid-template-columns:90px minmax(200px,1.4fr) 130px minmax(200px,1.3fr) 190px 90px 80px minmax(170px,1fr);font-size:12px;font-size:11px"><span>OS</span><span>Usuário</span><span>Cargo</span><span>Escola</span><span>Analista</span><span>Recebido</span><span class="texto-right">Em aberto</span><span>Situação</span></div>
         <sc-for list="{{ linhas }}" as="item" hint-placeholder-count="6">
-          <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-e9eff1" style="grid-template-columns:90px minmax(200px,1.4fr) 130px minmax(200px,1.3fr) 190px 90px 80px minmax(170px,1fr)">
+          <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:90px minmax(200px,1.4fr) 130px minmax(200px,1.3fr) 190px 90px 80px minmax(170px,1fr)">
             <span class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ item.ordem }}</span>
-            <div class="d-flex eixo-column min-w-0"><span class="fw-600">{{ item.nome }}</span><span class="fs-12 cor-5b6b70 rolagem-hidden reticencias-ellipsis">{{ item.email }}</span></div>
-            <span class="cor-34464d">{{ item.cargo }}</span>
-            <span class="cor-34464d">{{ item.escola }}</span>
-            <select onChange="{{ item.escolherCarteira }}" value="{{ item.carteira }}" class="h-36 raio-8 p-0-8 fs-13 w-100pc largura-fundo fundo-ffffff" style="border:1px solid var(--borda-cfdadd);background:var(--fundo-ffffff);border-color:{{ item.carteiraBorda }}"><option value="">Sem analista · atribuir</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+            <div class="d-flex eixo-column min-w-0"><span class="fw-600">{{ item.nome }}</span><span class="fs-12 cor-cinza-600 rolagem-hidden reticencias-ellipsis">{{ item.email }}</span></div>
+            <span class="cor-cinza-750">{{ item.cargo }}</span>
+            <span class="cor-cinza-750">{{ item.escola }}</span>
+            <select onChange="{{ item.escolherCarteira }}" value="{{ item.carteira }}" class="h-36 raio-8 p-0-8 fs-13 w-100pc largura-fundo fundo-branco" style="border:1px solid var(--borda-cinza-160);background:var(--fundo-branco);border-color:{{ item.carteiraBorda }}"><option value="">Sem analista · atribuir</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
             <span class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ item.recebimento }}</span>
             <span class="num-tabular-nums fs-12 texto-right" style="font-family:'Inter',system-ui,sans-serif;color:{{ item.emAbertoCor }}">{{ item.emAberto }}</span>
-            <div class="d-flex eixo-column gap-2"><span class="fs-11 fw-700 p-3-8 raio-999 alinha-si-flex-start" style="color:{{ item.situacaoCor }};background:{{ item.situacaoFundo }}">{{ item.situacao }}</span><span class="fs-12 cor-5b6b70">{{ item.baixa }}</span></div>
+            <div class="d-flex eixo-column gap-2"><span class="fs-11 fw-700 p-3-8 raio-999 alinha-si-flex-start" style="color:{{ item.situacaoCor }};background:{{ item.situacaoFundo }}">{{ item.situacao }}</span><span class="fs-12 cor-cinza-600">{{ item.baixa }}</span></div>
           </div>
         </sc-for>
-        <sc-if value="{{ semLinhas }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70 p-12-0">Nenhuma pendência neste filtro.</span></sc-if>
+        <sc-if value="{{ semLinhas }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600 p-12-0">Nenhuma pendência neste filtro.</span></sc-if>
       </div></div>
-      <span class="fs-12 cor-5b6b70">A baixa é feita pelo analista na tela dele; aqui a pendência é atualizada automaticamente.</span>
+      <span class="fs-12 cor-cinza-600">A baixa é feita pelo analista na tela dele; aqui a pendência é atualizada automaticamente.</span>
     </section>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -82,8 +82,8 @@ class Component extends DCLogic {
     const F = memoria.filtro || { ordem: '', carteira: '', situacao: 'pendente' };
     const pend = itens.filter(i => i.status === 'pendente');
     const ST = {
-      pendente: ['Pendente', 'var(--texto-9a6212)', 'var(--fundo-faefd9)'],
-      concluido: ['Concluído', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)']
+      pendente: ['Pendente', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)'],
+      concluido: ['Concluído', 'var(--texto-verde-700)', 'var(--fundo-verde-80)']
     };
     const diasDesde = iso => (iso ? Math.max(0, Math.round((dataDe(hoje) - dataDe(iso)) / 864e5)) : 0);
     const rows = itens
@@ -112,10 +112,10 @@ class Component extends DCLogic {
             ? (escolaPorId[String(i.escola_id)] || {}).nome || '—'
             : i.lotacao_original || 'Escola não reconhecida',
           carteira: i.carteira_id || '',
-          carteiraBorda: i.carteira_id ? 'var(--borda-cfdadd)' : '#E3B45C',
+          carteiraBorda: i.carteira_id ? 'var(--borda-cinza-160)' : '#E3B45C',
           recebimento: rec ? dmIso(rec) : '—',
           emAberto: i.status === 'pendente' ? d + (d === 1 ? ' dia' : ' dias') : '—',
-          emAbertoCor: i.status === 'pendente' && d > 15 ? 'var(--texto-b42318)' : 'var(--texto-1a2b33)',
+          emAbertoCor: i.status === 'pendente' && d > 15 ? 'var(--texto-vermelho-600)' : 'var(--texto-ciano-850)',
           situacao: st[0],
           situacaoCor: st[1],
           situacaoFundo: st[2],
@@ -144,8 +144,8 @@ class Component extends DCLogic {
             lotacao: p.lotacao || '—',
             escola: p.escola,
             carteira: p.cart,
-            escolaBorda: p.escola ? 'var(--borda-cfdadd)' : '#E3B45C',
-            carteiraBorda: p.cart ? 'var(--borda-cfdadd)' : '#E3B45C',
+            escolaBorda: p.escola ? 'var(--borda-cinza-160)' : '#E3B45C',
+            carteiraBorda: p.cart ? 'var(--borda-cinza-160)' : '#E3B45C',
             situacao: !cpfOk
               ? 'CPF ou CNPJ inválido · ignorado'
               : !p.escola
@@ -154,15 +154,15 @@ class Component extends DCLogic {
                   ? 'Sem analista'
                   : 'Novo',
             situacaoCor: !cpfOk
-              ? 'var(--texto-b42318)'
+              ? 'var(--texto-vermelho-600)'
               : !p.escola || !p.cart
-                ? 'var(--texto-9a6212)'
-                : 'var(--texto-23773a)',
+                ? 'var(--texto-ambar-660)'
+                : 'var(--texto-verde-700)',
             situacaoFundo: !cpfOk
-              ? 'var(--fundo-fbedeb)'
+              ? 'var(--fundo-vermelho-50)'
               : !p.escola || !p.cart
-                ? 'var(--fundo-faefd9)'
-                : 'var(--fundo-e2f2e5)',
+                ? 'var(--fundo-ambar-80)'
+                : 'var(--fundo-verde-80)',
             escolherEscola: e => {
               const esc = escPorId[e.target.value];
               upd({ escola: e.target.value, cart: esc && esc.carteira_id ? esc.carteira_id : p.cart });
@@ -179,19 +179,19 @@ class Component extends DCLogic {
           titulo: 'Concluídos',
           valor: numero(itens.length - pend.length),
           nota: 'baixa dada pelo analista',
-          cor: 'var(--texto-23773a)'
+          cor: 'var(--texto-verde-700)'
         },
         {
           titulo: 'Sem analista',
           valor: numero(pend.filter(i => !i.carteira_id).length),
           nota: 'atribuir manualmente',
-          cor: 'var(--texto-b42318)'
+          cor: 'var(--texto-vermelho-600)'
         },
         {
           titulo: 'OS carregadas',
           valor: numero(os.length),
           nota: os.map(o => o.secretaria + ' ' + o.numero).join(' · ') || '—',
-          cor: 'var(--texto-6c60e6)'
+          cor: 'var(--texto-indigo-360)'
         }
       ],
       filtro: F,

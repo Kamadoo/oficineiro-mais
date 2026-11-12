@@ -10,26 +10,26 @@
 <x-dc>
   <div class="d-flex quebra-wrap gap-10-12 alinha-center">
     <div role="group" aria-label="Semana" class="d-flex alinha-center gap-6">
-      <button onClick="{{ semanaAnterior }}" aria-label="Semana anterior" class="w-36 h-36 borda-cfdadd fundo-ffffff raio-8 cor-1a2b33 fs-16 p-0 largura-fundo botao-secundario">‹</button>
+      <button onClick="{{ semanaAnterior }}" aria-label="Semana anterior" class="w-36 h-36 borda-cinza-160 fundo-branco raio-8 cor-ciano-850 fs-16 p-0 largura-fundo botao-secundario">‹</button>
       <span class="fs-13 fw-600 min-w-170 texto-center">{{ semanaTexto }}</span>
-      <button onClick="{{ semanaSeguinte }}" aria-label="Próxima semana" class="w-36 h-36 borda-cfdadd fundo-ffffff raio-8 cor-1a2b33 fs-16 p-0 largura-fundo botao-secundario">›</button>
-      <sc-if value="{{ foraDaSemanaAtual }}" hint-placeholder-val="{{ false }}"><button onClick="{{ semanaAtual }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-1a2b33 botao-secundario">Esta semana</button></sc-if>
+      <button onClick="{{ semanaSeguinte }}" aria-label="Próxima semana" class="w-36 h-36 borda-cinza-160 fundo-branco raio-8 cor-ciano-850 fs-16 p-0 largura-fundo botao-secundario">›</button>
+      <sc-if value="{{ foraDaSemanaAtual }}" hint-placeholder-val="{{ false }}"><button onClick="{{ semanaAtual }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-ciano-850 botao-secundario">Esta semana</button></sc-if>
     </div>
     <div class="oculto-celular flex-1"></div>
-    <button class="largura-total-celular h-38 borda-0 cor-fff raio-8 p-0-14 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3" onClick="{{ agendarVisita }}" aria-haspopup="dialog">+ Nova visita</button>
+    <button class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3" onClick="{{ agendarVisita }}" aria-haspopup="dialog">+ Nova visita</button>
   </div>
   <div class="empilha-celular d-grid colunas-repeat-5-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
     <sc-for list="{{ semana }}" as="dia" hint-placeholder-count="5">
       <section class="dia-celular raio-12 p-14 d-flex eixo-column gap-10 min-h-220 min-w-0 largura-fundo {{ dia.classe }}" style="background:{{ dia.fundo }};border:1px solid {{ dia.borda }}" aria-label="{{ dia.aria }}">
-        <div class="d-flex justifica-space-between alinha-baseline"><b>{{ dia.nome }}</b><span class="num-tabular-nums fs-12 cor-5b6b70">{{ dia.data }}</span></div>
-        <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70">{{ dia.vazioTexto }}</span></sc-if>
+        <div class="d-flex justifica-space-between alinha-baseline"><b>{{ dia.nome }}</b><span class="num-tabular-nums fs-12 cor-cinza-600">{{ dia.data }}</span></div>
+        <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">{{ dia.vazioTexto }}</span></sc-if>
         <sc-for list="{{ dia.visitas }}" as="visita" hint-placeholder-count="2">
-          <button onClick="{{ visita.abrir }}" aria-haspopup="dialog" aria-label="{{ visita.aria }}" class="raio-8 p-10 d-flex eixo-column gap-2 texto-left cor-1a2b33 w-100pc min-w-0 largura-fundo" style="border:0;border-left:3px solid {{ visita.cor }};background:{{ visita.fundo }};cursor:pointer"><span class="num-tabular-nums fs-12 cor-5b6b70">{{ visita.hora }}</span><span class="fs-13 fw-600 quebra-palavra-anywhere">{{ visita.escola }}</span><span class="fs-12 cor-34464d quebra-palavra-anywhere">{{ visita.tipo }}</span><span class="fs-11 fw-600" style="color:{{ visita.situacaoCor }}">{{ visita.situacao }}</span></button>
+          <button onClick="{{ visita.abrir }}" aria-haspopup="dialog" aria-label="{{ visita.aria }}" class="raio-8 p-10 d-flex eixo-column gap-2 texto-left cor-ciano-850 w-100pc min-w-0 largura-fundo" style="border:0;border-left:3px solid {{ visita.cor }};background:{{ visita.fundo }};cursor:pointer"><span class="num-tabular-nums fs-12 cor-cinza-600">{{ visita.hora }}</span><span class="fs-13 fw-600 quebra-palavra-anywhere">{{ visita.escola }}</span><span class="fs-12 cor-cinza-750 quebra-palavra-anywhere">{{ visita.tipo }}</span><span class="fs-11 fw-600" style="color:{{ visita.situacaoCor }}">{{ visita.situacao }}</span></button>
         </sc-for>
       </section>
     </sc-for>
   </div>
-  <div class="d-flex quebra-wrap gap-8-16 fs-12 cor-34464d"><b class="fw-600 cor-5b6b70">Origem da visita:</b><sc-for list="{{ origens }}" as="origem" hint-placeholder-count="5"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ origem.cor }}"></span>{{ origem.rotulo }}</span></sc-for></div>
+  <div class="d-flex quebra-wrap gap-8-16 fs-12 cor-cinza-750"><b class="fw-600 cor-cinza-600">Origem da visita:</b><sc-for list="{{ origens }}" as="origem" hint-placeholder-count="5"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ origem.cor }}"></span>{{ origem.rotulo }}</span></sc-for></div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 const Base = window.FSM_BASE;
@@ -69,12 +69,12 @@ class Component extends DCLogic {
                   ? 'Remarcada de ' + dmIso(v.data_original)
                   : 'Agendada',
             situacaoCor: realizada
-              ? 'var(--texto-23773a)'
+              ? 'var(--texto-verde-700)'
               : semRegistro
-                ? 'var(--texto-b42318)'
-                : 'var(--texto-5b6b70)',
+                ? 'var(--texto-vermelho-600)'
+                : 'var(--texto-cinza-600)',
             cor: origem[1],
-            fundo: realizada ? 'var(--fundo-e2f2e5)' : 'var(--fundo-f7fafb)',
+            fundo: realizada ? 'var(--fundo-verde-80)' : 'var(--fundo-cinza-20)',
             aria: 'Ver visita em ' + nomeDaEscola(v.escola_id) + ', ' + dmIso(dia),
             abrir: () => contexto.abrirVisitaDaAgenda(v.id)
           };
@@ -87,9 +87,9 @@ class Component extends DCLogic {
               escola: nomeDaEscola(v.escola_id),
               tipo: v.tipo + (v.subtipo ? ' · ' + v.subtipo : ''),
               situacao: 'Fora da agenda',
-              situacaoCor: 'var(--texto-23773a)',
-              cor: 'var(--texto-23773a)',
-              fundo: 'var(--fundo-e2f2e5)',
+              situacaoCor: 'var(--texto-verde-700)',
+              cor: 'var(--texto-verde-700)',
+              fundo: 'var(--fundo-verde-80)',
               aria: 'Ver visita registrada em ' + nomeDaEscola(v.escola_id) + ', ' + dmIso(dia),
               abrir: () => contexto.abrirVisita(v.id)
             }))
@@ -101,9 +101,9 @@ class Component extends DCLogic {
         visitas,
         vazio: visitas.length === 0,
         vazioTexto: feriado ? 'Feriado · ' + feriado : 'Sem visitas agendadas',
-        classe: ehHoje ? '' : 'fundo-ffffff borda-dde6e8',
-        fundo: ehHoje ? 'var(--fundo-eff9fc)' : 'var(--fundo-ffffff)',
-        borda: ehHoje ? 'var(--borda-c9ecf6)' : 'var(--borda-dde6e8)'
+        classe: ehHoje ? '' : 'fundo-branco borda-cinza-110',
+        fundo: ehHoje ? 'var(--fundo-ciano-40)' : 'var(--fundo-branco)',
+        borda: ehHoje ? 'var(--borda-ciano-120)' : 'var(--borda-cinza-110)'
       };
     });
     return {

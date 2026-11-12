@@ -31,7 +31,7 @@ Cada perfil é um componente de nível superior (`oficineiro`, `direcao`, `anali
 
 ### Estilo
 
-`src/styles/app.css` concentra as classes utilitárias e os componentes visuais. Todas as cores passam por variáveis CSS, o que permite o tema escuro sem duplicar regras.
+`src/styles/app.css` concentra as classes utilitárias e os componentes visuais. Todas as cores passam por variáveis CSS, o que permite o tema escuro sem duplicar regras. Classes e variáveis de cor seguem uma escala por família e tom, de 0 (mais claro) a 1000 (mais escuro): `fundo-cinza-20`, `cor-ciano-850`, `borda-cinza-160`; transparências levam o sufixo `-a` com a opacidade (`fundo-branco-a9`). `src/lib/aparencia.js` associa cada tom claro ao equivalente do tema escuro.
 
 ## Build
 

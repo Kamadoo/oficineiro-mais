@@ -67,17 +67,17 @@
   <main class="min-w-0 d-flex eixo-column">
     <dc-import name="cabecalho" espacamento="gap-16 p-0-28" blocoClasse="cabecalho-titulo min-w-0" trilha="{{ trilha }}" cortaTrilha="{{ true }}" tituloClasse="espaco-nowrap rolagem-hidden reticencias-ellipsis" abrirMenu="{{ abrirMenu }}" titulo="{{ titulo }}" abrirNotif="{{ abrirNotif }}" notifAria="{{ notifAria }}" temNotif="{{ temNotif }}" notifN="{{ notifN }}"></dc-import>
 <sc-if value="{{ notifAberto }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharNotif }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-label="Notificações" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(440px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><h3 class="m-0 fs-17 flex-1">Notificações</h3><button onClick="{{ fecharNotif }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 largura-fundo">×</button></div>
+  <div onClick="{{ fecharNotif }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-label="Notificações" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(440px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><h3 class="m-0 fs-17 flex-1">Notificações</h3><button onClick="{{ fecharNotif }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-12 rolagem-auto flex-1">
-      <sc-if value="{{ temVariasNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex justifica-flex-end"><button onClick="{{ lerTodasNotif }}" class="h-34 borda-0 fundo-transparent cor-0b7ea3 fs-13 fw-600 p-0-4 botao-texto">Marcar todas como lidas</button></div></sc-if>
-      <sc-if value="{{ semNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column alinha-center gap-6 p-32-12 texto-center"><b class="fs-15">Tudo em dia</b><span class="fs-13 cor-5b6b70">Nenhuma notificação nova.</span></div></sc-if>
+      <sc-if value="{{ temVariasNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex justifica-flex-end"><button onClick="{{ lerTodasNotif }}" class="h-34 borda-0 fundo-transparent cor-ciano-660 fs-13 fw-600 p-0-4 botao-texto">Marcar todas como lidas</button></div></sc-if>
+      <sc-if value="{{ semNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column alinha-center gap-6 p-32-12 texto-center"><b class="fs-15">Tudo em dia</b><span class="fs-13 cor-cinza-600">Nenhuma notificação nova.</span></div></sc-if>
       <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="3">
-        <div class="raio-10 p-12-14 d-flex eixo-column gap-6 fundo-ffffff largura-fundo" style="border:1px solid var(--borda-dde6e8);border-left:4px solid {{ n.cor }}">
+        <div class="raio-10 p-12-14 d-flex eixo-column gap-6 fundo-branco largura-fundo" style="border:1px solid var(--borda-cinza-110);border-left:4px solid {{ n.cor }}">
           <b class="fs-14">{{ n.tit }}</b>
-          <span class="fs-13 cor-34464d lh-1p5">{{ n.txt }}</span>
-          <div class="d-flex quebra-wrap gap-8 mt-2"><sc-if value="{{ n.temAcao }}" hint-placeholder-val="{{ true }}"><button onClick="{{ n.go }}" class="h-36 borda-1-solid-0b7ea3 fundo-ffffff cor-08617e raio-8 p-0-12 fs-13 fw-600">{{ n.acao }}</button></sc-if><button onClick="{{ n.marcarLida }}" aria-label="{{ n.ariaLida }}" class="h-36 borda-cfdadd fundo-ffffff cor-34464d raio-8 p-0-12 fs-13 fw-600 botao-secundario">Marcar como lida</button></div>
+          <span class="fs-13 cor-cinza-750 lh-1p5">{{ n.txt }}</span>
+          <div class="d-flex quebra-wrap gap-8 mt-2"><sc-if value="{{ n.temAcao }}" hint-placeholder-val="{{ true }}"><button onClick="{{ n.go }}" class="h-36 borda-1-solid-0b7ea3 fundo-branco cor-ciano-740 raio-8 p-0-12 fs-13 fw-600">{{ n.acao }}</button></sc-if><button onClick="{{ n.marcarLida }}" aria-label="{{ n.ariaLida }}" class="h-36 borda-cinza-160 fundo-branco cor-cinza-750 raio-8 p-0-12 fs-13 fw-600 botao-secundario">Marcar como lida</button></div>
         </div>
       </sc-for>
     </div>
@@ -85,8 +85,8 @@
 </sc-if>
 
     <div class="pagina p-28 d-flex eixo-column gap-20 max-w-1320 w-100pc">
-<sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13 d-flex quebra-wrap alinha-center gap-8-14"><span class="flex-1 min-w-200">{{ erro }}</span><button onClick="{{ tentarDeNovo }}" class="h-34 borda-1-solid-b42318 fundo-ffffff cor-b42318 raio-8 p-0-12 fs-13 fw-600">Tentar de novo</button></div></sc-if>
-<sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-dde6e8 raio-12 p-24 texto-center cor-5b6b70 fs-14 lh-1p5 fundo-ffffff" style="background:var(--fundo-ffffff)">Entre com a conta de analista para ver a sua carteira.</div></sc-if>
+<sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13 d-flex quebra-wrap alinha-center gap-8-14"><span class="flex-1 min-w-200">{{ erro }}</span><button onClick="{{ tentarDeNovo }}" class="h-34 borda-1-solid-b42318 fundo-branco cor-vermelho-600 raio-8 p-0-12 fs-13 fw-600">Tentar de novo</button></div></sc-if>
+<sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-cinza-110 raio-12 p-24 texto-center cor-cinza-600 fs-14 lh-1p5 fundo-branco" style="background:var(--fundo-branco)">Entre com a conta de analista para ver a sua carteira.</div></sc-if>
 <sc-if value="{{ is.inicio }}" hint-placeholder-val="{{ true }}"><dc-import name="analista-inicio" contexto="{{ contexto }}" memoria="{{ memoriaInicio }}"></dc-import></sc-if>
 <sc-if value="{{ is.agenda }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-agenda" contexto="{{ contexto }}" memoria="{{ memoriaAgenda }}"></dc-import></sc-if>
 <sc-if value="{{ is.visitas }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-visitas" contexto="{{ contexto }}" memoria="{{ memoriaVisitas }}"></dc-import></sc-if>
@@ -99,93 +99,93 @@
 </div>
 
 <sc-if value="{{ visitaDaAgenda.aberta }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharVisitaDaAgenda }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="ag-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(460px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">{{ visitaDaAgenda.rotulo }}</span><h3 id="ag-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ visitaDaAgenda.titulo }}</h3></div><button onClick="{{ fecharVisitaDaAgenda }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+  <div onClick="{{ fecharVisitaDaAgenda }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="ag-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(460px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">{{ visitaDaAgenda.rotulo }}</span><h3 id="ag-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ visitaDaAgenda.titulo }}</h3></div><button onClick="{{ fecharVisitaDaAgenda }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
-      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ visitaDaAgenda.itens }}" as="item" hint-placeholder-count="5"><dt class="cor-5b6b70 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></sc-for></dl>
-      <sc-if value="{{ visitaDaAgenda.temNota }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-12 cor-5b6b70 lh-1p5">{{ visitaDaAgenda.nota }}</p></sc-if>
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ visitaDaAgenda.itens }}" as="item" hint-placeholder-count="5"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></sc-for></dl>
+      <sc-if value="{{ visitaDaAgenda.temNota }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-12 cor-cinza-600 lh-1p5">{{ visitaDaAgenda.nota }}</p></sc-if>
       <sc-if value="{{ visitaDaAgenda.alterando }}" hint-placeholder-val="{{ false }}">
-        <div role="group" aria-label="{{ visitaDaAgenda.alteracaoTitulo }}" class="fundo-f7fafb raio-10 p-14 d-flex eixo-column gap-10">
+        <div role="group" aria-label="{{ visitaDaAgenda.alteracaoTitulo }}" class="fundo-cinza-20 raio-10 p-14 d-flex eixo-column gap-10">
           <sc-if value="{{ visitaDaAgenda.remarcando }}" hint-placeholder-val="{{ false }}">
             <div class="empilha-celular d-grid colunas-1fr-1fr gap-10">
-              <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Nova data *</span><input id="ag-data" type="date" value="{{ visitaDaAgenda.novaData }}" min="{{ dataMinima }}" max="{{ dataMaxima }}" onChange="{{ visitaDaAgenda.escolherData }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
-              <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Horário</span><input type="time" value="{{ visitaDaAgenda.novaHora }}" onChange="{{ visitaDaAgenda.escolherHora }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
+              <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Nova data *</span><input id="ag-data" type="date" value="{{ visitaDaAgenda.novaData }}" min="{{ dataMinima }}" max="{{ dataMaxima }}" onChange="{{ visitaDaAgenda.escolherData }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
+              <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Horário</span><input type="time" value="{{ visitaDaAgenda.novaHora }}" onChange="{{ visitaDaAgenda.escolherHora }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
             </div>
           </sc-if>
-          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Motivo *</span><input id="ag-motivo" value="{{ visitaDaAgenda.motivo }}" onChange="{{ visitaDaAgenda.escreverMotivo }}" maxlength="300" placeholder="ex.: a escola pediu outro dia" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14"></input></label>
-          <div class="d-flex gap-8 quebra-wrap"><button onClick="{{ visitaDaAgenda.confirmar }}" disabled="{{ salvando }}" class="h-36 borda-0 cor-fff raio-8 p-0-14 fs-13 fw-600 botao-texto {{ visitaDaAgenda.confirmarClasse }}" style="background:{{ visitaDaAgenda.confirmarFundo }}">{{ visitaDaAgenda.confirmarRotulo }}</button><button onClick="{{ visitaDaAgenda.voltar }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-13 fw-600 cor-1a2b33 botao-secundario">Voltar</button></div>
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Motivo *</span><input id="ag-motivo" value="{{ visitaDaAgenda.motivo }}" onChange="{{ visitaDaAgenda.escreverMotivo }}" maxlength="300" placeholder="ex.: a escola pediu outro dia" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14"></input></label>
+          <div class="d-flex gap-8 quebra-wrap"><button onClick="{{ visitaDaAgenda.confirmar }}" disabled="{{ salvando }}" class="h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 botao-texto {{ visitaDaAgenda.confirmarClasse }}" style="background:{{ visitaDaAgenda.confirmarFundo }}">{{ visitaDaAgenda.confirmarRotulo }}</button><button onClick="{{ visitaDaAgenda.voltar }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 cor-ciano-850 botao-secundario">Voltar</button></div>
         </div>
       </sc-if>
-      <sc-if value="{{ temErroAgenda }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroAgenda }}</div></sc-if>
+      <sc-if value="{{ temErroAgenda }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroAgenda }}</div></sc-if>
     </div>
-    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
-      <sc-if value="{{ visitaDaAgenda.podeCancelar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.cancelar }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-b42318 mr-auto botao-secundario">Cancelar visita</button></sc-if>
-      <sc-if value="{{ visitaDaAgenda.podeRemarcar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.remarcar }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-1a2b33 botao-secundario">Remarcar</button></sc-if>
-      <sc-if value="{{ visitaDaAgenda.podeRegistrar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.registrar }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Registrar visita</button></sc-if>
-      <sc-if value="{{ visitaDaAgenda.soFechar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ fecharVisitaDaAgenda }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Fechar</button></sc-if>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+      <sc-if value="{{ visitaDaAgenda.podeCancelar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.cancelar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-vermelho-600 mr-auto botao-secundario">Cancelar visita</button></sc-if>
+      <sc-if value="{{ visitaDaAgenda.podeRemarcar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.remarcar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">Remarcar</button></sc-if>
+      <sc-if value="{{ visitaDaAgenda.podeRegistrar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.registrar }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Registrar visita</button></sc-if>
+      <sc-if value="{{ visitaDaAgenda.soFechar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ fecharVisitaDaAgenda }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Fechar</button></sc-if>
     </div>
   </aside>
 </sc-if>
 
 <sc-if value="{{ novaVisitaAberta }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharNovaVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="nv-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">Agenda</span><h3 id="nv-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">Nova visita</h3></div><button onClick="{{ fecharNovaVisita }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+  <div onClick="{{ fecharNovaVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="nv-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Agenda</span><h3 id="nv-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">Nova visita</h3></div><button onClick="{{ fecharNovaVisita }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
-      <sc-if value="{{ novaVisita.temDiagnostico }}" hint-placeholder-val="{{ false }}"><div class="fundo-f7fafb raio-10 p-12-14 fs-13 lh-1p5 cor-34464d">{{ novaVisita.diagnostico }}</div></sc-if>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Escola *</span><select id="nv-escola" value="{{ novaVisita.escola }}" onChange="{{ novaVisita.escolherEscola }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+      <sc-if value="{{ novaVisita.temDiagnostico }}" hint-placeholder-val="{{ false }}"><div class="fundo-cinza-20 raio-10 p-12-14 fs-13 lh-1p5 cor-cinza-750">{{ novaVisita.diagnostico }}</div></sc-if>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Escola *</span><select id="nv-escola" value="{{ novaVisita.escola }}" onChange="{{ novaVisita.escolherEscola }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
       <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Data *</span><input id="nv-data" type="date" value="{{ novaVisita.data }}" min="{{ dataMinima }}" max="{{ dataMaxima }}" onChange="{{ novaVisita.escolherData }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Horário</span><input type="time" value="{{ novaVisita.hora }}" onChange="{{ novaVisita.escolherHora }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Data *</span><input id="nv-data" type="date" value="{{ novaVisita.data }}" min="{{ dataMinima }}" max="{{ dataMaxima }}" onChange="{{ novaVisita.escolherData }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Horário</span><input type="time" value="{{ novaVisita.hora }}" onChange="{{ novaVisita.escolherHora }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
       </div>
-      <div class="d-flex eixo-column gap-8"><span id="nv-origem-rot" class="fs-12 cor-5b6b70 fw-600">Origem da visita *</span><div role="radiogroup" aria-labelledby="nv-origem-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ novaVisitaOrigens }}" as="origem" hint-placeholder-count="2"><button role="radio" aria-checked="{{ origem.marcado }}" onClick="{{ origem.escolher }}" class="raio-8 p-8-12 fs-13 fw-500 botao-opcao {{ origem.classe }}" style="border:1.5px solid {{ origem.borda }};background:{{ origem.fundo }};color:{{ origem.cor }}">{{ origem.rotulo }}</button></sc-for></div></div>
-      <div class="d-flex eixo-column gap-8"><span id="nv-tipo-rot" class="fs-12 cor-5b6b70 fw-600">Tipo de atendimento</span>
-        <div role="radiogroup" aria-labelledby="nv-tipo-rot" class="d-flex quebra-wrap gap-4 fundo-e3ebed p-4 raio-10 alinha-si-flex-start segmentado"><sc-for list="{{ novaVisitaTipos }}" as="tipo" hint-placeholder-count="4"><button role="radio" aria-checked="{{ tipo.marcado }}" onClick="{{ tipo.escolher }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 {{ tipo.classe }}" style="background:{{ tipo.fundo }};color:{{ tipo.cor }}">{{ tipo.rotulo }}</button></sc-for></div>
+      <div class="d-flex eixo-column gap-8"><span id="nv-origem-rot" class="fs-12 cor-cinza-600 fw-600">Origem da visita *</span><div role="radiogroup" aria-labelledby="nv-origem-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ novaVisitaOrigens }}" as="origem" hint-placeholder-count="2"><button role="radio" aria-checked="{{ origem.marcado }}" onClick="{{ origem.escolher }}" class="raio-8 p-8-12 fs-13 fw-500 botao-opcao {{ origem.classe }}" style="border:1.5px solid {{ origem.borda }};background:{{ origem.fundo }};color:{{ origem.cor }}">{{ origem.rotulo }}</button></sc-for></div></div>
+      <div class="d-flex eixo-column gap-8"><span id="nv-tipo-rot" class="fs-12 cor-cinza-600 fw-600">Tipo de atendimento</span>
+        <div role="radiogroup" aria-labelledby="nv-tipo-rot" class="d-flex quebra-wrap gap-4 fundo-cinza-90 p-4 raio-10 alinha-si-flex-start segmentado"><sc-for list="{{ novaVisitaTipos }}" as="tipo" hint-placeholder-count="4"><button role="radio" aria-checked="{{ tipo.marcado }}" onClick="{{ tipo.escolher }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 {{ tipo.classe }}" style="background:{{ tipo.fundo }};color:{{ tipo.cor }}">{{ tipo.rotulo }}</button></sc-for></div>
         <div role="radiogroup" aria-label="Detalhe do atendimento" class="d-flex quebra-wrap gap-8"><sc-for list="{{ novaVisitaDetalhes }}" as="detalhe" hint-placeholder-count="4"><button role="radio" aria-checked="{{ detalhe.marcado }}" onClick="{{ detalhe.escolher }}" class="raio-999 p-6-12 fs-13 fw-500 botao-opcao {{ detalhe.classe }}" style="border:1.5px solid {{ detalhe.borda }};background:{{ detalhe.fundo }};color:{{ detalhe.cor }}">{{ detalhe.rotulo }}</button></sc-for></div>
       </div>
-      <div class="d-flex eixo-column gap-8"><span id="nv-foco-rot" class="fs-12 cor-5b6b70 fw-600">Foco da visita</span><div role="group" aria-labelledby="nv-foco-rot" class="d-flex quebra-wrap gap-6"><sc-for list="{{ novaVisitaFocos }}" as="foco" hint-placeholder-count="4"><button aria-pressed="{{ foco.marcado }}" onClick="{{ foco.escolher }}" class="h-32 raio-999 p-0-12 fs-13 fw-500 botao-texto {{ foco.classe }}" style="border:1px solid {{ foco.borda }};background:{{ foco.fundo }};color:{{ foco.cor }}">{{ foco.rotulo }}</button></sc-for></div></div>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Observação</span><textarea rows="3" value="{{ novaVisita.orientacao }}" onChange="{{ novaVisita.escreverOrientacao }}" maxlength="1000" placeholder="ex.: pedido da direção para apoiar o 5º ano no Matific" class="borda-cfdadd raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
-      <sc-if value="{{ temErroNovaVisita }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroNovaVisita }}</div></sc-if>
+      <div class="d-flex eixo-column gap-8"><span id="nv-foco-rot" class="fs-12 cor-cinza-600 fw-600">Foco da visita</span><div role="group" aria-labelledby="nv-foco-rot" class="d-flex quebra-wrap gap-6"><sc-for list="{{ novaVisitaFocos }}" as="foco" hint-placeholder-count="4"><button aria-pressed="{{ foco.marcado }}" onClick="{{ foco.escolher }}" class="h-32 raio-999 p-0-12 fs-13 fw-500 botao-texto {{ foco.classe }}" style="border:1px solid {{ foco.borda }};background:{{ foco.fundo }};color:{{ foco.cor }}">{{ foco.rotulo }}</button></sc-for></div></div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Observação</span><textarea rows="3" value="{{ novaVisita.orientacao }}" onChange="{{ novaVisita.escreverOrientacao }}" maxlength="1000" placeholder="ex.: pedido da direção para apoiar o 5º ano no Matific" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+      <sc-if value="{{ temErroNovaVisita }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroNovaVisita }}</div></sc-if>
     </div>
-    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharNovaVisita }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-1a2b33 botao-secundario">Cancelar</button><button onClick="{{ salvarNovaVisita }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">{{ novaVisitaBotao }}</button></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharNovaVisita }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ salvarNovaVisita }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ novaVisitaBotao }}</button></div>
   </aside>
 </sc-if>
 
 <sc-if value="{{ visita.aberta }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="vd-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(500px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">{{ visita.rotulo }}</span><h3 id="vd-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ visita.titulo }}</h3></div><button onClick="{{ fecharVisita }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+  <div onClick="{{ fecharVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="vd-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(500px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">{{ visita.rotulo }}</span><h3 id="vd-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ visita.titulo }}</h3></div><button onClick="{{ fecharVisita }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
       <dl class="m-0 d-grid colunas-minmax-0-1fr-minmax-0-1fr gap-12-16">
-        <sc-for list="{{ visita.itens }}" as="item" hint-placeholder-count="6"><div class="d-flex eixo-column gap-2 min-w-0" style="grid-column:{{ item.coluna }}"><dt class="fs-12 cor-5b6b70 fw-600">{{ item.rotulo }}</dt><dd class="m-0 fs-14 lh-1p5 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></div></sc-for>
+        <sc-for list="{{ visita.itens }}" as="item" hint-placeholder-count="6"><div class="d-flex eixo-column gap-2 min-w-0" style="grid-column:{{ item.coluna }}"><dt class="fs-12 cor-cinza-600 fw-600">{{ item.rotulo }}</dt><dd class="m-0 fs-14 lh-1p5 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></div></sc-for>
       </dl>
       <sc-if value="{{ visita.temCorrecoes }}" hint-placeholder-val="{{ false }}">
-        <div class="borda-t-e8eef0 pt-12 d-flex eixo-column gap-6"><b class="fs-13">Correções</b><sc-for list="{{ visita.correcoes }}" as="correcao" hint-placeholder-count="2"><span class="fs-12 cor-34464d">{{ correcao }}</span></sc-for></div>
+        <div class="borda-t-cinza-70 pt-12 d-flex eixo-column gap-6"><b class="fs-13">Correções</b><sc-for list="{{ visita.correcoes }}" as="correcao" hint-placeholder-count="2"><span class="fs-12 cor-cinza-750">{{ correcao }}</span></sc-for></div>
       </sc-if>
-      <sc-if value="{{ visita.naoEdita }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-12 cor-5b6b70">A visita só pode ser corrigida até 7 dias depois da data.</p></sc-if>
+      <sc-if value="{{ visita.naoEdita }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-12 cor-cinza-600">A visita só pode ser corrigida até 7 dias depois da data.</p></sc-if>
     </div>
-    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><sc-if value="{{ visita.podeEditar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visita.editar }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-1a2b33 mr-auto botao-secundario">Corrigir registro</button></sc-if><button onClick="{{ fecharVisita }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Fechar</button></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><sc-if value="{{ visita.podeEditar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visita.editar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 mr-auto botao-secundario">Corrigir registro</button></sc-if><button onClick="{{ fecharVisita }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Fechar</button></div>
   </aside>
 </sc-if>
 
 <sc-if value="{{ baixa.aberta }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharBaixa }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="onb-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 sombra-n12-0-40-rgba-0-0-0-0p12 d-flex eixo-column largura-fundo" style="width:min(460px,100%)">
-    <div class="p-16-20 borda-b-dde6e8 d-flex alinha-flex-start gap-12"><div class="flex-1 d-flex eixo-column gap-2 min-w-0"><span class="fs-12 cor-5b6b70">Dar baixa no onboarding</span><h3 id="onb-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ baixa.nome }}</h3><span class="fs-12 cor-5b6b70">{{ baixa.escola }} · OS {{ baixa.ordem }}</span></div><button onClick="{{ fecharBaixa }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+  <div onClick="{{ fecharBaixa }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="onb-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 sombra-n12-0-40-rgba-0-0-0-0p12 d-flex eixo-column largura-fundo" style="width:min(460px,100%)">
+    <div class="p-16-20 borda-b-cinza-110 d-flex alinha-flex-start gap-12"><div class="flex-1 d-flex eixo-column gap-2 min-w-0"><span class="fs-12 cor-cinza-600">Dar baixa no onboarding</span><h3 id="onb-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ baixa.nome }}</h3><span class="fs-12 cor-cinza-600">{{ baixa.escola }} · OS {{ baixa.ordem }}</span></div><button onClick="{{ fecharBaixa }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="flex-1 rolagem-y-auto p-18-20 d-flex eixo-column gap-16">
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em">Data da entrega</span><input type="date" value="{{ baixa.data }}" max="{{ baixa.dataMaxima }}" onChange="{{ escolherDataDaBaixa }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
-      <div class="d-flex eixo-column gap-8"><span id="onb-forma-rot" class="fs-12 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em">Como foi feito</span><div role="radiogroup" aria-labelledby="onb-forma-rot" class="d-flex quebra-wrap gap-6"><sc-for list="{{ baixa.formas }}" as="forma" hint-placeholder-count="3"><button role="radio" aria-checked="{{ forma.marcado }}" onClick="{{ forma.escolher }}" class="h-34 raio-999 p-0-12 fs-13 fw-500 botao-texto {{ forma.classe }}" style="border:1px solid {{ forma.borda }};background:{{ forma.fundo }};color:{{ forma.cor }}">{{ forma.rotulo }}</button></sc-for></div></div>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em">Observação</span><textarea value="{{ baixa.observacao }}" onChange="{{ escreverObservacaoDaBaixa }}" rows="4" maxlength="1000" placeholder="Ex.: primeiro acesso feito, senha redefinida, apresentado o Minecraft Education." class="borda-cfdadd raio-8 p-10 fs-14 redim-vertical"></textarea></label>
-      <sc-if value="{{ temErroBaixa }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroBaixa }}</div></sc-if>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">Data da entrega</span><input type="date" value="{{ baixa.data }}" max="{{ baixa.dataMaxima }}" onChange="{{ escolherDataDaBaixa }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
+      <div class="d-flex eixo-column gap-8"><span id="onb-forma-rot" class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">Como foi feito</span><div role="radiogroup" aria-labelledby="onb-forma-rot" class="d-flex quebra-wrap gap-6"><sc-for list="{{ baixa.formas }}" as="forma" hint-placeholder-count="3"><button role="radio" aria-checked="{{ forma.marcado }}" onClick="{{ forma.escolher }}" class="h-34 raio-999 p-0-12 fs-13 fw-500 botao-texto {{ forma.classe }}" style="border:1px solid {{ forma.borda }};background:{{ forma.fundo }};color:{{ forma.cor }}">{{ forma.rotulo }}</button></sc-for></div></div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">Observação</span><textarea value="{{ baixa.observacao }}" onChange="{{ escreverObservacaoDaBaixa }}" rows="4" maxlength="1000" placeholder="Ex.: primeiro acesso feito, senha redefinida, apresentado o Minecraft Education." class="borda-cinza-160 raio-8 p-10 fs-14 redim-vertical"></textarea></label>
+      <sc-if value="{{ temErroBaixa }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroBaixa }}</div></sc-if>
     </div>
-    <div class="borda-t-dde6e8 d-flex gap-10 justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharBaixa }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-16 fs-14 fw-600 cor-1a2b33 botao-secundario">Cancelar</button><button onClick="{{ confirmarBaixa }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">{{ baixaBotao }}</button></div>
+    <div class="borda-t-cinza-110 d-flex gap-10 justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharBaixa }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-16 fs-14 fw-600 cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ confirmarBaixa }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ baixaBotao }}</button></div>
   </aside>
 </sc-if>
 
 <div class="sr-only" role="status" aria-live="polite">{{ aviso }}</div>
 <sc-if value="{{ aviso }}" hint-placeholder-val="{{ false }}">
-  <div aria-hidden="true" class="pos-fixed base-96 esquerda-50pc w-max-content fundo-13252c cor-fff p-12-18 raio-10 fs-14 z-95 sombra-0-8-24-rgba-0-0-0-0p2 largura-fundo" style="transform:translateX(-50%);max-width:calc(100% - 32px)">{{ aviso }}</div>
+  <div aria-hidden="true" class="pos-fixed base-96 esquerda-50pc w-max-content fundo-ciano-880 cor-branco p-12-18 raio-10 fs-14 z-95 sombra-0-8-24-rgba-0-0-0-0p2 largura-fundo" style="transform:translateX(-50%);max-width:calc(100% - 32px)">{{ aviso }}</div>
 </sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -285,17 +285,17 @@ const focar = id =>
   }, 30);
 const opcao = marcada =>
   marcada
-    ? { borda: '#0B7EA3', fundo: 'var(--fundo-e4f5fa)', cor: 'var(--texto-08617e)', classe: '' }
+    ? { borda: '#0B7EA3', fundo: 'var(--fundo-ciano-60)', cor: 'var(--texto-ciano-740)', classe: '' }
     : {
-        borda: 'var(--borda-cfdadd)',
-        fundo: 'var(--fundo-ffffff)',
-        cor: 'var(--texto-1a2b33)',
-        classe: 'fundo-ffffff botao-secundario'
+        borda: 'var(--borda-cinza-160)',
+        fundo: 'var(--fundo-branco)',
+        cor: 'var(--texto-ciano-850)',
+        classe: 'fundo-branco botao-secundario'
       };
 const segmento = marcado => ({
-  classe: marcado ? 'fundo-ffffff' : 'fundo-transparent',
-  fundo: marcado ? 'var(--fundo-ffffff)' : 'transparent',
-  cor: marcado ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)'
+  classe: marcado ? 'fundo-branco' : 'fundo-transparent',
+  fundo: marcado ? 'var(--fundo-branco)' : 'transparent',
+  cor: marcado ? 'var(--texto-ciano-850)' : 'var(--texto-cinza-600)'
 });
 
 class Component extends DCLogic {
@@ -1171,13 +1171,13 @@ class Component extends DCLogic {
       esquecida && {
         titulo: 'Presença de ' + dmIso(esquecida.data) + ' sem encerramento',
         detalhe: nomeDaEscola(esquecida.escola_id) + ' · encerre para liberar a presença de hoje',
-        cor: 'var(--texto-b42318)',
+        cor: 'var(--texto-vermelho-600)',
         resolver: () => this.irPara('inicio')
       },
       semRegistro.length && {
         titulo: plural(semRegistro.length, 'visita da agenda sem registro', 'visitas da agenda sem registro'),
         detalhe: lista(semRegistro, v => siglaDaEscola(v.escola_id) + ' ' + dmIso(v.data)),
-        cor: 'var(--texto-b42318)',
+        cor: 'var(--texto-vermelho-600)',
         resolver: () => {
           const visita = semRegistro.find(v => v.data >= ha30Dias);
           if (visita) this.abrirRegistro({ agenda: visita });
@@ -1191,7 +1191,7 @@ class Component extends DCLogic {
           'novas visitas vinculadas pela gerência'
         ),
         detalhe: lista(vinculadas, v => siglaDaEscola(v.escola_id) + ' ' + dmIso(v.data)),
-        cor: 'var(--texto-0b7ea3)',
+        cor: 'var(--texto-ciano-660)',
         resolver: () =>
           this.irPara('agenda', {
             semana: Math.round((dataDe(segDe(vinculadas[0].data)) - dataDe(segDe(hoje))) / (7 * 864e5))
@@ -1220,7 +1220,7 @@ class Component extends DCLogic {
           'onboardings em aberto há mais de 15 dias'
         ),
         detalhe: lista(atrasados, i => i.nome.split(' ')[0]),
-        cor: 'var(--texto-9a6212)',
+        cor: 'var(--texto-ambar-660)',
         resolver: () => this.irPara('onb')
       }
     ]
@@ -1241,7 +1241,7 @@ class Component extends DCLogic {
               .join(', ') + '. Inicie a presença ao chegar na escola.',
           acao: 'Ir para o início',
           go: () => this.irPara('inicio'),
-          cor: 'var(--texto-0b7ea3)',
+          cor: 'var(--texto-ciano-660)',
           ref: 'hoje-' + hoje
         },
       presencaAberta &&
@@ -1250,7 +1250,7 @@ class Component extends DCLogic {
           txt: contexto.nomeDaEscola(presencaAberta.escola_id) + ' desde ' + hmTs(presencaAberta.inicio) + '.',
           acao: 'Ir para o início',
           go: () => this.irPara('inicio'),
-          cor: 'var(--texto-b42318)',
+          cor: 'var(--texto-vermelho-600)',
           ref: 'aberta-' + presencaAberta.id
         },
       ...contexto.pendencias.map(p => ({
@@ -1370,7 +1370,7 @@ class Component extends DCLogic {
       escolherHora: alterar('hora'),
       escreverMotivo: alterar('motivo'),
       confirmarRotulo: s.salvando ? 'Salvando…' : modo === 'remarcar' ? 'Confirmar nova data' : 'Cancelar a visita',
-      confirmarClasse: modo === 'remarcar' ? 'fundo-0b7ea3' : '',
+      confirmarClasse: modo === 'remarcar' ? 'fundo-ciano-660' : '',
       confirmarFundo: modo === 'remarcar' ? '#0B7EA3' : '#B42318',
       confirmar: () => this.confirmarAlteracao(),
       voltar: () => this.setState({ alteracao: SEM_ALTERACAO, erroAgenda: '' })
@@ -1505,7 +1505,7 @@ class Component extends DCLogic {
       return {
         label: rotulo,
         go: () => this.irPara(tela),
-        classe: ativa ? 'fundo-rgba-255-255-255-0p09' : 'fundo-transparent',
+        classe: ativa ? 'fundo-branco-a9' : 'fundo-transparent',
         bg: ativa ? 'rgba(255,255,255,.09)' : 'transparent',
         fg: ativa ? '#fff' : '#C9D4D7',
         dot: ativa ? '#3ECDF3' : 'transparent',

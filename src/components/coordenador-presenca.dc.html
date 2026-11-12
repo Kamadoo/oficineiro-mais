@@ -10,35 +10,35 @@
 <x-dc>
 <sc-if value="{{ is.presencaJustificativas }}" hint-placeholder-val="{{ false }}">
   <div class="d-flex quebra-wrap alinha-flex-end justifica-space-between gap-10">
-    <div class="d-flex eixo-column gap-2"><h2 class="m-0 fs-20 fw-800">Justificativas de presença</h2><span class="fs-13 cor-5b6b70">A direção de cada escola aprova ou recusa. A coordenação acompanha e pode sinalizar a direção.</span></div>
-    <button onClick="{{ exportarJustificativas }}" class="min-h-40 borda-cfdadd fundo-ffffff cor-08617e raio-10 p-0-14 fs-14 fw-700 botao-secundario">Exportar relatório</button>
+    <div class="d-flex eixo-column gap-2"><h2 class="m-0 fs-20 fw-800">Justificativas de presença</h2><span class="fs-13 cor-cinza-600">A direção de cada escola aprova ou recusa. A coordenação acompanha e pode sinalizar a direção.</span></div>
+    <button onClick="{{ exportarJustificativas }}" class="min-h-40 borda-cinza-160 fundo-branco cor-ciano-740 raio-10 p-0-14 fs-14 fw-700 botao-secundario">Exportar relatório</button>
   </div>
-  <div role="group" aria-label="Filtros das justificativas" class="d-flex quebra-wrap gap-10-12 alinha-flex-end borda-dde6e8 raio-14 p-12-14 fundo-ffffff" style="background:var(--fundo-ffffff)">
-    <label class="d-flex eixo-column gap-4 flex-1-1-180"><span class="fs-12 cor-5b6b70 fw-600">Escola</span><select value="{{ filtroDasJustificativas.escola }}" onChange="{{ filtroDasJustificativas.escolherEscola }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as escolas</option><sc-for list="{{ opcoesDeEscolaDasJustificativas }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-    <label class="d-flex eixo-column gap-4 flex-1-1-160"><span class="fs-12 cor-5b6b70 fw-600">Situação</span><select value="{{ filtroDasJustificativas.status }}" onChange="{{ filtroDasJustificativas.escolherSituacao }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas</option><option value="em_analise">Em análise</option><option value="aprovada">Aprovadas</option><option value="recusada">Recusadas</option><option value="sinalizada">Sinalizadas pela coordenação</option></select></label>
-    <label class="d-flex eixo-column gap-4 flex-1-1-140"><span class="fs-12 cor-5b6b70 fw-600">De</span><input type="date" value="{{ filtroDasJustificativas.de }}" onChange="{{ filtroDasJustificativas.escolherDe }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit"></input></label>
-    <label class="d-flex eixo-column gap-4 flex-1-1-140"><span class="fs-12 cor-5b6b70 fw-600">Até</span><input type="date" value="{{ filtroDasJustificativas.ate }}" onChange="{{ filtroDasJustificativas.escolherAte }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit"></input></label>
+  <div role="group" aria-label="Filtros das justificativas" class="d-flex quebra-wrap gap-10-12 alinha-flex-end borda-cinza-110 raio-14 p-12-14 fundo-branco" style="background:var(--fundo-branco)">
+    <label class="d-flex eixo-column gap-4 flex-1-1-180"><span class="fs-12 cor-cinza-600 fw-600">Escola</span><select value="{{ filtroDasJustificativas.escola }}" onChange="{{ filtroDasJustificativas.escolherEscola }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><option value="">Todas as escolas</option><sc-for list="{{ opcoesDeEscolaDasJustificativas }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <label class="d-flex eixo-column gap-4 flex-1-1-160"><span class="fs-12 cor-cinza-600 fw-600">Situação</span><select value="{{ filtroDasJustificativas.status }}" onChange="{{ filtroDasJustificativas.escolherSituacao }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><option value="">Todas</option><option value="em_analise">Em análise</option><option value="aprovada">Aprovadas</option><option value="recusada">Recusadas</option><option value="sinalizada">Sinalizadas pela coordenação</option></select></label>
+    <label class="d-flex eixo-column gap-4 flex-1-1-140"><span class="fs-12 cor-cinza-600 fw-600">De</span><input type="date" value="{{ filtroDasJustificativas.de }}" onChange="{{ filtroDasJustificativas.escolherDe }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco fonte-inherit"></input></label>
+    <label class="d-flex eixo-column gap-4 flex-1-1-140"><span class="fs-12 cor-cinza-600 fw-600">Até</span><input type="date" value="{{ filtroDasJustificativas.ate }}" onChange="{{ filtroDasJustificativas.escolherAte }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco fonte-inherit"></input></label>
   </div>
-  <sc-if value="{{ temErroJustificativas }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-b42318 raio-10 p-10-14 fs-13 fw-600">{{ erroJustificativas }}</div></sc-if>
-  <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))"><sc-for list="{{ indicadoresDasJustificativas }}" as="indicador" hint-placeholder-count="4"><div class="borda-dde6e8 raio-14 p-12-14 d-flex eixo-column gap-4 fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-12 cor-5b6b70 fw-600">{{ indicador.titulo }}</span><b class="fs-24 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</b></div></sc-for></div>
-  <section aria-busy="{{ carregandoJustificativas }}" class="borda-dde6e8 raio-14 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff)">
-    <sc-if value="{{ carregandoJustificativas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-16 fs-13 cor-5b6b70">Carregando…</p></sc-if>
-    <sc-if value="{{ semJustificativas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-16 fs-13 cor-5b6b70">Nenhuma justificativa encontrada com estes filtros.</p></sc-if>
+  <sc-if value="{{ temErroJustificativas }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-600 raio-10 p-10-14 fs-13 fw-600">{{ erroJustificativas }}</div></sc-if>
+  <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))"><sc-for list="{{ indicadoresDasJustificativas }}" as="indicador" hint-placeholder-count="4"><div class="borda-cinza-110 raio-14 p-12-14 d-flex eixo-column gap-4 fundo-branco" style="background:var(--fundo-branco)"><span class="fs-12 cor-cinza-600 fw-600">{{ indicador.titulo }}</span><b class="fs-24 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</b></div></sc-for></div>
+  <section aria-busy="{{ carregandoJustificativas }}" class="borda-cinza-110 raio-14 rolagem-hidden fundo-branco" style="background:var(--fundo-branco)">
+    <sc-if value="{{ carregandoJustificativas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-16 fs-13 cor-cinza-600">Carregando…</p></sc-if>
+    <sc-if value="{{ semJustificativas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-16 fs-13 cor-cinza-600">Nenhuma justificativa encontrada com estes filtros.</p></sc-if>
     <sc-for list="{{ justificativas }}" as="justificativa" hint-placeholder-count="3">
-      <div class="justificativa-linha d-grid gap-8-16 p-14-16 borda-t-e9eff1" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1.7fr) minmax(0,1.2fr)">
-        <div class="d-flex eixo-column gap-3 min-w-0"><b class="fs-14">{{ justificativa.nome }}</b><span class="fs-12 cor-5b6b70">{{ justificativa.escola }}</span><span class="fs-13 cor-34464d">{{ justificativa.tipo }} · {{ justificativa.data }}</span><span class="fs-12 fw-600" style="color:{{ justificativa.esperaCor }}">{{ justificativa.espera }}</span></div>
-        <div class="d-flex eixo-column gap-4 min-w-0"><sc-if value="{{ justificativa.temHorarios }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70 num-tabular-nums">{{ justificativa.horarios }}</span></sc-if><span class="fs-13 cor-34464d quebra-palavra-anywhere">{{ justificativa.motivo }}</span><sc-if value="{{ justificativa.temSinalizacao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-7a4e0b fundo-faefd9 raio-8 p-6-10 quebra-palavra-anywhere">{{ justificativa.sinalizacao }}</span></sc-if></div>
+      <div class="justificativa-linha d-grid gap-8-16 p-14-16 borda-t-cinza-75" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1.7fr) minmax(0,1.2fr)">
+        <div class="d-flex eixo-column gap-3 min-w-0"><b class="fs-14">{{ justificativa.nome }}</b><span class="fs-12 cor-cinza-600">{{ justificativa.escola }}</span><span class="fs-13 cor-cinza-750">{{ justificativa.tipo }} · {{ justificativa.data }}</span><span class="fs-12 fw-600" style="color:{{ justificativa.esperaCor }}">{{ justificativa.espera }}</span></div>
+        <div class="d-flex eixo-column gap-4 min-w-0"><sc-if value="{{ justificativa.temHorarios }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600 num-tabular-nums">{{ justificativa.horarios }}</span></sc-if><span class="fs-13 cor-cinza-750 quebra-palavra-anywhere">{{ justificativa.motivo }}</span><sc-if value="{{ justificativa.temSinalizacao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-ambar-745 fundo-ambar-80 raio-8 p-6-10 quebra-palavra-anywhere">{{ justificativa.sinalizacao }}</span></sc-if></div>
         <div class="d-flex eixo-column gap-6 alinha-flex-start min-w-0">
           <span class="fs-12 fw-700 raio-999 p-3-10" style="background:{{ justificativa.fundo }};color:{{ justificativa.cor }}">{{ justificativa.situacao }}</span>
-          <sc-if value="{{ justificativa.decidida }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70">{{ justificativa.decisao }}</span></sc-if>
-          <sc-if value="{{ justificativa.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-34464d quebra-palavra-anywhere">Direção: {{ justificativa.observacao }}</span></sc-if>
-          <sc-if value="{{ justificativa.podeSinalizar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ justificativa.abrir }}" class="min-h-36 borda-1p5-solid-08617e fundo-ffffff cor-08617e raio-8 p-0-12 fs-13 fw-700 fonte-inherit botao-opcao">Sinalizar direção</button></sc-if>
+          <sc-if value="{{ justificativa.decidida }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">{{ justificativa.decisao }}</span></sc-if>
+          <sc-if value="{{ justificativa.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-750 quebra-palavra-anywhere">Direção: {{ justificativa.observacao }}</span></sc-if>
+          <sc-if value="{{ justificativa.podeSinalizar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ justificativa.abrir }}" class="min-h-36 borda-1p5-solid-08617e fundo-branco cor-ciano-740 raio-8 p-0-12 fs-13 fw-700 fonte-inherit botao-opcao">Sinalizar direção</button></sc-if>
         </div>
         <sc-if value="{{ justificativa.aberto }}" hint-placeholder-val="{{ false }}">
-          <div class="d-flex eixo-column gap-8 fundo-f4f7f8 raio-10 p-10-12" style="grid-column:1/-1">
-            <textarea value="{{ justificativa.mensagem }}" onInput="{{ justificativa.escreverMensagem }}" maxlength="300" rows="2" aria-label="{{ justificativa.rotulo }}" placeholder="Ex.: justificativa pendente há vários dias, favor analisar." class="borda-cfdadd raio-8 p-8-10 fs-14 fonte-inherit fundo-ffffff redim-vertical"></textarea>
-            <sc-if value="{{ justificativa.temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-b42318 fw-600">{{ justificativa.erro }}</span></sc-if>
-            <div class="d-flex gap-8 quebra-wrap"><button onClick="{{ justificativa.enviar }}" disabled="{{ justificativa.ocupado }}" class="min-h-36 borda-0 fundo-08617e cor-fff raio-8 p-0-14 fs-13 fw-700 fonte-inherit">Enviar para a direção</button><button onClick="{{ justificativa.fechar }}" disabled="{{ justificativa.ocupado }}" class="min-h-36 borda-cfdadd fundo-ffffff cor-34464d raio-8 p-0-14 fs-13 fw-600 fonte-inherit botao-secundario">Cancelar</button></div>
+          <div class="d-flex eixo-column gap-8 fundo-cinza-50 raio-10 p-10-12" style="grid-column:1/-1">
+            <textarea value="{{ justificativa.mensagem }}" onInput="{{ justificativa.escreverMensagem }}" maxlength="300" rows="2" aria-label="{{ justificativa.rotulo }}" placeholder="Ex.: justificativa pendente há vários dias, favor analisar." class="borda-cinza-160 raio-8 p-8-10 fs-14 fonte-inherit fundo-branco redim-vertical"></textarea>
+            <sc-if value="{{ justificativa.temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-vermelho-600 fw-600">{{ justificativa.erro }}</span></sc-if>
+            <div class="d-flex gap-8 quebra-wrap"><button onClick="{{ justificativa.enviar }}" disabled="{{ justificativa.ocupado }}" class="min-h-36 borda-0 fundo-ciano-740 cor-branco raio-8 p-0-14 fs-13 fw-700 fonte-inherit">Enviar para a direção</button><button onClick="{{ justificativa.fechar }}" disabled="{{ justificativa.ocupado }}" class="min-h-36 borda-cinza-160 fundo-branco cor-cinza-750 raio-8 p-0-14 fs-13 fw-600 fonte-inherit botao-secundario">Cancelar</button></div>
           </div>
         </sc-if>
       </div>
@@ -48,59 +48,59 @@
 
 <sc-if value="{{ is.presencaAgora }}" hint-placeholder-val="{{ false }}">
   <div class="d-flex quebra-wrap alinha-flex-end justifica-space-between gap-10">
-    <div class="d-flex eixo-column gap-2"><h2 class="m-0 fs-20 fw-800">Presença de hoje</h2><span class="fs-13 cor-5b6b70">{{ atualizado }}</span></div>
-    <button onClick="{{ exportarPainel }}" class="min-h-40 borda-cfdadd fundo-ffffff cor-08617e raio-10 p-0-14 fs-14 fw-700 botao-secundario">Exportar relatório</button>
+    <div class="d-flex eixo-column gap-2"><h2 class="m-0 fs-20 fw-800">Presença de hoje</h2><span class="fs-13 cor-cinza-600">{{ atualizado }}</span></div>
+    <button onClick="{{ exportarPainel }}" class="min-h-40 borda-cinza-160 fundo-branco cor-ciano-740 raio-10 p-0-14 fs-14 fw-700 botao-secundario">Exportar relatório</button>
   </div>
   <div class="d-flex quebra-wrap gap-10">
-    <label class="d-flex eixo-column gap-4 flex-1-1-180"><span class="fs-12 cor-5b6b70 fw-600">Escola</span><select value="{{ filtroDoPainel.escola }}" onChange="{{ filtroDoPainel.escolherEscola }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as escolas</option><sc-for list="{{ opcoesDeEscolaDoPainel }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-    <label class="d-flex eixo-column gap-4 flex-1-1-140"><span class="fs-12 cor-5b6b70 fw-600">Turno</span><select value="{{ filtroDoPainel.turno }}" onChange="{{ filtroDoPainel.escolherTurno }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todos</option><option value="manha">Manhã</option><option value="tarde">Tarde</option><option value="integral">Integral</option></select></label>
-    <label class="d-flex eixo-column gap-4 flex-2-1-200"><span class="fs-12 cor-5b6b70 fw-600">Buscar por nome</span><input value="{{ filtroDoPainel.busca }}" onInput="{{ filtroDoPainel.buscar }}" placeholder="Nome do oficineiro" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fundo-ffffff"></input></label>
+    <label class="d-flex eixo-column gap-4 flex-1-1-180"><span class="fs-12 cor-cinza-600 fw-600">Escola</span><select value="{{ filtroDoPainel.escola }}" onChange="{{ filtroDoPainel.escolherEscola }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><option value="">Todas as escolas</option><sc-for list="{{ opcoesDeEscolaDoPainel }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <label class="d-flex eixo-column gap-4 flex-1-1-140"><span class="fs-12 cor-cinza-600 fw-600">Turno</span><select value="{{ filtroDoPainel.turno }}" onChange="{{ filtroDoPainel.escolherTurno }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><option value="">Todos</option><option value="manha">Manhã</option><option value="tarde">Tarde</option><option value="integral">Integral</option></select></label>
+    <label class="d-flex eixo-column gap-4 flex-2-1-200"><span class="fs-12 cor-cinza-600 fw-600">Buscar por nome</span><input value="{{ filtroDoPainel.busca }}" onInput="{{ filtroDoPainel.buscar }}" placeholder="Nome do oficineiro" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco"></input></label>
   </div>
-  <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))"><sc-for list="{{ indicadoresDoPainel }}" as="indicador" hint-placeholder-count="4"><div class="borda-dde6e8 raio-14 p-12-14 d-flex eixo-column gap-4 fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-12 cor-5b6b70 fw-600">{{ indicador.titulo }}</span><b class="fs-24 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</b><span class="fs-12 cor-5b6b70">{{ indicador.nota }}</span><sc-if value="{{ indicador.temBarra }}" hint-placeholder-val="{{ false }}"><div class="h-6 raio-3 fundo-e3ebed"><div class="h-6 raio-3 fundo-0b7ea3 largura-fundo" style="width:{{ indicador.percentual }}%"></div></div></sc-if></div></sc-for></div>
+  <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))"><sc-for list="{{ indicadoresDoPainel }}" as="indicador" hint-placeholder-count="4"><div class="borda-cinza-110 raio-14 p-12-14 d-flex eixo-column gap-4 fundo-branco" style="background:var(--fundo-branco)"><span class="fs-12 cor-cinza-600 fw-600">{{ indicador.titulo }}</span><b class="fs-24 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</b><span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span><sc-if value="{{ indicador.temBarra }}" hint-placeholder-val="{{ false }}"><div class="h-6 raio-3 fundo-cinza-90"><div class="h-6 raio-3 fundo-ciano-660 largura-fundo" style="width:{{ indicador.percentual }}%"></div></div></sc-if></div></sc-for></div>
   <div class="painel-grade d-grid colunas-minmax-0-1fr-300 gap-16 alinha-start">
-    <section class="borda-dde6e8 raio-14 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff)">
+    <section class="borda-cinza-110 raio-14 rolagem-hidden fundo-branco" style="background:var(--fundo-branco)">
       <h3 class="m-0 p-14-16 fs-15">Oficineiros do turno</h3>
       <div class="rolagem-x-auto">
         <table class="w-100pc min-w-640 colapso-collapse fs-13">
-          <thead><tr class="fundo-eef3f4 cor-5b6b70 texto-left"><th class="p-8-10 fw-600">Oficineiro</th><th class="p-8-10 fw-600">Escola</th><th class="p-8-10 fw-600">Oficina</th><th class="p-8-10 fw-600">Entrada</th><th class="p-8-10 fw-600">Almoço</th><th class="p-8-10 fw-600">Saída</th><th class="p-8-10 fw-600">Horas hoje</th><th class="p-8-10 fw-600">Situação</th></tr></thead>
+          <thead><tr class="fundo-cinza-55 cor-cinza-600 texto-left"><th class="p-8-10 fw-600">Oficineiro</th><th class="p-8-10 fw-600">Escola</th><th class="p-8-10 fw-600">Oficina</th><th class="p-8-10 fw-600">Entrada</th><th class="p-8-10 fw-600">Almoço</th><th class="p-8-10 fw-600">Saída</th><th class="p-8-10 fw-600">Horas hoje</th><th class="p-8-10 fw-600">Situação</th></tr></thead>
           <tbody>
-            <sc-for list="{{ presencasDeHoje }}" as="presenca" hint-placeholder-count="4"><tr class="borda-t-dde6e8"><td class="p-10 fw-700">{{ presenca.nome }}</td><td class="p-10">{{ presenca.escola }}</td><td class="p-10 cor-5b6b70">{{ presenca.oficina }}</td><td class="p-10 num-tabular-nums">{{ presenca.entrada }}</td><td class="p-10 num-tabular-nums">{{ presenca.almoco }}</td><td class="p-10 num-tabular-nums">{{ presenca.saida }}</td><td class="p-10 num-tabular-nums fw-700">{{ presenca.horas }}</td><td class="p-10"><span class="fs-12 fw-700 raio-999 p-3-10 espaco-nowrap" style="background:{{ presenca.fundo }};color:{{ presenca.cor }}">{{ presenca.situacao }}</span></td></tr></sc-for>
+            <sc-for list="{{ presencasDeHoje }}" as="presenca" hint-placeholder-count="4"><tr class="borda-t-cinza-110"><td class="p-10 fw-700">{{ presenca.nome }}</td><td class="p-10">{{ presenca.escola }}</td><td class="p-10 cor-cinza-600">{{ presenca.oficina }}</td><td class="p-10 num-tabular-nums">{{ presenca.entrada }}</td><td class="p-10 num-tabular-nums">{{ presenca.almoco }}</td><td class="p-10 num-tabular-nums">{{ presenca.saida }}</td><td class="p-10 num-tabular-nums fw-700">{{ presenca.horas }}</td><td class="p-10"><span class="fs-12 fw-700 raio-999 p-3-10 espaco-nowrap" style="background:{{ presenca.fundo }};color:{{ presenca.cor }}">{{ presenca.situacao }}</span></td></tr></sc-for>
           </tbody>
         </table>
       </div>
-      <sc-if value="{{ semPresencasDeHoje }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-16 fs-13 cor-5b6b70">Nenhum oficineiro encontrado com estes filtros.</p></sc-if>
+      <sc-if value="{{ semPresencasDeHoje }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-16 fs-13 cor-cinza-600">Nenhum oficineiro encontrado com estes filtros.</p></sc-if>
     </section>
     <div class="d-flex eixo-column gap-16">
-      <section class="borda-dde6e8 raio-14 p-6-14-12 fundo-ffffff" style="background:var(--fundo-ffffff)">
-        <div class="d-flex justifica-space-between alinha-center gap-8 m-10-0-4"><h3 class="m-0 fs-15">Justificativas das escolas</h3><button onClick="{{ verJustificativas }}" class="borda-0 fundo-none cor-08617e fs-13 fw-700 p-6-0 fonte-inherit" style="cursor:pointer">Ver relatório</button></div>
-        <sc-if value="{{ semAjustes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Nenhuma justificativa recente.</span></sc-if>
+      <section class="borda-cinza-110 raio-14 p-6-14-12 fundo-branco" style="background:var(--fundo-branco)">
+        <div class="d-flex justifica-space-between alinha-center gap-8 m-10-0-4"><h3 class="m-0 fs-15">Justificativas das escolas</h3><button onClick="{{ verJustificativas }}" class="borda-0 fundo-none cor-ciano-740 fs-13 fw-700 p-6-0 fonte-inherit" style="cursor:pointer">Ver relatório</button></div>
+        <sc-if value="{{ semAjustes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma justificativa recente.</span></sc-if>
         <sc-for list="{{ ajustes }}" as="ajuste" hint-placeholder-count="2">
-          <div class="d-flex eixo-column gap-6 p-10-0 borda-t-dde6e8">
+          <div class="d-flex eixo-column gap-6 p-10-0 borda-t-cinza-110">
             <b class="fs-14">{{ ajuste.nome }}</b>
-            <span class="fs-13 cor-34464d">{{ ajuste.tipo }} · {{ ajuste.data }}</span>
-            <sc-if value="{{ ajuste.temHorarios }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70 num-tabular-nums">{{ ajuste.horarios }}</span></sc-if>
-            <span class="fs-13 cor-5b6b70">{{ ajuste.motivo }}</span>
+            <span class="fs-13 cor-cinza-750">{{ ajuste.tipo }} · {{ ajuste.data }}</span>
+            <sc-if value="{{ ajuste.temHorarios }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600 num-tabular-nums">{{ ajuste.horarios }}</span></sc-if>
+            <span class="fs-13 cor-cinza-600">{{ ajuste.motivo }}</span>
             <span class="alinha-si-flex-start fs-12 fw-700 raio-999 p-3-10" style="background:{{ ajuste.fundo }};color:{{ ajuste.cor }}">{{ ajuste.situacao }}</span>
           </div>
         </sc-for>
       </section>
-      <section class="borda-dde6e8 raio-14 p-6-14-12 fundo-ffffff" style="background:var(--fundo-ffffff)">
+      <section class="borda-cinza-110 raio-14 p-6-14-12 fundo-branco" style="background:var(--fundo-branco)">
         <h3 class="m-10-0-4 fs-15">Presença por escola</h3>
-        <sc-for list="{{ porEscola }}" as="escola" hint-placeholder-count="3"><div class="d-flex eixo-column gap-4 p-8-0 borda-t-dde6e8"><div class="d-flex justifica-space-between gap-8 fs-13"><span class="fw-600">{{ escola.nome }}</span><span class="num-tabular-nums cor-5b6b70">{{ escola.texto }}</span></div><div class="h-6 raio-3 fundo-e3ebed"><div class="h-6 raio-3 fundo-0b7ea3 largura-fundo" style="width:{{ escola.percentual }}%"></div></div></div></sc-for>
+        <sc-for list="{{ porEscola }}" as="escola" hint-placeholder-count="3"><div class="d-flex eixo-column gap-4 p-8-0 borda-t-cinza-110"><div class="d-flex justifica-space-between gap-8 fs-13"><span class="fw-600">{{ escola.nome }}</span><span class="num-tabular-nums cor-cinza-600">{{ escola.texto }}</span></div><div class="h-6 raio-3 fundo-cinza-90"><div class="h-6 raio-3 fundo-ciano-660 largura-fundo" style="width:{{ escola.percentual }}%"></div></div></div></sc-for>
       </section>
     </div>
   </div>
   <sc-if value="{{ conectado }}" hint-placeholder-val="{{ false }}">
-  <details class="pr-esc borda-dde6e8 raio-12 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff)">
-    <summary class="d-flex quebra-wrap alinha-center gap-6-10 p-14-16 cursor-pointer min-h-44 tamanho-border-box"><h3 class="m-0 fs-15">Escolas · localização e raio</h3><span class="fs-12 fw-600 p-2-8 raio-999 espaco-nowrap cor-5b6b70 fundo-edf2f3">{{ quantidadeDeEscolas }}</span><span class="fs-13 cor-5b6b70 flex-1-1-160">{{ escolasSemLocalizacao }}</span><span class="pr-seta cor-5b6b70" aria-hidden="true">▾</span></summary>
-    <p class="m-0 p-0-16-12 fs-13 cor-5b6b70 lh-1p5">A presença é iniciada sem justificativa quando o oficineiro está dentro do raio da escola. O raio vale de 20 a 500 metros.</p>
+  <details class="pr-esc borda-cinza-110 raio-12 rolagem-hidden fundo-branco" style="background:var(--fundo-branco)">
+    <summary class="d-flex quebra-wrap alinha-center gap-6-10 p-14-16 cursor-pointer min-h-44 tamanho-border-box"><h3 class="m-0 fs-15">Escolas · localização e raio</h3><span class="fs-12 fw-600 p-2-8 raio-999 espaco-nowrap cor-cinza-600 fundo-cinza-65">{{ quantidadeDeEscolas }}</span><span class="fs-13 cor-cinza-600 flex-1-1-160">{{ escolasSemLocalizacao }}</span><span class="pr-seta cor-cinza-600" aria-hidden="true">▾</span></summary>
+    <p class="m-0 p-0-16-12 fs-13 cor-cinza-600 lh-1p5">A presença é iniciada sem justificativa quando o oficineiro está dentro do raio da escola. O raio vale de 20 a 500 metros.</p>
     <ul class="lista-none m-0 p-0">
       <sc-for list="{{ escolas }}" as="escola" hint-placeholder-count="4">
-        <li class="pr-escl d-grid gap-6-14 alinha-center p-12-16 borda-t-e9eff1" style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) auto">
-          <span class="d-flex eixo-column min-w-0"><b class="fs-14">{{ escola.nome }}</b><span class="fs-12 cor-5b6b70">{{ escola.oficineiros }}</span></span>
-          <span class="d-flex eixo-column gap-2 fs-13 min-w-0"><sc-if value="{{ escola.semLocalizacao }}" hint-placeholder-val="{{ false }}"><span class="cor-9a6212 fw-600">{{ escola.localizacao }}</span></sc-if><sc-if value="{{ escola.temLocalizacao }}" hint-placeholder-val="{{ true }}"><a href="{{ escola.mapa }}" target="_blank" rel="noopener noreferrer" aria-label="{{ escola.mapaAria }}" class="fw-600 d-inline-flex alinha-center min-h-30" style="color:var(--texto-08617e)">Ver no mapa</a></sc-if></span>
-          <span class="d-flex alinha-center gap-8 quebra-wrap"><input type="number" min="20" max="500" step="1" inputmode="numeric" value="{{ escola.raio }}" onChange="{{ escola.escreverRaio }}" aria-label="{{ escola.raioAria }}" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fundo-ffffff fonte-inherit w-84 texto-right largura-fundo"></input><span class="fs-13 cor-5b6b70">m</span><button onClick="{{ escola.salvar }}" disabled="{{ escola.salvando }}" class="h-40 p-0-14 borda-1p5-solid-08617e fundo-ffffff cor-08617e raio-8 fs-14 fw-600 botao-opcao">{{ escola.salvarTexto }}</button></span>
-          <sc-if value="{{ escola.temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-b42318" style="grid-column:1 / -1">{{ escola.erro }}</span></sc-if>
+        <li class="pr-escl d-grid gap-6-14 alinha-center p-12-16 borda-t-cinza-75" style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) auto">
+          <span class="d-flex eixo-column min-w-0"><b class="fs-14">{{ escola.nome }}</b><span class="fs-12 cor-cinza-600">{{ escola.oficineiros }}</span></span>
+          <span class="d-flex eixo-column gap-2 fs-13 min-w-0"><sc-if value="{{ escola.semLocalizacao }}" hint-placeholder-val="{{ false }}"><span class="cor-ambar-660 fw-600">{{ escola.localizacao }}</span></sc-if><sc-if value="{{ escola.temLocalizacao }}" hint-placeholder-val="{{ true }}"><a href="{{ escola.mapa }}" target="_blank" rel="noopener noreferrer" aria-label="{{ escola.mapaAria }}" class="fw-600 d-inline-flex alinha-center min-h-30" style="color:var(--texto-ciano-740)">Ver no mapa</a></sc-if></span>
+          <span class="d-flex alinha-center gap-8 quebra-wrap"><input type="number" min="20" max="500" step="1" inputmode="numeric" value="{{ escola.raio }}" onChange="{{ escola.escreverRaio }}" aria-label="{{ escola.raioAria }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit w-84 texto-right largura-fundo"></input><span class="fs-13 cor-cinza-600">m</span><button onClick="{{ escola.salvar }}" disabled="{{ escola.salvando }}" class="h-40 p-0-14 borda-1p5-solid-08617e fundo-branco cor-ciano-740 raio-8 fs-14 fw-600 botao-opcao">{{ escola.salvarTexto }}</button></span>
+          <sc-if value="{{ escola.temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-vermelho-600" style="grid-column:1 / -1">{{ escola.erro }}</span></sc-if>
         </li>
       </sc-for>
     </ul>
@@ -109,51 +109,51 @@
 </sc-if>
 <sc-if value="{{ is.presencaOficineiros }}" hint-placeholder-val="{{ false }}">
   <div class="d-flex quebra-wrap gap-10-12 alinha-center">
-    <label class="largura-total-celular d-flex alinha-center gap-8 flex-1-1-280"><span class="oculto-celular fs-12 cor-5b6b70 fw-600">Oficineiro</span><select value="{{ oficineiro }}" onChange="{{ escolherOficineiro }}" aria-label="Oficineiro" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit min-w-0 flex-1 fw-600 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesDeOficineiro }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-    <label class="largura-total-celular d-flex alinha-center gap-8"><span class="oculto-celular fs-12 cor-5b6b70 fw-600">Ciclo</span><select value="{{ ciclo }}" onChange="{{ escolherCiclo }}" aria-label="Ciclo" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit fw-600 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff);min-width:0;min-width:170px"><sc-for list="{{ opcoesDeCiclo }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <label class="largura-total-celular d-flex alinha-center gap-8 flex-1-1-280"><span class="oculto-celular fs-12 cor-cinza-600 fw-600">Oficineiro</span><select value="{{ oficineiro }}" onChange="{{ escolherOficineiro }}" aria-label="Oficineiro" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 flex-1 fw-600 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeOficineiro }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <label class="largura-total-celular d-flex alinha-center gap-8"><span class="oculto-celular fs-12 cor-cinza-600 fw-600">Ciclo</span><select value="{{ ciclo }}" onChange="{{ escolherCiclo }}" aria-label="Ciclo" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit fw-600 largura-fundo fundo-branco" style="background:var(--fundo-branco);min-width:0;min-width:170px"><sc-for list="{{ opcoesDeCiclo }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
   </div>
   <div class="duas-colunas-celular d-grid colunas-repeat-4-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
-    <sc-for list="{{ indicadoresDoOficineiro }}" as="indicador" hint-placeholder-count="3"><div class="borda-dde6e8 raio-12 p-16 d-flex eixo-column gap-4 fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-13 cor-5b6b70">{{ indicador.titulo }}</span><span class="fs-24 fw-700 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-12 cor-5b6b70">{{ indicador.nota }}</span></div></sc-for>
+    <sc-for list="{{ indicadoresDoOficineiro }}" as="indicador" hint-placeholder-count="3"><div class="borda-cinza-110 raio-12 p-16 d-flex eixo-column gap-4 fundo-branco" style="background:var(--fundo-branco)"><span class="fs-13 cor-cinza-600">{{ indicador.titulo }}</span><span class="fs-24 fw-700 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for>
   </div>
-  <section class="borda-dde6e8 raio-12 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+  <section class="borda-cinza-110 raio-12 rolagem-hidden fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div role="table" aria-label="Presenças do oficineiro no ciclo">
-      <div role="row" class="oculto-celular d-grid gap-12 p-10-16 fs-12 fw-600 cor-5b6b70" style="background:var(--fundo-f9fbfc);grid-template-columns:96px minmax(0,1fr) 80px 80px 90px minmax(0,1.4fr)">
+      <div role="row" class="oculto-celular d-grid gap-12 p-10-16 fs-12 fw-600 cor-cinza-600" style="background:var(--fundo-cinza-30);grid-template-columns:96px minmax(0,1fr) 80px 80px 90px minmax(0,1.4fr)">
         <span role="columnheader">Data</span><span role="columnheader">Início → encerramento</span><span role="columnheader">Total</span><span role="columnheader">Válidas</span><span role="columnheader">Horas-aula</span><span role="columnheader">Situação</span>
       </div>
       <sc-for list="{{ diasDoOficineiro }}" as="dia" hint-placeholder-count="5">
-        <div role="row" class="pr-hlinha d-grid gap-4-12 alinha-center borda-t-e9eff1 p-12-16 fs-14" style="grid-template-columns:96px minmax(0,1fr) 80px 80px 90px minmax(0,1.4fr)">
-          <span class="fw-600 num-tabular-nums">{{ dia.data }}</span><span class="cor-34464d num-tabular-nums">{{ dia.faixa }}</span><span class="num-tabular-nums">{{ dia.total }}</span><span class="fw-600 num-tabular-nums">{{ dia.validas }}</span><span class="num-tabular-nums cor-1a3f9c"><span class="so-celular cor-5b6b70">Horas-aula </span>{{ dia.horasAula }}</span>
-          <span class="d-flex quebra-wrap gap-4-8 alinha-center"><span class="fs-12 fw-600 p-2-8 raio-999 espaco-nowrap" style="color:{{ dia.cor }};background:{{ dia.fundo }}">{{ dia.situacao }}</span><span class="fs-12 cor-5b6b70">{{ dia.nota }}</span></span>
+        <div role="row" class="pr-hlinha d-grid gap-4-12 alinha-center borda-t-cinza-75 p-12-16 fs-14" style="grid-template-columns:96px minmax(0,1fr) 80px 80px 90px minmax(0,1.4fr)">
+          <span class="fw-600 num-tabular-nums">{{ dia.data }}</span><span class="cor-cinza-750 num-tabular-nums">{{ dia.faixa }}</span><span class="num-tabular-nums">{{ dia.total }}</span><span class="fw-600 num-tabular-nums">{{ dia.validas }}</span><span class="num-tabular-nums cor-azul-640"><span class="so-celular cor-cinza-600">Horas-aula </span>{{ dia.horasAula }}</span>
+          <span class="d-flex quebra-wrap gap-4-8 alinha-center"><span class="fs-12 fw-600 p-2-8 raio-999 espaco-nowrap" style="color:{{ dia.cor }};background:{{ dia.fundo }}">{{ dia.situacao }}</span><span class="fs-12 cor-cinza-600">{{ dia.nota }}</span></span>
         </div>
       </sc-for>
-      <sc-if value="{{ semDiasDoOficineiro }}" hint-placeholder-val="{{ false }}"><div class="p-28-16 texto-center fs-14 cor-5b6b70">Nenhuma presença neste ciclo.</div></sc-if>
+      <sc-if value="{{ semDiasDoOficineiro }}" hint-placeholder-val="{{ false }}"><div class="p-28-16 texto-center fs-14 cor-cinza-600">Nenhuma presença neste ciclo.</div></sc-if>
     </div>
   </section>
 </sc-if>
 <sc-if value="{{ is.presencaMedicao }}" hint-placeholder-val="{{ false }}">
-  <sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-dde6e8 raio-12 p-24 texto-center cor-5b6b70 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)">{{ semLoginTexto }}</div></sc-if>
+  <sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-cinza-110 raio-12 p-24 texto-center cor-cinza-600 fs-14 fundo-branco" style="background:var(--fundo-branco)">{{ semLoginTexto }}</div></sc-if>
   <div class="d-flex quebra-wrap gap-10-12 alinha-center">
-    <label class="largura-total-celular d-flex alinha-center gap-8"><span class="oculto-celular fs-12 cor-5b6b70 fw-600">Ciclo</span><select value="{{ ciclo }}" onChange="{{ escolherCiclo }}" aria-label="Ciclo da medição" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit fw-600 min-w-170 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesDeCiclo }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-    <span class="fs-13 cor-5b6b70 flex-1-1-220">Apoio ao faturamento: presença conferida e atividades realizadas de cada oficineiro.</span>
-    <button class="largura-total-celular h-40 p-0-16 borda-1p5-solid-08617e fundo-ffffff cor-08617e raio-8 fs-14 fw-600 botao-opcao" onClick="{{ baixarMedicao }}">Baixar planilha</button>
+    <label class="largura-total-celular d-flex alinha-center gap-8"><span class="oculto-celular fs-12 cor-cinza-600 fw-600">Ciclo</span><select value="{{ ciclo }}" onChange="{{ escolherCiclo }}" aria-label="Ciclo da medição" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit fw-600 min-w-170 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeCiclo }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <span class="fs-13 cor-cinza-600 flex-1-1-220">Apoio ao faturamento: presença conferida e atividades realizadas de cada oficineiro.</span>
+    <button class="largura-total-celular h-40 p-0-16 borda-1p5-solid-08617e fundo-branco cor-ciano-740 raio-8 fs-14 fw-600 botao-opcao" onClick="{{ baixarMedicao }}">Baixar planilha</button>
   </div>
-  <sc-if value="{{ temAvisoDaMedicao }}" hint-placeholder-val="{{ false }}"><div role="note" class="fundo-faefd9 cor-7a4e0b raio-10 p-10-14 fs-13 lh-1p5">{{ avisoDaMedicao }}</div></sc-if>
-  <section class="borda-dde6e8 raio-12 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+  <sc-if value="{{ temAvisoDaMedicao }}" hint-placeholder-val="{{ false }}"><div role="note" class="fundo-ambar-80 cor-ambar-745 raio-10 p-10-14 fs-13 lh-1p5">{{ avisoDaMedicao }}</div></sc-if>
+  <section class="borda-cinza-110 raio-12 rolagem-hidden fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div class="rolagem-x-auto">
       <table class="w-100pc colapso-collapse min-w-820">
         <caption class="sr-only">Medição do serviço no ciclo</caption>
-        <thead><tr><th scope="col" class="p-10-14 fs-12 fw-600 cor-5b6b70 fundo-f9fbfc espaco-nowrap" style="text-align:right;text-align:left">Oficineiro</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-5b6b70 fundo-f9fbfc espaco-nowrap" style="text-align:right;text-align:left">Escola</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-5b6b70 fundo-f9fbfc texto-right espaco-nowrap">Dias com presença</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-5b6b70 fundo-f9fbfc texto-right espaco-nowrap">Horas conferidas</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-5b6b70 fundo-f9fbfc texto-right espaco-nowrap">Horas-aula</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-5b6b70 fundo-f9fbfc texto-right espaco-nowrap">Pendentes</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-5b6b70 fundo-f9fbfc texto-right espaco-nowrap">Horas previstas</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-5b6b70 fundo-f9fbfc texto-right espaco-nowrap">Execução</th></tr></thead>
+        <thead><tr><th scope="col" class="p-10-14 fs-12 fw-600 cor-cinza-600 fundo-cinza-30 espaco-nowrap" style="text-align:right;text-align:left">Oficineiro</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-cinza-600 fundo-cinza-30 espaco-nowrap" style="text-align:right;text-align:left">Escola</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-cinza-600 fundo-cinza-30 texto-right espaco-nowrap">Dias com presença</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-cinza-600 fundo-cinza-30 texto-right espaco-nowrap">Horas conferidas</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-cinza-600 fundo-cinza-30 texto-right espaco-nowrap">Horas-aula</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-cinza-600 fundo-cinza-30 texto-right espaco-nowrap">Pendentes</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-cinza-600 fundo-cinza-30 texto-right espaco-nowrap">Horas previstas</th><th scope="col" class="p-10-14 fs-12 fw-600 cor-cinza-600 fundo-cinza-30 texto-right espaco-nowrap">Execução</th></tr></thead>
         <tbody>
           <sc-for list="{{ medicao }}" as="linha" hint-placeholder-count="5">
-            <tr><th scope="row" class="p-11-14 fs-14 borda-t-e9eff1 num-tabular-nums fw-600" style="text-align:right;text-align:left">{{ linha.nome }}</th><td class="p-11-14 fs-14 borda-t-e9eff1 num-tabular-nums cor-5b6b70" style="text-align:right;text-align:left">{{ linha.escola }}</td><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums">{{ linha.dias }}</td><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums fw-600">{{ linha.conferidas }}</td><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums cor-1a3f9c">{{ linha.horasAula }}</td><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums" style="color:{{ linha.pendentesCor }}">{{ linha.pendentes }}</td><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums cor-5b6b70">{{ linha.previstas }}</td><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums fw-700">{{ linha.execucao }}</td></tr>
+            <tr><th scope="row" class="p-11-14 fs-14 borda-t-cinza-75 num-tabular-nums fw-600" style="text-align:right;text-align:left">{{ linha.nome }}</th><td class="p-11-14 fs-14 borda-t-cinza-75 num-tabular-nums cor-cinza-600" style="text-align:right;text-align:left">{{ linha.escola }}</td><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums">{{ linha.dias }}</td><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums fw-600">{{ linha.conferidas }}</td><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums cor-azul-640">{{ linha.horasAula }}</td><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums" style="color:{{ linha.pendentesCor }}">{{ linha.pendentes }}</td><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums cor-cinza-600">{{ linha.previstas }}</td><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums fw-700">{{ linha.execucao }}</td></tr>
           </sc-for>
         </tbody>
-        <tfoot><tr class="fundo-f7fafb"><th scope="row" class="p-11-14 fs-14 borda-t-e9eff1 num-tabular-nums fw-700" style="text-align:right;text-align:left">Total</th><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums"></td><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums fw-700">{{ totalDaMedicao.dias }}</td><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums fw-700">{{ totalDaMedicao.conferidas }}</td><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums fw-700">{{ totalDaMedicao.horasAula }}</td><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums fw-700">{{ totalDaMedicao.pendentes }}</td><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums fw-700">{{ totalDaMedicao.previstas }}</td><td class="p-11-14 fs-14 borda-t-e9eff1 texto-right num-tabular-nums fw-700">{{ totalDaMedicao.execucao }}</td></tr></tfoot>
+        <tfoot><tr class="fundo-cinza-20"><th scope="row" class="p-11-14 fs-14 borda-t-cinza-75 num-tabular-nums fw-700" style="text-align:right;text-align:left">Total</th><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums"></td><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums fw-700">{{ totalDaMedicao.dias }}</td><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums fw-700">{{ totalDaMedicao.conferidas }}</td><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums fw-700">{{ totalDaMedicao.horasAula }}</td><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums fw-700">{{ totalDaMedicao.pendentes }}</td><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums fw-700">{{ totalDaMedicao.previstas }}</td><td class="p-11-14 fs-14 borda-t-cinza-75 texto-right num-tabular-nums fw-700">{{ totalDaMedicao.execucao }}</td></tr></tfoot>
       </table>
     </div>
-    <sc-if value="{{ semMedicao }}" hint-placeholder-val="{{ false }}"><div class="p-28-16 texto-center fs-14 cor-5b6b70">Nenhum oficineiro ativo.</div></sc-if>
+    <sc-if value="{{ semMedicao }}" hint-placeholder-val="{{ false }}"><div class="p-28-16 texto-center fs-14 cor-cinza-600">Nenhum oficineiro ativo.</div></sc-if>
   </section>
-  <details class="fs-13 cor-5b6b70 lh-1p55">
+  <details class="fs-13 cor-cinza-600 lh-1p55">
     <summary class="cursor-pointer fw-600 min-h-32 d-flex alinha-center">Como cada coluna é calculada</summary>
     <ul class="m-6-0-0 pl-18 d-flex eixo-column gap-4">
       <li>Horas conferidas: horas trabalhadas, sem o almoço, até 8h00 por dia. O que passa de 8h fica registrado, mas não entra. Dia sem saída registrada não entra até ser regularizado.</li>
@@ -170,11 +170,11 @@ class Component extends DCLogic {
   painelDetalhado(contexto) {
     const filtro = contexto.filtroDoPainel;
     const SITUACOES = {
-      trabalhando: ['Trabalhando', 'var(--fundo-e2f2e5)', 'var(--texto-1b5e2e)'],
-      almoco: ['Em almoço', 'var(--fundo-e3ebed)', 'var(--texto-08617e)'],
-      perto_limite: ['Perto do limite', 'var(--fundo-faefd9)', 'var(--texto-7a4e0b)'],
-      encerrado: ['Encerrado', 'var(--fundo-e3ebed)', 'var(--texto-34464d)'],
-      sem_registro: ['Sem registro', 'var(--fundo-fbedeb)', 'var(--texto-b42318)']
+      trabalhando: ['Trabalhando', 'var(--fundo-verde-80)', 'var(--texto-verde-760)'],
+      almoco: ['Em almoço', 'var(--fundo-cinza-90)', 'var(--texto-ciano-740)'],
+      perto_limite: ['Perto do limite', 'var(--fundo-ambar-80)', 'var(--texto-ambar-745)'],
+      encerrado: ['Encerrado', 'var(--fundo-cinza-90)', 'var(--texto-cinza-750)'],
+      sem_registro: ['Sem registro', 'var(--fundo-vermelho-50)', 'var(--texto-vermelho-600)']
     };
     const TIPOS_DE_AJUSTE = {
       falta: 'Falta',
@@ -272,7 +272,7 @@ class Component extends DCLogic {
           titulo: 'Presentes agora',
           valor: String(presentes),
           nota: 'de ' + escalados.length + ' escalados · ' + contarNaSituacao('almoco') + ' em almoço',
-          cor: 'var(--texto-1a2b33)',
+          cor: 'var(--texto-ciano-850)',
           temBarra: true,
           percentual: escalados.length ? Math.min(100, Math.round((presentes / escalados.length) * 100)) : 0
         },
@@ -280,7 +280,7 @@ class Component extends DCLogic {
           titulo: 'Perto do limite de 8h',
           valor: String(contarNaSituacao('perto_limite')),
           nota: '30 min ou menos',
-          cor: 'var(--texto-7a4e0b)',
+          cor: 'var(--texto-ambar-745)',
           temBarra: false,
           percentual: 0
         },
@@ -288,7 +288,7 @@ class Component extends DCLogic {
           titulo: 'Sem registro hoje',
           valor: String(contarNaSituacao('sem_registro')),
           nota: 'nenhuma marcação',
-          cor: 'var(--texto-b42318)',
+          cor: 'var(--texto-vermelho-600)',
           temBarra: false,
           percentual: 0
         },
@@ -296,7 +296,7 @@ class Component extends DCLogic {
           titulo: 'Justificativas',
           valor: String(pendentes.length),
           nota: 'aguardando a direção',
-          cor: 'var(--texto-1a2b33)',
+          cor: 'var(--texto-ciano-850)',
           temBarra: false,
           percentual: 0
         }
@@ -330,10 +330,10 @@ class Component extends DCLogic {
           .filter(x => x[1])
           .map(x => x[0] + ' ' + String(x[1]).slice(0, 5));
         const st = {
-          em_analise: ['Em análise na direção', 'var(--fundo-faefd9)', 'var(--texto-7a4e0b)'],
-          aprovada: ['Aprovada pela direção', 'var(--fundo-e2f2e5)', 'var(--texto-1b5e2e)'],
-          recusada: ['Recusada pela direção', 'var(--fundo-fbedeb)', 'var(--texto-b42318)']
-        }[a.status] || ['Em análise na direção', 'var(--fundo-faefd9)', 'var(--texto-7a4e0b)'];
+          em_analise: ['Em análise na direção', 'var(--fundo-ambar-80)', 'var(--texto-ambar-745)'],
+          aprovada: ['Aprovada pela direção', 'var(--fundo-verde-80)', 'var(--texto-verde-760)'],
+          recusada: ['Recusada pela direção', 'var(--fundo-vermelho-50)', 'var(--texto-vermelho-600)']
+        }[a.status] || ['Em análise na direção', 'var(--fundo-ambar-80)', 'var(--texto-ambar-745)'];
         return {
           nome: a.nome,
           tipo: TIPOS_DE_AJUSTE[a.tipo] || a.tipo,
@@ -365,9 +365,9 @@ class Component extends DCLogic {
       externa: 'Atividade externa'
     };
     const SITUACOES = {
-      em_analise: ['Em análise na direção', 'var(--fundo-faefd9)', 'var(--texto-7a4e0b)'],
-      aprovada: ['Aprovada pela direção', 'var(--fundo-e2f2e5)', 'var(--texto-1b5e2e)'],
-      recusada: ['Recusada pela direção', 'var(--fundo-fbedeb)', 'var(--texto-b42318)']
+      em_analise: ['Em análise na direção', 'var(--fundo-ambar-80)', 'var(--texto-ambar-745)'],
+      aprovada: ['Aprovada pela direção', 'var(--fundo-verde-80)', 'var(--texto-verde-760)'],
+      recusada: ['Recusada pela direção', 'var(--fundo-vermelho-50)', 'var(--texto-vermelho-600)']
     };
     const dataDe = iso => (iso ? Base.dmy(new Date(iso)) : '');
     const diaDe = d => Base.dmy(new Date(d + 'T12:00:00'));
@@ -457,21 +457,21 @@ class Component extends DCLogic {
       temErroJustificativas: !!contexto.erroJustificativas,
       exportarJustificativas: exportar,
       indicadoresDasJustificativas: [
-        { titulo: 'Em análise na direção', valor: String(pendentes.length), cor: 'var(--texto-7a4e0b)' },
+        { titulo: 'Em análise na direção', valor: String(pendentes.length), cor: 'var(--texto-ambar-745)' },
         {
           titulo: 'Aguardando há mais de 3 dias',
           valor: String(pendentes.filter(a => diasDesde(a.pedido_em) > 3).length),
-          cor: 'var(--texto-b42318)'
+          cor: 'var(--texto-vermelho-600)'
         },
         {
           titulo: 'Aprovadas',
           valor: String(daEscola.filter(a => a.status === 'aprovada').length),
-          cor: 'var(--texto-1b5e2e)'
+          cor: 'var(--texto-verde-760)'
         },
         {
           titulo: 'Recusadas',
           valor: String(daEscola.filter(a => a.status === 'recusada').length),
-          cor: 'var(--texto-34464d)'
+          cor: 'var(--texto-cinza-750)'
         }
       ],
       semJustificativas: !contexto.carregandoJustificativas && !linhas.length,
@@ -489,7 +489,7 @@ class Component extends DCLogic {
           horarios: horarios(a),
           motivo: a.motivo,
           espera: emAnalise ? espera(a) : 'enviada em ' + dataDe(a.pedido_em),
-          esperaCor: atrasada ? 'var(--texto-b42318)' : 'var(--texto-5b6b70)',
+          esperaCor: atrasada ? 'var(--texto-vermelho-600)' : 'var(--texto-cinza-600)',
           situacao: st[0],
           fundo: st[1],
           cor: st[2],
@@ -693,7 +693,7 @@ class Component extends DCLogic {
         conferidas: Base.dur(l.conf),
         horasAula: Base.dur(l.ha),
         pendentes: String(l.pend),
-        pendentesCor: l.pend ? 'var(--texto-9a6212)' : 'var(--texto-5b6b70)',
+        pendentesCor: l.pend ? 'var(--texto-ambar-660)' : 'var(--texto-cinza-600)',
         previstas: Base.dur(l.prev),
         execucao: percentual(l.conf, l.prev)
       })),
@@ -757,25 +757,25 @@ class Component extends DCLogic {
           valor: Base.dur(linhasDoHistorico.reduce((x, r) => x + r.vm, 0)),
           nota:
             linhasDoHistorico.length + (linhasDoHistorico.length === 1 ? ' dia com presença' : ' dias com presença'),
-          cor: 'var(--texto-08617e)'
+          cor: 'var(--texto-ciano-740)'
         },
         {
           titulo: 'Total na escola',
           valor: Base.dur(linhasDoHistorico.reduce((x, r) => x + r.m, 0)),
           nota: 'antes das conferências',
-          cor: 'var(--texto-1a2b33)'
+          cor: 'var(--texto-ciano-850)'
         },
         {
           titulo: 'Horas-aula ministradas',
           valor: Base.dur(horasAulaDoOficineiro),
           nota: 'atividades registradas como realizadas',
-          cor: 'var(--texto-1a3f9c)'
+          cor: 'var(--texto-azul-640)'
         },
         {
           titulo: 'Pendentes com você',
           valor: String(pendenciasDoOficineiro),
           nota: pendenciasDoOficineiro ? 'dias sem saída ou volta do almoço' : 'nada pendente',
-          cor: pendenciasDoOficineiro ? 'var(--texto-9a6212)' : 'var(--texto-1b5e2e)'
+          cor: pendenciasDoOficineiro ? 'var(--texto-ambar-660)' : 'var(--texto-verde-760)'
         }
       ],
       diasDoOficineiro: linhasDoHistorico,
