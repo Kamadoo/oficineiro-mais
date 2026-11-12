@@ -37,6 +37,31 @@ Cada perfil vê apenas o que lhe cabe. As regras de acesso ficam no banco de dad
 
 São 6 perfis e 54 telas, com modo escuro e layout responsivo até 360 px.
 
+## Telas
+
+As capturas abaixo usam apenas dados fictícios.
+
+<p align="center">
+  <img src="docs/img/visao-geral.png" alt="Visão geral da rede, perfil Gerência de projetos" width="900">
+</p>
+
+<table>
+  <tr>
+    <td width="40%"><img src="docs/img/presenca-coordenacao.png" alt="Presença de hoje, perfil Coordenação"></td>
+    <td width="40%"><img src="docs/img/presenca-oficineiro.png" alt="Registro de presença, perfil Oficineiro"></td>
+    <td width="20%"><img src="docs/img/celular.png" alt="Registro de presença no celular"></td>
+  </tr>
+  <tr>
+    <td align="center">Presença de hoje (coordenação)</td>
+    <td align="center">Registro de presença com raio da escola</td>
+    <td align="center">Celular</td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="docs/img/visao-geral-escuro.png" alt="Visão geral no tema escuro" width="900">
+</p>
+
 ## Arquitetura
 
 ```mermaid
