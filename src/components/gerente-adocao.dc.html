@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Gerente de Projetos · Adoção</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ is.adocaoConsolidado }}" hint-placeholder-val="{{ false }}">
+  <div class="d-flex quebra-wrap gap-8 alinha-center"><span id="g-corte-rot" class="fs-12 cor-5b6b70 fw-600 mr-4">Consolidar</span><div role="radiogroup" aria-labelledby="g-corte-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ cortes }}" as="corte" hint-placeholder-count="5"><button role="radio" aria-checked="{{ corte.marcado }}" onClick="{{ corte.escolher }}" class="raio-999 p-6-12 fs-13 fw-500 botao-opcao {{ corte.classe }}" style="border:1.5px solid {{ corte.borda }};background:{{ corte.fundo }};color:{{ corte.cor }}">{{ corte.rotulo }}</button></sc-for></div></div>
+  <section class="grade-imprimir borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+    <div class="p-16-20 d-flex gap-4-10 alinha-baseline quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-240">{{ consolidadoTitulo }}</h3><span class="fs-12 cor-5b6b70">Execução = realizadas ÷ previstas líquidas (sem feriados)</span></div>
+    <div role="table" aria-label="{{ consolidadoTitulo }}" class="min-w-1000">
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-5b6b70 borda-t-dde6e8 borda-b-dde6e8" style="grid-template-columns:1.8fr .7fr .8fr .8fr .8fr 1.3fr .9fr .8fr .6fr 1fr"><span role="columnheader">{{ colunaDoCorte }}</span><span role="columnheader">Escolas</span><span role="columnheader">Previstas</span><span role="columnheader">Realizadas</span><span role="columnheader">Não real.</span><span role="columnheader">Execução</span><span role="columnheader">Estudantes</span><span role="columnheader">Presença</span><span role="columnheader">Eng.</span><span role="columnheader">Minecraft · Matific</span></div>
+      <sc-for list="{{ linhasConsolidadas }}" as="linha" hint-placeholder-count="4">
+        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-e9eff1 alinha-center" style="grid-template-columns:1.8fr .7fr .8fr .8fr .8fr 1.3fr .9fr .8fr .6fr 1fr;background:{{ linha.fundo }};font-weight:{{ linha.peso }}">
+          <span role="cell" class="d-flex eixo-column min-w-0"><span class="quebra-palavra-anywhere">{{ linha.nome }}</span><span class="fs-11 cor-5b6b70 fw-400">{{ linha.complemento }}</span></span>
+          <span role="cell" class="num-tabular-nums">{{ linha.escolas }}</span><span role="cell" class="num-tabular-nums">{{ linha.previstas }}</span><span role="cell" class="num-tabular-nums">{{ linha.realizadas }}</span><span role="cell" class="num-tabular-nums">{{ linha.naoRealizadas }}</span>
+          <span role="cell" class="d-flex alinha-center gap-8"><b class="w-38 num-tabular-nums">{{ linha.execucao }}</b><span class="flex-1 h-6 fundo-e8eef0 raio-3"><span class="d-block h-6 raio-3 largura-fundo" style="width:{{ linha.largura }};background:{{ linha.cor }}"></span></span></span>
+          <span role="cell" class="num-tabular-nums">{{ linha.estudantes }}</span><span role="cell" class="num-tabular-nums">{{ linha.presenca }}</span><span role="cell" class="num-tabular-nums">{{ linha.engajamento }}</span><span role="cell" class="num-tabular-nums fs-12">{{ linha.solucao }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semLinhasConsolidadas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhuma atividade prevista ou registrada no período.</p></sc-if>
+  </section>
+  <div class="empilha-celular d-grid gap-20" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));opacity:{{ opacidade }}">
+    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="g-h-sol">
+      <h3 id="g-h-sol" class="m-0 fs-15">Uso por solução</h3>
+      <sc-for list="{{ porSolucao }}" as="item" hint-placeholder-count="4">
+        <div class="d-flex eixo-column gap-6"><div class="d-flex quebra-wrap justifica-space-between fs-13 gap-2-8"><b>{{ item.nome }}</b><span class="cor-5b6b70">{{ item.detalhe }}</span></div><div class="d-flex alinha-center gap-10"><span class="flex-1 h-8 fundo-e8eef0 raio-4"><span class="d-block h-8 raio-4 largura-fundo" style="width:{{ item.parcela }};background:{{ item.cor }}"></span></span><b class="num-tabular-nums fs-13 w-40 texto-right">{{ item.parcela }}</b></div></div>
+      </sc-for>
+    </section>
+    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="g-h-tipo">
+      <h3 id="g-h-tipo" class="m-0 fs-15">Atividades por tipo</h3>
+      <sc-for list="{{ porTipo }}" as="item" hint-placeholder-count="3">
+        <div class="d-grid colunas-minmax-0-1fr-auto gap-4-12 p-10-12 raio-8" style="background:{{ item.fundo }}"><b class="fs-14" style="color:{{ item.cor }}">{{ item.nome }}</b><b class="num-tabular-nums" style="color:{{ item.cor }}">{{ item.execucao }}</b><span class="fs-12 cor-34464d">{{ item.detalhe }}</span><span class="fs-11 cor-5b6b70">execução</span></div>
+      </sc-for>
+    </section>
+    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="g-h-evol">
+      <h3 id="g-h-evol" class="m-0 fs-15">Evolução mensal · execução</h3>
+      <div role="img" aria-label="{{ evolucaoAria }}" class="d-flex alinha-flex-end gap-10 h-150 borda-b-dde6e8">
+        <sc-for list="{{ evolucao }}" as="mes" hint-placeholder-count="6"><div class="flex-1 d-flex eixo-column alinha-center justifica-flex-end h-100pc gap-4"><span class="fs-11 num-tabular-nums cor-34464d">{{ mes.valor }}</span><span class="w-100pc max-w-34 raio-4-4-0-0 largura-fundo" style="height:{{ mes.altura }};background:{{ mes.cor }}"></span></div></sc-for>
+      </div>
+      <div aria-hidden="true" class="d-flex gap-10"><sc-for list="{{ evolucao }}" as="mes" hint-placeholder-count="6"><span class="flex-1 texto-center fs-11 cor-5b6b70">{{ mes.mes }}</span></sc-for></div>
+      <span class="fs-11 cor-5b6b70">{{ evolucaoNota }}</span>
+    </section>
+  </div>
+</sc-if>
+
+<sc-if value="{{ is.adocaoDetalhado }}" hint-placeholder-val="{{ false }}">
+  <div class="filtros d-flex quebra-wrap gap-8">
+    <select aria-label="Oficineiro" value="{{ oficineiro }}" onChange="{{ escolherOficineiro }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="flex:1 1 160px;background:var(--fundo-ffffff)"><option value="">Todos os oficineiros</option><sc-for list="{{ opcoesDeOficineiro }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select aria-label="Tipo de atividade" value="{{ tipo }}" onChange="{{ escolherTipo }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="flex:1 1 140px;background:var(--fundo-ffffff)"><option value="">Todos os tipos</option><option value="R">Aula regular</option><option value="P">Projeto tempo integral</option><option value="F">Formação de professores</option></select>
+    <select aria-label="Solução" value="{{ solucao }}" onChange="{{ escolherSolucao }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="flex:1 1 140px;background:var(--fundo-ffffff)"><option value="">Todas as soluções</option><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
+    <select aria-label="Situação" value="{{ situacao }}" onChange="{{ escolherSituacao }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="flex:1 1 140px;background:var(--fundo-ffffff)"><option value="">Todas as situações</option><option value="real">Realizadas</option><option value="nao">Não realizadas</option><option value="pend">Pendentes de registro</option><option value="anul">Anuladas</option></select>
+    <input class="largura-total-celular h-36 borda-cfdadd raio-8 p-0-12 fs-13 min-w-240" style="flex:1" type="search" value="{{ busca }}" onChange="{{ buscar }}" aria-label="Buscar turma, professor ou oficineiro" placeholder="Buscar turma, professor ou oficineiro"></input>
+  </div>
+  <section class="grade-imprimir borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+    <div role="status" class="p-14-20 fs-13 cor-5b6b70">{{ detalhadoResumo }}</div>
+    <div role="table" aria-label="Registros de atividades" class="min-w-1180">
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-5b6b70 borda-t-dde6e8 borda-b-dde6e8" style="grid-template-columns:52px 1.4fr 70px 1.3fr 1.4fr 1.1fr 1fr 70px 1.2fr 40px"><span role="columnheader">Data</span><span role="columnheader">Escola</span><span role="columnheader">Carteira</span><span role="columnheader">Oficineiro</span><span role="columnheader">Tipo de atividade</span><span role="columnheader">Turma</span><span role="columnheader">Solução</span><span role="columnheader">Pres./Matr.</span><span role="columnheader">Situação</span><span role="columnheader">Eng.</span></div>
+      <sc-for list="{{ linhasDetalhadas }}" as="linha" hint-placeholder-count="8">
+        <div role="row" class="d-grid gap-10 p-11-20 fs-13 borda-b-e9eff1 alinha-center" style="grid-template-columns:52px 1.4fr 70px 1.3fr 1.4fr 1.1fr 1fr 70px 1.2fr 40px">
+          <span role="cell" class="num-tabular-nums">{{ linha.data }}</span><span role="cell" class="min-w-0 quebra-palavra-anywhere">{{ linha.escola }}</span><span role="cell" class="fs-12">{{ linha.carteira }}</span>
+          <span role="cell" class="min-w-0"><sc-if value="{{ linha.temRegistro }}" hint-placeholder-val="{{ true }}"><button onClick="{{ linha.ver }}" aria-haspopup="dialog" aria-label="{{ linha.aria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-1a2b33 texto-left sublinha-3 quebra-palavra-anywhere botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:#CFDADD">{{ linha.oficineiro }}</button></sc-if><sc-if value="{{ linha.semRegistro }}" hint-placeholder-val="{{ false }}"><b class="quebra-palavra-anywhere">{{ linha.oficineiro }}</b></sc-if></span>
+          <span role="cell" class="justifica-si-start fs-12 fw-600 p-2-8 raio-4" style="color:{{ linha.tipoCor }};background:{{ linha.tipoFundo }}">{{ linha.tipo }}</span>
+          <b role="cell" class="quebra-palavra-anywhere">{{ linha.turma }}</b><span role="cell" class="quebra-palavra-anywhere">{{ linha.solucao }}</span><span role="cell" class="num-tabular-nums">{{ linha.presentes }}</span>
+          <span role="cell" class="justifica-si-start fs-12 fw-600 p-3-8 raio-999" style="color:{{ linha.situacaoCor }};background:{{ linha.situacaoFundo }}">{{ linha.situacao }}</span>
+          <span role="cell" class="num-tabular-nums">{{ linha.engajamento }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semLinhasDetalhadas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhum registro com esses filtros.</p></sc-if>
+    <sc-if value="{{ temMais }}" hint-placeholder-val="{{ false }}"><div class="p-12-20"><button onClick="{{ mostrarMais }}" class="h-38 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-13 fw-600 cor-1a2b33 botao-secundario">{{ maisTexto }}</button></div></sc-if>
+  </section>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { TIPOS, dmIso, dmyIso, pct, pctTxt, exC, numero, plural, normTxt } = Base;
+class Component extends DCLogic {
+  lembrar(mudanca) {
+    this.props.contexto.lembrar('adocao', mudanca);
+  }
+  renderVals() {
+    const contexto = this.props.contexto,
+      memoria = this.props.memoria;
+    const {
+      carteiraDaEscola,
+      rotuloDaCarteira,
+      analistasDaCarteira,
+      nomeDaEscola,
+      nomeDaPessoa,
+      contaPorId,
+      siglaDaEscola,
+      escolaAtualDe,
+      atividades,
+      resumir,
+      larguraDaBarra,
+      total,
+      tela,
+      ultimosCiclos,
+      dadosDoCiclo,
+      atividadesDoCiclo,
+      escolaNoFiltro,
+      turmaDe,
+      SITUACOES_DA_ATIVIDADE,
+      situacaoDe,
+      is,
+      nomeDoArquivo,
+      periodoTexto,
+      opacidade,
+      oficineirosAtivos,
+      nomeDoMes
+    } = contexto;
+    const agrupar = (loteAtual, chave) => {
+      const g = {};
+      loteAtual.forEach(i => {
+        const k = chave(i);
+        (g[k] = g[k] || []).push(i);
+      });
+      return g;
+    };
+    const CORTES = {
+      carteira: [
+        'Por carteira do analista',
+        'Carteira',
+        i => carteiraDaEscola(i.esc),
+        k => rotuloDaCarteira(k),
+        k => plural(analistasDaCarteira(k).length, 'analista', 'analistas')
+      ],
+      escola: [
+        'Por escola',
+        'Escola',
+        i => String(i.esc),
+        k => nomeDaEscola(k),
+        k => carteiraDaEscola(k) || 'sem carteira'
+      ],
+      oficineiro: [
+        'Por oficineiro',
+        'Oficineiro',
+        i => i.of,
+        k => nomeDaPessoa(k),
+        k => (contaPorId[k] ? siglaDaEscola(escolaAtualDe(contaPorId[k])) : '')
+      ],
+      solucao: ['Por solução', 'Solução', i => i.sol || '', k => k || 'Sem solução informada', () => ''],
+      tipo: ['Por tipo de atividade', 'Tipo de atividade', i => i.tipo || 'R', k => (TIPOS[k] || TIPOS.R)[0], () => '']
+    };
+    const corte = CORTES[memoria.corte] ? memoria.corte : 'carteira',
+      [tituloDoCorte, colunaDoCorte, chaveDoCorte, nomeNoCorte, detalheNoCorte] = CORTES[corte];
+    const gruposDoCorte = Object.entries(agrupar(atividades, chaveDoCorte))
+      .map(([k, loteAtual]) => ({ k, n: nomeNoCorte(k), sub: detalheNoCorte(k), t: resumir(loteAtual) }))
+      .sort((a, b) =>
+        corte === 'carteira' || corte === 'tipo'
+          ? a.n.localeCompare(b.n, 'pt-BR')
+          : (a.t.ex == null ? 999 : a.t.ex) - (b.t.ex == null ? 999 : b.t.ex) || a.n.localeCompare(b.n, 'pt-BR')
+      );
+    const linhaConsolidada = (n, aba, t, total) => ({
+      nome: n,
+      complemento: aba,
+      escolas: String(t.nEsc),
+      previstas: numero(t.liq),
+      realizadas: numero(t.real),
+      naoRealizadas: numero(t.nao),
+      execucao: pctTxt(t.ex),
+      largura: larguraDaBarra(t.ex),
+      cor: exC(t.ex),
+      estudantes: numero(t.est),
+      presenca: pctTxt(t.presAl),
+      engajamento: t.eng,
+      solucao: t.sol,
+      fundo: total ? 'var(--fundo-f7fafb)' : 'var(--fundo-ffffff)',
+      peso: total ? '600' : '400'
+    });
+    const linhasConsolidadas = gruposDoCorte
+      .map(x => linhaConsolidada(x.n, x.sub, x.t, false))
+      .concat(gruposDoCorte.length ? [linhaConsolidada('Total', '', total, true)] : []);
+    const atividadesFeitas = atividades.filter(i => i.st === 'real' || i.extra);
+    const solucoes = Object.entries(agrupar(atividadesFeitas, i => i.sol || 'Sem solução informada'))
+      .map(([n, loteAtual]) => ({ n, L: loteAtual }))
+      .sort((a, b) => b.L.length - a.L.length);
+    const principaisSolucoes = solucoes
+      .slice(0, 4)
+      .concat(solucoes.length > 4 ? [{ n: 'Outras soluções', L: [].concat(...solucoes.slice(4).map(x => x.L)) }] : []);
+    const CORES_DAS_SOLUCOES = [
+      'var(--texto-23773a)',
+      'var(--texto-1f4fc4)',
+      'var(--texto-9a6212)',
+      'var(--texto-6c60e6)',
+      'var(--texto-5b6b70)'
+    ];
+    const adocaoPorSolucao = principaisSolucoes.map((x, i) => ({
+      nome: x.n,
+      parcela: pct(x.L.length, atividadesFeitas.length) + '%',
+      detalhe:
+        plural(x.L.length, 'atividade', 'atividades') +
+        ' · ' +
+        plural(
+          x.L.reduce((a, j) => a + ((j.reg && j.reg.presentes) || 0), 0),
+          'estudante',
+          'estudantes'
+        ),
+      cor: CORES_DAS_SOLUCOES[i]
+    }));
+    const adocaoPorTipo = ['R', 'P', 'F'].map(k => {
+      const t = resumir(atividades.filter(i => (i.tipo || 'R') === k));
+      return {
+        nome: TIPOS[k][0],
+        execucao: pctTxt(t.ex),
+        detalhe: plural(t.real + t.extra, 'atividade', 'atividades') + ' · ' + plural(t.est, 'estudante', 'estudantes'),
+        cor: TIPOS[k][1],
+        fundo: TIPOS[k][2]
+      };
+    });
+    const evolucao =
+      tela === 'adocao'
+        ? ultimosCiclos.map(c => {
+            const dm = dadosDoCiclo(c),
+              t = dm.pronto ? resumir(atividadesDoCiclo(dm, c).filter(i => escolaNoFiltro(i.esc))) : null,
+              v = t ? t.ex : null;
+            return {
+              mes: nomeDoMes(c).slice(0, 3),
+              valor: dm.pronto ? pctTxt(v) : '…',
+              altura: v == null ? '2%' : Math.max(2, v) + '%',
+              cor: v == null ? 'var(--borda-cfdadd)' : exC(v),
+              percentual: v
+            };
+          })
+        : [];
+    const evolucaoAria = 'Execução nos últimos 6 meses: ' + evolucao.map(b => b.mes + ' ' + b.valor).join(', ');
+    const termoDeBusca = normTxt(memoria.busca.trim());
+    const atividadesFiltradas = atividades
+      .filter(i => i.st !== 'canc')
+      .filter(
+        i =>
+          (!memoria.oficineiro || i.of === memoria.oficineiro) &&
+          (!memoria.tipo || (i.tipo || 'R') === memoria.tipo) &&
+          (!memoria.solucao || i.sol === memoria.solucao) &&
+          (!memoria.situacao ||
+            (memoria.situacao === 'real' && (i.st === 'real' || i.extra)) ||
+            (memoria.situacao === 'nao' && i.st === 'nao') ||
+            (memoria.situacao === 'pend' && i.st === 'sreg' && !i.anul) ||
+            (memoria.situacao === 'anul' && i.anul)) &&
+          (!termoDeBusca ||
+            normTxt(turmaDe(i)).includes(termoDeBusca) ||
+            normTxt(nomeDaPessoa(i.of)).includes(termoDeBusca) ||
+            normTxt((i.reg && i.reg.professor_aula) || (i.g && i.g.professor) || '').includes(termoDeBusca))
+      )
+      .sort(
+        (a, b) =>
+          b.iso.localeCompare(a.iso) ||
+          String((a.g || a.reg || {}).inicio).localeCompare(String((b.g || b.reg || {}).inicio))
+      );
+    const linhasDetalhadas = atividadesFiltradas.slice(0, memoria.limite).map(i => {
+      const st = SITUACOES_DA_ATIVIDADE[situacaoDe(i)],
+        tp = TIPOS[i.tipo] || TIPOS.R,
+        temReg = !!i.reg;
+      return {
+        data: dmIso(i.iso),
+        escola: nomeDaEscola(i.esc),
+        carteira: carteiraDaEscola(i.esc) || '—',
+        oficineiro: nomeDaPessoa(i.of),
+        temRegistro: temReg,
+        semRegistro: !temReg,
+        ver: () => contexto.abrirRegistro(i),
+        aria: 'Ver o registro de ' + nomeDaPessoa(i.of) + ' em ' + dmIso(i.iso),
+        tipo: tp[0],
+        tipoCor: tp[1],
+        tipoFundo: tp[2],
+        turma: turmaDe(i),
+        solucao: i.sol || '—',
+        presentes:
+          temReg && i.reg.situacao !== 'Não realizada'
+            ? (i.reg.presentes == null ? '—' : i.reg.presentes) +
+              '/' +
+              (i.reg.matriculados == null ? '—' : i.reg.matriculados)
+            : '—',
+        situacao: st[0],
+        situacaoCor: st[1],
+        situacaoFundo: st[2],
+        engajamento: temReg && i.reg.engajamento ? i.reg.engajamento + '/5' : '—'
+      };
+    });
+    contexto.registrarExportador(() => {
+      if (is.adocaoConsolidado)
+        return contexto.exportar(
+          nomeDoArquivo('adocao_consolidado'),
+          'Consolidado',
+          [
+            ['Adoção e execução das atividades · ' + tituloDoCorte.toLowerCase() + ' · ' + periodoTexto],
+            [],
+            [
+              colunaDoCorte,
+              'Escolas',
+              'Previstas líquidas',
+              'Realizadas',
+              'Não realizadas',
+              'Sem registro',
+              'Fora da grade',
+              'Execução',
+              'Estudantes',
+              'Presença dos alunos',
+              'Engajamento',
+              'Minecraft · Matific'
+            ]
+          ].concat(
+            gruposDoCorte
+              .concat([{ n: 'Total', t: total }])
+              .map(x => [
+                x.n,
+                x.t.nEsc,
+                x.t.liq,
+                x.t.real,
+                x.t.nao,
+                x.t.sreg,
+                x.t.extra,
+                pctTxt(x.t.ex),
+                x.t.est,
+                pctTxt(x.t.presAl),
+                x.t.eng,
+                x.t.sol
+              ])
+          )
+        );
+      if (is.adocaoDetalhado)
+        return contexto.exportar(
+          nomeDoArquivo('adocao_detalhado'),
+          'Detalhado',
+          [
+            [
+              'Data',
+              'Escola',
+              'Carteira',
+              'Oficineiro',
+              'Tipo de atividade',
+              'Turma',
+              'Solução',
+              'Presentes',
+              'Matriculados',
+              'Situação',
+              'Engajamento'
+            ]
+          ].concat(
+            atividadesFiltradas.map(i => [
+              dmyIso(i.iso),
+              nomeDaEscola(i.esc),
+              carteiraDaEscola(i.esc),
+              nomeDaPessoa(i.of),
+              (TIPOS[i.tipo] || TIPOS.R)[0],
+              turmaDe(i),
+              i.sol,
+              i.reg ? i.reg.presentes : '',
+              i.reg ? i.reg.matriculados : '',
+              SITUACOES_DA_ATIVIDADE[situacaoDe(i)][0],
+              i.reg && i.reg.engajamento ? i.reg.engajamento : ''
+            ])
+          )
+        );
+    });
+    return {
+      is,
+      opacidade: String(opacidade),
+      cortes: Object.keys(CORTES).map(k => ({
+        rotulo: CORTES[k][0],
+        marcado: corte === k ? 'true' : 'false',
+        ...contexto.estiloOpcao(corte === k),
+        escolher: () => this.lembrar({ corte: k })
+      })),
+      consolidadoTitulo: 'Adoção e execução das atividades · ' + tituloDoCorte.toLowerCase(),
+      colunaDoCorte: colunaDoCorte,
+      linhasConsolidadas: linhasConsolidadas,
+      semLinhasConsolidadas: gruposDoCorte.length === 0,
+      porSolucao: adocaoPorSolucao.length
+        ? adocaoPorSolucao
+        : [{ nome: 'Nenhuma atividade realizada', parcela: '0%', detalhe: 'no período', cor: 'var(--borda-cfdadd)' }],
+      porTipo: adocaoPorTipo,
+      evolucao: evolucao,
+      evolucaoAria: evolucaoAria,
+      evolucaoNota: evolucao.some(b => b.valor === '…')
+        ? 'Carregando os meses anteriores…'
+        : 'Mês atual em andamento · execução até hoje',
+      oficineiro: memoria.oficineiro,
+      opcoesDeOficineiro: oficineirosAtivos
+        .slice()
+        .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+        .map(c => ({ valor: c.id, rotulo: c.nome })),
+      escolherOficineiro: e => this.lembrar({ oficineiro: e.target.value, limite: 100 }),
+      tipo: memoria.tipo,
+      escolherTipo: e => this.lembrar({ tipo: e.target.value, limite: 100 }),
+      solucao: memoria.solucao,
+      solucoes: Array.from(new Set(atividades.map(i => i.sol).filter(Boolean))).sort((a, b) =>
+        a.localeCompare(b, 'pt-BR')
+      ),
+      escolherSolucao: e => this.lembrar({ solucao: e.target.value, limite: 100 }),
+      situacao: memoria.situacao,
+      escolherSituacao: e => this.lembrar({ situacao: e.target.value, limite: 100 }),
+      busca: memoria.busca,
+      buscar: e => this.lembrar({ busca: e.target.value, limite: 100 }),
+      detalhadoResumo:
+        plural(atividadesFiltradas.length, 'atividade', 'atividades') +
+        ' no período' +
+        (atividadesFiltradas.length > linhasDetalhadas.length ? ' · exibindo ' + numero(linhasDetalhadas.length) : ''),
+      linhasDetalhadas: linhasDetalhadas,
+      semLinhasDetalhadas: atividadesFiltradas.length === 0,
+      temMais: atividadesFiltradas.length > linhasDetalhadas.length,
+      maisTexto: 'Mostrar mais ' + Math.min(100, atividadesFiltradas.length - linhasDetalhadas.length),
+      mostrarMais: () => this.lembrar({ limite: memoria.limite + 100 })
+    };
+  }
+}
+</script>
+</body>
+</html>

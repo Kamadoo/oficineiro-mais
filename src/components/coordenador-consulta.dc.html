@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Coordenador do núcleo · Consulta e correções</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <p class="m-0 fs-13 cor-5b6b70 lh-1p5 max-w-760">Consulte a situação de qualquer pessoa em um ciclo e corrija o que for necessário. Toda correção exige um motivo e fica registrada na auditoria.</p>
+  <div role="group" aria-label="Escolha da pessoa e do ciclo" class="d-flex gap-10-12 alinha-flex-end quebra-wrap">
+    <label class="largura-total-celular d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Pessoa</span><select id="adm-cons-pessoa" value="{{ consulta.pessoa }}" onChange="{{ consulta.escolherPessoa }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit max-w-320 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha a pessoa</option><sc-for list="{{ consulta.pessoas }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Ciclo</span><select value="{{ consulta.ciclo }}" onChange="{{ consulta.escolherCiclo }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ consulta.ciclos }}" as="opcao" hint-placeholder-count="12"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <button onClick="{{ consulta.consultar }}" disabled="{{ consulta.consultando }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-0b7ea3" style="background:#0B7EA3">{{ consulta.botao }}</button>
+  </div>
+  <sc-if value="{{ consulta.temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ consulta.erro }}</div></sc-if>
+  <sc-if value="{{ consulta.temPessoa }}" hint-placeholder-val="{{ false }}">
+    <section class="espaco-celular borda-dde6e8 raio-12 p-18-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ consulta.opacidade }}" aria-labelledby="adm-h-cons">
+      <h3 id="adm-h-cons" class="m-0 fs-15">{{ consulta.nome }}</h3>
+      <dl class="adm-linha m-0 d-grid colunas-repeat-4-minmax-0-1fr gap-12">
+        <sc-for list="{{ consulta.itens }}" as="item" hint-placeholder-count="4"><div class="d-flex eixo-column gap-2 min-w-0"><dt class="fs-12 cor-5b6b70 fw-600">{{ item.rotulo }}</dt><dd class="m-0 fs-14 quebra-palavra-anywhere">{{ item.valor }}</dd></div></sc-for>
+      </dl>
+      <sc-if value="{{ consulta.naoEhOficineiro }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-13 cor-5b6b70">As correções de presença, grade e registros de atividade valem para contas de oficineiro. Para mudar o perfil, a escola ou a senha desta conta, use Gestão de Contas.</p></sc-if>
+      <sc-if value="{{ consulta.ehOficineiro }}" hint-placeholder-val="{{ false }}">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Motivo das correções desta tela *</span><input id="adm-cons-motivo" value="{{ consulta.motivo }}" onChange="{{ consulta.escreverMotivo }}" maxlength="500" placeholder="Ex.: correção solicitada pela direção da escola" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit"></input><span class="fs-12 cor-5b6b70">Usado ao reabrir o mês, mudar a situação da grade ou de um registro de atividade. Mínimo de 10 caracteres.</span></label>
+      </sc-if>
+    </section>
+    <sc-if value="{{ consulta.ehOficineiro }}" hint-placeholder-val="{{ false }}">
+      <section class="espaco-celular borda-dde6e8 raio-12 p-18-20 d-flex quebra-wrap alinha-center gap-10-16 fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ consulta.opacidade }}" aria-labelledby="adm-h-rel">
+        <div class="flex-1 min-w-220 d-flex eixo-column gap-4"><h3 id="adm-h-rel" class="m-0 fs-15">Relatório de {{ consulta.cicloTexto }}</h3><span class="fs-13 cor-34464d">{{ consulta.relatorioTexto }}</span></div>
+        <sc-if value="{{ consulta.podeReabrir }}" hint-placeholder-val="{{ false }}"><button onClick="{{ consulta.reabrir }}" disabled="{{ salvando }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Reabrir ciclo para correção</button></sc-if>
+      </section>
+      <section aria-labelledby="adm-h-pres" class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ consulta.opacidade }}">
+        <div class="d-flex quebra-wrap alinha-center gap-8-12 p-14-20 borda-b-dde6e8"><h3 id="adm-h-pres" class="m-0 fs-15 flex-1">Presenças do ciclo</h3><button onClick="{{ consulta.lancarPresenca }}" aria-haspopup="dialog" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Lançar presença</button></div>
+        <div role="table" aria-labelledby="adm-h-pres" class="min-w-760">
+          <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-5b6b70 borda-b-dde6e8" style="grid-template-columns:90px 90px 80px 80px 90px minmax(0,2fr) 100px"><span role="columnheader">Data</span><span role="columnheader">Escola</span><span role="columnheader">Início</span><span role="columnheader">Fim</span><span role="columnheader">Trabalhado</span><span role="columnheader">Situação</span><span role="columnheader"><span class="sr-only">Ação</span></span></div>
+          <sc-for list="{{ consulta.presencas }}" as="presenca" hint-placeholder-count="6">
+            <div role="row" class="d-grid gap-10 p-10-20 fs-13 borda-b-e8eef0 alinha-center" style="grid-template-columns:90px 90px 80px 80px 90px minmax(0,2fr) 100px">
+              <span role="cell" class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ presenca.data }}</span>
+              <span role="cell">{{ presenca.escola }}</span>
+              <span role="cell">{{ presenca.inicio }}</span>
+              <span role="cell">{{ presenca.fim }}</span>
+              <span role="cell">{{ presenca.trabalhado }}</span>
+              <span role="cell"><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ presenca.cor }};background:{{ presenca.fundo }}">{{ presenca.situacao }}</span></span>
+              <span role="cell"><button onClick="{{ presenca.abrir }}" aria-haspopup="dialog" aria-label="{{ presenca.aria }}" class="h-32 borda-cfdadd fundo-ffffff raio-8 p-0-10 fs-13 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Corrigir</button></span>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ consulta.semPresencas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-18-20 fs-13 cor-5b6b70">Nenhuma presença neste ciclo.</p></sc-if>
+      </section>
+      <section class="espaco-celular borda-dde6e8 raio-12 p-18-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ consulta.opacidade }}" aria-labelledby="adm-h-grade">
+        <h3 id="adm-h-grade" class="m-0 fs-15">Grade de atividades</h3>
+        <sc-if value="{{ consulta.semGrade }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-13 cor-5b6b70">Nenhuma grade enviada por esta pessoa.</p></sc-if>
+        <sc-for list="{{ consulta.grades }}" as="grade" hint-placeholder-count="1">
+          <div class="d-flex quebra-wrap alinha-flex-end gap-8-12">
+            <div class="flex-1 min-w-200 d-flex eixo-column gap-2"><b class="fs-14">Ano letivo {{ grade.ano }}</b><span class="fs-12 cor-5b6b70">Situação atual: {{ grade.atual }}</span></div>
+            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Nova situação</span><select value="{{ grade.valor }}" onChange="{{ grade.escolher }}" aria-label="{{ grade.aria }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ consulta.opcoesDeGrade }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+            <button onClick="{{ grade.aplicar }}" disabled="{{ salvando }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Aplicar</button>
+          </div>
+        </sc-for>
+      </section>
+      <section aria-labelledby="adm-h-regs" class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ consulta.opacidade }}">
+        <h3 id="adm-h-regs" class="m-0 fs-15 p-14-20 borda-b-dde6e8">Registros de atividade do ciclo</h3>
+        <div role="table" aria-labelledby="adm-h-regs" class="min-w-820">
+          <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-5b6b70 borda-b-dde6e8" style="grid-template-columns:90px 70px 70px minmax(0,1.4fr) minmax(0,1fr) 200px 90px"><span role="columnheader">Data</span><span role="columnheader">Início</span><span role="columnheader">Turma</span><span role="columnheader">Componente</span><span role="columnheader">Atividade</span><span role="columnheader">Situação da revisão</span><span role="columnheader"><span class="sr-only">Ação</span></span></div>
+          <sc-for list="{{ consulta.registros }}" as="registro" hint-placeholder-count="6">
+            <div role="row" class="d-grid gap-10 p-10-20 fs-13 borda-b-e8eef0 alinha-center" style="grid-template-columns:90px 70px 70px minmax(0,1.4fr) minmax(0,1fr) 200px 90px">
+              <span role="cell" class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ registro.data }}</span>
+              <span role="cell">{{ registro.inicio }}</span>
+              <span role="cell">{{ registro.turma }}</span>
+              <span role="cell" class="min-w-0 quebra-palavra-anywhere">{{ registro.componente }}</span>
+              <span role="cell">{{ registro.situacao }}</span>
+              <span role="cell"><select value="{{ registro.valor }}" onChange="{{ registro.escolher }}" aria-label="{{ registro.aria }}" class="h-36 w-100pc borda-cfdadd raio-8 p-0-8 fs-13 fonte-inherit largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ consulta.opcoesDeRegistro }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></span>
+              <span role="cell"><button onClick="{{ registro.aplicar }}" disabled="{{ registro.bloqueado }}" class="h-32 borda-cfdadd fundo-ffffff raio-8 p-0-10 fs-13 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Aplicar</button></span>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ consulta.semRegistros }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-18-20 fs-13 cor-5b6b70">Nenhum registro de atividade neste ciclo.</p></sc-if>
+      </section>
+    </sc-if>
+  </sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+class Component extends DCLogic {
+  renderVals() {
+    const contexto = this.props.contexto;
+    const {
+      escs,
+      hojeSP,
+      cdP,
+      contasDoSistema,
+      PAPEL_AUD,
+      carteiraPorId,
+      cd,
+      situacaoDaPresenca,
+      dmIso,
+      minTxt,
+      dmaIso,
+      dataDoIso
+    } = contexto;
+    const SIT_GRADE = [
+      ['enviada', 'Enviada · aguardando validação'],
+      ['validada', 'Validada'],
+      ['devolvida', 'Devolvida para ajuste'],
+      ['alterada', 'Alterada · aguardando nova validação']
+    ];
+    const SIT_REG = [
+      ['', 'Aguardando revisão'],
+      ['revisado', 'Revisado'],
+      ['devolvido', 'Devolvido para correção'],
+      ['corrigido', 'Corrigido'],
+      ['anulado', 'Anulado']
+    ];
+    const SIT_REL = {
+      fechado: 'Fechado · aguardando a direção',
+      aprovado_direcao: 'Aprovado pela direção · aguardando a coordenação',
+      aprovado_coordenacao: 'Aprovado pela coordenação',
+      devolvido: 'Aberto para correção pelo oficineiro'
+    };
+    const opts = opcoes => opcoes.map(([v, l]) => ({ valor: v, rotulo: l }));
+    const rot = (opcoes, v) => (opcoes.find(x => x[0] === (v || '')) || [, v || '—'])[1];
+    const hmSP = v =>
+      v
+        ? new Date(v).toLocaleTimeString('pt-BR', {
+            timeZone: 'America/Sao_Paulo',
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        : '';
+    const escSig = id => (escs.find(e => String(e.id) === String(id)) || {}).sigla || '—';
+    const MESES = [
+      'janeiro',
+      'fevereiro',
+      'março',
+      'abril',
+      'maio',
+      'junho',
+      'julho',
+      'agosto',
+      'setembro',
+      'outubro',
+      'novembro',
+      'dezembro'
+    ];
+    const mesTxt = ym => (ym ? MESES[Number(ym.slice(5, 7)) - 1] + ' de ' + ym.slice(0, 4) : '');
+    const cicloSP = Base.cicloComp(dataDoIso(hojeSP));
+    const co = contexto.consulta || {},
+      ehOfic = !!(cdP && cdP.papel === 'oficineiro');
+    const coSet = k => e =>
+      contexto.setState({
+        consulta: { ...contexto.estado().consulta, [k]: e.target.value },
+        dadosDaConsulta: null,
+        erroConsulta: ''
+      });
+    const abrirPres = p =>
+      contexto.abrirGavetaDeAdmin(
+        {
+          presencaEditada: {
+            id: p.id,
+            nova: false,
+            data: p.data,
+            ini: hmSP(p.inicio),
+            fim: hmSP(p.fim),
+            motivo: '',
+            conferencia: p.conferencia_status,
+            excedente: p.excedente_status,
+            deficit: p.deficit_status,
+            horario: p.horario_status
+          }
+        },
+        'adm-pr-motivo'
+      );
+    const corrigir = (fn, txt) => contexto.corrigirComoAdmin(fn, txt);
+    const A = window.FSM_AUTH;
+    return {
+      consulta: {
+        pessoa: co.usuario || '',
+        ciclo: co.mes || '',
+        escolherPessoa: coSet('usuario'),
+        escolherCiclo: coSet('mes'),
+        pessoas: contasDoSistema
+          .filter(c => c.papel !== 'administrador')
+          .slice()
+          .sort((a, b) => String(a.nome).localeCompare(String(b.nome), 'pt-BR'))
+          .map(c => ({
+            valor: c.id,
+            rotulo: c.nome + ' · ' + (PAPEL_AUD[c.papel] || c.papel) + (c.ativo ? '' : ' (desativada)')
+          })),
+        ciclos: Array.from({ length: 13 }, (_, i) => {
+          const d = new Date(cicloSP.getFullYear(), cicloSP.getMonth() - i, 1);
+          const v = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+          return { valor: v, rotulo: mesTxt(v).charAt(0).toUpperCase() + mesTxt(v).slice(1) };
+        }),
+        consultar: () => contexto.consultarAdmin(),
+        consultando: !!contexto.carregandoConsulta,
+        botao: contexto.carregandoConsulta ? 'Consultando…' : 'Consultar',
+        temErro: !!contexto.erroConsulta,
+        erro: contexto.erroConsulta,
+        temPessoa: !!cdP,
+        opacidade: contexto.carregandoConsulta || contexto.salvandoSistema ? 0.6 : 1,
+        nome: cdP ? cdP.nome : '',
+        itens: cdP
+          ? [
+              ['Perfil', PAPEL_AUD[cdP.papel] || cdP.papel],
+              ['Login', cdP.usuario || '—'],
+              [
+                'Escola',
+                cdP.escola_id
+                  ? escSig(cdP.escola_id)
+                  : cdP.carteira_id
+                    ? (carteiraPorId[cdP.carteira_id] || {}).rotulo || cdP.carteira_id
+                    : '—'
+              ],
+              ['Conta', cdP.ativo ? 'Ativa' : 'Desativada']
+            ].map(([l, v]) => ({ rotulo: l, valor: v }))
+          : [],
+        ehOficineiro: ehOfic,
+        naoEhOficineiro: !!cdP && !ehOfic,
+        motivo: contexto.motivoDaCorrecao || '',
+        escreverMotivo: e => contexto.setState({ motivoDaCorrecao: e.target.value, erroConsulta: '' }),
+        cicloTexto: cd
+          ? mesTxt(String(cd.competencia).slice(0, 7)) +
+            ' (' +
+            (cd.ciclo_inicio && cd.ciclo_fim
+              ? Base.dm(dataDoIso(cd.ciclo_inicio)) + ' a ' + Base.dm(dataDoIso(cd.ciclo_fim))
+              : Base.cicloTxt(dataDoIso(String(cd.competencia).slice(0, 10)))) +
+            ')'
+          : '',
+        relatorioTexto: cd
+          ? cd.relatorio
+            ? SIT_REL[cd.relatorio.status] || cd.relatorio.status
+            : String(cd.competencia).slice(0, 7) === Base.iso(cicloSP).slice(0, 7)
+              ? 'Ciclo em andamento · aberto para registros'
+              : 'Encerrado sem relatório gerado'
+          : '',
+        podeReabrir:
+          !!cd &&
+          (cd.relatorio
+            ? cd.relatorio.status !== 'devolvido'
+            : String(cd.competencia).slice(0, 7) !== Base.iso(cicloSP).slice(0, 7)),
+        reabrir: () =>
+          corrigir(
+            m => A.adminReabrirMes(cdP.id, String(cd.competencia).slice(0, 10), m),
+            'Ciclo reaberto · o oficineiro já pode corrigir os registros'
+          ),
+        lancarPresenca: () =>
+          contexto.abrirGavetaDeAdmin(
+            { presencaEditada: { nova: true, data: '', ini: '', fim: '', motivo: '' } },
+            'adm-pr-motivo'
+          ),
+        presencas: ((cd && cd.presencas) || []).map(p => {
+          const [sit, cor, fundo] = situacaoDaPresenca(p);
+          return {
+            data: dmIso(p.data),
+            escola: escSig(p.escola_id),
+            inicio: hmSP(p.inicio) || '—',
+            fim: hmSP(p.fim) || '—',
+            trabalhado:
+              minTxt(p.trabalhado_min) +
+              (!p.pausa_inicio
+                ? ''
+                : p.pausa_fim
+                  ? ' · pausa ' + hmSP(p.pausa_inicio) + '–' + hmSP(p.pausa_fim)
+                  : ' · pausa desde ' + hmSP(p.pausa_inicio)),
+            situacao: sit,
+            cor,
+            fundo,
+            aria: 'Corrigir a presença de ' + dmaIso(p.data),
+            abrir: () => abrirPres(p)
+          };
+        }),
+        semPresencas: !!cd && !(cd.presencas || []).length,
+        opcoesDeGrade: opts(SIT_GRADE),
+        grades: ((cd && cd.grades) || []).map(g => {
+          const valor = (contexto.gradesEditadas || {})[g.ano_letivo] || g.status;
+          return {
+            ano: String(g.ano_letivo),
+            atual: rot(SIT_GRADE, g.status),
+            valor,
+            aria: 'Nova situação da grade de ' + g.ano_letivo,
+            escolher: e =>
+              contexto.setState({
+                gradesEditadas: { ...contexto.estado().gradesEditadas, [g.ano_letivo]: e.target.value }
+              }),
+            aplicar: () =>
+              valor === g.status
+                ? contexto.setState({ erroConsulta: 'Escolha uma situação diferente da atual.' })
+                : corrigir(m => A.adminSituacaoGrade(cdP.id, g.ano_letivo, valor, m), 'Situação da grade alterada')
+          };
+        }),
+        semGrade: !!cd && !(cd.grades || []).length,
+        opcoesDeRegistro: opts(SIT_REG),
+        registros: ((cd && cd.registros) || []).map(r => {
+          const ed = (contexto.registrosEditados || {})[r.id],
+            valor = ed != null ? ed : r.revisao_status || '';
+          return {
+            data: dmIso(r.data),
+            inicio: r.inicio || '—',
+            turma: r.turma || '—',
+            componente: r.componente || r.oficina || '—',
+            situacao: r.situacao || '—',
+            valor,
+            aria: 'Situação da revisão do registro de ' + dmaIso(r.data) + ', turma ' + (r.turma || ''),
+            escolher: e =>
+              contexto.setState({
+                registrosEditados: { ...contexto.estado().registrosEditados, [r.id]: e.target.value }
+              }),
+            bloqueado: !!contexto.salvandoSistema || valor === (r.revisao_status || ''),
+            aplicar: () => corrigir(m => A.adminSituacaoRegistro(r.id, valor, m), 'Situação do registro alterada')
+          };
+        }),
+        semRegistros: !!cd && !(cd.registros || []).length
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

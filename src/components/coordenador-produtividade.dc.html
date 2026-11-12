@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Coordenador do núcleo · Produtividade</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <sc-if value="{{ conectado }}" hint-placeholder-val="{{ false }}">
+  <section aria-label="Resumo" class="duas-colunas-celular d-grid colunas-repeat-4-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="4"><div class="borda-dde6e8 raio-12 p-16-18 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-13 cor-5b6b70">{{ indicador.titulo }}</span><span class="fs-28 fw-700 num-tabular-nums">{{ indicador.valor }}</span><span class="fs-12 cor-5b6b70 lh-1p4">{{ indicador.nota }}</span></div></sc-for>
+  </section>
+  <div class="empilha-celular d-grid colunas-minmax-0-1p3fr-minmax-0-1fr gap-12 alinha-start" style="opacity:{{ opacidade }}">
+    <section class="espaco-celular borda-dde6e8 raio-12 p-18-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="pd-h-dias">
+      <div class="d-flex eixo-column gap-2"><h3 id="pd-h-dias" class="m-0 fs-15">Atividades por dia</h3><span class="fs-12 cor-5b6b70">{{ diasTitulo }}</span></div>
+      <div aria-hidden="true" class="d-flex quebra-wrap gap-6-14 fs-12 cor-5b6b70"><span class="d-inline-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 fundo-23773a largura-fundo"></span>Realizadas</span><span class="d-inline-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 fundo-b42318 largura-fundo"></span>Não realizadas</span><span class="d-inline-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 fundo-e3b45c largura-fundo"></span>Sem registro</span></div>
+      <ul class="lista-none m-0 p-0 d-flex eixo-column gap-10">
+        <sc-for list="{{ dias }}" as="dia" hint-placeholder-count="5">
+          <li aria-label="{{ dia.aria }}" class="d-grid colunas-72-minmax-0-1fr-92 gap-10 alinha-center fs-13">
+            <span class="num-tabular-nums cor-34464d">{{ dia.data }}</span>
+            <span aria-hidden="true" class="d-flex h-12 raio-6 rolagem-hidden fundo-e8eef0"><span class="fundo-23773a largura-fundo" style="width:{{ dia.larguraRealizadas }}"></span><span class="fundo-b42318 largura-fundo" style="width:{{ dia.larguraNaoRealizadas }}"></span><span class="fundo-e3b45c largura-fundo" style="width:{{ dia.larguraSemRegistro }}"></span></span>
+            <span class="texto-right num-tabular-nums"><b>{{ dia.percentual }}</b> <span class="cor-5b6b70 fs-12">· {{ dia.texto }}</span></span>
+          </li>
+        </sc-for>
+      </ul>
+      <sc-if value="{{ semDias }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Nenhuma atividade prevista no período com os filtros escolhidos.</span></sc-if>
+    </section>
+    <section class="espaco-celular borda-dde6e8 raio-12 p-18-20 d-flex eixo-column gap-10 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="pd-h-faixas">
+      <div class="d-flex eixo-column gap-2"><h3 id="pd-h-faixas" class="m-0 fs-15">{{ faixasTitulo }}</h3><span class="fs-12 cor-5b6b70">{{ faixasSubtitulo }}</span></div>
+      <sc-for list="{{ faixas }}" as="faixa" hint-placeholder-count="4">
+        <div class="d-flex eixo-column gap-6">
+          <button onClick="{{ faixa.alternar }}" disabled="{{ faixa.semOficineiros }}" aria-expanded="{{ faixa.expandida }}" aria-label="{{ faixa.aria }}" class="d-grid colunas-minmax-0-1fr-minmax-0-1fr-32 gap-10 alinha-center w-100pc borda-0 fundo-transparent p-6-0 texto-left fonte-inherit cor-1a2b33 largura-fundo" style="cursor:pointer">
+            <span class="d-flex eixo-column"><span class="fs-14 fw-600">{{ faixa.nome }}</span><span class="fs-12 cor-5b6b70">{{ faixa.intervalo }}</span></span>
+            <span aria-hidden="true" class="h-8 fundo-e8eef0 raio-4"><span class="d-block h-8 raio-4 largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></span></span>
+            <b class="texto-right num-tabular-nums">{{ faixa.quantidade }}</b>
+          </button>
+          <sc-if value="{{ faixa.aberta }}" hint-placeholder-val="{{ false }}">
+            <ul class="lista-none m-0-0-6 p-8-10 fundo-f7fafb raio-8 d-flex eixo-column gap-2">
+              <sc-for list="{{ faixa.oficineiros }}" as="oficineiro" hint-placeholder-count="3"><li><button onClick="{{ oficineiro.abrir }}" aria-label="{{ oficineiro.aria }}" class="d-flex justifica-space-between gap-10 w-100pc borda-0 fundo-transparent p-6-4 fonte-inherit fs-13 cor-1a2b33 texto-left largura-fundo" style="cursor:pointer"><span>{{ oficineiro.nome }} <span class="cor-5b6b70">· {{ oficineiro.escola }}</span></span><b class="num-tabular-nums">{{ oficineiro.valor }}</b></button></li></sc-for>
+            </ul>
+          </sc-if>
+        </div>
+      </sc-for>
+      <sc-if value="{{ temSemPrevisao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70">{{ semPrevisaoTexto }}</span></sc-if>
+    </section>
+  </div>
+  <section class="borda-dde6e8 raio-12 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}" aria-labelledby="pd-h-top">
+    <div class="p-14-20 d-flex quebra-wrap alinha-center gap-8-12 borda-b-dde6e8">
+      <div class="d-flex eixo-column gap-2 flex-1-1-200"><h3 id="pd-h-top" class="m-0 fs-15">{{ rankingTitulo }}</h3><span class="fs-12 cor-5b6b70">{{ rankingDescricao }} · toque em um nome para abrir a presença</span></div>
+      <label for="topN" class="fs-13 cor-5b6b70">Mostrar</label>
+      <select id="topN" value="{{ limite }}" onChange="{{ escolherLimite }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="5">5 primeiros</option><option value="10">10 primeiros</option><option value="todos">Mostrar tudo</option></select>
+    </div>
+    <div role="table" aria-labelledby="pd-h-top">
+      <div role="row" class="produtividade-top-linha d-grid colunas-minmax-0-1fr-120-110 gap-10 p-10-20 fs-12 fw-600 cor-5b6b70 borda-b-e8eef0" style="background:var(--fundo-f9fbfc)"><span role="columnheader">Oficineiro</span><span role="columnheader" class="texto-right">Dias com presença</span><span role="columnheader" class="texto-right">Horas conferidas</span></div>
+      <sc-for list="{{ ranking }}" as="oficineiro" hint-placeholder-count="5">
+        <div role="row" class="produtividade-top-linha d-grid colunas-minmax-0-1fr-120-110 gap-10 p-6-20 fs-14 borda-b-e8eef0 alinha-center"><span role="cell"><button onClick="{{ oficineiro.abrir }}" aria-label="{{ oficineiro.aria }}" class="borda-0 fundo-transparent p-6-0 fonte-inherit fs-14 cor-1a2b33 texto-left sublinha-3" style="cursor:pointer;text-decoration:underline;text-decoration-color:#CFDADD">{{ oficineiro.nome }}</button> <span class="cor-5b6b70 fs-12">· {{ oficineiro.escola }}</span></span><span role="cell" class="texto-right num-tabular-nums">{{ oficineiro.dias }}</span><span role="cell" class="texto-right num-tabular-nums">{{ oficineiro.horas }}</span></div>
+      </sc-for>
+      <sc-if value="{{ semRanking }}" hint-placeholder-val="{{ false }}"><div class="p-24-20 texto-center fs-14 cor-5b6b70">Nenhum oficineiro com os filtros escolhidos.</div></sc-if>
+    </div>
+  </section>
+  </sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { minDeHora } = Base;
+class Component extends DCLogic {
+  renderVals() {
+    const contexto = this.props.contexto;
+    const {
+      oficineirosVisiveis,
+      periodo,
+      fimDoPeriodo,
+      gradeCompleta,
+      noFiltroDasAtividades,
+      hojeDasAtividades,
+      minutosDeAgora,
+      registroPorChave,
+      escolaNaData,
+      siglaDaEscola,
+      minutosContabilizados
+    } = contexto;
+    let indicadores = [],
+      diasDoPeriodo = [],
+      faixas = [],
+      ranking = [],
+      pdSemPrev = 0,
+      diasTitulo = '',
+      rankingDescricao = '';
+    if (contexto.conectado && contexto.tela === 'prod') {
+      const porOf = {},
+        porDia = {};
+      const ofsP = contexto.oficineiroFiltrado
+        ? contexto.oficineiros.filter(o => o.id === contexto.oficineiroFiltrado)
+        : oficineirosVisiveis;
+      ofsP.forEach(o => {
+        porOf[o.id] = { liq: 0, real: 0 };
+      });
+      for (let d = new Date(periodo.ini + 'T12:00:00'); Base.iso(d) <= fimDoPeriodo; d = Base.add(d, 1)) {
+        const dw = d.getDay(),
+          iso = Base.iso(d);
+        if (dw < 1 || dw > 5 || Base.feriado(d)) continue;
+        gradeCompleta.forEach(g => {
+          if (g.dia_semana !== dw || g.ano_letivo !== d.getFullYear() || !noFiltroDasAtividades(g)) return;
+          if (g.criado_em && iso < Base.iso(new Date(g.criado_em))) return;
+          if (iso === hojeDasAtividades && minDeHora(g.fim) > minutosDeAgora) return;
+          if (!registroPorChave[g.id + '|' + iso]) {
+            const eD = escolaNaData(g.oficineiro_id, iso);
+            if (eD != null && eD !== g.escola_id) return;
+          }
+          const reg = registroPorChave[g.id + '|' + iso],
+            valido = reg && reg.revisao_status !== 'anulado';
+          const st = !valido ? 'sem' : reg.situacao === 'Não realizada' ? 'nao' : 'real';
+          const dd = porDia[iso] || (porDia[iso] = { iso, real: 0, nao: 0, sem: 0 });
+          dd[st]++;
+          const o = porOf[g.oficineiro_id] || (porOf[g.oficineiro_id] = { liq: 0, real: 0 });
+          o.liq++;
+          if (st === 'real') o.real++;
+        });
+      }
+      const tot = Object.values(porDia).reduce(
+        (t, d) => ({ real: t.real + d.real, liq: t.liq + d.real + d.nao + d.sem }),
+        { real: 0, liq: 0 }
+      );
+      const pctN = (a, b) => (b ? Math.round((a / b) * 100) : null),
+        pctT = (a, b) => (b ? Math.round((a / b) * 100) + '%' : '—');
+      const hojeOfs = new Set(contexto.presencasDeHoje.filter(noFiltroDasAtividades).map(p => p.oficineiro_id));
+      const escN = new Set(ofsP.map(o => o.escola_id).filter(Boolean)).size;
+      indicadores = [
+        {
+          titulo: 'Oficineiros',
+          valor: String(ofsP.length),
+          nota: 'ativos · ' + escN + (escN === 1 ? ' escola' : ' escolas')
+        },
+        {
+          titulo: 'Atividades realizadas',
+          valor: Base.N(tot.real),
+          nota:
+            'de ' +
+            Base.N(tot.liq) +
+            (tot.liq === 1 ? ' prevista' : ' previstas') +
+            ' · ' +
+            periodo.rotulo.toLowerCase()
+        },
+        { titulo: 'Execução', valor: pctT(tot.real, tot.liq), nota: 'realizadas ÷ previstas' },
+        {
+          titulo: 'Presença hoje',
+          valor: String(ofsP.filter(o => hojeOfs.has(o.id)).length),
+          nota: 'de ' + ofsP.length + ' iniciaram as atividades'
+        }
+      ];
+      let dias = Object.values(porDia).sort((a, b) => (a.iso < b.iso ? -1 : 1));
+      const encerrados = dias.filter(d => d.iso < hojeDasAtividades);
+      dias = (encerrados.length ? encerrados : dias).slice(-10).reverse();
+      diasTitulo = !encerrados.length
+        ? 'Dias letivos no período'
+        : dias.length === 1
+          ? 'Último dia letivo encerrado no período'
+          : 'Últimos ' + dias.length + ' dias letivos encerrados no período';
+      diasDoPeriodo = dias.map(d => {
+        const liq = d.real + d.nao + d.sem,
+          dt = new Date(d.iso + 'T12:00:00'),
+          pc = pctN(d.real, liq);
+        return {
+          data: Base.WD[dt.getDay()] + ' ' + Base.dm(dt),
+          texto: d.real + ' de ' + liq,
+          percentual: pc == null ? '—' : pc + '%',
+          larguraRealizadas: liq ? ((d.real / liq) * 100).toFixed(1) + '%' : '0%',
+          larguraNaoRealizadas: liq ? ((d.nao / liq) * 100).toFixed(1) + '%' : '0%',
+          larguraSemRegistro: liq ? ((d.sem / liq) * 100).toFixed(1) + '%' : '0%',
+          aria:
+            Base.WDL[dt.getDay()] +
+            ', ' +
+            Base.dm(dt) +
+            ': ' +
+            d.real +
+            ' realizadas, ' +
+            d.nao +
+            ' não realizadas e ' +
+            d.sem +
+            ' sem registro, de ' +
+            liq +
+            ' previstas'
+        };
+      });
+      const FX = [
+        ['No ritmo', '90% ou mais', 'var(--texto-23773a)', x => x >= 90],
+        ['Estável', '75% a 89%', 'var(--texto-6c60e6)', x => x >= 75 && x < 90],
+        ['Atenção', '50% a 74%', '#E0892B', x => x >= 50 && x < 75],
+        ['Reforçar apoio', 'menos de 50%', 'var(--texto-b42318)', x => x < 50]
+      ];
+      const execOf = ofsP.map(o => ({ o, ex: pctN((porOf[o.id] || {}).real || 0, (porOf[o.id] || {}).liq || 0) }));
+      pdSemPrev = execOf.filter(x => x.ex == null).length;
+      const qtdF = FX.map(f => execOf.filter(x => x.ex != null && f[3](x.ex)));
+      const mxF = Math.max(1, ...qtdF.map(l => l.length));
+      faixas = FX.map((f, i) => {
+        const aberta = contexto.faixaDaProdutividade === f[0],
+          lista = qtdF[i].sort((a, b) => a.ex - b.ex || a.o.nome.localeCompare(b.o.nome, 'pt-BR'));
+        return {
+          nome: f[0],
+          intervalo: f[1],
+          cor: f[2],
+          quantidade: String(lista.length),
+          largura: Math.round((lista.length / mxF) * 100) + '%',
+          aberta: aberta && lista.length > 0,
+          expandida: aberta ? 'true' : 'false',
+          podeAbrir: lista.length > 0,
+          semOficineiros: lista.length === 0,
+          alternar: () => contexto.setState({ faixaDaProdutividade: aberta ? '' : f[0] }),
+          aria:
+            f[0] +
+            ', ' +
+            f[1] +
+            ': ' +
+            lista.length +
+            (lista.length === 1 ? ' oficineiro' : ' oficineiros') +
+            (lista.length ? (aberta ? '. Ocultar a lista.' : '. Mostrar a lista.') : ''),
+          oficineiros: lista.map(x => ({
+            nome: x.o.nome,
+            valor: x.ex + '%',
+            escola: siglaDaEscola(x.o.escola_id),
+            abrir: () =>
+              contexto.setState({
+                tela: 'aulas',
+                abas: { ...contexto.abas, aulas: 'ofic' },
+                oficineiroDasAtividades: x.o.id
+              }),
+            aria: 'Abrir as atividades de ' + x.o.nome
+          }))
+        };
+      });
+      let letivosP = 0;
+      for (let d = new Date(periodo.ini + 'T12:00:00'); Base.iso(d) <= fimDoPeriodo; d = Base.add(d, 1))
+        if (Base.letivo(d) && Base.iso(d) < hojeDasAtividades) letivosP++;
+      const presP = (contexto.presencasDoPeriodo || []).filter(noFiltroDasAtividades);
+      const top = ofsP
+        .map(o => {
+          const ps = presP.filter(p => p.oficineiro_id === o.id);
+          return {
+            o,
+            dias: new Set(ps.map(p => p.data)).size,
+            min: ps.reduce((x, p) => x + minutosContabilizados(p), 0)
+          };
+        })
+        .sort((a, b) => b.dias - a.dias || b.min - a.min || a.o.nome.localeCompare(b.o.nome, 'pt-BR'));
+      rankingDescricao = periodo.rotulo;
+      ranking = (contexto.limiteDoRanking === 'todos' ? top : top.slice(0, Number(contexto.limiteDoRanking) || 5)).map(
+        x => ({
+          nome: x.o.nome,
+          escola: siglaDaEscola(x.o.escola_id),
+          dias: x.dias + ' de ' + letivosP,
+          horas: Base.dur(x.min),
+          abrir: () =>
+            contexto.setState({
+              tela: 'presenca',
+              abas: { ...contexto.abas, presenca: 'ofic' },
+              oficineiroDaPresenca: x.o.id
+            }),
+          aria: 'Abrir a presença de ' + x.o.nome
+        })
+      );
+    }
+    return {
+      limite: contexto.limiteDoRanking,
+      escolherLimite: e => contexto.setState({ limiteDoRanking: e.target.value }),
+      conectado: contexto.conectado,
+      indicadores,
+      dias: diasDoPeriodo,
+      semDias: contexto.conectado && diasDoPeriodo.length === 0,
+      diasTitulo,
+      faixas,
+      temSemPrevisao: pdSemPrev > 0,
+      semPrevisaoTexto:
+        pdSemPrev +
+        (pdSemPrev === 1
+          ? ' oficineiro sem atividades previstas no período'
+          : ' oficineiros sem atividades previstas no período'),
+      ranking,
+      rankingDescricao,
+      faixasTitulo: contexto.oficineiroFiltrado
+        ? 'Execução das atividades · ' +
+          ((contexto.oficineiros.find(o => o.id === contexto.oficineiroFiltrado) || {}).nome || 'oficineiro')
+        : 'Execução das atividades dos oficineiros',
+      faixasSubtitulo: contexto.oficineiroFiltrado
+        ? 'atividades realizadas ÷ previstas · faixa do oficineiro escolhido no filtro'
+        : 'atividades realizadas ÷ previstas · toque em uma faixa para ver quem está nela',
+      rankingTitulo: contexto.oficineiroFiltrado
+        ? 'Presenças de ' +
+          ((contexto.oficineiros.find(o => o.id === contexto.oficineiroFiltrado) || {}).nome || 'oficineiro')
+        : 'Oficineiros com mais presenças',
+      semRanking: contexto.conectado && ranking.length === 0,
+      opacidade: contexto.carregandoAtividades ? 0.6 : 1
+    };
+  }
+}
+</script>
+</body>
+</html>

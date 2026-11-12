@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Analista · Onboarding</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <p class="m-0 fs-14 cor-34464d lh-1p5 max-w-820">Usuários ativados por Ordem de Serviço nas escolas da sua carteira. Faça o primeiro acesso com cada um (implementação e onboarding) e dê baixa quando concluir. O Gerente de Projetos acompanha em tempo real.</p>
+  <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-4 fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}" aria-labelledby="an-h-onbp">
+    <h3 id="an-h-onbp" class="m-0-0-8 fs-15">Pendentes · {{ total }}</h3>
+    <sc-for list="{{ pendentes }}" as="item" hint-placeholder-count="3">
+      <div class="d-flex quebra-wrap alinha-center gap-8-16 p-12-0 borda-t-e8eef0">
+        <div class="flex-1-1-240 min-w-0 d-flex eixo-column gap-2"><span class="fs-14 fw-600">{{ item.nome }}</span><span class="fs-12 cor-5b6b70 rolagem-hidden reticencias-ellipsis">{{ item.cargo }} · {{ item.email }}</span></div>
+        <div class="flex-1-1-220 d-flex eixo-column gap-2"><span class="fs-13">{{ item.escola }}</span><span class="fs-12 cor-5b6b70">OS {{ item.ordem }} · recebido {{ item.recebimento }} · <span style="color:{{ item.emAbertoCor }}">{{ item.emAberto }}</span></span></div>
+        <button onClick="{{ item.darBaixa }}" aria-haspopup="dialog" aria-label="{{ item.rotuloBaixa }}" class="largura-total-celular h-36 borda-0 cor-fff raio-8 p-0-14 fs-13 fw-600 espaco-nowrap fundo-0b7ea3" style="background:#0B7EA3">Dar baixa</button>
+      </div>
+    </sc-for>
+    <sc-if value="{{ semPendentes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70 p-8-0">Nenhuma pendência de onboarding.</span></sc-if>
+  </section>
+  <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-4 fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}" aria-labelledby="an-h-onbc">
+    <h3 id="an-h-onbc" class="m-0-0-8 fs-15">Concluídos</h3>
+    <sc-for list="{{ concluidos }}" as="item" hint-placeholder-count="1">
+      <div class="d-flex quebra-wrap alinha-center gap-6-16 p-10-0 borda-t-e8eef0 fs-13">
+        <span class="flex-1-1-220 fw-600">{{ item.nome }}</span><span class="flex-1-1-200 cor-34464d">{{ item.escola }}</span><span class="flex-1-1-240 cor-5b6b70 fs-12">{{ item.baixa }}</span>
+        <sc-if value="{{ item.podeDesfazer }}" hint-placeholder-val="{{ true }}"><button onClick="{{ item.desfazer }}" aria-label="{{ item.rotuloDesfazer }}" class="h-30 borda-cfdadd fundo-ffffff raio-6 p-0-10 fs-12 fw-600 cor-1a2b33 botao-secundario">Desfazer baixa</button></sc-if>
+      </div>
+    </sc-for>
+    <sc-if value="{{ semConcluidos }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70 p-8-0">Nenhum onboarding concluído ainda.</span></sc-if>
+  </section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { dmyIso } = Base;
+class Component extends DCLogic {
+  renderVals() {
+    const contexto = this.props.contexto;
+    const { onboardingsPendentes, onboardingsConcluidos } = contexto;
+    const escolaDe = item =>
+      item.escola_id ? contexto.nomeDaEscola(item.escola_id) : item.lotacao_original || 'Escola não reconhecida';
+    const linha = item => {
+      const recebimento = contexto.recebimentoDe(item),
+        dias = contexto.diasDesde(recebimento);
+      return {
+        nome: item.nome,
+        cargo: item.cargo || '—',
+        email: item.email || '—',
+        escola: escolaDe(item),
+        ordem: contexto.ordemDe(item),
+        recebimento: recebimento ? dmyIso(recebimento) : '—',
+        emAberto: dias + (dias === 1 ? ' dia em aberto' : ' dias em aberto'),
+        emAbertoCor: dias > 15 ? 'var(--texto-b42318)' : 'var(--texto-5b6b70)',
+        baixa: item.baixa_data
+          ? 'Baixa em ' +
+            dmyIso(item.baixa_data) +
+            ' · ' +
+            (item.baixa_forma || '') +
+            (item.baixa_obs ? ' · ' + item.baixa_obs : '')
+          : '',
+        rotuloBaixa: 'Dar baixa no onboarding de ' + item.nome,
+        darBaixa: () => contexto.abrirBaixa(item, escolaDe(item), contexto.ordemDe(item)),
+        podeDesfazer: item.baixa_por === contexto.usuario,
+        rotuloDesfazer: 'Desfazer a baixa de ' + item.nome,
+        desfazer: () => contexto.desfazerBaixa(item)
+      };
+    };
+    return {
+      opacidade: contexto.opacidade,
+      total: String(onboardingsPendentes.length),
+      pendentes: onboardingsPendentes.map(linha),
+      concluidos: onboardingsConcluidos.map(linha),
+      semPendentes: !onboardingsPendentes.length,
+      semConcluidos: !onboardingsConcluidos.length
+    };
+  }
+}
+</script>
+</body>
+</html>

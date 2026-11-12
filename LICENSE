@@ -1,0 +1,17 @@
+Copyright (c) 2026 João Vitor Nunes. Todos os direitos reservados.
+
+Este repositório é público apenas para consulta. Nenhuma licença é concedida.
+Sem autorização prévia e por escrito do autor, é proibido usar, copiar,
+modificar, mesclar, publicar, distribuir, sublicenciar ou vender o código, a
+marca, as imagens e a documentação aqui contidos, no todo ou em parte.
+
+O software é fornecido "no estado em que se encontra", sem garantia de qualquer
+tipo, expressa ou implícita.
+
+Componentes de terceiros não são cobertos por esta licença e pertencem aos
+respectivos autores:
+
+- src/runtime/dc-runtime.js: runtime de componentes declarativos (.dc.html).
+- React e React DOM 18.3.1: licença MIT (Meta Platforms, Inc. e afiliadas).
+- Leaflet 1.9.4: licença BSD de 2 cláusulas (Volodymyr Agafonkin e colaboradores).
+- Fonte Inter: SIL Open Font License 1.1 (vendor/fonts/inter/OFL.txt).

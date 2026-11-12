@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Coordenador do núcleo · Relatórios</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-dde6e8 raio-12 p-24 texto-center cor-5b6b70 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)">Entre com a conta do coordenador para ver os relatórios.</div></sc-if>
+  <sc-if value="{{ mostrarRelatorios }}" hint-placeholder-val="{{ false }}">
+  <section class="au-tabela borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidadeDosRelatorios }}" aria-labelledby="cr-titulo">
+    <div class="p-16-20 d-flex gap-10-14 alinha-center quebra-wrap borda-b-dde6e8">
+      <div class="d-flex eixo-column gap-2 flex-1-1-260 min-w-0"><h3 id="cr-titulo" class="m-0 fs-16">Relatórios do ciclo · aprovação da coordenação</h3><span class="fs-12 cor-5b6b70">{{ resumo }}</span></div>
+      <select aria-label="Ciclo dos relatórios" value="{{ ciclo }}" onChange="{{ escolherCiclo }}" class="largura-total-celular h-36 borda-cfdadd raio-8 p-0-8 fs-13 fonte-inherit fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesDeCiclo }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    </div>
+    <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="m-12-20-0 fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erro }}</div></sc-if>
+    <div role="table" aria-labelledby="cr-titulo" class="min-w-980">
+      <div role="row" class="au-cab d-grid gap-10 p-10-20 fs-12 fw-600 cor-5b6b70 borda-b-dde6e8" style="background:var(--fundo-f9fbfc);grid-template-columns:minmax(0,1.3fr) minmax(0,1.1fr) 50px 86px 86px 86px minmax(0,1.8fr) 190px"><span role="columnheader">Oficineiro</span><span role="columnheader">Escola</span><span role="columnheader">Dias</span><span role="columnheader">Horas válidas</span><span role="columnheader">Atividades realizadas</span><span role="columnheader">Check da escola</span><span role="columnheader">Situação</span><span role="columnheader"><span class="sr-only">Ações</span></span></div>
+      <sc-for list="{{ relatorios }}" as="relatorio" hint-placeholder-count="3">
+        <div role="row" class="au-linha d-grid gap-10 p-12-20 fs-13 borda-b-e8eef0 alinha-center num-tabular-nums" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1.1fr) 50px 86px 86px 86px minmax(0,1.8fr) 190px">
+          <b role="cell" class="au-larga quebra-palavra-anywhere">{{ relatorio.oficineiro }}</b>
+          <span role="cell" class="au-larga fs-12 cor-34464d quebra-palavra-anywhere">{{ relatorio.escola }}</span>
+          <span role="cell"><span class="so-celular cor-5b6b70">Dias: </span>{{ relatorio.dias }}</span>
+          <span role="cell"><span class="so-celular cor-5b6b70">Horas: </span>{{ relatorio.horas }}</span>
+          <span role="cell"><span class="so-celular cor-5b6b70">Realizadas: </span>{{ relatorio.realizadas }}</span>
+          <span role="cell" style="color:{{ relatorio.conferenciaCor }}"><span class="so-celular cor-5b6b70">Check: </span>{{ relatorio.conferencia }}</span>
+          <span role="cell" class="au-larga d-flex eixo-column gap-4 alinha-flex-start min-w-0"><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ relatorio.cor }};background:{{ relatorio.fundo }}">{{ relatorio.situacao }}</span><sc-if value="{{ relatorio.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-5b6b70 quebra-palavra-anywhere">{{ relatorio.observacao }}</span></sc-if></span>
+          <span role="cell" class="au-larga d-flex gap-6 quebra-wrap justifica-flex-end">
+            <sc-if value="{{ relatorio.podeDecidir }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ relatorio.devolver }}" disabled="{{ salvando }}" aria-expanded="{{ relatorio.devolucaoAberta }}" aria-label="{{ relatorio.ariaDevolver }}" class="h-32 borda-cfdadd fundo-ffffff cor-b42318 raio-6 p-0-10 fs-12 fw-600 botao-secundario">Devolver</button>
+              <button onClick="{{ relatorio.aprovar }}" disabled="{{ salvando }}" aria-label="{{ relatorio.ariaAprovar }}" class="h-32 borda-0 cor-fff raio-6 p-0-12 fs-12 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Aprovar</button>
+            </sc-if>
+          </span>
+          <sc-if value="{{ relatorio.mostrarDevolucao }}" hint-placeholder-val="{{ false }}">
+            <div class="d-flex quebra-wrap gap-8 alinha-center fundo-fbedeb raio-10 p-10-12" style="grid-column:1 / -1">
+              <input id="cr-dev-txt" aria-label="Motivo da devolução" value="{{ motivoDaDevolucao }}" onChange="{{ escreverMotivoDaDevolucao }}" maxlength="500" placeholder="Motivo da devolução (obrigatório)" class="flex-1 min-w-220 h-38 borda-bee9f5 raio-8 p-0-12 fs-14 fonte-inherit"></input>
+              <button onClick="{{ relatorio.confirmarDevolucao }}" disabled="{{ salvando }}" class="h-38 borda-0 fundo-b42318 cor-fff raio-8 p-0-14 fs-13 fw-600">Confirmar devolução</button>
+              <button onClick="{{ cancelarDevolucao }}" class="h-38 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-1a2b33 botao-secundario">Cancelar</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semRelatorios }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 texto-center fs-14 cor-5b6b70">{{ semRelatoriosTexto }}</p></sc-if>
+    <p class="m-0 p-12-20 fs-12 cor-5b6b70 borda-t-e8eef0">Fluxo: o oficineiro fecha o ciclo → a direção da escola aprova → a coordenação faz a aprovação final e o ciclo entra na medição. Devolvido, o relatório volta ao oficineiro para ajuste.</p>
+  </section>
+  <section aria-label="Resumo do período" class="duas-colunas-celular d-grid colunas-repeat-4-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="4"><div class="borda-dde6e8 raio-12 p-16-18 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-13 cor-5b6b70">{{ indicador.titulo }}</span><span class="fs-28 fw-700 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-12 cor-5b6b70 lh-1p4">{{ indicador.nota }}</span></div></sc-for>
+  </section>
+
+  <section class="borda-dde6e8 raio-12 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}" aria-labelledby="rel-titulo">
+    <div class="p-16-20 d-flex gap-10-14 alinha-center quebra-wrap borda-b-dde6e8">
+      <div class="d-flex eixo-column gap-2 flex-1-1-240 min-w-0"><h3 id="rel-titulo" class="m-0 fs-16 d-flex alinha-center gap-8 quebra-wrap">Previsto x realizado <span class="fs-12 fw-600 p-2-10 raio-999 fundo-e4f5fa cor-08617e">{{ unidadeTexto }}</span></h3><span aria-live="polite" class="fs-12 cor-5b6b70">{{ periodoTexto }} · {{ unidadeExplicacao }} · {{ ordemTexto }}</span></div>
+      <label class="largura-total-celular d-flex alinha-center gap-8"><span class="fs-12 cor-5b6b70 fw-600 espaco-nowrap">Agrupar por</span><select value="{{ corte }}" onChange="{{ escolherCorte }}" class="h-36 borda-cfdadd raio-8 p-0-10 fs-13 fonte-inherit fw-600 min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesDeCorte }}" as="opcao" hint-placeholder-count="8"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+      <div role="group" aria-label="Unidade" class="d-flex gap-4 fundo-e3ebed p-3 raio-8"><sc-for list="{{ unidades }}" as="unidade" hint-placeholder-count="2"><button onClick="{{ unidade.escolher }}" aria-pressed="{{ unidade.marcado }}" class="borda-0 raio-6 p-5-12 fs-12 fw-600 min-h-30 {{ unidade.classe }}" style="background:{{ unidade.fundo }};color:{{ unidade.cor }}">{{ unidade.rotulo }}</button></sc-for></div>
+    </div>
+    <div class="rolagem-x-auto">
+    <div role="table" aria-labelledby="rel-titulo" style="min-width:{{ larguraMinima }}">
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-5b6b70 borda-b-dde6e8" style="grid-template-columns:{{ colunas }};background:var(--fundo-f9fbfc)"><span role="columnheader">{{ colunaDoCorte }}</span><span role="columnheader" title="Atividades da grade no período">Previstas</span><sc-if value="{{ todasAsColunas }}" hint-placeholder-val="{{ false }}"><span role="columnheader" title="Canceladas: atividades da grade em feriados">Canceladas</span><span role="columnheader" title="Previstas menos canceladas">Prev. líquidas</span></sc-if><span role="columnheader">Realizadas</span><span role="columnheader">Não realizadas</span><span role="columnheader">Sem registro</span><sc-if value="{{ todasAsColunas }}" hint-placeholder-val="{{ false }}"><span role="columnheader" title="Atividades realizadas fora da grade ou em reposição">Extras</span></sc-if><span role="columnheader">Execução</span></div>
+      <sc-for list="{{ previstoRealizado }}" as="linha" hint-placeholder-count="4">
+        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-e8eef0 alinha-center num-tabular-nums" style="grid-template-columns:{{ colunas }};background:{{ linha.fundo }};font-weight:{{ linha.peso }}">
+          <span role="rowheader" class="quebra-palavra-anywhere">{{ linha.nome }}</span><span role="cell">{{ linha.previstas }}</span><sc-if value="{{ todasAsColunas }}" hint-placeholder-val="{{ false }}"><span role="cell">{{ linha.canceladas }}</span><span role="cell">{{ linha.liquidas }}</span></sc-if><span role="cell">{{ linha.realizadas }}</span><span role="cell">{{ linha.naoRealizadas }}</span><span role="cell">{{ linha.semRegistro }}</span><sc-if value="{{ todasAsColunas }}" hint-placeholder-val="{{ false }}"><span role="cell">{{ linha.extras }}</span></sc-if>
+          <span role="cell" class="d-flex alinha-center gap-8"><b class="w-44">{{ linha.execucao }}</b><span aria-hidden="true" class="flex-1 h-8 fundo-e8eef0 raio-4"><span class="d-block h-8 raio-4 largura-fundo" style="width:{{ linha.barra }};background:{{ linha.corDaBarra }}"></span></span></span>
+        </div>
+      </sc-for>
+      <sc-if value="{{ semPrevistas }}" hint-placeholder-val="{{ false }}"><div class="p-28-20 texto-center fs-14 cor-5b6b70">Nenhuma atividade prevista no período com os filtros escolhidos.</div></sc-if>
+    </div>
+    </div>
+    <div class="p-12-20 d-flex quebra-wrap gap-8-16 alinha-center">
+      <button onClick="{{ alternarColunas }}" aria-pressed="{{ todasAsColunasMarcado }}" class="h-34 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-34464d botao-secundario">{{ colunasTexto }}</button>
+      <span class="fs-12 cor-5b6b70">Execução: <span class="cor-1b5e2e fw-600">90% ou mais</span> · <span class="cor-9a6212 fw-600">75% a 89%</span> · <span class="cor-b42318 fw-600">abaixo de 75%</span></span>
+    </div>
+  </section>
+
+  <div class="empilha-celular d-grid colunas-minmax-0-1p6fr-minmax-0-1fr gap-12 alinha-start" style="opacity:{{ opacidade }}">
+    <section class="borda-dde6e8 raio-12 p-18-20 d-flex eixo-column gap-16 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="rel-h-reg">
+      <h3 id="rel-h-reg" class="m-0 fs-15">Registro de atividade</h3>
+      <div class="d-grid colunas-repeat-2-minmax-0-1fr gap-12">
+        <sc-for list="{{ indicadoresDoRegistro }}" as="indicador" hint-placeholder-count="2"><div class="fundo-f7fafb raio-10 p-12-14 d-flex eixo-column gap-2 min-w-0 largura-fundo"><span class="fs-12 cor-5b6b70">{{ indicador.titulo }}</span><span class="fs-22 fw-700 num-tabular-nums">{{ indicador.valor }}</span><span class="fs-12 cor-5b6b70">{{ indicador.nota }}</span></div></sc-for>
+      </div>
+      <div class="empilha-celular d-grid colunas-repeat-2-minmax-0-1fr gap-16">
+        <div class="d-flex eixo-column gap-8"><span class="fs-13 fw-600">Uso por solução</span><ul class="lista-none m-0 p-0 d-flex eixo-column gap-8">
+          <sc-for list="{{ solucoes }}" as="barra" hint-placeholder-count="3"><li class="d-grid colunas-minmax-0-1fr-44 gap-4-10 alinha-center fs-13"><span class="cor-34464d quebra-palavra-anywhere">{{ barra.rotulo }}</span><b class="texto-right num-tabular-nums">{{ barra.valor }}</b><sc-if value="{{ barra.temBarra }}" hint-placeholder-val="{{ true }}"><span aria-hidden="true" class="h-6 fundo-e8eef0 raio-3" style="grid-column:1 / -1"><span class="d-block h-6 fundo-6c60e6 raio-3 largura-fundo" style="width:{{ barra.largura }}"></span></span></sc-if></li></sc-for>
+        </ul></div>
+        <div class="d-flex eixo-column gap-8"><span class="fs-13 fw-600">Motivos de não realização</span><ul class="lista-none m-0 p-0 d-flex eixo-column gap-8">
+          <sc-for list="{{ motivos }}" as="barra" hint-placeholder-count="3"><li class="d-grid colunas-minmax-0-1fr-44 gap-4-10 alinha-center fs-13"><span class="cor-34464d quebra-palavra-anywhere">{{ barra.rotulo }}</span><b class="texto-right num-tabular-nums">{{ barra.valor }}</b><sc-if value="{{ barra.temBarra }}" hint-placeholder-val="{{ true }}"><span aria-hidden="true" class="h-6 fundo-e8eef0 raio-3" style="grid-column:1 / -1"><span class="d-block h-6 fundo-6c60e6 raio-3 largura-fundo" style="width:{{ barra.largura }}"></span></span></sc-if></li></sc-for>
+        </ul></div>
+      </div>
+    </section>
+    <section class="borda-dde6e8 raio-12 p-18-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="rel-h-grade">
+      <h3 id="rel-h-grade" class="m-0 fs-15">Grade de atividades</h3>
+      <sc-for list="{{ indicadoresDaGrade }}" as="indicador" hint-placeholder-count="2"><div class="fundo-f7fafb raio-10 p-12-14 d-flex eixo-column gap-2 min-w-0 largura-fundo"><span class="fs-12 cor-5b6b70">{{ indicador.titulo }}</span><span class="fs-22 fw-700 num-tabular-nums">{{ indicador.valor }}</span><span class="fs-12 cor-5b6b70">{{ indicador.nota }}</span></div></sc-for>
+    </section>
+  </div>
+
+  <details class="fs-13 cor-5b6b70 lh-1p55">
+    <summary class="cursor-pointer fw-600 min-h-32 d-flex alinha-center">Como os números são calculados</summary>
+    <ul class="m-6-0-0 pl-18 d-flex eixo-column gap-4">
+      <li>Previstas líquidas = realizadas + não realizadas + sem registro. Extras / reposições são contadas à parte e não entram na taxa de execução.</li>
+      <li>Canceladas são atividades da grade em feriados. Atividades anuladas pelo coordenador contam como sem registro.</li>
+      <li>Horas conferidas: até 8h00 por dia, mais as horas acima de 8h autorizadas. Execução do contrato = horas conferidas ÷ (8h por dia letivo encerrado × oficineiros).</li>
+      <li>Ocorrências técnicas: atividades não realizadas por falta de internet ou de equipamentos.</li>
+      <li>Período: {{ periodoTexto }}.</li>
+    </ul>
+  </details>
+  </sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { turmaTxt, detTipo, minDeHora } = Base;
+class Component extends DCLogic {
+  renderVals() {
+    const contexto = this.props.contexto;
+    const {
+      temposDeAula,
+      nomeDoOficineiro,
+      escolaDe,
+      siglaDaEscola,
+      periodo,
+      fimDoPeriodo,
+      gradeCompleta,
+      noFiltroDasAtividades,
+      hojeDasAtividades,
+      minutosDeAgora,
+      registroPorChave,
+      escolaNaData,
+      gradePorId,
+      minutosContabilizados,
+      oficineirosVisiveis,
+      agora,
+      textoDoFiltro,
+      TIPOS_DE_ATIVIDADE
+    } = contexto;
+    let previstoRealizado = [],
+      indicadoresDoRelatorio = [],
+      relTitulo = '',
+      periodoTexto = '',
+      relExportar = () => {},
+      relVazio = false,
+      indicadores = [],
+      solucoes = [],
+      motivosDeNaoRealizacao = [],
+      indicadoresDoRegistro = [],
+      indicadoresDaGrade = [];
+    if (contexto.conectado && contexto.tela === 'rel') {
+      const pesoG = g => (contexto.unidade === 'horas' ? temposDeAula(g.inicio, g.fim) : 1);
+      const pesoR = r => (contexto.unidade === 'horas' ? temposDeAula(r.inicio, r.fim) : 1);
+      const semanaDe = iso => {
+        const d = new Date(iso + 'T12:00:00'),
+          seg = Base.add(d, -((d.getDay() + 6) % 7));
+        return Base.iso(seg);
+      };
+      const CORTE = {
+        'Por oficineiro': x => [x.of, nomeDoOficineiro(x.of)],
+        'Por escola': x => [String(x.esc), escolaDe(x.esc)],
+        'Por oficineiro e escola': x => [x.of + '|' + x.esc, nomeDoOficineiro(x.of) + ' · ' + siglaDaEscola(x.esc)],
+        'Por tipo de atividade': x => [x.tipo, (TIPOS_DE_ATIVIDADE[x.tipo] || TIPOS_DE_ATIVIDADE.R).curto],
+        'Por professor regente': x => [x.prof || '', x.prof || 'Sem professor informado'],
+        'Por turma': x => [x.esc + '|' + x.turma, x.turma + ' · ' + siglaDaEscola(x.esc)],
+        'Por solução': x => [x.sol || '', x.sol || 'Sem solução informada'],
+        'Por semana e mês': x => {
+          const w = semanaDe(x.iso);
+          return [w, 'Semana de ' + Base.dm(new Date(w + 'T12:00:00'))];
+        }
+      };
+      const corte = CORTE[contexto.recorte] ? contexto.recorte : 'Por oficineiro e escola',
+        chave = CORTE[corte];
+      const grupos = {};
+      const soma = (x, campo, v) => {
+        const [k, l] = chave(x);
+        const gr = grupos[k] || (grupos[k] = { k, l, prev: 0, canc: 0, real: 0, nao: 0, extra: 0 });
+        gr[campo] += v;
+      };
+      const usados = new Set();
+      let semRegAulas = 0,
+        liqAulas = 0,
+        realAulas = 0;
+      for (let d = new Date(periodo.ini + 'T12:00:00'); Base.iso(d) <= fimDoPeriodo; d = Base.add(d, 1)) {
+        const dw = d.getDay(),
+          iso = Base.iso(d),
+          fer = !!Base.feriado(d);
+        if (dw < 1 || dw > 5) continue;
+        gradeCompleta.forEach(g => {
+          if (g.dia_semana !== dw || g.ano_letivo !== d.getFullYear() || !noFiltroDasAtividades(g)) return;
+          if (g.criado_em && iso < Base.iso(new Date(g.criado_em))) return;
+          if (iso === hojeDasAtividades && minDeHora(g.fim) > minutosDeAgora) return;
+          if (!registroPorChave[g.id + '|' + iso]) {
+            const eD = escolaNaData(g.oficineiro_id, iso);
+            if (eD != null && eD !== g.escola_id) return;
+          }
+          const reg = registroPorChave[g.id + '|' + iso],
+            valido = reg && reg.revisao_status !== 'anulado';
+          const x = {
+              of: g.oficineiro_id,
+              esc: g.escola_id,
+              tipo: g.tipo,
+              prof: g.professor || '',
+              turma: turmaTxt(g),
+              sol: (valido && detTipo(reg)) || detTipo(g) || '',
+              iso
+            },
+            w = pesoG(g);
+          soma(x, 'prev', w);
+          if (fer) {
+            soma(x, 'canc', w);
+            return;
+          }
+          if (reg) usados.add(reg.id);
+          liqAulas++;
+          if (valido) {
+            soma(x, reg.situacao === 'Não realizada' ? 'nao' : 'real', w);
+            if (reg.situacao !== 'Não realizada') realAulas++;
+          } else semRegAulas++;
+        });
+      }
+      contexto.registros.filter(noFiltroDasAtividades).forEach(r => {
+        if (usados.has(r.id) || r.revisao_status === 'anulado' || r.situacao === 'Não realizada') return;
+        const g = r.grade_aula_id ? gradePorId[r.grade_aula_id] : null;
+        soma(
+          {
+            of: r.oficineiro_id,
+            esc: r.escola_id,
+            tipo: r.tipo,
+            prof: r.professor_aula || (g && g.professor) || '',
+            turma: r.turma,
+            sol: detTipo(r),
+            iso: r.data
+          },
+          'extra',
+          pesoR(r)
+        );
+      });
+      const linhas = Object.values(grupos).map(gr => {
+        const liq = gr.prev - gr.canc;
+        return { ...gr, liq, sreg: Math.max(0, liq - gr.real - gr.nao) };
+      });
+      const exV = r => (r.liq ? r.real / r.liq : 9);
+      linhas.sort(
+        corte === 'Por semana e mês'
+          ? (a, b) => (a.k < b.k ? -1 : 1)
+          : (a, b) => exV(a) - exV(b) || a.l.localeCompare(b.l, 'pt-BR')
+      );
+      const tot = linhas.reduce(
+        (t, r) => ({
+          l: 'Total',
+          prev: t.prev + r.prev,
+          canc: t.canc + r.canc,
+          liq: t.liq + r.liq,
+          real: t.real + r.real,
+          nao: t.nao + r.nao,
+          sreg: t.sreg + r.sreg,
+          extra: t.extra + r.extra
+        }),
+        { l: 'Total', prev: 0, canc: 0, liq: 0, real: 0, nao: 0, sreg: 0, extra: 0 }
+      );
+      const percentual = (a, b) => (b ? Math.round((a / b) * 100) + '%' : '—');
+      relVazio = linhas.length === 0;
+      previstoRealizado = [...linhas, ...(linhas.length ? [tot] : [])].map((r, i, a) => ({
+        nome: r.l,
+        previstas: String(r.prev),
+        canceladas: String(r.canc),
+        liquidas: String(r.liq),
+        realizadas: String(r.real),
+        naoRealizadas: String(r.nao),
+        semRegistro: String(r.sreg),
+        extras: String(r.extra),
+        execucao: percentual(r.real, r.liq),
+        barra: r.liq ? Math.min(100, Math.round((r.real / r.liq) * 100)) + '%' : '0%',
+        corDaBarra: !r.liq
+          ? '#A9B8BD'
+          : r.real / r.liq >= 0.9
+            ? '#23773A'
+            : r.real / r.liq >= 0.75
+              ? '#E0892B'
+              : '#B42318',
+        fundo: i === a.length - 1 ? 'var(--fundo-f7fafb)' : 'var(--fundo-ffffff)',
+        peso: i === a.length - 1 ? '600' : '400',
+        total: i === a.length - 1,
+        aria: r.l + ': execução ' + percentual(r.real, r.liq)
+      }));
+      const fimD = new Date(fimDoPeriodo + 'T12:00:00');
+      periodoTexto = Base.dm(new Date(periodo.ini + 'T12:00:00')) + ' a ' + Base.dmy(fimD);
+      relTitulo = 'Previsto x realizado · ' + periodo.rotulo.toLowerCase() + ' · ' + corte.toLowerCase();
+
+      const presF = (contexto.presencasDoPeriodo || []).filter(noFiltroDasAtividades);
+      const confMin = presF.reduce((x, pr) => x + minutosContabilizados(pr), 0);
+      let letivos = 0;
+      for (
+        let d = new Date(periodo.ini + 'T12:00:00');
+        Base.iso(d) < hojeDasAtividades && Base.iso(d) <= periodo.fim;
+        d = Base.add(d, 1)
+      )
+        if (Base.letivo(d)) letivos++;
+      const nOfs = contexto.oficineiroFiltrado ? 1 : oficineirosVisiveis.length,
+        prevMin = letivos * 480 * nOfs;
+      const anoAt = agora.getFullYear();
+      const gradeAno = contexto.grade.filter(g => g.ano_letivo === anoAt && noFiltroDasAtividades(g));
+      const escAlvo = contexto.oficineiroFiltrado
+        ? (contexto.oficineiros.find(o => o.id === contexto.oficineiroFiltrado) || {}).escola_id
+        : null;
+      const turmasCad = (contexto.turmasDaRede || []).filter(
+        t =>
+          (!contexto.escolaDasAtividades || String(t.escola_id) === contexto.escolaDasAtividades) &&
+          (!escAlvo || t.escola_id === escAlvo)
+      );
+      const atendidas = new Set(gradeAno.map(g => g.escola_id + '|' + g.ano + '|' + g.turma)),
+        anosAtendidos = new Set(gradeAno.map(g => g.escola_id + '|' + g.ano));
+      const cadastradas = new Set(turmasCad.map(t => t.escola_id + '|' + t.ano + '|' + (t.turma || '')));
+      const cobertas = [...cadastradas].filter(k => {
+        const [e, a, tu] = k.split('|');
+        return tu ? atendidas.has(k) : anosAtendidos.has(e + '|' + a);
+      }).length;
+      const ofsAlvo = contexto.oficineiroFiltrado
+        ? contexto.oficineiros.filter(o => o.id === contexto.oficineiroFiltrado)
+        : oficineirosVisiveis;
+      const gradesPend = ofsAlvo.filter(o => {
+        const e = contexto.enviosDaGrade.find(x => x.oficineiro_id === o.id && x.ano_letivo === anoAt);
+        return !e || e.status !== 'validada';
+      }).length;
+      const regsOk = contexto.registros.filter(r => noFiltroDasAtividades(r) && r.revisao_status !== 'anulado');
+      const realizadas = regsOk.filter(r => r.situacao !== 'Não realizada'),
+        naoReal = regsOk.filter(r => r.situacao === 'Não realizada');
+      const estudantes = realizadas.reduce((x, r) => x + (r.presentes || 0), 0);
+      const comMatr = realizadas.filter(r => r.presentes != null && r.matriculados),
+        presTx = percentual(
+          comMatr.reduce((x, r) => x + r.presentes, 0),
+          comMatr.reduce((x, r) => x + r.matriculados, 0)
+        );
+      const contar = arr => {
+        const m = {};
+        arr.forEach(v => {
+          m[v] = (m[v] || 0) + 1;
+        });
+        return Object.entries(m).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'pt-BR'));
+      };
+      const sols = contar(realizadas.map(r => r.solucao || 'Sem solução informada')).slice(0, 3);
+      const comObj = realizadas.filter(r => r.objetivo),
+        objOk = comObj.filter(r => r.objetivo === 'Sim' || r.objetivo === 'Parcialmente').length;
+      const motivos = contar(naoReal.map(r => String(r.motivo || 'Outro').split(' · ')[0]));
+      const TEC = ['Sem internet', 'Equipamentos indisponíveis'],
+        tecnicas = naoReal.filter(r => TEC.includes(String(r.motivo || '').split(' · ')[0]));
+      const tecEsc = contar(tecnicas.map(r => siglaDaEscola(r.escola_id)));
+      const pctDe = (n, t) => (t ? Math.round((n / t) * 100) + '%' : '—');
+      indicadoresDoRelatorio = [
+        ['Presença na Escola', 'Horas de atendimento presencial', Base.dur(confMin), 'conferidas no período'],
+        [
+          'Presença na Escola',
+          'Execução do contrato',
+          pctDe(confMin, prevMin),
+          'horas conferidas ÷ previstas (8h por dia letivo encerrado)'
+        ],
+        [
+          'Grade de Atividades',
+          'Cobertura das escolas',
+          cadastradas.size ? pctDe(cobertas, cadastradas.size) : '—',
+          cadastradas.size
+            ? 'turmas atendidas ÷ cadastradas (' + cobertas + ' de ' + cadastradas.size + ')'
+            : 'nenhuma turma cadastrada'
+        ],
+        ['Grade de Atividades', 'Grades pendentes', String(gradesPend), 'sem envio ou validação em ' + anoAt],
+        ['Registro de Atividades', 'Estudantes atendidos', Base.N(estudantes), 'soma de presentes'],
+        ['Registro de Atividades', 'Taxa de presença', presTx, 'presentes ÷ matriculados'],
+        [
+          'Registro de Atividades',
+          'Uso por solução',
+          sols.length ? sols.map(([, n]) => pctDe(n, realizadas.length)).join(' · ') : '—',
+          sols.length ? sols.map(([k]) => k).join(' · ') : 'nenhuma atividade realizada no período'
+        ],
+        ['Registro de Atividades', 'Objetivos atingidos', pctDe(objOk, comObj.length), 'sim ou parcialmente'],
+        [
+          'Registro de Atividades',
+          'Motivos de não realização',
+          motivos.length ? motivos[0][0] + ' ' + pctDe(motivos[0][1], naoReal.length) : '—',
+          motivos.length > 1
+            ? motivos
+                .slice(1, 3)
+                .map(([k, n]) => k.toLowerCase() + ' ' + pctDe(n, naoReal.length))
+                .join(' · ')
+            : motivos.length
+              ? 'único motivo no período'
+              : 'nenhuma atividade não realizada'
+        ],
+        [
+          'Registro de Atividades',
+          'Ocorrências técnicas',
+          String(tecnicas.length),
+          tecEsc.length ? tecEsc[0][0] + ' concentra a maior parte' : 'nenhuma no período'
+        ]
+      ].map(([o, l, v, x]) => ({ o, l, v, s: x }));
+      const UN = contexto.unidade === 'horas' ? 'horas-aula' : 'aulas';
+      indicadores = [
+        {
+          titulo: 'Execução das atividades',
+          valor: pctDe(realAulas, liqAulas),
+          nota: liqAulas
+            ? realAulas + ' de ' + liqAulas + (liqAulas === 1 ? ' atividade prevista' : ' atividades previstas')
+            : 'nenhuma atividade prevista no período',
+          cor: 'var(--texto-08617e)'
+        },
+        {
+          titulo: 'Horas conferidas',
+          valor: Base.dur(confMin),
+          nota: 'execução do contrato: ' + pctDe(confMin, prevMin),
+          cor: 'var(--texto-1a2b33)'
+        },
+        {
+          titulo: 'Estudantes atendidos',
+          valor: Base.N(estudantes),
+          nota: 'taxa de presença: ' + presTx,
+          cor: 'var(--texto-1a2b33)'
+        },
+        {
+          titulo: 'Pendências',
+          valor: String(semRegAulas + gradesPend),
+          nota:
+            semRegAulas +
+            (semRegAulas === 1 ? ' atividade sem registro' : ' atividades sem registro') +
+            ' · ' +
+            gradesPend +
+            (gradesPend === 1 ? ' grade sem validação' : ' grades sem validação'),
+          cor: semRegAulas + gradesPend ? 'var(--texto-9a6212)' : 'var(--texto-1b5e2e)'
+        }
+      ];
+      const barras = (lista, total, vazio) =>
+        lista.length
+          ? lista.map(([k, n]) => ({
+              rotulo: k,
+              valor: pctDe(n, total),
+              largura: total ? Math.round((n / total) * 100) + '%' : '0%',
+              quantidade: String(n),
+              temBarra: true
+            }))
+          : [{ rotulo: vazio, valor: '', largura: '0%', quantidade: '', temBarra: false }];
+      solucoes = barras(sols, realizadas.length, 'Nenhuma atividade realizada no período');
+      motivosDeNaoRealizacao = barras(
+        motivos.slice(0, 3),
+        naoReal.length,
+        'Nenhuma atividade não realizada no período'
+      );
+      indicadoresDoRegistro = [
+        { titulo: 'Objetivos atingidos', valor: pctDe(objOk, comObj.length), nota: 'sim ou parcialmente' },
+        {
+          titulo: 'Ocorrências técnicas',
+          valor: String(tecnicas.length),
+          nota: tecEsc.length ? tecEsc[0][0] + ' concentra a maior parte' : 'nenhuma no período'
+        }
+      ];
+      indicadoresDaGrade = [
+        {
+          titulo: 'Cobertura das escolas',
+          valor: cadastradas.size ? pctDe(cobertas, cadastradas.size) : '—',
+          nota: cadastradas.size
+            ? 'turmas atendidas ÷ cadastradas (' + cobertas + ' de ' + cadastradas.size + ')'
+            : 'nenhuma turma cadastrada'
+        },
+        { titulo: 'Grades pendentes', valor: String(gradesPend), nota: 'sem envio ou validação em ' + anoAt }
+      ];
+      relExportar = () =>
+        contexto.baixarCsv(
+          [
+            [relTitulo + ' (' + UN + ')'],
+            ['Período', periodoTexto + ' · ' + textoDoFiltro],
+            [],
+            [
+              corte.replace(/^Por /, '').replace(/^./, c => c.toUpperCase()),
+              'Previstas',
+              'Canceladas',
+              'Previstas líquidas',
+              'Realizadas',
+              'Não realizadas',
+              'Sem registro',
+              'Extras',
+              'Execução'
+            ],
+            ...previstoRealizado.map(r => [
+              r.nome,
+              r.previstas,
+              r.canceladas,
+              r.liquidas,
+              r.realizadas,
+              r.naoRealizadas,
+              r.semRegistro,
+              r.extras,
+              r.execucao
+            ]),
+            [],
+            ['Indicador', 'Grupo', 'Valor', 'Detalhe'],
+            ...indicadoresDoRelatorio.map(k => [k.l, k.o, k.v, k.s])
+          ],
+          'relatorio-' +
+            corte
+              .toLowerCase()
+              .replace(/[^a-z]+/g, '-')
+              .replace(/-+$/, '') +
+            '-' +
+            periodo.ini +
+            '.csv'
+        );
+    }
+    contexto.registrarExportador(relExportar);
+    return {
+      semLogin: !contexto.conectado,
+      previstoRealizado,
+      periodoTexto,
+      semPrevistas: contexto.conectado && relVazio,
+      opacidade: contexto.carregandoAtividades ? 0.6 : 1,
+      colunaDoCorte: (contexto.recorte || 'Por oficineiro e escola')
+        .replace(/^Por /, '')
+        .replace(/^./, c => c.toUpperCase()),
+      ...(() => {
+        const SITC = {
+          fechado: ['Aguardando a direção da escola', 'var(--texto-9a6212)', 'var(--fundo-faefd9)'],
+          aprovado_direcao: ['Aprovado pela direção · aguardando você', 'var(--texto-08617e)', 'var(--fundo-e4f5fa)'],
+          aprovado_coordenacao: ['Aprovado · entra na medição', 'var(--texto-1b5e2e)', 'var(--fundo-e2f2e5)'],
+          devolvido: ['Devolvido ao oficineiro', 'var(--texto-b42318)', 'var(--fundo-fbedeb)']
+        };
+        const MS = [
+          'janeiro',
+          'fevereiro',
+          'março',
+          'abril',
+          'maio',
+          'junho',
+          'julho',
+          'agosto',
+          'setembro',
+          'outubro',
+          'novembro',
+          'dezembro'
+        ];
+        const mt = v => MS[Number(v.slice(5, 7)) - 1] + ' de ' + v.slice(0, 4);
+        const dm = v =>
+          v
+            ? new Date(v).toLocaleDateString('pt-BR', {
+                timeZone: 'America/Sao_Paulo',
+                day: '2-digit',
+                month: '2-digit'
+              })
+            : '';
+        const dur = m => Math.floor((m || 0) / 60) + 'h' + String((m || 0) % 60).padStart(2, '0');
+        const base = contexto.cicloBaseDosRelatorios(),
+          comp = contexto.cicloDosRelatorios || base;
+        const opts = [];
+        for (let k = 0; k < 12; k++) {
+          const d = new Date(Number(base.slice(0, 4)), Number(base.slice(5, 7)) - 1 - k, 1);
+          const v = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-01';
+          opts.push({ valor: v, rotulo: mt(v).charAt(0).toUpperCase() + mt(v).slice(1) });
+        }
+        const relatorios = contexto.relatoriosDoCiclo || [];
+        const cont = st => relatorios.filter(r => r.status === st).length;
+        return {
+          opacidadeDosRelatorios: contexto.carregandoRelatorios ? 0.6 : 1,
+          ciclo: comp,
+          opcoesDeCiclo: opts,
+          escolherCiclo: e => {
+            const v = e.target.value;
+            contexto.setState({ cicloDosRelatorios: v, relatoriosDoCiclo: [], relatorioADevolver: null }, () =>
+              contexto.carregarRelatoriosDoCiclo(v)
+            );
+          },
+          resumo: !contexto.relatoriosCarregados
+            ? 'Carregando…'
+            : relatorios.length
+              ? cont('aprovado_direcao') +
+                ' aguardando você · ' +
+                cont('fechado') +
+                ' com a direção · ' +
+                cont('aprovado_coordenacao') +
+                ' aprovados · ' +
+                cont('devolvido') +
+                ' devolvidos'
+              : 'Nenhum relatório neste ciclo',
+          temErro: !!contexto.erroRelatorios,
+          erro: contexto.erroRelatorios,
+          salvando: !!contexto.salvandoRelatorio,
+          motivoDaDevolucao: contexto.motivoDaDevolucao,
+          escreverMotivoDaDevolucao: e => contexto.setState({ motivoDaDevolucao: e.target.value, erroRelatorios: '' }),
+          cancelarDevolucao: () =>
+            contexto.setState({ relatorioADevolver: null, motivoDaDevolucao: '', erroRelatorios: '' }),
+          semRelatorios: !!contexto.relatoriosCarregados && !relatorios.length && !contexto.carregandoRelatorios,
+          semRelatoriosTexto:
+            'Nenhum relatório do ciclo de ' + mt(comp) + '. Os ciclos fecham sozinhos depois do último dia.',
+          relatorios: relatorios.map(r => {
+            const st = SITC[r.status] || SITC.fechado;
+            const aberto = contexto.relatorioADevolver === r.id;
+            return {
+              oficineiro: r.oficineiro,
+              escola: r.escola,
+              dias: String(r.dias_presenca),
+              horas: dur(r.validos_min),
+              realizadas: String(r.realizadas),
+              conferencia: r.confirmadas + ' de ' + r.registradas,
+              conferenciaCor:
+                r.registradas && r.confirmadas === r.registradas ? 'var(--texto-1b5e2e)' : 'var(--texto-9a6212)',
+              situacao: st[0],
+              cor: st[1],
+              fundo: st[2],
+              temObservacao: r.status !== 'fechado',
+              observacao:
+                r.status === 'devolvido'
+                  ? (r.devolvido_nome ? 'Por ' + r.devolvido_nome + ': ' : '') + (r.motivo_devolucao || '')
+                  : r.status === 'aprovado_coordenacao'
+                    ? 'Aprovado por ' +
+                      (r.coordenacao_nome || 'coordenação') +
+                      (r.coordenacao_em ? ' em ' + dm(r.coordenacao_em) : '')
+                    : 'Direção: ' + (r.direcao_nome || '—') + (r.direcao_em ? ' em ' + dm(r.direcao_em) : ''),
+              podeDecidir: r.status === 'aprovado_direcao',
+              devolucaoAberta: aberto ? 'true' : 'false',
+              mostrarDevolucao: aberto,
+              ariaDevolver: 'Devolver o relatório de ' + r.oficineiro,
+              ariaAprovar: 'Aprovar o relatório de ' + r.oficineiro,
+              devolver: () =>
+                contexto.setState(
+                  { relatorioADevolver: aberto ? null : r.id, motivoDaDevolucao: '', erroRelatorios: '' },
+                  () =>
+                    setTimeout(() => {
+                      const el = document.getElementById('cr-dev-txt');
+                      if (el) el.focus();
+                    }, 30)
+                ),
+              confirmarDevolucao: () => contexto.devolverRelatorio(r),
+              aprovar: () => contexto.aprovarRelatorio(r)
+            };
+          })
+        };
+      })(),
+      mostrarRelatorios: contexto.tela === 'rel' && contexto.conectado,
+      indicadores,
+      solucoes,
+      motivos: motivosDeNaoRealizacao,
+      indicadoresDoRegistro,
+      indicadoresDaGrade,
+      corte: contexto.recorte || 'Por oficineiro e escola',
+      opcoesDeCorte: [
+        'Por oficineiro',
+        'Por escola',
+        'Por oficineiro e escola',
+        'Por tipo de atividade',
+        'Por professor regente',
+        'Por turma',
+        'Por solução',
+        'Por semana e mês'
+      ].map(c => ({ valor: c, rotulo: c.replace(/^Por /, '').replace(/^./, x => x.toUpperCase()) })),
+      escolherCorte: e => contexto.setState({ recorte: e.target.value }),
+      todasAsColunas: !!contexto.mostrarTodasAsColunas,
+      todasAsColunasMarcado: contexto.mostrarTodasAsColunas ? 'true' : 'false',
+      colunasTexto: contexto.mostrarTodasAsColunas ? 'Mostrar só as colunas principais' : 'Mostrar todas as colunas',
+      alternarColunas: () => contexto.setState({ mostrarTodasAsColunas: !contexto.mostrarTodasAsColunas }),
+      colunas: contexto.mostrarTodasAsColunas
+        ? 'minmax(0,2fr) repeat(7,minmax(0,.8fr)) minmax(0,1.3fr)'
+        : 'minmax(0,2.2fr) repeat(4,minmax(0,.8fr)) minmax(0,1.4fr)',
+      larguraMinima: contexto.mostrarTodasAsColunas ? '940px' : '640px',
+      unidadeTexto: contexto.unidade === 'horas' ? 'em horas-aula' : 'em atividades',
+      unidadeExplicacao:
+        contexto.unidade === 'horas'
+          ? 'cada horário de 50 min conta 1'
+          : 'cada atividade conta 1, qualquer que seja a duração',
+      ordemTexto: (contexto.recorte || '') === 'Por semana e mês' ? 'Em ordem de data.' : 'Menor execução primeiro.',
+      unidades: [
+        ['aulas', 'Atividades'],
+        ['horas', 'Horas-aula']
+      ].map(([k, l]) => ({
+        rotulo: l,
+        marcado: contexto.unidade === k ? 'true' : 'false',
+        escolher: () => contexto.setState({ unidade: k }),
+        classe: contexto.unidade === k ? 'fundo-ffffff' : 'fundo-transparent',
+        fundo: contexto.unidade === k ? 'var(--fundo-ffffff)' : 'transparent',
+        cor: contexto.unidade === k ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)'
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

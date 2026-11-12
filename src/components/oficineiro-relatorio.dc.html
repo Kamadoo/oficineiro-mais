@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Oficineiro · Relatório</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <div class="d-flex quebra-wrap alinha-center gap-10-12">
+    <label class="largura-total-celular d-flex alinha-center gap-8"><span class="oculto-celular fs-12 cor-5b6b70 fw-600">Ciclo</span><select value="{{ ciclo }}" onChange="{{ escolherCiclo }}" aria-label="Ciclo do relatório" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit fw-600 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff);min-width:0;min-width:180px"><sc-for list="{{ ciclos }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <span class="fs-12 fw-600 p-5-10 raio-999 espaco-nowrap" style="color:{{ situacao.cor }};background:{{ situacao.fundo }}">{{ situacao.texto }}</span>
+    <div class="oculto-celular flex-1"></div>
+    <div class="largura-total-celular d-flex gap-8 quebra-wrap">
+      <button onClick="{{ abrirDocumento }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-34464d flex-1-1-auto botao-secundario">Imprimir / PDF</button>
+      <sc-if value="{{ podeReenviar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ pedirReenvio }}" class="h-40 flex-1-1-auto borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Reenviar para aprovação</button></sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ devolvido }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-13 cor-7a1f17 fundo-fbedeb raio-10 p-12-14 lh-1p5">{{ devolvidoTexto }}</span></sc-if>
+  <sc-if value="{{ confirmando }}" hint-placeholder-val="{{ false }}">
+    <div role="alertdialog" aria-label="Confirmar envio do ciclo" class="fundo-ffffff raio-12 p-16-18 d-flex eixo-column gap-12 largura-fundo" style="border:1px solid var(--borda-dde6e8);border-color:#0B7EA3">
+      <b class="fs-15">Reenviar {{ cicloNome }} para aprovação?</b>
+      <span class="fs-14 cor-34464d lh-1p5">Depois de reenviado, os registros e as presenças deste ciclo voltam a ficar travados.</span>
+      <sc-if value="{{ temPendencias }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-7a4e0b fundo-fdf6e7 raio-8 p-8-10">Atenção: ainda há {{ pendenciasTexto }}.</span></sc-if>
+      <div class="d-flex gap-8 quebra-wrap"><button onClick="{{ confirmarReenvio }}" disabled="{{ ocupado }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Confirmar reenvio</button><button onClick="{{ cancelarReenvio }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-34464d botao-secundario">Cancelar</button></div>
+    </div>
+  </sc-if>
+
+  <div class="duas-colunas-celular d-grid colunas-repeat-4-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
+    <sc-for list="{{ cartoes }}" as="cartao" hint-placeholder-count="4">
+      <div class="borda-dde6e8 raio-12 p-16 d-flex eixo-column gap-4 fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-13 cor-5b6b70">{{ cartao.rotulo }}</span><span class="fs-24 fw-700 num-tabular-nums" style="color:{{ cartao.cor }}">{{ cartao.valor }}</span><span class="fs-12 cor-5b6b70">{{ cartao.nota }}</span></div>
+    </sc-for>
+  </div>
+
+
+  <sc-if value="{{ temPendencias }}" hint-placeholder-val="{{ false }}">
+    <section class="espaco-celular fundo-ffffff raio-12 p-18-20 d-flex eixo-column gap-4 largura-fundo" style="border:1px solid var(--borda-dde6e8);border-left:4px solid #E0A93B">
+      <h3 class="m-0-0-6 fs-15">Pendências do ciclo</h3>
+      <sc-for list="{{ pendencias }}" as="pendencia" hint-placeholder-count="3">
+        <div class="d-flex quebra-wrap alinha-center gap-6-12 p-10-0 borda-t-e9eff1">
+          <span class="fs-13 fw-600 num-tabular-nums min-w-86">{{ pendencia.data }}</span>
+          <span class="flex-1-1-220 fs-14 cor-1a2b33">{{ pendencia.texto }}</span>
+          <sc-if value="{{ pendencia.temAcao }}" hint-placeholder-val="{{ true }}"><button onClick="{{ pendencia.executar }}" class="h-34 borda-1-solid-0b7ea3 fundo-ffffff cor-0b7ea3 raio-8 p-0-12 fs-13 fw-600">{{ pendencia.acao }}</button></sc-if>
+        </div>
+      </sc-for>
+    </section>
+  </sc-if>
+
+  <section id="rel-lista" class="borda-dde6e8 raio-12 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+    <div class="d-flex quebra-wrap alinha-center gap-10-12 p-14-16 borda-b-e9eff1">
+      <div class="largura-total-celular d-flex gap-4 fundo-edf2f3 p-4 raio-10" role="tablist">
+        <sc-for list="{{ abas }}" as="aba" hint-placeholder-count="2"><button role="tab" aria-selected="{{ aba.atual }}" onClick="{{ aba.abrir }}" class="flex-1-1-auto borda-0 raio-7 p-8-14 fs-14 fw-600 espaco-nowrap {{ aba.classe }}" style="background:{{ aba.fundo }};color:{{ aba.cor }}">{{ aba.rotulo }}</button></sc-for>
+      </div>
+      <div class="oculto-celular flex-1"></div>
+      <sc-if value="{{ abaAtividades }}" hint-placeholder-val="{{ true }}">
+        <div class="largura-total-celular d-flex gap-8 quebra-wrap">
+          <select value="{{ turma }}" onChange="{{ escolherTurma }}" aria-label="Turma" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit min-w-0 flex-1-1-140 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as turmas</option><sc-for list="{{ turmas }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
+        </div>
+      </sc-if>
+      <button onClick="{{ exportar }}" class="largura-total-celular borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-34464d botao-secundario" style="height:40px;height:40px">Baixar planilha</button>
+    </div>
+
+    <sc-if value="{{ abaAtividades }}" hint-placeholder-val="{{ true }}">
+      <sc-for list="{{ grupos }}" as="grupo" hint-placeholder-count="3">
+        <div role="table" id="{{ grupo.id }}" aria-label="{{ grupo.titulo }}" style="background:{{ grupo.fundo }};box-shadow:{{ grupo.sombra }};transition:background 0.4s ease,box-shadow 0.4s ease">
+          <div class="d-flex alinha-center gap-10 p-14-16-10 borda-t-e9eff1">
+            <span class="w-10 h-10 raio-5 flex-none largura-fundo" style="background:{{ grupo.cor }}" aria-hidden="true"></span>
+            <h3 class="m-0 fs-15">{{ grupo.titulo }}</h3>
+            <span class="fs-12 fw-600 cor-5b6b70 fundo-edf2f3 raio-999 p-2-8">{{ grupo.total }}</span>
+          </div>
+          <div role="row" class="oculto-celular d-grid gap-12 p-6-16 fs-12 fw-600 cor-5b6b70" style="background:var(--fundo-f9fbfc);grid-template-columns:96px minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,1fr)">
+            <span role="columnheader">Data</span><span role="columnheader">Turma</span><span role="columnheader">Tipo · solução</span><span role="columnheader">{{ grupo.coluna }}</span>
+          </div>
+          <sc-for list="{{ grupo.linhas }}" as="linha" hint-placeholder-count="3">
+            <button role="row" onClick="{{ linha.abrir }}" aria-label="{{ linha.aria }}" class="relatorio-linha d-grid gap-4-12 alinha-center w-100pc texto-left p-12-16 fs-14 cor-1a2b33 largura-fundo fundo-ffffff" style="grid-template-columns:96px minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,1fr);border:0;border-top:1px solid var(--borda-e9eff1);background:var(--fundo-ffffff)">
+              <span class="num-tabular-nums fw-600">{{ linha.data }}</span>
+              <span class="fw-600">{{ linha.turma }}</span>
+              <span class="d-flex eixo-column min-w-0"><span class="fs-13 fw-600" style="color:{{ linha.corDoTexto }}">{{ linha.tipo }}</span><span class="fs-12 cor-5b6b70 rolagem-hidden reticencias-ellipsis espaco-nowrap">{{ linha.detalhe }}</span></span>
+              <span class="fs-13 num-tabular-nums" style="color:{{ linha.extraCor }};font-weight:{{ linha.extraPeso }}">{{ linha.extra }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-for>
+      <sc-if value="{{ semAtividades }}" hint-placeholder-val="{{ false }}"><div class="p-28-16 texto-center fs-14 cor-5b6b70 borda-t-e9eff1">{{ semAtividadesTexto }}</div></sc-if>
+    </sc-if>
+
+    <sc-if value="{{ abaHoras }}" hint-placeholder-val="{{ false }}">
+      <div class="p-12-16 fs-13 cor-5b6b70 fundo-f9fbfc lh-1p5">Tempo trabalhado na escola, descontado o almoço. Valem até 8h por dia; o que passar disso vai para o coordenador do núcleo decidir se entra no banco de horas.</div>
+      <div role="table" aria-label="Horas na escola">
+        <div role="row" class="oculto-celular d-grid gap-12 p-10-16 fs-12 fw-600 cor-5b6b70 borda-t-e9eff1" style="grid-template-columns:96px minmax(0,1fr) 80px 80px minmax(0,1.4fr)">
+          <span role="columnheader">Data</span><span role="columnheader">Início → encerramento</span><span role="columnheader">Total</span><span role="columnheader">Válidas</span><span role="columnheader">Situação</span>
+        </div>
+        <sc-for list="{{ horas }}" as="linha" hint-placeholder-count="6">
+          <div role="row" class="relatorio-linha-horas d-grid gap-4-12 alinha-center borda-t-e9eff1 p-12-16 fs-14" style="grid-template-columns:96px minmax(0,1fr) 80px 80px minmax(0,1.4fr)">
+            <span class="num-tabular-nums fw-600">{{ linha.data }}</span>
+            <span class="num-tabular-nums cor-34464d">{{ linha.faixa }}</span>
+            <span class="num-tabular-nums">{{ linha.total }}</span>
+            <span class="num-tabular-nums fw-600">{{ linha.validas }}</span>
+            <span class="d-flex quebra-wrap alinha-center gap-6"><span class="fs-12 fw-600 p-2-8 raio-999" style="color:{{ linha.situacaoCor }};background:{{ linha.situacaoFundo }}">{{ linha.situacao }}</span><sc-if value="{{ linha.temAcao }}" hint-placeholder-val="{{ false }}"><button onClick="{{ linha.justificar }}" class="h-30 borda-1-solid-0b7ea3 fundo-ffffff cor-0b7ea3 raio-8 p-0-10 fs-12 fw-600">Justificar</button></sc-if><span class="flex-base-100pc fs-12 cor-5b6b70">{{ linha.nota }}</span></span>
+          </div>
+        </sc-for>
+        <sc-if value="{{ semHoras }}" hint-placeholder-val="{{ false }}"><div class="p-28-16 texto-center fs-14 cor-5b6b70">Nenhuma presença registrada neste ciclo.</div></sc-if>
+      </div>
+    </sc-if>
+  </section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { dataDe } = Base;
+const GRUPOS = [
+  ['Realizada', 'realizadas', 'Atividades realizadas', 'var(--texto-23773a)', 'Presentes'],
+  ['Pendente', 'pendentes', 'Atividades pendentes de registro', '#E0A93B', ''],
+  ['Não realizada', 'nao', 'Atividades não realizadas', 'var(--texto-b42318)', 'Motivo'],
+  ['Anulada', 'anuladas', 'Atividades anuladas pelo coordenador', 'var(--texto-8a999e)', 'Motivo'],
+  ['Feriado', 'feriados', 'Feriados', 'var(--texto-8a999e)', '']
+];
+const SITUACAO_DO_CICLO = {
+  fechado: ['Enviado à direção', 'var(--texto-34464d)', 'var(--fundo-e8eef0)'],
+  aprovado_direcao: ['Aprovado pela direção', 'var(--texto-1a3f9c)', 'var(--fundo-eff3fd)'],
+  aprovado_coordenacao: ['Aprovado', 'var(--texto-1b5e2e)', 'var(--fundo-e2f2e5)'],
+  devolvido: ['Devolvido para ajuste', 'var(--texto-b42318)', 'var(--fundo-fbedeb)']
+};
+class Component extends DCLogic {
+  lembrar(mudanca) {
+    Object.assign(this.props.memoria, mudanca);
+    this.forceUpdate();
+  }
+  verPendentes() {
+    const contexto = this.props.contexto;
+    contexto.lembrar('relatorio', { aba: 'aulas', turma: '', destaque: true });
+    setTimeout(() => {
+      const grupo = document.getElementById('rel-g-pendentes') || document.getElementById('rel-lista');
+      if (grupo) {
+        grupo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const botao = grupo.querySelector('button');
+        if (botao) botao.focus({ preventScroll: true });
+      }
+      contexto.apagarDestaqueDepois();
+    }, 50);
+  }
+  renderVals() {
+    const contexto = this.props.contexto,
+      memoria = this.props.memoria;
+    const { competencia, linhas, horas, pendencias, editavel, cicloAtual, devolvido, fimDoCiclo } = contexto.relatorio;
+    const situacaoDoCiclo = contexto.relatorioDoCiclo;
+    const filtradas = linhas.filter(linha => !memoria.turma || linha.turma === memoria.turma);
+    const grupos = GRUPOS.map(([situacao, id, titulo, cor, coluna]) => {
+      const pendente = situacao === 'Pendente';
+      const doGrupo = filtradas
+        .filter(linha => linha.situacao === situacao)
+        .map(linha => ({
+          ...linha,
+          extra:
+            situacao === 'Realizada'
+              ? linha.presenca + (linha.devolvida ? ' · devolvida' : '')
+              : pendente
+                ? editavel
+                  ? 'Registrar →'
+                  : 'Sem registro'
+                : linha.nota,
+          extraCor: pendente && editavel ? 'var(--texto-0b7ea3)' : 'var(--texto-34464d)',
+          extraPeso: pendente && editavel ? 600 : 400
+        }));
+      const destaque = pendente && memoria.destaque;
+      return {
+        titulo,
+        cor,
+        coluna,
+        total: String(doGrupo.length),
+        linhas: doGrupo,
+        id: 'rel-g-' + id,
+        fundo: destaque ? 'var(--fundo-fdf6e7)' : 'transparent',
+        sombra: destaque ? 'inset 4px 0 0 #E0A93B' : 'none'
+      };
+    }).filter(grupo => grupo.linhas.length);
+    const previstas = linhas.filter(linha => linha.situacao !== 'Feriado').length,
+      realizadas = linhas.filter(linha => linha.situacao === 'Realizada').length,
+      naoRealizadas = linhas.filter(linha => linha.situacao === 'Não realizada').length;
+    const aguardando = horas.filter(linha => /aguardando|conferência|falta justificar/i.test(linha.situacao)).length;
+    const minutosValidos = horas.reduce((soma, linha) => soma + linha.minutosValidos, 0);
+    const ciclos = [];
+    const competenciaDeHoje = Base.cicloComp(new Date());
+    for (let mes = competenciaDeHoje.getMonth(); mes >= 0; mes--) {
+      const data = new Date(competenciaDeHoje.getFullYear(), mes, 1);
+      ciclos.push({ valor: Base.iso(data), rotulo: Base.Mes(data) + ' · ' + Base.cicloTxt(data) });
+    }
+    const situacao = situacaoDoCiclo
+      ? SITUACAO_DO_CICLO[situacaoDoCiclo.status]
+      : cicloAtual
+        ? ['Em aberto até ' + Base.dm(fimDoCiclo), 'var(--texto-7a4e0b)', 'var(--fundo-faefd9)']
+        : ['Encerrado', 'var(--texto-34464d)', 'var(--fundo-e8eef0)'];
+    const semRegistro = pendencias.filter(pendencia => pendencia.semRegistro).length;
+    return {
+      ciclo: competencia,
+      escolherCiclo: evento => contexto.escolherCiclo(evento.target.value),
+      ciclos,
+      cicloNome: Base.Mes(dataDe(competencia)),
+      situacao: {
+        texto:
+          situacao[0] +
+          (situacaoDoCiclo && situacaoDoCiclo.status === 'fechado' && situacaoDoCiclo.fechado_em
+            ? ' em ' + Base.dm(new Date(situacaoDoCiclo.fechado_em))
+            : ''),
+        cor: situacao[1],
+        fundo: situacao[2]
+      },
+      devolvido,
+      devolvidoTexto:
+        (situacaoDoCiclo && situacaoDoCiclo.devolvido_papel === 'direcao'
+          ? 'A direção da escola devolveu este ciclo para ajuste'
+          : situacaoDoCiclo && situacaoDoCiclo.devolvido_papel === 'coordenador'
+            ? 'O coordenador devolveu este ciclo para ajuste'
+            : 'Este ciclo foi reaberto para ajuste') +
+        (situacaoDoCiclo && situacaoDoCiclo.motivo_devolucao ? ': ' + situacaoDoCiclo.motivo_devolucao : '.') +
+        ' Corrija o que for preciso e use “Reenviar para aprovação”.',
+      abrirDocumento: () => contexto.abrirDocumento(),
+      podeReenviar: devolvido && !memoria.confirmando,
+      pedirReenvio: () => this.lembrar({ confirmando: true }),
+      confirmando: memoria.confirmando,
+      confirmarReenvio: () => contexto.reenviarCiclo(),
+      cancelarReenvio: () => this.lembrar({ confirmando: false }),
+      ocupado: contexto.carregandoRelatorio,
+      opacidade: contexto.carregandoRelatorio ? 0.6 : 1,
+      cartoes: [
+        {
+          rotulo: 'Horas válidas',
+          valor: Base.dur(minutosValidos),
+          nota: !horas.length
+            ? 'Nenhuma presença no ciclo'
+            : aguardando
+              ? aguardando + (aguardando === 1 ? ' dia aguardando decisão' : ' dias aguardando decisão')
+              : horas.length + (horas.length === 1 ? ' dia no ciclo' : ' dias no ciclo'),
+          cor: 'var(--texto-08617e)'
+        },
+        {
+          rotulo: 'Atividades realizadas',
+          valor: String(realizadas),
+          nota: 'de ' + previstas + ' previstas na grade',
+          cor: 'var(--texto-1a2b33)'
+        },
+        {
+          rotulo: 'Não realizadas',
+          valor: String(naoRealizadas),
+          nota: naoRealizadas ? 'com motivo registrado' : 'nenhuma no ciclo',
+          cor: 'var(--texto-1a2b33)'
+        },
+        {
+          rotulo: 'Pendências',
+          valor: String(pendencias.length),
+          nota: pendencias.length ? 'veja a lista abaixo' : 'tudo em dia',
+          cor: pendencias.length ? 'var(--texto-9a6212)' : 'var(--texto-1b5e2e)'
+        }
+      ],
+      temPendencias: pendencias.length > 0,
+      pendencias: [
+        ...pendencias.filter(pendencia => !pendencia.semRegistro),
+        ...(semRegistro
+          ? [
+              {
+                data: semRegistro === 1 ? '1 atividade' : semRegistro + ' atividades',
+                texto: 'Sem registro neste ciclo · estão na lista de atividades abaixo',
+                temAcao: true,
+                acao: 'Ver na lista',
+                executar: () => this.verPendentes()
+              }
+            ]
+          : [])
+      ],
+      pendenciasTexto: pendencias.length + (pendencias.length === 1 ? ' pendência' : ' pendências'),
+      abas: [
+        ['aulas', 'Atividades · ' + previstas],
+        ['horas', 'Horas na escola · ' + horas.length]
+      ].map(([chave, rotulo]) => ({
+        rotulo,
+        atual: memoria.aba === chave ? 'true' : 'false',
+        abrir: () => this.lembrar({ aba: chave }),
+        classe: memoria.aba === chave ? 'fundo-ffffff' : 'fundo-transparent',
+        fundo: memoria.aba === chave ? 'var(--fundo-ffffff)' : 'transparent',
+        cor: memoria.aba === chave ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)'
+      })),
+      abaAtividades: memoria.aba === 'aulas',
+      abaHoras: memoria.aba === 'horas',
+      turma: memoria.turma,
+      escolherTurma: evento => this.lembrar({ turma: evento.target.value }),
+      turmas: [...new Set(linhas.map(linha => linha.turma))].sort(),
+      grupos,
+      semAtividades: filtradas.length === 0,
+      semAtividadesTexto: linhas.length
+        ? 'Nenhuma atividade com esse filtro.'
+        : 'Nenhuma atividade da grade neste ciclo. Monte a grade na aba Grade de Atividades.',
+      horas,
+      semHoras: horas.length === 0,
+      exportar: () =>
+        memoria.aba === 'horas'
+          ? contexto.exportar(
+              [
+                ['Data', 'Início → encerramento', 'Total', 'Válidas', 'Situação'],
+                ...horas.map(linha => [Base.dmy(linha.dia), linha.faixa, linha.total, linha.validas, linha.situacao])
+              ],
+              'horas-' + competencia.slice(0, 7) + '.csv'
+            )
+          : contexto.exportar(
+              [
+                ['Data', 'Início', 'Turma', 'Tipo', 'Solução', 'Situação', 'Motivo', 'Presentes', 'Matriculados'],
+                ...filtradas.map(linha => [
+                  Base.dmy(dataDe(linha.iso)),
+                  linha.hora,
+                  linha.turma,
+                  linha.tipo,
+                  linha.detalhe,
+                  linha.situacao,
+                  linha.motivo,
+                  linha.presentes,
+                  linha.matriculados
+                ])
+              ],
+              'atividades-' + competencia.slice(0, 7) + '.csv'
+            )
+    };
+  }
+}
+</script>
+</body>
+</html>

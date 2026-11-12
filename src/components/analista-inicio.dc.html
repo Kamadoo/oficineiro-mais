@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Analista · Início</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <sc-if value="{{ temOnboarding }}" hint-placeholder-val="{{ false }}">
+    <div class="fundo-eff9fc borda-bee9f5 raio-12 p-14-16 d-flex quebra-wrap alinha-center gap-10-14">
+      <span class="num-tabular-nums fs-22 fw-600 cor-08617e">{{ onboardingTotal }}</span>
+      <div class="flex-1-1-260 d-flex eixo-column gap-2"><span class="fs-14 fw-600 cor-1a2b33">{{ onboardingTitulo }}</span><span class="fs-12 cor-34464d">{{ onboardingDetalhe }}</span></div>
+      <button onClick="{{ verOnboarding }}" class="largura-total-celular h-38 borda-0 cor-fff raio-8 p-0-14 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Ver pendências</button>
+    </div>
+  </sc-if>
+  <div class="empilha-celular d-grid colunas-minmax-0-1p3fr-minmax-0-1fr gap-20">
+    <section aria-labelledby="an-h-pres" class="borda-dde6e8 raio-12 rolagem-hidden d-flex eixo-column fundo-ffffff" style="background:var(--fundo-ffffff)">
+      <div class="mapa-celular pos-relative isola-isolate h-240 rolagem-hidden" style="background:var(--fundo-mapa);background-image:linear-gradient(var(--grade-mapa) 1px,transparent 1px),linear-gradient(90deg,var(--grade-mapa) 1px,transparent 1px);background-size:32px 32px">
+        <div id="mapa-analista" class="pos-absolute inset-0 z-0" style="opacity:{{ mapaOpacidade }}"></div>
+        <sc-if value="{{ semMapa }}" hint-placeholder-val="{{ true }}">
+          <div class="pos-absolute esquerda-50pc topo-50pc w-150 h-150 m-n75-0-0-n75 raio-50pc fundo-rgba-11-126-163-0p10 borda-2-dashed-6c60e6 largura-fundo"></div>
+          <div class="pos-absolute esquerda-50pc topo-50pc d-flex eixo-column alinha-center gap-4" style="transform:translate(-50%,-50%)"><div class="w-14 h-14 raio-7 fundo-0b7ea3 borda-3-solid-fff sombra-0-0-0-1-0b7ea3 largura-fundo"></div><span class="fs-12 fw-600 fundo-ffffff p-2-8 raio-4 espaco-nowrap">{{ escola.sigla }}</span></div>
+        </sc-if>
+        <div class="pos-absolute esquerda-12 direita-12 base-12 d-flex z-1001 ponteiro-none"><span class="fundo-ffffff raio-6 p-6-10 fs-12 num-tabular-nums cor-34464d max-w-100pc rolagem-hidden reticencias-ellipsis espaco-nowrap largura-fundo quebra-celular">{{ linhaDoGps }}</span></div>
+        <button onClick="{{ atualizarLocal }}" class="pos-absolute z-1001 direita-12 topo-12 borda-dde6e8 raio-8 p-6-10 fs-12 fw-600 cor-34464d d-flex alinha-center gap-6 fundo-ffffff" style="background:var(--fundo-ffffff)"><svg class="icone" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>Atualizar local</button>
+      </div>
+      <div class="espaco-celular p-20 d-flex eixo-column gap-16">
+        <h3 id="an-h-pres" class="sr-only">Presença na escola</h3>
+        <div class="d-flex quebra-wrap alinha-center gap-6-10"><span class="fs-12 fw-600 p-4-10 raio-999 segmentado" style="color:{{ situacao.cor }};background:{{ situacao.fundo }}">{{ situacao.rotulo }}</span><span class="fs-13 cor-5b6b70">{{ situacao.detalhe }}</span></div>
+        <sc-if value="{{ podeEscolher }}" hint-placeholder-val="{{ true }}">
+          <label class="d-flex eixo-column gap-8">
+            <span class="fs-12 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em">Escola da visita</span>
+            <select id="an-escola" value="{{ escolaId }}" onChange="{{ escolherEscola }}" class="h-44 w-100pc borda-1p5-solid-0b7ea3 raio-10 p-0-12 fs-14 fw-500 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)">
+              <option value="">Escolha a escola</option>
+              <sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for>
+            </select>
+            <span class="fs-12 cor-5b6b70">{{ escola.endereco }}</span>
+          </label>
+        </sc-if>
+        <sc-if value="{{ temVisitaDaAgenda }}" hint-placeholder-val="{{ true }}">
+          <div class="fundo-f7fafb raio-10 p-12-14 d-flex eixo-column gap-6">
+            <div class="d-flex justifica-space-between gap-10 alinha-baseline"><span class="fs-12 cor-5b6b70 fw-600">Visita na agenda</span><span class="fs-12 num-tabular-nums cor-5b6b70">{{ visitaDaAgenda.hora }}</span></div>
+            <span class="fs-14 fw-600">{{ visitaDaAgenda.tipo }}</span>
+            <span class="alinha-si-flex-start fs-12 fw-600 p-3-8 raio-4" style="color:{{ visitaDaAgenda.origemCor }};background:{{ visitaDaAgenda.origemFundo }}">Origem: {{ visitaDaAgenda.origem }}</span>
+            <sc-if value="{{ visitaDaAgenda.temOrientacao }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-34464d texto-quebra-pretty">{{ visitaDaAgenda.orientacao }}</span></sc-if>
+          </div>
+        </sc-if>
+        <sc-if value="{{ temBloqueio }}" hint-placeholder-val="{{ false }}">
+          <div role="status" class="fundo-fbedeb raio-10 p-12-14 cor-8a1c12 fw-600 fs-14">{{ bloqueio }}</div>
+        </sc-if>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em">Observação (opcional)</span><input value="{{ observacao }}" onChange="{{ escreverObservacao }}" maxlength="300" placeholder="ex.: reunião com a direção, sinal de GPS fraco" class="h-44 borda-cfdadd raio-8 p-0-12 fs-14"></input></label>
+        <button onClick="{{ alternarPresenca }}" disabled="{{ presencaBloqueada }}" class="h-52 borda-0 raio-10 cor-fff fs-16 fw-600 {{ botao.classe }}" style="background:{{ botao.fundo }}">{{ botao.rotulo }}</button>
+        <p class="m-0 fs-12 cor-5b6b70 lh-1p5">A posição é conferida no início e no encerramento, e a hora é registrada pelo servidor. A presença só pode ser registrada dentro do raio da escola.</p>
+      </div>
+    </section>
+    <div class="d-flex eixo-column gap-20 min-w-0">
+      <section class="espaco-celular borda-dde6e8 raio-12 p-18-20 d-flex eixo-column gap-10 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="an-h-pend">
+        <div class="d-flex alinha-baseline gap-10 quebra-wrap"><h3 id="an-h-pend" class="m-0 fs-15 flex-1">Pendências da carteira</h3><span class="fs-12 cor-5b6b70">{{ pendenciasResumo }}</span></div>
+        <sc-if value="{{ semPendencias }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-13 cor-23773a fw-600">Carteira em dia.</p></sc-if>
+        <sc-for list="{{ pendencias }}" as="pendencia" hint-placeholder-count="3">
+          <div class="geral-pendencia d-grid colunas-10-minmax-0-1fr-auto gap-2-12 alinha-center p-10-0 borda-t-e9eff1">
+            <span aria-hidden="true" class="w-10 h-10 raio-5 largura-fundo" style="background:{{ pendencia.cor }}"></span>
+            <div class="d-flex eixo-column gap-2 min-w-0"><b class="fs-14">{{ pendencia.titulo }}</b><span class="fs-12 cor-5b6b70 quebra-palavra-anywhere">{{ pendencia.detalhe }}</span></div>
+            <button onClick="{{ pendencia.resolver }}" aria-label="{{ pendencia.aria }}" class="h-32 borda-cfdadd fundo-ffffff cor-08617e raio-8 p-0-12 fs-13 fw-600 espaco-nowrap botao-secundario">Resolver →</button>
+          </div>
+        </sc-for>
+      </section>
+      <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="an-h-dia">
+        <div class="d-flex justifica-space-between alinha-baseline gap-10"><h3 id="an-h-dia" class="m-0 fs-15">Resumo do dia</h3><span class="fs-12 cor-5b6b70">{{ dataDeHoje }}</span></div>
+        <sc-if value="{{ semPresencasDeHoje }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Nenhuma visita iniciada hoje.</span></sc-if>
+        <sc-for list="{{ presencasDeHoje }}" as="presenca" hint-placeholder-count="2">
+          <div class="d-grid colunas-minmax-0-1fr-auto gap-4-10 p-12 raio-8 fundo-f7fafb alinha-center">
+            <span class="fw-600 fs-14 min-w-0 quebra-palavra-anywhere">{{ presenca.escola }}</span><span class="num-tabular-nums fw-600 fs-13">{{ presenca.tempo }}</span>
+            <span class="fs-12 cor-5b6b70 num-tabular-nums">{{ presenca.faixa }} · {{ presenca.origem }}</span><span class="fs-12 texto-right" style="color:{{ presenca.cor }}">{{ presenca.situacao }}</span>
+            <sc-if value="{{ presenca.faltaRegistrar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ presenca.registrar }}" class="justifica-si-start h-32 borda-0 cor-fff raio-8 p-0-12 fs-13 fw-600 fundo-0b7ea3" style="grid-column:1/-1;background:#0B7EA3">Registrar esta visita</button></sc-if>
+          </div>
+        </sc-for>
+      </section>
+      <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-4 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="an-h-ult">
+        <h3 id="an-h-ult" class="m-0-0-8 fs-15">Minhas presenças · últimos 5 dias</h3>
+        <sc-if value="{{ semPresencasRecentes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Nenhuma presença registrada nos últimos 5 dias letivos.</span></sc-if>
+        <sc-for list="{{ presencasRecentes }}" as="presenca" hint-placeholder-count="5">
+          <div class="analista-presenca d-grid colunas-44-minmax-0-1fr-auto gap-2-10 p-10-0 borda-t-e8eef0 fs-13 alinha-center">
+            <span class="num-tabular-nums">{{ presenca.data }}</span><b class="min-w-0 quebra-palavra-anywhere">{{ presenca.escola }}</b><span class="num-tabular-nums cor-5b6b70 fs-12">{{ presenca.faixa }}</span>
+            <span></span><span class="fs-12" style="color:{{ presenca.notaCor }}">{{ presenca.nota }}</span><span class="fs-11 fw-600 p-2-8 raio-4 justifica-si-end" style="color:{{ presenca.origemCor }};background:{{ presenca.origemFundo }}">{{ presenca.origem }}</span>
+          </div>
+        </sc-for>
+      </section>
+    </div>
+  </div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { p2, dataDe, minDe, hmDe, hmTs, dmIso, numero, plural } = Base;
+function rotuloSeguro(texto) {
+  const rotulo = document.createElement('span');
+  rotulo.textContent = String(texto);
+  return rotulo;
+}
+const FORA_DA_AGENDA = ['Fora da agenda', 'var(--texto-8a999e)', 'var(--fundo-eef3f4)', 'var(--texto-45575e)'];
+const minutosDe = instante => {
+  const hora = hmTs(instante);
+  return hora ? minDe(hora) : null;
+};
+const duracao = minutos => (minutos == null ? '' : Math.floor(minutos / 60) + 'h' + p2(minutos % 60));
+const distancia = (latitude1, longitude1, latitude2, longitude2) => {
+  const radianos = graus => (graus * Math.PI) / 180,
+    a =
+      Math.sin(radianos(latitude2 - latitude1) / 2) ** 2 +
+      Math.cos(radianos(latitude1)) *
+        Math.cos(radianos(latitude2)) *
+        Math.sin(radianos(longitude2 - longitude1) / 2) ** 2;
+  return Math.round(12742000 * Math.asin(Math.sqrt(a)));
+};
+let leafletCarregando = null;
+const carregarLeaflet = () => {
+  if (window.L && window.L.map) return Promise.resolve(window.L);
+  if (!leafletCarregando)
+    leafletCarregando = new Promise((ok, erro) => {
+      const estilo = document.createElement('link');
+      estilo.rel = 'stylesheet';
+      estilo.href = '../vendor/leaflet/leaflet-1.9.4.css';
+      document.head.appendChild(estilo);
+      const script = document.createElement('script');
+      script.src = '../vendor/leaflet/leaflet-1.9.4.js';
+      script.onload = () => (window.L ? ok(window.L) : erro());
+      script.onerror = erro;
+      document.head.appendChild(script);
+    });
+  return leafletCarregando;
+};
+class Component extends DCLogic {
+  componentDidMount() {
+    this.aoMudarVisibilidade = () => this.acompanhar();
+    document.addEventListener('visibilitychange', this.aoMudarVisibilidade);
+    this.montarMapa();
+    this.acompanhar();
+  }
+  componentDidUpdate() {
+    this.montarMapa();
+    this.acompanhar();
+  }
+  componentWillUnmount() {
+    this.desmontada = true;
+    document.removeEventListener('visibilitychange', this.aoMudarVisibilidade);
+    if (this.vigia != null && navigator.geolocation) navigator.geolocation.clearWatch(this.vigia);
+    this.vigia = null;
+    this.removerMapa();
+  }
+  lembrar(mudanca) {
+    Object.assign(this.props.memoria, mudanca);
+    if (!this.desmontada) this.forceUpdate();
+  }
+  escolaDoMapa() {
+    const contexto = this.props.contexto,
+      aberta = contexto.presencaAberta,
+      daAgenda = contexto.agendaDeHoje[0],
+      id = aberta
+        ? String(aberta.escola_id)
+        : this.props.memoria.escola || (daAgenda ? String(daAgenda.escola_id) : ''),
+      escola = contexto.escolaDe(id);
+    return escola && escola.latitude != null && escola.longitude != null
+      ? { latitude: escola.latitude, longitude: escola.longitude, raio: escola.raio_m || 150, sigla: escola.sigla }
+      : null;
+  }
+  localizar(depois) {
+    if (!navigator.geolocation) {
+      const geo = { situacao: 'erro', mensagem: 'Este aparelho não informa a localização' };
+      this.lembrar({ geo });
+      if (depois) depois(geo);
+      return;
+    }
+    this.fila = [...(this.fila || []), ...(depois ? [depois] : [])];
+    const anterior = this.props.memoria.geo;
+    this.lembrar({ geo: { ...anterior, situacao: anterior.situacao === 'ok' ? 'ok' : 'buscando' } });
+    if (this.vigia != null) navigator.geolocation.clearWatch(this.vigia);
+    const entregar = geo => {
+      const fila = this.fila || [];
+      this.fila = [];
+      fila.forEach(funcao => funcao(geo));
+    };
+    this.vigia = navigator.geolocation.watchPosition(
+      posicao => {
+        const atual = this.props.memoria.geo,
+          latitude = posicao.coords.latitude,
+          longitude = posicao.coords.longitude,
+          precisao = Math.round(posicao.coords.accuracy);
+        if (
+          atual.situacao === 'ok' &&
+          !(this.fila || []).length &&
+          distancia(latitude, longitude, atual.latitude, atual.longitude) < 5 &&
+          Math.abs(precisao - atual.precisao) < 10
+        )
+          return;
+        const geo = { situacao: 'ok', latitude, longitude, precisao };
+        this.lembrar({ geo });
+        entregar(geo);
+      },
+      falha => {
+        const atual = this.props.memoria.geo;
+        if (atual.situacao === 'ok' && !(this.fila || []).length) return;
+        if (atual.latitude != null && falha.code === 3) {
+          const geo = { ...atual, situacao: 'ok' };
+          this.lembrar({ geo });
+          entregar(geo);
+          return;
+        }
+        const geo = {
+          situacao: 'erro',
+          mensagem:
+            falha.code === 1
+              ? 'Localização bloqueada · permita o acesso nas configurações do navegador'
+              : falha.code === 3
+                ? 'O GPS demorou a responder · tente de novo'
+                : 'Não foi possível obter a localização'
+        };
+        this.lembrar({ geo });
+        entregar(geo);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 }
+    );
+  }
+  acompanhar() {
+    const quer = this.props.contexto.conectado && !document.hidden && !!navigator.geolocation;
+    if (quer && this.vigia == null) this.localizar();
+    else if (!quer && this.vigia != null) {
+      navigator.geolocation.clearWatch(this.vigia);
+      this.vigia = null;
+    }
+  }
+  removerMapa() {
+    if (this.mapa) {
+      try {
+        this.mapa.remove();
+      } catch (x) {}
+      this.mapa = null;
+      this.marcasDoUsuario = null;
+    }
+    this.elementoDoMapa = null;
+  }
+  montarMapa() {
+    const elemento = document.getElementById('mapa-analista');
+    const escola = this.escolaDoMapa(),
+      chaveDaEscola = escola ? escola.latitude + ',' + escola.longitude + ',' + escola.raio : 'sem';
+    if (!elemento || (elemento === this.elementoDoMapa && chaveDaEscola !== this.chaveDaEscola)) {
+      this.removerMapa();
+      if (!elemento) return;
+    }
+    if (elemento === this.elementoDoMapa) return this.atualizarMapa();
+    this.elementoDoMapa = elemento;
+    this.chaveDaEscola = chaveDaEscola;
+    this.chaveDaPosicao = null;
+    if (!escola) return;
+    carregarLeaflet()
+      .then(L => {
+        if (this.elementoDoMapa !== elemento || !document.body.contains(elemento)) return;
+        const centro = [escola.latitude, escola.longitude];
+        const mapa = L.map(elemento, { zoomControl: false }).setView(centro, 17);
+        const camada = L.tileLayer(
+          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+          {
+            maxZoom: 19,
+            attribution: 'Mapa © Esri',
+            referrerPolicy: 'no-referrer'
+          }
+        ).addTo(mapa);
+        let carregou = false;
+        camada.on('tileload', () => {
+          if (!carregou) {
+            carregou = true;
+            this.lembrar({ mapa: 'ok' });
+          }
+        });
+        camada.on('tileerror', () => {
+          if (!carregou && this.props.memoria.mapa !== 'erro') this.lembrar({ mapa: 'erro' });
+        });
+        L.circle(centro, {
+          radius: escola.raio,
+          color: '#6C60E6',
+          weight: 2,
+          dashArray: '6 6',
+          fillColor: '#0B7EA3',
+          fillOpacity: 0.1
+        }).addTo(mapa);
+        L.circleMarker(centro, { radius: 7, color: '#fff', weight: 3, fillColor: '#0B7EA3', fillOpacity: 1 })
+          .addTo(mapa)
+          .bindTooltip(rotuloSeguro(escola.sigla || ''), { permanent: true, direction: 'bottom', offset: [0, 8] });
+        this.mapa = mapa;
+        this.leaflet = L;
+        this.atualizarMapa();
+      })
+      .catch(() => this.lembrar({ mapa: 'erro' }));
+  }
+  atualizarMapa() {
+    const mapa = this.mapa,
+      L = this.leaflet,
+      geo = this.props.memoria.geo;
+    if (!mapa) return;
+    const chave = geo.situacao === 'ok' ? geo.latitude + ',' + geo.longitude + ',' + geo.precisao : geo.situacao;
+    if (chave === this.chaveDaPosicao) return;
+    this.chaveDaPosicao = chave;
+    if (this.marcasDoUsuario) {
+      this.marcasDoUsuario.forEach(marca => mapa.removeLayer(marca));
+      this.marcasDoUsuario = null;
+    }
+    const escola = this.escolaDoMapa(),
+      centro = escola ? [escola.latitude, escola.longitude] : null;
+    if (geo.situacao !== 'ok') return centro ? mapa.setView(centro, 17, { animate: false }) : null;
+    const posicao = [geo.latitude, geo.longitude];
+    this.marcasDoUsuario = [
+      L.circle(posicao, {
+        radius: geo.precisao,
+        color: '#6C60E6',
+        weight: 1,
+        fillColor: '#6C60E6',
+        fillOpacity: 0.12
+      }).addTo(mapa),
+      L.circleMarker(posicao, { radius: 8, color: '#fff', weight: 3, fillColor: '#6C60E6', fillOpacity: 1 })
+        .addTo(mapa)
+        .bindTooltip('Você', { permanent: true, direction: 'top', offset: [0, -8] })
+    ];
+    if (centro) mapa.fitBounds(L.latLngBounds([centro, posicao]).pad(0.3), { maxZoom: 17, animate: false });
+    else mapa.setView(posicao, 17, { animate: false });
+  }
+  renderVals() {
+    const contexto = this.props.contexto,
+      memoria = this.props.memoria;
+    const { hoje, agora, agendaDeHoje, presencaAberta, presencasComVisita, pendencias, onboardingsPendentes } =
+      contexto;
+    const { nomeDaEscola, origemDe } = contexto;
+    const geo = memoria.geo;
+    const escolaId = presencaAberta
+      ? String(presencaAberta.escola_id)
+      : memoria.escola || (agendaDeHoje[0] ? String(agendaDeHoje[0].escola_id) : '');
+    const visitaDaAgenda = presencaAberta
+      ? presencaAberta.agenda_id
+        ? contexto.agenda.find(v => v.id === presencaAberta.agenda_id)
+        : null
+      : agendaDeHoje.find(v => String(v.escola_id) === escolaId);
+    const escola = contexto.escolaDe(escolaId);
+    const escolaDoMapa = this.escolaDoMapa(),
+      metros =
+        escolaDoMapa && geo.situacao === 'ok'
+          ? distancia(geo.latitude, geo.longitude, escolaDoMapa.latitude, escolaDoMapa.longitude)
+          : null,
+      foraDoRaio = metros != null && metros > escolaDoMapa.raio;
+    const deOutroDia = !!(presencaAberta && presencaAberta.data < hoje);
+    const bloqueio =
+      deOutroDia || (!presencaAberta && !escolaId)
+        ? ''
+        : !escolaDoMapa
+          ? 'Esta escola ainda não tem localização cadastrada. Peça ao coordenador para cadastrar antes de registrar a presença.'
+          : geo.situacao === 'erro'
+            ? 'Ative a localização do aparelho para registrar a presença. A presença só pode ser registrada dentro do raio da escola.'
+            : foraDoRaio
+              ? 'Você está a ' +
+                numero(metros) +
+                ' m da escola, fora do raio de ' +
+                numero(escolaDoMapa.raio) +
+                ' m. Aproxime-se da escola para ' +
+                (presencaAberta ? 'encerrar' : 'registrar') +
+                ' a presença.'
+              : '';
+    const linhaDoGps =
+      geo.situacao === 'ok'
+        ? escolaDoMapa
+          ? 'Você está a ' + numero(metros) + ' m da escola · precisão de ' + numero(geo.precisao) + ' m'
+          : 'Localização obtida · precisão de ' + numero(geo.precisao) + ' m'
+        : geo.situacao === 'erro'
+          ? geo.mensagem
+          : 'Buscando sua localização…';
+    const visitaDe = presenca => (presenca.agenda_id ? contexto.agenda.find(v => v.id === presenca.agenda_id) : null);
+    const presencasDeHoje = contexto.presencas
+      .filter(p => p.data === hoje)
+      .map(p => {
+        const visita = visitaDe(p),
+          inicio = minutosDe(p.inicio),
+          fim = p.fim ? minutosDe(p.fim) : null,
+          registrada = presencasComVisita.has(p.id);
+        return {
+          escola: nomeDaEscola(p.escola_id),
+          faixa: hmTs(p.inicio) + ' → ' + (p.fim ? hmTs(p.fim) : '—'),
+          tempo: duracao(Math.max(0, (fim == null ? agora : fim) - inicio)),
+          origem: visita ? origemDe(visita.origem)[0] : 'Fora da agenda',
+          situacao: !p.fim ? 'Em andamento' : registrada ? 'Visita registrada' : 'Falta registrar a visita',
+          cor: !p.fim ? 'var(--texto-1f4fc4)' : registrada ? 'var(--texto-23773a)' : 'var(--texto-b42318)',
+          faltaRegistrar: !!p.fim && !registrada,
+          registrar: () => contexto.abrirRegistro({ presenca: p })
+        };
+      });
+    const inicioDosCincoDias = (() => {
+      let dia = dataDe(hoje);
+      for (let letivos = 0; letivos < 5;) {
+        dia = Base.add(dia, -1);
+        if (Base.letivo(dia)) letivos++;
+      }
+      return Base.iso(dia);
+    })();
+    const presencasRecentes = contexto.presencas
+      .filter(p => p.data !== hoje && p.data >= inicioDosCincoDias)
+      .sort((a, b) => String(b.inicio).localeCompare(String(a.inicio)))
+      .map(p => {
+        const visita = visitaDe(p),
+          origem = visita ? origemDe(visita.origem) : FORA_DA_AGENDA,
+          registrada = presencasComVisita.has(p.id);
+        return {
+          data: dmIso(p.data),
+          escola: nomeDaEscola(p.escola_id),
+          faixa: hmTs(p.inicio) + '–' + (p.fim ? hmTs(p.fim) : 'sem encerramento'),
+          nota: !p.fim
+            ? 'Presença sem encerramento'
+            : p.conferencia
+              ? p.conferencia + ' · para conferência'
+              : registrada
+                ? 'Visita registrada'
+                : 'Sem registro de visita',
+          notaCor:
+            !p.fim || p.conferencia
+              ? 'var(--texto-9a6212)'
+              : registrada
+                ? 'var(--texto-5b6b70)'
+                : 'var(--texto-b42318)',
+          origem: origem[0],
+          origemCor: origem[3],
+          origemFundo: origem[2]
+        };
+      });
+    const origemDaVisita = visitaDaAgenda ? origemDe(visitaDaAgenda.origem) : null;
+    return {
+      temOnboarding: onboardingsPendentes.length > 0,
+      onboardingTotal: String(onboardingsPendentes.length),
+      onboardingTitulo:
+        onboardingsPendentes.length === 1
+          ? 'Novo usuário aguardando onboarding'
+          : 'Novos usuários aguardando onboarding',
+      onboardingDetalhe: onboardingsPendentes.length
+        ? 'Ativados por OS · ' +
+          Array.from(
+            new Set(onboardingsPendentes.map(i => (i.escola_id ? contexto.siglaDaEscola(i.escola_id) : '?')))
+          ).join(', ') +
+          ' · mais antigo há ' +
+          plural(contexto.diasDesde(contexto.recebimentoDe(onboardingsPendentes[0])), 'dia', 'dias')
+        : '',
+      verOnboarding: () => contexto.irPara('onb'),
+      mapaOpacidade: memoria.mapa === 'ok' ? '1' : '0',
+      semMapa: memoria.mapa !== 'ok',
+      linhaDoGps,
+      atualizarLocal: () => this.localizar(),
+      escola: {
+        sigla: escola ? escola.sigla : 'Escola',
+        endereco: escola ? escola.endereco || '' : 'Escolha a escola para ver o raio no mapa'
+      },
+      podeEscolher: !presencaAberta,
+      escolaId: escolaId || '',
+      escolherEscola: e => this.lembrar({ escola: e.target.value }),
+      opcoesDeEscola: agendaDeHoje
+        .map(v => ({
+          valor: String(v.escola_id),
+          rotulo: 'Agenda de hoje' + (v.hora ? ' ' + hmDe(v.hora) : '') + ' · ' + nomeDaEscola(v.escola_id)
+        }))
+        .concat(
+          contexto.escolasDaCarteira
+            .filter(e => !agendaDeHoje.some(v => v.escola_id === e.id))
+            .map(e => ({ valor: String(e.id), rotulo: e.nome }))
+        ),
+      temVisitaDaAgenda: !!visitaDaAgenda,
+      visitaDaAgenda: visitaDaAgenda
+        ? {
+            hora: visitaDaAgenda.hora ? hmDe(visitaDaAgenda.hora) : 'sem horário',
+            tipo: visitaDaAgenda.tipo || 'Visita',
+            origem: origemDaVisita[0],
+            origemCor: origemDaVisita[3],
+            origemFundo: origemDaVisita[2],
+            temOrientacao: !!visitaDaAgenda.orientacao,
+            orientacao: visitaDaAgenda.orientacao || ''
+          }
+        : {},
+      temBloqueio: !!bloqueio,
+      bloqueio,
+      presencaBloqueada: contexto.presencaSalvando || !!bloqueio,
+      situacao: presencaAberta
+        ? {
+            rotulo: 'Em andamento',
+            detalhe:
+              nomeDaEscola(presencaAberta.escola_id) +
+              ' · desde ' +
+              hmTs(presencaAberta.inicio) +
+              (presencaAberta.data < hoje ? ' de ' + dmIso(presencaAberta.data) : ''),
+            cor: 'var(--texto-1f4fc4)',
+            fundo: 'var(--fundo-e7edfc)'
+          }
+        : {
+            rotulo: 'Sem presença em andamento',
+            detalhe: agendaDeHoje.length
+              ? plural(agendaDeHoje.length, 'visita na agenda de hoje', 'visitas na agenda de hoje')
+              : 'Selecione a escola da visita',
+            cor: 'var(--texto-34464d)',
+            fundo: 'var(--fundo-e8eef0)'
+          },
+      observacao: memoria.observacao,
+      escreverObservacao: e => this.lembrar({ observacao: e.target.value }),
+      botao: presencaAberta
+        ? {
+            rotulo: contexto.presencaSalvando ? 'Encerrando…' : 'Encerrar atividades na escola',
+            fundo: bloqueio ? '#A9B8BD' : '#13252C'
+          }
+        : {
+            rotulo: contexto.presencaSalvando ? 'Iniciando…' : 'Iniciar atividades na escola',
+            classe: escolaId && !bloqueio ? 'fundo-0b7ea3' : '',
+            fundo: escolaId && !bloqueio ? '#0B7EA3' : '#A9B8BD'
+          },
+      alternarPresenca: () =>
+        contexto.alternarPresenca(
+          visitaDaAgenda && visitaDaAgenda.status === 'agendada' ? visitaDaAgenda : null,
+          enviar => {
+            const atual = this.props.memoria.geo;
+            if (atual.situacao === 'ok') enviar(atual);
+            else this.localizar(enviar);
+          }
+        ),
+      pendencias,
+      semPendencias: pendencias.length === 0,
+      pendenciasResumo: pendencias.length
+        ? plural(pendencias.length, 'ponto para resolver', 'pontos para resolver')
+        : 'Tudo em dia',
+      dataDeHoje: 'Hoje · ' + dmIso(hoje),
+      presencasDeHoje,
+      semPresencasDeHoje: presencasDeHoje.length === 0,
+      presencasRecentes,
+      semPresencasRecentes: presencasRecentes.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

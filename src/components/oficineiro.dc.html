@@ -1,0 +1,2833 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Oficineiro de Inclusão Digital</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles/app.css">
+<style>
+.relatorio-linha:hover {
+  background: #F5F9FA !important;
+}
+.relatorio-linha:focus-visible {
+  outline: 2px solid #0B7EA3;
+  outline-offset: -2px;
+}
+@media (max-width: 900px) {
+  .relatorio-linha {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) !important;
+    padding: 12px 14px !important;
+  }
+  .relatorio-linha-horas {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    padding: 12px 14px !important;
+  }
+  .relatorio-linha-horas > span:last-child {
+    grid-column: 1 / -1;
+  }
+}
+.grade-vazio {
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.registro-campos:disabled input,
+.registro-campos:disabled select,
+.registro-campos:disabled textarea {
+  color: inherit;
+  -webkit-text-fill-color: currentColor;
+  opacity: 1;
+  cursor: default;
+}
+.registro-campos:disabled button {
+  cursor: default;
+}
+.grade-vazio:hover,
+.grade-vazio:focus-visible {
+  opacity: 1;
+  border-color: #CFDADD !important;
+  background: #F5F9FA !important;
+}
+.grade-atividade:hover {
+  filter: brightness(0.97);
+}
+.grade-atividade:focus-visible,
+.grade-vazio:focus-visible {
+  outline: 2px solid #0B7EA3;
+  outline-offset: 2px;
+}
+@media (hover: none) {
+  .grade-vazio {
+    opacity: 1;
+    color: #C2CED1 !important;
+  }
+}
+.navegacao-inferior {
+  display: none;
+}
+@media (max-width: 900px) {
+  .pagina {
+    padding: 14px !important;
+    gap: 14px !important;
+  }
+  .aderente {
+    position: static !important;
+  }
+  .navegacao-inferior {
+    display: flex;
+  }
+  .espaco-navegacao-inferior {
+    padding-bottom: calc(150px + env(safe-area-inset-bottom)) !important;
+  }
+  #rel-horas {
+    max-width: none !important;
+    margin: 16px !important;
+  }
+}
+@media print {
+  html.espelho-imprimir body * {
+    visibility: hidden !important;
+  }
+  html.espelho-imprimir #esp-folha,
+  html.espelho-imprimir #esp-folha * {
+    visibility: visible !important;
+  }
+  html.espelho-imprimir #esp-folha {
+    position: absolute;
+    inset: 0 0 auto 0;
+  }
+  html.espelho-imprimir .espelho-nao-imprimir {
+    display: none !important;
+  }
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+  body {
+    background: #fff !important;
+  }
+  body:has(#rel-horas) #app-main,
+  #rel-toolbar,
+  #perfil-switch,
+  .navegacao-inferior,
+  .veu {
+    display: none !important;
+  }
+  #rel-overlay {
+    position: static !important;
+    background: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+  #rel-horas {
+    box-shadow: none !important;
+    margin: 0 !important;
+    width: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+  #rel-horas > * {
+    margin-bottom: 3mm !important;
+  }
+  #rel-horas > b,
+  #rel-horas > span,
+  #rel-horas > p {
+    display: block !important;
+  }
+  *:has(#rel-horas) {
+    display: block !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    position: static !important;
+  }
+  #rel-horas thead {
+    display: table-header-group;
+  }
+  #rel-horas table,
+  #rel-horas tbody,
+  #rel-horas thead {
+    break-inside: auto !important;
+  }
+}
+</style>
+</helmet>
+<div id="app-main" class="estrutura d-grid colunas-236-minmax-0-1fr min-h-100vh">
+  <dc-import name="menu" navCls="{{ menuClasse }}" closeNav="{{ fecharMenu }}" perfilTitulo="Oficineiro de Inclusão Digital" perfilLinha="{{ perfilLinha }}" menu="{{ menu }}" abrirNotif="{{ abrirNotif }}" notifAria="{{ notifAria }}" temNotif="{{ temNotif }}" notifN="{{ notifN }}" temConfig="{{ temConfig }}" abrirConfig="{{ abrirConfig }}" temSair="{{ temSair }}" sairConta="{{ sairConta }}"></dc-import>
+
+  <main class="min-w-0 d-flex eixo-column">
+    <dc-import name="cabecalho" espacamento="gap-16 p-0-28" blocoClasse="min-w-0" abrirMenu="{{ abrirMenu }}" titulo="{{ titulo }}" abrirNotif="{{ abrirNotif }}" notifAria="{{ notifAria }}" temNotif="{{ temNotif }}" notifN="{{ notifN }}"></dc-import>
+
+    <div class="pagina espaco-navegacao-inferior p-28 d-flex eixo-column gap-20 max-w-1280 w-100pc">
+
+<sc-if value="{{ semInternet }}" hint-placeholder-val="{{ false }}">
+  <div class="d-flex gap-12 alinha-flex-start fundo-fdf6e7 borda-1-solid-e3b45c raio-12 p-12-16 cor-5e4a26">
+    <svg class="icone flex-none cor-9a6212 mt-1" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M2 2l20 20"></path><path d="M8.5 16.4a5 5 0 0 1 7 0"></path><path d="M5 12.6a10 10 0 0 1 4.6-2.4"></path><path d="M19 12.6a10 10 0 0 0-2.3-1.6"></path><path d="M12 20h.01"></path></svg>
+    <div class="d-flex eixo-column gap-6 flex-1 min-w-0">
+      <b class="cor-7a4e0b fs-14">Sem internet</b>
+      <span class="fs-13 lh-1p5 texto-quebra-pretty">A presença e os registros de atividade precisam de conexão. A grade e as turmas mostradas são as da última sincronização ({{ sincronizadoTexto }}).</span>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ is.presenca }}" hint-placeholder-val="{{ true }}"><dc-import name="oficineiro-presenca" contexto="{{ contexto }}" memoria="{{ memoriaPresenca }}"></dc-import></sc-if>
+<sc-if value="{{ is.grade }}" hint-placeholder-val="{{ false }}"><dc-import name="oficineiro-grade" contexto="{{ contexto }}" memoria="{{ memoriaGrade }}"></dc-import></sc-if>
+<sc-if value="{{ is.registro }}" hint-placeholder-val="{{ false }}"><dc-import name="oficineiro-registro" contexto="{{ contexto }}" memoria="{{ memoriaRegistro }}"></dc-import></sc-if>
+<sc-if value="{{ is.horas }}" hint-placeholder-val="{{ false }}"><dc-import name="oficineiro-relatorio" contexto="{{ contexto }}" memoria="{{ memoriaRelatorio }}"></dc-import></sc-if>
+
+    </div>
+  </main>
+</div>
+
+<nav class="navegacao-inferior pos-fixed esquerda-0 direita-0 base-0 z-40 fundo-ffffff borda-t-dde6e8 justifica-space-around gap-2" style="padding:6px 6px calc(6px + env(safe-area-inset-bottom))" aria-label="Menu principal">
+  <button onClick="{{ navegacao.presenca.abrir }}" class="flex-1 borda-0 fundo-transparent d-flex eixo-column alinha-center gap-2 fs-11 fw-600 p-6-0 min-h-52" style="color:{{ navegacao.presenca.cor }}"><svg class="icone" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Presença</button>
+  <button onClick="{{ navegacao.grade.abrir }}" class="flex-1 borda-0 fundo-transparent d-flex eixo-column alinha-center gap-2 fs-11 fw-600 p-6-0 min-h-52" style="color:{{ navegacao.grade.cor }}"><svg class="icone" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M3 9h18M8 2v4M16 2v4"></path></svg>Grade</button>
+  <button onClick="{{ navegacao.registro.abrir }}" class="flex-1 borda-0 fundo-transparent d-flex eixo-column alinha-center gap-2 fs-11 fw-600 p-6-0 min-h-52" style="color:{{ navegacao.registro.cor }}"><svg class="icone" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13 7l4 4"></path></svg>Registro</button>
+  <button onClick="{{ navegacao.horas.abrir }}" class="flex-1 borda-0 fundo-transparent d-flex eixo-column alinha-center gap-2 fs-11 fw-600 p-6-0 min-h-52 pos-relative" style="color:{{ navegacao.horas.cor }}"><svg class="icone" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Relatório<span class="pos-absolute topo-2 fs-10 fw-700 cor-13252c raio-999 p-0-5" style="left:calc(50% + 6px);background:{{ navegacao.horas.seloFundo }}">{{ navegacao.horas.selo }}</span></button>
+</nav>
+
+<sc-if value="{{ temGaveta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharGaveta }}" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(520px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><h3 class="m-0 fs-17 flex-1">{{ gavetaTitulo }}</h3><button onClick="{{ fecharGaveta }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 largura-fundo">×</button></div>
+    <sc-if value="{{ gavetaDaAtividade }}" hint-placeholder-val="{{ true }}">
+      <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
+        <div class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Escola</span><div class="min-h-40 raio-8 fundo-eef3f4 d-flex alinha-center p-0-12 fs-14 espaco-nowrap rolagem-hidden reticencias-ellipsis">{{ escolaNome }}</div></div>
+        <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Dia da semana *</span><select value="{{ edicao.dia }}" onChange="{{ mudarDia }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ diasDaSemana }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Horário *</span><select value="{{ edicao.horario }}" onChange="{{ mudarHorario }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Selecione o horário</option><sc-for list="{{ horarios }}" as="opcao" hint-placeholder-count="12"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+        </div>
+        <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Hora de início *</span><input type="time" min="07:00" max="16:10" value="{{ edicao.hora }}" onChange="{{ mudarHora }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input><span class="fs-12 cor-5b6b70">Cada horário tem 50 minutos. As atividades vão das 07:00 às 17:00.</span></label>
+        <div class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Nº de horários · término {{ termino }}</span><div class="d-flex gap-6" role="group" aria-label="Número de horários"><sc-for list="{{ tempos }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" disabled="{{ opcao.desligada }}" class="flex-1 h-40 raio-8 fs-14 fw-600 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }};opacity:{{ opcao.opacidade }}">{{ opcao.rotulo }}</button></sc-for></div></div>
+        <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-5b6b70 fw-600">Tipo de atividade *</span><div class="d-flex eixo-column gap-6" role="group" aria-label="Tipo de atividade"><sc-for list="{{ tipos }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="texto-left raio-8 p-10-12 fs-14 fw-500 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div></div>
+        <sc-if value="{{ comTurma }}" hint-placeholder-val="{{ true }}"><div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Ano *</span><select value="{{ edicao.ano }}" onChange="{{ mudarAno }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Selecione o ano</option><sc-for list="{{ anos }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Turma *</span><select value="{{ edicao.turma }}" onChange="{{ mudarTurma }}" disabled="{{ semAno }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">{{ turmaVazia }}</option><sc-for list="{{ turmasDoAno }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">Turma {{ opcao }}</option></sc-for></select></label>
+        </div></sc-if>
+        <sc-if value="{{ ehRegular }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Componente curricular *</span><select value="{{ edicao.componente }}" onChange="{{ mudarComponente }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Selecione o componente curricular</option><sc-for list="{{ componentes }}" as="opcao" hint-placeholder-count="9"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+        <sc-if value="{{ ehIntegral }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Oficina *</span><select value="{{ edicao.oficina }}" onChange="{{ mudarOficina }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Selecione</option><sc-for list="{{ oficinas }}" as="opcao" hint-placeholder-count="10"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+        <sc-if value="{{ temOutraOficina }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Qual oficina? *</span><input value="{{ edicao.outraOficina }}" onChange="{{ mudarOutraOficina }}" maxlength="60" placeholder="Nome da oficina" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input></label></sc-if>
+        <span class="fs-12 cor-5b6b70 lh-1p45 mt-n8">Vale para o ano todo. Em semanas específicas, o componente curricular/oficina, o tipo de atividade e a solução podem ser trocados em ‘Por semana’.</span>
+        <sc-if value="{{ ehRegular }}" hint-placeholder-val="{{ true }}">
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Professor(a) regente *</span><input value="{{ edicao.professor }}" onChange="{{ mudarProfessor }}" maxlength="120" placeholder="Nome do professor da turma" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input></label>
+        </sc-if>
+        <sc-if value="{{ escolheSolucao }}" hint-placeholder-val="{{ true }}"><div class="d-flex eixo-column gap-8"><span class="fs-12 cor-5b6b70 fw-600">Solução prevista *</span>
+          <sc-if value="{{ escolheSolucao }}" hint-placeholder-val="{{ true }}"><div class="d-flex gap-8 quebra-wrap" role="group" aria-label="Solução prevista"><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="raio-8 p-8-12 fs-13 fw-500 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div></sc-if>
+          <sc-if value="{{ temOutraSolucao }}" hint-placeholder-val="{{ false }}"><input value="{{ edicao.outraSolucao }}" onChange="{{ mudarOutraSolucao }}" maxlength="80" aria-label="Qual solução" placeholder="Qual solução?" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input></sc-if>
+        </div></sc-if>
+        <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Espaço</span><select value="{{ edicao.espaco }}" onChange="{{ mudarEspaco }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="Laboratório">Laboratório</option><option value="Sala da turma">Sala da turma</option><option value="Biblioteca">Biblioteca</option><option value="Outro">Outro</option></select></label>
+          <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Observações</span><input value="{{ edicao.observacao }}" onChange="{{ mudarObservacaoDaAtividade }}" maxlength="300" placeholder="Opcional" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input></label>
+        </div>
+        <sc-if value="{{ edicaoComErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-b42318 fundo-fbedeb raio-8 p-10-12 lh-1p45">{{ edicao.erro }}</span></sc-if>
+      </div>
+      <div class="borda-t-dde6e8 d-flex quebra-wrap gap-8 alinha-center" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+        <button onClick="{{ salvarAtividade }}" disabled="{{ edicao.salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 botao-texto {{ salvarClasse }}" style="background:{{ salvarFundo }}">{{ salvarTexto }}</button>
+        <span class="flex-1"></span>
+        <sc-if value="{{ editando }}" hint-placeholder-val="{{ false }}"><button onClick="{{ excluirAtividade }}" disabled="{{ edicao.salvando }}" class="h-40 borda-1p5-solid-b42318 raio-8 p-0-14 fs-14 fw-600 botao-opcao botao-texto {{ excluirClasse }}" style="background:{{ excluirFundo }};color:{{ excluirCor }}">{{ excluirTexto }}</button></sc-if>
+      </div>
+    </sc-if>
+    <sc-if value="{{ gavetaDeNotificacoes }}" hint-placeholder-val="{{ false }}">
+      <div class="p-20 d-flex eixo-column gap-12 rolagem-auto flex-1">
+        <sc-if value="{{ temVariasNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex justifica-flex-end"><button onClick="{{ lerTodasNotif }}" class="h-34 borda-0 fundo-transparent cor-0b7ea3 fs-13 fw-600 p-0-4 botao-texto">Marcar todas como lidas</button></div></sc-if>
+        <sc-if value="{{ semNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column alinha-center gap-6 p-32-12 texto-center"><b class="fs-15">Tudo em dia</b><span class="fs-13 cor-5b6b70">Nenhuma notificação nova.</span></div></sc-if>
+        <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="3">
+          <div class="raio-10 p-12-14 d-flex eixo-column gap-6 fundo-ffffff largura-fundo" style="border:1px solid var(--borda-dde6e8);border-left:4px solid {{ n.cor }}">
+            <b class="fs-14">{{ n.tit }}</b>
+            <span class="fs-13 cor-34464d lh-1p5">{{ n.txt }}</span>
+            <div class="d-flex quebra-wrap gap-8 mt-2"><sc-if value="{{ n.temAcao }}" hint-placeholder-val="{{ true }}"><button onClick="{{ n.go }}" class="h-36 borda-1-solid-0b7ea3 fundo-ffffff cor-08617e raio-8 p-0-12 fs-13 fw-600">{{ n.acao }}</button></sc-if><button onClick="{{ n.marcarLida }}" aria-label="{{ n.ariaLida }}" class="h-36 borda-cfdadd fundo-ffffff cor-34464d raio-8 p-0-12 fs-13 fw-600 botao-secundario">Marcar como lida</button></div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ gavetaDaSemana }}" hint-placeholder-val="{{ false }}">
+      <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
+        <div class="d-flex eixo-column gap-4 fundo-f7fafb raio-10 p-12-14">
+          <b class="fs-15">{{ resumoDaSemana.titulo }}</b>
+          <span class="fs-13 cor-34464d">{{ resumoDaSemana.quando }}</span>
+          <span class="fs-13 cor-5b6b70">Na grade padrão: {{ resumoDaSemana.padrao }}</span>
+        </div>
+        <span class="fs-13 cor-5b6b70 lh-1p5">A mudança vale só para a semana de {{ resumoDaSemana.semana }}. As outras semanas continuam como estão.</span>
+        <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-5b6b70 fw-600">Tipo de atividade nesta semana *</span><div class="d-flex eixo-column gap-6" role="group" aria-label="Tipo de atividade nesta semana"><sc-for list="{{ tiposNaSemana }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="texto-left raio-8 p-10-12 fs-14 fw-600 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div></div>
+        <sc-if value="{{ semanaRegular }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Componente curricular nesta semana *</span><select value="{{ edicaoDaSemana.componente }}" onChange="{{ mudarComponenteNaSemana }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Selecione o componente curricular</option><sc-for list="{{ componentes }}" as="opcao" hint-placeholder-count="9"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+        <sc-if value="{{ semanaIntegral }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Oficina nesta semana *</span><select value="{{ edicaoDaSemana.oficina }}" onChange="{{ mudarOficinaNaSemana }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Selecione</option><sc-for list="{{ oficinas }}" as="opcao" hint-placeholder-count="10"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+        <sc-if value="{{ temOutraOficinaNaSemana }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Qual oficina? *</span><input value="{{ edicaoDaSemana.outraOficina }}" onChange="{{ mudarOutraOficinaNaSemana }}" maxlength="60" placeholder="Nome da oficina" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input></label></sc-if>
+        <sc-if value="{{ escolheSolucaoNaSemana }}" hint-placeholder-val="{{ true }}"><div class="d-flex eixo-column gap-8"><span class="fs-12 cor-5b6b70 fw-600">Solução prevista nesta semana *</span>
+          <sc-if value="{{ escolheSolucaoNaSemana }}" hint-placeholder-val="{{ true }}"><div class="d-flex gap-8 quebra-wrap" role="group" aria-label="Solução prevista nesta semana"><sc-for list="{{ solucoesNaSemana }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="raio-8 p-8-12 fs-13 fw-600 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div></sc-if>
+          <sc-if value="{{ temOutraSolucaoNaSemana }}" hint-placeholder-val="{{ false }}"><input value="{{ edicaoDaSemana.outraSolucao }}" onChange="{{ mudarOutraSolucaoNaSemana }}" maxlength="80" aria-label="Qual solução" placeholder="Qual solução?" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff fonte-inherit min-w-0 largura-fundo"></input></sc-if>
+        </div></sc-if>
+        <sc-if value="{{ semanaComErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-b42318 fundo-fbedeb raio-8 p-10-12 lh-1p45">{{ edicaoDaSemana.erro }}</span></sc-if>
+      </div>
+      <div class="borda-t-dde6e8 d-flex quebra-wrap gap-8 alinha-center" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+        <button onClick="{{ salvarNaSemana }}" disabled="{{ edicaoDaSemana.salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 botao-texto {{ salvarNaSemanaClasse }}" style="background:{{ salvarNaSemanaFundo }}">{{ salvarNaSemanaTexto }}</button>
+        <span class="flex-1"></span>
+        <sc-if value="{{ semanaAlterada }}" hint-placeholder-val="{{ false }}"><button onClick="{{ usarGradePadrao }}" disabled="{{ edicaoDaSemana.salvando }}" class="h-40 borda-cfdadd fundo-ffffff cor-34464d raio-8 p-0-14 fs-14 fw-600 botao-secundario">Usar a grade padrão</button></sc-if>
+      </div>
+    </sc-if>
+    <sc-if value="{{ gavetaDaCopia }}" hint-placeholder-val="{{ false }}">
+      <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
+        <span class="fs-14 cor-34464d lh-1p5">{{ copiaTexto }}</span>
+        <div class="d-flex eixo-column gap-6" role="group" aria-label="Para quais semanas"><sc-for list="{{ modosDaCopia }}" as="opcao" hint-placeholder-count="4"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="texto-left raio-8 p-10-12 fs-14 fw-600 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div>
+        <sc-if value="{{ escolheSemanas }}" hint-placeholder-val="{{ false }}">
+          <div class="d-flex eixo-column gap-10">
+            <sc-for list="{{ ciclosDaCopia }}" as="ciclo" hint-placeholder-count="3">
+              <div class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">{{ ciclo.nome }}</span>
+                <div class="d-flex quebra-wrap gap-6"><sc-for list="{{ ciclo.semanas }}" as="semana" hint-placeholder-count="4"><button onClick="{{ semana.escolher }}" aria-pressed="{{ semana.marcada }}" aria-label="{{ semana.aria }}" class="min-h-36 raio-8 p-4-10 fs-13 fw-600 num-tabular-nums botao-opcao segmentado {{ semana.classe }}" style="border:1.5px solid {{ semana.borda }};background:{{ semana.fundo }};color:{{ semana.cor }}">{{ semana.texto }}</button></sc-for></div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <span role="status" class="fs-13 cor-5b6b70 lh-1p5">{{ copiaResumo }}</span>
+        <sc-if value="{{ copiaComErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-b42318 fundo-fbedeb raio-8 p-10-12 lh-1p45">{{ copia.erro }}</span></sc-if>
+      </div>
+      <div class="borda-t-dde6e8 d-flex gap-8 alinha-center" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+        <button onClick="{{ copiar }}" disabled="{{ copia.salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 botao-texto {{ copiarClasse }}" style="background:{{ copiarFundo }}">{{ copiarTexto }}</button>
+      </div>
+    </sc-if>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ temResumo }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharResumo }}" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-label="Resumo da atividade registrada" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">Resumo do registro</span><h3 class="m-0 fs-17">{{ resumo.titulo }}</h3></div><button onClick="{{ fecharResumo }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
+      <sc-if value="{{ resumo.temRevisao }}" hint-placeholder-val="{{ false }}"><div class="raio-10 p-10-14 fs-13 fw-600 lh-1p5" style="color:{{ resumo.revisaoCor }};background:{{ resumo.revisaoFundo }}">{{ resumo.revisao }}</div></sc-if>
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ resumo.itens }}" as="item" hint-placeholder-count="6"><dt class="cor-5b6b70 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
+      <sc-for list="{{ resumo.textos }}" as="texto" hint-placeholder-count="2"><div class="fundo-f7fafb raio-10 p-12-14 d-flex eixo-column gap-4"><span class="fs-12 cor-5b6b70 fw-600">{{ texto.rotulo }}</span><span class="fs-14 lh-1p5 espaco-pre-wrap quebra-palavra-anywhere">{{ texto.valor }}</span></div></sc-for>
+    </div>
+    <div class="borda-t-dde6e8 d-flex gap-8 justifica-flex-end quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+      <sc-if value="{{ resumo.podeCorrigir }}" hint-placeholder-val="{{ false }}"><button onClick="{{ resumo.corrigir }}" class="h-40 borda-1p5-solid-0b7ea3 fundo-ffffff cor-08617e raio-8 p-0-16 fs-14 fw-600 mr-auto botao-opcao">Corrigir registro</button></sc-if>
+      <button onClick="{{ fecharResumo }}" class="h-40 borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Fechar</button>
+    </div>
+  </aside>
+</sc-if>
+
+
+<sc-if value="{{ documentoAberto }}" hint-placeholder-val="{{ false }}">
+  <div id="rel-overlay" class="pos-fixed inset-0 z-90 fundo-2e464e rolagem-auto p-0-0-40">
+    <div id="rel-toolbar" class="pos-sticky topo-0 esquerda-0 z-2 d-flex eixo-column gap-10 p-12-16 fundo-13252c cor-fff">
+      <div class="d-flex quebra-wrap alinha-center gap-12">
+        <div class="d-flex eixo-column flex-1 min-w-200"><b class="fs-15">Documentos do ciclo · {{ cicloNome }}</b><span class="fs-12 cor-b4c2c6">Prévia de impressão · A4 · {{ documento.situacao }}</span></div>
+        <button onClick="{{ fecharDocumento }}" class="h-38 borda-1-solid-rgba-255-255-255-0p3 fundo-transparent cor-fff raio-8 p-0-14 fs-14 fw-600 botao-texto">Fechar</button>
+        <button onClick="{{ imprimir }}" disabled="{{ documento.bloqueado }}" aria-describedby="rel-bloqueio" class="h-38 borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 botao-texto {{ documento.botaoClasse }}" style="background:{{ documento.botaoFundo }}">Imprimir / salvar PDF</button>
+      </div>
+      <div role="tablist" aria-label="Documento" class="d-flex gap-4 fundo-rgba-255-255-255-0p08 p-4 raio-10 alinha-si-flex-start quebra-wrap"><button role="tab" aria-selected="{{ abaPresenca }}" onClick="{{ verPresenca }}" class="min-h-36 borda-0 raio-8 p-0-14 fs-13 fw-700 botao-texto {{ abaPresencaClasse }}" style="background:{{ abaPresencaFundo }};color:{{ abaPresencaCor }}">Relatório de Presença na Escola</button><button role="tab" aria-selected="{{ abaAtividades }}" onClick="{{ verAtividades }}" class="min-h-36 borda-0 raio-8 p-0-14 fs-13 fw-700 botao-texto {{ abaAtividadesClasse }}" style="background:{{ abaAtividadesFundo }};color:{{ abaAtividadesCor }}">Relatório de Atividades</button></div>
+      <sc-if value="{{ documento.bloqueado }}" hint-placeholder-val="{{ false }}">
+        <div id="rel-bloqueio" role="status" class="d-flex eixo-column gap-6 fundo-rgba-255-255-255-0p08 raio-8 p-10-12 fs-13 lh-1p5">
+          <span>{{ documento.bloqueio }}</span>
+          <sc-if value="{{ documento.temPendencias }}" hint-placeholder-val="{{ false }}"><ul class="m-0 pl-18 d-flex eixo-column gap-2"><sc-for list="{{ documento.pendencias }}" as="pendencia" hint-placeholder-count="3"><li>{{ pendencia }}</li></sc-for></ul></sc-if>
+        </div>
+      </sc-if>
+      <label class="d-flex eixo-column gap-6 fs-12 cor-b4c2c6">Observações do(a) oficineiro(a) (opcional, saem no relatório)<textarea value="{{ observacao }}" onChange="{{ mudarObservacao }}" rows="2" maxlength="600" placeholder="Exemplo: turmas do 4º ano usaram o Matific em dupla por falta de tablets carregados" class="borda-1-solid-rgba-255-255-255-0p3 raio-8 p-8-10 fs-14 fonte-inherit redim-vertical lh-1p5 fundo-1b3038 cor-fff"></textarea></label>
+    </div>
+    <div id="rel-horas" class="w-210mm min-h-297mm m-28-auto-0 fundo-fefefe sombra-0-12-40-rgba-0-0-0-0p35 p-11mm-12mm cor-1a2b34 fs-9pt lh-1p3 d-flex eixo-column gap-0 largura-fundo" style="max-width:calc(100% - 32px);font-family:Arial,Helvetica,sans-serif">
+      <div class="d-flex alinha-center gap-12 borda-b-2-solid-0b7ea4 pb-8">
+        <img src="../public/brand/logo-cliente.png" alt="{{ cliente.orgao }}" class="w-120 h-46 obj-ajuste-contain obj-pos-left-center"></img>
+        <div class="flex-1 texto-center d-flex eixo-column gap-2"><b class="ls-0p3" style="font-size:12.5pt">{{ cliente.orgaoTitulo }}</b><b class="fs-10pt cor-08617f">{{ oficial.titulo }}</b></div>
+        <div class="w-120 h-46 d-flex alinha-center justifica-center gap-7"><svg role="img" aria-label="Oficineiro+" viewBox="0 0 31 31" width="30" height="30"><rect x="0" y="0" width="14" height="14" rx="3" fill="#DD2287"></rect><rect x="17" y="0" width="14" height="14" rx="3" fill="#6C60E7"></rect><rect x="0" y="17" width="14" height="14" rx="3" fill="#3ECDF3"></rect><rect x="17" y="17" width="14" height="14" rx="3" fill="#35E47D"></rect></svg><span class="fs-13pt fw-800 ls-n0p2 cor-1a2b34">Oficineiro<b class="cor-0b7ea4">+</b></span></div>
+      </div>
+      <div class="d-grid colunas-2fr-1fr borda-1-solid-9fb0b6 mt-8">
+        <div class="p-4-6 borda-b-1-solid-dde6e9 borda-d-1-solid-dde6e9"><small class="cor-5b6b71 d-block fs-7pt caixa-uppercase">Oficineiro(a)</small>{{ oficial.nome }}</div>
+        <div class="p-4-6 borda-b-1-solid-dde6e9"><small class="cor-5b6b71 d-block fs-7pt caixa-uppercase">{{ oficial.documentoRotulo }}</small>{{ oficial.documento }}</div>
+        <div class="p-4-6 borda-d-1-solid-dde6e9"><small class="cor-5b6b71 d-block fs-7pt caixa-uppercase">Escola</small>{{ oficial.escola }}</div>
+        <div class="p-4-6"><small class="cor-5b6b71 d-block fs-7pt caixa-uppercase">Oficina</small>{{ oficial.oficina }}</div>
+      </div>
+      <sc-if value="{{ abaPresenca }}" hint-placeholder-val="{{ true }}">
+        <table class="w-100pc colapso-collapse mt-8">
+          <thead><tr class="fundo-e3ebee"><th class="w-9pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Data</th><th class="w-6pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Dia</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Entrada</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Saída almoço</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Volta almoço</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Saída</th><th class="w-9pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Total</th><th class="w-30pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Observação</th></tr></thead>
+          <tbody><sc-for list="{{ oficial.linhas }}" as="linha" hint-placeholder-count="8"><tr class="quebra-dentro-avoid"><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ linha.data }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ linha.dia }}</td><td colspan="6" rowspan="{{ linha.rs }}" class="borda-1-solid-9fb0b6 p-2p4-4 texto-center fundo-f2f5f6 cor-5b6b71 fw-bold" style="display:{{ linha.mostraM }}">{{ linha.offTxt }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.c1 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.c2 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.c3 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.c4 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ linha.mostraN }}">{{ linha.total }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-left cor-3a4b52" style="display:{{ linha.mostraN }};font-size:7.6pt">{{ linha.obs }}</td></tr></sc-for></tbody>
+          <tfoot><tr class="fundo-e3ebee fw-bold"><td colspan="6" class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">TOTAL DE HORAS CONTABILIZADAS NO CICLO</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ oficial.total }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-left cor-3a4b52" style="font-size:7.6pt">Limite de 8h por dia, sem contar o almoço</td></tr></tfoot>
+        </table>
+      </sc-if>
+      <div class="d-grid colunas-repeat-5-1fr gap-6 mt-8 quebra-dentro-avoid"><sc-for list="{{ oficial.resumo }}" as="item" hint-placeholder-count="5"><div class="borda-1-solid-9fb0b6 p-4-6"><small class="d-block cor-5b6b71 fs-7pt caixa-uppercase">{{ item.l }}</small><b class="fs-11pt">{{ item.v }}</b></div></sc-for></div>
+      <sc-if value="{{ abaAtividades }}" hint-placeholder-val="{{ false }}">
+        <table class="w-100pc colapso-collapse mt-8">
+          <thead><tr class="fundo-e3ebee"><th class="w-7pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Data</th><th class="w-10pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Horário</th><th class="w-8pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Turma</th><th class="w-20pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Atividade agendada</th><th class="w-10pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Situação</th><th class="w-7pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Estud.</th><th class="borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Registro: como foi feita</th></tr></thead>
+          <tbody><sc-for list="{{ oficial.atividades }}" as="linha" hint-placeholder-count="6"><tr class="quebra-dentro-avoid"><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top" style="font-size:7.8pt">{{ linha.data }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top espaco-nowrap" style="font-size:7.8pt">{{ linha.horario }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top texto-center" style="font-size:7.8pt">{{ linha.turma }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top" style="font-size:7.8pt">{{ linha.atividade }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top fw-bold espaco-nowrap" style="font-size:7.8pt;color:{{ linha.sitCor }}">{{ linha.sit }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top texto-center" style="font-size:7.8pt">{{ linha.estud }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top" style="font-size:7.8pt">{{ linha.registro }}</td></tr></sc-for></tbody>
+        </table>
+        <sc-if value="{{ oficial.semAtividades }}" hint-placeholder-val="{{ false }}"><span class="mt-6 cor-5b6b71" style="font-size:8.5pt">Nenhuma atividade agendada neste ciclo.</span></sc-if>
+        <sc-if value="{{ documento.temObservacoes }}" hint-placeholder-val="{{ false }}"><div class="mt-8 borda-1-solid-9fb0b6 p-4-6 fs-8pt"><b>Observações do(a) oficineiro(a):</b> {{ observacao }}</div></sc-if>
+      </sc-if>
+      <p class="m-8-0-0 fs-8pt cor-3a4b52">{{ declaracao }}</p>
+      <div class="d-grid colunas-repeat-3-1fr gap-14 mt-24 quebra-dentro-avoid"><sc-for list="{{ oficial.assinaturas }}" as="assinatura" hint-placeholder-count="3"><div class="texto-center fs-8pt d-flex eixo-column gap-2"><div class="borda-t-1-solid-1a2b34 pt-3 fw-bold">{{ assinatura.papel }}</div><sc-if value="{{ assinatura.temNome }}" hint-placeholder-val="{{ true }}"><span>{{ assinatura.nome }}</span></sc-if><sc-if value="{{ assinatura.temStamp }}" hint-placeholder-val="{{ false }}"><span class="cor-08617f" style="font-size:7.2pt">{{ assinatura.stamp }}</span></sc-if></div></sc-for></div>
+      <div class="mt-10 borda-t-1-solid-dde6e9 pt-4 fs-7pt cor-5b6b71 d-flex justifica-space-between gap-12 quebra-wrap"><span>{{ oficial.gerado }}</span><span>{{ oficial.codigo }}</span></div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ aviso }}" hint-placeholder-val="{{ false }}">
+  <div class="pos-fixed base-96 esquerda-50pc w-max-content fundo-13252c cor-fff p-12-18 raio-10 fs-14 z-95 sombra-0-8-24-rgba-0-0-0-0p2 largura-fundo" style="transform:translateX(-50%);max-width:calc(100% - 32px)">{{ aviso }}</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const {
+  ANOS,
+  TURMAS_PADRAO,
+  WDL: DIAS,
+  anoTxt: anoTexto,
+  turmaTxt: turmaTexto,
+  minDeHora,
+  iso,
+  dataDe,
+  dmIso,
+  hm: horaDe,
+  hmTs: horaDeBrasilia
+} = Base;
+const minutosDoInstante = instante => {
+  const data = new Date(instante);
+  return data.getHours() * 60 + data.getMinutes();
+};
+const ROTULO_DA_MARCACAO = {
+  entrada: 'Entrada',
+  saida_almoco: 'Saída para almoço',
+  retorno_almoco: 'Volta do almoço',
+  saida: 'Saída'
+};
+const ajusteVazio = () => ({
+  tipo: '',
+  data: '',
+  entrada: '',
+  saidaAlmoco: '',
+  retornoAlmoco: '',
+  saida: '',
+  motivo: '',
+  erro: '',
+  ok: false,
+  enviando: false
+});
+const distanciaEmMetros = (latitude1, longitude1, latitude2, longitude2) => {
+  const radianos = Math.PI / 180;
+  const a =
+    Math.sin(((latitude2 - latitude1) * radianos) / 2) ** 2 +
+    Math.cos(latitude1 * radianos) *
+      Math.cos(latitude2 * radianos) *
+      Math.sin(((longitude2 - longitude1) * radianos) / 2) ** 2;
+  return 12742000 * Math.asin(Math.sqrt(a));
+};
+const TIPOS_DE_ATIVIDADE = {
+  R: {
+    nome: 'Aula regular',
+    curto: 'Aula regular',
+    cor: 'var(--texto-1f4fc4)',
+    fundo: 'var(--fundo-eff3fd)',
+    corDoTexto: 'var(--texto-1a3f9c)'
+  },
+  P: {
+    nome: 'Projeto tempo integral',
+    curto: 'Projeto tempo integral',
+    cor: 'var(--texto-9a6212)',
+    fundo: 'var(--fundo-fcf5e8)',
+    corDoTexto: 'var(--texto-7a4e0b)'
+  },
+  F: {
+    nome: 'Formação de professores',
+    curto: 'Formação de professores',
+    cor: 'var(--texto-6c60e6)',
+    fundo: 'var(--fundo-ecebfc)',
+    corDoTexto: 'var(--texto-4b41b8)'
+  },
+  C: {
+    nome: 'Oficina de tecnologia',
+    curto: 'Oficina de tecnologia',
+    cor: 'var(--texto-23773a)',
+    fundo: 'var(--fundo-edf7ef)',
+    corDoTexto: 'var(--texto-1b5e2e)'
+  },
+  X: { nome: 'Planejamento', curto: 'Planejamento', cor: 'var(--texto-5b6b70)', fundo: 'var(--fundo-e8eef0)' }
+};
+const tipoDe = chave => TIPOS_DE_ATIVIDADE[chave] || TIPOS_DE_ATIVIDADE.R;
+const TIPOS_DA_GRADE = ['R', 'P', 'F'];
+const OFICINAS = [
+  'Tempo de Estudo',
+  'Programa Construtores – Minecraft',
+  'Artesanato',
+  'Basquete',
+  'Colagem',
+  'Coral',
+  'Dança',
+  'Direitos humanos',
+  'Empreendedorismo',
+  'Fanfarra',
+  'Fotografia',
+  'Futsal',
+  'Handebol',
+  'Hóquei',
+  'Horta e Meio Ambiente',
+  'Jiu-Jitsu',
+  'Jogos Matemáticos',
+  'Jornal',
+  'Judô',
+  'Música/Flauta',
+  'Projeto de Vida',
+  'Robótica',
+  'Rugby',
+  'Skate',
+  'Sorvebol',
+  'Teatro',
+  'Tempo de Aula – Reforço Escolar',
+  'Xadrez'
+];
+const SOLUCOES = ['Matific', 'Minecraft Education', 'MS Reflect', 'Canva', 'MS Copilot Pro', 'Outra'];
+const solucoesDe = tipo => SOLUCOES.filter(solucao => solucao !== 'MS Copilot Pro' || tipo === 'F');
+const HORARIOS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const INICIO_DA_GRADE = 420,
+  FIM_DA_GRADE = 1020;
+const COMPONENTES = [
+  'Língua Portuguesa',
+  'Matemática',
+  'Ciências',
+  'História',
+  'Geografia',
+  'Arte',
+  'Educação Física',
+  'Língua Inglesa',
+  'Projetos e oficinas'
+];
+const ENGAJAMENTO = ['Sem nota', 'Muito baixo', 'Baixo', 'Médio', 'Alto', 'Muito alto'];
+const linhaDoTipo = atividade =>
+  !atividade
+    ? ''
+    : atividade.tipo === 'R'
+      ? atividade.componente || ''
+      : atividade.tipo === 'P'
+        ? atividade.oficina
+          ? 'Oficina: ' + atividade.oficina
+          : ''
+        : '';
+const segundaDe = dia => {
+  const data = typeof dia === 'string' ? dataDe(dia) : new Date(dia.getFullYear(), dia.getMonth(), dia.getDate());
+  data.setDate(data.getDate() - ((data.getDay() + 6) % 7));
+  return iso(data);
+};
+const somarDias = (dia, quantos) => {
+  const data = dataDe(dia);
+  data.setDate(data.getDate() + quantos);
+  return iso(data);
+};
+const cicloDaSemana = semana => iso(Base.cicloComp(dataDe(somarDias(semana, 4)))).slice(0, 7);
+const minutosDePausa = (inicio, fim, inicioDaPausa, fimDaPausa) => {
+  if (!inicioDaPausa) return 0;
+  const comeco = Math.max(new Date(inicio).getTime(), new Date(inicioDaPausa).getTime()),
+    termino = Math.min(new Date(fim).getTime(), new Date(fimDaPausa || fim).getTime());
+  return Math.max(0, Math.round((termino - comeco) / 60000));
+};
+const minutosTrabalhados = (inicio, fim, inicioDaPausa, fimDaPausa) => {
+  const bruto = Math.max(0, Math.round((new Date(fim) - new Date(inicio)) / 60000));
+  if (inicioDaPausa) return Math.max(0, bruto - minutosDePausa(inicio, fim, inicioDaPausa, fimDaPausa));
+  return bruto > 360 ? bruto - 60 : bruto;
+};
+const faixaDaPausa = presenca =>
+  presenca && presenca.pausa_inicio
+    ? presenca.pausa_fim
+      ? ' · pausa ' +
+        Base.hm(minutosDoInstante(presenca.pausa_inicio)) +
+        '–' +
+        Base.hm(minutosDoInstante(presenca.pausa_fim))
+      : ' · pausa desde ' + Base.hm(minutosDoInstante(presenca.pausa_inicio))
+    : '';
+const LIMITE_DO_DIA = 480;
+const trabalhadoEm = presenca =>
+  presenca.fim && !(presenca.pausa_inicio && !presenca.pausa_fim)
+    ? presenca.trabalhado_min != null
+      ? presenca.trabalhado_min
+      : minutosTrabalhados(presenca.inicio, presenca.fim, presenca.pausa_inicio, presenca.pausa_fim)
+    : null;
+const minutosValidos = presenca => Math.min(trabalhadoEm(presenca) || 0, LIMITE_DO_DIA);
+const horaValida = hora => /^([01]\d|2[0-3]):[0-5]\d$/.test(String(hora || ''));
+const horarioPadrao = numero => horaDe(INICIO_DA_GRADE + (Number(numero) - 1) * 50);
+const horarioDe = minutos => Math.max(1, Math.min(12, Math.floor((minutos - INICIO_DA_GRADE) / 50) + 1));
+const horarioTexto = atividade =>
+  (atividade && atividade.horario ? atividade.horario + 'º horário · ' : '') +
+  String(atividade.inicio).slice(0, 5) +
+  '–' +
+  String(atividade.fim).slice(0, 5);
+const TELAS = [
+  ['presenca', 'Presença na Escola'],
+  ['grade', 'Grade de Atividades'],
+  ['registro', 'Registro de Atividades'],
+  ['horas', 'Relatório Geral']
+];
+const TITULO_DA_GAVETA = {
+  notif: 'Notificações',
+  semana: 'Atividade nesta semana',
+  copiar: 'Copiar semana'
+};
+
+class Component extends DCLogic {
+  state = {
+    tela: 'presenca',
+    presencaDeHoje: null,
+    posicao: null,
+    desvioDoRelogio: 0,
+    marcandoPresenca: false,
+    erroDaPresenca: null,
+    espelho: null,
+    competenciaDoEspelho: null,
+    ajustes: [],
+    menuAberto: false,
+    semInternet: false,
+    sincronizadoAs: Base.hm(Base.nowMin()),
+    lembretes: [],
+    contestadas: [],
+    relatorioAnterior: null,
+    mudancaDeEscola: null,
+    carregado: false,
+    escola: { id: null, sigla: '', nome: '', latitude: null, longitude: null, raio: null },
+    nomeDoUsuario: '',
+    documentoAberto: false,
+    observacoes: {},
+    contratada: null,
+    competenciaDoRelatorio: '',
+    presencasDoCiclo: [],
+    registrosDoCiclo: [],
+    relatorioDoCiclo: null,
+    espelhoAssinadoEm: null,
+    abaDoDocumento: 'presenca',
+    carregandoRelatorio: false,
+    registroAberto: null,
+    gaveta: null,
+    edicao: {},
+    semanasDaGrade: [],
+    edicaoDaSemana: {},
+    copia: {},
+    envioDaGrade: null,
+    enviandoGrade: false,
+    registrosDoDia: [],
+    grade: [],
+    carregandoGrade: false,
+    anoLetivo: new Date().getFullYear(),
+    turmas: [],
+    aviso: ''
+  };
+  memoria = {
+    presenca: { aba: 'registrar', ajuste: ajusteVazio() },
+    grade: {
+      modo: 'padrao',
+      semana: (() => {
+        const hoje = new Date();
+        return hoje.getDay() === 0 || hoje.getDay() === 6 ? somarDias(segundaDe(hoje), 7) : segundaDe(hoje);
+      })(),
+      ciclo: ''
+    },
+    registro: { dia: 0, atividade: null, formulario: {} },
+    relatorio: { aba: 'aulas', turma: '', destaque: false, confirmando: false }
+  };
+  componentDidMount() {
+    this.relogio = setInterval(() => this.forceUpdate(), 30000);
+    this.aoMudarRede = () => {
+      if (navigator.onLine !== this.state.semInternet) return;
+      this.setState({ semInternet: !navigator.onLine, sincronizadoAs: Base.hm(Base.nowMin()) });
+      this.avisar(
+        navigator.onLine ? 'Conexão restabelecida' : 'Sem internet · reconecte para registrar presença e atividades'
+      );
+    };
+    window.addEventListener('online', this.aoMudarRede);
+    this.aoSair = evento => {
+      if (this.state.carregado && this.temRascunho()) {
+        evento.preventDefault();
+        evento.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', this.aoSair);
+    window.addEventListener('offline', this.aoMudarRede);
+    setTimeout(this.aoMudarRede, 0);
+    this.carregar();
+  }
+  diaUtil(deslocamento) {
+    let dia = new Date();
+    dia = new Date(dia.getFullYear(), dia.getMonth(), dia.getDate());
+    while (dia.getDay() === 0 || dia.getDay() === 6) dia = Base.add(dia, -1);
+    let restantes = deslocamento || 0;
+    while (restantes !== 0) {
+      dia = Base.add(dia, restantes > 0 ? 1 : -1);
+      if (dia.getDay() !== 0 && dia.getDay() !== 6) restantes += restantes > 0 ? -1 : 1;
+    }
+    return dia;
+  }
+  async carregarMudancaDeEscola() {
+    if (!this.state.carregado || !window.FSM_AUTH.minhaMudancaEscola) return;
+    try {
+      const mudanca = await window.FSM_AUTH.minhaMudancaEscola();
+      this.setState({ mudancaDeEscola: mudanca && mudanca.escola ? mudanca : null });
+    } catch (x) {}
+  }
+  async carregarContestadas() {
+    if (!this.state.carregado || !window.FSM_AUTH.registrosPeriodo) return;
+    try {
+      const hoje = Base.iso(new Date()),
+        competencia = Base.cicloComp(new Date()),
+        anterior = new Date(competencia.getFullYear(), competencia.getMonth() - 1, 1);
+      const inicio = Base.iso(Base.cicloIni(anterior));
+      const [registros, relatorioAnterior] = await Promise.all([
+        window.FSM_AUTH.registrosPeriodo(inicio, hoje),
+        window.FSM_AUTH.relatorioDoMes
+          ? window.FSM_AUTH.relatorioDoMes(Base.iso(anterior)).catch(() => null)
+          : Promise.resolve(null)
+      ]);
+      this.setState({
+        contestadas: (registros || []).filter(x => x.check_direcao === 'contestada' && x.revisao_status !== 'anulado'),
+        relatorioAnterior: relatorioAnterior || null
+      });
+    } catch (x) {}
+  }
+  async carregarLembretes() {
+    this.carregarContestadas();
+    if (!this.state.carregado) return;
+    try {
+      const lembretes = await window.FSM_AUTH.meusLembretes();
+      this.setState({ lembretes: Array.isArray(lembretes) ? lembretes : [] });
+    } catch (x) {}
+  }
+  async carregarRegistros(deslocamento) {
+    if (!this.state.carregado) return;
+    const dia = deslocamento == null ? this.memoria.registro.dia : deslocamento,
+      data = Base.iso(this.diaUtil(dia));
+    try {
+      const registros = await window.FSM_AUTH.registrosDoDia(data);
+      if (this.memoria.registro.dia === dia) this.setState({ registrosDoDia: registros || [] });
+    } catch (x) {
+      this.avisar((x && x.message) || 'Não foi possível carregar os registros');
+    }
+  }
+
+  lembrar(tela, mudanca) {
+    Object.assign(this.memoria[tela], mudanca);
+    this.forceUpdate();
+  }
+  irPara(tela) {
+    this.setState({ tela, gaveta: null, menuAberto: false });
+  }
+  guardarRascunho() {
+    const formulario = this.memoria.registro.formulario;
+    if (formulario && formulario.alterado && formulario.chave) {
+      this.rascunhos = this.rascunhos || {};
+      this.rascunhos[formulario.chave] = { ...formulario, erro: '', salvando: false };
+    }
+  }
+  temRascunho() {
+    const formulario = this.memoria.registro.formulario;
+    return !!((formulario && formulario.alterado) || Object.keys(this.rascunhos || {}).length);
+  }
+  irParaDia(dia) {
+    this.guardarRascunho();
+    Object.assign(this.memoria.registro, { dia, atividade: null, formulario: {} });
+    this.setState({ registrosDoDia: [] }, () => this.carregarRegistros(dia));
+  }
+  abrirRegistro(atividade, forcar) {
+    const memoria = this.memoria.registro,
+      data = iso(this.diaUtil(memoria.dia)),
+      registro = this.state.registrosDoDia.find(r => r.grade_aula_id === atividade.id && r.data === data);
+    const mudou = !!(registro && registro.mudanca),
+      chave = atividade.id + '|' + data;
+    if (!forcar && memoria.formulario && memoria.formulario.chave === chave && memoria.atividade === atividade.id)
+      return;
+    if (!forcar) this.guardarRascunho();
+    const rascunho = forcar ? null : (this.rascunhos || {})[chave];
+    if (rascunho) {
+      delete this.rascunhos[chave];
+      return this.lembrar('registro', {
+        atividade: atividade.id,
+        formulario: { ...rascunho, id: registro ? registro.id : rascunho.id }
+      });
+    }
+    const somenteLeitura =
+      !!registro && registro.revisao_status !== 'devolvido' && registro.check_direcao !== 'contestada';
+    this.lembrar('registro', {
+      atividade: atividade.id,
+      formulario: registro
+        ? {
+            chave,
+            id: registro.id,
+            situacao: registro.situacao === 'Não realizada' ? 'nao' : 'sim',
+            motivo: (registro.motivo || '').split(' · ')[0],
+            detalheDoMotivo: (registro.motivo || '').split(' · ').slice(1).join(' · '),
+            mudou,
+            professor: registro.professor_aula || atividade.professor || '',
+            solucao: registro.solucao || atividade.solucao || '',
+            oficina: registro.oficina || atividade.oficina || '',
+            somenteLeitura,
+            mudanca: registro.mudanca || '',
+            matriculados: registro.matriculados == null ? '' : String(registro.matriculados),
+            presentes: registro.presentes == null ? '' : String(registro.presentes),
+            atividade: registro.atividade || '',
+            componente: registro.componente || atividade.componente || '',
+            descricao: registro.conteudo || '',
+            objetivo: registro.objetivo || '',
+            engajamento: registro.engajamento || 0,
+            proxima: registro.proxima_aula || '',
+            erro: ''
+          }
+        : {
+            chave,
+            id: null,
+            situacao: '',
+            motivo: '',
+            detalheDoMotivo: '',
+            mudou: false,
+            professor: atividade.professor || '',
+            solucao: atividade.solucao || '',
+            oficina: atividade.oficina || '',
+            somenteLeitura: false,
+            mudanca: '',
+            matriculados: '',
+            presentes: '',
+            atividade: '',
+            componente: atividade.componente || '',
+            descricao: '',
+            objetivo: '',
+            engajamento: 0,
+            proxima: '',
+            erro: ''
+          }
+    });
+  }
+  matriculadosDaTurma(atividade) {
+    if (!atividade) return null;
+    const turma = (this.state.turmas || []).find(
+      t => String(t.ano) === String(atividade.ano) && String(t.turma || '') === String(atividade.turma || '')
+    );
+    return turma && turma.matriculados != null ? Number(turma.matriculados) : null;
+  }
+  async salvarRegistro() {
+    const s = this.state,
+      memoria = this.memoria.registro,
+      formulario = memoria.formulario,
+      data = iso(this.diaUtil(memoria.dia)),
+      atividade = this.efetiva(
+        s.grade.find(a => a.id === memoria.atividade),
+        segundaDe(data)
+      );
+    if (!atividade) return;
+    const doCadastro = this.matriculadosDaTurma(atividade),
+      matriculados = doCadastro != null ? String(doCadastro) : formulario.matriculados;
+    const erro = !formulario.situacao
+      ? 'Diga se a atividade aconteceu.'
+      : formulario.situacao === 'nao'
+        ? !formulario.motivo
+          ? 'Escolha o motivo.'
+          : ''
+        : formulario.mudou && formulario.mudanca.trim().length < 5
+          ? 'Conte o que mudou em relação à grade.'
+          : formulario.presentes === '' || !(Number(formulario.presentes) >= 0)
+            ? 'Informe quantos alunos estavam presentes.'
+            : matriculados !== '' && Number(formulario.presentes) > Number(matriculados)
+              ? 'Presentes não pode ser maior que matriculados.'
+              : formulario.descricao.trim().length < 10
+                ? 'Conte como foi a atividade (pelo menos uma frase).'
+                : '';
+    if (erro) return this.lembrar('registro', { formulario: { ...formulario, erro } });
+    if (s.semInternet)
+      return this.lembrar('registro', {
+        formulario: { ...formulario, erro: 'Sem internet. O registro precisa de conexão para ser salvo.' }
+      });
+    const realizada = formulario.situacao === 'sim',
+      tipo = atividade.tipo;
+    const dados = {
+      grade_aula_id: atividade.id,
+      data,
+      inicio: String(atividade.inicio).slice(0, 5),
+      fim: String(atividade.fim).slice(0, 5),
+      turma: turmaTexto(atividade),
+      tipo,
+      situacao: realizada ? 'Realizada' : 'Não realizada',
+      motivo: realizada
+        ? null
+        : formulario.motivo + (formulario.detalheDoMotivo.trim() ? ' · ' + formulario.detalheDoMotivo.trim() : ''),
+      solucao: tipo === 'P' ? null : realizada && formulario.mudou ? formulario.solucao : atividade.solucao,
+      oficina: tipo === 'P' ? (realizada && formulario.mudou && formulario.oficina) || atividade.oficina || null : null,
+      professor_aula: realizada && formulario.mudou && formulario.professor.trim() ? formulario.professor.trim() : null,
+      mudanca: realizada && formulario.mudou ? formulario.mudanca.trim() : null,
+      presentes: realizada ? Number(formulario.presentes) : null,
+      matriculados: realizada && matriculados !== '' ? Number(matriculados) : null,
+      conteudo: realizada ? formulario.descricao.trim() : null,
+      atividade: realizada && formulario.atividade.trim() ? formulario.atividade.trim() : null,
+      componente:
+        realizada && tipo === 'R' ? (formulario.mudou ? formulario.componente : atividade.componente) || null : null,
+      objetivo: realizada && formulario.objetivo ? formulario.objetivo : null,
+      engajamento: realizada && formulario.engajamento ? formulario.engajamento : null,
+      proxima_aula: realizada && formulario.proxima.trim() ? formulario.proxima.trim() : null
+    };
+    this.lembrar('registro', { formulario: { ...formulario, salvando: true } });
+    try {
+      const salvo = await window.FSM_AUTH.salvarRegistroAula(formulario.id, dados);
+      if (memoria.formulario.chave === formulario.chave)
+        this.lembrar('registro', {
+          formulario: {
+            ...memoria.formulario,
+            id: (salvo && salvo.id) || formulario.id,
+            somenteLeitura: true,
+            alterado: false,
+            salvando: false,
+            erro: ''
+          }
+        });
+      else if (this.rascunhos && this.rascunhos[formulario.chave]) delete this.rascunhos[formulario.chave];
+      this.avisar(formulario.id ? 'Registro atualizado' : 'Atividade registrada');
+      this.carregarRegistros();
+      this.carregarRelatorio();
+      this.carregarLembretes();
+    } catch (x) {
+      this.lembrar('registro', {
+        formulario: {
+          ...memoria.formulario,
+          salvando: false,
+          erro: (x && x.message) || 'Não foi possível salvar o registro.'
+        }
+      });
+    }
+  }
+  competenciaAtual() {
+    return Base.iso(Base.cicloComp(new Date()));
+  }
+  async carregarRelatorio(competencia) {
+    if (!this.state.carregado) return;
+    if (!this.state.contratada && window.FSM_AUTH.minhaContratada)
+      window.FSM_AUTH.minhaContratada()
+        .then(ciclo => this.setState({ contratada: ciclo || {} }))
+        .catch(() => {});
+    const ciclo = competencia || this.state.competenciaDoRelatorio || this.competenciaAtual(),
+      inicio = Base.iso(Base.cicloIni(dataDe(ciclo))),
+      fim = Base.iso(Base.cicloFim(dataDe(ciclo))),
+      A = window.FSM_AUTH;
+    this.setState({ carregandoRelatorio: true });
+    try {
+      const [presencas, registros, situacao, espelho] = await Promise.all([
+        A.presencasPeriodo(inicio, fim),
+        A.registrosPeriodo(inicio, fim),
+        A.relatorioDoMes(ciclo),
+        A.meuEspelho(ciclo).catch(() => null)
+      ]);
+      if ((this.state.competenciaDoRelatorio || this.competenciaAtual()) === ciclo)
+        this.setState({
+          presencasDoCiclo: presencas || [],
+          registrosDoCiclo: registros || [],
+          relatorioDoCiclo: situacao,
+          espelhoAssinadoEm: (espelho && espelho.assinado_em) || null,
+          carregandoRelatorio: false
+        });
+    } catch (x) {
+      this.setState({ carregandoRelatorio: false });
+      this.avisar((x && x.message) || 'Não foi possível carregar o relatório');
+    }
+  }
+
+  apagarDestaqueDepois() {
+    clearTimeout(this.destaqueTempo);
+    this.destaqueTempo = setTimeout(() => this.lembrar('relatorio', { destaque: false }), 2500);
+  }
+  deslocamentoDe(data) {
+    const base = this.diaUtil(0),
+      alvo = dataDe(data),
+      passo = alvo < base ? -1 : 1;
+    let dia = base,
+      deslocamento = 0;
+    while (Base.iso(dia) !== data && Math.abs(deslocamento) < 400) {
+      dia = Base.add(dia, passo);
+      if (dia.getDay() !== 0 && dia.getDay() !== 6) deslocamento += passo;
+    }
+    return deslocamento;
+  }
+
+  irParaRegistro(data, atividadeId) {
+    const dia = this.deslocamentoDe(data),
+      abrir = () => {
+        const atividade = this.state.grade.find(a => a.id === atividadeId);
+        if (atividade) this.abrirRegistro(atividade);
+      };
+    this.guardarRascunho();
+    Object.assign(this.memoria.registro, { dia, atividade: null, formulario: {} });
+    this.setState({ tela: 'registro' }, () => {
+      const carga = this.carregarRegistros(dia);
+      carga && carga.then ? carga.then(abrir) : abrir();
+      window.scrollTo(0, 0);
+    });
+  }
+  async reenviarCiclo() {
+    const s = this.state,
+      competencia = s.competenciaDoRelatorio || this.competenciaAtual();
+    if (s.semInternet) return this.avisar('Sem internet. O envio precisa de conexão.');
+    this.setState({ carregandoRelatorio: true });
+    try {
+      await window.FSM_AUTH.fecharRelatorio(competencia);
+      this.lembrar('relatorio', { confirmando: false });
+      this.avisar('Ciclo reenviado para aprovação da direção');
+      this.carregarRelatorio(competencia);
+      this.carregarContestadas();
+    } catch (x) {
+      this.setState({ carregandoRelatorio: false });
+      this.avisar((x && x.message) || 'Não foi possível enviar o ciclo');
+    }
+  }
+  exportar(linhas, nome) {
+    if (window.FSM_PLANILHA) return window.FSM_PLANILHA.baixar(linhas, nome, 'Oficineiro+');
+    const escapar = valor => {
+      let texto = String(valor == null ? '' : valor);
+      if (/^[=+\-@\t\r]/.test(texto)) texto = "'" + texto;
+      return /[;"\n]/.test(texto) ? '"' + texto.replace(/"/g, '""') + '"' : texto;
+    };
+    const csv = '﻿' + linhas.map(linha => linha.map(escapar).join(';')).join('\r\n');
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = nome;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  async carregarTurmas() {
+    try {
+      const turmas = await window.FSM_AUTH.turmasDaEscola();
+      this.setState({ turmas: turmas || [] });
+    } catch (x) {}
+  }
+  async carregarGrade() {
+    if (!this.state.carregado) return;
+    this.setState({ carregandoGrade: true });
+    try {
+      const A = window.FSM_AUTH;
+      const [grade, envio, semanas] = await Promise.all([
+        A.gradeAulas(this.state.anoLetivo),
+        A.envioDaGrade(this.state.anoLetivo),
+        A.semanasGrade ? A.semanasGrade(this.state.anoLetivo).catch(() => []) : []
+      ]);
+      this.setState({
+        grade: grade || [],
+        envioDaGrade: (envio && envio[0]) || null,
+        semanasDaGrade: semanas || [],
+        carregandoGrade: false
+      });
+    } catch (x) {
+      this.setState({ carregandoGrade: false });
+      this.avisar((x && x.message) || 'Não foi possível carregar a grade');
+    }
+  }
+  efetiva(atividade, semana) {
+    const alteracao =
+      atividade && (this.state.semanasDaGrade || []).find(x => x.grade_aula_id === atividade.id && x.semana === semana);
+    return alteracao
+      ? {
+          ...atividade,
+          tipo: alteracao.tipo,
+          solucao: alteracao.solucao,
+          componente: alteracao.tipo === 'R' ? alteracao.componente || atividade.componente : null,
+          oficina: alteracao.tipo === 'P' ? alteracao.oficina : null,
+          personalizada: true
+        }
+      : atividade;
+  }
+  semanaEditavel(semana) {
+    return semana >= segundaDe(new Date());
+  }
+  abrirAtividadeDaSemana(daGrade) {
+    const semana = this.memoria.grade.semana;
+    if (!this.semanaEditavel(semana)) return this.avisar('Semanas que já passaram não podem ser alteradas.');
+    const atual = this.efetiva(daGrade, semana),
+      tipo = TIPOS_DA_GRADE.includes(atual.tipo) ? atual.tipo : 'P',
+      outraSolucao = tipo !== 'P' && !!atual.solucao && !SOLUCOES.includes(atual.solucao),
+      outraOficina = tipo === 'P' && !!atual.oficina && !OFICINAS.includes(atual.oficina);
+    this.setState({
+      gaveta: 'semana',
+      edicaoDaSemana: {
+        atividade: daGrade.id,
+        tipo,
+        solucao: tipo === 'P' ? '' : outraSolucao ? 'Outra' : atual.solucao || 'Matific',
+        outraSolucao: outraSolucao ? atual.solucao : '',
+        componente: tipo === 'R' && COMPONENTES.includes(atual.componente) ? atual.componente : '',
+        oficina: tipo === 'P' ? (outraOficina ? 'Outro' : atual.oficina || '') : '',
+        outraOficina: outraOficina ? atual.oficina : '',
+        erro: '',
+        salvando: false
+      }
+    });
+  }
+  preencherNaSemana(mudanca) {
+    this.setState(s => ({ edicaoDaSemana: { ...s.edicaoDaSemana, ...mudanca, erro: '' } }));
+  }
+  itensDaSemana(semana) {
+    return (this.state.semanasDaGrade || [])
+      .filter(x => x.semana === semana)
+      .map(x => ({
+        grade_aula_id: x.grade_aula_id,
+        tipo: x.tipo,
+        solucao: x.solucao,
+        componente: x.componente || null,
+        oficina: x.oficina || null
+      }));
+  }
+  async gravarSemana(semana, itens, mensagem) {
+    const s = this.state;
+    if (s.semInternet) {
+      this.avisar('Sem internet. A grade só pode ser alterada com conexão.');
+      return false;
+    }
+    const limpos = itens
+      .map(item => {
+        const daGrade = s.grade.find(x => x.id === item.grade_aula_id);
+        return daGrade
+          ? { ...item, componente: item.componente && item.componente !== daGrade.componente ? item.componente : null }
+          : null;
+      })
+      .filter(item => {
+        const daGrade = item && s.grade.find(x => x.id === item.grade_aula_id);
+        return (
+          daGrade &&
+          !(
+            daGrade.tipo === item.tipo &&
+            (daGrade.solucao || null) === (item.solucao || null) &&
+            !item.componente &&
+            (daGrade.oficina || null) === (item.oficina || null)
+          )
+        );
+      });
+    try {
+      await window.FSM_AUTH.salvarSemanaGrade(semana, limpos);
+      this.avisar(mensagem);
+      this.carregarGrade();
+      return true;
+    } catch (x) {
+      this.avisar((x && x.message) || 'Não foi possível salvar a semana.');
+      return false;
+    }
+  }
+  async salvarAtividadeDaSemana(voltarAoPadrao) {
+    const s = this.state,
+      edicaoDaSemana = s.edicaoDaSemana,
+      semana = this.memoria.grade.semana,
+      daGrade = s.grade.find(x => x.id === edicaoDaSemana.atividade);
+    if (!daGrade || edicaoDaSemana.salvando) return;
+    let item = null;
+    if (!voltarAoPadrao) {
+      const solucao =
+        edicaoDaSemana.tipo === 'P'
+          ? null
+          : edicaoDaSemana.solucao === 'Outra'
+            ? edicaoDaSemana.outraSolucao.trim()
+            : edicaoDaSemana.solucao;
+      const oficina =
+        edicaoDaSemana.tipo === 'P'
+          ? edicaoDaSemana.oficina === 'Outro'
+            ? edicaoDaSemana.outraOficina.trim()
+            : edicaoDaSemana.oficina
+          : null;
+      if (edicaoDaSemana.tipo !== 'P' && !solucao)
+        return this.setState({ edicaoDaSemana: { ...edicaoDaSemana, erro: 'Informe qual é a solução prevista.' } });
+      if (edicaoDaSemana.tipo === 'R' && !edicaoDaSemana.componente)
+        return this.setState({ edicaoDaSemana: { ...edicaoDaSemana, erro: 'Escolha o componente curricular.' } });
+      if (edicaoDaSemana.tipo === 'P' && !oficina)
+        return this.setState({ edicaoDaSemana: { ...edicaoDaSemana, erro: 'Escolha a oficina.' } });
+      item = {
+        grade_aula_id: daGrade.id,
+        tipo: edicaoDaSemana.tipo,
+        solucao,
+        componente: edicaoDaSemana.tipo === 'R' ? edicaoDaSemana.componente : null,
+        oficina
+      };
+    }
+    const itens = [
+      ...this.itensDaSemana(semana).filter(outro => outro.grade_aula_id !== daGrade.id),
+      ...(item ? [item] : [])
+    ];
+    this.setState({ edicaoDaSemana: { ...edicaoDaSemana, salvando: true } });
+    const ok = await this.gravarSemana(
+      semana,
+      itens,
+      voltarAoPadrao
+        ? 'Esta atividade voltou para a grade padrão nesta semana'
+        : 'Atividade alterada só na semana de ' + dmIso(semana)
+    );
+    this.setState(ok ? { gaveta: null } : { edicaoDaSemana: { ...this.state.edicaoDaSemana, salvando: false } });
+  }
+  async voltarSemanaAoPadrao() {
+    const semana = this.memoria.grade.semana;
+    if (!this.semanaEditavel(semana)) return this.avisar('Semanas que já passaram não podem ser alteradas.');
+    await this.gravarSemana(semana, [], 'A semana de ' + dmIso(semana) + ' voltou para a grade padrão');
+  }
+  abrirCopia() {
+    if (!this.semanaEditavel(this.memoria.grade.semana))
+      return this.avisar('Semanas que já passaram não podem ser copiadas.');
+    this.setState({ gaveta: 'copiar', copia: { modo: 'alt2', escolhidas: {}, erro: '', salvando: false } });
+  }
+  semanasFuturas() {
+    const s = this.state,
+      fimDoAno = s.anoLetivo + '-12-31',
+      lista = [];
+    for (let outra = segundaDe(new Date()); outra <= fimDoAno && lista.length < 60; outra = somarDias(outra, 7))
+      if (outra !== this.memoria.grade.semana && outra.slice(0, 4) === String(s.anoLetivo)) lista.push(outra);
+    return lista;
+  }
+  destinosDaCopia(copia) {
+    const semana = this.memoria.grade.semana,
+      futuras = this.semanasFuturas();
+    const distancia = outra => Math.round((dataDe(outra) - dataDe(semana)) / (7 * 864e5));
+    if (copia.modo === 'alt2') return futuras.filter(outra => outra > semana && distancia(outra) % 2 === 0);
+    if (copia.modo === 'alt3') return futuras.filter(outra => outra > semana && distancia(outra) % 3 === 0);
+    if (copia.modo === 'mes') {
+      const ciclo = cicloDaSemana(semana);
+      return futuras.filter(outra => cicloDaSemana(outra) === ciclo);
+    }
+    return futuras.filter(outra => copia.escolhidas && copia.escolhidas[outra]);
+  }
+  async copiarSemana() {
+    const s = this.state,
+      copia = s.copia,
+      semana = this.memoria.grade.semana,
+      destinos = this.destinosDaCopia(copia);
+    if (copia.salvando) return;
+    if (!destinos.length) return this.setState({ copia: { ...copia, erro: 'Escolha pelo menos uma semana.' } });
+    if (s.semInternet)
+      return this.setState({ copia: { ...copia, erro: 'Sem internet. A grade só pode ser alterada com conexão.' } });
+    const mensagem =
+      destinos.length === 1
+        ? 'Semana copiada para ' + dmIso(destinos[0])
+        : 'Semana copiada para ' + destinos.length + ' semanas';
+    this.setState({ copia: { ...copia, salvando: true } });
+    try {
+      await window.FSM_AUTH.copiarSemanaGrade(semana, destinos);
+      this.setState({ gaveta: null });
+      this.avisar(mensagem);
+      this.carregarGrade();
+    } catch (x) {
+      this.setState({
+        copia: { ...this.state.copia, salvando: false, erro: (x && x.message) || 'Não foi possível copiar a semana.' }
+      });
+    }
+  }
+  async enviarGrade() {
+    const s = this.state;
+    if (!s.grade.length) return this.avisar('Adicione as atividades antes de enviar a grade.');
+    if (s.semInternet) return this.avisar('Sem internet. O envio precisa de conexão.');
+    this.setState({ enviandoGrade: true });
+    try {
+      await window.FSM_AUTH.enviarGrade(s.anoLetivo);
+      this.setState({ enviandoGrade: false });
+      this.avisar('Grade enviada à direção da escola');
+      this.carregarGrade();
+    } catch (x) {
+      this.setState({ enviandoGrade: false });
+      this.avisar((x && x.message) || 'Não foi possível enviar a grade');
+    }
+  }
+  abrirAtividade(daGrade, dia, hora) {
+    if (daGrade) {
+      const inicio = minDeHora(daGrade.inicio),
+        tipo = TIPOS_DA_GRADE.includes(daGrade.tipo) ? daGrade.tipo : 'P';
+      const tempos = Math.max(1, Math.min(3, Math.round((minDeHora(daGrade.fim) - inicio) / 50)));
+      const outraSolucao = tipo !== 'P' && !!daGrade.solucao && !SOLUCOES.includes(daGrade.solucao);
+      const outraOficina = tipo === 'P' && !!daGrade.oficina && !OFICINAS.includes(daGrade.oficina);
+      return this.setState({
+        gaveta: 'aula',
+        edicao: {
+          id: daGrade.id,
+          dia: String(daGrade.dia_semana),
+          horario: String(daGrade.horario || horarioDe(inicio)),
+          hora: String(daGrade.inicio).slice(0, 5),
+          tempos,
+          tipo,
+          ano: daGrade.ano == null ? '' : String(daGrade.ano),
+          turma: daGrade.turma || '',
+          solucao: tipo === 'P' ? '' : outraSolucao ? 'Outra' : daGrade.solucao || 'Matific',
+          outraSolucao: outraSolucao ? daGrade.solucao : '',
+          componente: tipo === 'R' && COMPONENTES.includes(daGrade.componente) ? daGrade.componente : '',
+          oficina: tipo === 'P' ? (outraOficina ? 'Outro' : daGrade.oficina || '') : '',
+          outraOficina: outraOficina ? daGrade.oficina : '',
+          professor: daGrade.professor || '',
+          espaco: daGrade.espaco || 'Laboratório',
+          observacao: daGrade.observacao || '',
+          erro: '',
+          confirmarExcluir: false
+        }
+      });
+    }
+    const minutos = horaValida(hora) ? minDeHora(hora) : null;
+    this.setState({
+      gaveta: 'aula',
+      edicao: {
+        id: null,
+        dia: String(dia || 1),
+        horario: minutos == null ? '' : String(horarioDe(minutos)),
+        hora: minutos == null ? '' : horaDe(minutos),
+        tempos: 1,
+        tipo: 'R',
+        ano: '',
+        turma: '',
+        solucao: 'Matific',
+        outraSolucao: '',
+        componente: '',
+        oficina: '',
+        outraOficina: '',
+        professor: '',
+        espaco: 'Laboratório',
+        observacao: '',
+        erro: '',
+        confirmarExcluir: false
+      }
+    });
+  }
+  preencherEdicao(mudanca) {
+    this.setState(s => ({ edicao: { ...s.edicao, ...mudanca, erro: '', confirmarExcluir: false } }));
+  }
+  validarAtividade(edicao) {
+    if (!['1', '2', '3', '4', '5'].includes(String(edicao.dia))) return 'Escolha o dia da semana.';
+    if (!edicao.horario) return 'Escolha o horário.';
+    if (!horaValida(edicao.hora)) return 'Informe a hora de início.';
+    const inicio = minDeHora(edicao.hora);
+    if (inicio < INICIO_DA_GRADE) return 'As atividades começam a partir das 07:00';
+    if (inicio + 50 * (edicao.tempos || 1) > FIM_DA_GRADE) return 'A atividade precisa terminar até as 17:00';
+    if (edicao.tipo !== 'F' && edicao.ano === '') return 'Escolha o ano.';
+    if (edicao.tipo !== 'F' && !edicao.turma) return 'Escolha a turma.';
+    if (edicao.tipo === 'R' && !edicao.componente) return 'Escolha o componente curricular.';
+    if (edicao.tipo === 'P' && !edicao.oficina) return 'Escolha a oficina.';
+    if (edicao.tipo === 'P' && edicao.oficina === 'Outro' && !edicao.outraOficina.trim())
+      return 'Informe qual é a oficina.';
+    if (edicao.tipo === 'R' && edicao.professor.trim().length < 3) return 'Informe o(a) professor(a) regente.';
+    if (edicao.tipo !== 'P' && !edicao.solucao) return 'Escolha a solução prevista.';
+    if (edicao.tipo !== 'P' && edicao.solucao === 'Outra' && !edicao.outraSolucao.trim())
+      return 'Informe qual é a solução prevista.';
+    return '';
+  }
+  dadosDaAtividade(edicao) {
+    const inicio = minDeHora(edicao.hora),
+      formacao = edicao.tipo === 'F';
+    return {
+      ano_letivo: this.state.anoLetivo,
+      dia_semana: Number(edicao.dia),
+      horario: Number(edicao.horario),
+      inicio: horaDe(inicio),
+      fim: horaDe(inicio + 50 * (edicao.tempos || 1)),
+      ano: formacao ? null : Number(edicao.ano),
+      turma: formacao ? null : edicao.turma,
+      componente: edicao.tipo === 'R' ? edicao.componente || null : null,
+      oficina: edicao.tipo === 'P' ? (edicao.oficina === 'Outro' ? edicao.outraOficina.trim() : edicao.oficina) : null,
+      tipo: edicao.tipo,
+      solucao: edicao.tipo === 'P' ? null : edicao.solucao === 'Outra' ? edicao.outraSolucao.trim() : edicao.solucao,
+      professor: edicao.tipo === 'R' ? edicao.professor.trim() : null,
+      espaco: edicao.espaco || null,
+      obs: edicao.observacao,
+      observacao: edicao.observacao.trim() || null
+    };
+  }
+  async salvarAtividade() {
+    const s = this.state,
+      edicao = s.edicao,
+      erro = this.validarAtividade(edicao);
+    if (erro) return this.setState({ edicao: { ...edicao, erro } });
+    if (s.semInternet)
+      return this.setState({ edicao: { ...edicao, erro: 'Sem internet. A grade só pode ser alterada com conexão.' } });
+    const dados = this.dadosDaAtividade(edicao);
+    delete dados.obs;
+    this.setState({ edicao: { ...edicao, salvando: true } });
+    try {
+      await window.FSM_AUTH.salvarAulaGrade(edicao.id, dados);
+      this.setState({ gaveta: null });
+      this.avisar(edicao.id ? 'Edição salva' : 'Atividade adicionada à grade');
+      this.carregarGrade();
+    } catch (x) {
+      this.setState({
+        edicao: {
+          ...this.state.edicao,
+          salvando: false,
+          erro: (x && x.message) || 'Não foi possível salvar a atividade.'
+        }
+      });
+    }
+  }
+  async excluirAtividade() {
+    const s = this.state,
+      edicao = s.edicao;
+    if (!edicao.confirmarExcluir) return this.setState({ edicao: { ...edicao, confirmarExcluir: true, erro: '' } });
+    if (s.semInternet)
+      return this.setState({ edicao: { ...edicao, erro: 'Sem internet. A grade só pode ser alterada com conexão.' } });
+    this.setState({ edicao: { ...edicao, salvando: true } });
+    try {
+      await window.FSM_AUTH.excluirAulaGrade(edicao.id);
+      this.setState({ gaveta: null });
+      this.avisar('Atividade excluída');
+      this.carregarGrade();
+    } catch (x) {
+      this.setState({
+        edicao: {
+          ...this.state.edicao,
+          salvando: false,
+          erro: (x && x.message) || 'Não foi possível excluir a atividade.'
+        }
+      });
+    }
+  }
+  async carregar() {
+    const A = window.FSM_AUTH;
+    if (!A || !A.logado || !A.logado()) return;
+    try {
+      const [acesso, daEscola, ciclo] = await Promise.all([
+        A.meuAcesso(),
+        A.minhaEscola(),
+        A.meuCiclo ? A.meuCiclo() : 'dia21'
+      ]);
+      Base.definirCiclo(ciclo);
+      if (!daEscola) return this.avisar('Sua conta ainda não está ligada a uma escola. Procure o coordenador.');
+      const escola = {
+        id: daEscola.id,
+        sigla: daEscola.sigla,
+        nome: daEscola.nome,
+        latitude: daEscola.latitude,
+        longitude: daEscola.longitude,
+        raio: daEscola.raio_m
+      };
+      this.setState({ carregado: true, escola, nomeDoUsuario: (acesso && acesso.nome) || '' }, () => {
+        this.carregarPresencaDeHoje();
+        this.carregarEspelho();
+        this.carregarAjustes();
+        this.carregarTurmas();
+        this.carregarGrade();
+        this.carregarRegistros();
+        this.carregarRelatorio();
+        this.carregarLembretes();
+        this.carregarMudancaDeEscola();
+      });
+    } catch (x) {
+      this.avisar((x && x.message) || 'Não foi possível carregar os dados da escola');
+    }
+  }
+  async carregarPresencaDeHoje() {
+    try {
+      const presenca = await window.FSM_AUTH.minhaPresencaHoje();
+      this.setState({ presencaDeHoje: presenca, desvioDoRelogio: Date.parse(presenca.agora) - Date.now() });
+      if (presenca.proxima) this.conferirRaio();
+    } catch (x) {
+      this.avisar((x && x.message) || 'Não foi possível carregar a presença de hoje');
+    }
+  }
+  async carregarEspelho(competencia) {
+    const escolhida = competencia || this.state.competenciaDoEspelho;
+    try {
+      const espelho = await window.FSM_AUTH.meuEspelho(escolhida);
+      this.setState({ espelho, competenciaDoEspelho: espelho.competencia });
+    } catch (x) {
+      this.avisar((x && x.message) || 'Não foi possível carregar o espelho');
+    }
+  }
+  async carregarAjustes() {
+    try {
+      this.setState({ ajustes: (await window.FSM_AUTH.ajustesPresenca()) || [] });
+    } catch (x) {
+      this.avisar((x && x.message) || 'Não foi possível carregar suas solicitações');
+    }
+  }
+
+  async conferirRaio() {
+    const escola = this.state.escola;
+    if (!escola || escola.latitude == null || escola.longitude == null || !escola.raio) return;
+    try {
+      const coordenadas = (await this.localizar()).coords;
+      const distancia = Math.round(
+        distanciaEmMetros(coordenadas.latitude, coordenadas.longitude, escola.latitude, escola.longitude)
+      );
+      this.setState({
+        posicao: {
+          distancia,
+          fora: distancia > escola.raio,
+          latitude: coordenadas.latitude,
+          longitude: coordenadas.longitude,
+          precisao: coordenadas.accuracy || 0
+        }
+      });
+    } catch (x) {
+      this.setState({ posicao: null });
+    }
+  }
+  localizar() {
+    return new Promise((ok, falha) => {
+      if (!navigator.geolocation) return falha({ code: 2 });
+      navigator.geolocation.getCurrentPosition(ok, falha, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+    });
+  }
+  async marcarPresenca(tipo) {
+    if (this.state.marcandoPresenca) return;
+    this.setState({ marcandoPresenca: true, erroDaPresenca: null });
+    let posicao = null;
+    try {
+      posicao = await this.localizar();
+    } catch (falha) {
+      this.setState({
+        marcandoPresenca: false,
+        erroDaPresenca:
+          falha && falha.code === 1
+            ? {
+                titulo: 'Localização bloqueada',
+                texto:
+                  'Libere a localização para este site. No Chrome (Android): toque no cadeado ao lado do endereço › Permissões › Localização › Permitir. No Safari (iPhone): Ajustes › Safari › Localização › Permitir.',
+                justificar: true
+              }
+            : {
+                titulo: 'Não foi possível obter sua localização',
+                texto: 'Tente de novo perto de uma janela ou ao ar livre. Dentro de prédios o GPS costuma piorar.',
+                justificar: true
+              }
+      });
+      return;
+    }
+    try {
+      const coordenadas = posicao.coords;
+      const resposta = await window.FSM_AUTH.marcarPresenca(
+        tipo,
+        coordenadas.latitude,
+        coordenadas.longitude,
+        coordenadas.accuracy
+      );
+      if (!resposta.aceita) {
+        const imprecisa = resposta.motivo === 'Localização imprecisa';
+        this.setState({
+          erroDaPresenca: {
+            titulo: imprecisa ? 'Localização imprecisa' : 'Registro não aceito: ' + resposta.motivo.toLowerCase(),
+            texto: imprecisa
+              ? 'A precisão do GPS está em ±' +
+                resposta.precisao_m +
+                ' m. Tente de novo perto de uma janela ou ao ar livre.'
+              : resposta.distancia_m != null
+                ? 'Você está a ' +
+                  resposta.distancia_m +
+                  ' m da escola, e o raio aceito é de ' +
+                  resposta.raio_m +
+                  ' m.'
+                : 'A presença não foi gravada.',
+            justificar: true
+          }
+        });
+      } else this.avisar(ROTULO_DA_MARCACAO[tipo] + ' registrada às ' + horaDeBrasilia(resposta.em));
+      await this.carregarPresencaDeHoje();
+    } catch (x) {
+      this.setState({
+        erroDaPresenca: {
+          titulo: 'Registro não enviado',
+          texto: (x && x.message) || 'Tente de novo.',
+          justificar: false
+        }
+      });
+    } finally {
+      this.setState({ marcandoPresenca: false });
+    }
+  }
+
+  async enviarAjuste() {
+    const ajuste = this.memoria.presenca.ajuste,
+      recusar = erro => this.lembrar('presenca', { ajuste: { ...ajuste, erro } });
+    if (!ajuste.tipo) return recusar('Escolha o tipo de solicitação.');
+    if (!ajuste.data) return recusar('Informe a data.');
+    if (String(ajuste.motivo || '').trim().length < 5) return recusar('Explique o motivo da solicitação.');
+    this.lembrar('presenca', { ajuste: { ...ajuste, enviando: true, erro: '', ok: false } });
+    try {
+      await window.FSM_AUTH.solicitarAjuste(ajuste);
+      this.lembrar('presenca', { ajuste: { ...ajusteVazio(), ok: true } });
+      await this.carregarAjustes();
+    } catch (x) {
+      this.lembrar('presenca', {
+        ajuste: {
+          ...this.memoria.presenca.ajuste,
+          enviando: false,
+          erro: (x && x.message) || 'Não foi possível enviar.'
+        }
+      });
+    }
+  }
+  async assinarEspelho() {
+    try {
+      await window.FSM_AUTH.assinarEspelho(this.state.competenciaDoEspelho);
+      this.avisar('Espelho assinado');
+      await this.carregarEspelho();
+    } catch (x) {
+      this.avisar((x && x.message) || 'Não foi possível assinar o espelho');
+    }
+  }
+  baixarEspelho() {
+    const competencia = String(this.state.competenciaDoEspelho || this.competenciaAtual()).slice(0, 10);
+    this.memoria.relatorio.confirmando = false;
+    this.setState(
+      {
+        documentoAberto: true,
+        abaDoDocumento: 'presenca',
+        competenciaDoRelatorio: competencia,
+        presencasDoCiclo: [],
+        registrosDoCiclo: [],
+        relatorioDoCiclo: null,
+        espelhoAssinadoEm: null
+      },
+      () => this.carregarRelatorio(competencia)
+    );
+  }
+
+  abrirAjuste(tipo, data) {
+    this.lembrar('presenca', {
+      aba: 'justificativas',
+      ajuste: { ...ajusteVazio(), tipo, data: data || iso(new Date()) }
+    });
+  }
+  escolherCiclo(competencia) {
+    this.memoria.relatorio.confirmando = false;
+    this.setState(
+      {
+        competenciaDoRelatorio: competencia,
+        presencasDoCiclo: [],
+        registrosDoCiclo: [],
+        relatorioDoCiclo: null,
+        espelhoAssinadoEm: null
+      },
+      () => this.carregarRelatorio(competencia)
+    );
+  }
+  componentDidUpdate() {
+    this.conferirAno();
+    if (this.state.tela !== this.telaAnterior) {
+      this.telaAnterior = this.state.tela;
+      if (this.telaAnterior === 'horas') this.carregarRelatorio();
+    }
+  }
+  conferirAno() {
+    const ano = new Date().getFullYear();
+    if (ano !== this.state.anoLetivo) this.setState({ anoLetivo: ano, grade: [] }, () => this.carregarGrade());
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.relogio);
+    clearTimeout(this.avisoTempo);
+    clearTimeout(this.destaqueTempo);
+    window.removeEventListener('online', this.aoMudarRede);
+    window.removeEventListener('offline', this.aoMudarRede);
+    window.removeEventListener('beforeunload', this.aoSair);
+  }
+  opcao(marcada, cor) {
+    return marcada
+      ? {
+          borda: cor || '#0B7EA3',
+          fundo: cor ? 'var(--fundo-ffffff)' : 'var(--fundo-e4f5fa)',
+          cor: cor || 'var(--texto-08617e)',
+          classe: cor ? 'fundo-ffffff' : ''
+        }
+      : {
+          borda: 'var(--borda-cfdadd)',
+          fundo: 'var(--fundo-ffffff)',
+          cor: 'var(--texto-1a2b33)',
+          classe: 'fundo-ffffff botao-secundario'
+        };
+  }
+  avisar(texto) {
+    this.setState({ aviso: texto });
+    clearTimeout(this.avisoTempo);
+    this.avisoTempo = setTimeout(() => this.setState({ aviso: '' }), 3200);
+  }
+
+  lembretesPendentes() {
+    const s = this.state,
+      hoje = iso(new Date()),
+      jaRegistrado = (lista, lembrete) =>
+        (lista || []).some(r => r.grade_aula_id === lembrete.grade_aula_id && r.data === lembrete.data);
+    return s.lembretes.filter(
+      lembrete =>
+        lembrete.data <= hoje &&
+        s.grade.some(a => a.id === lembrete.grade_aula_id) &&
+        !jaRegistrado(s.registrosDoCiclo, lembrete) &&
+        !jaRegistrado(s.registrosDoDia, lembrete)
+    );
+  }
+  relatorio() {
+    const s = this.state;
+    const competencia = s.competenciaDoRelatorio || this.competenciaAtual(),
+      dataDaCompetencia = dataDe(competencia),
+      inicioDoCiclo = Base.cicloIni(dataDaCompetencia),
+      fimDoCiclo = Base.cicloFim(dataDaCompetencia),
+      hoje = Base.iso(new Date());
+    const ate = fimDoCiclo < new Date() ? fimDoCiclo : new Date();
+    const ocorrencias = [];
+    for (let dia = inicioDoCiclo; dia <= ate; dia = Base.add(dia, 1)) {
+      const diaDaSemana = dia.getDay(),
+        data = Base.iso(dia);
+      if (diaDaSemana === 0 || diaDaSemana === 6) continue;
+      s.grade
+        .filter(
+          daGrade =>
+            daGrade.dia_semana === diaDaSemana &&
+            daGrade.ano_letivo === dia.getFullYear() &&
+            (!daGrade.criado_em || data >= Base.iso(new Date(daGrade.criado_em)))
+        )
+        .forEach(padrao => {
+          const daGrade = this.efetiva(padrao, segundaDe(data));
+          ocorrencias.push({
+            dia,
+            data,
+            daGrade,
+            feriado: Base.feriado(dia),
+            registro: s.registrosDoCiclo.find(
+              registro => registro.grade_aula_id === daGrade.id && registro.data === data
+            )
+          });
+        });
+    }
+    s.registrosDoCiclo
+      .filter(registro => !ocorrencias.some(ocorrencia => ocorrencia.registro === registro))
+      .forEach(registro =>
+        ocorrencias.push({ dia: dataDe(registro.data), data: registro.data, daGrade: null, feriado: '', registro })
+      );
+    ocorrencias.sort((x, y) =>
+      x.data < y.data
+        ? -1
+        : x.data > y.data
+          ? 1
+          : String(x.daGrade ? x.daGrade.inicio : x.registro.inicio).localeCompare(
+              String(y.daGrade ? y.daGrade.inicio : y.registro.inicio)
+            )
+    );
+    const cicloAtual = competencia === this.competenciaAtual(),
+      devolvido = !!(s.relatorioDoCiclo && s.relatorioDoCiclo.status === 'devolvido');
+    const editavel = cicloAtual || devolvido;
+    const situacaoDe = ocorrencia =>
+      ocorrencia.registro
+        ? ocorrencia.registro.revisao_status === 'anulado'
+          ? 'Anulada'
+          : ocorrencia.registro.situacao === 'Não realizada'
+            ? 'Não realizada'
+            : 'Realizada'
+        : ocorrencia.feriado
+          ? 'Feriado'
+          : 'Pendente';
+    const linhaDe = ocorrencia => {
+      const situacao = situacaoDe(ocorrencia),
+        chaveDoTipo = ocorrencia.daGrade ? ocorrencia.daGrade.tipo : ocorrencia.registro.tipo,
+        tipo = tipoDe(chaveDoTipo);
+      const turma = ocorrencia.daGrade ? turmaTexto(ocorrencia.daGrade) : ocorrencia.registro.turma,
+        origem = ocorrencia.registro || ocorrencia.daGrade,
+        hora = String(ocorrencia.daGrade ? ocorrencia.daGrade.inicio : ocorrencia.registro.inicio).slice(0, 5);
+      const nota =
+        ocorrencia.registro && situacao === 'Não realizada'
+          ? String(ocorrencia.registro.motivo || '').split(' · ')[0]
+          : situacao === 'Anulada'
+            ? ocorrencia.registro.revisao_obs || 'Anulada pelo coordenador'
+            : situacao === 'Feriado'
+              ? ocorrencia.feriado
+              : '';
+      const presenca =
+        ocorrencia.registro && ocorrencia.registro.presentes != null
+          ? ocorrencia.registro.presentes +
+            (ocorrencia.registro.matriculados ? '/' + ocorrencia.registro.matriculados : '')
+          : '—';
+      return {
+        data: Base.WD[ocorrencia.dia.getDay()] + ' ' + Base.dm(ocorrencia.dia),
+        hora,
+        turma,
+        tipo: tipo.curto,
+        corDoTexto: tipo.corDoTexto || tipo.cor,
+        detalhe: [linhaDoTipo(origem), origem && origem.tipo !== 'P' ? origem.solucao : ''].filter(Boolean).join(' · '),
+        situacao,
+        nota,
+        presenca,
+        aria:
+          Base.dm(ocorrencia.dia) +
+          ' às ' +
+          hora +
+          ', ' +
+          turma +
+          ', ' +
+          situacao +
+          (ocorrencia.registro && situacao !== 'Pendente'
+            ? '. Ver o resumo do registro.'
+            : ocorrencia.daGrade
+              ? '. Abrir o registro.'
+              : ''),
+        abrir: () =>
+          ocorrencia.registro && situacao !== 'Pendente' && situacao !== 'Feriado'
+            ? this.setState({ registroAberto: ocorrencia.registro.id })
+            : ocorrencia.daGrade && situacao !== 'Feriado'
+              ? this.irParaRegistro(ocorrencia.data, ocorrencia.daGrade.id)
+              : null,
+        iso: ocorrencia.data,
+        tipoLinha: [
+          tipo.curto,
+          origem && origem.tipo === 'P'
+            ? origem.oficina || (ocorrencia.daGrade && ocorrencia.daGrade.oficina) || ''
+            : origem && origem.tipo === 'R'
+              ? origem.componente || (ocorrencia.daGrade && ocorrencia.daGrade.componente) || ''
+              : '',
+          origem && origem.tipo !== 'P' ? origem.solucao : ''
+        ]
+          .filter(Boolean)
+          .join(' · '),
+        presentes: ocorrencia.registro ? ocorrencia.registro.presentes : null,
+        matriculados: ocorrencia.registro ? ocorrencia.registro.matriculados : null,
+        motivo: ocorrencia.registro ? ocorrencia.registro.motivo || '' : '',
+        devolvida: !!(ocorrencia.registro && ocorrencia.registro.revisao_status === 'devolvido')
+      };
+    };
+    const linhas = ocorrencias.map(linhaDe);
+    const horas = [...s.presencasDoCiclo]
+      .sort((x, y) => (x.data < y.data ? -1 : 1))
+      .map(presenca => {
+        const inicio = new Date(presenca.inicio),
+          fim = presenca.fim ? new Date(presenca.fim) : null,
+          minutos = trabalhadoEm(presenca),
+          validos = minutosValidos(presenca),
+          pendente = !fim || (presenca.pausa_inicio && !presenca.pausa_fim);
+        const situacao = pendente
+          ? presenca.data === hoje
+            ? 'Em andamento'
+            : !fim
+              ? 'Pendente · saída não registrada'
+              : 'Pendente · volta do almoço não registrada'
+          : minutos > LIMITE_DO_DIA
+            ? 'Acima de 8h · ' + (minutos - LIMITE_DO_DIA) + ' min não contabilizados'
+            : 'Regular';
+        const cores = /^Pendente/.test(situacao)
+          ? ['var(--texto-34464d)', 'var(--fundo-e3ebed)']
+          : /^Acima/.test(situacao)
+            ? ['var(--texto-7a4e0b)', 'var(--fundo-faefd9)']
+            : /andamento/.test(situacao)
+              ? ['var(--texto-08617e)', 'var(--fundo-e3ebed)']
+              : ['var(--texto-1b5e2e)', 'var(--fundo-e2f2e5)'];
+        const dia = dataDe(presenca.data),
+          faixa =
+            Base.hm(inicio.getHours() * 60 + inicio.getMinutes()) +
+            ' → ' +
+            (fim ? Base.hm(fim.getHours() * 60 + fim.getMinutes()) : '—') +
+            faixaDaPausa(presenca);
+        const acoes = pendente && presenca.data < hoje ? ['ajuste'] : [];
+        return {
+          presenca,
+          nota: '',
+          data: Base.WD[dia.getDay()] + ' ' + Base.dm(dia),
+          dia,
+          faixa,
+          total: minutos == null ? '—' : Base.dur(minutos),
+          validas: minutos == null ? '—' : Base.dur(validos),
+          minutosValidos: validos,
+          situacao,
+          situacaoCor: cores[0],
+          situacaoFundo: cores[1],
+          temAcao: acoes.length > 0,
+          justificar: () => acoes.length && this.abrirAjuste('esquecimento', presenca.data)
+        };
+      });
+    horas.sort((a, b) => (a.presenca.data < b.presenca.data ? -1 : a.presenca.data > b.presenca.data ? 1 : 0));
+    const pendencias = [
+      ...ocorrencias
+        .filter(
+          ocorrencia =>
+            ocorrencia.registro &&
+            ocorrencia.registro.check_direcao === 'contestada' &&
+            ocorrencia.registro.revisao_status !== 'anulado'
+        )
+        .map(ocorrencia => ({
+          data: Base.WD[ocorrencia.dia.getDay()] + ' ' + Base.dm(ocorrencia.dia),
+          texto:
+            'Atividade contestada pela direção · ' +
+            ocorrencia.registro.turma +
+            (ocorrencia.registro.check_motivo ? ' · ' + ocorrencia.registro.check_motivo : ''),
+          temAcao: !!ocorrencia.daGrade,
+          ref: 'c' + ocorrencia.registro.id + ':' + (ocorrencia.registro.check_em || ''),
+          acao: 'Corrigir',
+          executar: () => (ocorrencia.daGrade ? this.irParaRegistro(ocorrencia.data, ocorrencia.daGrade.id) : null)
+        })),
+      ...ocorrencias
+        .filter(ocorrencia => ocorrencia.registro && ocorrencia.registro.revisao_status === 'devolvido')
+        .map(ocorrencia => ({
+          data: Base.WD[ocorrencia.dia.getDay()] + ' ' + Base.dm(ocorrencia.dia),
+          texto:
+            'Registro devolvido pelo coordenador · ' +
+            ocorrencia.registro.turma +
+            (ocorrencia.registro.revisao_obs ? ' · ' + ocorrencia.registro.revisao_obs : ''),
+          temAcao: !!ocorrencia.daGrade,
+          ref: 'r' + ocorrencia.registro.id + ':' + (ocorrencia.registro.revisado_em || ''),
+          acao: 'Corrigir',
+          executar: () => (ocorrencia.daGrade ? this.irParaRegistro(ocorrencia.data, ocorrencia.daGrade.id) : null)
+        })),
+      ...ocorrencias
+        .filter(ocorrencia => situacaoDe(ocorrencia) === 'Pendente')
+        .map(ocorrencia => ({
+          data: Base.WD[ocorrencia.dia.getDay()] + ' ' + Base.dm(ocorrencia.dia),
+          texto:
+            'Atividade sem registro · ' +
+            turmaTexto(ocorrencia.daGrade) +
+            ' · ' +
+            String(ocorrencia.daGrade.inicio).slice(0, 5) +
+            (s.lembretes.some(l => l.grade_aula_id === ocorrencia.daGrade.id && l.data === ocorrencia.data)
+              ? ' · o coordenador pediu o registro'
+              : ''),
+          temAcao: editavel,
+          semRegistro: true,
+          acao: 'Registrar',
+          executar: () => this.irParaRegistro(ocorrencia.data, ocorrencia.daGrade.id)
+        })),
+      ...horas
+        .filter(linha => linha.temAcao)
+        .map(linha => ({
+          data: linha.data,
+          texto: linha.situacao,
+          temAcao: editavel,
+          acao: 'Solicitar ajuste',
+          executar: linha.justificar
+        }))
+    ];
+    const pendenciasComAcao = pendencias.filter(pendencia => pendencia.temAcao).length;
+    if (cicloAtual) this.pendenciasDoCicloAtual = { pendencias, relatorioDoCiclo: s.relatorioDoCiclo };
+    return {
+      competencia,
+      dataDaCompetencia,
+      inicioDoCiclo,
+      fimDoCiclo,
+      hoje,
+      ocorrencias,
+      linhaDe,
+      linhas,
+      horas,
+      pendencias,
+      pendenciasComAcao,
+      editavel,
+      cicloAtual,
+      devolvido
+    };
+  }
+  documentos(relatorio) {
+    const s = this.state;
+    const { competencia, inicioDoCiclo, fimDoCiclo, hoje, ocorrencias, linhaDe, pendencias, cicloAtual, devolvido } =
+      relatorio;
+    const documento = (() => {
+      const textos = [...pendencias.map(pendencia => pendencia.data + ' · ' + pendencia.texto)];
+      const bloqueio = cicloAtual
+        ? 'Ciclo em aberto até ' +
+          Base.dm(fimDoCiclo) +
+          '. A versão para assinatura é liberada a partir de ' +
+          Base.dm(Base.add(fimDoCiclo, 1)) +
+          ', com o ciclo fechado e sem pendências.'
+        : devolvido
+          ? 'O relatório deste ciclo foi devolvido para ajuste. Corrija e reenvie para aprovação antes de emitir.'
+          : textos.length
+            ? 'Resolva as pendências abaixo para emitir o relatório. Enquanto houver pendência, a emissão fica bloqueada.'
+            : '';
+      return {
+        situacao: cicloAtual
+          ? 'Em aberto até ' + Base.dm(fimDoCiclo)
+          : bloqueio
+            ? 'Com pendências'
+            : 'Ciclo fechado · aguardando assinaturas',
+        bloqueado: !!bloqueio || !s.carregado,
+        bloqueio: s.carregado ? bloqueio : 'Carregando os dados…',
+        botaoClasse: bloqueio || !s.carregado ? '' : 'fundo-0b7ea3',
+        botaoFundo: bloqueio || !s.carregado ? '#5B6B70' : '#0B7EA3',
+        temPendencias: !cicloAtual && textos.length > 0,
+        pendencias: textos,
+        temObservacoes: !!String((s.observacoes || {})[competencia] || '').trim()
+      };
+    })();
+    const oficial = (() => {
+      const limite = fimDoCiclo < new Date() ? fimDoCiclo : new Date();
+      const docDePresenca = Base.docPresenca({
+        ini: inicioDoCiclo,
+        ate: limite,
+        hojeIso: hoje,
+        pres: s.presencasDoCiclo,
+        ajustes: s.ajustes,
+        comGrade: data =>
+          ocorrencias.some(ocorrencia => ocorrencia.data === data && ocorrencia.daGrade && !ocorrencia.feriado)
+      });
+      const agendadas = ocorrencias.filter(
+        ocorrencia => !ocorrencia.feriado && !(ocorrencia.registro && ocorrencia.registro.revisao_status === 'anulado')
+      );
+      const docDeAtividades = Base.docAtividades(
+        agendadas.map(ocorrencia => {
+          const registro = ocorrencia.registro,
+            fonte = registro || ocorrencia.daGrade;
+          return {
+            d: ocorrencia.dia,
+            inicio: fonte.inicio,
+            fim: fonte.fim,
+            turma: ocorrencia.daGrade ? turmaTexto(ocorrencia.daGrade) : registro && registro.turma,
+            atividade: (registro && registro.atividade) || linhaDe(ocorrencia).tipoLinha,
+            sit: !registro ? 'Agendada' : registro.situacao === 'Não realizada' ? 'Não realizada' : 'Realizada',
+            presentes: registro ? registro.presentes : null,
+            registro: registro
+              ? registro.situacao === 'Não realizada'
+                ? registro.motivo
+                : registro.conteudo || registro.objetivo
+              : ''
+          };
+        })
+      );
+      const contratada = s.contratada || {};
+      const frequencia = {};
+      ocorrencias.forEach(ocorrencia => {
+        const oficina =
+          (ocorrencia.registro && ocorrencia.registro.oficina) || (ocorrencia.daGrade && ocorrencia.daGrade.oficina);
+        if (oficina) frequencia[oficina] = (frequencia[oficina] || 0) + 1;
+      });
+      const situacao = s.relatorioDoCiclo || {};
+      const nome = s.nomeDoUsuario || '—';
+      const referencia = situacao.id ? '-' + String(situacao.id).padStart(5, '0') : '';
+      const agora = new Date();
+      const base = {
+        nome: nome.toUpperCase(),
+        documentoRotulo: contratada.tipo === 'CPF' ? 'CPF' : 'CNPJ',
+        documento: contratada.documento || 'Não informado',
+        escola: (s.escola.nome || '—').toUpperCase(),
+        oficina: Object.keys(frequencia).sort((a, b) => frequencia[b] - frequencia[a])[0] || '—',
+        assinaturas: [
+          Base.docAssinatura(
+            'Oficineiro(a)',
+            nome,
+            s.espelhoAssinadoEm || (situacao.status && situacao.status !== 'devolvido' ? situacao.fechado_em : null)
+          ),
+          Base.docAssinatura('Direção da escola', '', situacao.direcao_em),
+          Base.docAssinatura('Coordenação', '', situacao.coordenacao_em)
+        ],
+        gerado:
+          'Gerado pelo Oficineiro+ (oficineiromais.com.br) em ' +
+          Base.dmy(agora) +
+          ' às ' +
+          Base.hm(agora.getHours() * 60 + agora.getMinutes())
+      };
+      const ciclo = 'CICLO ' + Base.dmy(inicioDoCiclo) + ' A ' + Base.dmy(fimDoCiclo);
+      return {
+        presenca: {
+          ...base,
+          titulo: 'RELATÓRIO DE PRESENÇA NA ESCOLA · ' + ciclo,
+          linhas: docDePresenca.linhas,
+          total: docDePresenca.total,
+          resumo: docDePresenca.resumo,
+          codigo: 'Documento PRE-' + competencia.slice(0, 7) + referencia
+        },
+        atividades: {
+          ...base,
+          titulo: 'RELATÓRIO DE ATIVIDADES · ' + ciclo,
+          atividades: docDeAtividades.linhas,
+          semAtividades: !docDeAtividades.linhas.length,
+          resumo: docDeAtividades.resumo,
+          codigo: 'Documento ATV-' + competencia.slice(0, 7) + referencia
+        }
+      };
+    })();
+    return { documento, oficial };
+  }
+  notificacoes(lembretesPendentes) {
+    const s = this.state;
+    const lista = [],
+      abrirTela = tela => () => this.irPara(tela);
+    const hoje = new Date(),
+      diaDaSemana = hoje.getDay(),
+      agora = Base.nowMin();
+    if (diaDaSemana >= 1 && diaDaSemana <= 5 && !Base.feriado(hoje)) {
+      const atividadesDeHoje = s.grade.filter(
+        daGrade => daGrade.dia_semana === diaDaSemana && daGrade.ano_letivo === hoje.getFullYear()
+      );
+      if (atividadesDeHoje.length) {
+        const primeira = Math.min(...atividadesDeHoje.map(daGrade => minDeHora(daGrade.inicio))),
+          ultima = Math.max(...atividadesDeHoje.map(daGrade => minDeHora(daGrade.fim)));
+        const proxima = s.presencaDeHoje ? s.presencaDeHoje.proxima : null;
+        if (proxima === 'entrada' && agora >= primeira - 30)
+          lista.push({
+            dia: true,
+            tit: 'Registre sua entrada de hoje',
+            txt: 'Sua primeira atividade hoje é às ' + Base.hm(primeira) + '. Registre a entrada ao chegar na escola.',
+            acao: 'Ir para a presença',
+            go: abrirTela('presenca'),
+            cor: 'var(--texto-0b7ea3)'
+          });
+        if (proxima && proxima !== 'entrada' && agora >= ultima + 30)
+          lista.push({
+            dia: true,
+            tit: 'Registre sua saída de hoje',
+            txt: 'Sua última atividade terminou às ' + Base.hm(ultima) + '. Registre a saída antes de sair da escola.',
+            acao: 'Ir para a presença',
+            go: abrirTela('presenca'),
+            cor: 'var(--texto-0b7ea3)'
+          });
+      }
+    }
+    lembretesPendentes.forEach(lembrete => {
+      const daGrade = s.grade.find(outra => outra.id === lembrete.grade_aula_id),
+        dia = dataDe(lembrete.data);
+      lista.push({
+        ref: 'l' + lembrete.id,
+        tit: 'O coordenador pediu um registro de atividades',
+        txt:
+          Base.WD[dia.getDay()] +
+          ' ' +
+          Base.dm(dia) +
+          (daGrade ? ' · ' + turmaTexto(daGrade) + ' · ' + String(daGrade.inicio).slice(0, 5) : ''),
+        acao: 'Registrar',
+        go: () => {
+          this.setState({ gaveta: null });
+          this.irParaRegistro(lembrete.data, lembrete.grade_aula_id);
+        },
+        cor: 'var(--texto-9a6212)'
+      });
+    });
+    const doCiclo = this.pendenciasDoCicloAtual || { pendencias: [], relatorioDoCiclo: null },
+      pendencias = doCiclo.pendencias || [];
+    const comAcao = (pendencia, titulo) => ({
+      ref: pendencia.ref,
+      tit: titulo,
+      txt: pendencia.data + ' · ' + pendencia.texto,
+      acao: pendencia.acao,
+      go: () => {
+        this.setState({ gaveta: null });
+        pendencia.executar();
+      },
+      cor: 'var(--texto-9a6212)'
+    });
+    pendencias
+      .filter(
+        pendencia => pendencia.acao === 'Corrigir' && pendencia.temAcao && String(pendencia.ref || '').charAt(0) !== 'c'
+      )
+      .forEach(pendencia => lista.push(comAcao(pendencia, 'Registro devolvido para ajuste')));
+    (s.contestadas || []).forEach(registro => {
+      const dia = dataDe(registro.data);
+      lista.push({
+        ref: 'c' + registro.id + ':' + (registro.check_em || ''),
+        tit: 'Atividade contestada pela direção',
+        txt:
+          Base.WD[dia.getDay()] +
+          ' ' +
+          Base.dm(dia) +
+          ' · ' +
+          registro.turma +
+          (registro.check_motivo ? ' · ' + registro.check_motivo : '') +
+          '. Corrija o registro para a direção conferir de novo.',
+        acao: registro.grade_aula_id ? 'Corrigir' : '',
+        go: registro.grade_aula_id
+          ? () => {
+              this.setState({ gaveta: null });
+              this.irParaRegistro(registro.data, registro.grade_aula_id);
+            }
+          : null,
+        cor: 'var(--texto-b42318)'
+      });
+    });
+    const anterior = s.relatorioAnterior;
+    if (anterior && anterior.status === 'devolvido' && anterior.competencia) {
+      const mesAnterior = Base.Mes(dataDe(String(anterior.competencia).slice(0, 10)));
+      lista.push({
+        ref: 'ra' + anterior.id + ':' + (anterior.motivo_devolucao || ''),
+        tit: 'Relatório de ' + mesAnterior + ' devolvido',
+        txt:
+          (anterior.devolvido_papel === 'direcao'
+            ? 'A direção da escola devolveu o relatório de '
+            : anterior.devolvido_papel === 'coordenador'
+              ? 'O coordenador devolveu o relatório de '
+              : 'O relatório foi reaberto para ajuste: ') +
+          mesAnterior +
+          (anterior.motivo_devolucao ? ': ' + anterior.motivo_devolucao : '.') +
+          ' Corrija e reenvie para aprovação.',
+        acao: 'Abrir relatório',
+        go: () => {
+          const competencia = String(anterior.competencia).slice(0, 10);
+          this.memoria.relatorio.confirmando = false;
+          this.setState(
+            {
+              gaveta: null,
+              menuAberto: false,
+              tela: 'horas',
+              competenciaDoRelatorio: competencia,
+              presencasDoCiclo: [],
+              registrosDoCiclo: [],
+              relatorioDoCiclo: null
+            },
+            () => this.carregarRelatorio(competencia)
+          );
+        },
+        cor: 'var(--texto-b42318)'
+      });
+    }
+    if (doCiclo.relatorioDoCiclo && doCiclo.relatorioDoCiclo.status === 'devolvido')
+      lista.push({
+        tit: 'Relatório do ciclo devolvido',
+        txt:
+          (doCiclo.relatorioDoCiclo.devolvido_papel === 'direcao'
+            ? 'A direção da escola devolveu o relatório deste ciclo'
+            : doCiclo.relatorioDoCiclo.devolvido_papel === 'coordenador'
+              ? 'O coordenador devolveu o relatório deste ciclo'
+              : 'O relatório deste ciclo foi reaberto para ajuste') +
+          (doCiclo.relatorioDoCiclo.motivo_devolucao ? ': ' + doCiclo.relatorioDoCiclo.motivo_devolucao : '.'),
+        acao: 'Abrir relatório',
+        go: abrirTela('horas'),
+        cor: 'var(--texto-b42318)'
+      });
+    pendencias
+      .filter(pendencia => pendencia.acao === 'Solicitar ajuste' && pendencia.temAcao)
+      .forEach(pendencia =>
+        lista.push({
+          ...comAcao(pendencia, 'Presença pendente'),
+          txt: pendencia.data + ' · ' + pendencia.texto + '. Solicite o ajuste na aba Justificativas.'
+        })
+      );
+    const semRegistro = pendencias.filter(
+      pendencia => pendencia.acao === 'Registrar' && pendencia.temAcao && !/coordenador pediu/.test(pendencia.texto)
+    );
+    if (semRegistro.length)
+      lista.push({
+        tit:
+          semRegistro.length === 1
+            ? '1 atividade sem registro neste ciclo'
+            : semRegistro.length + ' atividades sem registro neste ciclo',
+        txt: 'O prazo para registrar vai até ' + Base.prazo(new Date()) + ', último dia do ciclo.',
+        acao: 'Ver pendências',
+        go: abrirTela('horas'),
+        cor: 'var(--texto-9a6212)'
+      });
+    if (s.carregado && !s.carregandoGrade) {
+      const envio = s.envioDaGrade,
+        situacao = envio && envio.status;
+      if (!s.grade.length)
+        lista.push({
+          tit: 'Monte sua grade de atividades',
+          txt: 'A grade de ' + s.anoLetivo + ' ainda não tem atividades.',
+          acao: 'Abrir a grade',
+          go: abrirTela('grade'),
+          cor: 'var(--texto-9a6212)'
+        });
+      else if (situacao === 'devolvida')
+        lista.push({
+          ref: 'gd' + (envio.decidido_em || ''),
+          tit: 'Grade devolvida pela direção',
+          txt: envio.comentario ? envio.comentario : 'Ajuste a grade e envie novamente.',
+          acao: 'Abrir a grade',
+          go: abrirTela('grade'),
+          cor: 'var(--texto-b42318)'
+        });
+      else if (!envio)
+        lista.push({
+          tit: 'Envie sua grade para validação',
+          txt: 'A direção da escola precisa validar a grade de ' + s.anoLetivo + '.',
+          acao: 'Abrir a grade',
+          go: abrirTela('grade'),
+          cor: 'var(--texto-9a6212)'
+        });
+      else if (situacao === 'alterada')
+        lista.push({
+          ref: 'ga' + (envio.enviado_em || ''),
+          tit: 'Grade alterada depois do envio',
+          txt: 'Envie a grade novamente para a direção da escola validar as mudanças.',
+          acao: 'Abrir a grade',
+          go: abrirTela('grade'),
+          cor: 'var(--texto-9a6212)'
+        });
+    }
+    pendencias
+      .filter(pendencia => !pendencia.temAcao && /sem encerramento/.test(pendencia.texto))
+      .forEach(pendencia =>
+        lista.push({
+          tit: 'Presença sem encerramento',
+          txt: pendencia.data + ' · a presença ficou aberta e vai para a conferência da direção.',
+          acao: '',
+          go: null,
+          cor: 'var(--texto-5b6b70)'
+        })
+      );
+    const mudanca = s.mudancaDeEscola;
+    if (mudanca) {
+      const data = String(mudanca.vale_a_partir).split('-').reverse().join('/');
+      lista.push({
+        tit: mudanca.ja_vale ? 'Sua escola de atuação mudou' : 'Sua escola de atuação vai mudar',
+        txt: mudanca.ja_vale
+          ? 'Desde ' + data + ' você atua na ' + mudanca.escola + '. Monte a grade desta escola e envie para validação.'
+          : 'A partir de ' +
+            data +
+            ' você atua na ' +
+            mudanca.escola +
+            '. A grade da nova escola começa sem atividades e precisa ser montada e validada.',
+        acao: mudanca.ja_vale ? 'Abrir a grade' : '',
+        go: mudanca.ja_vale ? abrirTela('grade') : null,
+        cor: 'var(--texto-1a3f9c)'
+      });
+    }
+    return lista.map(notificacao => ({ ...notificacao, temAcao: !!(notificacao.acao && notificacao.go) }));
+  }
+  sino(notificacoes) {
+    const Notificacoes = window.FSM_NOTIF || {
+        usuario: () => '',
+        chave: notificacao => notificacao.tit + '|' + (notificacao.ref || notificacao.txt),
+        ler: () => [],
+        gravar: () => {}
+      },
+      usuario = Notificacoes.usuario('oficineiro');
+    if (this.usuarioDasNotificacoes !== usuario) {
+      this.usuarioDasNotificacoes = usuario;
+      this.notificacoesVistas = Notificacoes.ler(usuario);
+    }
+    const vistas = this.notificacoesVistas || [],
+      novas = notificacoes.filter(notificacao => !vistas.includes(Notificacoes.chave(notificacao))),
+      visiveis = novas.map(notificacao => {
+        const chave = Notificacoes.chave(notificacao);
+        return {
+          ...notificacao,
+          ariaLida: 'Marcar como lida: ' + notificacao.tit,
+          marcarLida: () => {
+            this.notificacoesVistas = [...(this.notificacoesVistas || []).filter(x => x !== chave), chave];
+            Notificacoes.gravar(usuario, this.notificacoesVistas);
+            this.forceUpdate();
+          }
+        };
+      });
+    return {
+      notifs: visiveis,
+      temVariasNotif: visiveis.length > 1,
+      lerTodasNotif: () => {
+        const chaves = novas.map(Notificacoes.chave);
+        this.notificacoesVistas = [...vistas.filter(chave => !chaves.includes(chave)), ...chaves];
+        Notificacoes.gravar(usuario, this.notificacoesVistas);
+        this.forceUpdate();
+      },
+      notifN: String(novas.length),
+      temNotif: novas.length > 0,
+      semNotif: visiveis.length === 0,
+      notifAria: novas.length
+        ? 'Notificações: ' + novas.length + (novas.length === 1 ? ' nova' : ' novas')
+        : 'Notificações: nenhuma nova',
+      abrirNotif: () => {
+        this.setState({ gaveta: 'notif', menuAberto: false });
+      }
+    };
+  }
+
+  contexto(relatorio, lembretesPendentes) {
+    const s = this.state;
+    return {
+      carregado: s.carregado,
+      escola: s.escola,
+      nomeDoUsuario: s.nomeDoUsuario,
+      grade: s.grade,
+      semanasDaGrade: s.semanasDaGrade || [],
+      anoLetivo: s.anoLetivo,
+      presencaDeHoje: s.presencaDeHoje,
+      desvioDoRelogio: s.desvioDoRelogio,
+      posicao: s.posicao,
+      marcandoPresenca: s.marcandoPresenca,
+      erroDaPresenca: s.erroDaPresenca,
+      espelho: s.espelho,
+      ajustes: s.ajustes || [],
+      rotuloDaMarcacao: ROTULO_DA_MARCACAO,
+      carregandoGrade: s.carregandoGrade,
+      envioDaGrade: s.envioDaGrade,
+      enviandoGrade: s.enviandoGrade,
+      inicioDaGrade: INICIO_DA_GRADE,
+      fimDaGrade: FIM_DA_GRADE,
+      registrosDoDia: s.registrosDoDia || [],
+      lembretesPendentes,
+      oficinas: OFICINAS,
+      componentes: COMPONENTES,
+      engajamentoTexto: ENGAJAMENTO,
+      relatorio,
+      relatorioDoCiclo: s.relatorioDoCiclo,
+      carregandoRelatorio: s.carregandoRelatorio,
+      tipoDe,
+      linhaDoTipo,
+      horarioTexto,
+      somarDias,
+      cicloDaSemana,
+      solucoesDe,
+      opcao: (marcada, cor) => this.opcao(marcada, cor),
+      efetiva: (atividade, semana) => this.efetiva(atividade, semana),
+      diaUtil: deslocamento => this.diaUtil(deslocamento),
+      matriculadosDaTurma: atividade => this.matriculadosDaTurma(atividade),
+      avisar: texto => this.avisar(texto),
+      irPara: tela => this.irPara(tela),
+      lembrar: (tela, mudanca) => this.lembrar(tela, mudanca),
+      carregarPresencaDeHoje: () => this.carregarPresencaDeHoje(),
+      carregarEspelho: competencia => this.carregarEspelho(competencia),
+      carregarAjustes: () => this.carregarAjustes(),
+      marcarPresenca: tipo => this.marcarPresenca(tipo),
+      abrirAjuste: (tipo, data) => this.abrirAjuste(tipo, data),
+      enviarAjuste: () => this.enviarAjuste(),
+      assinarEspelho: () => this.assinarEspelho(),
+      baixarEspelho: () => this.baixarEspelho(),
+      abrirAtividade: (atividade, dia, hora) => this.abrirAtividade(atividade, dia, hora),
+      abrirAtividadeDaSemana: atividade => this.abrirAtividadeDaSemana(atividade),
+      abrirCopia: () => this.abrirCopia(),
+      voltarSemanaAoPadrao: () => this.voltarSemanaAoPadrao(),
+      enviarGrade: () => this.enviarGrade(),
+      abrirRegistro: (atividade, forcar) => this.abrirRegistro(atividade, forcar),
+      irParaDia: dia => this.irParaDia(dia),
+      irParaRegistro: (data, atividadeId) => this.irParaRegistro(data, atividadeId),
+      salvarRegistro: () => this.salvarRegistro(),
+      escolherCiclo: competencia => this.escolherCiclo(competencia),
+      abrirDocumento: () => this.setState({ documentoAberto: true }),
+      reenviarCiclo: () => this.reenviarCiclo(),
+      exportar: (linhas, nome) => this.exportar(linhas, nome),
+      apagarDestaqueDepois: () => this.apagarDestaqueDepois()
+    };
+  }
+  resumoDoRegistro(relatorio) {
+    const s = this.state;
+    const registro = s.registroAberto ? s.registrosDoCiclo.find(x => x.id === s.registroAberto) : null;
+    if (!registro) return { temResumo: false, resumo: {} };
+    const daGrade = s.grade.find(x => x.id === registro.grade_aula_id),
+      dia = dataDe(registro.data),
+      realizada = registro.situacao !== 'Não realizada',
+      anulada = registro.revisao_status === 'anulado',
+      devolvida = registro.revisao_status === 'devolvido';
+    const percentual =
+      registro.presentes != null && registro.matriculados
+        ? ' (' + Math.round((Math.min(registro.presentes, registro.matriculados) / registro.matriculados) * 100) + '%)'
+        : '';
+    const itens = [
+      [
+        'Data e horário',
+        Base.WDL[dia.getDay()] +
+          ', ' +
+          Base.dmy(dia) +
+          ' · ' +
+          String(registro.inicio).slice(0, 5) +
+          ' às ' +
+          String(registro.fim).slice(0, 5)
+      ],
+      ['Turma', registro.turma || (daGrade ? turmaTexto(daGrade) : '—')],
+      ['Tipo de atividade', tipoDe(registro.tipo).curto],
+      ...(registro.tipo === 'R'
+        ? [
+            ['Componente curricular', registro.componente || (daGrade && daGrade.componente) || 'Não informado'],
+            ['Solução', registro.solucao || '—']
+          ]
+        : registro.tipo === 'P'
+          ? [['Oficina', registro.oficina || (daGrade && daGrade.oficina) || 'Não informada']]
+          : [['Solução', registro.solucao || '—']]),
+      ['Situação', anulada ? 'Anulada pelo coordenador' : registro.situacao]
+    ];
+    if (realizada)
+      itens.push(
+        [
+          'Presentes',
+          registro.presentes != null
+            ? registro.presentes +
+              (registro.matriculados ? ' de ' + registro.matriculados + ' matriculados' + percentual : '')
+            : '—'
+        ],
+        [
+          'Engajamento',
+          registro.engajamento ? registro.engajamento + ' de 5 · ' + ENGAJAMENTO[registro.engajamento] : 'Sem nota'
+        ],
+        ['Objetivo atingido', registro.objetivo || 'Não informado'],
+        ['Professor(a) na sala', registro.professor_aula || (daGrade && daGrade.professor) || 'Não informado']
+      );
+    else itens.push(['Motivo', registro.motivo || '—']);
+    const textos = (
+      realizada
+        ? [
+            ['Atividade', registro.atividade],
+            ['Como foi a atividade', registro.conteudo],
+            ['Mudança de última hora', registro.mudanca],
+            ['Próxima atividade', registro.proxima_aula]
+          ]
+        : []
+    )
+      .filter(x => x[1])
+      .map(([rotulo, valor]) => ({ rotulo, valor }));
+    const revisao = anulada
+      ? ['Anulada pelo coordenador', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)']
+      : devolvida
+        ? ['Devolvida para ajuste', 'var(--texto-b42318)', 'var(--fundo-fbedeb)']
+        : registro.revisao_status === 'revisado'
+          ? ['Revisada pelo coordenador', 'var(--texto-1b5e2e)', 'var(--fundo-e2f2e5)']
+          : registro.revisao_status === 'corrigido'
+            ? ['Corrigida · aguardando revisão', 'var(--texto-1a3f9c)', 'var(--fundo-eff3fd)']
+            : null;
+    return {
+      temResumo: true,
+      resumo: {
+        titulo: (daGrade ? turmaTexto(daGrade) : registro.turma) + ' · ' + Base.dm(dia),
+        itens: itens.map(([rotulo, valor]) => ({ rotulo, valor })),
+        textos,
+        temTextos: textos.length > 0,
+        temRevisao: !!revisao,
+        revisao: revisao ? revisao[0] + (registro.revisao_obs ? ': ' + registro.revisao_obs : '') : '',
+        revisaoCor: revisao ? revisao[1] : '',
+        revisaoFundo: revisao ? revisao[2] : '',
+        podeCorrigir: devolvida && !!daGrade && relatorio.editavel,
+        corrigir: () => {
+          this.setState({ registroAberto: null });
+          if (daGrade) this.irParaRegistro(registro.data, daGrade.id);
+        }
+      },
+      fecharResumo: () => this.setState({ registroAberto: null })
+    };
+  }
+  edicaoDaSemana() {
+    const s = this.state;
+    const edicaoDaSemana = s.edicaoDaSemana || {},
+      daGrade = s.grade.find(x => x.id === edicaoDaSemana.atividade),
+      semana = this.memoria.grade.semana;
+    const resumo = daGrade
+      ? {
+          titulo: turmaTexto(daGrade),
+          quando: DIAS[daGrade.dia_semana] + ' · ' + horarioTexto(daGrade),
+          padrao: [tipoDe(daGrade.tipo).curto, linhaDoTipo(daGrade), daGrade.tipo === 'P' ? '' : daGrade.solucao]
+            .filter(Boolean)
+            .join(' · '),
+          semana: dmIso(semana) + ' a ' + dmIso(somarDias(semana, 4))
+        }
+      : { titulo: '', quando: '', padrao: '', semana: '' };
+    const copia = s.copia || {},
+      destinos = s.gaveta === 'copiar' ? this.destinosDaCopia(copia) : [],
+      cicloTexto = Base.cicloTxt(dataDe(cicloDaSemana(semana) + '-01'));
+    const futuras = s.gaveta === 'copiar' ? this.semanasFuturas() : [],
+      porCiclo = {};
+    futuras.forEach(outra => {
+      const chave = cicloDaSemana(outra);
+      (porCiclo[chave] = porCiclo[chave] || []).push(outra);
+    });
+    const alteradas = this.itensDaSemana(semana).length;
+    return {
+      edicaoDaSemana,
+      resumoDaSemana: resumo,
+      semanaComErro: !!edicaoDaSemana.erro,
+      semanaAlterada: !!(daGrade && this.efetiva(daGrade, semana).personalizada),
+      tiposNaSemana: (daGrade && daGrade.tipo === 'F' ? ['F'] : ['R', 'P']).map(chave => {
+        const marcada = edicaoDaSemana.tipo === chave;
+        return {
+          rotulo: TIPOS_DE_ATIVIDADE[chave].nome,
+          marcada: marcada ? 'true' : 'false',
+          ...this.opcao(marcada, marcada ? TIPOS_DE_ATIVIDADE[chave].cor : null),
+          classe: marcada ? '' : 'fundo-ffffff',
+          fundo: marcada ? TIPOS_DE_ATIVIDADE[chave].fundo : 'var(--fundo-ffffff)',
+          escolher: () =>
+            edicaoDaSemana.tipo !== chave &&
+            this.preencherNaSemana({
+              tipo: chave,
+              solucao:
+                chave === 'P'
+                  ? ''
+                  : solucoesDe(chave).includes(edicaoDaSemana.solucao)
+                    ? edicaoDaSemana.solucao
+                    : 'Matific',
+              componente: '',
+              oficina: '',
+              outraOficina: ''
+            })
+        };
+      }),
+      escolheSolucaoNaSemana: edicaoDaSemana.tipo !== 'P',
+      solucoesNaSemana: solucoesDe(edicaoDaSemana.tipo).map(valor => {
+        const marcada = edicaoDaSemana.solucao === valor;
+        return {
+          rotulo: valor,
+          marcada: marcada ? 'true' : 'false',
+          ...this.opcao(marcada),
+          escolher: () => this.preencherNaSemana({ solucao: valor })
+        };
+      }),
+      temOutraSolucaoNaSemana: edicaoDaSemana.tipo !== 'P' && edicaoDaSemana.solucao === 'Outra',
+      mudarOutraSolucaoNaSemana: evento => this.preencherNaSemana({ outraSolucao: evento.target.value }),
+      mudarComponenteNaSemana: evento => this.preencherNaSemana({ componente: evento.target.value }),
+      semanaRegular: edicaoDaSemana.tipo === 'R',
+      semanaIntegral: edicaoDaSemana.tipo === 'P',
+      mudarOficinaNaSemana: evento => this.preencherNaSemana({ oficina: evento.target.value, outraOficina: '' }),
+      temOutraOficinaNaSemana: edicaoDaSemana.tipo === 'P' && edicaoDaSemana.oficina === 'Outro',
+      mudarOutraOficinaNaSemana: evento => this.preencherNaSemana({ outraOficina: evento.target.value }),
+      salvarNaSemana: () => this.salvarAtividadeDaSemana(false),
+      usarGradePadrao: () => this.salvarAtividadeDaSemana(true),
+      salvarNaSemanaTexto: edicaoDaSemana.salvando ? 'Salvando…' : 'Salvar só nesta semana',
+      salvarNaSemanaClasse: edicaoDaSemana.salvando ? '' : 'fundo-0b7ea3',
+      salvarNaSemanaFundo: edicaoDaSemana.salvando ? '#A9B8BD' : '#0B7EA3',
+      copia,
+      copiaComErro: !!copia.erro,
+      escolheSemanas: copia.modo === 'escolher',
+      copiaTexto: alteradas
+        ? (alteradas === 1
+            ? 'A atividade alterada da semana de ' + dmIso(semana) + ' vai valer também nas semanas escolhidas.'
+            : 'As ' +
+              alteradas +
+              ' atividades alteradas da semana de ' +
+              dmIso(semana) +
+              ' vão valer também nas semanas escolhidas.') + ' O que já estava personalizado nelas é substituído.'
+        : 'A semana de ' +
+          dmIso(semana) +
+          ' segue a grade padrão. Copiar faz as semanas escolhidas voltarem para a grade padrão.',
+      modosDaCopia: [
+        ['alt2', 'A cada 2 semanas, até o fim do ano'],
+        ['alt3', 'A cada 3 semanas, até o fim do ano'],
+        ['mes', 'Nas outras semanas do ciclo (' + cicloTexto + ')'],
+        ['escolher', 'Escolher as semanas']
+      ].map(([chave, rotulo]) => {
+        const marcada = copia.modo === chave;
+        return {
+          rotulo,
+          marcada: marcada ? 'true' : 'false',
+          ...this.opcao(marcada),
+          classe: marcada ? '' : 'fundo-ffffff',
+          fundo: marcada ? 'var(--fundo-eff9fc)' : 'var(--fundo-ffffff)',
+          escolher: () => this.setState({ copia: { ...copia, modo: chave, erro: '' } })
+        };
+      }),
+      ciclosDaCopia: Object.keys(porCiclo)
+        .sort()
+        .map(chave => ({
+          nome: Base.Mes(dataDe(chave + '-01')) + ' · ' + Base.cicloTxt(dataDe(chave + '-01')),
+          semanas: porCiclo[chave].map(outra => {
+            const marcada = !!(copia.escolhidas && copia.escolhidas[outra]);
+            return {
+              texto: dmIso(outra),
+              marcada: marcada ? 'true' : 'false',
+              ...this.opcao(marcada),
+              classe: marcada ? '' : 'fundo-ffffff',
+              fundo: marcada ? 'var(--fundo-eff9fc)' : 'var(--fundo-ffffff)',
+              aria: 'Semana de ' + dmIso(outra) + ' a ' + dmIso(somarDias(outra, 4)),
+              escolher: () =>
+                this.setState({
+                  copia: { ...copia, erro: '', escolhidas: { ...(copia.escolhidas || {}), [outra]: !marcada } }
+                })
+            };
+          })
+        })),
+      copiaResumo: destinos.length
+        ? 'Vai valer em ' +
+          (destinos.length === 1 ? '1 semana' : destinos.length + ' semanas') +
+          ': ' +
+          destinos.slice(0, 8).map(dmIso).join(', ') +
+          (destinos.length > 8 ? '…' : '') +
+          '.'
+        : 'Nenhuma semana escolhida.',
+      copiar: () => this.copiarSemana(),
+      copiarTexto: copia.salvando ? 'Copiando…' : 'Copiar semana',
+      copiarClasse: copia.salvando ? '' : 'fundo-0b7ea3',
+      copiarFundo: copia.salvando ? '#A9B8BD' : '#0B7EA3'
+    };
+  }
+  edicaoDaAtividade() {
+    const s = this.state;
+    const edicao = s.edicao || {};
+    const anosDaEscola = [...new Set((s.turmas || []).map(turma => Number(turma.ano)))]
+      .filter(ano => ANOS.includes(ano))
+      .sort((x, y) => x - y);
+    const anos = anosDaEscola.length ? anosDaEscola : ANOS;
+    const turmasDoAno =
+      edicao.ano === '' || edicao.ano == null
+        ? []
+        : (s.turmas || [])
+            .filter(turma => String(turma.ano) === String(edicao.ano) && turma.turma)
+            .map(turma => turma.turma);
+    const turmasDaEdicao =
+      edicao.ano === '' || edicao.ano == null ? [] : turmasDoAno.length ? turmasDoAno : TURMAS_PADRAO;
+    const inicioDaEdicao = horaValida(edicao.hora) ? minDeHora(edicao.hora) : null;
+    const fimDaEdicao = inicioDaEdicao == null ? null : inicioDaEdicao + 50 * (edicao.tempos || 1);
+    return {
+      edicao,
+      mudarDia: evento => this.preencherEdicao({ dia: evento.target.value }),
+      diasDaSemana: [1, 2, 3, 4, 5].map(dia => ({ valor: String(dia), rotulo: DIAS[dia] })),
+      mudarHorario: evento => {
+        const valor = evento.target.value;
+        this.preencherEdicao({
+          horario: valor,
+          ...(valor && !horaValida(this.state.edicao.hora) ? { hora: horarioPadrao(valor) } : {})
+        });
+      },
+      horarios: HORARIOS.map(numero => ({ valor: String(numero), rotulo: numero + 'º horário' })),
+      mudarHora: evento => this.preencherEdicao({ hora: evento.target.value }),
+      tempos: [1, 2, 3].map(quantidade => {
+        const cabe = inicioDaEdicao == null || inicioDaEdicao + 50 * quantidade <= FIM_DA_GRADE,
+          marcada = (edicao.tempos || 1) === quantidade;
+        return {
+          rotulo: quantidade + (quantidade > 1 ? ' horários' : ' horário'),
+          marcada: marcada ? 'true' : 'false',
+          desligada: !cabe,
+          opacidade: cabe ? 1 : 0.4,
+          ...this.opcao(marcada),
+          escolher: () => cabe && this.preencherEdicao({ tempos: quantidade })
+        };
+      }),
+      termino: fimDaEdicao ? Base.hm(fimDaEdicao) : '—',
+      tipos: TIPOS_DA_GRADE.map(chave => {
+        const marcada = edicao.tipo === chave;
+        return {
+          rotulo: TIPOS_DE_ATIVIDADE[chave].nome,
+          marcada: marcada ? 'true' : 'false',
+          ...this.opcao(marcada, marcada ? TIPOS_DE_ATIVIDADE[chave].cor : null),
+          classe: marcada ? '' : 'fundo-ffffff',
+          fundo: marcada ? TIPOS_DE_ATIVIDADE[chave].fundo : 'var(--fundo-ffffff)',
+          escolher: () =>
+            edicao.tipo !== chave &&
+            this.preencherEdicao({
+              tipo: chave,
+              solucao: chave === 'P' ? '' : solucoesDe(chave).includes(edicao.solucao) ? edicao.solucao : 'Matific',
+              componente: '',
+              oficina: '',
+              outraOficina: ''
+            })
+        };
+      }),
+      mudarAno: evento => this.preencherEdicao({ ano: evento.target.value, turma: '' }),
+      mudarComponente: evento => this.preencherEdicao({ componente: evento.target.value }),
+      componentes: COMPONENTES.map(item => ({ valor: item, rotulo: item })),
+      comTurma: edicao.tipo !== 'F',
+      ehIntegral: edicao.tipo === 'P',
+      mudarOficina: evento => this.preencherEdicao({ oficina: evento.target.value, outraOficina: '' }),
+      oficinas: [...OFICINAS, 'Outro'].map(item => ({ valor: item, rotulo: item })),
+      temOutraOficina: edicao.tipo === 'P' && edicao.oficina === 'Outro',
+      mudarOutraOficina: evento => this.preencherEdicao({ outraOficina: evento.target.value }),
+      anos: anos.map(ano => ({ valor: String(ano), rotulo: anoTexto(ano) })),
+      mudarTurma: evento => this.preencherEdicao({ turma: evento.target.value }),
+      turmasDoAno: turmasDaEdicao,
+      semAno: edicao.ano === '' || edicao.ano == null,
+      turmaVazia: edicao.ano === '' || edicao.ano == null ? 'Escolha o ano primeiro' : 'Selecione a turma',
+      ehRegular: edicao.tipo === 'R',
+      mudarProfessor: evento => this.preencherEdicao({ professor: evento.target.value }),
+      escolheSolucao: edicao.tipo !== 'P',
+      solucoes: solucoesDe(edicao.tipo).map(valor => {
+        const marcada = edicao.solucao === valor;
+        return {
+          rotulo: valor,
+          marcada: marcada ? 'true' : 'false',
+          ...this.opcao(marcada),
+          escolher: () => this.preencherEdicao({ solucao: valor })
+        };
+      }),
+      temOutraSolucao: edicao.tipo !== 'P' && edicao.solucao === 'Outra',
+      mudarOutraSolucao: evento => this.preencherEdicao({ outraSolucao: evento.target.value }),
+      mudarEspaco: evento => this.preencherEdicao({ espaco: evento.target.value }),
+      mudarObservacaoDaAtividade: evento => this.preencherEdicao({ observacao: evento.target.value }),
+      edicaoComErro: !!edicao.erro,
+      editando: !!edicao.id,
+      salvarTexto: edicao.salvando ? 'Salvando…' : edicao.id ? 'Salvar edição' : 'Adicionar à grade',
+      salvarClasse: edicao.salvando ? '' : 'fundo-0b7ea3',
+      salvarFundo: edicao.salvando ? '#A9B8BD' : '#0B7EA3',
+      excluirTexto: edicao.confirmarExcluir ? 'Confirmar exclusão' : 'Excluir atividade',
+      excluirClasse: edicao.confirmarExcluir ? '' : 'fundo-ffffff',
+      excluirFundo: edicao.confirmarExcluir ? '#B42318' : 'var(--fundo-ffffff)',
+      excluirCor: edicao.confirmarExcluir ? '#fff' : 'var(--texto-b42318)',
+      salvarAtividade: () => this.salvarAtividade(),
+      excluirAtividade: () => this.excluirAtividade()
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const lembretesPendentes = this.lembretesPendentes();
+    const relatorio = this.relatorio();
+    const { documento, oficial } = this.documentos(relatorio);
+    const selos = {
+      registro: s.carregado && lembretesPendentes.length ? String(lembretesPendentes.length) : '',
+      horas: relatorio.pendenciasComAcao && relatorio.cicloAtual ? String(relatorio.pendenciasComAcao) : ''
+    };
+    const navegacao = {};
+    const menu = TELAS.map(([chave, rotulo]) => {
+      const atual = s.tela === chave,
+        tag = selos[chave] || '',
+        tagBg = tag ? '#F2C66D' : 'transparent',
+        abrir = () => this.irPara(chave);
+      navegacao[chave] = {
+        abrir,
+        cor: atual ? 'var(--texto-0b7ea3)' : 'var(--texto-5b6b70)',
+        selo: tag,
+        seloFundo: tagBg
+      };
+      return {
+        label: rotulo,
+        tag,
+        tagBg,
+        go: abrir,
+        classe: atual ? 'fundo-rgba-255-255-255-0p09' : 'fundo-transparent',
+        bg: atual ? 'rgba(255,255,255,.09)' : 'transparent',
+        fg: atual ? '#fff' : '#C9D4D7',
+        dot: atual ? '#3ECDF3' : 'transparent',
+        atual: atual ? 'page' : 'false'
+      };
+    });
+    const atividades = s.abaDoDocumento === 'atividades',
+      doDocumento = atividades ? oficial.atividades : oficial.presenca;
+    return {
+      cliente: Base.cliente(),
+      ...this.sino(this.notificacoes(lembretesPendentes)),
+      menu,
+      navegacao,
+      titulo: TELAS.find(([chave]) => chave === s.tela)[1],
+      temConfig: typeof window.fsmConfiguracoes === 'function',
+      abrirConfig: () => {
+        if (this.state.menuAberto) this.setState({ menuAberto: false });
+        if (typeof window.fsmConfiguracoes === 'function') window.fsmConfiguracoes();
+      },
+      temSair: typeof window.fsmSair === 'function',
+      sairConta: () => {
+        if (typeof window.fsmSair === 'function') window.fsmSair();
+      },
+      menuClasse: s.menuAberto ? 'open' : '',
+      abrirMenu: () => this.setState({ menuAberto: true }),
+      fecharMenu: () => this.setState({ menuAberto: false }),
+      is: {
+        presenca: s.tela === 'presenca',
+        grade: s.tela === 'grade',
+        registro: s.tela === 'registro',
+        horas: s.tela === 'horas'
+      },
+      semInternet: s.semInternet,
+      sincronizadoTexto: 'hoje às ' + s.sincronizadoAs,
+      perfilLinha: (s.nomeDoUsuario ? s.nomeDoUsuario + ' · ' : '') + s.escola.sigla,
+      escolaNome: s.escola.nome,
+      contexto: this.contexto(relatorio, lembretesPendentes),
+      memoriaPresenca: this.memoria.presenca,
+      memoriaGrade: this.memoria.grade,
+      memoriaRegistro: this.memoria.registro,
+      memoriaRelatorio: this.memoria.relatorio,
+      ...this.resumoDoRegistro(relatorio),
+      documentoAberto: s.documentoAberto,
+      fecharDocumento: () => this.setState({ documentoAberto: false }),
+      cicloNome: Base.Mes(relatorio.dataDaCompetencia),
+      documento,
+      oficial: doDocumento,
+      abaPresenca: !atividades,
+      abaAtividades: atividades,
+      abaPresencaClasse: atividades ? 'fundo-transparent' : '',
+      abaPresencaFundo: atividades ? 'transparent' : '#FEFEFE',
+      abaPresencaCor: atividades ? '#FEFEFE' : '#13252C',
+      abaAtividadesClasse: atividades ? '' : 'fundo-transparent',
+      abaAtividadesFundo: atividades ? '#FEFEFE' : 'transparent',
+      abaAtividadesCor: atividades ? '#13252C' : '#FEFEFE',
+      verPresenca: () => this.setState({ abaDoDocumento: 'presenca' }),
+      verAtividades: () => this.setState({ abaDoDocumento: 'atividades' }),
+      declaracao: atividades
+        ? 'Declaro que as atividades acima foram realizadas conforme registrado, nas datas e turmas indicadas.'
+        : 'Declaro que os horários acima correspondem às minhas atividades presenciais na escola indicada. Todos os registros foram confirmados por geolocalização dentro do raio da escola, ou ajustados por justificativa aprovada pela direção da escola.',
+      observacao: (s.observacoes || {})[relatorio.competencia] || '',
+      mudarObservacao: evento => {
+        const valor = evento.target.value;
+        this.setState(st => ({ observacoes: { ...(st.observacoes || {}), [relatorio.competencia]: valor } }));
+      },
+      imprimir: () => {
+        if (documento.bloqueado) return;
+        const entreAspas = texto => '"' + String(texto).replace(/[\\"]/g, ' ') + '"';
+        const estilo = document.createElement('style');
+        estilo.id = 'rel-pagina';
+        estilo.textContent =
+          '@media print{@page{size:A4;margin:12mm 12mm 16mm;@bottom-left{content:' +
+          entreAspas((s.nomeDoUsuario || '—') + ' · ' + doDocumento.codigo) +
+          ';font:8pt Inter,system-ui,sans-serif;color:#555}@bottom-right{content:"Página " counter(page) " de " counter(pages);font:8pt Inter,system-ui,sans-serif;color:#555}}}';
+        document.head.appendChild(estilo);
+        try {
+          window.print();
+        } finally {
+          setTimeout(() => estilo.remove(), 1000);
+        }
+      },
+      temGaveta: !!s.gaveta,
+      gavetaTitulo:
+        s.gaveta === 'aula'
+          ? s.edicao.id
+            ? 'Editar atividade da grade'
+            : 'Nova atividade na grade'
+          : TITULO_DA_GAVETA[s.gaveta] || 'Registro de atividade',
+      gavetaDaAtividade: s.gaveta === 'aula',
+      gavetaDaSemana: s.gaveta === 'semana',
+      gavetaDaCopia: s.gaveta === 'copiar',
+      gavetaDeNotificacoes: s.gaveta === 'notif',
+      fecharGaveta: () => this.setState({ gaveta: null }),
+      ...this.edicaoDaSemana(),
+      ...this.edicaoDaAtividade(),
+      aviso: s.aviso
+    };
+  }
+}
+</script>
+</body>
+</html>

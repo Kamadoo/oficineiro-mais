@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Direção Escolar · Agendas dos oficineiros</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <div class="d-flex quebra-wrap gap-10-12 alinha-center">
+    <label class="largura-total-celular d-flex alinha-center gap-8 flex-1-1-320 max-w-520"><span class="oculto-celular fs-12 cor-5b6b70 fw-600">Oficineiro</span><select value="{{ oficineiroSelecionado }}" onChange="{{ escolherOficineiro }}" disabled="{{ semOficineiros }}" aria-label="Oficineiro" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit min-w-0 flex-1 fw-600 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesOficineiro }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <sc-for list="{{ situacoesGrade }}" as="situacao" hint-placeholder-count="1"><span class="fs-12 fw-600 p-4-10 raio-999 espaco-nowrap segmentado" style="color:{{ situacao.cor }};background:{{ situacao.fundo }}">{{ situacao.texto }}</span></sc-for>
+  </div>
+  <sc-if value="{{ validacao.aberta }}" hint-placeholder-val="{{ false }}">
+    <section class="fundo-ffffff raio-12 p-16-18 d-flex eixo-column gap-12 largura-fundo" style="border:1px solid var(--borda-dde6e8);border-left:4px solid #1A3F9C" aria-label="Validação da grade">
+      <b class="fs-15">Grade de {{ validacao.nome }} enviada para validação{{ validacao.enviadaEm }}</b>
+      <span class="fs-14 cor-34464d lh-1p5">Confira as atividades abaixo. Se estiver tudo certo, valide. Caso precise mudar algo, devolva explicando o ajuste: a direção não edita a grade diretamente.</span>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Comentário (obrigatório para devolver)</span><input value="{{ validacao.comentario }}" onChange="{{ validacao.escreverComentario }}" maxlength="500" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
+      <sc-if value="{{ validacao.temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-b42318">{{ validacao.erro }}</span></sc-if>
+      <div class="d-flex gap-8 quebra-wrap">
+        <button onClick="{{ validacao.devolver }}" disabled="{{ validacao.salvando }}" class="flex-1-1-160 h-40 borda-1p5-solid-b42318 fundo-ffffff cor-b42318 raio-8 fs-14 fw-600 botao-opcao">Devolver para ajuste</button>
+        <button onClick="{{ validacao.validar }}" disabled="{{ validacao.salvando }}" class="flex-1-1-160 h-40 borda-0 fundo-23773a cor-fff raio-8 fs-14 fw-600">Validar grade</button>
+      </div>
+    </section>
+  </sc-if>
+  <div class="duas-colunas-celular d-grid colunas-repeat-3-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="3"><div class="borda-dde6e8 raio-12 p-16 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-13 cor-5b6b70">{{ indicador.rotulo }}</span><span class="fs-24 fw-700 num-tabular-nums">{{ indicador.valor }}</span><span class="fs-12 cor-5b6b70 rolagem-hidden reticencias-ellipsis espaco-nowrap quebra-celular">{{ indicador.nota }}</span></div></sc-for>
+  </div>
+  <div class="d-flex alinha-center gap-10-12 quebra-wrap">
+    <span class="fs-13 cor-5b6b70">Das 07:00 às 17:00</span>
+    <div class="flex-1"></div>
+    <div role="group" aria-label="Semana" class="d-flex alinha-center gap-6">
+      <button onClick="{{ semanaAnterior }}" aria-label="Semana anterior" class="w-36 h-36 borda-cfdadd fundo-ffffff raio-8 cor-1a2b33 fs-16 p-0 largura-fundo botao-secundario">‹</button>
+      <span class="fs-13 fw-600 min-w-150 texto-center">{{ semanaTexto }}</span>
+      <button onClick="{{ semanaSeguinte }}" aria-label="Próxima semana" class="w-36 h-36 borda-cfdadd fundo-ffffff raio-8 cor-1a2b33 fs-16 p-0 largura-fundo botao-secundario">›</button>
+      <sc-if value="{{ foraDaSemanaAtual }}" hint-placeholder-val="{{ false }}"><button onClick="{{ voltarSemanaAtual }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-1a2b33 botao-secundario">Esta semana</button></sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ gradeVazia }}" hint-placeholder-val="{{ false }}"><div class="borda-dde6e8 raio-12 p-24 texto-center cor-5b6b70 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)">{{ gradeVaziaTexto }}</div></sc-if>
+  <sc-if value="{{ temGrade }}" hint-placeholder-val="{{ true }}">
+  <section class="oculto-celular borda-dde6e8 raio-12 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}" aria-label="Grade semanal">
+    <div class="d-grid colunas-72-repeat-5-minmax-0-1fr" style="grid-template-rows:{{ gradeLinhas }}">
+      <sc-for list="{{ gradeCelulas }}" as="celula" hint-placeholder-count="12">
+        <sc-if value="{{ celula.ehHora }}" hint-placeholder-val="{{ false }}"><div class="col-1 p-4-0-0-16 fs-13 cor-5b6b70 num-tabular-nums borda-t-e9eff1" style="grid-row:{{ celula.linha }};font-weight:{{ celula.peso }}">{{ celula.texto }}</div></sc-if>
+        <sc-if value="{{ celula.ehDia }}" hint-placeholder-val="{{ false }}"><div class="lin-1 p-14-8-10 d-flex eixo-column gap-2" style="grid-column:{{ celula.coluna }}"><span class="fs-13 fw-600" style="color:{{ celula.cor }}">{{ celula.texto }}</span><span class="fs-11 cor-5b6b70 num-tabular-nums">{{ celula.data }}</span><sc-if value="{{ celula.temFeriado }}" hint-placeholder-val="{{ false }}"><span class="fs-11 fw-600 cor-9a6212">{{ celula.feriado }}</span></sc-if></div></sc-if>
+        <sc-if value="{{ celula.ehVazia }}" hint-placeholder-val="{{ true }}"><div class="borda-t-e9eff1" style="grid-row:{{ celula.linha }};grid-column:{{ celula.coluna }};background:{{ celula.fundo }}"></div></sc-if>
+        <sc-if value="{{ celula.ehAtividade }}" hint-placeholder-val="{{ false }}">
+          <div class="p-2-4 d-flex eixo-column gap-4 pos-relative z-1 min-h-0" style="grid-row:{{ celula.linha }};grid-column:{{ celula.coluna }}">
+            <sc-for list="{{ celula.atividades }}" as="atividade" hint-placeholder-count="1">
+              <button onClick="{{ atividade.abrir }}" aria-haspopup="dialog" aria-label="{{ atividade.rotuloVer }}" class="flex-1 min-w-0 min-h-0 rolagem-hidden raio-8 p-6-10 d-flex eixo-column alinha-flex-start justifica-flex-start gap-2 texto-left cor-1a2b33 largura-fundo" style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }};cursor:pointer;font:inherit">
+                <span class="fs-11 fw-600 cor-45575e num-tabular-nums espaco-nowrap rolagem-hidden reticencias-ellipsis max-w-100pc">{{ atividade.horario }}</span>
+                <span class="fs-13 fw-700 lh-1p25 espaco-nowrap rolagem-hidden reticencias-ellipsis max-w-100pc">{{ atividade.turma }}</span>
+                <span class="fs-12 lh-1p3 d--webkit-box linhas-2 orienta-vertical rolagem-hidden"><b class="fw-600" style="color:{{ atividade.cor }}">{{ atividade.tipo }}</b><sc-if value="{{ atividade.temSolucao }}" hint-placeholder-val="{{ true }}"><span class="cor-45575e"> · {{ atividade.solucao }}</span></sc-if></span>
+                <sc-if value="{{ atividade.temOficineiro }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-5b6b70 espaco-nowrap rolagem-hidden reticencias-ellipsis max-w-100pc">{{ atividade.oficineiro }}</span></sc-if>
+                <sc-if value="{{ atividade.personalizada }}" hint-placeholder-val="{{ false }}"><span class="fs-11 fw-600 cor-7a4e0b">Alterada nesta semana</span></sc-if>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </sc-for>
+    </div>
+  </section>
+  <div class="so-celular-flex eixo-column gap-12">
+    <sc-for list="{{ diasEmLista }}" as="dia" hint-placeholder-count="5">
+      <section class="borda-dde6e8 raio-12 p-14 d-flex eixo-column gap-8 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-label="{{ dia.nome }}">
+        <h3 class="m-0 fs-15">{{ dia.nome }}</h3>
+        <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="2"><button onClick="{{ atividade.abrir }}" aria-haspopup="dialog" aria-label="{{ atividade.rotuloVer }}" class="d-grid colunas-52-minmax-0-1fr gap-2-12 raio-8 p-10-12 texto-left cor-1a2b33 w-100pc largura-fundo" style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }};cursor:pointer;font:inherit"><span class="fw-600 num-tabular-nums" style="grid-row:1 / span 4">{{ atividade.hora }}</span><span class="fs-12 fw-600 cor-45575e num-tabular-nums">{{ atividade.horario }}</span><b class="fs-14">{{ atividade.turma }}</b><span class="fs-12 fw-600" style="color:{{ atividade.cor }}">{{ atividade.tipo }}</span><span class="fs-12 cor-45575e">{{ atividade.solucaoOficineiro }}</span></button></sc-for>
+        <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-7d8c91">{{ dia.vazioTexto }}</span></sc-if>
+      </section>
+    </sc-for>
+  </div>
+  </sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { TIPOS, WDL: DIAS, dataDe, minDe, hmDe, dmIso, segDe, msgErro } = Base;
+const PADRAO = { oficineiro: '', semana: 0, comentario: '', erro: '', salvando: false };
+const SITUACOES_GRADE = {
+  enviada: ['Aguardando sua validação', 'var(--texto-1a3f9c)', 'var(--fundo-eff3fd)'],
+  validada: ['Validada', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)'],
+  devolvida: ['Devolvida para ajuste', 'var(--texto-b42318)', 'var(--fundo-fbedeb)'],
+  alterada: ['Alterada · aguardando novo envio', 'var(--texto-9a6212)', 'var(--fundo-faefd9)']
+};
+const detalheDoTipo = g => (g.tipo === 'P' ? g.oficina || '' : g.solucao || '');
+const horarioTexto = g =>
+  (g.horario ? g.horario + 'º horário · ' : '') + String(g.inicio).slice(0, 5) + '–' + String(g.fim).slice(0, 5);
+class Component extends DCLogic {
+  lembrar(mudanca) {
+    Object.assign(this.props.memoria, mudanca);
+    this.forceUpdate();
+  }
+  async decidirGrade(oficineiroId, ano, validar) {
+    const contexto = this.props.contexto;
+    const comentario = String(this.props.memoria.comentario || '').trim();
+    if (!validar && comentario.length < 5)
+      return this.lembrar({ erro: 'Explique o ajuste para o oficineiro (pelo menos 5 letras).' });
+    this.lembrar({ salvando: true, erro: '' });
+    try {
+      const A = window.FSM_AUTH;
+      await A.validarGrade(oficineiroId, ano, validar, comentario);
+      const envios = await A.envioDaGrade(ano).catch(() => null);
+      this.lembrar({ salvando: false, comentario: '' });
+      if (envios) contexto.atualizarEnvios(envios);
+      contexto.avisar(validar ? 'Grade validada' : 'Grade devolvida ao oficineiro');
+    } catch (x) {
+      this.lembrar({ salvando: false, erro: msgErro(x, 'Não foi possível salvar.') });
+    }
+  }
+  renderVals() {
+    const contexto = this.props.contexto;
+    const memoria = { ...PADRAO, ...this.props.memoria };
+    const { hoje, oficineiros, semanas, envios, nomeOficineiro, turmaDaGrade, temposDeAula } = contexto;
+    const segunda = Base.iso(Base.add(dataDe(segDe(hoje)), memoria.semana * 7));
+    const ano = dataDe(segunda).getFullYear();
+    const dias = [0, 1, 2, 3, 4].map(k => Base.add(dataDe(segunda), k));
+    const selecionado =
+      memoria.oficineiro && (memoria.oficineiro === 'todos' || oficineiros.some(o => o.id === memoria.oficineiro))
+        ? memoria.oficineiro
+        : oficineiros.length === 1
+          ? oficineiros[0].id
+          : 'todos';
+    const todos = selecionado === 'todos';
+    const doSelecionado = id => todos || selecionado === id;
+    const grade = contexto.grade.filter(g => Number(g.ano_letivo) === ano && doSelecionado(g.oficineiro_id));
+    const porHorarioENome = (x, y) =>
+      minDe(x.inicio) - minDe(y.inicio) ||
+      nomeOficineiro(x.oficineiro_id).localeCompare(nomeOficineiro(y.oficineiro_id));
+    const efetiva = g => {
+      const daSemana = semanas.find(x => x.grade_aula_id === g.id && x.semana === segunda);
+      return daSemana
+        ? {
+            ...g,
+            tipo: daSemana.tipo || g.tipo,
+            solucao: daSemana.solucao,
+            componente: (daSemana.tipo || g.tipo) === 'R' ? daSemana.componente || g.componente : null,
+            oficina: (daSemana.tipo || g.tipo) === 'P' ? daSemana.oficina : null,
+            personalizada: true
+          }
+        : g;
+    };
+    const detalhe = (g, dia) => {
+      const aula = efetiva(g);
+      const tipo = TIPOS[aula.tipo] || TIPOS.R;
+      const tempos = temposDeAula(aula.inicio, aula.fim);
+      return {
+        titulo: turmaDaGrade(aula),
+        quando: DIAS[dia.getDay()] + ', ' + Base.dm(dia) + ' · ' + hmDe(aula.inicio) + '–' + hmDe(aula.fim),
+        tipo: tipo[0],
+        cor: tipo[1],
+        fundo: tipo[2],
+        personalizada: !!aula.personalizada,
+        itens: [
+          ['Oficineiro', nomeOficineiro(aula.oficineiro_id)],
+          ['Componente curricular', aula.tipo === 'R' ? aula.componente : ''],
+          ['Oficina', aula.tipo === 'P' ? aula.oficina : ''],
+          ['Solução', aula.tipo === 'P' ? '' : aula.solucao],
+          ['Professor regente', aula.tipo === 'R' ? aula.professor : ''],
+          ['Espaço', aula.espaco],
+          ['Observação', aula.observacao],
+          ['Duração', tempos + (tempos === 1 ? ' horário de 50 min' : ' horários de 50 min')]
+        ]
+          .filter(([, valor]) => valor != null && String(valor).trim() !== '')
+          .map(([rotulo, valor]) => ({ rotulo, valor: String(valor) }))
+      };
+    };
+    const cartao = (g, dia) => {
+      const aula = efetiva(g);
+      const tipo = TIPOS[aula.tipo] || TIPOS.R;
+      const feriado = Base.feriado(dia);
+      const componente = aula.tipo === 'R' ? aula.componente || '' : '';
+      const solucao = detalheDoTipo(aula);
+      const oficineiro = nomeOficineiro(aula.oficineiro_id);
+      return {
+        turma: turmaDaGrade(aula),
+        horario: horarioTexto(aula),
+        tipo: tipo[0],
+        solucao: [componente, solucao].filter(Boolean).join(' · '),
+        temSolucao: !!(componente || solucao),
+        oficineiro,
+        temOficineiro: todos,
+        solucaoOficineiro: [componente, solucao, todos ? oficineiro : ''].filter(Boolean).join(' · '),
+        personalizada: !!aula.personalizada,
+        cor: feriado ? 'var(--texto-5b6b70)' : tipo[1],
+        fundo: feriado ? 'var(--fundo-e8eef0)' : tipo[2],
+        hora: hmDe(aula.inicio),
+        rotuloVer:
+          'Ver detalhes: ' +
+          turmaDaGrade(aula) +
+          (componente ? ', ' + componente : '') +
+          ', ' +
+          DIAS[dia.getDay()] +
+          ' · ' +
+          horarioTexto(aula),
+        abrir: () => contexto.mostrarDetalheGrade(detalhe(g, dia))
+      };
+    };
+    const blocosPorDia = dias.map(dia => {
+      const blocos = [];
+      grade
+        .filter(g => g.dia_semana === dia.getDay())
+        .sort(porHorarioENome)
+        .forEach(g => {
+          const ultimo = blocos[blocos.length - 1];
+          if (ultimo && minDe(g.inicio) < ultimo.fim) {
+            ultimo.aulas.push(g);
+            ultimo.fim = Math.max(ultimo.fim, minDe(g.fim));
+          } else blocos.push({ inicio: minDe(g.inicio), fim: minDe(g.fim), aulas: [g] });
+        });
+      return blocos;
+    });
+    const eixo = Base.eixoGrade(
+      blocosPorDia.flat().map(bloco => [bloco.inicio, bloco.fim]),
+      { cresce: true }
+    );
+    const fundoDoDia = dia => (Base.feriado(dia) ? 'var(--fundo-f7fafb)' : 'var(--fundo-ffffff)');
+    const gradeCelulas = [];
+    dias.forEach((dia, k) => {
+      const feriado = Base.feriado(dia);
+      const ehHoje = Base.iso(dia) === hoje;
+      gradeCelulas.push({
+        ehDia: true,
+        coluna: k + 2,
+        texto: DIAS[dia.getDay()] + (ehHoje ? ' · hoje' : ''),
+        cor: ehHoje ? 'var(--texto-0b7ea3)' : 'var(--texto-1a2b33)',
+        data: Base.dm(dia),
+        temFeriado: !!feriado,
+        feriado: feriado ? 'Feriado: ' + feriado : ''
+      });
+    });
+    eixo.segs.forEach(segmento => {
+      gradeCelulas.push({
+        ehHora: true,
+        linha: segmento.gr,
+        texto: segmento.marco ? Base.hm(segmento.ini) : '',
+        peso: segmento.ocupado ? 600 : 400
+      });
+      dias.forEach((dia, k) => {
+        if (blocosPorDia[k].some(bloco => bloco.inicio < segmento.fim && bloco.fim > segmento.ini)) return;
+        gradeCelulas.push({ ehVazia: true, linha: segmento.gr, coluna: k + 2, fundo: fundoDoDia(dia) });
+      });
+    });
+    dias.forEach((dia, k) => {
+      blocosPorDia[k].forEach(bloco => {
+        gradeCelulas.push({
+          ehAtividade: true,
+          linha: eixo.faixa(bloco.inicio, bloco.fim),
+          coluna: k + 2,
+          atividades: bloco.aulas.map(g => cartao(g, dia))
+        });
+      });
+    });
+    const escolhido = todos ? null : oficineiros.find(o => o.id === selecionado);
+    const envio = escolhido ? envios.find(x => x.oficineiro_id === escolhido.id && Number(x.ano_letivo) === ano) : null;
+    return {
+      opacidade: contexto.carregando ? 0.6 : 1,
+      oficineiroSelecionado: selecionado,
+      opcoesOficineiro: oficineiros.length
+        ? [
+            ...(oficineiros.length > 1 ? [{ valor: 'todos', rotulo: 'Todos os oficineiros' }] : []),
+            ...oficineiros.map(o => ({ valor: o.id, rotulo: o.nome }))
+          ]
+        : [{ valor: '', rotulo: 'Nenhum oficineiro nesta escola' }],
+      semOficineiros: !oficineiros.length,
+      escolherOficineiro: e => this.lembrar({ oficineiro: e.target.value, comentario: '', erro: '' }),
+      situacoesGrade: oficineiros
+        .filter(o => doSelecionado(o.id))
+        .map(o => {
+          const enviado = envios.find(x => x.oficineiro_id === o.id && Number(x.ano_letivo) === ano);
+          const situacao = enviado
+            ? SITUACOES_GRADE[enviado.status] || SITUACOES_GRADE.enviada
+            : ['Ainda não enviada', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)'];
+          return {
+            texto: (todos ? o.nome + ': ' : 'Grade ') + situacao[0].toLowerCase(),
+            cor: situacao[1],
+            fundo: situacao[2]
+          };
+        }),
+      validacao:
+        envio && envio.status === 'enviada'
+          ? {
+              aberta: true,
+              nome: escolhido.nome,
+              enviadaEm: envio.enviado_em ? ' em ' + Base.dm(new Date(envio.enviado_em)) : '',
+              comentario: memoria.comentario,
+              escreverComentario: e => this.lembrar({ comentario: e.target.value, erro: '' }),
+              erro: memoria.erro,
+              temErro: !!memoria.erro,
+              salvando: memoria.salvando,
+              validar: () => this.decidirGrade(escolhido.id, ano, true),
+              devolver: () => this.decidirGrade(escolhido.id, ano, false)
+            }
+          : { aberta: false },
+      indicadores: [
+        todos
+          ? {
+              rotulo: 'Oficineiros com grade',
+              valor: String(new Set(grade.map(g => g.oficineiro_id)).size),
+              nota: 'de ' + oficineiros.length + ' na escola'
+            }
+          : { rotulo: 'Atividades na semana', valor: String(grade.length), nota: 'na grade de ' + ano },
+        {
+          rotulo: 'Horas-aula por semana',
+          valor: String(grade.reduce((total, g) => total + temposDeAula(g.inicio, g.fim), 0)),
+          nota: 'atividades de 50 min na grade de ' + ano
+        },
+        {
+          rotulo: 'Turmas',
+          valor: String(new Set(grade.map(g => g.ano + g.turma)).size),
+          nota: grade.length ? 'atendidas na semana' : 'grade vazia'
+        }
+      ],
+      semanaTexto: 'Semana de ' + dmIso(segunda) + ' a ' + dmIso(Base.iso(Base.add(dataDe(segunda), 4))),
+      semanaAnterior: () => this.lembrar({ semana: Math.max(-26, memoria.semana - 1) }),
+      semanaSeguinte: () => this.lembrar({ semana: Math.min(26, memoria.semana + 1) }),
+      voltarSemanaAtual: () => this.lembrar({ semana: 0 }),
+      foraDaSemanaAtual: memoria.semana !== 0,
+      gradeVazia: !grade.length && !contexto.carregando,
+      gradeVaziaTexto: oficineiros.length
+        ? 'Nenhuma atividade na grade de ' +
+          ano +
+          (todos ? ' para os oficineiros desta escola.' : ' para este oficineiro.')
+        : 'Nenhum oficineiro ativo nesta escola.',
+      temGrade: grade.length > 0,
+      gradeLinhas: eixo.linhas,
+      gradeCelulas,
+      diasEmLista: dias.map(dia => {
+        const feriado = Base.feriado(dia);
+        const atividades = grade
+          .filter(g => g.dia_semana === dia.getDay())
+          .sort((x, y) => minDe(x.inicio) - minDe(y.inicio))
+          .map(g => cartao(g, dia));
+        return {
+          nome: DIAS[dia.getDay()] + ' · ' + Base.dm(dia) + (feriado ? ' · feriado' : ''),
+          atividades,
+          vazio: !atividades.length,
+          vazioTexto: feriado ? 'Feriado: ' + feriado : 'Sem atividades'
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

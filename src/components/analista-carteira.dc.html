@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Analista · Adoção e execução das aulas</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <div class="filtros d-flex quebra-wrap gap-8 alinha-center">
+    <select aria-label="Período" value="{{ periodo }}" onChange="{{ escolherPeriodo }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fw-600 fundo-ffffff" style="flex:1 1 140px;background:var(--fundo-ffffff)"><sc-for list="{{ periodos }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select aria-label="Escola" value="{{ escola }}" onChange="{{ escolherEscola }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="flex:1 1 140px;background:var(--fundo-ffffff)"><option value="">Todas as escolas da carteira</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select aria-label="Solução" value="{{ solucao }}" onChange="{{ escolherSolucao }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="flex:1 1 140px;background:var(--fundo-ffffff)"><option value="">Todas as soluções</option><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
+    <select aria-label="Tipo de atividade" value="{{ tipo }}" onChange="{{ escolherTipo }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="flex:1 1 140px;background:var(--fundo-ffffff)"><option value="">Todos os tipos de aula</option><option value="R">Aula regular</option><option value="P">Projeto tempo integral</option><option value="F">Formação de professores</option></select>
+    <div class="oculto-celular flex-1"></div>
+    <span role="status" aria-live="polite" class="fs-12 cor-5b6b70">{{ periodoTexto }}</span>
+    <button onClick="{{ exportar }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-1a2b33 botao-secundario">Exportar Excel</button>
+  </div>
+  <div class="duas-colunas-celular d-grid colunas-repeat-3-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="6"><div class="borda-dde6e8 raio-10 p-14-16 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-12 cor-5b6b70">{{ indicador.titulo }}</span><span class="fs-26 fw-600 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-11 cor-5b6b70">{{ indicador.nota }}</span></div></sc-for>
+  </div>
+  <section class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+    <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-200">Execução e adoção por escola</h3><span class="fs-12 cor-5b6b70">Execução = realizadas ÷ previstas líquidas · extras fora da taxa</span></div>
+    <div role="table" aria-label="Execução e adoção por escola" class="min-w-1180">
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-5b6b70 borda-t-dde6e8 borda-b-dde6e8" style="grid-template-columns:1.6fr 1.1fr .7fr .7fr 1.2fr .7fr .7fr .5fr 1fr .5fr .9fr"><span role="columnheader">Escola</span><span role="columnheader">Oficineiro(s)</span><span role="columnheader">Prev. líquidas</span><span role="columnheader">Realizadas</span><span role="columnheader">Execução</span><span role="columnheader">Estudantes</span><span role="columnheader">Presença</span><span role="columnheader">Eng.</span><span role="columnheader">Solução principal</span><span role="columnheader">Não real.</span><span role="columnheader">Visitas</span></div>
+      <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="5">
+        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-e8eef0 alinha-center" style="grid-template-columns:1.6fr 1.1fr .7fr .7fr 1.2fr .7fr .7fr .5fr 1fr .5fr .9fr;background:{{ linha.fundo }};font-weight:{{ linha.peso }}">
+          <span role="cell" class="quebra-palavra-anywhere">{{ linha.escola }}</span><span role="cell" class="fs-12 cor-34464d quebra-palavra-anywhere">{{ linha.oficineiros }}</span><span role="cell" class="num-tabular-nums">{{ linha.previstas }}</span><span role="cell" class="num-tabular-nums">{{ linha.realizadas }}</span>
+          <span role="cell" class="d-flex alinha-center gap-8"><b class="w-38 num-tabular-nums">{{ linha.execucao }}</b><span class="flex-1 h-6 fundo-e8eef0 raio-3"><span class="d-block h-6 raio-3 largura-fundo" style="width:{{ linha.execucaoLargura }};background:{{ linha.execucaoCor }}"></span></span></span>
+          <span role="cell" class="num-tabular-nums">{{ linha.estudantes }}</span><span role="cell" class="num-tabular-nums">{{ linha.presenca }}</span><span role="cell" class="num-tabular-nums">{{ linha.engajamento }}</span><span role="cell" class="quebra-palavra-anywhere">{{ linha.solucao }}</span><span role="cell" class="num-tabular-nums" style="color:{{ linha.naoRealizadasCor }}">{{ linha.naoRealizadas }}</span>
+          <span role="cell" class="d-flex eixo-column fs-11 cor-34464d fw-400"><span>{{ linha.ultimaVisita }}</span><span style="color:{{ linha.proximaVisitaCor }}">{{ linha.proximaVisita }}</span></span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semEscolas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhuma escola ativa na carteira com esses filtros.</p></sc-if>
+  </section>
+  <div class="empilha-celular d-grid colunas-repeat-2-minmax-0-1fr gap-20" style="opacity:{{ opacidade }}">
+    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)">
+      <h3 class="m-0 fs-15">Uso por solução</h3>
+      <sc-for list="{{ usoPorSolucao }}" as="item" hint-placeholder-count="4">
+        <div class="d-flex eixo-column gap-6"><div class="d-flex quebra-wrap justifica-space-between gap-2-8 fs-13"><b>{{ item.nome }}</b><span class="cor-5b6b70">{{ item.detalhe }}</span></div><div class="d-flex alinha-center gap-10"><span class="flex-1 h-8 fundo-e8eef0 raio-4"><span class="d-block h-8 raio-4 largura-fundo" style="width:{{ item.parcela }};background:{{ item.cor }}"></span></span><b class="num-tabular-nums fs-13 w-40 texto-right">{{ item.parcela }}</b></div></div>
+      </sc-for>
+    </section>
+    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)">
+      <h3 class="m-0 fs-15">Aulas por tipo</h3>
+      <sc-for list="{{ aulasPorTipo }}" as="item" hint-placeholder-count="3">
+        <div class="d-grid colunas-minmax-0-1fr-auto gap-4-12 p-10-12 raio-8" style="background:{{ item.fundo }}"><b class="fs-14" style="color:{{ item.cor }}">{{ item.nome }}</b><b class="num-tabular-nums" style="color:{{ item.cor }}">{{ item.execucao }}</b><span class="fs-12 cor-34464d">{{ item.detalhe }}</span><span class="fs-11 cor-5b6b70">execução</span></div>
+      </sc-for>
+    </section>
+    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)">
+      <h3 class="m-0 fs-15">Motivos de não realização</h3>
+      <sc-if value="{{ semMotivos }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Nenhuma aula não realizada no período.</span></sc-if>
+      <sc-for list="{{ motivos }}" as="item" hint-placeholder-count="4">
+        <div class="d-grid colunas-minmax-0-150-minmax-0-1fr-28 gap-10 alinha-center fs-13"><span class="quebra-palavra-anywhere">{{ item.nome }}</span><span class="h-8 fundo-e8eef0 raio-4"><span class="d-block h-8 fundo-b42318 raio-4 largura-fundo" style="width:{{ item.largura }}"></span></span><b class="num-tabular-nums texto-right">{{ item.total }}</b></div>
+      </sc-for>
+      <span class="fs-12 cor-5b6b70">Motivos informados pelos oficineiros no registro das aulas.</span>
+    </section>
+    <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)">
+      <h3 class="m-0 fs-15">Engajamento e objetivos por solução</h3>
+      <sc-if value="{{ semEngajamento }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Nenhuma aula com engajamento informado no período.</span></sc-if>
+      <sc-for list="{{ engajamentoPorSolucao }}" as="item" hint-placeholder-count="4">
+        <div class="d-grid colunas-minmax-0-1fr-70-minmax-0-170 gap-10 alinha-center fs-13 p-8-0 borda-t-e8eef0"><b class="quebra-palavra-anywhere">{{ item.nome }}</b><span class="num-tabular-nums">{{ item.nota }} / 5</span><span class="cor-23773a fs-12">{{ item.objetivo }}</span></div>
+      </sc-for>
+    </section>
+  </div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { TIPOS, dataDe, minDe, dmIso, cicloIniIso, cicloFimIso, mesTxt, pct, pctTxt, exC, numero, plural } = Base;
+const CORES_DAS_SOLUCOES = [
+  'var(--texto-23773a)',
+  'var(--texto-1f4fc4)',
+  'var(--texto-9a6212)',
+  'var(--texto-6c60e6)',
+  'var(--texto-5b6b70)'
+];
+const larguraDaBarra = valor => (valor == null ? '0%' : Math.min(100, valor) + '%');
+const minutosDaAula = aula =>
+  aula.reg && aula.reg.inicio && aula.reg.fim ? Math.max(0, minDe(aula.reg.fim) - minDe(aula.reg.inicio)) : 0;
+const feita = aula => aula.st === 'real' || aula.extra;
+const horasAula = aulas =>
+  Math.round(aulas.filter(aula => feita(aula) && aula.reg).reduce((soma, aula) => soma + minutosDaAula(aula), 0) / 50);
+const solucaoPrincipal = aulas => {
+  const totais = {};
+  aulas.filter(aula => feita(aula) && aula.sol).forEach(aula => (totais[aula.sol] = (totais[aula.sol] || 0) + 1));
+  return Object.keys(totais).sort((a, b) => totais[b] - totais[a])[0] || '—';
+};
+class Component extends DCLogic {
+  lembrar(mudanca) {
+    Object.assign(this.props.memoria, mudanca);
+    this.forceUpdate();
+  }
+  renderVals() {
+    const contexto = this.props.contexto,
+      memoria = this.props.memoria;
+    const { hoje, escolasDaCarteira, oficineiros, resumir, dadosDoCiclo, aulasDoCiclo } = contexto;
+    const cicloAtual = contexto.cicloRelativo(0);
+    const ciclos = [-5, -4, -3, -2, -1, 0].map(k => contexto.cicloRelativo(k));
+    const periodo = memoria.periodo === 'ult7' || memoria.periodo === 'tri' ? memoria.periodo : null,
+      ciclo = periodo ? cicloAtual : ciclos.includes(memoria.periodo) ? memoria.periodo : cicloAtual,
+      ehCicloAtual = ciclo === cicloAtual,
+      fim = ehCicloAtual ? hoje : cicloFimIso(ciclo),
+      inicio =
+        periodo === 'ult7'
+          ? Base.iso(Base.add(dataDe(hoje), -6))
+          : periodo === 'tri'
+            ? cicloIniIso(contexto.cicloRelativo(-2))
+            : cicloIniIso(ciclo),
+      dados = periodo === 'tri' ? dadosDoCiclo(contexto.cicloRelativo(-2)) : dadosDoCiclo(ciclo);
+    const diasLetivos = (() => {
+      let total = 0;
+      for (let dia = dataDe(inicio); Base.iso(dia) <= fim; dia = Base.add(dia, 1)) if (Base.letivo(dia)) total++;
+      return total;
+    })();
+    const aulasDoPeriodo = (
+      periodo
+        ? (periodo === 'tri' ? aulasDoCiclo(dados, contexto.cicloRelativo(-2)) : [])
+            .concat(aulasDoCiclo(dadosDoCiclo(contexto.cicloRelativo(-1)), contexto.cicloRelativo(-1)))
+            .concat(contexto.aulasDoCicloAtual)
+        : ehCicloAtual
+          ? contexto.aulasDoCicloAtual
+          : aulasDoCiclo(dados, ciclo)
+    ).filter(aula => aula.iso >= inicio && aula.iso <= fim);
+    const aulas = aulasDoPeriodo.filter(
+      aula =>
+        (!memoria.escola || String(aula.esc) === memoria.escola) &&
+        (!memoria.solucao || aula.sol === memoria.solucao) &&
+        (!memoria.tipo || (aula.tipo || 'R') === memoria.tipo)
+    );
+    const escolas = escolasDaCarteira.filter(e => !memoria.escola || String(e.id) === memoria.escola);
+    const visitas = contexto.minhasVisitas.filter(
+      v => v.data >= inicio && v.data <= fim && (!memoria.escola || String(v.escola_id) === memoria.escola)
+    );
+    const turmas = (() => {
+      const todas = new Set(),
+        atendidas = new Set();
+      aulas
+        .filter(aula => !aula.extra && aula.g && aula.g.ano != null && aula.st !== 'canc')
+        .forEach(aula => {
+          const chave = aula.esc + '|' + aula.g.ano + '|' + aula.g.turma;
+          todas.add(chave);
+          if (aula.st === 'real') atendidas.add(chave);
+        });
+      return { todas: todas.size, atendidas: atendidas.size };
+    })();
+    const total = resumir(aulas);
+    const linha = (escola, responsaveis, resumo, solucao, ultimaVisita, proximaVisita, ehTotal, proximaVisitaCor) => ({
+      escola,
+      oficineiros: responsaveis,
+      previstas: resumo.liquidas ? numero(resumo.liquidas) : '—',
+      realizadas: numero(resumo.real),
+      execucao: resumo.execucao == null ? '—' : resumo.execucao + '%',
+      execucaoLargura: larguraDaBarra(resumo.execucao),
+      execucaoCor: resumo.execucao == null ? '#A9B8BD' : exC(resumo.execucao),
+      estudantes: numero(resumo.estudantes),
+      presenca: pctTxt(resumo.presenca),
+      engajamento: resumo.engajamento,
+      solucao,
+      naoRealizadas: numero(resumo.nao),
+      naoRealizadasCor: resumo.nao > 4 ? 'var(--texto-b42318)' : 'var(--texto-1a2b33)',
+      ultimaVisita,
+      proximaVisita,
+      proximaVisitaCor: proximaVisitaCor || 'var(--texto-34464d)',
+      fundo: ehTotal ? 'var(--fundo-f7fafb)' : 'var(--fundo-ffffff)',
+      peso: ehTotal ? '600' : '400'
+    });
+    const linhas = escolas
+      .map(escola => {
+        const daEscola = aulas.filter(aula => aula.esc === escola.id),
+          ultima = contexto.ultimaVisita(escola.id),
+          proxima = contexto.proximaVisita(escola.id),
+          antiga = !ultima || ultima.data < contexto.ha30Dias;
+        return linha(
+          escola.nome,
+          oficineiros
+            .filter(o => o.escola_id === escola.id)
+            .map(o => o.nome)
+            .join(' · ') || 'Sem oficineiro',
+          resumir(daEscola),
+          solucaoPrincipal(daEscola),
+          ultima ? 'Última ' + dmIso(ultima.data) : 'Sem visita',
+          proxima ? 'Próxima ' + dmIso(proxima.data) : 'Sem agendada',
+          false,
+          !proxima && antiga ? 'var(--texto-b42318)' : 'var(--texto-34464d)'
+        );
+      })
+      .concat(
+        escolas.length
+          ? [
+              linha(
+                'Total',
+                plural(
+                  oficineiros.filter(o => escolas.some(e => e.id === o.escola_id)).length,
+                  'oficineiro',
+                  'oficineiros'
+                ),
+                total,
+                solucaoPrincipal(aulas),
+                plural(visitas.length, 'visita', 'visitas'),
+                '',
+                true
+              )
+            ]
+          : []
+      );
+    const feitas = aulas.filter(feita);
+    const porSolucao = {};
+    feitas.forEach(aula => {
+      const nome = aula.sol || 'Sem solução informada';
+      porSolucao[nome] = [...(porSolucao[nome] || []), aula];
+    });
+    const solucoes = Object.entries(porSolucao).sort((a, b) => b[1].length - a[1].length);
+    const principais = solucoes
+      .slice(0, 4)
+      .concat(solucoes.length > 4 ? [['Outras soluções', [].concat(...solucoes.slice(4).map(x => x[1]))]] : []);
+    const porMotivo = {};
+    aulas
+      .filter(aula => aula.st === 'nao' && aula.reg)
+      .forEach(aula => {
+        const motivo = (aula.reg.motivo || 'Sem motivo informado').trim();
+        porMotivo[motivo] = (porMotivo[motivo] || 0) + 1;
+      });
+    const motivos = Object.entries(porMotivo)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6);
+    const maiorMotivo = motivos.length ? motivos[0][1] : 1;
+    const comEngajamento = solucoes
+      .map(([nome, lista]) => ({ nome, lista, avaliadas: lista.filter(aula => aula.reg && aula.reg.engajamento) }))
+      .filter(x => x.avaliadas.length);
+    const periodoNome = periodo === 'ult7' ? 'últimos 7 dias' : periodo === 'tri' ? 'trimestre' : mesTxt(ciclo);
+    return {
+      opacidade: contexto.opacidade,
+      opcoesDeEscola: contexto.opcoesDeEscola,
+      periodo: periodo || ciclo,
+      periodos: ciclos
+        .slice()
+        .reverse()
+        .map(valor => ({
+          valor,
+          rotulo: mesTxt(valor).replace(/^./, letra => letra.toUpperCase()) + ' · ' + Base.cicloTxt(dataDe(valor))
+        }))
+        .concat([
+          { valor: 'ult7', rotulo: 'Últimos 7 dias' },
+          { valor: 'tri', rotulo: 'Trimestre · 3 últimos ciclos' }
+        ]),
+      escolherPeriodo: e => {
+        const valor = e.target.value;
+        this.lembrar({ periodo: valor });
+        contexto.carregarPeriodo(valor);
+      },
+      escola: memoria.escola,
+      escolherEscola: e => this.lembrar({ escola: e.target.value }),
+      solucao: memoria.solucao,
+      escolherSolucao: e => this.lembrar({ solucao: e.target.value }),
+      solucoes: Array.from(new Set(aulasDoPeriodo.map(aula => aula.sol).filter(Boolean))).sort((a, b) =>
+        a.localeCompare(b, 'pt-BR')
+      ),
+      tipo: memoria.tipo,
+      escolherTipo: e => this.lembrar({ tipo: e.target.value }),
+      periodoTexto: !dados.pronto
+        ? 'Carregando ' + (periodo === 'tri' ? 'o trimestre' : mesTxt(ciclo)) + '…'
+        : (periodo === 'ult7' ? 'Últimos 7 dias · ' : periodo === 'tri' ? 'Trimestre · ' : 'Ciclo ') +
+          dmIso(inicio) +
+          (ehCicloAtual ? ' até ' : ' a ') +
+          dmIso(fim) +
+          ' · ' +
+          plural(diasLetivos, 'dia letivo', 'dias letivos') +
+          ' · fonte: grade e registro de atividades dos oficineiros',
+      indicadores: [
+        {
+          titulo: 'Execução das aulas',
+          valor: pctTxt(total.execucao),
+          nota: 'realizadas ÷ previstas líquidas',
+          cor: exC(total.execucao)
+        },
+        {
+          titulo: 'Aulas realizadas',
+          valor: numero(total.real) + ' / ' + numero(total.liquidas),
+          nota: total.extra ? numero(total.extra) + ' fora da grade' : 'todas da grade',
+          cor: 'var(--texto-1a2b33)'
+        },
+        {
+          titulo: 'Horas-aula realizadas',
+          valor: numero(horasAula(aulas)),
+          nota: 'tempos de 50 minutos',
+          cor: 'var(--texto-1a2b33)'
+        },
+        {
+          titulo: 'Estudantes atendidos',
+          valor: numero(total.estudantes),
+          nota: 'soma de presentes',
+          cor: 'var(--texto-1a2b33)'
+        },
+        {
+          titulo: 'Taxa de presença',
+          valor: pctTxt(total.presenca),
+          nota: 'presentes ÷ matriculados',
+          cor: 'var(--texto-1a2b33)'
+        },
+        {
+          titulo: 'Cobertura das turmas',
+          valor: pctTxt(pct(turmas.atendidas, turmas.todas)),
+          nota: 'turmas atendidas ÷ turmas da grade',
+          cor: 'var(--texto-1a2b33)'
+        }
+      ],
+      linhas,
+      semEscolas: escolas.length === 0,
+      usoPorSolucao: principais.length
+        ? principais.map(([nome, lista], i) => ({
+            nome,
+            parcela: pct(lista.length, feitas.length) + '%',
+            detalhe:
+              plural(lista.length, 'aula', 'aulas') +
+              ' · ' +
+              plural(
+                lista.reduce((soma, aula) => soma + ((aula.reg && aula.reg.presentes) || 0), 0),
+                'estudante',
+                'estudantes'
+              ),
+            cor: CORES_DAS_SOLUCOES[i]
+          }))
+        : [{ nome: 'Nenhuma aula realizada', parcela: '0%', detalhe: 'no período', cor: 'var(--borda-cfdadd)' }],
+      aulasPorTipo: ['R', 'P', 'F']
+        .filter(tipo => tipo !== 'F' || aulas.some(aula => aula.tipo === 'F'))
+        .map(tipo => {
+          const doTipo = aulas.filter(aula => (aula.tipo || 'R') === tipo),
+            resumo = resumir(doTipo),
+            oficinas = {};
+          if (tipo === 'P')
+            doTipo.filter(feita).forEach(aula => {
+              const nome = aula.sol || 'Outra oficina';
+              oficinas[nome] = (oficinas[nome] || 0) + 1;
+            });
+          const detalhes = Object.entries(oficinas)
+            .sort((a, b) => b[1] - a[1])
+            .map(([nome, quantidade]) => nome + ' ' + numero(quantidade));
+          return {
+            nome: TIPOS[tipo][0],
+            execucao: pctTxt(resumo.execucao),
+            detalhe:
+              [
+                plural(resumo.real + resumo.extra, 'aula', 'aulas'),
+                plural(horasAula(doTipo), 'hora-aula', 'horas-aula'),
+                plural(resumo.estudantes, 'estudante', 'estudantes')
+              ]
+                .concat(detalhes)
+                .join(' · ') + (tipo === 'P' && resumo.real + resumo.extra ? ' · contraturno' : ''),
+            cor: TIPOS[tipo][1],
+            fundo: TIPOS[tipo][2]
+          };
+        }),
+      motivos: motivos.map(([nome, quantidade]) => ({
+        nome,
+        total: String(quantidade),
+        largura: Math.round((quantidade / maiorMotivo) * 100) + '%'
+      })),
+      semMotivos: motivos.length === 0,
+      engajamentoPorSolucao: comEngajamento.map(x => {
+        const comObjetivo = x.lista.filter(
+            aula => aula.reg && (aula.reg.objetivo === 'Sim' || aula.reg.objetivo === 'Não')
+          ),
+          atingido = pct(comObjetivo.filter(aula => aula.reg.objetivo === 'Sim').length, comObjetivo.length);
+        return {
+          nome: x.nome,
+          nota: (x.avaliadas.reduce((soma, aula) => soma + aula.reg.engajamento, 0) / x.avaliadas.length)
+            .toFixed(1)
+            .replace('.', ','),
+          objetivo: atingido == null ? 'objetivo não informado' : atingido + '% com objetivo atingido'
+        };
+      }),
+      semEngajamento: comEngajamento.length === 0,
+      exportar: () =>
+        contexto.exportar(
+          'adocao_aulas_' +
+            (periodo === 'ult7' ? 'ultimos_7_dias' : periodo === 'tri' ? 'trimestre' : ciclo.slice(0, 7)),
+          'Adoção',
+          [
+            ['Execução e adoção por escola · ' + periodoNome + ' · ' + dmIso(inicio) + ' a ' + dmIso(fim)],
+            [],
+            [
+              'Escola',
+              'Oficineiro(s)',
+              'Previstas líquidas',
+              'Realizadas',
+              'Execução',
+              'Estudantes',
+              'Presença dos alunos',
+              'Engajamento',
+              'Solução principal',
+              'Não realizadas',
+              'Visitas'
+            ]
+          ].concat(
+            linhas.map(x => [
+              x.escola,
+              x.oficineiros,
+              x.previstas,
+              x.realizadas,
+              x.execucao,
+              x.estudantes,
+              x.presenca,
+              x.engajamento,
+              x.solucao,
+              x.naoRealizadas,
+              [x.ultimaVisita, x.proximaVisita].filter(Boolean).join(' · ')
+            ])
+          )
+        )
+    };
+  }
+}
+</script>
+</body>
+</html>

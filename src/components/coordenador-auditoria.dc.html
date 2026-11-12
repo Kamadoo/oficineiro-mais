@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Coordenador do núcleo · Auditoria</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <div role="group" aria-label="Tipo de registro" class="d-flex gap-4 fundo-e3ebed p-4 raio-10 alinha-si-flex-start quebra-wrap segmentado"><sc-for list="{{ abas }}" as="aba" hint-placeholder-count="2"><button onClick="{{ aba.escolher }}" aria-pressed="{{ aba.marcado }}" class="borda-0 raio-7 p-8-14 fs-14 fw-600 espaco-nowrap {{ aba.classe }}" style="background:{{ aba.fundo }};color:{{ aba.cor }}">{{ aba.rotulo }}</button></sc-for></div>
+<sc-if value="{{ abaAtividades }}" hint-placeholder-val="{{ true }}">
+  <div role="group" aria-label="Filtros das atividades" class="d-flex gap-10-12 alinha-flex-end quebra-wrap">
+    <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">De</span><input type="date" value="{{ filtroDasAtividades.desde }}" onChange="{{ filtroDasAtividades.escolherDesde }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff"></input></label>
+    <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Até</span><input type="date" value="{{ filtroDasAtividades.ate }}" onChange="{{ filtroDasAtividades.escolherAte }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff"></input></label>
+    <label class="largura-total-celular d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Pessoa</span><select value="{{ filtroDasAtividades.usuario }}" onChange="{{ filtroDasAtividades.escolherPessoa }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit max-w-260 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as pessoas</option><sc-for list="{{ opcoesDePessoa }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <label class="largura-total-celular d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Tipo de atividade</span><select value="{{ filtroDasAtividades.categoria }}" onChange="{{ filtroDasAtividades.escolherCategoria }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit max-w-260 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as atividades</option><sc-for list="{{ opcoesDeCategoria }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <button onClick="{{ buscarAtividades }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-0b7ea3" style="background:#0B7EA3">Buscar</button>
+    <button onClick="{{ limparAtividades }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Limpar</button>
+    <button onClick="{{ exportarAtividades }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Exportar Excel</button>
+  </div>
+  <div role="status" aria-live="polite" class="fs-13 cor-5b6b70 min-h-20">{{ resumoDasAtividades }}</div>
+  <sc-if value="{{ temErroAtividades }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroAtividades }}</div></sc-if>
+  <section class="adm-tabela borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidadeDasAtividades }}" aria-labelledby="adm-h-atv">
+    <h3 id="adm-h-atv" class="sr-only">Atividades por pessoa</h3>
+    <div role="table" aria-labelledby="adm-h-atv" class="min-w-860">
+      <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-5b6b70 borda-b-dde6e8" style="grid-template-columns:150px minmax(0,1.2fr) minmax(0,1.3fr) minmax(0,2.2fr)"><span role="columnheader">Quando</span><span role="columnheader">Pessoa</span><span role="columnheader">Atividade</span><span role="columnheader">Detalhes</span></div>
+      <sc-for list="{{ atividades }}" as="atividade" hint-placeholder-count="8">
+        <div role="row" class="d-grid gap-10 p-10-20 fs-13 borda-b-e8eef0 alinha-start" style="grid-template-columns:150px minmax(0,1.2fr) minmax(0,1.3fr) minmax(0,2.2fr)">
+          <span role="cell" class="cor-5b6b70 fs-12 num-tabular-nums">{{ atividade.quando }}</span>
+          <span role="cell" class="min-w-0 quebra-palavra-anywhere">{{ atividade.quem }}</span>
+          <span role="cell" class="min-w-0 d-flex eixo-column gap-2"><b class="fw-600" style="color:{{ atividade.cor }}">{{ atividade.acao }}</b><span class="fs-11 cor-5b6b70">{{ atividade.categoria }}</span></span>
+          <span role="cell" class="fs-12 cor-34464d min-w-0 quebra-palavra-anywhere lh-1p45">{{ atividade.detalhes }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semAtividades }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-18-20 fs-13 cor-5b6b70">Nenhuma atividade encontrada com esses filtros.</p></sc-if>
+  </section>
+</sc-if>
+<sc-if value="{{ abaRegistros }}" hint-placeholder-val="{{ false }}">
+  <div role="group" aria-label="Filtros da auditoria" class="d-flex gap-10-12 alinha-flex-end quebra-wrap">
+    <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">De</span><input type="date" value="{{ filtroDaAuditoria.desde }}" onChange="{{ filtroDaAuditoria.escolherDesde }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff"></input></label>
+    <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Até</span><input type="date" value="{{ filtroDaAuditoria.ate }}" onChange="{{ filtroDaAuditoria.escolherAte }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff"></input></label>
+    <label class="largura-total-celular d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Pessoa</span><select value="{{ filtroDaAuditoria.usuario }}" onChange="{{ filtroDaAuditoria.escolherPessoa }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit max-w-260 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as pessoas</option><sc-for list="{{ opcoesDePessoa }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <label class="largura-total-celular d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Tipo de ação</span><select value="{{ filtroDaAuditoria.acao }}" onChange="{{ filtroDaAuditoria.escolherAcao }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit max-w-260 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as ações</option><sc-for list="{{ opcoesDeAcao }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <button onClick="{{ buscarRegistros }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-0b7ea3" style="background:#0B7EA3">Buscar</button>
+    <button onClick="{{ limparRegistros }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Limpar</button>
+    <button onClick="{{ exportarRegistros }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Exportar Excel</button>
+  </div>
+  <div role="status" aria-live="polite" class="fs-13 cor-5b6b70 min-h-20">{{ resumoDosRegistros }}</div>
+  <sc-if value="{{ temErroRegistros }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroRegistros }}</div></sc-if>
+  <section class="adm-tabela borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidadeDosRegistros }}" aria-labelledby="adm-h-aud">
+    <h3 id="adm-h-aud" class="sr-only">Registros de auditoria</h3>
+    <div role="table" aria-labelledby="adm-h-aud" class="min-w-900">
+      <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-5b6b70 borda-b-dde6e8" style="grid-template-columns:140px minmax(0,1.3fr) minmax(0,1.1fr) minmax(0,1fr) minmax(0,2fr)"><span role="columnheader">Quando</span><span role="columnheader">Quem</span><span role="columnheader">Ação</span><span role="columnheader">Onde</span><span role="columnheader">Detalhes</span></div>
+      <sc-for list="{{ registros }}" as="registro" hint-placeholder-count="8">
+        <div role="row" class="d-grid gap-10 p-10-20 fs-13 borda-b-e8eef0 alinha-center" style="grid-template-columns:140px minmax(0,1.3fr) minmax(0,1.1fr) minmax(0,1fr) minmax(0,2fr)">
+          <span role="cell" class="cor-5b6b70 fs-12">{{ registro.quando }}</span>
+          <span role="cell" class="min-w-0 quebra-palavra-anywhere">{{ registro.quem }}</span>
+          <span role="cell" class="min-w-0"><button onClick="{{ registro.abrir }}" aria-haspopup="dialog" aria-label="{{ registro.aria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-1a2b33 texto-left fonte-inherit sublinha-3 botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:#CFDADD">{{ registro.acao }}</button></span>
+          <span role="cell" class="fs-12 min-w-0 quebra-palavra-anywhere">{{ registro.onde }}</span>
+          <span role="cell" class="fs-12 cor-34464d min-w-0 quebra-palavra-anywhere">{{ registro.resumo }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semRegistros }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-18-20 fs-13 cor-5b6b70">Nenhum registro encontrado com esses filtros.</p></sc-if>
+  </section>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+class Component extends DCLogic {
+  renderVals() {
+    const contexto = this.props.contexto;
+    const { dataHora, ACAO, PAPEL_AUD, contasDoSistema, audLinha, campos } = contexto;
+    const f = contexto.filtroDaAuditoria;
+    const setF = k => e =>
+      contexto.setState({ filtroDaAuditoria: { ...contexto.estado().filtroDaAuditoria, [k]: e.target.value } });
+    const fa = contexto.filtroDasAtividades;
+    const setFa = k => e =>
+      contexto.setState({ filtroDasAtividades: { ...contexto.estado().filtroDasAtividades, [k]: e.target.value } });
+    const CAT_ATV = [
+      ['acesso', 'Entradas no site'],
+      ['presenca', 'Presença'],
+      ['recusa', 'Tentativas recusadas'],
+      ['registro', 'Registros e envios'],
+      ['conferencia', 'Conferências e decisões'],
+      ['consulta', 'Consultas'],
+      ['exportacao', 'Exportações e impressões'],
+      ['administracao', 'Contas e administração']
+    ];
+    const CAT_TXT = Object.fromEntries(CAT_ATV);
+    const ST_ATV = {
+      conferida: 'conferida',
+      nao_conferida: 'não conferida',
+      autorizado: 'aceito',
+      nao: 'recusado',
+      aguardando: 'aguardando decisão',
+      revisado: 'revisado',
+      devolvido: 'devolvido',
+      corrigido: 'corrigido',
+      anulado: 'anulado',
+      validada: 'validada',
+      devolvida: 'devolvida',
+      aprovado_direcao: 'aprovado pela direção',
+      aprovado_coordenacao: 'aprovado pela coordenação'
+    };
+    const atvVal = (d, k) => {
+      const x = d && d[k];
+      return x && typeof x === 'object' && !Array.isArray(x) && ('para' in x || 'de' in x) ? x.para : x;
+    };
+    const atvDist = m =>
+      Number(m) >= 1000 ? (Number(m) / 1000).toFixed(1).replace('.', ',') + ' km' : Number(m) + ' m';
+    const atvData = v =>
+      v && /^\d{4}-\d{2}-\d{2}/.test(String(v))
+        ? String(v).slice(8, 10) + '/' + String(v).slice(5, 7) + '/' + String(v).slice(0, 4)
+        : '';
+    const atvTexto = r => {
+      const d = r.detalhes && typeof r.detalhes === 'object' ? r.detalhes : {},
+        v = k => atvVal(d, k),
+        tem = k => v(k) != null && v(k) !== '',
+        junta = (...p) => p.filter(Boolean).join(' · '),
+        outro = r.alvo_nome && r.alvo_id !== r.usuario_id ? r.alvo_nome : '',
+        de = outro ? 'de ' + outro : '',
+        esc = r.escola || '',
+        dist = (k, rot) => (tem(k) ? 'a ' + atvDist(v(k)) + ' da escola' : rot || ''),
+        sit = () =>
+          ['conferencia_status', 'excedente_status', 'deficit_status', 'horario_status', 'revisao_status', 'status']
+            .map(k => (d[k] && typeof d[k] === 'object' && 'para' in d[k] ? ST_ATV[d[k].para] : null))
+            .filter(Boolean)[0] || '',
+        marcado = q => {
+          if (!q) return '';
+          const dif = Math.abs(new Date(q) - new Date(r.em)) > 120000;
+          return 'marcado em ' + dataHora(q, true) + (dif ? ', recebido pelo servidor em ' + dataHora(r.em, true) : '');
+        };
+      switch (r.evento) {
+        case 'acesso':
+          return ['Entrou no site', ''];
+        case 'entrada':
+          return [
+            'Registrou entrada na escola',
+            junta(esc, marcado(v('inicio')), dist('distancia_inicio_m', 'sem localização'), v('conferencia'))
+          ];
+        case 'saida':
+          return [
+            'Registrou saída da escola',
+            junta(esc, marcado(v('fim')), dist('distancia_fim_m'), v('conferencia'))
+          ];
+        case 'entrada_raio':
+          return ['Entrou no raio da escola', junta(esc, marcado(v('entrou_raio_em')), dist('distancia_entrada_m'))];
+        case 'justificativa':
+          return [
+            'Enviou justificativa de presença',
+            junta(esc, v('motivo') || v('motivo_excedente') || v('motivo_deficit') || v('motivo_horario'))
+          ];
+        case 'decisao_presenca':
+          return ['Conferiu presença', junta(de, esc, sit())];
+        case 'reabertura':
+          return ['Reabriu a presença do dia', junta(esc, atvData(v('data')))];
+        case 'recusa':
+          return [
+            'Presença recusada',
+            junta(
+              (d.evento || 'Presença') + ' não aceita' + (d.motivo ? ': ' + d.motivo : ''),
+              esc,
+              d.quando ? 'marcado no aparelho em ' + dataHora(d.quando, true) : ''
+            )
+          ];
+        case 'aula_registrada':
+        case 'aula_editada':
+        case 'aula_excluida':
+          return [
+            r.evento === 'aula_registrada'
+              ? 'Registrou atividade'
+              : r.evento === 'aula_editada'
+                ? 'Alterou registro de atividade'
+                : 'Excluiu registro de atividade',
+            junta(esc, atvData(v('data')), v('turma'), v('solucao'), v('situacao'))
+          ];
+        case 'aula_direcao':
+          return ['Direção conferiu registro de atividade', junta(de, esc)];
+        case 'aula_revisada':
+          return ['Revisou registro de atividade', junta(de, esc, sit())];
+        case 'grade_enviada':
+          return ['Enviou a grade de atividades', junta(esc, tem('ano_letivo') ? 'Ano ' + v('ano_letivo') : '')];
+        case 'grade_validada':
+          return ['Validou a grade de atividades', junta(de, esc)];
+        case 'grade_devolvida':
+          return ['Devolveu a grade de atividades', junta(de, esc, v('comentario'))];
+        case 'relatorio_fechado':
+          return ['Fechou o relatório mensal', junta(esc, atvData(v('competencia')).slice(3))];
+        case 'relatorio_aprovado':
+          return ['Aprovou relatório mensal', junta(de, esc, sit())];
+        case 'relatorio_devolvido':
+          return ['Devolveu relatório mensal', junta(de, esc, v('motivo_devolucao'))];
+        case 'visita_registrada':
+          return ['Registrou visita', junta(esc, atvData(v('data')), v('tipo'))];
+        case 'visita_corrigida':
+          return ['Corrigiu registro de visita', junta(esc)];
+        case 'visita_agendada':
+          return [
+            'Agendou visita',
+            junta(
+              outro ? 'para ' + outro : '',
+              esc,
+              atvData(v('data')),
+              tem('hora') ? String(v('hora')).slice(0, 5) : ''
+            )
+          ];
+        case 'visita_cancelada':
+          return ['Cancelou visita agendada', junta(de, esc, v('motivo_alteracao'))];
+        case 'visita_remarcada':
+          return [
+            'Remarcou visita',
+            junta(esc, tem('data') ? 'para ' + atvData(v('data')) : '', v('motivo_alteracao'))
+          ];
+        case 'onboarding_baixa':
+          return ['Deu baixa em onboarding', junta(esc, v('baixa_forma'))];
+        case 'onboarding_reaberto':
+          return ['Reabriu onboarding', junta(esc)];
+        case 'consulta':
+          return [
+            outro ? 'Consultou dados de outra pessoa' : 'Consultou dados',
+            junta(
+              d.tela,
+              d.descricao,
+              outro,
+              String(d.periodo || '')
+                .replace(/(\d{4})-(\d{2})-(\d{2})/g, '$3/$2/$1')
+                .replace(/^(\d{4})-(\d{2})$/, '$2/$1'),
+              d.filtros
+            )
+          ];
+        case 'cpf':
+          return ['Consultou CPF completo', junta(de)];
+        case 'exportacao':
+          return [
+            d.formato === 'Excel' ? 'Exportou planilha' : 'Imprimiu ou gerou PDF',
+            junta(d.tela, d.arquivo ? 'arquivo ' + d.arquivo : '', d.linhas ? d.linhas + ' linhas' : '')
+          ];
+        default:
+          return [ACAO[String(r.evento || '').toUpperCase()] || 'Atividade', junta(outro, esc, d.motivo)];
+      }
+    };
+    const atvLinha = r => {
+      const [acao, det] = atvTexto(r);
+      return {
+        quando: dataHora(r.em, true),
+        quem: (r.nome || 'Conta removida') + (PAPEL_AUD[r.papel] ? ' · ' + PAPEL_AUD[r.papel] : ''),
+        acao,
+        categoria: CAT_TXT[r.categoria] || '',
+        cor: r.categoria === 'recusa' ? 'var(--texto-b42318)' : 'var(--texto-1a2b33)',
+        detalhes: det || '—'
+      };
+    };
+    return {
+      filtroDaAuditoria: {
+        ...f,
+        escolherDesde: setF('desde'),
+        escolherAte: setF('ate'),
+        escolherPessoa: setF('usuario'),
+        escolherAcao: setF('acao')
+      },
+      opcoesDePessoa: contasDoSistema.map(c => ({ valor: c.id, rotulo: c.nome })),
+      opcoesDeAcao: Object.keys(ACAO).map(k => ({ valor: k, rotulo: ACAO[k] })),
+      buscarRegistros: () => contexto.carregarAuditoria(),
+      limparRegistros: () =>
+        contexto.setState({ filtroDaAuditoria: { desde: '', ate: '', usuario: '', acao: '' } }, () =>
+          contexto.carregarAuditoria()
+        ),
+      registros: (contexto.auditoria || []).map(audLinha),
+      opacidadeDosRegistros: contexto.carregandoAuditoria ? 0.6 : 1,
+      resumoDosRegistros: contexto.auditoriaCarregada
+        ? (contexto.auditoria || []).length +
+          ((contexto.auditoria || []).length === 1 ? ' registro' : ' registros') +
+          ((contexto.auditoria || []).length >= 300
+            ? ' · mostrando os 300 mais recentes; use os filtros para refinar'
+            : '')
+        : 'Carregando…',
+      semRegistros:
+        !!contexto.auditoriaCarregada && !(contexto.auditoria || []).length && !contexto.carregandoAuditoria,
+      temErroRegistros: !!contexto.erroAuditoria,
+      erroRegistros: contexto.erroAuditoria,
+      exportarRegistros: () =>
+        contexto.baixarCsv(
+          [
+            ['Quando', 'Quem', 'Ação', 'Onde', 'Detalhes'],
+            ...(contexto.auditoria || []).map(ev => {
+              const l = audLinha(ev);
+              return [
+                l.quando,
+                l.quem,
+                l.acao,
+                l.onde,
+                campos(ev)
+                  .map(c => c.campo + ': ' + c.texto)
+                  .join(' | ')
+              ];
+            })
+          ],
+          'auditoria-oficineiro-mais'
+        ),
+      abas: [
+        ['atv', 'Atividades por pessoa'],
+        ['log', 'Log técnico']
+      ].map(([k, l]) => ({
+        rotulo: l,
+        marcado: contexto.abaDaAuditoria === k ? 'true' : 'false',
+        escolher: () => contexto.setState({ abaDaAuditoria: k }),
+        classe: contexto.abaDaAuditoria === k ? 'fundo-ffffff' : 'fundo-transparent',
+        fundo: contexto.abaDaAuditoria === k ? 'var(--fundo-ffffff)' : 'transparent',
+        cor: contexto.abaDaAuditoria === k ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)'
+      })),
+      abaAtividades: contexto.abaDaAuditoria === 'atv',
+      abaRegistros: contexto.abaDaAuditoria === 'log',
+      filtroDasAtividades: {
+        ...fa,
+        escolherDesde: setFa('desde'),
+        escolherAte: setFa('ate'),
+        escolherPessoa: setFa('usuario'),
+        escolherCategoria: setFa('categoria')
+      },
+      opcoesDeCategoria: CAT_ATV.map(([v, l]) => ({ valor: v, rotulo: l })),
+      buscarAtividades: () => contexto.carregarAtividadesDoSistema(),
+      limparAtividades: () =>
+        contexto.setState(
+          {
+            filtroDasAtividades: {
+              desde: Base.iso(new Date(Date.now() - 6 * 864e5)),
+              ate: Base.iso(new Date()),
+              usuario: '',
+              categoria: ''
+            }
+          },
+          () => contexto.carregarAtividadesDoSistema()
+        ),
+      atividades: (contexto.atividadesDoSistema || []).map(atvLinha),
+      opacidadeDasAtividades: contexto.carregandoAtividadesDoSistema ? 0.6 : 1,
+      resumoDasAtividades: contexto.atividadesDoSistemaCarregadas
+        ? (contexto.atividadesDoSistema || []).length +
+          ((contexto.atividadesDoSistema || []).length === 1 ? ' atividade' : ' atividades') +
+          ((contexto.atividadesDoSistema || []).length >= 500
+            ? ' · mostrando as 500 mais recentes; use os filtros para refinar'
+            : '')
+        : 'Carregando…',
+      semAtividades:
+        !!contexto.atividadesDoSistemaCarregadas &&
+        !(contexto.atividadesDoSistema || []).length &&
+        !contexto.carregandoAtividadesDoSistema,
+      temErroAtividades: !!contexto.erroAtividadesDoSistema,
+      erroAtividades: contexto.erroAtividadesDoSistema,
+      exportarAtividades: () =>
+        contexto.baixarCsv(
+          [
+            ['Quando', 'Pessoa', 'Tipo', 'Atividade', 'Detalhes'],
+            ...(contexto.atividadesDoSistema || []).map(r => {
+              const l = atvLinha(r);
+              return [l.quando, l.quem, l.cat, l.acao, l.det];
+            })
+          ],
+          'atividades-oficineiro-mais'
+        )
+    };
+  }
+}
+</script>
+</body>
+</html>

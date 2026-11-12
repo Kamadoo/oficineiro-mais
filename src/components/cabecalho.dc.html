@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Cabeçalho</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<header class="cabecalho min-h-64 fundo-ffffff borda-b-dde6e8 d-flex quebra-wrap alinha-center {{ espacamento }} pos-sticky topo-0 z-5">
+  <button class="botao-menu w-40 h-40 flex-none borda-dde6e8 raio-10 cor-1a2b33 p-0 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)" onClick="{{ abrirMenu }}" aria-label="Abrir menu"><svg class="icone" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+  <div class="{{ blocoClasse }} d-flex eixo-column lh-1p25 flex-1">
+    <sc-if value="{{ trilha !== undefined }}" hint-placeholder-val="{{ true }}">
+      <sc-if value="{{ cortaTrilha }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ trilha }}</span></sc-if>
+      <sc-if value="{{ !cortaTrilha }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-5b6b70">{{ trilha }}</span></sc-if>
+      <h1 data-fsm-tela="" class="m-0 fs-18 fw-600 {{ tituloClasse }}">{{ titulo }}</h1>
+    </sc-if>
+    <sc-if value="{{ trilha === undefined }}" hint-placeholder-val="{{ false }}"><span data-fsm-tela="" class="fs-18 fw-600 espaco-nowrap rolagem-hidden reticencias-ellipsis">{{ titulo }}</span></sc-if>
+  </div>
+  <sc-if value="{{ children }}" hint-placeholder-val="{{ false }}">{{ children }}</sc-if>
+  <sc-if value="{{ temSino !== false }}" hint-placeholder-val="{{ true }}"><button class="sino-celular pos-relative w-40 h-40 flex-none borda-dde6e8 raio-10 cor-1a2b33 p-0 d-flex alinha-center justifica-center largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)" onClick="{{ abrirNotif }}" aria-label="{{ notifAria }}" title="Notificações"><svg class="icone" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg><sc-if value="{{ temNotif }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" class="pos-absolute topo-n6 direita-n6 min-w-20 h-20 raio-10 fundo-dd2287 cor-fff fs-11 fw-700 d-flex alinha-center justifica-center p-0-5 largura-fundo">{{ notifN }}</span></sc-if></button></sc-if>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

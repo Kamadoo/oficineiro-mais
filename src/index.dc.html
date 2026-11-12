@@ -1,0 +1,2846 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Oficineiro+</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style id="fsm-estilo-inicial">
+body {
+  margin: 0;
+  background: #EEF3F4;
+  font-family: "Inter", system-ui, sans-serif;
+}
+a {
+  color: #0B7EA3;
+}
+a:hover {
+  color: #08617E;
+}
+#entrada {
+  --ent-fundo: #EAF0F1;
+  --ent-cartao: #FFFFFF;
+  --ent-borda: #DDE6E8;
+  --ent-borda-forte: #B5C3C7;
+  --ent-campo: #F7FAFB;
+  --ent-txt: #1A2B33;
+  --ent-sec: #5B6B70;
+  --ent-acento: #0B7EA3;
+  --ent-acento-h: #08617E;
+  --ent-link: #0B7EA3;
+  --ent-ok: #1B5E2E;
+  --ent-aviso-bg: #E4F7FC;
+  --ent-aviso-borda: #BEE9F5;
+  --ent-aviso-txt: #0B5E7A;
+  --ent-erro-bg: #FDECF4;
+  --ent-erro-borda: #F6C3DD;
+  --ent-erro-txt: #9C1460;
+  --ent-sombra: 0 30px 70px rgba(26, 43, 51, 0.12);
+  --forca-trilho: #E3EBED;
+  --forca-1: #B42318;
+  --forca-2: #9A6212;
+  --forca-3: #23773A;
+}
+html[data-tema="escuro"] #entrada {
+  --ent-fundo: #0B161A;
+  --ent-cartao: #13232A;
+  --ent-borda: #2A3E46;
+  --ent-borda-forte: #3F555D;
+  --ent-campo: #0F1D22;
+  --ent-txt: #E6EEF0;
+  --ent-sec: #9CB0B6;
+  --ent-acento: #0B7EA3;
+  --ent-acento-h: #0E8FB8;
+  --ent-link: #5FCDEE;
+  --ent-ok: #7FD79A;
+  --ent-aviso-bg: #12303A;
+  --ent-aviso-borda: #1F5266;
+  --ent-aviso-txt: #A8E6F7;
+  --ent-erro-bg: #3A1426;
+  --ent-erro-borda: #6E2148;
+  --ent-erro-txt: #F6B3D3;
+  --ent-sombra: 0 30px 70px rgba(0, 0, 0, 0.45);
+  --forca-trilho: #22363E;
+  --forca-1: #F59A8F;
+  --forca-2: #F0C46E;
+  --forca-3: #7FD79A;
+}
+html[data-tema="escuro"] body:has(#entrada) {
+  background: #0B161A;
+}
+.fsm-campo {
+  height: 54px;
+  border: 1px solid var(--ent-borda);
+  border-radius: 12px;
+  background: var(--ent-campo);
+  color: var(--ent-txt);
+  font-size: 16px;
+  font-family: inherit;
+  padding: 0 16px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.fsm-campo:hover {
+  border-color: var(--ent-borda-forte);
+}
+.fsm-campo:focus {
+  border-color: var(--ent-acento);
+  background: var(--ent-cartao);
+  box-shadow: 0 0 0 3px rgba(11, 126, 163, 0.18);
+}
+.fsm-campo::placeholder {
+  color: var(--ent-sec);
+  opacity: 0.7;
+}
+.fsm-olho {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ent-sec);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+.fsm-olho:hover,
+.fsm-olho[aria-pressed="true"] {
+  color: var(--ent-acento);
+  background: var(--ent-fundo);
+}
+.fsm-olho:focus-visible {
+  outline: 3px solid #3ECDF3;
+  outline-offset: 2px;
+}
+.forca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.forca-trilho {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--forca-trilho);
+  overflow: hidden;
+}
+.forca-barra {
+  height: 100%;
+  border-radius: 999px;
+  transition:
+    width 0.25s ease,
+    background-color 0.25s ease;
+}
+.forca-txt {
+  min-width: 44px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: right;
+}
+@media (prefers-reduced-motion: reduce) {
+  .forca-barra {
+    transition: none;
+  }
+}
+.fsm-codigo {
+  letter-spacing: 0.4em;
+  text-align: center;
+  font-size: 22px;
+  font-family: "Inter", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.fsm-rotulo {
+  font-size: 13.5px;
+  color: var(--ent-sec);
+  font-weight: 600;
+  margin-top: 6px;
+}
+.fsm-btn {
+  height: 56px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ent-acento);
+  color: #fff;
+  font-size: 16.5px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(11, 126, 163, 0.28);
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.fsm-btn:hover {
+  background: var(--ent-acento-h);
+}
+.fsm-btn:focus-visible,
+.fsm-link:focus-visible {
+  outline: 3px solid #3ECDF3;
+  outline-offset: 3px;
+}
+.fsm-btn[disabled] {
+  opacity: 0.75;
+  cursor: progress;
+}
+.fsm-lembrar-op {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--ent-borda);
+  border-radius: 12px;
+  background: var(--ent-campo);
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ent-txt);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+.fsm-lembrar-op:hover {
+  border-color: var(--ent-borda-forte);
+}
+.fsm-lembrar-op:has(.fsm-check:checked) {
+  border-color: var(--ent-aviso-borda);
+  background: var(--ent-aviso-bg);
+}
+.fsm-lembrar-dica {
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--ent-sec);
+}
+.fsm-check {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  border: 1.5px solid var(--ent-borda-forte);
+  border-radius: 6px;
+  background-color: var(--ent-cartao);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.fsm-check:checked {
+  background-color: var(--ent-acento);
+  border-color: var(--ent-acento);
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: 14px 14px;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' %76iewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+}
+.fsm-check:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(62, 205, 243, 0.45);
+}
+.fsm-link {
+  align-self: center;
+  border: 0;
+  background: transparent;
+  color: var(--ent-link);
+  font-size: 14.5px;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  padding: 10px 8px;
+}
+.fsm-link:hover {
+  color: var(--ent-acento-h);
+}
+html[data-tema="escuro"] .fsm-link:hover {
+  color: #A8E6F7;
+}
+.ent-aviso {
+  background: var(--ent-aviso-bg);
+  border: 1px solid var(--ent-aviso-borda);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ent-aviso-txt);
+}
+.ent-erro {
+  background: var(--ent-erro-bg);
+  border: 1px solid var(--ent-erro-borda);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ent-erro-txt);
+}
+.ent-nota {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ent-sec);
+}
+.ent-passos {
+  margin: 4px 0 0;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ent-txt);
+}
+.ent-qr {
+  align-self: center;
+  background: #fff;
+  border: 1px solid #DDE6E8;
+  border-radius: 16px;
+  padding: 12px;
+  margin: 6px 0;
+}
+.ent-chave {
+  font-variant-numeric: tabular-nums;
+  color: var(--ent-txt);
+}
+@media (max-width: 900px) {
+  #sessao-chip {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: calc(76px + env(safe-area-inset-bottom)) !important;
+    justify-content: space-between !important;
+  }
+}
+#entrada {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: clamp(12px, 3vw, 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ent-fundo);
+  color: var(--ent-txt);
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+#entrada-card {
+  position: relative;
+  width: 100%;
+  max-width: 1240px;
+  min-height: min(820px, calc(100vh - 80px));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  border-radius: 28px;
+  border: 1px solid var(--ent-borda);
+  overflow: hidden;
+  background: var(--ent-cartao);
+  box-shadow: var(--ent-sombra);
+}
+.ent-arte {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: clamp(28px, 4vw, 48px);
+  color: #fff;
+  background-color: #13252C;
+  background-image:
+    radial-gradient(ellipse 90% 45% at 50% 100%, rgba(11, 126, 163, 0.45), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 0%, rgba(53, 228, 125, 0.1), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100% 100%,
+    30px 30px,
+    30px 30px;
+  overflow: hidden;
+}
+.ent-marca {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+.ent-marca b {
+  color: #3ECDF3;
+  font-weight: 800;
+}
+.ent-orbita {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ent-orbita img {
+  width: 100%;
+  max-width: 480px;
+  max-height: max(200px, min(490px, calc(100vh - 480px)));
+  aspect-ratio: 960 / 980;
+  object-fit: contain;
+  display: block;
+  height: auto;
+}
+.ent-lema {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 560px;
+}
+.ent-lema-t {
+  margin: 0;
+  font-size: clamp(30px, min(3.8vw, 5.6vh), 50px);
+  line-height: 1.04;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.ent-lema-t span {
+  color: #3ECDF3;
+}
+.ent-lema-s {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #C9D4D7;
+  text-wrap: pretty;
+}
+.ent-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(32px, 5vw, 64px) clamp(24px, 5vw, 64px);
+  background: var(--ent-cartao);
+}
+html[data-tema="escuro"] .ent-form {
+  border-left: 1px solid var(--ent-borda);
+}
+.ent-form-in {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ent-titulo {
+  margin: 0 0 8px;
+  font-size: 34px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  color: var(--ent-txt);
+}
+.ent-titulo::after {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 4px;
+  margin-top: 12px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #35E47D, #3ECDF3, #0B7EA3);
+}
+.ent-sub {
+  margin: 0 0 4px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ent-sec);
+}
+.ent-status {
+  margin: 12px 0;
+  font-size: 15px;
+  color: var(--ent-sec);
+}
+@media (max-width: 1040px) {
+  .ent-orbita img {
+    max-width: 380px;
+  }
+}
+@media (max-width: 900px) {
+  #entrada {
+    padding: 16px;
+  }
+  #entrada-card {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 520px;
+    min-height: calc(100vh - 32px);
+    border-radius: 28px;
+  }
+  .ent-arte {
+    padding: 20px 20px 18px;
+    gap: 10px;
+  }
+  .ent-orbita img {
+    max-width: 250px;
+  }
+  .ent-orbita img.peq {
+    max-height: 120px;
+  }
+  .ent-arte:has(img.peq) .ent-lema {
+    display: none;
+  }
+  .ent-lema-t {
+    font-size: 26px;
+  }
+  .ent-lema-s {
+    display: none;
+  }
+  .ent-form {
+    padding: 22px 20px 32px;
+    align-items: flex-start;
+  }
+  html[data-tema="escuro"] .ent-form {
+    border-left: 0;
+    border-top: 1px solid var(--ent-borda);
+  }
+  .ent-form-in {
+    max-width: none;
+  }
+  .ent-titulo {
+    font-size: 26px;
+    margin-bottom: 4px;
+  }
+  .ent-titulo::after {
+    margin-top: 10px;
+  }
+}
+@media (max-width: 520px) {
+  #entrada {
+    padding: 0;
+  }
+  #entrada-card {
+    border-radius: 0;
+    min-height: 100vh;
+    border: 0;
+    box-shadow: none;
+  }
+}
+@media print {
+  #sessao-chip {
+    display: none !important;
+  }
+}
+@keyframes fsmEntra {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fsmSurge {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+#entrada-card {
+  animation: fsmEntra 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+#area-logada {
+  animation: fsmSurge 0.4s ease both;
+}
+.pagina > :where(:not(.sc-host)),
+.pagina > :where(.sc-host) > * {
+  animation: fsmEntra 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+#fsm-saindo {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(5, 12, 14, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #E3ECEE;
+  font-size: 16px;
+  font-family: inherit;
+  animation: fsmSurge 0.25s ease both;
+}
+#fsm-saindo span {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  border-top-color: #3ECDF3;
+  animation: fsmGira 0.8s linear infinite;
+}
+@keyframes fsmGira {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #entrada-card,
+  #area-logada,
+  .pagina > :where(:not(.sc-host)),
+  .pagina > :where(.sc-host) > *,
+  #fsm-saindo,
+  #fsm-saindo span,
+  #fsm-config {
+    animation: none !important;
+  }
+}
+:root {
+  --cfg-fundo: #EEF3F4;
+  --cfg-sup: #fff;
+  --cfg-sup2: #F7FAFB;
+  --cfg-borda: #DDE6E8;
+  --cfg-txt: #1A2B33;
+  --cfg-sec: #5B6B70;
+  --cfg-acento: #0B7EA3;
+  --cfg-acento-txt: #08617E;
+  --cfg-campo-borda: #CFDADD;
+  --cfg-seg: #E3EBED;
+  --cfg-ok: #1B5E2E;
+  --cfg-ok-bg: #E2F2E5;
+  --cfg-erro: #B42318;
+  --cfg-erro-bg: #FBEDEB;
+  --cfg-alerta: #7A4E0B;
+  --cfg-alerta-bg: #FAEFD9;
+  --forca-trilho: #E3EBED;
+  --forca-1: #B42318;
+  --forca-2: #9A6212;
+  --forca-3: #23773A;
+}
+html[data-tema="escuro"] {
+  --cfg-fundo: #0E1A1E;
+  --cfg-sup: #15252B;
+  --cfg-sup2: #1B2D34;
+  --cfg-borda: #34484F;
+  --cfg-txt: #E6EEF0;
+  --cfg-sec: #9CB0B6;
+  --cfg-acento: #2BB3DD;
+  --cfg-acento-txt: #5FCDEE;
+  --cfg-campo-borda: #3F555D;
+  --cfg-seg: #22363E;
+  --cfg-ok: #7FD79A;
+  --cfg-ok-bg: #173022;
+  --cfg-erro: #F59A8F;
+  --cfg-erro-bg: #3B1D1A;
+  --cfg-alerta: #F0C46E;
+  --cfg-alerta-bg: #35290F;
+  --forca-trilho: #22363E;
+  --forca-1: #F59A8F;
+  --forca-2: #F0C46E;
+  --forca-3: #7FD79A;
+}
+#fsm-config {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: var(--cfg-fundo);
+  color: var(--cfg-txt);
+  overflow-y: auto;
+  font-family: "Inter", system-ui, sans-serif;
+  animation: fsmSurge 0.2s ease both;
+}
+#fsm-config * {
+  box-sizing: border-box;
+}
+.cfg-topo {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 24px;
+  min-height: 64px;
+  background: var(--cfg-sup);
+  border-bottom: 1px solid var(--cfg-borda);
+}
+.cfg-topo h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  outline: none;
+}
+.cfg-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--cfg-campo-borda);
+  border-radius: 8px;
+  background: var(--cfg-sup);
+  color: var(--cfg-txt);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cfg-corpo {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cfg-card {
+  background: var(--cfg-sup);
+  border: 1px solid var(--cfg-borda);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cfg-card h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+.cfg-card h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+.cfg-dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(120px, max-content) minmax(0, 1fr);
+  gap: 8px 16px;
+  font-size: 14px;
+}
+.cfg-dl dt {
+  color: var(--cfg-sec);
+}
+.cfg-dl dd {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.cfg-nota {
+  margin: 0;
+  font-size: 13px;
+  color: var(--cfg-sec);
+  line-height: 1.5;
+}
+.cfg-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--cfg-borda);
+}
+.cfg-linha > div {
+  flex: 1 1 260px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cfg-linha p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--cfg-sec);
+  line-height: 1.5;
+}
+.cfg-btn {
+  height: 40px;
+  padding: 0 16px;
+  border: 1.5px solid var(--cfg-acento);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cfg-acento-txt);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cfg-btn-forte {
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #0B7EA3;
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cfg-btn-perigo {
+  height: 40px;
+  padding: 0 16px;
+  border: 1.5px solid var(--cfg-erro);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cfg-erro);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cfg-btn[disabled],
+.cfg-btn-forte[disabled],
+.cfg-btn-perigo[disabled] {
+  opacity: 0.6;
+  cursor: wait;
+}
+.cfg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--cfg-sup2);
+  border-radius: 10px;
+  padding: 16px;
+}
+.cfg-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cfg-sec);
+}
+.cfg-campo {
+  height: 44px;
+  border: 1px solid var(--cfg-campo-borda);
+  border-radius: 8px;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 16px;
+  background: var(--cfg-sup);
+  color: var(--cfg-txt);
+  width: 100%;
+  max-width: 420px;
+}
+.cfg-campo:focus,
+.cfg-voltar:focus-visible,
+.cfg-btn:focus-visible,
+.cfg-btn-forte:focus-visible,
+.cfg-btn-perigo:focus-visible,
+.cfg-seg button:focus-visible {
+  outline: 2px solid var(--cfg-acento);
+  outline-offset: 2px;
+}
+.cfg-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.cfg-msg {
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.cfg-msg.ok {
+  background: var(--cfg-ok-bg);
+  color: var(--cfg-ok);
+}
+.cfg-msg.erro {
+  background: var(--cfg-erro-bg);
+  color: var(--cfg-erro);
+}
+.cfg-msg.alerta {
+  background: var(--cfg-alerta-bg);
+  color: var(--cfg-alerta);
+}
+.cfg-chip {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+.cfg-chip.ok {
+  background: var(--cfg-ok-bg);
+  color: var(--cfg-ok);
+}
+.cfg-chip.erro {
+  background: var(--cfg-erro-bg);
+  color: var(--cfg-erro);
+}
+.cfg-chip.alerta {
+  background: var(--cfg-alerta-bg);
+  color: var(--cfg-alerta);
+}
+.cfg-chip.neutro {
+  background: var(--cfg-seg);
+  color: var(--cfg-sec);
+}
+.cfg-grupo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+.cfg-grupo > span {
+  flex: 1 1 180px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.cfg-seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  background: var(--cfg-seg);
+  padding: 4px;
+  border-radius: 10px;
+}
+.cfg-seg button {
+  min-height: 36px;
+  border: 0;
+  border-radius: 7px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: var(--cfg-sec);
+}
+.cfg-seg button[aria-pressed="true"] {
+  background: var(--cfg-sup);
+  color: var(--cfg-txt);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+.cfg-passos {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--cfg-sec);
+  line-height: 1.6;
+}
+.cfg-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.cfg-det summary {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cfg-acento-txt);
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .cfg-topo {
+    padding: 8px 14px;
+  }
+  .cfg-corpo {
+    padding: 14px 14px 48px;
+  }
+  .cfg-card {
+    padding: 16px;
+  }
+  .cfg-dl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cfg-dl dd {
+    margin-bottom: 6px;
+  }
+  .cfg-linha .cfg-btn,
+  .cfg-linha .cfg-btn-perigo,
+  .cfg-acoes button {
+    flex: 1 1 100%;
+  }
+}
+@media print {
+  #fsm-config {
+    display: none !important;
+  }
+}
+#area-logada select:not([multiple]):not([size]) {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B6B70' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 10px center !important;
+  background-size: 16px 16px !important;
+  padding-right: 34px !important;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  text-overflow: ellipsis;
+}
+#area-logada select:not([multiple]):not([size]):hover {
+  border-color: #0B7EA3 !important;
+}
+#area-logada select:not([multiple]):not([size]):focus-visible {
+  outline: none;
+  border-color: #0B7EA3 !important;
+  box-shadow: 0 0 0 3px rgba(11, 126, 163, 0.18);
+}
+#area-logada select:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+html[data-tema="escuro"] #area-logada select:not([multiple]):not([size]) {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239CB0B6' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+}
+@supports (appearance: base-select) {
+  #area-logada select:not([multiple]):not([size]),
+  #area-logada select:not([multiple]):not([size])::picker(select) {
+    appearance: base-select;
+  }
+  #area-logada select:not([multiple]):not([size])::picker-icon {
+    display: none;
+  }
+  #area-logada select:not([multiple]):not([size]) {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    background-position: right 10px top calc(50% - 4px) !important;
+  }
+  #area-logada select:not([multiple]):not([size]) selectedcontent {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #area-logada select:not([multiple]):not([size])::picker(select) {
+    position-try-order: normal;
+    border: 1px solid #DDE6E8;
+    border-radius: 12px;
+    padding: 6px;
+    margin-top: 4px;
+    background: #fff;
+    color: #1A2B33;
+    box-shadow: 0 14px 36px rgba(19, 37, 44, 0.16);
+    max-height: min(360px, 60vh);
+    font-family: "Inter", system-ui, sans-serif;
+  }
+  #area-logada select:not([multiple]):not([size]) option {
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.35;
+    color: #1A2B33;
+    gap: 8px;
+    cursor: pointer;
+  }
+  #area-logada select:not([multiple]):not([size]) option:hover,
+  #area-logada select:not([multiple]):not([size]) option:focus-visible {
+    background: #EEF3F4;
+    outline: none;
+  }
+  #area-logada select:not([multiple]):not([size]) option:checked {
+    background: #E4F5FA;
+    color: #08617E;
+    font-weight: 600;
+  }
+  #area-logada select:not([multiple]):not([size]) option::checkmark {
+    color: #0B7EA3;
+  }
+  html[data-tema="escuro"] #area-logada select:not([multiple]):not([size])::picker(select) {
+    background: #15252B;
+    color: #E6EEF0;
+    border-color: #34484F;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
+  }
+  html[data-tema="escuro"] #area-logada select:not([multiple]):not([size]) option {
+    color: #E6EEF0;
+  }
+  html[data-tema="escuro"] #area-logada select:not([multiple]):not([size]) option:hover,
+  html[data-tema="escuro"] #area-logada select:not([multiple]):not([size]) option:focus-visible {
+    background: #22363E;
+  }
+  html[data-tema="escuro"] #area-logada select:not([multiple]):not([size]) option:checked {
+    background: #12303A;
+    color: #5FCDEE;
+  }
+}
+@media print {
+  #area-logada select {
+    background-image: none !important;
+    padding-right: 8px !important;
+  }
+}
+.ent-marca-simbolo {
+  display: block;
+  flex: none;
+}
+.fsm-rotulo.fsm-rotulo-afastado {
+  margin-top: 8px;
+}
+.fsm-campo-caixa {
+  position: relative;
+}
+.fsm-campo.fsm-campo-olho {
+  padding-right: 56px;
+}
+.fsm-lembrar-textos {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fsm-btn.fsm-btn-afastado {
+  margin-top: 10px;
+}
+#fsm-mfa-qr {
+  width: 180px;
+  height: 180px;
+}
+.ent-nota.ent-nota-chave {
+  text-align: center;
+  word-break: break-all;
+}
+.ent-usuario {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--ent-aviso-bg);
+  border: 1px solid var(--ent-aviso-borda);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.ent-usuario-titulo {
+  font-size: 13px;
+  color: var(--ent-aviso-txt);
+  font-weight: 600;
+}
+.ent-usuario-valor {
+  font-size: 20px;
+  color: var(--ent-txt);
+  letter-spacing: 0.3px;
+  overflow-wrap: anywhere;
+}
+.ent-usuario-texto {
+  font-size: 13px;
+  color: var(--ent-txt);
+  line-height: 1.45;
+}
+.ent-regra {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ent-sec);
+}
+.ent-regra.regra-ok {
+  color: var(--ent-ok);
+}
+.forca-nivel-0 .forca-barra {
+  width: 0%;
+  background: transparent;
+}
+.forca-nivel-1 .forca-barra {
+  width: 20%;
+}
+.forca-nivel-2 .forca-barra {
+  width: 40%;
+}
+.forca-nivel-3 .forca-barra {
+  width: 60%;
+}
+.forca-nivel-4 .forca-barra {
+  width: 80%;
+}
+.forca-nivel-5 .forca-barra {
+  width: 100%;
+}
+:is(.forca-nivel-1, .forca-nivel-2) .forca-barra {
+  background: var(--forca-1);
+}
+:is(.forca-nivel-3, .forca-nivel-4) .forca-barra {
+  background: var(--forca-2);
+}
+.forca-nivel-5 .forca-barra {
+  background: var(--forca-3);
+}
+.forca-nivel-0 .forca-txt {
+  color: transparent;
+}
+:is(.forca-nivel-1, .forca-nivel-2) .forca-txt {
+  color: var(--forca-1);
+}
+:is(.forca-nivel-3, .forca-nivel-4) .forca-txt {
+  color: var(--forca-2);
+}
+.forca-nivel-5 .forca-txt {
+  color: var(--forca-3);
+}
+.erro-pagina {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--fundo-eef3f4);
+}
+.erro-caixa {
+  max-width: 440px;
+  background: var(--fundo-ffffff);
+  border: 1px solid var(--borda-dde6e8);
+  border-radius: 14px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.erro-titulo {
+  font-size: 17px;
+  color: var(--texto-1a2b33);
+}
+.erro-texto {
+  font-size: 14px;
+  color: var(--texto-34464d);
+  line-height: 1.55;
+}
+.erro-botao {
+  align-self: flex-start;
+  height: 40px;
+  border: 0;
+  background: #0b7ea3;
+  color: #fff;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+}
+.cfg-linha.cfg-linha-primeira {
+  border-top: 0;
+  padding-top: 0;
+}
+.cfg-nota.cfg-nota-forte {
+  color: var(--cfg-txt);
+}
+.cfg-nota.cfg-regra {
+  color: var(--cfg-sec);
+}
+.cfg-nota.cfg-regra.regra-ok {
+  color: var(--cfg-ok);
+}
+
+@media screen {
+  #area-logada {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  #area-logada ::selection {
+    background: rgba(11, 126, 163, 0.2);
+  }
+  #area-logada * {
+    scrollbar-width: thin;
+    scrollbar-color: #C3CFD2 transparent;
+  }
+  html[data-tema="escuro"] body #area-logada * {
+    scrollbar-color: #3F555D transparent;
+  }
+  body #area-logada main {
+    background-image:
+      radial-gradient(1100px 440px at 88% -170px, rgba(11, 126, 163, 0.09), transparent 70%),
+      radial-gradient(900px 400px at 0% -150px, rgba(53, 228, 125, 0.07), transparent 70%),
+      linear-gradient(rgba(19, 37, 44, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(19, 37, 44, 0.035) 1px, transparent 1px);
+    background-size:
+      auto,
+      auto,
+      28px 28px,
+      28px 28px;
+    background-repeat: no-repeat, no-repeat, repeat, repeat;
+    background-attachment: scroll, scroll, fixed, fixed;
+  }
+  html[data-tema="escuro"] body #area-logada main {
+    background-image:
+      radial-gradient(1100px 420px at 88% -180px, rgba(11, 126, 163, 0.09), transparent 70%),
+      radial-gradient(900px 380px at 0% -160px, rgba(53, 228, 125, 0.06), transparent 70%),
+      linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  }
+  body #area-logada main header {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    -webkit-backdrop-filter: saturate(1.6) blur(14px);
+    backdrop-filter: saturate(1.6) blur(14px);
+  }
+  html[data-tema="escuro"] body #area-logada main header {
+    background-color: rgba(17, 31, 36, 0.8) !important;
+  }
+  #area-logada main header span.fs-18,
+  #area-logada main h1,
+  #area-logada main h2,
+  #area-logada main h3 {
+    letter-spacing: -0.011em;
+  }
+  #area-logada main .fs-28,
+  #area-logada main .fs-26,
+  #area-logada main .fs-30,
+  #area-logada main .fs-32 {
+    letter-spacing: -0.02em;
+  }
+  body #area-logada aside.fundo-13252c {
+    background-color: #13252C !important;
+    background-image:
+      radial-gradient(ellipse 160% 36% at 50% 100%, rgba(11, 126, 163, 0.4), transparent 70%),
+      radial-gradient(ellipse 120% 26% at 100% 0%, rgba(53, 228, 125, 0.08), transparent 70%),
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) !important;
+    background-size:
+      100% 100%,
+      100% 100%,
+      30px 30px,
+      30px 30px !important;
+    box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.05);
+  }
+  #area-logada
+    aside.fundo-13252c
+    div.w-34.fundo-0b7ea3 {
+    background-image: linear-gradient(135deg, #2BB3DD, #08617E) !important;
+    box-shadow:
+      0 4px 16px -2px rgba(11, 126, 163, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+  #area-logada aside.fundo-13252c div.fundo-rgba-255-255-255-0p06 {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  }
+  #area-logada aside.fundo-13252c nav button {
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  #area-logada aside.fundo-13252c nav button:hover {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    color: #fff !important;
+  }
+  #area-logada aside.fundo-13252c nav button.fundo-rgba-255-255-255-0p09 {
+    background: linear-gradient(90deg, rgba(62, 205, 243, 0.2), rgba(255, 255, 255, 0.05) 75%) !important;
+    color: #fff !important;
+    box-shadow: inset 2px 0 0 #3ECDF3;
+  }
+  #area-logada aside.fundo-13252c button:focus-visible {
+    outline: 2px solid #3ECDF3;
+    outline-offset: 1px;
+  }
+  #area-logada aside.fundo-13252c div.mt-auto button {
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease;
+  }
+  #area-logada aside.fundo-13252c div.mt-auto button:hover {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.24) !important;
+  }
+  #area-logada main .fundo-ffffff.borda-dde6e8 {
+    box-shadow:
+      0 1px 2px rgba(19, 37, 44, 0.04),
+      0 4px 14px -6px rgba(19, 37, 44, 0.08);
+  }
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    main
+    .fundo-ffffff.borda-dde6e8 {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.035),
+      0 1px 2px rgba(0, 0, 0, 0.35),
+      0 8px 20px -10px rgba(0, 0, 0, 0.6);
+  }
+  #area-logada
+    main
+    :is(button, a).fundo-ffffff.borda-dde6e8,
+  #area-logada main .agenda-clicavel {
+    transition:
+      box-shadow 0.18s ease,
+      transform 0.18s ease,
+      border-color 0.18s ease,
+      background-color 0.15s ease;
+  }
+  html:not([data-tema="escuro"])
+    #area-logada
+    main
+    :is(button, a).fundo-ffffff.borda-dde6e8:hover {
+    border-color: #CFDADD !important;
+    box-shadow:
+      0 2px 4px rgba(19, 37, 44, 0.05),
+      0 12px 26px -10px rgba(19, 37, 44, 0.18);
+    transform: translateY(-1px);
+  }
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    main
+    :is(button, a).fundo-ffffff.borda-dde6e8:hover {
+    border-color: #3F555D !important;
+    transform: translateY(-1px);
+  }
+  #area-logada .fundo-0b7ea3:is(button, a) {
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 65%);
+    box-shadow:
+      0 1px 2px rgba(8, 97, 126, 0.25),
+      0 6px 16px -6px rgba(11, 126, 163, 0.5);
+    transition:
+      filter 0.15s ease,
+      box-shadow 0.15s ease,
+      transform 0.1s ease;
+  }
+  #area-logada
+    .fundo-0b7ea3:is(button, a):not(
+      :disabled
+    ):hover {
+    filter: brightness(1.08);
+    box-shadow:
+      0 1px 2px rgba(8, 97, 126, 0.3),
+      0 10px 22px -8px rgba(11, 126, 163, 0.6);
+  }
+  #area-logada
+    .fundo-0b7ea3:is(button, a):not(
+      :disabled
+    ):active {
+    transform: translateY(1px);
+    filter: brightness(0.97);
+  }
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    .fundo-0b7ea3:is(button, a) {
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.4),
+      0 6px 18px -6px rgba(11, 126, 163, 0.45);
+  }
+  #area-logada main button.fundo-ffffff.botao-secundario,
+  #area-logada
+    aside.pos-fixed
+    button.fundo-ffffff.botao-secundario,
+  #area-logada main button.botao-opcao {
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      box-shadow 0.15s ease,
+      color 0.15s ease;
+  }
+  html:not([data-tema="escuro"])
+    #area-logada
+    :is(main, aside.pos-fixed)
+    button.fundo-ffffff.botao-secundario:not(:disabled):hover {
+    background-color: #F5F9FA !important;
+    border-color: #B5C3C7 !important;
+  }
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    :is(main, aside.pos-fixed)
+    button.fundo-ffffff.botao-secundario:not(:disabled):hover {
+    background-color: #22363E !important;
+    border-color: #3F555D !important;
+  }
+  #area-logada main button:not(:disabled):active {
+    transform: translateY(0.5px);
+  }
+  #area-logada main .fundo-e3ebed button.fundo-ffffff,
+  #area-logada main .fundo-e8eef0 button.fundo-ffffff {
+    box-shadow:
+      0 1px 2px rgba(19, 37, 44, 0.08),
+      0 2px 8px -3px rgba(19, 37, 44, 0.12);
+  }
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    main
+    .fundo-e3ebed
+    button.fundo-ffffff,
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    main
+    .fundo-e8eef0
+    button.fundo-ffffff {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  }
+  #area-logada main .fundo-e3ebed button.fundo-transparent {
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease;
+  }
+  html:not([data-tema="escuro"])
+    #area-logada
+    main
+    .fundo-e3ebed
+    button.fundo-transparent:hover {
+    color: #1A2B33 !important;
+    background-color: rgba(255, 255, 255, 0.5) !important;
+  }
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    main
+    .fundo-e3ebed
+    button.fundo-transparent:hover {
+    color: #E6EEF0 !important;
+    background-color: rgba(255, 255, 255, 0.04) !important;
+  }
+  #area-logada main [role="row"]:not(:has([role="columnheader"])) {
+    transition: background-color 0.12s ease;
+  }
+  html:not([data-tema="escuro"]) #area-logada main [role="row"]:not(:has([role="columnheader"])):hover {
+    background-color: #F8FBFB;
+  }
+  html[data-tema="escuro"] body #area-logada main [role="row"]:not(:has([role="columnheader"])):hover {
+    background-color: #1B2D34;
+  }
+  #area-logada input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+  #area-logada textarea {
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  html:not([data-tema="escuro"])
+    #area-logada
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not(:disabled):hover,
+  html:not([data-tema="escuro"]) #area-logada textarea:not(:disabled):hover {
+    border-color: #B5C3C7 !important;
+  }
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not(:disabled):hover,
+  html[data-tema="escuro"] body #area-logada textarea:not(:disabled):hover {
+    border-color: #3F555D !important;
+  }
+  #area-logada input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):focus,
+  #area-logada textarea:focus {
+    outline: none;
+    border-color: #0B7EA3 !important;
+    box-shadow: 0 0 0 3px rgba(11, 126, 163, 0.18);
+  }
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):focus,
+  html[data-tema="escuro"] body #area-logada textarea:focus {
+    border-color: #5FCDEE !important;
+    box-shadow: 0 0 0 3px rgba(95, 205, 238, 0.2);
+  }
+  #area-logada main :is(button, a, summary, [tabindex="0"]):focus-visible,
+  #area-logada aside.pos-fixed :is(button, a):focus-visible {
+    outline: 2px solid #0B7EA3;
+    outline-offset: 2px;
+  }
+  html[data-tema="escuro"] body #area-logada main :is(button, a, summary, [tabindex="0"]):focus-visible,
+  html[data-tema="escuro"] body #area-logada aside.pos-fixed :is(button, a):focus-visible {
+    outline-color: #5FCDEE;
+  }
+  #area-logada aside.pos-fixed {
+    box-shadow: -24px 0 60px -16px rgba(19, 37, 44, 0.32) !important;
+    animation: fsmGaveta 0.26s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  html[data-tema="escuro"] body #area-logada aside.pos-fixed {
+    box-shadow: -24px 0 60px -16px rgba(0, 0, 0, 0.7) !important;
+    border-left: 1px solid #2A3D45;
+  }
+  #area-logada div.fundo-rgba-19-37-44-0p45 {
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    animation: fsmSurge 0.2s ease both;
+  }
+  #area-logada div.pos-fixed.fundo-13252c {
+    border-radius: 12px !important;
+    box-shadow:
+      0 12px 32px -8px rgba(19, 37, 44, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    animation: fsmAviso 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  #area-logada
+    main
+    .fundo-ffffff.borda-dde6e8:has(
+      > :is(
+        .fs-22,
+        .fs-24,
+        .fs-26,
+        .fs-28
+      )
+    ):nth-child(3n + 1) {
+    background-image: radial-gradient(180px 110px at 100% 0%, rgba(11, 126, 163, 0.08), transparent 72%);
+  }
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    main
+    .fundo-ffffff.borda-dde6e8:has(
+      > :is(
+        .fs-22,
+        .fs-24,
+        .fs-26,
+        .fs-28
+      )
+    ):nth-child(3n + 1) {
+    background-image: radial-gradient(180px 110px at 100% 0%, rgba(11, 126, 163, 0.13), transparent 72%);
+  }
+  #area-logada
+    main
+    .fundo-ffffff.borda-dde6e8:has(
+      > :is(
+        .fs-22,
+        .fs-24,
+        .fs-26,
+        .fs-28
+      )
+    ):nth-child(3n + 2) {
+    background-image: radial-gradient(180px 110px at 100% 0%, rgba(108, 96, 230, 0.08), transparent 72%);
+  }
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    main
+    .fundo-ffffff.borda-dde6e8:has(
+      > :is(
+        .fs-22,
+        .fs-24,
+        .fs-26,
+        .fs-28
+      )
+    ):nth-child(3n + 2) {
+    background-image: radial-gradient(180px 110px at 100% 0%, rgba(108, 96, 230, 0.15), transparent 72%);
+  }
+  #area-logada
+    main
+    .fundo-ffffff.borda-dde6e8:has(
+      > :is(
+        .fs-22,
+        .fs-24,
+        .fs-26,
+        .fs-28
+      )
+    ):nth-child(3n + 3) {
+    background-image: radial-gradient(180px 110px at 100% 0%, rgba(53, 228, 125, 0.1), transparent 72%);
+  }
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    main
+    .fundo-ffffff.borda-dde6e8:has(
+      > :is(
+        .fs-22,
+        .fs-24,
+        .fs-26,
+        .fs-28
+      )
+    ):nth-child(3n + 3) {
+    background-image: radial-gradient(180px 110px at 100% 0%, rgba(53, 228, 125, 0.1), transparent 72%);
+  }
+  #area-logada
+    main
+    :is(.fundo-e8eef0, .fundo-e3ebed)
+    > .largura-fundo:not(button) {
+    transform-origin: left center;
+    animation: fsmBarra 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+}
+@keyframes fsmBarra {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: none;
+  }
+}
+#area-logada main button.botao-limpo:focus-visible {
+  outline: 2px solid #0B7EA3 !important;
+  outline-offset: 2px !important;
+  border-radius: 4px;
+}
+html[data-tema="escuro"] #area-logada main button.botao-limpo:focus-visible {
+  outline-color: #5FCDEE !important;
+}
+@media screen {
+  #area-logada main .fsm-rola {
+    background-image:
+      linear-gradient(to right, #fff 30%, rgba(255, 255, 255, 0)),
+      linear-gradient(to left, #fff 30%, rgba(255, 255, 255, 0)),
+      radial-gradient(farthest-side at 0 50%, rgba(19, 37, 44, 0.22), rgba(19, 37, 44, 0)),
+      radial-gradient(farthest-side at 100% 50%, rgba(19, 37, 44, 0.22), rgba(19, 37, 44, 0)) !important;
+    background-position:
+      left center,
+      right center,
+      left center,
+      right center !important;
+    background-repeat: no-repeat !important;
+    background-size:
+      48px 100%,
+      48px 100%,
+      16px 100%,
+      16px 100% !important;
+    background-attachment: local, local, scroll, scroll !important;
+  }
+  html[data-tema="escuro"] body #area-logada main .fsm-rola {
+    background-image:
+      linear-gradient(to right, #15252B 30%, rgba(21, 37, 43, 0)),
+      linear-gradient(to left, #15252B 30%, rgba(21, 37, 43, 0)),
+      radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)),
+      radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important;
+  }
+}
+@media (max-width: 900px) {
+  #area-logada main .fundo-e3ebed.segmentado:has(> button + button),
+  #area-logada main .fundo-e3ebed.segmentado:has(> * > button) {
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+  }
+  #area-logada main .fundo-e3ebed.segmentado button {
+    flex: 1 1 auto;
+    min-height: 38px;
+    white-space: normal !important;
+  }
+  #area-logada main button.fundo-transparent.botao-texto {
+    min-height: 36px !important;
+  }
+  #area-logada main .fundo-e3ebed > button {
+    min-height: 36px !important;
+  }
+  #area-logada main button.botao-limpo {
+    display: inline-block !important;
+    padding: 8px 0 !important;
+  }
+  #area-logada main .fsm-rola::-webkit-scrollbar {
+    height: 6px;
+  }
+}
+@media screen {
+  #area-logada main .fundo-ffffff.cartao-indicador {
+    box-shadow:
+      0 1px 2px rgba(19, 37, 44, 0.04),
+      0 4px 14px -6px rgba(19, 37, 44, 0.08);
+  }
+  html[data-tema="escuro"]
+    body
+    #area-logada
+    main
+    .fundo-ffffff.cartao-indicador {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.035),
+      0 1px 2px rgba(0, 0, 0, 0.35),
+      0 8px 20px -10px rgba(0, 0, 0, 0.6);
+  }
+  body #area-logada nav.navegacao-inferior {
+    background-color: rgba(255, 255, 255, 0.86) !important;
+    -webkit-backdrop-filter: saturate(1.6) blur(14px);
+    backdrop-filter: saturate(1.6) blur(14px);
+  }
+  html[data-tema="escuro"] body #area-logada nav.navegacao-inferior {
+    background-color: rgba(17, 31, 36, 0.88) !important;
+  }
+}
+@keyframes fsmGaveta {
+  from {
+    opacity: 0;
+    translate: 28px 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes fsmAviso {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #area-logada * {
+    transition: none !important;
+  }
+  #area-logada aside.pos-fixed,
+  #area-logada div.fundo-rgba-19-37-44-0p45,
+  #area-logada div.pos-fixed.fundo-13252c,
+  #area-logada main .largura-fundo {
+    animation: none !important;
+  }
+  #area-logada main :is(button, a):hover,
+  #area-logada main button:active {
+    transform: none !important;
+  }
+}
+html[data-animacoes="reduzir"] #area-logada main :is(button, a):hover,
+html[data-animacoes="reduzir"] #area-logada main button:active {
+  transform: none !important;
+}
+</style>
+<script src="./config.js"></script>
+<script src="./lib/base.js"></script>
+<script src="./lib/auth.js"></script>
+<script src="./lib/planilha.js"></script>
+<script src="./lib/notificacoes.js"></script>
+<script src="./lib/aparencia.js"></script>
+<script src="./lib/sobre.js"></script>
+</helmet>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#13252C"></rect><rect x="27" y="27" width="21" height="21" rx="5" fill="#DD2287"></rect><rect x="52" y="27" width="21" height="21" rx="5" fill="#6C60E6"></rect><rect x="27" y="52" width="21" height="21" rx="5" fill="#3ECDF3"></rect><rect x="52" y="52" width="21" height="21" rx="5" fill="#35E47D"></rect></svg></template>
+
+<sc-if value="{{ naEntrada }}" hint-placeholder-val="{{ true }}">
+  <div id="entrada">
+    <div id="entrada-card">
+      <div class="ent-arte">
+        <div class="ent-marca" role="img" aria-label="Oficineiro+"><svg aria-hidden="true" viewBox="0 0 31 31" width="30" height="30" class="ent-marca-simbolo"><rect x="0" y="0" width="14" height="14" rx="3" fill="#DD2287"></rect><rect x="17" y="0" width="14" height="14" rx="3" fill="#6C60E6"></rect><rect x="0" y="17" width="14" height="14" rx="3" fill="#3ECDF3"></rect><rect x="17" y="17" width="14" height="14" rx="3" fill="#35E47D"></rect></svg><span>Oficineiro<b>+</b></span></div>
+        <div class="ent-orbita">
+          <img src="../public/brand/entrada-orbita.png" alt="" class="{{ orbitaCls }}"></img>
+        </div>
+        <div class="ent-lema">
+          <p class="ent-lema-t">Cada oficina, <span>uma nova forma de aprender.</span></p>
+          <p class="ent-lema-s">Presença na escola, grade e registro das atividades em um só lugar.</p>
+        </div>
+      </div>
+      <div class="ent-form">
+        <div class="ent-form-in">
+        <h1 class="ent-titulo">{{ titulo }}</h1>
+        <sc-if value="{{ temSubtitulo }}" hint-placeholder-val="{{ true }}"><p class="ent-sub">{{ subtitulo }}</p></sc-if>
+
+        <sc-if value="{{ aviso }}" hint-placeholder-val="{{ false }}">
+          <div role="status" class="ent-aviso">{{ aviso }}</div>
+        </sc-if>
+
+        <sc-if value="{{ eh.carregando }}" hint-placeholder-val="{{ false }}">
+          <p class="ent-status">Verificando sua sessão…</p>
+        </sc-if>
+
+        <sc-if value="{{ eh.login }}" hint-placeholder-val="{{ true }}">
+          <label class="fsm-rotulo fsm-rotulo-afastado" for="fsm-usuario">Usuário</label>
+          <input id="fsm-usuario" class="fsm-campo" type="text" autoComplete="username" autoCapitalize="none" maxLength="30" spellCheck="false" readOnly="{{ ocupado }}" onKeyDown="{{ enterLogin }}"></input>
+          <label class="fsm-rotulo" for="fsm-senha">Senha</label>
+          <div class="fsm-campo-caixa">
+            <input id="fsm-senha" class="fsm-campo fsm-campo-olho" type="{{ tipoSenha }}" autoComplete="current-password" maxLength="128" readOnly="{{ ocupado }}" onKeyDown="{{ enterLogin }}"></input>
+            <button type="button" class="fsm-olho" onClick="{{ alternarSenha }}" aria-label="{{ olhoAria }}" aria-pressed="{{ olhoPressed }}" aria-controls="fsm-senha" title="{{ olhoAria }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle><sc-if value="{{ verSenha }}" hint-placeholder-val="{{ false }}"><path d="M4 4l16 16"></path></sc-if></svg></button>
+          </div>
+          <label class="fsm-lembrar-op" for="fsm-lembrar">
+            <input id="fsm-lembrar" class="fsm-check" type="checkbox" aria-describedby="fsm-lembrar-dica"></input>
+            <span class="fsm-lembrar-textos"><span>Manter conectado neste aparelho até amanhã</span><span id="fsm-lembrar-dica" class="fsm-lembrar-dica">Não marque em computador compartilhado.</span></span>
+          </label>
+          <button class="fsm-btn fsm-btn-afastado" onClick="{{ entrar }}" disabled="{{ ocupado }}">{{ rotuloEntrar }}</button>
+          <button class="fsm-link" onClick="{{ irPrimeiroAcesso }}">Primeiro acesso? Ative sua conta aqui</button>
+        </sc-if>
+
+        <sc-if value="{{ eh.primeiroCpf }}" hint-placeholder-val="{{ false }}">
+          <label class="fsm-rotulo fsm-rotulo-afastado" for="fsm-cpf">CPF ou CNPJ</label>
+          <input id="fsm-cpf" class="fsm-campo" inputMode="numeric" autoComplete="off" maxLength="18" placeholder="CPF ou CNPJ cadastrado" onInput="{{ formatarCpf }}" onKeyDown="{{ enterCpf }}"></input>
+          <button class="fsm-btn fsm-btn-afastado" onClick="{{ pedirCodigo }}" disabled="{{ ocupado }}">{{ rotuloEnviar }}</button>
+          <button class="fsm-link" onClick="{{ voltarLogin }}">Já tenho usuário e senha</button>
+        </sc-if>
+
+        <sc-if value="{{ eh.primeiroCodigo }}" hint-placeholder-val="{{ false }}">
+          <label class="fsm-rotulo fsm-rotulo-afastado" for="fsm-codigo-email">Código recebido no e-mail institucional</label>
+          <input id="fsm-codigo-email" class="fsm-campo fsm-codigo" inputMode="numeric" autoComplete="one-time-code" maxLength="10" placeholder="código" onKeyDown="{{ enterCodigoEmail }}"></input>
+          <button class="fsm-btn" onClick="{{ confirmarPrimeiroAcesso }}" disabled="{{ ocupado }}">{{ rotuloConfirmar }}</button>
+          <button class="fsm-link" onClick="{{ reenviarCodigo }}">Não recebeu? Enviar outro código</button>
+          <button class="fsm-link" onClick="{{ voltarLogin }}">Voltar</button>
+        </sc-if>
+
+        <sc-if value="{{ eh.mfaCadastro }}" hint-placeholder-val="{{ false }}">
+          <ol class="ent-passos">
+            <li>Abra o aplicativo autenticador no celular (Google Authenticator, Microsoft Authenticator ou Authy).</li>
+            <li>Toque em adicionar conta e leia o código abaixo.</li>
+            <li>Digite os 6 números que aparecerem no aplicativo.</li>
+          </ol>
+          <div class="ent-qr">
+            <div id="fsm-mfa-qr" role="img" aria-label="Código QR do autenticador"></div>
+          </div>
+          <p class="ent-nota ent-nota-chave">Sem câmera? Digite a chave no aplicativo: <b class="ent-chave">{{ mfaSegredo }}</b></p>
+          <input id="fsm-codigo" class="fsm-campo fsm-codigo" inputMode="numeric" autoComplete="one-time-code" maxLength="6" placeholder="000000" onKeyDown="{{ enterCodigo }}"></input>
+          <button class="fsm-btn" onClick="{{ confirmarCodigo }}" disabled="{{ ocupado }}">{{ rotuloConfirmar }}</button>
+        </sc-if>
+
+        <sc-if value="{{ eh.mfaCodigo }}" hint-placeholder-val="{{ false }}">
+          <label class="fsm-rotulo fsm-rotulo-afastado" for="fsm-codigo">Código de 6 números do aplicativo autenticador</label>
+          <input id="fsm-codigo" class="fsm-campo fsm-codigo" inputMode="numeric" autoComplete="one-time-code" maxLength="6" placeholder="000000" onKeyDown="{{ enterCodigo }}"></input>
+          <button class="fsm-btn" onClick="{{ confirmarCodigo }}" disabled="{{ ocupado }}">{{ rotuloConfirmar }}</button>
+        </sc-if>
+
+        <sc-if value="{{ eh.trocarSenha }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ temUsuarioGerado }}" hint-placeholder-val="{{ true }}">
+            <div role="status" class="ent-usuario">
+              <span class="ent-usuario-titulo">Seu usuário para entrar</span>
+              <b class="ent-usuario-valor">{{ usuarioGerado }}</b>
+              <span class="ent-usuario-texto">Anote este usuário: você vai usá-lo, junto com a senha que criar agora, para entrar no Oficineiro+.</span>
+            </div>
+          </sc-if>
+          <label class="fsm-rotulo fsm-rotulo-afastado" for="fsm-nova">Crie sua senha</label>
+          <div class="fsm-campo-caixa">
+            <input id="fsm-nova" class="fsm-campo fsm-campo-olho" type="{{ tipoNova }}" autoComplete="new-password" maxLength="128" onInput="{{ conferirSenha }}"></input>
+            <button type="button" class="fsm-olho" onClick="{{ alternarNova }}" aria-label="{{ olhoNovaAria }}" aria-pressed="{{ olhoNovaPressed }}" aria-controls="fsm-nova" title="{{ olhoNovaAria }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle><sc-if value="{{ verNova }}" hint-placeholder-val="{{ false }}"><path d="M4 4l16 16"></path></sc-if></svg></button>
+          </div>
+          <div class="forca {{ forcaClasse }}" aria-hidden="true"><div class="forca-trilho"><div class="forca-barra"></div></div><span class="forca-txt">{{ forcaTxt }}</span></div>
+          <label class="fsm-rotulo" for="fsm-confirma">Repita a senha nova</label>
+          <div class="fsm-campo-caixa">
+            <input id="fsm-confirma" class="fsm-campo fsm-campo-olho" type="{{ tipoConfirma }}" autoComplete="new-password" maxLength="128" onKeyDown="{{ enterSenha }}"></input>
+            <button type="button" class="fsm-olho" onClick="{{ alternarConfirma }}" aria-label="{{ olhoConfirmaAria }}" aria-pressed="{{ olhoConfirmaPressed }}" aria-controls="fsm-confirma" title="{{ olhoConfirmaAria }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle><sc-if value="{{ verConfirma }}" hint-placeholder-val="{{ false }}"><path d="M4 4l16 16"></path></sc-if></svg></button>
+          </div>
+          <p class="ent-regra {{ regraClasse }}">{{ regraSenha }}</p>
+          <button class="fsm-btn" onClick="{{ salvarSenha }}" disabled="{{ ocupado }}">{{ rotuloSalvar }}</button>
+        </sc-if>
+
+        <sc-if value="{{ erro }}" hint-placeholder-val="{{ false }}">
+          <div role="alert" class="ent-erro">{{ erro }}</div>
+        </sc-if>
+
+        <sc-if value="{{ podeSair }}" hint-placeholder-val="{{ false }}">
+          <button class="fsm-link" onClick="{{ sair }}">Sair e entrar com outra conta</button>
+        </sc-if>
+        </div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ dentro }}" hint-placeholder-val="{{ false }}">
+  <div id="area-logada" onClickCapture="{{ bloquearAtalhos }}">
+    <sc-if value="{{ is.oficineiro }}" hint-placeholder-val="{{ false }}"><dc-import name="oficineiro" hint-size="100%,100vh"></dc-import></sc-if>
+    <sc-if value="{{ is.coordenador }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador" hint-size="100%,100vh"></dc-import></sc-if>
+    <sc-if value="{{ is.direcao }}" hint-placeholder-val="{{ false }}"><dc-import name="direcao" hint-size="100%,100vh"></dc-import></sc-if>
+    <sc-if value="{{ is.analista }}" hint-placeholder-val="{{ false }}"><dc-import name="analista" hint-size="100%,100vh"></dc-import></sc-if>
+    <sc-if value="{{ is.gerente }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente" hint-size="100%,100vh"></dc-import></sc-if>
+    <sc-if value="{{ semTela }}" hint-placeholder-val="{{ false }}">
+      <div role="alert" class="erro-pagina">
+        <div class="erro-caixa">
+          <b class="erro-titulo">Seu perfil não tem tela nesta versão do site</b>
+          <span class="erro-texto">Recarregue a página. Se a mensagem continuar, o site publicado está desatualizado: procure a equipe de TI.</span>
+          <button onClick="{{ sair }}" class="erro-botao">Sair da conta</button>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</sc-if>
+<sc-if value="{{ cfgAberta }}" hint-placeholder-val="{{ false }}">
+  <div id="fsm-config" role="dialog" aria-modal="true" aria-labelledby="fsm-config-titulo" onKeyDown="{{ cfgTecla }}">
+    <header class="cfg-topo">
+      <button class="cfg-voltar" onClick="{{ cfgFechar }}"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>Voltar</button>
+      <h1 id="fsm-config-titulo" tabIndex="-1">Configurações</h1>
+    </header>
+    <div class="cfg-corpo">
+      <section class="cfg-card" aria-labelledby="cfg-h-conta">
+        <h2 id="cfg-h-conta">Minha conta</h2>
+        <sc-if value="{{ cfg.carregandoConta }}" hint-placeholder-val="{{ false }}"><p class="cfg-nota" role="status">Carregando…</p></sc-if>
+        <sc-if value="{{ cfg.erroConta }}" hint-placeholder-val="{{ false }}"><div class="cfg-msg erro" role="alert">{{ cfg.erroConta }}</div></sc-if>
+        <sc-if value="{{ cfg.temConta }}" hint-placeholder-val="{{ true }}">
+          <dl class="cfg-dl">
+            <sc-for list="{{ cfg.dados }}" as="d" hint-placeholder-count="5"><dt>{{ d.r }}</dt><dd>{{ d.v }}</dd></sc-for>
+          </dl>
+          <p class="cfg-nota">Para corrigir algum dado, fale com o gerente do projeto.</p>
+        </sc-if>
+      </section>
+
+      <section class="cfg-card" aria-labelledby="cfg-h-seg">
+        <h2 id="cfg-h-seg">Segurança</h2>
+        <div class="cfg-linha cfg-linha-primeira">
+          <div><h3>Senha</h3><p>Ao trocar a senha, os outros aparelhos conectados são desconectados.</p></div>
+          <sc-if value="{{ cfg.senhaFechada }}" hint-placeholder-val="{{ true }}"><button class="cfg-btn" onClick="{{ cfgAbrirSenha }}">Alterar senha</button></sc-if>
+        </div>
+        <sc-if value="{{ cfg.senhaOk }}" hint-placeholder-val="{{ false }}"><div class="cfg-msg ok" role="status">Senha alterada. Use a senha nova no próximo acesso. Os outros aparelhos foram desconectados.</div></sc-if>
+        <sc-if value="{{ cfg.senhaAberta }}" hint-placeholder-val="{{ false }}">
+          <div class="cfg-form" role="group" aria-labelledby="cfg-h-senha">
+            <h3 id="cfg-h-senha" class="cfg-sr">Alterar senha</h3>
+            <label>Senha atual<input id="cfg-atual" class="cfg-campo" type="password" autoComplete="current-password" maxLength="128"></input></label>
+            <label>Senha nova<input id="cfg-nova" class="cfg-campo" type="password" autoComplete="new-password" maxLength="128" onInput="{{ cfgConferirSenha }}" aria-describedby="cfg-regra"></input></label>
+            <div class="forca {{ cfg.forcaClasse }}" aria-hidden="true"><div class="forca-trilho"><div class="forca-barra"></div></div><span class="forca-txt">{{ cfg.forcaTxt }}</span></div>
+            <label>Repita a senha nova<input id="cfg-repete" class="cfg-campo" type="password" autoComplete="new-password" maxLength="128" onKeyDown="{{ cfgEnterSenha }}"></input></label>
+            <p id="cfg-regra" class="cfg-nota cfg-regra {{ cfg.regraClasse }}">{{ cfg.regra }}</p>
+            <sc-if value="{{ cfg.senhaErro }}" hint-placeholder-val="{{ false }}"><div class="cfg-msg erro" role="alert">{{ cfg.senhaErro }}</div></sc-if>
+            <div class="cfg-acoes">
+              <button class="cfg-btn-forte" onClick="{{ cfgSalvarSenha }}" disabled="{{ cfg.senhaBusy }}">{{ cfg.senhaRotulo }}</button>
+              <button class="cfg-btn" onClick="{{ cfgCancelarSenha }}" disabled="{{ cfg.senhaBusy }}">Cancelar</button>
+            </div>
+          </div>
+        </sc-if>
+        <div class="cfg-linha">
+          <div><h3>Aplicativo autenticador</h3><p>{{ cfg.fatorTxt }}</p></div>
+          <span class="cfg-chip {{ cfg.fatorClasse }}">{{ cfg.fatorChip }}</span>
+        </div>
+        <div class="cfg-linha">
+          <div><h3>Sair de todos os aparelhos</h3><p>Use se você esqueceu a conta aberta em outro computador ou celular. Este aparelho também sai.</p></div>
+          <sc-if value="{{ cfg.sairPergunta }}" hint-placeholder-val="{{ true }}"><button class="cfg-btn-perigo" onClick="{{ cfgPerguntarSair }}">Sair de todos</button></sc-if>
+        </div>
+        <sc-if value="{{ cfg.sairConfirma }}" hint-placeholder-val="{{ false }}">
+          <div class="cfg-form" role="group" aria-label="Confirmar saída de todos os aparelhos">
+            <p class="cfg-nota cfg-nota-forte">Você vai sair da conta em todos os aparelhos, inclusive neste. Continuar?</p>
+            <sc-if value="{{ cfg.sairErro }}" hint-placeholder-val="{{ false }}"><div class="cfg-msg erro" role="alert">{{ cfg.sairErro }}</div></sc-if>
+            <div class="cfg-acoes">
+              <button class="cfg-btn-perigo" onClick="{{ cfgSairTodos }}" disabled="{{ cfg.sairBusy }}">{{ cfg.sairRotulo }}</button>
+              <button class="cfg-btn" onClick="{{ cfgCancelarSair }}" disabled="{{ cfg.sairBusy }}">Cancelar</button>
+            </div>
+          </div>
+        </sc-if>
+      </section>
+
+      <section class="cfg-card" aria-labelledby="cfg-h-ap">
+        <h2 id="cfg-h-ap">Aparência</h2>
+        <sc-for list="{{ cfg.grupos }}" as="g" hint-placeholder-count="3">
+          <div class="cfg-grupo">
+            <span id="{{ g.id }}">{{ g.rotulo }}</span>
+            <div class="cfg-seg" role="group" aria-labelledby="{{ g.id }}">
+              <sc-for list="{{ g.opcoes }}" as="o" hint-placeholder-count="3"><button aria-pressed="{{ o.on }}" onClick="{{ o.go }}">{{ o.rotulo }}</button></sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <p class="cfg-nota" role="status" aria-live="polite">{{ cfg.prefStatus }}</p>
+      </section>
+
+      <sc-if value="{{ cfg.ehOficineiro }}" hint-placeholder-val="{{ false }}">
+        <section class="cfg-card" aria-labelledby="cfg-h-loc">
+          <h2 id="cfg-h-loc">Localização</h2>
+          <div class="cfg-linha cfg-linha-primeira">
+            <div><h3>Permissão do navegador</h3><p>{{ cfg.locTxt }}</p></div>
+            <span class="cfg-chip {{ cfg.locClasse }}">{{ cfg.locChip }}</span>
+          </div>
+          <div class="cfg-acoes"><button class="cfg-btn" onClick="{{ cfgTestarLoc }}" disabled="{{ cfg.locBusy }}">{{ cfg.locRotulo }}</button></div>
+          <sc-if value="{{ cfg.locResultado }}" hint-placeholder-val="{{ false }}"><div class="cfg-msg {{ cfg.locResClasse }}" role="status">{{ cfg.locResultado }}</div></sc-if>
+          <details class="cfg-det">
+            <summary>Como liberar a localização</summary>
+            <ul class="cfg-passos">
+              <li><b>Android (Chrome):</b> toque no ícone ao lado do endereço do site, depois em Permissões, Localização e Permitir.</li>
+              <li><b>iPhone (Safari):</b> abra Ajustes, Privacidade e Segurança, Serviços de Localização, e deixe ligado. Em Ajustes, Safari, Localização, escolha Perguntar ou Permitir.</li>
+              <li><b>Computador:</b> clique no ícone ao lado do endereço do site, em Localização escolha Permitir e recarregue a página.</li>
+            </ul>
+          </details>
+        </section>
+      </sc-if>
+
+      <section class="cfg-card" aria-labelledby="cfg-h-ajuda">
+        <h2 id="cfg-h-ajuda">Ajuda e suporte</h2>
+        <dl class="cfg-dl">
+          <sc-for list="{{ cfg.suporte }}" as="d" hint-placeholder-count="3"><dt>{{ d.r }}</dt><dd>{{ d.v }}</dd></sc-for>
+        </dl>
+      </section>
+    </div>
+  </div>
+</sc-if>
+<sc-if value="{{ saindo }}" hint-placeholder-val="{{ false }}"><div id="fsm-saindo" role="status" aria-live="polite"><span aria-hidden="true"></span>Saindo da sua conta…</div></sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    etapa: 'carregando',
+    erro: '',
+    aviso: '',
+    ocupado: false,
+    acesso: null,
+    mfa: null,
+    regraOk: false,
+    forca: 0,
+    falta: '',
+    cfg: null,
+    verSenha: false,
+    verNova: false,
+    verConfirma: false
+  };
+
+  forcaSenha(v) {
+    const falta = window.FSM_AUTH.regraSenha(v).map(x => (x === '12 caracteres' ? 'no mínimo 12 caracteres' : x));
+    const n = v ? 5 - falta.length : 0;
+    const lista = falta.length > 1 ? falta.slice(0, -1).join(', ') + ' e ' + falta[falta.length - 1] : falta[0] || '';
+    return { ok: !!v && !falta.length, n, falta: n && falta.length ? 'Falta: ' + lista + '.' : '' };
+  }
+
+  forcaVisual(n) {
+    return {
+      forcaClasse: 'forca-nivel-' + n,
+      forcaTxt: !n ? '' : n <= 2 ? 'Fraca' : n <= 4 ? 'Média' : 'Forte'
+    };
+  }
+
+  alternarCampo(chave, id) {
+    this.setState({ [chave]: !this.state[chave] }, () => {
+      const el = document.getElementById(id);
+      if (el) el.focus();
+    });
+  }
+
+  cfgMuda(o) {
+    this.setState(s => ({ cfg: s.cfg ? { ...s.cfg, ...o } : s.cfg }));
+  }
+
+  async carregarPreferencias() {
+    const A = window.FSM_AUTH,
+      AP = window.FSM_APARENCIA;
+    if (!AP) return;
+    try {
+      const p = await A.preferencias();
+      if (p && Object.keys(p).length) AP.aplicar(p);
+    } catch (e) {}
+  }
+
+  abrirConfig() {
+    if (this.state.etapa !== 'dentro' || this.state.cfg) return;
+    this._cfgVolta = document.activeElement;
+    this.setState({
+      cfg: {
+        carregandoConta: true,
+        conta: null,
+        erroConta: '',
+        fator: null,
+        senhaAberta: false,
+        senhaOk: false,
+        senhaErro: '',
+        senhaBusy: false,
+        regraOk: false,
+        forca: 0,
+        falta: '',
+        sairConfirma: false,
+        sairBusy: false,
+        sairErro: '',
+        prefStatus: '',
+        loc: null,
+        locBusy: false,
+        locResultado: '',
+        locResClasse: 'ok'
+      }
+    });
+    const area = document.getElementById('area-logada');
+    if (area) area.inert = true;
+    try {
+      document.body.style.overflow = 'hidden';
+    } catch (e) {}
+    setTimeout(() => {
+      const t = document.getElementById('fsm-config-titulo');
+      if (t) t.focus();
+    }, 40);
+    const A = window.FSM_AUTH;
+    A.minhaConta()
+      .then(c => this.cfgMuda({ conta: c, carregandoConta: false }))
+      .catch(e =>
+        this.cfgMuda({
+          carregandoConta: false,
+          erroConta: (e && e.message) || 'Não foi possível carregar os dados da conta.'
+        })
+      );
+    A.fatores()
+      .then(f => this.cfgMuda({ fator: f.some(x => x.status === 'verified') ? 'ativo' : 'nenhum' }))
+      .catch(() => this.cfgMuda({ fator: 'erro' }));
+    if (this.state.acesso && this.state.acesso.papel === 'oficineiro') this.lerPermissaoLoc();
+  }
+
+  fecharConfig() {
+    if (!this.state.cfg) return;
+    const area = document.getElementById('area-logada');
+    if (area) area.inert = false;
+    try {
+      document.body.style.overflow = '';
+    } catch (e) {}
+    this.setState({ cfg: null });
+    const volta = this._cfgVolta;
+    this._cfgVolta = null;
+    setTimeout(() => {
+      if (volta && volta.focus && document.contains(volta)) volta.focus();
+    }, 40);
+  }
+
+  async lerPermissaoLoc() {
+    if (!navigator.geolocation) return this.cfgMuda({ loc: 'sem' });
+    try {
+      if (!navigator.permissions || !navigator.permissions.query) return this.cfgMuda({ loc: 'desconhecida' });
+      const st = await navigator.permissions.query({ name: 'geolocation' });
+      this.cfgMuda({ loc: st.state });
+      st.onchange = () => this.cfgMuda({ loc: st.state });
+    } catch (e) {
+      this.cfgMuda({ loc: 'desconhecida' });
+    }
+  }
+
+  testarLoc() {
+    if (!navigator.geolocation)
+      return this.cfgMuda({ locResultado: 'Este navegador não oferece localização.', locResClasse: 'erro' });
+    this.cfgMuda({ locBusy: true, locResultado: '' });
+    let feito = false;
+    const fim = fn => arg => {
+      if (feito) return;
+      feito = true;
+      clearTimeout(limite);
+      fn(arg);
+    };
+    const limite = setTimeout(
+      () =>
+        fim(() =>
+          this.cfgMuda({
+            locBusy: false,
+            locResClasse: 'erro',
+            locResultado:
+              'Não foi possível obter a localização agora. Confira se o GPS ou a localização do aparelho está ligada e tente de novo.'
+          })
+        )(),
+      20000
+    );
+    navigator.geolocation.getCurrentPosition(
+      fim(pos => {
+        const m = Math.round(pos.coords.accuracy || 0);
+        this.cfgMuda({
+          locBusy: false,
+          loc: 'granted',
+          locResClasse: m > 100 ? 'alerta' : 'ok',
+          locResultado:
+            m > 100
+              ? 'Localização funcionando, mas com pouca precisão. Ao ar livre ou perto de uma janela costuma melhorar.'
+              : 'Localização funcionando.'
+        });
+      }),
+      fim(err =>
+        this.cfgMuda({
+          locBusy: false,
+          loc: err && err.code === 1 ? 'denied' : this.state.cfg && this.state.cfg.loc,
+          locResClasse: 'erro',
+          locResultado:
+            err && err.code === 1
+              ? 'A localização está bloqueada para este site. Veja abaixo como liberar.'
+              : 'Não foi possível obter a localização agora. Confira se o GPS ou a localização do aparelho está ligada e tente de novo.'
+        })
+      ),
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 }
+    );
+  }
+
+  async salvarSenhaConfig() {
+    const c = this.state.cfg;
+    if (!c || c.senhaBusy) return;
+    const atual = this.ler('cfg-atual', false),
+      nova = this.ler('cfg-nova', false),
+      rep = this.ler('cfg-repete', false);
+    this.cfgMuda({ senhaBusy: true, senhaErro: '' });
+    try {
+      await window.FSM_AUTH.trocarSenhaAtual(atual, nova, rep);
+      ['cfg-atual', 'cfg-nova', 'cfg-repete'].forEach(id => this.ler(id, true));
+      this.cfgMuda({ senhaBusy: false, senhaAberta: false, senhaOk: true, regraOk: false, forca: 0, falta: '' });
+    } catch (e) {
+      this.ler('cfg-atual', true);
+      this.cfgMuda({ senhaBusy: false, senhaErro: (e && e.message) || 'Não foi possível trocar a senha.' });
+    }
+  }
+
+  async sairTodosConfig() {
+    const c = this.state.cfg;
+    if (!c || c.sairBusy) return;
+    this.cfgMuda({ sairBusy: true, sairErro: '' });
+    try {
+      await window.FSM_AUTH.sairDeTodos();
+      this.fecharConfig();
+      this.setState({
+        etapa: 'login',
+        acesso: null,
+        mfa: null,
+        erro: '',
+        aviso: 'Você saiu da conta em todos os aparelhos.'
+      });
+      window.scrollTo(0, 0);
+    } catch (e) {
+      this.cfgMuda({ sairBusy: false, sairErro: (e && e.message) || 'Não foi possível sair agora.' });
+    }
+  }
+
+  async mudarPreferencia(k, v) {
+    const AP = window.FSM_APARENCIA;
+    if (!AP) return;
+    AP.aplicar({ [k]: v });
+    this.cfgMuda({ prefStatus: 'Salvando…' });
+    try {
+      await window.FSM_AUTH.salvarPreferencias({ [k]: v });
+      this.cfgMuda({ prefStatus: '' });
+    } catch (e) {
+      this.cfgMuda({ prefStatus: 'Não foi possível salvar na sua conta agora. A escolha vale só neste aparelho.' });
+    }
+  }
+
+  pintarQr() {
+    const el = document.getElementById('fsm-mfa-qr');
+    if (!el) return;
+    const qr = (this.state.mfa && this.state.mfa.qr) || '';
+    const atual = el.firstChild;
+    if (atual && atual.getAttribute && atual.getAttribute('src') === qr) return;
+    while (el.firstChild) el.removeChild(el.firstChild);
+    if (!/^data:image\//.test(qr)) return;
+    const img = document.createElement('img');
+    img.src = qr;
+    img.alt = '';
+    img.style.cssText = 'width:180px;height:180px;display:block';
+    el.appendChild(img);
+  }
+  componentDidUpdate() {
+    this.pintarQr();
+  }
+  componentDidMount() {
+    this.pintarQr();
+    window.fsmConfiguracoes = () => this.abrirConfig();
+    if (!window.__fsmRola) {
+      window.__fsmRola = true;
+      let t = null;
+      const marcar = () => {
+        t = null;
+        document
+          .querySelectorAll(
+            '#area-logada main :is(.rolagem-auto, .rolagem-x-auto, [style*="overflow: auto"], [style*="overflow-x: auto"])'
+          )
+          .forEach(el => {
+            const rola = el.scrollWidth > el.clientWidth + 4;
+            if (rola !== el.classList.contains('fsm-rola')) el.classList.toggle('fsm-rola', rola);
+          });
+      };
+      const agendar = () => {
+        if (!t) t = setTimeout(marcar, 250);
+      };
+      try {
+        new MutationObserver(agendar).observe(document.body, { childList: true, subtree: true });
+      } catch (e) {}
+      window.addEventListener('resize', agendar);
+      agendar();
+    }
+    window.fsmSair = () => {
+      if (this.state.cfg) this.fecharConfig();
+      if (this.state.saindo) return;
+      this.setState({ saindo: true });
+      setTimeout(() => {
+        window.FSM_AUTH.sair();
+        this.setState({ saindo: false, etapa: 'login', acesso: null, mfa: null, erro: '', aviso: '' });
+        window.scrollTo(0, 0);
+      }, 650);
+    };
+    const inicio = Date.now();
+    const aguarda = () => {
+      const A = window.FSM_AUTH;
+      if (A && A.configurado()) return this.iniciar(A);
+      if (Date.now() - inicio < 10000) return setTimeout(aguarda, 50);
+      this.setState({
+        etapa: 'login',
+        erro: A
+          ? 'O site ainda não está ligado ao banco. Preencha src/config.js e gere o site de novo.'
+          : 'Não foi possível carregar o site. Recarregue a página.'
+      });
+    };
+    aguarda();
+  }
+
+  iniciar(A) {
+    A.aoExpirar(m => {
+      if (this.state.cfg) this.fecharConfig();
+      this.setState({
+        etapa: 'login',
+        acesso: null,
+        mfa: null,
+        ocupado: false,
+        erro: '',
+        aviso:
+          m === 'inatividade'
+            ? 'Sessão encerrada após 30 minutos sem uso.'
+            : m === 'prazo'
+              ? 'O acesso salvo de ontem terminou. Entre de novo para começar o dia.'
+              : m === 'expirou'
+                ? 'Sua sessão expirou. Entre de novo.'
+                : ''
+      });
+    });
+    const link = A.sessaoDoLink();
+    if (link === 'outro') {
+      this.setState({
+        etapa: 'primeiroCpf',
+        erro: 'Por segurança, o link do e-mail só funciona no mesmo navegador em que você pediu o código. Peça um código novo por aqui e abra o link neste navegador.'
+      });
+      return;
+    }
+    if (link === 'erro') {
+      this.setState({
+        etapa: 'primeiroCpf',
+        erro: 'Este link do e-mail não vale mais: ele venceu ou já foi usado. Isso acontece quando o próprio e-mail (ex.: Hotmail/Outlook) verifica o link antes de você. Digite o CPF ou o CNPJ de novo para receber outro.'
+      });
+      return;
+    }
+    if (link === true) {
+      this.avancar().catch(e =>
+        this.setState({ etapa: 'login', erro: (e && e.message) || 'Não foi possível continuar.' })
+      );
+      return;
+    }
+    if (A.temSessaoGuardada()) {
+      window.__fsmRetomada = window.__fsmRetomada || A.retomar();
+      window.__fsmRetomada
+        .then(() => this.avancar())
+        .catch(e =>
+          this.setState({
+            etapa: 'login',
+            aviso:
+              e && e.message === 'prazo' ? 'O acesso salvo de ontem terminou. Entre de novo para começar o dia.' : ''
+          })
+        );
+    } else this.setState({ etapa: 'login' });
+  }
+
+  ler(id, limpar) {
+    const el = document.getElementById(id);
+    const v = el ? el.value : '';
+    if (el && limpar) el.value = '';
+    return v;
+  }
+
+  async executa(fn) {
+    if (this.state.ocupado) return;
+    this.setState({ ocupado: true, erro: '', aviso: '' });
+    try {
+      await fn();
+    } catch (e) {
+      this.setState({ erro: (e && e.message) || 'Erro inesperado.' });
+    }
+    this.setState({ ocupado: false });
+  }
+
+  async carregarDadosGerais() {
+    const A = window.FSM_AUTH;
+    if (!A || !A.feriados) return;
+    const [fer, cfg] = await Promise.all([A.feriados().catch(() => null), A.configuracoes().catch(() => null)]);
+    if (Array.isArray(fer)) {
+      const mapa = {};
+      fer.forEach(f => {
+        if (f && f.data) mapa[String(f.data).slice(0, 10)] = f.nome;
+      });
+      window.FSM_FERIADOS = mapa;
+    }
+    if (cfg && window.FSM_SOBRE) {
+      const sup = window.FSM_SOBRE.suporte || {};
+      window.FSM_SOBRE.suporte = {
+        ...sup,
+        email: cfg.suporte_email || sup.email || '',
+        telefone: cfg.suporte_telefone ? this.telFormatado(cfg.suporte_telefone) : sup.telefone || '',
+        horario: cfg.suporte_horario || sup.horario || ''
+      };
+    }
+  }
+  telFormatado(t) {
+    const d = String(t || '').replace(/\D/g, '');
+    return d.length === 11
+      ? '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7)
+      : d.length === 10
+        ? '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6)
+        : d;
+  }
+  async avancar() {
+    const A = window.FSM_AUTH;
+    const gerais = this.carregarDadosGerais().catch(() => null);
+    const ac = await A.meuAcesso();
+    if (!ac || !ac.papel) {
+      A.sair();
+      this.setState({
+        etapa: 'login',
+        erro: 'Esta conta não tem acesso ao Oficineiro+ ou está desativada. Procure o gerente do projeto.'
+      });
+      return;
+    }
+    if (ac.precisa_mfa) {
+      const fatores = await A.fatores();
+      const ok = fatores.find(f => f.status === 'verified');
+      if (ok) {
+        this.setState({ etapa: 'mfaCodigo', acesso: ac, mfa: { id: ok.id } });
+        return;
+      }
+      const novo = await A.cadastrarAutenticador();
+      this.setState({ etapa: 'mfaCadastro', acesso: ac, mfa: novo });
+      return;
+    }
+    if (ac.precisa_criar_usuario || ac.precisa_trocar_senha) {
+      const usuario = ac.precisa_criar_usuario ? await A.gerarMeuUsuario() : ac.usuario;
+      this.setState({
+        etapa: 'trocarSenha',
+        acesso: { ...ac, usuario, precisa_criar_usuario: false },
+        regraOk: false,
+        forca: 0,
+        falta: '',
+        verNova: false,
+        verConfirma: false
+      });
+      return;
+    }
+    if (!ac.acesso_ok) {
+      A.sair();
+      this.setState({ etapa: 'login', erro: 'O acesso desta conta não foi liberado.' });
+      return;
+    }
+    await gerais;
+    this.setState({ etapa: 'dentro', acesso: ac, mfa: null, erro: '', aviso: '' });
+    this.carregarPreferencias();
+    window.scrollTo(0, 0);
+  }
+
+  renderVals() {
+    const s = this.state,
+      A = window.FSM_AUTH;
+    const NOMES = {
+      gerente: 'Gerente de Projetos',
+      coordenador: 'Coordenador do núcleo',
+      direcao: 'Direção Escolar',
+      analista: 'Analista',
+      oficineiro: 'Oficineiro de Inclusão Digital',
+      administrador: 'Administrador'
+    };
+    const papel = s.acesso && s.acesso.papel;
+    const is = {};
+    Object.keys(NOMES).forEach(k => {
+      is[k] = s.etapa === 'dentro' && papel === k;
+    });
+    is.coordenador = is.coordenador || is.administrador;
+    const TIT = {
+      carregando: ['Boas-vindas', 'Presença na escola, grade e registro das atividades.'],
+      login: ['Acesse sua conta', ''],
+      primeiroCpf: [
+        'Primeiro acesso',
+        'Digite o CPF ou o CNPJ da sua conta. Vamos enviar um código para o seu e-mail institucional.'
+      ],
+      primeiroCodigo: ['Confira seu e-mail', ''],
+      mfaCadastro: [
+        'Proteja sua conta',
+        'O Oficineiro+ exige o código de um aplicativo autenticador a cada acesso. Faça o cadastro uma única vez.'
+      ],
+      mfaCodigo: ['Confirme que é você', 'Digite o código que aparece agora no seu aplicativo autenticador.'],
+      trocarSenha: ['Crie seu acesso', 'Defina a senha que você vai usar daqui em diante.']
+    }[s.etapa] || ['Oficineiro+', ''];
+    const confirmarCodigo = () =>
+      this.executa(async () => {
+        const codigo = this.ler('fsm-codigo', true);
+        await A.confirmarCodigo(s.mfa.id, codigo);
+        await this.avancar();
+      });
+    const entrar = () =>
+      this.executa(async () => {
+        const usuario = this.ler('fsm-usuario', false),
+          senha = this.ler('fsm-senha', false);
+        if (this.state.verSenha) this.setState({ verSenha: false });
+        const cx = document.getElementById('fsm-lembrar');
+        try {
+          await A.entrar(usuario, senha, !!(cx && cx.checked));
+        } finally {
+          this.ler('fsm-senha', true);
+        }
+        await this.avancar();
+      });
+    const pedirCodigo = () =>
+      this.executa(async () => {
+        const cpf = this.ler('fsm-cpf', false);
+        const msg = await A.pedirCodigo(cpf);
+        this.cpf = cpf;
+        this.setState({ etapa: 'primeiroCodigo', aviso: msg });
+      });
+    const reenviarCodigo = () =>
+      this.executa(async () => {
+        const msg = await A.pedirCodigo(this.cpf || '');
+        this.setState({ aviso: msg });
+      });
+    const confirmarPrimeiroAcesso = () =>
+      this.executa(async () => {
+        const codigo = this.ler('fsm-codigo-email', true);
+        await A.confirmarPrimeiroAcesso(this.cpf || '', codigo);
+        this.cpf = null;
+        await this.avancar();
+      });
+    const salvarSenha = () =>
+      this.executa(async () => {
+        const n = this.ler('fsm-nova', false),
+          c = this.ler('fsm-confirma', false);
+        const falta = A.regraSenha(n);
+        if (falta.length) throw new Error('A senha precisa ter: ' + falta.join(', ') + '.');
+        if (n !== c) throw new Error('As duas senhas não são iguais.');
+        await A.trocarSenha(n, c);
+        this.ler('fsm-nova', true);
+        this.ler('fsm-confirma', true);
+        await this.avancar();
+      });
+    const enter = fn => e => {
+      if (e && e.key === 'Enter') {
+        e.preventDefault();
+        fn();
+      }
+    };
+    const c = s.cfg,
+      AP = window.FSM_APARENCIA,
+      SO = window.FSM_SOBRE || {};
+    let cfg = {};
+    if (c) {
+      const conta = c.conta,
+        p2 = n => String(n).padStart(2, '0');
+      const quando = t => {
+        const d = new Date(t);
+        return isNaN(d)
+          ? '—'
+          : p2(d.getDate()) +
+              '/' +
+              p2(d.getMonth() + 1) +
+              '/' +
+              d.getFullYear() +
+              ' às ' +
+              p2(d.getHours()) +
+              ':' +
+              p2(d.getMinutes());
+      };
+      const dados = conta
+        ? [
+            ['Nome', conta.nome],
+            ['Usuário', conta.usuario || '—'],
+            ['Cargo', NOMES[conta.papel] || '—'],
+            conta.escola
+              ? ['Escola', conta.escola.nome]
+              : conta.carteira
+                ? ['Carteira', conta.carteira.rotulo]
+                : ['Abrangência', 'Toda a rede'],
+            ['Acesso anterior', conta.acesso_anterior ? quando(conta.acesso_anterior) : 'Nenhum registrado antes deste']
+          ].map(([r, v]) => ({ r, v: String(v == null ? '—' : v) }))
+        : [];
+      const FAT = {
+        ativo: [
+          'ok',
+          'Ativo',
+          'O código do aplicativo é pedido a cada acesso. Vai trocar de celular? Peça ao gerente do projeto para redefinir o autenticador antes de apagar o aplicativo antigo.'
+        ],
+        nenhum: ['neutro', 'Não usado', 'Esta conta de teste entra sem o aplicativo autenticador.'],
+        erro: ['neutro', 'Indisponível', 'Não foi possível verificar o autenticador agora.']
+      }[c.fator] || ['neutro', 'Verificando…', 'Verificando o autenticador…'];
+      const LOC = {
+        granted: ['ok', 'Permitida', 'O Oficineiro+ pode usar a localização para registrar a sua presença na escola.'],
+        prompt: [
+          'alerta',
+          'Ainda não permitida',
+          'O navegador vai pedir permissão quando você iniciar a presença ou testar abaixo.'
+        ],
+        denied: [
+          'erro',
+          'Bloqueada',
+          'Sem localização, a presença vai para conferência do coordenador. Veja abaixo como liberar.'
+        ],
+        sem: ['erro', 'Indisponível', 'Este navegador não oferece localização.']
+      }[c.loc] || ['neutro', 'Não informada', 'Use o botão abaixo para testar a localização.'];
+      const pref = AP ? AP.atual() : {};
+      const grupo = (id, rotulo, k, ops) => ({
+        id,
+        rotulo,
+        opcoes: ops.map(([v, r]) => ({
+          rotulo: r,
+          on: pref[k] === v ? 'true' : 'false',
+          go: () => this.mudarPreferencia(k, v)
+        }))
+      });
+      const sup = SO.suporte || {},
+        contato = [sup.email, sup.telefone].filter(Boolean).join(' · ');
+      const gerado = /^\d{2}\/\d{2}\/\d{4}/.test(String(SO.gerado || '')) ? ' · gerada em ' + SO.gerado : '';
+      cfg = {
+        carregandoConta: !!c.carregandoConta,
+        erroConta: c.erroConta,
+        temConta: !!conta,
+        dados,
+        senhaAberta: !!c.senhaAberta,
+        senhaFechada: !c.senhaAberta,
+        senhaOk: !!c.senhaOk,
+        senhaErro: c.senhaErro,
+        senhaBusy: !!c.senhaBusy,
+        senhaRotulo: c.senhaBusy ? 'Salvando…' : 'Salvar senha nova',
+        regra: c.regraOk
+          ? 'Senha forte. Agora repita a senha nova.'
+          : c.falta || 'Mínimo de 12 caracteres, com letra maiúscula, letra minúscula, número e símbolo.',
+        ...this.forcaVisual(c.forca || 0),
+        regraClasse: c.regraOk ? 'regra-ok' : '',
+        fatorClasse: FAT[0],
+        fatorChip: FAT[1],
+        fatorTxt: FAT[2],
+        sairPergunta: !c.sairConfirma,
+        sairConfirma: !!c.sairConfirma,
+        sairBusy: !!c.sairBusy,
+        sairErro: c.sairErro,
+        sairRotulo: c.sairBusy ? 'Saindo…' : 'Sair de todos os aparelhos',
+        grupos: [
+          grupo('cfg-g-tema', 'Tema', 'tema', [
+            ['claro', 'Claro'],
+            ['escuro', 'Escuro'],
+            ['auto', 'Automático']
+          ]),
+          grupo('cfg-g-texto', 'Tamanho do texto', 'texto', [
+            ['normal', 'Normal'],
+            ['grande', 'Grande'],
+            ['maior', 'Maior']
+          ]),
+          grupo('cfg-g-anim', 'Animações', 'animacoes', [
+            ['sim', 'Mostrar'],
+            ['reduzir', 'Reduzir']
+          ])
+        ],
+        prefStatus:
+          c.prefStatus ||
+          (pref.tema === 'auto' ? 'No automático, o tema acompanha o modo claro ou escuro do aparelho.' : ''),
+        ehOficineiro: !!(s.acesso && s.acesso.papel === 'oficineiro'),
+        locClasse: LOC[0],
+        locChip: LOC[1],
+        locTxt: LOC[2],
+        locBusy: !!c.locBusy,
+        locRotulo: c.locBusy ? 'Testando…' : 'Testar localização',
+        locResultado: c.locResultado,
+        locResClasse: c.locResClasse || 'ok',
+        suporte: [
+          ['Suporte', sup.nome || 'Oficineiro+ Suporte Online'],
+          ['Contato', contato || '~'],
+          ['Atendimento', sup.horario || '~'],
+          ['Versão do sistema', 'Oficineiro+ ' + (SO.versao || '1.0') + (SO.fase ? ' · ' + SO.fase : '') + gerado]
+        ].map(([r, v]) => ({ r, v }))
+      };
+    }
+    return {
+      cfgAberta: !!c,
+      cfg,
+      cfgFechar: () => this.fecharConfig(),
+      cfgTecla: e => {
+        if (e && e.key === 'Escape') {
+          e.preventDefault();
+          this.fecharConfig();
+        }
+      },
+      cfgAbrirSenha: () => {
+        this.cfgMuda({ senhaAberta: true, senhaOk: false, senhaErro: '', regraOk: false, forca: 0, falta: '' });
+        setTimeout(() => {
+          const el = document.getElementById('cfg-atual');
+          if (el) el.focus();
+        }, 40);
+      },
+      cfgCancelarSenha: () => {
+        ['cfg-atual', 'cfg-nova', 'cfg-repete'].forEach(id => this.ler(id, true));
+        this.cfgMuda({ senhaAberta: false, senhaErro: '', regraOk: false, forca: 0, falta: '' });
+      },
+      cfgConferirSenha: () => {
+        const f = this.forcaSenha(this.ler('cfg-nova', false));
+        if (c && (f.ok !== !!c.regraOk || f.n !== (c.forca || 0) || f.falta !== (c.falta || '')))
+          this.cfgMuda({ regraOk: f.ok, forca: f.n, falta: f.falta });
+      },
+      cfgSalvarSenha: () => this.salvarSenhaConfig(),
+      cfgEnterSenha: enter(() => this.salvarSenhaConfig()),
+      cfgPerguntarSair: () => this.cfgMuda({ sairConfirma: true, sairErro: '' }),
+      cfgCancelarSair: () => this.cfgMuda({ sairConfirma: false, sairErro: '' }),
+      cfgSairTodos: () => this.sairTodosConfig(),
+      cfgTestarLoc: () => this.testarLoc(),
+      naEntrada: s.etapa !== 'dentro',
+      dentro: s.etapa === 'dentro',
+      eh: {
+        carregando: s.etapa === 'carregando',
+        login: s.etapa === 'login',
+        primeiroCpf: s.etapa === 'primeiroCpf',
+        primeiroCodigo: s.etapa === 'primeiroCodigo',
+        mfaCadastro: s.etapa === 'mfaCadastro',
+        mfaCodigo: s.etapa === 'mfaCodigo',
+        trocarSenha: s.etapa === 'trocarSenha'
+      },
+      temUsuarioGerado: !!(s.acesso && s.acesso.usuario),
+      usuarioGerado: (s.acesso && s.acesso.usuario) || '',
+      rotuloEnviar: s.ocupado ? 'Enviando…' : 'Enviar código',
+      irPrimeiroAcesso: () => this.setState({ etapa: 'primeiroCpf', erro: '', aviso: '' }),
+      voltarLogin: () => {
+        this.cpf = null;
+        this.setState({ etapa: 'login', erro: '', aviso: '' });
+      },
+      formatarCpf: e => {
+        const d = (e.target.value || '').replace(/\D/g, '').slice(0, 14);
+        e.target.value =
+          d.length <= 11
+            ? d
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
+                .replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4')
+            : d
+                .replace(/(\d{2})(\d)/, '$1.$2')
+                .replace(/(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+                .replace(/(\d{2})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3/$4')
+                .replace(/(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})(\d)/, '$1.$2.$3/$4-$5');
+      },
+      pedirCodigo,
+      reenviarCodigo,
+      confirmarPrimeiroAcesso,
+      enterCpf: enter(pedirCodigo),
+      enterCodigoEmail: enter(confirmarPrimeiroAcesso),
+      titulo: TIT[0],
+      subtitulo: TIT[1],
+      temSubtitulo: !!TIT[1],
+      orbitaCls: ['login', 'carregando', 'primeiroCpf'].includes(s.etapa) ? 'cheia' : 'peq',
+      erro: s.erro,
+      aviso: s.aviso,
+      ocupado: s.ocupado,
+      podeSair: ['mfaCadastro', 'mfaCodigo', 'trocarSenha'].includes(s.etapa),
+      rotuloEntrar: s.ocupado ? 'Entrando…' : 'Entrar',
+      tipoSenha: s.verSenha ? 'text' : 'password',
+      verSenha: !!s.verSenha,
+      olhoAria: s.verSenha ? 'Ocultar a senha' : 'Mostrar a senha',
+      olhoPressed: s.verSenha ? 'true' : 'false',
+      alternarSenha: () =>
+        this.setState({ verSenha: !this.state.verSenha }, () => {
+          const el = document.getElementById('fsm-senha');
+          if (el) el.focus();
+        }),
+      rotuloConfirmar: s.ocupado ? 'Conferindo…' : 'Confirmar',
+      rotuloSalvar: s.ocupado ? 'Salvando…' : 'Salvar e entrar',
+      mfaSegredo: (s.mfa && s.mfa.segredo) || '',
+      regraSenha: s.regraOk
+        ? 'Senha forte. Agora repita a senha no segundo campo.'
+        : s.falta || 'Mínimo de 12 caracteres, com letra maiúscula, letra minúscula, número e símbolo.',
+      ...this.forcaVisual(s.forca),
+      tipoNova: s.verNova ? 'text' : 'password',
+      verNova: !!s.verNova,
+      olhoNovaAria: s.verNova ? 'Ocultar a senha' : 'Mostrar a senha',
+      olhoNovaPressed: s.verNova ? 'true' : 'false',
+      alternarNova: () => this.alternarCampo('verNova', 'fsm-nova'),
+      tipoConfirma: s.verConfirma ? 'text' : 'password',
+      verConfirma: !!s.verConfirma,
+      olhoConfirmaAria: s.verConfirma ? 'Ocultar a senha repetida' : 'Mostrar a senha repetida',
+      olhoConfirmaPressed: s.verConfirma ? 'true' : 'false',
+      alternarConfirma: () => this.alternarCampo('verConfirma', 'fsm-confirma'),
+      regraClasse: s.regraOk ? 'regra-ok' : '',
+      conferirSenha: () => {
+        const f = this.forcaSenha(this.ler('fsm-nova', false));
+        if (f.ok !== s.regraOk || f.n !== s.forca || f.falta !== s.falta)
+          this.setState({ regraOk: f.ok, forca: f.n, falta: f.falta });
+      },
+      entrar,
+      confirmarCodigo,
+      salvarSenha,
+      enterLogin: enter(entrar),
+      enterCodigo: enter(confirmarCodigo),
+      enterSenha: enter(salvarSenha),
+      sair: () => {
+        A.sair();
+        this.setState({ etapa: 'login', acesso: null, mfa: null, erro: '', aviso: '' });
+        window.scrollTo(0, 0);
+      },
+      is,
+      semTela: s.etapa === 'dentro' && !Object.keys(is).some(k => is[k]),
+      saindo: !!s.saindo,
+      bloquearAtalhos: e => {
+        const a = e.target.closest && e.target.closest('a[href]');
+        if (!a) return;
+        const href = decodeURIComponent(a.getAttribute('href') || '');
+        if (/FSM (Oficineiro|Coordenador|Direcao|Analista|Gerente)|\.dc\.html/.test(href)) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

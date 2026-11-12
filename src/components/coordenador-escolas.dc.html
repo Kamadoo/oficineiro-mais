@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Coordenador do núcleo · Escolas e turmas</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <div class="d-flex gap-10-12 alinha-center quebra-wrap">
+    <p class="m-0 fs-13 cor-5b6b70 flex-1 min-w-220 lh-1p5">Cadastro das escolas, da localização usada na presença e das turmas com o número de matriculados.</p>
+    <button class="largura-total-celular h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-0b7ea3" style="background:#0B7EA3" onClick="{{ novaEscola }}" aria-haspopup="dialog">+ Nova escola</button>
+  </div>
+  <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erro }}</div></sc-if>
+  <section class="adm-tabela borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}" aria-labelledby="adm-h-escolas">
+    <h3 id="adm-h-escolas" class="sr-only">Escolas</h3>
+    <div role="table" aria-labelledby="adm-h-escolas" class="min-w-860">
+      <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-5b6b70 borda-b-dde6e8" style="grid-template-columns:80px minmax(0,2fr) minmax(0,1fr) 70px 130px minmax(0,1.2fr) 110px"><span role="columnheader">Sigla</span><span role="columnheader">Escola</span><span role="columnheader">Carteira</span><span role="columnheader">Raio</span><span role="columnheader">Localização</span><span role="columnheader">Turmas</span><span role="columnheader">Situação</span></div>
+      <sc-for list="{{ escolas }}" as="escola" hint-placeholder-count="6">
+        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-e8eef0 alinha-center" style="grid-template-columns:80px minmax(0,2fr) minmax(0,1fr) 70px 130px minmax(0,1.2fr) 110px">
+          <span role="cell" class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ escola.sigla }}</span>
+          <span role="cell" class="min-w-0"><button onClick="{{ escola.abrir }}" aria-haspopup="dialog" aria-label="{{ escola.aria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-14 fw-600 cor-1a2b33 texto-left fonte-inherit sublinha-3 quebra-palavra-anywhere botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:#CFDADD">{{ escola.nome }}</button></span>
+          <span role="cell" class="fs-12">{{ escola.carteira }}</span>
+          <span role="cell">{{ escola.raio }}</span>
+          <span role="cell" class="fs-12 fw-600" style="color:{{ escola.localizacaoCor }}">{{ escola.localizacao }}</span>
+          <span role="cell" class="fs-12">{{ escola.turmas }}</span>
+          <span role="cell"><span class="d-inline-block fs-12 fw-600 p-2-8 raio-999" style="color:{{ escola.situacaoCor }};background:{{ escola.situacaoFundo }}">{{ escola.situacao }}</span></span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semEscolas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-18-20 fs-13 cor-5b6b70">Nenhuma escola cadastrada.</p></sc-if>
+  </section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const contexto = this.props.contexto;
+    const { escs, turmasDe, carteiraPorId } = contexto;
+
+    return {
+      opacidade: contexto.carregandoSistema ? 0.6 : 1,
+      temErro: !!contexto.erroSistema,
+      erro: contexto.erroSistema,
+      escolas: escs.map(e => {
+        const ts = turmasDe(e.id);
+        return {
+          sigla: e.sigla,
+          nome: e.nome,
+          carteira: e.carteira_id ? (carteiraPorId[e.carteira_id] || {}).rotulo || e.carteira_id : '—',
+          raio: e.raio_m + ' m',
+          localizacao: e.latitude == null ? 'Sem localização' : e.posicao_confirmada ? 'Confirmada' : 'A confirmar',
+          localizacaoCor:
+            e.latitude == null
+              ? 'var(--texto-b42318)'
+              : e.posicao_confirmada
+                ? 'var(--texto-23773a)'
+                : 'var(--texto-7a4e0b)',
+          turmas: ts.length
+            ? ts.length +
+              (ts.length === 1 ? ' turma' : ' turmas') +
+              (ts.some(t => t.matriculados == null) ? ' · falta matriculados' : '')
+            : 'Nenhuma',
+          situacao: e.ativa === false ? 'Desativada' : 'Ativa',
+          situacaoCor: e.ativa === false ? 'var(--texto-5b6b70)' : 'var(--texto-23773a)',
+          situacaoFundo: e.ativa === false ? 'var(--fundo-e8eef0)' : 'var(--fundo-e2f2e5)',
+          aria: 'Editar a escola ' + e.nome,
+          abrir: () =>
+            contexto.abrirGavetaDeAdmin(
+              {
+                escolaEditada: {
+                  id: e.id,
+                  sigla: e.sigla,
+                  nome: e.nome,
+                  endereco: e.endereco || '',
+                  telefone: e.telefone || '',
+                  carteira_id: e.carteira_id || '',
+                  latitude: e.latitude == null ? '' : String(e.latitude),
+                  longitude: e.longitude == null ? '' : String(e.longitude),
+                  raio_m: String(e.raio_m),
+                  ativa: e.ativa !== false
+                }
+              },
+              'adm-esc-titulo'
+            )
+        };
+      }),
+      semEscolas: !escs.length && !contexto.carregandoSistema,
+      novaEscola: () =>
+        contexto.abrirGavetaDeAdmin(
+          {
+            escolaEditada: {
+              sigla: '',
+              nome: '',
+              endereco: '',
+              telefone: '',
+              carteira_id: '',
+              latitude: '',
+              longitude: '',
+              raio_m: '150',
+              ativa: true
+            }
+          },
+          'adm-esc-sigla'
+        )
+    };
+  }
+}
+</script>
+</body>
+</html>

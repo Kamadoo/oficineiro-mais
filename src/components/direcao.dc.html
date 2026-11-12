@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Direção Escolar</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles/app.css">
+<style>
+button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+[role="table"] {
+  position: relative;
+}
+.dir-h {
+  position: static;
+}
+.dir-click:hover {
+  background: #F5F9FA !important;
+}
+.dir-click:focus-visible,
+.dir-foco:focus-visible {
+  outline: 2px solid #0B7EA3;
+  outline-offset: -2px;
+}
+@media (max-width: 900px) {
+  .direcao-ponto-grade {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .cabecalho {
+    gap: 10px !important;
+  }
+  .cabecalho-titulo {
+    min-width: 0 !important;
+  }
+  .cabecalho-titulo > span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pagina {
+    padding: 14px 14px 32px !important;
+    gap: 14px !important;
+  }
+  .dir-tab {
+    min-width: 0 !important;
+  }
+  .dir-cab {
+    display: none !important;
+  }
+  .dir-linha {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    padding: 14px !important;
+    gap: 8px 12px !important;
+  }
+  .dir-linha > .dir-larga {
+    grid-column: 1 / -1;
+  }
+  .dir-linha > [data-r]::before {
+    content: attr(data-r);
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: #5B6B70;
+    font-family: "Inter", system-ui, sans-serif;
+    margin-bottom: 2px;
+  }
+  .dir-acoes {
+    justify-content: flex-start !important;
+  }
+  .dir-h {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background-color: #fff;
+  }
+  .dir-barra > .dir-esp {
+    display: none;
+  }
+  .dir-of {
+    grid-template-columns: 40px minmax(0, 1fr) !important;
+  }
+  .dir-of > :not(:first-child) {
+    grid-column: 2;
+  }
+  .dir-of > :nth-child(3) {
+    justify-self: start;
+  }
+  .dir-hoje {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+  }
+  .dir-hoje > :first-child {
+    grid-column: 1 / -1;
+  }
+  .dir-hoje > .dir-acao {
+    grid-column: 1 / -1 !important;
+    justify-content: flex-start !important;
+  }
+  .dir-pres {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+  }
+  .dir-pres > :nth-child(2) {
+    grid-column: 1;
+  }
+}
+.dir-of:hover {
+  background-color: #EEF3F4 !important;
+}
+html[data-tema="escuro"] .dir-of:hover {
+  background-color: #22363E !important;
+}
+html[data-tema="escuro"] .dir-h {
+  background-color: #15252B;
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #rel-dir,
+  #rel-dir * {
+    visibility: visible;
+  }
+  #rel-dir {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0 !important;
+    box-shadow: none !important;
+    max-width: none !important;
+  }
+}
+</style>
+</helmet>
+<div class="estrutura d-grid colunas-236-minmax-0-1fr min-h-100vh">
+  <dc-import name="menu" navCls="{{ menuClasse }}" closeNav="{{ fecharMenu }}" perfilTitulo="Direção Escolar" perfilLinha="{{ escolaNome }}" menu="{{ menu }}" abrirNotif="{{ abrirNotif }}" notifAria="{{ notifAria }}" temNotif="{{ temNotif }}" notifN="{{ notifN }}" temConfig="{{ temConfig }}" abrirConfig="{{ abrirConfig }}" temSair="{{ temSair }}" sairConta="{{ sairConta }}"></dc-import>
+
+  <main class="min-w-0 d-flex eixo-column">
+    <dc-import name="cabecalho" espacamento="gap-12-16 p-10-28" blocoClasse="cabecalho-titulo min-w-220" trilha="{{ trilha }}" tituloClasse="" abrirMenu="{{ abrirMenu }}" titulo="{{ titulo }}" abrirNotif="{{ abrirNotif }}" notifAria="{{ notifAria }}" temNotif="{{ temNotif }}" notifN="{{ notifN }}"></dc-import>
+<sc-if value="{{ notifAberto }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharNotif }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-label="Notificações" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(440px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><h3 class="m-0 fs-17 flex-1">Notificações</h3><button onClick="{{ fecharNotif }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-12 rolagem-auto flex-1">
+      <sc-if value="{{ temVariasNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex justifica-flex-end"><button onClick="{{ lerTodasNotif }}" class="h-34 borda-0 fundo-transparent cor-0b7ea3 fs-13 fw-600 p-0-4 botao-texto">Marcar todas como lidas</button></div></sc-if>
+      <sc-if value="{{ semNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column alinha-center gap-6 p-32-12 texto-center"><b class="fs-15">Tudo em dia</b><span class="fs-13 cor-5b6b70">Nenhuma notificação nova.</span></div></sc-if>
+      <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="3">
+        <div class="raio-10 p-12-14 d-flex eixo-column gap-6 fundo-ffffff largura-fundo" style="border:1px solid var(--borda-dde6e8);border-left:4px solid {{ n.cor }}">
+          <b class="fs-14">{{ n.tit }}</b>
+          <span class="fs-13 cor-34464d lh-1p5">{{ n.txt }}</span>
+          <div class="d-flex quebra-wrap gap-8 mt-2"><sc-if value="{{ n.temAcao }}" hint-placeholder-val="{{ true }}"><button onClick="{{ n.go }}" class="h-36 borda-1-solid-0b7ea3 fundo-ffffff cor-08617e raio-8 p-0-12 fs-13 fw-600">{{ n.acao }}</button></sc-if><button onClick="{{ n.marcarLida }}" aria-label="{{ n.ariaLida }}" class="h-36 borda-cfdadd fundo-ffffff cor-34464d raio-8 p-0-12 fs-13 fw-600 botao-secundario">Marcar como lida</button></div>
+        </div>
+      </sc-for>
+    </div>
+  </aside>
+</sc-if>
+
+    <div class="pagina p-28 d-flex eixo-column gap-20 max-w-1280 w-100pc">
+<sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13 d-flex quebra-wrap alinha-center gap-8-14"><span class="flex-1 min-w-200">{{ erro }}</span><button onClick="{{ tentarDeNovo }}" class="h-34 borda-1-solid-b42318 fundo-ffffff cor-b42318 raio-8 p-0-12 fs-13 fw-600">Tentar de novo</button></div></sc-if>
+
+<sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-dde6e8 raio-12 p-24 texto-center cor-5b6b70 fs-14 lh-1p5 fundo-ffffff" style="background:var(--fundo-ffffff)">Entre com a conta da direção da escola para ver os oficineiros, as atividades e os relatórios.</div></sc-if>
+<sc-if value="{{ is.inicio }}" hint-placeholder-val="{{ true }}"><dc-import name="direcao-inicio" contexto="{{ contexto }}"></dc-import></sc-if>
+<sc-if value="{{ is.agenda }}" hint-placeholder-val="{{ false }}"><dc-import name="direcao-agenda" contexto="{{ contexto }}" memoria="{{ memoriaAgenda }}"></dc-import></sc-if>
+<sc-if value="{{ is.checkAtividades }}" hint-placeholder-val="{{ false }}"><dc-import name="direcao-check" contexto="{{ contexto }}" memoria="{{ memoriaCheck }}"></dc-import></sc-if>
+<sc-if value="{{ is.ponto }}" hint-placeholder-val="{{ false }}"><dc-import name="direcao-presenca" contexto="{{ contexto }}" memoria="{{ memoriaPonto }}"></dc-import></sc-if>
+<sc-if value="{{ is.relatorio }}" hint-placeholder-val="{{ false }}"><dc-import name="direcao-relatorio" contexto="{{ contexto }}"></dc-import></sc-if>
+
+    </div>
+  </main>
+</div>
+
+<sc-if value="{{ detalheGradeAberto }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharDetalheGrade }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-20"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="dir-ag-tit" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-21 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(460px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">Detalhes da atividade · somente visualização</span><h3 id="dir-ag-tit" tabindex="-1" class="m-0 fs-17 contorno-none">{{ detalheGrade.titulo }}</h3></div><button onClick="{{ fecharDetalheGrade }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
+      <div class="d-flex eixo-column gap-4 raio-10 p-12-14" style="border-left:4px solid {{ detalheGrade.cor }};background:{{ detalheGrade.fundo }}"><b class="fs-15">{{ detalheGrade.quando }}</b><span class="fs-13 fw-600" style="color:{{ detalheGrade.cor }}">{{ detalheGrade.tipo }}</span><sc-if value="{{ detalheGrade.personalizada }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-7a4e0b">Alterada nesta semana</span></sc-if></div>
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ detalheGrade.itens }}" as="item" hint-placeholder-count="5"><dt class="cor-5b6b70 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
+    </div>
+    <div class="borda-t-dde6e8 d-flex justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharDetalheGrade }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Fechar</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ atividadeAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharAtividade }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-20"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="dir-det-tit" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-21 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">{{ atividade.oficineiro }}</span><h3 id="dir-det-tit" tabindex="-1" class="m-0 fs-17">{{ atividade.titulo }}</h3></div><button onClick="{{ fecharAtividade }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <div class="d-flex quebra-wrap gap-6"><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ atividade.situacaoCor }};background:{{ atividade.situacaoFundo }}">{{ atividade.situacao }}</span><sc-if value="{{ atividade.temCheck }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ atividade.checkCor }};background:{{ atividade.checkFundo }}">{{ atividade.check }}</span></sc-if></div>
+      <sc-if value="{{ atividade.temMotivoCheck }}" hint-placeholder-val="{{ false }}"><div class="fundo-fbedeb cor-7a1f17 raio-10 p-10-12 fs-13 lh-1p5">{{ atividade.motivoCheck }}</div></sc-if>
+      <sc-if value="{{ atividade.temHistorico }}" hint-placeholder-val="{{ false }}">
+        <section aria-label="Histórico do check" class="d-flex eixo-column gap-0 borda-dde6e8 raio-10 p-12-14">
+          <span class="fs-12 cor-5b6b70 fw-600 mb-6">Histórico do check</span>
+          <ol class="lista-none m-0 p-0 d-flex eixo-column gap-10">
+            <sc-for list="{{ atividade.historico }}" as="evento" hint-placeholder-count="3">
+              <li class="d-grid colunas-10-minmax-0-1fr gap-2-10">
+                <span aria-hidden="true" class="w-10 h-10 raio-5 mt-4 largura-fundo" style="background:{{ evento.cor }}"></span>
+                <b class="fs-13" style="color:{{ evento.cor }}">{{ evento.titulo }}</b>
+                <span class="col-2 fs-12 cor-5b6b70 num-tabular-nums">{{ evento.quando }}</span>
+                <sc-if value="{{ evento.temTexto }}" hint-placeholder-val="{{ true }}"><span class="col-2 fs-13 cor-34464d lh-1p45 quebra-palavra-anywhere">{{ evento.texto }}</span></sc-if>
+              </li>
+            </sc-for>
+          </ol>
+        </section>
+      </sc-if>
+      <sc-if value="{{ atividade.semHistorico }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70">O histórico do check fica disponível depois que o arquivo 41_direcao_historico.sql for rodado no Supabase.</span></sc-if>
+      <dl class="m-0 d-grid colunas-minmax-0-1fr-minmax-0-1fr gap-12-16">
+        <sc-for list="{{ atividade.itens }}" as="item" hint-placeholder-count="6"><div class="d-flex eixo-column gap-2 min-w-0" style="grid-column:{{ item.coluna }}"><dt class="fs-12 cor-5b6b70 fw-600">{{ item.rotulo }}</dt><dd class="m-0 fs-14 lh-1p5 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></div></sc-for>
+      </dl>
+    </div>
+    <sc-if value="{{ atividade.temAcoes }}" hint-placeholder-val="{{ false }}">
+      <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+        <sc-if value="{{ atividade.podeContestar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ atividade.contestar }}" disabled="{{ salvando }}" class="h-40 borda-cfdadd fundo-ffffff cor-b42318 raio-8 p-0-14 fs-14 fw-600 botao-secundario">Contestar</button></sc-if>
+        <button onClick="{{ atividade.confirmar }}" disabled="{{ salvando }}" class="h-40 borda-0 fundo-23773a cor-fff raio-8 p-0-16 fs-14 fw-600">{{ atividade.confirmarTexto }}</button>
+      </div>
+    </sc-if>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ presencaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharPresenca }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-20"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="dir-pres-tit" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-21 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">Presença na escola</span><h3 id="dir-pres-tit" tabindex="-1" class="m-0 fs-17 contorno-none">{{ presenca.nome }}</h3></div><button onClick="{{ fecharPresenca }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-16-20 d-flex eixo-column gap-12 rolagem-auto flex-1">
+      <div class="d-flex quebra-wrap gap-10 alinha-center"><div role="group" aria-label="Mês" class="d-flex gap-4 fundo-e3ebed p-4 raio-10 segmentado"><sc-for list="{{ presencaCiclos }}" as="ciclo" hint-placeholder-count="2"><button onClick="{{ ciclo.escolher }}" aria-pressed="{{ ciclo.ativo }}" class="borda-0 raio-7 p-7-12 fs-13 fw-600 espaco-nowrap {{ ciclo.classe }}" style="background:{{ ciclo.fundo }};color:{{ ciclo.cor }}">{{ ciclo.rotulo }}</button></sc-for></div><span role="status" class="fs-13 cor-34464d">{{ presenca.resumo }}</span></div>
+      <sc-if value="{{ presenca.vazio }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-12-0 fs-13 cor-5b6b70">Nenhum dia com presença ou atividade prevista neste mês.</p></sc-if>
+      <div role="list" aria-label="Dias do mês" class="d-flex eixo-column">
+        <sc-for list="{{ presenca.linhas }}" as="dia" hint-placeholder-count="6">
+          <div role="listitem" class="dir-pres d-grid colunas-92-minmax-0-1fr-auto gap-2-12 alinha-center p-10-0 borda-t-e9eff1 fs-13">
+            <b class="num-tabular-nums">{{ dia.dia }}</b>
+            <span class="cor-34464d num-tabular-nums">{{ dia.horario }}<sc-if value="{{ dia.horas }}" hint-placeholder-val="{{ false }}"><span class="cor-5b6b70"> · {{ dia.horas }}</span></sc-if></span>
+            <span class="justifica-si-end fs-12 fw-600 p-3-8 raio-999 espaco-nowrap" style="color:{{ dia.situacaoCor }};background:{{ dia.situacaoFundo }}">{{ dia.situacao }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <p class="m-0 fs-12 cor-5b6b70 lh-1p5">Horas válidas seguem as regras do relatório mensal: limite de 8h por dia e excedentes só com autorização da coordenação.</p>
+    </div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ contestando }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharContestacao }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-30"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="dir-cont-tit" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-31 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(460px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">Contestar atividade</span><h3 id="dir-cont-tit" class="m-0 fs-17">{{ contestacao.turma }} · {{ contestacao.data }} · {{ contestacao.hora }}</h3></div><button onClick="{{ fecharContestacao }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 flex-1 rolagem-auto">
+      <div class="fs-13 cor-34464d">{{ contestacao.oficineiro }} · registrou como <b>{{ contestacao.situacao }}</b></div>
+      <div role="radiogroup" aria-label="Motivo" class="d-flex eixo-column gap-8"><span class="fs-12 cor-5b6b70 fw-600">Motivo *</span><div class="d-flex eixo-column gap-6"><sc-for list="{{ motivosContestacao }}" as="motivo" hint-placeholder-count="4"><button role="radio" aria-checked="{{ motivo.ativo }}" onClick="{{ motivo.escolher }}" class="texto-left raio-8 p-9-12 fs-13 fw-500 botao-opcao {{ motivo.classe }}" style="border:1.5px solid {{ motivo.borda }};background:{{ motivo.fundo }};color:{{ motivo.cor }}">{{ motivo.rotulo }}</button></sc-for></div></div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Comentário para o oficineiro *</span><textarea id="dir-cont-txt" rows="4" value="{{ contestacaoTexto }}" onChange="{{ escreverContestacao }}" maxlength="400" placeholder="ex.: a turma estava em avaliação neste horário" class="borda-cfdadd raio-8 p-10-12 fs-14 redim-vertical"></textarea><span class="fs-12 cor-5b6b70">O oficineiro recebe o motivo e o comentário e pode corrigir o registro.</span></label>
+      <sc-if value="{{ temErroContestacao }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroContestacao }}</div></sc-if>
+    </div>
+    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharContestacao }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 cor-1a2b33 botao-secundario">Cancelar</button><button onClick="{{ enviarContestacao }}" disabled="{{ salvando }}" class="h-40 borda-0 fundo-b42318 cor-fff raio-8 p-0-16 fs-14 fw-600">Enviar contestação</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ relatorioAberto }}" hint-placeholder-val="{{ false }}">
+  <div role="dialog" aria-modal="true" aria-label="{{ relatorio.rotulo }}" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p72 z-40 rolagem-auto pb-40">
+    <div class="pos-sticky topo-0 d-flex quebra-wrap gap-10 alinha-center p-14-24 fundo-13252c cor-fff">
+      <b class="flex-1 min-w-200 fs-15">Documentos do ciclo · {{ relatorio.nome }} · {{ relatorio.ciclo }}</b>
+      <button onClick="{{ fecharRelatorio }}" class="h-38 borda-1-solid-rgba-255-255-255-0p3 fundo-transparent cor-fff raio-8 p-0-14 fs-14 botao-texto">Fechar</button>
+      <sc-if value="{{ relatorio.podeDecidir }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ abrirDevolver }}" aria-expanded="{{ devolvendoExpandido }}" class="h-38 borda-1-solid-rgba-255-255-255-0p3 fundo-transparent cor-fff raio-8 p-0-14 fs-14 botao-texto">Devolver ao oficineiro</button>
+        <button onClick="{{ relatorio.aprovar }}" disabled="{{ salvando }}" class="h-38 borda-0 fundo-23773a cor-fff raio-8 p-0-16 fs-14 fw-600">Aprovar e enviar à coordenação</button>
+      </sc-if>
+      <button onClick="{{ imprimir }}" class="h-38 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Imprimir</button>
+    </div>
+    <div role="tablist" aria-label="Documento" class="d-flex gap-4 fundo-rgba-255-255-255-0p12 p-4 raio-10 w-fit-content m-16-auto-0 quebra-wrap largura-fundo" style="max-width:calc(100% - 32px)"><button role="tab" aria-selected="{{ abaPresenca }}" onClick="{{ verAbaPresenca }}" class="min-h-36 borda-0 raio-8 p-0-14 fs-13 fw-700 botao-texto {{ abaPresencaClasse }}" style="background:{{ abaPresencaFundo }};color:{{ abaPresencaCor }}">Relatório de Presença na Escola</button><button role="tab" aria-selected="{{ abaAtividades }}" onClick="{{ verAbaAtividades }}" class="min-h-36 borda-0 raio-8 p-0-14 fs-13 fw-700 botao-texto {{ abaAtividadesClasse }}" style="background:{{ abaAtividadesFundo }};color:{{ abaAtividadesCor }}">Relatório de Atividades</button></div>
+    <sc-if value="{{ relatorio.temAviso }}" hint-placeholder-val="{{ false }}">
+      <div class="m-16-auto-0 fundo-faefd9 cor-5e4a26 raio-10 p-12-16 fs-13 lh-1p5 largura-fundo" style="max-width:calc(210mm)">{{ relatorio.aviso }}</div>
+    </sc-if>
+    <sc-if value="{{ devolvendo }}" hint-placeholder-val="{{ false }}">
+      <div class="m-16-auto-0 fundo-fbedeb raio-10 p-14-16 d-flex eixo-column gap-8 largura-fundo" style="max-width:calc(210mm)">
+        <div class="d-flex quebra-wrap gap-10 alinha-center">
+          <input id="dir-dev-txt" aria-label="Motivo da devolução" value="{{ devolucaoTexto }}" onChange="{{ escreverDevolucao }}" maxlength="500" placeholder="Motivo da devolução (obrigatório)" class="flex-1 min-w-240 h-38 borda-bee9f5 raio-8 p-0-12 fs-14"></input>
+          <button onClick="{{ relatorio.devolver }}" disabled="{{ salvando }}" class="h-38 borda-0 fundo-b42318 cor-fff raio-8 p-0-14 fs-14 fw-600">Confirmar devolução</button>
+        </div>
+        <sc-if value="{{ temErroDevolucao }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-7a1f17">{{ erroDevolucao }}</span></sc-if>
+      </div>
+    </sc-if>
+    <div id="rel-dir" class="w-210mm min-h-297mm m-20-auto-0 fundo-fefefe sombra-0-12-40-rgba-0-0-0-0p35 p-11mm-12mm cor-1a2b34 fs-9pt lh-1p3 d-flex eixo-column gap-0 largura-fundo" style="max-width:calc(100% - 32px);font-family:Arial,Helvetica,sans-serif">
+      <div class="d-flex alinha-center gap-12 borda-b-2-solid-0b7ea4 pb-8">
+        <img src="../public/brand/logo-cliente.png" alt="{{ cliente.orgao }}" class="w-120 h-46 obj-ajuste-contain obj-pos-left-center"></img>
+        <div class="flex-1 texto-center d-flex eixo-column gap-2"><b class="ls-0p3" style="font-size:12.5pt">{{ cliente.orgaoTitulo }}</b><b class="fs-10pt cor-08617f">{{ documento.titulo }}</b></div>
+        <div class="w-120 h-46 d-flex alinha-center justifica-center gap-7"><svg role="img" aria-label="Oficineiro+" viewBox="0 0 31 31" width="30" height="30"><rect x="0" y="0" width="14" height="14" rx="3" fill="#DD2287"></rect><rect x="17" y="0" width="14" height="14" rx="3" fill="#6C60E7"></rect><rect x="0" y="17" width="14" height="14" rx="3" fill="#3ECDF3"></rect><rect x="17" y="17" width="14" height="14" rx="3" fill="#35E47D"></rect></svg><span class="fs-13pt fw-800 ls-n0p2 cor-1a2b34">Oficineiro<b class="cor-0b7ea4">+</b></span></div>
+      </div>
+      <div class="d-grid colunas-2fr-1fr borda-1-solid-9fb0b6 mt-8">
+        <div class="p-4-6 borda-b-1-solid-dde6e9 borda-d-1-solid-dde6e9"><small class="cor-5b6b71 d-block fs-7pt caixa-uppercase">Oficineiro(a)</small>{{ documento.nome }}</div>
+        <div class="p-4-6 borda-b-1-solid-dde6e9"><small class="cor-5b6b71 d-block fs-7pt caixa-uppercase">{{ documento.identificacaoRotulo }}</small>{{ documento.identificacao }}</div>
+        <div class="p-4-6 borda-d-1-solid-dde6e9"><small class="cor-5b6b71 d-block fs-7pt caixa-uppercase">Escola</small>{{ documento.escola }}</div>
+        <div class="p-4-6"><small class="cor-5b6b71 d-block fs-7pt caixa-uppercase">Oficina</small>{{ documento.oficina }}</div>
+      </div>
+      <sc-if value="{{ abaPresenca }}" hint-placeholder-val="{{ true }}">
+        <table class="w-100pc colapso-collapse mt-8">
+          <thead><tr class="fundo-e3ebee"><th class="w-9pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Data</th><th class="w-6pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Dia</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Entrada</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Saída almoço</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Volta almoço</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Saída</th><th class="w-9pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Total</th><th class="w-30pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase" style="font-size:7.6pt">Observação</th></tr></thead>
+          <tbody><sc-for list="{{ documento.linhas }}" as="r" hint-placeholder-count="8"><tr class="quebra-dentro-avoid"><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ r.data }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ r.dia }}</td><td colspan="6" rowspan="{{ r.rs }}" class="borda-1-solid-9fb0b6 p-2p4-4 texto-center fundo-f2f5f6 cor-5b6b71 fw-bold" style="display:{{ r.mostraM }}">{{ r.offTxt }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ r.mostraN }}">{{ r.c1 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ r.mostraN }}">{{ r.c2 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ r.mostraN }}">{{ r.c3 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ r.mostraN }}">{{ r.c4 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ r.mostraN }}">{{ r.total }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-left cor-3a4b52" style="display:{{ r.mostraN }};font-size:7.6pt">{{ r.obs }}</td></tr></sc-for></tbody>
+          <tfoot><tr class="fundo-e3ebee fw-bold"><td colspan="6" class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">TOTAL DE HORAS CONTABILIZADAS NO CICLO</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ documento.total }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-left cor-3a4b52" style="font-size:7.6pt">Limite de 8h por dia, sem contar o almoço</td></tr></tfoot>
+        </table>
+      </sc-if>
+      <div class="d-grid colunas-repeat-5-1fr gap-6 mt-8 quebra-dentro-avoid"><sc-for list="{{ documento.resumo }}" as="k" hint-placeholder-count="5"><div class="borda-1-solid-9fb0b6 p-4-6"><small class="d-block cor-5b6b71 fs-7pt caixa-uppercase">{{ k.l }}</small><b class="fs-11pt">{{ k.v }}</b></div></sc-for></div>
+      <sc-if value="{{ abaAtividades }}" hint-placeholder-val="{{ false }}">
+        <table class="w-100pc colapso-collapse mt-8">
+          <thead><tr class="fundo-e3ebee"><th class="w-7pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Data</th><th class="w-10pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Horário</th><th class="w-8pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Turma</th><th class="w-20pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Atividade agendada</th><th class="w-10pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Situação</th><th class="w-7pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Estud.</th><th class="borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase" style="font-size:7.3pt">Registro: como foi feita</th></tr></thead>
+          <tbody><sc-for list="{{ documento.atividades }}" as="r" hint-placeholder-count="6"><tr class="quebra-dentro-avoid"><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top" style="font-size:7.8pt">{{ r.data }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top espaco-nowrap" style="font-size:7.8pt">{{ r.horario }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top texto-center" style="font-size:7.8pt">{{ r.turma }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top" style="font-size:7.8pt">{{ r.atividade }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top fw-bold espaco-nowrap" style="font-size:7.8pt;color:{{ r.sitCor }}">{{ r.sit }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top texto-center" style="font-size:7.8pt">{{ r.estud }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top" style="font-size:7.8pt">{{ r.registro }}</td></tr></sc-for></tbody>
+        </table>
+        <sc-if value="{{ documento.semAtividades }}" hint-placeholder-val="{{ false }}"><span class="mt-6 cor-5b6b71" style="font-size:8.5pt">Nenhuma atividade agendada neste ciclo.</span></sc-if>
+      </sc-if>
+      <p class="m-8-0-0 fs-8pt cor-3a4b52">{{ declaracao }}</p>
+      <div class="d-grid colunas-repeat-3-1fr gap-14 mt-24 quebra-dentro-avoid"><sc-for list="{{ documento.assinaturas }}" as="a" hint-placeholder-count="3"><div class="texto-center fs-8pt d-flex eixo-column gap-2"><div class="borda-t-1-solid-1a2b34 pt-3 fw-bold">{{ a.papel }}</div><sc-if value="{{ a.temNome }}" hint-placeholder-val="{{ true }}"><span>{{ a.nome }}</span></sc-if><sc-if value="{{ a.temStamp }}" hint-placeholder-val="{{ false }}"><span class="cor-08617f" style="font-size:7.2pt">{{ a.stamp }}</span></sc-if></div></sc-for></div>
+      <div class="mt-10 borda-t-1-solid-dde6e9 pt-4 fs-7pt cor-5b6b71 d-flex justifica-space-between gap-12 quebra-wrap"><span>{{ documento.gerado }}</span><span>{{ documento.codigo }}</span></div>
+    </div>
+  </div>
+</sc-if>
+
+<div class="sr-only" role="status" aria-live="polite">{{ aviso }}</div>
+<sc-if value="{{ aviso }}" hint-placeholder-val="{{ false }}">
+  <div aria-hidden="true" class="pos-fixed base-24 esquerda-50pc w-max-content fundo-13252c cor-fff p-12-18 raio-10 fs-14 z-60 sombra-0-8-24-rgba-0-0-0-0p2 largura-fundo" style="transform:translateX(-50%);max-width:calc(100% - 32px)">{{ aviso }}</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const {
+  TIPOS,
+  WDL: DIAS,
+  dataDe,
+  hojeIso,
+  agoraMin,
+  minDe,
+  hmDe,
+  hmTs,
+  dmTs,
+  dmIso,
+  cicloIniIso,
+  cicloFimIso,
+  mesTxt,
+  segDe,
+  anoTxt,
+  numero,
+  msgErro,
+  prazoDe
+} = Base;
+const REGISTRADAS = ['Realizada', 'Realizada parcialmente', 'Não realizada'];
+const MENU = [
+  ['inicio', 'Início'],
+  ['agenda', 'Agendas dos oficineiros'],
+  ['check', 'Check de atividades'],
+  ['rel', 'Relatório mensal'],
+  ['ponto', 'Presença na Escola']
+];
+const TITULOS = {
+  inicio: 'Início',
+  agenda: 'Agendas dos oficineiros',
+  check: 'Check de atividades',
+  rel: 'Relatório mensal de atividades',
+  ponto: 'Presença na Escola'
+};
+const MOTIVOS_CONTESTACAO = [
+  'A atividade não aconteceu',
+  'Horário diferente do registrado',
+  'Turma diferente',
+  'Número de presentes divergente'
+];
+const ENGAJAMENTO = ['', 'Muito baixo', 'Baixo', 'Médio', 'Alto', 'Muito alto'];
+const DECLARACAO_ATIVIDADES =
+  'Declaro que as atividades acima foram realizadas conforme registrado, nas datas e turmas indicadas.';
+const DECLARACAO_PRESENCA =
+  'Declaro que os horários acima correspondem às minhas atividades presenciais na escola indicada. Todos os registros foram confirmados por geolocalização dentro do raio da escola, ou ajustados por justificativa aprovada pela direção da escola.';
+const cicloDe = (iso, meses) => {
+  const ciclo = Base.cicloComp(dataDe(iso));
+  return Base.iso(new Date(ciclo.getFullYear(), ciclo.getMonth() + (meses || 0), 1));
+};
+const mesCurto = iso => Base.MESES[Number(String(iso).slice(5, 7)) - 1] + '/' + String(iso).slice(0, 4);
+const turmaDaGrade = g => (g.tipo === 'F' || g.ano == null ? 'Professores' : anoTxt(g.ano) + ' · Turma ' + g.turma);
+const primeiroNome = nome => String(nome || '').split(' ')[0];
+const temposDeAula = (inicio, fim) => Math.max(1, Math.round((minDe(fim) - minDe(inicio)) / 50));
+const minutosValidos = p => (!p.fim || (p.pausa_inicio && !p.pausa_fim) ? 0 : Math.min(p.trabalhado_min || 0, 480));
+const situacaoDoRegistro = a =>
+  a.revisao_status === 'anulado'
+    ? ['Anulada pela coordenação', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)']
+    : a.situacao === 'Realizada'
+      ? ['Registrada', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)']
+      : a.situacao === 'Realizada parcialmente'
+        ? ['Realizada parcialmente', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)']
+        : a.situacao === 'Não realizada'
+          ? ['Não realizada' + (a.motivo ? ' · ' + a.motivo : ''), 'var(--texto-b42318)', 'var(--fundo-fbedeb)']
+          : [a.situacao || 'Pendente de registro', 'var(--texto-9a6212)', 'var(--fundo-faefd9)'];
+const pendenteDeCheck = a =>
+  REGISTRADAS.includes(a.situacao) &&
+  a.revisao_status !== 'anulado' &&
+  (!a.check_direcao || a.check_direcao === 'corrigida');
+const ROTULOS_CHECK = {
+  ok: ['Confirmada', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)'],
+  ciente: ['Ciente', 'var(--texto-34464d)', 'var(--fundo-e8eef0)'],
+  contestada: ['Contestada · aguardando oficineiro', 'var(--texto-b42318)', 'var(--fundo-fbedeb)'],
+  corrigida: ['Corrigida pelo oficineiro · confirme de novo', 'var(--texto-1a3f9c)', 'var(--fundo-eff3fd)']
+};
+const diasUteisAte = (de, ate) => {
+  let dias = 0;
+  for (let d = Base.add(dataDe(de), 1); Base.iso(d) <= ate; d = Base.add(d, 1)) if (Base.letivo(d)) dias++;
+  return dias;
+};
+const SITUACOES_PRESENCA = {
+  ok: ['No raio da escola', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)'],
+  'Fora do raio': ['Fora do raio', 'var(--texto-9a6212)', 'var(--fundo-faefd9)'],
+  'Sem encerramento': ['Sem encerramento', 'var(--texto-9a6212)', 'var(--fundo-faefd9)'],
+  'Enviado sem internet': ['Enviado sem internet', 'var(--texto-1a3f9c)', 'var(--fundo-eff3fd)'],
+  'Sem localização': ['Sem localização', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)'],
+  aberta: ['Na escola agora', 'var(--texto-1a3f9c)', 'var(--fundo-eff3fd)'],
+  falta: ['Sem presença', 'var(--texto-b42318)', 'var(--fundo-fbedeb)']
+};
+const EVENTOS_HISTORICO = {
+  contestada: ['Contestada pela direção', 'var(--texto-b42318)'],
+  corrigida: ['Corrigida pelo oficineiro', 'var(--texto-1a3f9c)'],
+  confirmada: ['Confirmada pela direção', 'var(--texto-23773a)']
+};
+const atividadesPrevistas = (grade, semanas, oficineiroId, inicio, fim, hoje, agora) => {
+  const previstas = [];
+  if (!inicio || !fim || inicio > fim) return previstas;
+  for (let d = dataDe(inicio); Base.iso(d) <= fim; d = Base.add(d, 1)) {
+    const data = Base.iso(d);
+    if (data > hoje) break;
+    if (!Base.letivo(d)) continue;
+    const diaSemana = d.getDay(),
+      segunda = segDe(data);
+    grade.forEach(aula => {
+      if (oficineiroId && aula.oficineiro_id !== oficineiroId) return;
+      if (aula.dia_semana !== diaSemana || Number(aula.ano_letivo) !== d.getFullYear()) return;
+      if (aula.criado_em && String(aula.criado_em).slice(0, 10) > data) return;
+      if (data === hoje && minDe(aula.fim) > agora) return;
+      const daSemana = semanas.find(x => x.grade_aula_id === aula.id && x.semana === segunda);
+      previstas.push({ aula, data, tipo: (daSemana && daSemana.tipo) || aula.tipo });
+    });
+  }
+  return previstas;
+};
+const focar = id =>
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.focus();
+  }, 30);
+class Component extends DCLogic {
+  state = {
+    menuAberto: false,
+    tela: 'inicio',
+    aviso: '',
+    logado: false,
+    carregando: false,
+    erro: '',
+    notifAberto: false,
+    acesso: null,
+    escola: null,
+    equipe: [],
+    nomes: [],
+    contratadas: [],
+    presencas: [],
+    atividades: [],
+    grade: [],
+    semanas: [],
+    envios: [],
+    historico: [],
+    relatoriosCicloAnterior: [],
+    relatorios: [],
+    relatorioCiclo: '',
+    relatoriosOcupado: false,
+    relatorioDados: null,
+    presencaLinhas: [],
+    justificativas: [],
+    presencaAtualizadaEm: null,
+    detalheGrade: null,
+    atividadeAberta: null,
+    presencaOficineiro: null,
+    presencaCiclo: 'mes',
+    contestacao: null,
+    contestacaoMotivo: MOTIVOS_CONTESTACAO[0],
+    contestacaoTexto: '',
+    contestacaoErro: '',
+    relatorioAberto: null,
+    relatorioAba: 'presenca',
+    devolvendo: false,
+    devolucaoTexto: '',
+    devolucaoErro: '',
+    salvando: false
+  };
+  memoria = { agenda: {}, check: {}, ponto: {} };
+  componentDidMount() {
+    this.aoTeclar = e => {
+      if (e.key !== 'Escape') return;
+      const s = this.state;
+      if (s.notifAberto) return this.setState({ notifAberto: false });
+      if (s.contestacao) return this.setState({ contestacao: null, contestacaoErro: '' });
+      if (s.presencaOficineiro) return this.fecharPresenca();
+      if (s.atividadeAberta) return this.fecharAtividade();
+      if (s.detalheGrade) return this.setState({ detalheGrade: null });
+      if (s.relatorioAberto) return this.setState({ relatorioAberto: null, devolvendo: false });
+    };
+    document.addEventListener('keydown', this.aoTeclar);
+    this.relogio = setInterval(() => this.forceUpdate(), 60000);
+    this.carregarDados();
+  }
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.aoTeclar);
+    clearInterval(this.relogio);
+  }
+  estiloOpcao(ativa) {
+    return ativa
+      ? { borda: '#0B7EA3', fundo: 'var(--fundo-e4f5fa)', cor: 'var(--texto-08617e)', classe: '' }
+      : {
+          borda: 'var(--borda-cfdadd)',
+          fundo: 'var(--fundo-ffffff)',
+          cor: 'var(--texto-1a2b33)',
+          classe: 'fundo-ffffff botao-secundario'
+        };
+  }
+  avisar(texto) {
+    this.setState({ aviso: texto });
+    clearTimeout(this.avisoTempo);
+    this.avisoTempo = setTimeout(() => this.setState({ aviso: '' }), 2600);
+  }
+  daEscola(escolaId) {
+    return registro => escolaId == null || registro.escola_id == null || registro.escola_id === escolaId;
+  }
+  async carregarDados() {
+    const A = window.FSM_AUTH;
+    if (!A || !A.logado || !A.logado()) return;
+    if (!A.pessoasDaEscola || !A.relatoriosEscola) {
+      this.setState({ logado: true, erro: 'Esta versão do site está desatualizada. Gere e publique o site de novo.' });
+      return;
+    }
+    this.setState({ logado: true, carregando: true, erro: '' });
+    try {
+      const acesso = await A.meuAcesso();
+      const hoje = hojeIso(),
+        ano = Number(hoje.slice(0, 4)),
+        inicio = cicloIniIso(cicloDe(hoje, -1));
+      const [escolas, equipe, presencas, atividades, grade, semanas, envios, historico, nomes, contratadas] =
+        await Promise.all([
+          A.escolas(),
+          A.pessoasDaEscola(),
+          A.presencasRede(inicio, hoje),
+          A.aulasRede(inicio, hoje),
+          A.gradeRede(ano),
+          A.semanasGrade(ano).catch(() => []),
+          A.envioDaGrade(ano).catch(() => []),
+          this.lerHistorico(inicio),
+          A.nomesDaEscola ? A.nomesDaEscola().catch(() => []) : [],
+          A.contratadasEscola ? A.contratadasEscola().catch(() => []) : []
+        ]);
+      const escola = (escolas || []).find(e => e.id === (acesso && acesso.escola_id)) || null;
+      const minha = acesso ? this.daEscola(acesso.escola_id) : () => true;
+      this.setState(
+        {
+          acesso: acesso || {},
+          escola,
+          equipe: (equipe || []).filter(minha),
+          presencas: (presencas || []).filter(minha),
+          atividades: (atividades || []).filter(minha),
+          grade: (grade || []).filter(minha),
+          semanas: semanas || [],
+          envios: envios || [],
+          historico,
+          nomes: nomes || [],
+          contratadas: contratadas || [],
+          carregando: false,
+          relatorioCiclo: this.state.relatorioCiclo || cicloDe(hoje, -1)
+        },
+        () => {
+          this.carregarRelatorios(this.state.relatorioCiclo, true);
+          this.carregarPresenca();
+        }
+      );
+    } catch (x) {
+      this.setState({ carregando: false, erro: msgErro(x, 'Não foi possível carregar os dados da escola.') });
+    }
+  }
+  lerHistorico(desde) {
+    const A = window.FSM_AUTH;
+    return A && A.historicoCheck ? A.historicoCheck(desde).catch(() => null) : Promise.resolve(null);
+  }
+  async recarregarAtividades() {
+    const A = window.FSM_AUTH,
+      hoje = hojeIso(),
+      inicio = cicloIniIso(cicloDe(hoje, -1)),
+      minha = this.daEscola((this.state.acesso || {}).escola_id);
+    try {
+      const [presencas, atividades, historico] = await Promise.all([
+        A.presencasRede(inicio, hoje),
+        A.aulasRede(inicio, hoje),
+        this.lerHistorico(inicio)
+      ]);
+      this.setState({
+        presencas: (presencas || []).filter(minha),
+        atividades: (atividades || []).filter(minha),
+        historico
+      });
+    } catch (x) {
+      this.setState({ erro: msgErro(x, 'Não foi possível atualizar as atividades.') });
+    }
+  }
+  async carregarRelatorios(ciclo, tambemAnterior) {
+    const A = window.FSM_AUTH,
+      hoje = hojeIso(),
+      anterior = cicloDe(hoje, -1),
+      pedido = ciclo || this.state.relatorioCiclo || anterior;
+    this.setState({ relatoriosOcupado: true });
+    try {
+      const minha = this.daEscola((this.state.acesso || {}).escola_id);
+      let dados = null;
+      if (pedido < anterior) {
+        const fim = Base.iso(Base.cicloFim(dataDe(pedido), 'mensal')),
+          inicio = Base.iso(Base.cicloIni(dataDe(pedido), 'dia21')),
+          ano = Number(pedido.slice(0, 4)),
+          mesmoAno = ano === Number(hoje.slice(0, 4));
+        const [presencas, atividades, grade, semanas] = await Promise.all([
+          A.presencasRede(inicio, fim),
+          A.aulasRede(inicio, fim),
+          mesmoAno ? Promise.resolve(null) : A.gradeRede(ano),
+          mesmoAno ? Promise.resolve(null) : A.semanasGrade(ano).catch(() => [])
+        ]);
+        dados = {
+          ciclo: pedido,
+          presencas: (presencas || []).filter(minha),
+          atividades: (atividades || []).filter(minha),
+          grade: grade ? grade.filter(minha) : null,
+          semanas
+        };
+      }
+      const [lista, listaAnterior] = await Promise.all([
+        A.relatoriosEscola(pedido),
+        tambemAnterior && pedido !== anterior ? A.relatoriosEscola(anterior) : Promise.resolve(null)
+      ]);
+      if ((this.state.relatorioCiclo || anterior) !== pedido) return;
+      this.setState({
+        relatorios: lista || [],
+        relatorioDados: dados,
+        relatoriosOcupado: false,
+        ...(pedido === anterior
+          ? { relatoriosCicloAnterior: lista || [] }
+          : listaAnterior
+            ? { relatoriosCicloAnterior: listaAnterior }
+            : {})
+      });
+    } catch (x) {
+      const semFuncao = /relatorios_escola|function|PGRST202/i.test(String((x && x.message) || ''));
+      this.setState({
+        relatoriosOcupado: false,
+        erro: semFuncao
+          ? 'Os relatórios mensais ainda não estão disponíveis no banco. Rode o arquivo 40_direcao_escolar.sql no Supabase.'
+          : msgErro(x, 'Não foi possível carregar os relatórios.')
+      });
+    }
+  }
+  async carregarPresenca() {
+    const A = window.FSM_AUTH;
+    if (!A || !A.painelPresenca) return;
+    try {
+      const [linhas, justificativas] = await Promise.all([
+        A.painelPresenca(),
+        A.relatorioJustificativas().catch(() => A.ajustesPresenca())
+      ]);
+      this.setState({
+        presencaLinhas: linhas || [],
+        justificativas: justificativas || [],
+        presencaAtualizadaEm: new Date()
+      });
+    } catch (x) {
+      this.setState({ erro: msgErro(x, 'Não foi possível carregar a presença de hoje.') });
+    }
+  }
+  async confirmarAtividade(id) {
+    if (this.state.salvando) return;
+    this.setState({ salvando: true });
+    try {
+      await window.FSM_AUTH.conferirAula(id, true);
+      this.setState(
+        {
+          salvando: false,
+          atividadeAberta: null,
+          atividades: this.state.atividades.map(a =>
+            a.id === id ? { ...a, check_direcao: 'ok', check_motivo: null } : a
+          )
+        },
+        () => {
+          this.avisar('Atividade confirmada');
+          this.recarregarAtividades();
+          this.carregarRelatorios(this.state.relatorioCiclo, true);
+        }
+      );
+    } catch (x) {
+      this.setState({ salvando: false });
+      this.avisar(msgErro(x, 'Não foi possível confirmar a atividade.'));
+    }
+  }
+  async enviarContestacao() {
+    const s = this.state,
+      contestacao = s.contestacao,
+      texto = String(s.contestacaoTexto || '').trim();
+    if (!contestacao || s.salvando) return;
+    if (texto.length < 5) {
+      this.setState({ contestacaoErro: 'Escreva um comentário para o oficineiro (pelo menos 5 letras).' }, () => {
+        const el = document.getElementById('dir-cont-txt');
+        if (el) el.focus();
+      });
+      return;
+    }
+    this.setState({ salvando: true, contestacaoErro: '' });
+    try {
+      await window.FSM_AUTH.conferirAula(contestacao.id, false, (s.contestacaoMotivo + ' · ' + texto).slice(0, 500));
+      this.setState({ salvando: false, contestacao: null, contestacaoTexto: '', atividadeAberta: null }, () => {
+        this.avisar('Contestação enviada ao oficineiro');
+        this.recarregarAtividades();
+        this.carregarRelatorios(this.state.relatorioCiclo, true);
+      });
+    } catch (x) {
+      this.setState({ salvando: false, contestacaoErro: msgErro(x, 'Não foi possível enviar a contestação.') });
+    }
+  }
+  async confirmarAtividades(ids) {
+    if (this.state.salvando || !ids.length) return false;
+    this.setState({ salvando: true });
+    try {
+      const confirmadas = await window.FSM_AUTH.conferirAulas(ids);
+      this.setState({ salvando: false }, () => {
+        this.avisar(
+          (Number(confirmadas) || 0) === 1 ? '1 atividade confirmada' : numero(confirmadas) + ' atividades confirmadas'
+        );
+        this.recarregarAtividades();
+        this.carregarRelatorios(this.state.relatorioCiclo, true);
+      });
+    } catch (x) {
+      this.setState({ salvando: false });
+      this.avisar(msgErro(x, 'Não foi possível confirmar as atividades.'));
+    }
+    return true;
+  }
+  async aprovarRelatorio(relatorio) {
+    if (this.state.salvando) return;
+    this.setState({ salvando: true });
+    try {
+      await window.FSM_AUTH.aprovarRelatorio(relatorio.id);
+      this.setState({ salvando: false, relatorioAberto: null, devolvendo: false }, () => {
+        this.avisar(
+          'Relatório de ' + primeiroNome(relatorio.oficineiro) + ' aprovado · enviado à coordenação do núcleo'
+        );
+        this.carregarRelatorios(this.state.relatorioCiclo, true);
+      });
+    } catch (x) {
+      this.setState({ salvando: false });
+      this.avisar(msgErro(x, 'Não foi possível aprovar o relatório.'));
+    }
+  }
+  async devolverRelatorio(relatorio) {
+    const texto = String(this.state.devolucaoTexto || '').trim();
+    if (this.state.salvando) return;
+    if (texto.length < 5) {
+      this.setState({ devolucaoErro: 'Explique o motivo da devolução (pelo menos 5 letras).' }, () => {
+        const el = document.getElementById('dir-dev-txt');
+        if (el) el.focus();
+      });
+      return;
+    }
+    this.setState({ salvando: true, devolucaoErro: '' });
+    try {
+      await window.FSM_AUTH.devolverRelatorio(relatorio.id, texto);
+      this.setState({ salvando: false, relatorioAberto: null, devolvendo: false, devolucaoTexto: '' }, () => {
+        this.avisar('Relatório devolvido a ' + primeiroNome(relatorio.oficineiro) + ' com o motivo');
+        this.carregarRelatorios(this.state.relatorioCiclo, true);
+      });
+    } catch (x) {
+      this.setState({ salvando: false, devolucaoErro: msgErro(x, 'Não foi possível devolver o relatório.') });
+    }
+  }
+  abrirAtividade(id) {
+    this.focoAntesDaAtividade = document.activeElement;
+    this.setState({ atividadeAberta: id }, () => focar('dir-det-tit'));
+  }
+  fecharAtividade() {
+    this.setState({ atividadeAberta: null }, () => {
+      const anterior = this.focoAntesDaAtividade;
+      this.focoAntesDaAtividade = null;
+      if (anterior && document.contains(anterior)) anterior.focus();
+    });
+  }
+  registrarConsulta(dados) {
+    const A = window.FSM_AUTH;
+    if (A && A.registrarAtividade) A.registrarAtividade('CONSULTA', dados);
+  }
+  abrirPresenca(oficineiroId) {
+    this.registrarConsulta({ tela: 'Presença', alvo: oficineiroId, descricao: 'Abriu a presença do oficineiro' });
+    this.focoAntesDaPresenca = document.activeElement;
+    this.setState({ presencaOficineiro: oficineiroId, presencaCiclo: 'mes' }, () => focar('dir-pres-tit'));
+  }
+  fecharPresenca() {
+    this.setState({ presencaOficineiro: null }, () => {
+      const anterior = this.focoAntesDaPresenca;
+      this.focoAntesDaPresenca = null;
+      if (anterior && document.contains(anterior)) anterior.focus();
+    });
+  }
+  abrirContestacao(contestacao) {
+    this.setState(
+      { contestacao, contestacaoTexto: '', contestacaoErro: '', contestacaoMotivo: MOTIVOS_CONTESTACAO[0] },
+      () => focar('dir-cont-txt')
+    );
+  }
+  irPara(tela, memoria, estado) {
+    if (memoria) Object.assign(this.memoria[tela], memoria);
+    this.setState({ notifAberto: false, menuAberto: false, tela, ...(estado || {}) }, () => {
+      if (tela === 'ponto') this.carregarPresenca();
+    });
+  }
+  contextoDaEscola() {
+    const s = this.state,
+      hoje = hojeIso(),
+      agora = agoraMin(),
+      cicloAtual = cicloDe(hoje, 0),
+      cicloAnterior = cicloDe(hoje, -1),
+      inicioCicloAtual = cicloIniIso(cicloAtual),
+      inicioCicloAnterior = cicloIniIso(cicloAnterior);
+    const oficineiros = s.equipe.filter(p => p.papel === 'oficineiro' && p.ativo !== false);
+    const nomeOficineiro = id =>
+      (s.equipe.find(p => p.id === id) || s.nomes.find(p => p.id === id) || {}).nome || 'Oficineiro';
+    const grade = s.grade.filter(g => oficineiros.some(o => o.id === g.oficineiro_id));
+    const atividades = s.atividades;
+    const aguardandoCheck = atividades.filter(pendenteDeCheck);
+    const filtrosDoCheck = pendentes =>
+      pendentes.length
+        ? {
+            situacao: 'pend',
+            oficineiro: 'todos',
+            periodo: pendentes.every(a => a.data >= inicioCicloAtual) ? 'mes' : 'dois'
+          }
+        : null;
+    const prazo = prazoDe(cicloAnterior),
+      prazoVencido = hoje > prazo,
+      diasUteis = diasUteisAte(hoje, prazo);
+    const contestar = (a, situacao) => () =>
+      this.abrirContestacao({
+        id: a.id,
+        turma: a.turma,
+        data: dmIso(a.data),
+        hora: hmDe(a.inicio),
+        oficineiro: nomeOficineiro(a.oficineiro_id),
+        situacao
+      });
+    const rotulosDaAtividade = a => ({
+      rotuloConfirmar: 'Confirmar a atividade de ' + dmIso(a.data) + ' às ' + hmDe(a.inicio) + ', ' + a.turma,
+      rotuloContestar: 'Contestar a atividade de ' + dmIso(a.data) + ' às ' + hmDe(a.inicio) + ', ' + a.turma
+    });
+    return {
+      hoje,
+      agora,
+      cicloAtual,
+      cicloAnterior,
+      inicioCicloAtual,
+      inicioCicloAnterior,
+      cicloRelativo: meses => cicloDe(hoje, meses),
+      carregando: s.carregando,
+      salvando: !!s.salvando,
+      oficineiros,
+      grade,
+      semanas: s.semanas,
+      atividades,
+      presencas: s.presencas,
+      envios: s.envios,
+      aguardandoCheck,
+      gradesPendentes: s.envios.filter(e => e.status === 'enviada' && oficineiros.some(o => o.id === e.oficineiro_id)),
+      justificativasEmAnalise: (s.justificativas || []).filter(j => j.status === 'em_analise'),
+      filtrosDoCheck,
+      nomeOficineiro,
+      pendenteDeCheck,
+      situacaoDoRegistro,
+      turmaDaGrade,
+      temposDeAula,
+      minutosValidos,
+      previstas: (oficineiroId, inicio, fim) =>
+        atividadesPrevistas(grade, s.semanas, oficineiroId, inicio, fim, hoje, agora),
+      acoesDaAtividade: registro =>
+        registro && pendenteDeCheck(registro)
+          ? {
+              podeConferir: true,
+              ver: () => this.abrirAtividade(registro.id),
+              confirmar: () => this.confirmarAtividade(registro.id),
+              contestar: contestar(registro, situacaoDoRegistro(registro)[0]),
+              rotuloVer: 'Ver o registro de ' + nomeOficineiro(registro.oficineiro_id) + ', ' + hmDe(registro.inicio),
+              ...rotulosDaAtividade(registro)
+            }
+          : {
+              podeConferir: false,
+              ver: registro ? () => this.abrirAtividade(registro.id) : null,
+              rotuloVer: registro
+                ? 'Ver o registro de ' + nomeOficineiro(registro.oficineiro_id) + ', ' + hmDe(registro.inicio)
+                : ''
+            },
+      linhaDaAtividade: a => {
+        const tipo = TIPOS[a.tipo] || TIPOS.R,
+          situacao = situacaoDoRegistro(a),
+          anulada = a.revisao_status === 'anulado',
+          registrada = REGISTRADAS.includes(a.situacao) && !anulada,
+          check = a.check_direcao,
+          rotulo = ROTULOS_CHECK[check === 'ok' ? (a.situacao === 'Não realizada' ? 'ciente' : 'ok') : check];
+        return {
+          id: a.id,
+          dataIso: a.data,
+          inicio: hmDe(a.inicio),
+          grupo: anulada || !registrada ? 'sem' : check === 'ok' ? 'ok' : check === 'contestada' ? 'cont' : 'pend',
+          data: dmIso(a.data),
+          horario: hmDe(a.inicio) + '–' + hmDe(a.fim),
+          oficineiro: nomeOficineiro(a.oficineiro_id),
+          tipo: tipo[0],
+          tipoCor: tipo[1],
+          tipoFundo: tipo[2],
+          turma: a.turma,
+          presentes: a.presentes != null ? a.presentes + '/' + (a.matriculados != null ? a.matriculados : '—') : '—',
+          situacao: situacao[0],
+          situacaoCor: situacao[1],
+          situacaoFundo: situacao[2],
+          linhaFundo: check === 'contestada' ? 'var(--fundo-fafcfc)' : 'var(--fundo-ffffff)',
+          podeConferir: registrada && (!check || check === 'corrigida'),
+          conferida: !!check && check !== 'corrigida',
+          semConferencia: !registrada,
+          check:
+            check && check !== 'corrigida'
+              ? rotulo[0]
+              : anulada
+                ? 'Fora do check'
+                : registrada
+                  ? ''
+                  : 'Aguardando registro do oficineiro',
+          checkCor: check && rotulo ? rotulo[1] : '',
+          checkFundo: check && rotulo ? rotulo[2] : '',
+          temNota: check === 'corrigida' || check === 'contestada',
+          nota:
+            check === 'corrigida'
+              ? 'Corrigida pelo oficineiro após a contestação · confirme de novo'
+              : check === 'contestada' && a.check_motivo
+                ? 'Motivo: ' + a.check_motivo
+                : '',
+          temRegistro: true,
+          semRegistro: false,
+          rotuloVer:
+            'Ver o registro de ' + nomeOficineiro(a.oficineiro_id) + ', ' + dmIso(a.data) + ' às ' + hmDe(a.inicio),
+          ...rotulosDaAtividade(a),
+          confirmar: () => this.confirmarAtividade(a.id),
+          contestar: contestar(a, situacao[0]),
+          ver: () => this.abrirAtividade(a.id)
+        };
+      },
+      confirmarAtividades: ids => this.confirmarAtividades(ids),
+      relatorios: {
+        ciclo: s.relatorioCiclo || cicloAnterior,
+        lista: s.relatorios || [],
+        ocupado: s.relatoriosOcupado,
+        pendentes: (s.relatoriosCicloAnterior || []).filter(r => r.status === 'fechado'),
+        prazoVencido,
+        prazoTexto: prazoVencido
+          ? 'Prazo vencido em ' + dmIso(prazo)
+          : 'Prazo: até ' +
+            DIAS[dataDe(prazo).getDay()].toLowerCase() +
+            ', ' +
+            dmIso(prazo) +
+            (prazo === hoje
+              ? ' (hoje)'
+              : diasUteis === 1
+                ? ' (falta 1 dia útil)'
+                : ' (faltam ' + diasUteis + ' dias úteis)'),
+        escolherCiclo: ciclo =>
+          this.setState({ relatorioCiclo: ciclo, relatorios: [], relatorioDados: null }, () =>
+            this.carregarRelatorios(ciclo, false)
+          ),
+        abrir: id => this.setState({ relatorioAberto: id, devolvendo: false, devolucaoTexto: '', devolucaoErro: '' }),
+        aprovar: relatorio => this.aprovarRelatorio(relatorio)
+      },
+      presenca: {
+        linhas: s.presencaLinhas || [],
+        justificativas: s.justificativas || [],
+        atualizadaEm: s.presencaAtualizadaEm,
+        recarregar: () => this.carregarPresenca()
+      },
+      avisar: texto => this.avisar(texto),
+      atualizarEnvios: envios => this.setState({ envios }),
+      mostrarDetalheGrade: detalheGrade => this.setState({ detalheGrade }),
+      abrirPresenca: oficineiroId => this.abrirPresenca(oficineiroId),
+      abrirRelatorios: () =>
+        this.setState({ tela: 'rel', relatorioCiclo: cicloAnterior }, () =>
+          this.carregarRelatorios(cicloAnterior, true)
+        ),
+      abrirCheck: () => {
+        Object.assign(this.memoria.check, filtrosDoCheck(aguardandoCheck));
+        this.setState({ tela: 'check' });
+      }
+    };
+  }
+  atividadeDetalhada(contexto, registro) {
+    if (!registro) return {};
+    const s = this.state;
+    const linha = contexto.linhaDaAtividade(registro);
+    const check = registro.check_direcao;
+    const contestada = check === 'contestada';
+    const nomeDaEquipe = id => (s.equipe.find(p => p.id === id) || {}).nome || '';
+    const eventos = (s.historico || []).filter(h => h.aula_id === registro.id);
+    const temHistorico = eventos.some(h => h.evento !== 'confirmada');
+    return {
+      temHistorico,
+      historico: temHistorico
+        ? eventos.map(h => {
+            const evento = EVENTOS_HISTORICO[h.evento] || EVENTOS_HISTORICO.confirmada;
+            return {
+              titulo: evento[0],
+              cor: evento[1],
+              quando: dmTs(h.em) + ' às ' + hmTs(h.em) + (nomeDaEquipe(h.por) ? ' · ' + nomeDaEquipe(h.por) : ''),
+              texto: h.texto || '',
+              temTexto: !!h.texto
+            };
+          })
+        : [],
+      semHistorico: s.historico === null && !!check && check !== 'ok',
+      oficineiro: linha.oficineiro,
+      titulo: linha.turma + ' · ' + linha.data,
+      situacao: linha.situacao,
+      situacaoCor: linha.situacaoCor,
+      situacaoFundo: linha.situacaoFundo,
+      temCheck: !!check,
+      check: check ? ROTULOS_CHECK[check === 'ok' && registro.situacao === 'Não realizada' ? 'ciente' : check][0] : '',
+      checkCor: check ? ROTULOS_CHECK[check][1] : '',
+      checkFundo: check ? ROTULOS_CHECK[check][2] : '',
+      temMotivoCheck: !temHistorico && !!(registro.check_motivo && check !== 'ok'),
+      motivoCheck: 'Sua contestação: ' + (registro.check_motivo || ''),
+      itens: [
+        ['Data', DIAS[dataDe(registro.data).getDay()] + ', ' + dmIso(registro.data) + '/' + registro.data.slice(0, 4)],
+        ['Horário', linha.horario],
+        ['Turma', registro.turma],
+        ['Tipo de atividade', linha.tipo],
+        ['Componente curricular', registro.tipo === 'R' ? registro.componente : ''],
+        ['Oficina', registro.tipo === 'P' ? registro.oficina : ''],
+        ['Solução', registro.tipo === 'P' ? '' : registro.solucao],
+        ['Presentes / matriculados', linha.presentes],
+        ['Engajamento da turma', ENGAJAMENTO[Number(registro.engajamento) || 0] || ''],
+        ['Professor regente', registro.professor_aula],
+        ['Motivo da não realização', registro.situacao === 'Não realizada' ? registro.motivo : ''],
+        ['Conteúdo trabalhado', registro.conteudo, '1 / -1'],
+        ['Atividade', registro.atividade, '1 / -1'],
+        ['Objetivo', registro.objetivo, '1 / -1'],
+        ['Mudança em relação à grade', registro.mudanca, '1 / -1'],
+        ['Próxima atividade', registro.proxima_aula, '1 / -1'],
+        ['Check registrado em', registro.check_em ? dmTs(registro.check_em) + ' às ' + hmTs(registro.check_em) : '']
+      ]
+        .filter(([, valor]) => valor != null && String(valor).trim() !== '')
+        .map(([rotulo, valor, coluna]) => ({ rotulo, valor: String(valor), coluna: coluna || 'auto' })),
+      temAcoes: linha.podeConferir || contestada,
+      podeContestar: linha.podeConferir,
+      confirmarTexto: contestada ? 'Confirmar mesmo assim' : '✓ Confirmar atividade',
+      confirmar: () => this.confirmarAtividade(registro.id),
+      contestar: () => linha.contestar()
+    };
+  }
+  presencaDoOficineiro(contexto) {
+    const s = this.state,
+      hoje = contexto.hoje;
+    const oficineiro = s.presencaOficineiro
+      ? contexto.oficineiros.find(o => o.id === s.presencaOficineiro) ||
+        s.equipe.find(p => p.id === s.presencaOficineiro)
+      : null;
+    if (!oficineiro) return null;
+    const anterior = s.presencaCiclo === 'ant',
+      inicio = anterior ? contexto.inicioCicloAnterior : contexto.inicioCicloAtual,
+      fim = anterior ? cicloFimIso(contexto.cicloAnterior) : hoje;
+    const presencas = s.presencas.filter(p => p.oficineiro_id === oficineiro.id && p.data >= inicio && p.data <= fim);
+    const previstas = new Set(
+      atividadesPrevistas(contexto.grade, s.semanas, oficineiro.id, inicio, fim, hoje, 24 * 60).map(x => x.data)
+    );
+    const dias = [...new Set([...presencas.map(p => p.data), ...previstas])].sort().reverse();
+    let foraDoRaio = 0,
+      faltas = 0;
+    const linhas = dias.map(data => {
+      const p = presencas.find(x => x.data === data),
+        ehHoje = data === hoje;
+      let situacao;
+      if (!p) {
+        situacao = ehHoje
+          ? ['Ainda não chegou', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)']
+          : SITUACOES_PRESENCA.falta;
+        if (!ehHoje) faltas++;
+      } else if (!p.fim) situacao = ehHoje ? SITUACOES_PRESENCA.aberta : SITUACOES_PRESENCA['Sem encerramento'];
+      else situacao = SITUACOES_PRESENCA[p.conferencia] || SITUACOES_PRESENCA.ok;
+      if (p && p.conferencia === 'Fora do raio') foraDoRaio++;
+      return {
+        dia: DIAS[dataDe(data).getDay()].slice(0, 3) + ', ' + dmIso(data),
+        horario: p
+          ? (p.fim
+              ? hmTs(p.inicio) + '–' + hmTs(p.fim)
+              : ehHoje
+                ? 'Desde ' + hmTs(p.inicio)
+                : hmTs(p.inicio) + ' · sem saída') +
+            (!p.pausa_inicio
+              ? ''
+              : p.pausa_fim
+                ? ' · pausa ' + hmTs(p.pausa_inicio) + '–' + hmTs(p.pausa_fim)
+                : ' · pausa desde ' + hmTs(p.pausa_inicio))
+          : '—',
+        horas: p && p.fim ? Base.dur(minutosValidos(p)) : '',
+        situacao: situacao[0],
+        situacaoCor: situacao[1],
+        situacaoFundo: situacao[2]
+      };
+    });
+    const encerradas = presencas.filter(p => p.fim);
+    const diasComPresenca = new Set(encerradas.map(p => p.data)).size;
+    return {
+      nome: oficineiro.nome,
+      linhas,
+      vazio: !linhas.length,
+      resumo:
+        diasComPresenca +
+        (diasComPresenca === 1 ? ' dia' : ' dias') +
+        ' · ' +
+        Base.dur(encerradas.reduce((total, p) => total + minutosValidos(p), 0)) +
+        ' válidas' +
+        (faltas ? ' · ' + faltas + (faltas === 1 ? ' dia sem presença' : ' dias sem presença') : '') +
+        (foraDoRaio ? ' · ' + foraDoRaio + ' fora do raio' : '')
+    };
+  }
+  relatorioDetalhado(contexto, relatorio) {
+    if (!relatorio) return {};
+    const s = this.state,
+      { hoje, agora } = contexto,
+      ciclo = contexto.relatorios.ciclo;
+    const dados =
+      s.relatorioDados && s.relatorioDados.ciclo === ciclo
+        ? {
+            presencas: s.relatorioDados.presencas,
+            atividades: s.relatorioDados.atividades,
+            grade: s.relatorioDados.grade || s.grade,
+            semanas: s.relatorioDados.semanas || s.semanas
+          }
+        : { presencas: s.presencas, atividades: s.atividades, grade: s.grade, semanas: s.semanas };
+    const oficineiroId = relatorio.oficineiro_id;
+    const oficineiro = s.equipe.find(p => p.id === oficineiroId) || s.nomes.find(p => p.id === oficineiroId) || {};
+    const tipoCiclo = Base.cicloDe(oficineiro.documento_tipo),
+      inicioData = Base.cicloIni(dataDe(ciclo), tipoCiclo),
+      fimData = Base.cicloFim(dataDe(ciclo), tipoCiclo),
+      inicio = Base.iso(inicioData),
+      fim = Base.iso(fimData);
+    const previstas = atividadesPrevistas(dados.grade, dados.semanas || [], oficineiroId, inicio, fim, hoje, agora);
+    const registros = dados.atividades.filter(
+      a => a.oficineiro_id === oficineiroId && a.data >= inicio && a.data <= fim && a.revisao_status !== 'anulado'
+    );
+    const semCheck = relatorio.registradas - relatorio.confirmadas;
+    const presenca = Base.docPresenca({
+      ini: inicioData,
+      ate: fim < hoje ? fimData : dataDe(hoje),
+      hojeIso: hoje,
+      pres: dados.presencas.filter(p => p.oficineiro_id === oficineiroId && p.data >= inicio && p.data <= fim),
+      ajustes: (s.justificativas || []).filter(j => j.oficineiro_id === oficineiroId),
+      comGrade: data => previstas.some(x => x.data === data)
+    });
+    const usados = new Set();
+    const itens = previstas.map(x => {
+      const registro = registros.find(a => a.grade_aula_id === x.aula.id && a.data === x.data);
+      if (registro) usados.add(registro.id);
+      return { dia: dataDe(x.data), aula: x.aula, registro };
+    });
+    registros
+      .filter(a => !usados.has(a.id))
+      .forEach(registro => itens.push({ dia: dataDe(registro.data), aula: null, registro }));
+    itens.sort(
+      (x, y) =>
+        Base.iso(x.dia).localeCompare(Base.iso(y.dia)) ||
+        String((x.registro || x.aula).inicio).localeCompare(String((y.registro || y.aula).inicio))
+    );
+    const atividades = Base.docAtividades(
+      itens.map(({ dia, aula, registro }) => ({
+        d: dia,
+        inicio: (registro || aula).inicio,
+        fim: (registro || aula).fim,
+        turma: registro ? registro.turma : turmaDaGrade(aula),
+        atividade: (registro && registro.atividade) || (TIPOS[(registro || aula).tipo] || [''])[0],
+        sit: !registro ? 'Agendada' : registro.situacao === 'Não realizada' ? 'Não realizada' : 'Realizada',
+        presentes: registro ? registro.presentes : null,
+        registro: registro
+          ? registro.situacao === 'Não realizada'
+            ? registro.motivo
+            : registro.conteudo || registro.objetivo
+          : ''
+      }))
+    );
+    const frequencia = {};
+    [...registros, ...previstas.map(x => x.aula)].forEach(x => {
+      if (x && x.oficina) frequencia[x.oficina] = (frequencia[x.oficina] || 0) + 1;
+    });
+    const momento = new Date();
+    const contratada = (s.contratadas || []).find(c => c.id === oficineiroId) || {};
+    const referencia = String(relatorio.id).padStart(5, '0');
+    const comum = {
+      nome: String(relatorio.oficineiro || '—').toUpperCase(),
+      identificacaoRotulo: contratada.tipo === 'CPF' ? 'CPF' : 'CNPJ',
+      identificacao: contratada.mascara || 'Não informado',
+      escola: String((s.escola || {}).nome || '—').toUpperCase(),
+      oficina: Object.keys(frequencia).sort((a, b) => frequencia[b] - frequencia[a])[0] || '—',
+      assinaturas: [
+        Base.docAssinatura(
+          'Oficineiro(a)',
+          relatorio.oficineiro,
+          relatorio.status !== 'devolvido' ? relatorio.fechado_em : null
+        ),
+        Base.docAssinatura(
+          'Direção da escola',
+          relatorio.direcao_nome ? relatorio.direcao_nome + ' · Diretor(a)' : '',
+          relatorio.direcao_em
+        ),
+        Base.docAssinatura(
+          'Coordenação',
+          relatorio.coordenacao_nome ? relatorio.coordenacao_nome + ' · Coordenador(a)' : '',
+          relatorio.coordenacao_em
+        )
+      ],
+      gerado:
+        'Gerado pelo Oficineiro+ (oficineiromais.com.br) em ' +
+        Base.dmy(momento) +
+        ' às ' +
+        Base.hm(momento.getHours() * 60 + momento.getMinutes())
+    };
+    const cicloTexto = 'CICLO ' + Base.dmy(inicioData) + ' A ' + Base.dmy(fimData);
+    return {
+      rotulo: 'Documentos do ciclo de ' + relatorio.oficineiro,
+      nome: relatorio.oficineiro,
+      ciclo: mesCurto(ciclo),
+      podeDecidir: relatorio.status === 'fechado',
+      temAviso:
+        relatorio.status === 'fechado' ? semCheck > 0 || relatorio.contestadas > 0 : relatorio.status === 'devolvido',
+      aviso:
+        relatorio.status === 'devolvido'
+          ? 'Devolvido ao oficineiro' +
+            (relatorio.motivo_devolucao ? ': ' + relatorio.motivo_devolucao : '.') +
+            ' Aguardando o reenvio.'
+          : (semCheck > 0
+              ? semCheck +
+                (semCheck === 1
+                  ? ' atividade registrada ainda não teve'
+                  : ' atividades registradas ainda não tiveram') +
+                ' o check da direção'
+              : '') +
+            (relatorio.contestadas > 0
+              ? (semCheck > 0 ? ' · ' : '') +
+                relatorio.contestadas +
+                (relatorio.contestadas === 1 ? ' atividade contestada aguarda' : ' atividades contestadas aguardam') +
+                ' o oficineiro'
+              : '') +
+            '. Você pode aprovar assim mesmo ou devolver ao oficineiro.',
+      documentoPresenca: {
+        ...comum,
+        titulo: 'RELATÓRIO DE PRESENÇA NA ESCOLA · ' + cicloTexto,
+        linhas: presenca.linhas,
+        total: presenca.total,
+        resumo: presenca.resumo,
+        codigo: 'Documento PRE-' + ciclo.slice(0, 7) + '-' + referencia
+      },
+      documentoAtividades: {
+        ...comum,
+        titulo: 'RELATÓRIO DE ATIVIDADES · ' + cicloTexto,
+        atividades: atividades.linhas,
+        semAtividades: !atividades.linhas.length,
+        resumo: atividades.resumo,
+        codigo: 'Documento ATV-' + ciclo.slice(0, 7) + '-' + referencia
+      },
+      aprovar: () => this.aprovarRelatorio(relatorio),
+      devolver: () => this.devolverRelatorio(relatorio)
+    };
+  }
+  avisosDaEscola(contexto) {
+    const s = this.state,
+      { cicloAnterior, aguardandoCheck, filtrosDoCheck } = contexto,
+      { pendentes, prazoTexto, prazoVencido } = contexto.relatorios;
+    const lista = [];
+    if (pendentes.length)
+      lista.push({
+        tit:
+          pendentes.length === 1
+            ? '1 relatório mensal aguardando sua aprovação'
+            : pendentes.length + ' relatórios mensais aguardando sua aprovação',
+        txt: pendentes.map(r => r.oficineiro).join(', ') + ' · ' + mesTxt(cicloAnterior) + '. ' + prazoTexto + '.',
+        ref: cicloAnterior + ':' + pendentes.map(r => r.id).join(','),
+        acao: 'Abrir relatórios',
+        go: () => this.irPara('rel', null, { relatorioCiclo: cicloAnterior }),
+        cor: prazoVencido ? 'var(--texto-b42318)' : 'var(--texto-0b7ea3)'
+      });
+    const grades = contexto.gradesPendentes;
+    if (grades.length)
+      lista.push({
+        tit:
+          grades.length === 1
+            ? '1 grade de oficineiro para validar'
+            : grades.length + ' grades de oficineiros para validar',
+        txt: 'Grades enviadas pelos oficineiros da escola aguardando a validação da direção.',
+        ref: grades.map(e => e.oficineiro_id + ':' + e.enviado_em).join(','),
+        acao: 'Abrir agenda',
+        go: () => this.irPara('agenda', grades.length === 1 ? { oficineiro: grades[0].oficineiro_id } : null),
+        cor: 'var(--texto-1a3f9c)'
+      });
+    const novas = aguardandoCheck.filter(a => !a.check_direcao);
+    if (novas.length)
+      lista.push({
+        tit: novas.length === 1 ? '1 atividade para confirmar' : novas.length + ' atividades para confirmar',
+        txt: 'Atividades registradas pelos oficineiros aguardando a confirmação da escola.',
+        ref: String(novas.length) + ':' + Math.max(...novas.map(a => a.id)),
+        acao: 'Abrir check de atividades',
+        go: () => this.irPara('check', filtrosDoCheck(novas)),
+        cor: 'var(--texto-9a6212)'
+      });
+    const corrigidas = s.atividades.filter(a => a.check_direcao === 'corrigida');
+    if (corrigidas.length)
+      lista.push({
+        tit:
+          corrigidas.length === 1
+            ? '1 atividade corrigida após sua contestação'
+            : corrigidas.length + ' atividades corrigidas após sua contestação',
+        txt: 'O oficineiro ajustou o registro. Confira e confirme de novo.',
+        ref: corrigidas.map(a => a.id).join(','),
+        acao: 'Ver atividades corrigidas',
+        go: () => this.irPara('check', filtrosDoCheck(corrigidas)),
+        cor: 'var(--texto-1a3f9c)'
+      });
+    const emAnalise = contexto.justificativasEmAnalise;
+    const sinalizadas = emAnalise.filter(j => j.sinal_qtd > 0);
+    if (sinalizadas.length)
+      lista.push({
+        tit:
+          sinalizadas.length === 1
+            ? '1 justificativa sinalizada pela coordenação'
+            : sinalizadas.length + ' justificativas sinalizadas pela coordenação',
+        txt: [...new Set(sinalizadas.map(j => j.nome))].join(', ') + '.',
+        ref: sinalizadas.map(j => j.id + ':' + j.sinal_qtd).join(','),
+        acao: 'Abrir Presença na Escola',
+        go: () => this.irPara('ponto'),
+        cor: 'var(--texto-7a4e0b)'
+      });
+    if (emAnalise.length)
+      lista.push({
+        tit:
+          emAnalise.length === 1
+            ? '1 justificativa de presença para decidir'
+            : emAnalise.length + ' justificativas de presença para decidir',
+        txt: [...new Set(emAnalise.map(j => j.nome))].join(', ') + '.',
+        ref: emAnalise.map(j => j.id).join(','),
+        acao: 'Abrir Presença na Escola',
+        go: () => this.irPara('ponto'),
+        cor: 'var(--texto-6c60e6)'
+      });
+    return lista.map(aviso => ({ ...aviso, temAcao: !!(aviso.acao && aviso.go) }));
+  }
+  notificacoes(avisos) {
+    const N = window.FSM_NOTIF || {
+        usuario: () => '',
+        chave: n => n.tit + '|' + (n.ref || n.txt),
+        ler: () => [],
+        gravar: () => {}
+      },
+      usuario = N.usuario('direcao');
+    if (this.notifUsuario !== usuario) {
+      this.notifUsuario = usuario;
+      this.notifVistas = N.ler(usuario);
+    }
+    const vistas = this.notifVistas || [],
+      novas = avisos.filter(n => !vistas.includes(N.chave(n))),
+      visiveis = novas.map(n => {
+        const chave = N.chave(n);
+        return {
+          ...n,
+          ariaLida: 'Marcar como lida: ' + n.tit,
+          marcarLida: () => {
+            this.notifVistas = [...(this.notifVistas || []).filter(x => x !== chave), chave];
+            N.gravar(usuario, this.notifVistas);
+            this.forceUpdate();
+          }
+        };
+      });
+    return {
+      notifs: visiveis,
+      temVariasNotif: visiveis.length > 1,
+      lerTodasNotif: () => {
+        const chaves = novas.map(N.chave);
+        this.notifVistas = [...vistas.filter(chave => !chaves.includes(chave)), ...chaves];
+        N.gravar(usuario, this.notifVistas);
+        this.forceUpdate();
+      },
+      notifN: String(novas.length),
+      temNotif: novas.length > 0,
+      semNotif: visiveis.length === 0,
+      notifAria: novas.length
+        ? 'Notificações: ' + novas.length + (novas.length === 1 ? ' nova' : ' novas')
+        : 'Notificações: nenhuma nova',
+      abrirNotif: () => {
+        this.setState({ notifAberto: true, menuAberto: false });
+      }
+    };
+  }
+  renderVals() {
+    const s = this.state;
+    const contexto = this.contextoDaEscola();
+    const { oficineiros, aguardandoCheck } = contexto;
+    const escola = s.escola || {};
+    const selos = {
+      agenda: contexto.gradesPendentes.length,
+      check: aguardandoCheck.length,
+      rel: contexto.relatorios.pendentes.length,
+      ponto: contexto.justificativasEmAnalise.length
+    };
+    const menu = MENU.map(([tela, rotulo]) => {
+      const ativa = s.tela === tela,
+        selo = selos[tela] ? String(selos[tela]) : '';
+      return {
+        label: rotulo,
+        tag: selo,
+        tagBg: selo ? '#F2C66D' : 'transparent',
+        atual: ativa ? 'page' : 'false',
+        go: () => {
+          if (tela === 'check') Object.assign(this.memoria.check, contexto.filtrosDoCheck(aguardandoCheck));
+          this.setState({ tela, menuAberto: false }, () => {
+            if (!s.logado) return;
+            if (tela === 'rel') this.carregarRelatorios(this.state.relatorioCiclo, true);
+            if (tela === 'check') this.recarregarAtividades();
+            if (tela === 'ponto') this.carregarPresenca();
+          });
+        },
+        classe: ativa ? 'fundo-rgba-255-255-255-0p09' : 'fundo-transparent',
+        bg: ativa ? 'rgba(255,255,255,.09)' : 'transparent',
+        fg: ativa ? '#fff' : '#C9D4D7',
+        dot: ativa ? '#3ECDF3' : 'transparent'
+      };
+    });
+    const trilhas = {
+      inicio:
+        (escola.sigla || 'Escola') +
+        ' · ' +
+        oficineiros.length +
+        (oficineiros.length === 1 ? ' oficineiro' : ' oficineiros'),
+      agenda: 'Grade semanal dos oficineiros da escola',
+      check: 'Confirmação das atividades registradas',
+      rel: 'Aprovação da direção → coordenação do núcleo',
+      ponto: 'Presença dos oficineiros e justificativas da escola'
+    };
+    const registroAberto = s.atividadeAberta ? s.atividades.find(a => a.id === s.atividadeAberta) : null;
+    const presenca = this.presencaDoOficineiro(contexto);
+    const relatorioSelecionado = s.relatorioAberto
+      ? contexto.relatorios.lista.find(r => r.id === s.relatorioAberto)
+      : null;
+    const relatorio = this.relatorioDetalhado(contexto, relatorioSelecionado);
+    const abaAtividades = s.relatorioAba === 'atividades';
+    const estiloAba = ativa => (ativa ? ['', '#FEFEFE', '#13252C'] : ['fundo-transparent', 'transparent', '#FEFEFE']);
+    const [abaPresencaClasse, abaPresencaFundo, abaPresencaCor] = estiloAba(!abaAtividades);
+    const [abaAtividadesClasse, abaAtividadesFundo, abaAtividadesCor] = estiloAba(abaAtividades);
+    return {
+      cliente: Base.cliente(),
+      ...this.notificacoes(this.avisosDaEscola(contexto)),
+      contexto,
+      memoriaAgenda: this.memoria.agenda,
+      memoriaCheck: this.memoria.check,
+      memoriaPonto: this.memoria.ponto,
+      is: {
+        inicio: s.logado && s.tela === 'inicio',
+        agenda: s.logado && s.tela === 'agenda',
+        checkAtividades: s.logado && s.tela === 'check',
+        relatorio: s.logado && s.tela === 'rel',
+        ponto: s.logado && s.tela === 'ponto'
+      },
+      semLogin: !s.logado,
+      escolaNome: escola.sigla
+        ? escola.sigla + ' - ' + String(escola.nome || '').replace(new RegExp('^' + escola.sigla + '\\s*-\\s*'), '')
+        : 'Escola',
+      menu,
+      menuClasse: s.menuAberto ? 'open' : '',
+      abrirMenu: () => this.setState({ menuAberto: true }),
+      fecharMenu: () => this.setState({ menuAberto: false }),
+      titulo: TITULOS[s.tela],
+      trilha: trilhas[s.tela],
+      notifAberto: !!s.notifAberto,
+      fecharNotif: () => this.setState({ notifAberto: false }),
+      temConfig: typeof window.fsmConfiguracoes === 'function',
+      abrirConfig: () => {
+        if (this.state.menuAberto) this.setState({ menuAberto: false });
+        if (typeof window.fsmConfiguracoes === 'function') window.fsmConfiguracoes();
+      },
+      temSair: typeof window.fsmSair === 'function',
+      sairConta: () => {
+        if (typeof window.fsmSair === 'function') window.fsmSair();
+      },
+      temErro: !!s.erro,
+      erro: s.erro,
+      tentarDeNovo: () => this.setState({ erro: '' }, () => this.carregarDados()),
+      salvando: !!s.salvando,
+      detalheGradeAberto: !!s.detalheGrade,
+      detalheGrade: s.detalheGrade || {},
+      fecharDetalheGrade: () => this.setState({ detalheGrade: null }),
+      atividadeAberta: !!registroAberto,
+      atividade: this.atividadeDetalhada(contexto, registroAberto),
+      fecharAtividade: () => this.fecharAtividade(),
+      presencaAberta: !!presenca,
+      presenca: presenca || {},
+      presencaCiclos: [
+        ['mes', 'Ciclo ' + Base.cicloTxt(dataDe(contexto.cicloAtual))],
+        ['ant', 'Ciclo ' + Base.cicloTxt(dataDe(contexto.cicloAnterior))]
+      ].map(([ciclo, rotulo]) => {
+        const ativo = s.presencaCiclo === ciclo;
+        return {
+          rotulo,
+          ativo: ativo ? 'true' : 'false',
+          escolher: () => this.setState({ presencaCiclo: ciclo }),
+          classe: ativo ? 'fundo-ffffff' : 'fundo-transparent',
+          fundo: ativo ? 'var(--fundo-ffffff)' : 'transparent',
+          cor: ativo ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)'
+        };
+      }),
+      fecharPresenca: () => this.fecharPresenca(),
+      contestando: !!s.contestacao,
+      contestacao: s.contestacao || {},
+      fecharContestacao: () => this.setState({ contestacao: null, contestacaoErro: '' }),
+      motivosContestacao: MOTIVOS_CONTESTACAO.map(motivo => {
+        const ativo = s.contestacaoMotivo === motivo;
+        return {
+          rotulo: motivo,
+          ativo: ativo ? 'true' : 'false',
+          ...this.estiloOpcao(ativo),
+          escolher: () => this.setState({ contestacaoMotivo: motivo })
+        };
+      }),
+      contestacaoTexto: s.contestacaoTexto,
+      escreverContestacao: e => this.setState({ contestacaoTexto: e.target.value, contestacaoErro: '' }),
+      temErroContestacao: !!s.contestacaoErro,
+      erroContestacao: s.contestacaoErro,
+      enviarContestacao: () => this.enviarContestacao(),
+      relatorioAberto: !!relatorioSelecionado,
+      relatorio,
+      documento: (abaAtividades ? relatorio.documentoAtividades : relatorio.documentoPresenca) || {},
+      abaPresenca: !abaAtividades,
+      abaAtividades,
+      abaPresencaClasse,
+      abaPresencaFundo,
+      abaPresencaCor,
+      abaAtividadesClasse,
+      abaAtividadesFundo,
+      abaAtividadesCor,
+      verAbaPresenca: () => this.setState({ relatorioAba: 'presenca' }),
+      verAbaAtividades: () => this.setState({ relatorioAba: 'atividades' }),
+      declaracao: abaAtividades ? DECLARACAO_ATIVIDADES : DECLARACAO_PRESENCA,
+      fecharRelatorio: () => this.setState({ relatorioAberto: null, devolvendo: false }),
+      imprimir: () => window.print(),
+      devolvendo: s.devolvendo,
+      devolvendoExpandido: s.devolvendo ? 'true' : 'false',
+      abrirDevolver: () =>
+        this.setState({ devolvendo: !s.devolvendo, devolucaoErro: '' }, () =>
+          setTimeout(() => {
+            const el = document.getElementById('dir-dev-txt');
+            if (el && this.state.devolvendo) el.focus();
+          }, 30)
+        ),
+      devolucaoTexto: s.devolucaoTexto,
+      escreverDevolucao: e => this.setState({ devolucaoTexto: e.target.value, devolucaoErro: '' }),
+      temErroDevolucao: !!s.devolucaoErro,
+      erroDevolucao: s.devolucaoErro,
+      aviso: s.aviso
+    };
+  }
+}
+</script>
+</body>
+</html>

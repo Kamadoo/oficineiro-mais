@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Analista</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles/app.css">
+<style>
+@media (max-width: 900px) {
+  .pagina {
+    padding: 14px 14px 90px !important;
+    gap: 14px !important;
+  }
+  .mapa-celular {
+    height: 190px !important;
+  }
+  .dia-celular {
+    min-height: 0 !important;
+  }
+  .analista-presenca > :not(:first-child) {
+    grid-column: 2;
+  }
+  .analista-presenca > :nth-child(4) {
+    display: none;
+  }
+  .analista-presenca > :nth-child(6) {
+    justify-self: start !important;
+  }
+}
+[role="table"] {
+  position: relative;
+}
+@media print {
+  .menu-lateral,
+  .veu,
+  .botao-menu,
+  .sino-celular,
+  .filtros {
+    display: none !important;
+  }
+  .estrutura {
+    display: block !important;
+  }
+  .cabecalho {
+    position: static !important;
+  }
+  body {
+    background: #fff !important;
+  }
+  .pagina {
+    padding: 0 !important;
+    max-width: none !important;
+  }
+}
+</style>
+</helmet>
+<div class="estrutura d-grid colunas-236-minmax-0-1fr min-h-100vh">
+  <dc-import name="menu" navCls="{{ menuClasse }}" closeNav="{{ fecharMenu }}" perfilTitulo="Analista" perfilLinha="{{ carteiraLinha }}" menu="{{ menu }}" abrirNotif="{{ abrirNotif }}" notifAria="{{ notifAria }}" temNotif="{{ temNotif }}" notifN="{{ notifN }}" temConfig="{{ temConfig }}" abrirConfig="{{ abrirConfig }}" temSair="{{ temSair }}" sairConta="{{ sairConta }}"></dc-import>
+
+  <main class="min-w-0 d-flex eixo-column">
+    <dc-import name="cabecalho" espacamento="gap-16 p-0-28" blocoClasse="cabecalho-titulo min-w-0" trilha="{{ trilha }}" cortaTrilha="{{ true }}" tituloClasse="espaco-nowrap rolagem-hidden reticencias-ellipsis" abrirMenu="{{ abrirMenu }}" titulo="{{ titulo }}" abrirNotif="{{ abrirNotif }}" notifAria="{{ notifAria }}" temNotif="{{ temNotif }}" notifN="{{ notifN }}"></dc-import>
+<sc-if value="{{ notifAberto }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharNotif }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-label="Notificações" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(440px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><h3 class="m-0 fs-17 flex-1">Notificações</h3><button onClick="{{ fecharNotif }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-12 rolagem-auto flex-1">
+      <sc-if value="{{ temVariasNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex justifica-flex-end"><button onClick="{{ lerTodasNotif }}" class="h-34 borda-0 fundo-transparent cor-0b7ea3 fs-13 fw-600 p-0-4 botao-texto">Marcar todas como lidas</button></div></sc-if>
+      <sc-if value="{{ semNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column alinha-center gap-6 p-32-12 texto-center"><b class="fs-15">Tudo em dia</b><span class="fs-13 cor-5b6b70">Nenhuma notificação nova.</span></div></sc-if>
+      <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="3">
+        <div class="raio-10 p-12-14 d-flex eixo-column gap-6 fundo-ffffff largura-fundo" style="border:1px solid var(--borda-dde6e8);border-left:4px solid {{ n.cor }}">
+          <b class="fs-14">{{ n.tit }}</b>
+          <span class="fs-13 cor-34464d lh-1p5">{{ n.txt }}</span>
+          <div class="d-flex quebra-wrap gap-8 mt-2"><sc-if value="{{ n.temAcao }}" hint-placeholder-val="{{ true }}"><button onClick="{{ n.go }}" class="h-36 borda-1-solid-0b7ea3 fundo-ffffff cor-08617e raio-8 p-0-12 fs-13 fw-600">{{ n.acao }}</button></sc-if><button onClick="{{ n.marcarLida }}" aria-label="{{ n.ariaLida }}" class="h-36 borda-cfdadd fundo-ffffff cor-34464d raio-8 p-0-12 fs-13 fw-600 botao-secundario">Marcar como lida</button></div>
+        </div>
+      </sc-for>
+    </div>
+  </aside>
+</sc-if>
+
+    <div class="pagina p-28 d-flex eixo-column gap-20 max-w-1320 w-100pc">
+<sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13 d-flex quebra-wrap alinha-center gap-8-14"><span class="flex-1 min-w-200">{{ erro }}</span><button onClick="{{ tentarDeNovo }}" class="h-34 borda-1-solid-b42318 fundo-ffffff cor-b42318 raio-8 p-0-12 fs-13 fw-600">Tentar de novo</button></div></sc-if>
+<sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-dde6e8 raio-12 p-24 texto-center cor-5b6b70 fs-14 lh-1p5 fundo-ffffff" style="background:var(--fundo-ffffff)">Entre com a conta de analista para ver a sua carteira.</div></sc-if>
+<sc-if value="{{ is.inicio }}" hint-placeholder-val="{{ true }}"><dc-import name="analista-inicio" contexto="{{ contexto }}" memoria="{{ memoriaInicio }}"></dc-import></sc-if>
+<sc-if value="{{ is.agenda }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-agenda" contexto="{{ contexto }}" memoria="{{ memoriaAgenda }}"></dc-import></sc-if>
+<sc-if value="{{ is.visitas }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-visitas" contexto="{{ contexto }}" memoria="{{ memoriaVisitas }}"></dc-import></sc-if>
+<sc-if value="{{ is.carteira }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-carteira" contexto="{{ contexto }}" memoria="{{ memoriaCarteira }}"></dc-import></sc-if>
+<sc-if value="{{ is.jornada }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-jornada" contexto="{{ contexto }}" memoria="{{ memoriaJornada }}"></dc-import></sc-if>
+<sc-if value="{{ is.onboarding }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-onboarding" contexto="{{ contexto }}"></dc-import></sc-if>
+
+    </div>
+  </main>
+</div>
+
+<sc-if value="{{ visitaDaAgenda.aberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharVisitaDaAgenda }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="ag-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(460px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">{{ visitaDaAgenda.rotulo }}</span><h3 id="ag-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ visitaDaAgenda.titulo }}</h3></div><button onClick="{{ fecharVisitaDaAgenda }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ visitaDaAgenda.itens }}" as="item" hint-placeholder-count="5"><dt class="cor-5b6b70 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></sc-for></dl>
+      <sc-if value="{{ visitaDaAgenda.temNota }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-12 cor-5b6b70 lh-1p5">{{ visitaDaAgenda.nota }}</p></sc-if>
+      <sc-if value="{{ visitaDaAgenda.alterando }}" hint-placeholder-val="{{ false }}">
+        <div role="group" aria-label="{{ visitaDaAgenda.alteracaoTitulo }}" class="fundo-f7fafb raio-10 p-14 d-flex eixo-column gap-10">
+          <sc-if value="{{ visitaDaAgenda.remarcando }}" hint-placeholder-val="{{ false }}">
+            <div class="empilha-celular d-grid colunas-1fr-1fr gap-10">
+              <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Nova data *</span><input id="ag-data" type="date" value="{{ visitaDaAgenda.novaData }}" min="{{ dataMinima }}" max="{{ dataMaxima }}" onChange="{{ visitaDaAgenda.escolherData }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
+              <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Horário</span><input type="time" value="{{ visitaDaAgenda.novaHora }}" onChange="{{ visitaDaAgenda.escolherHora }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
+            </div>
+          </sc-if>
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Motivo *</span><input id="ag-motivo" value="{{ visitaDaAgenda.motivo }}" onChange="{{ visitaDaAgenda.escreverMotivo }}" maxlength="300" placeholder="ex.: a escola pediu outro dia" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14"></input></label>
+          <div class="d-flex gap-8 quebra-wrap"><button onClick="{{ visitaDaAgenda.confirmar }}" disabled="{{ salvando }}" class="h-36 borda-0 cor-fff raio-8 p-0-14 fs-13 fw-600 botao-texto {{ visitaDaAgenda.confirmarClasse }}" style="background:{{ visitaDaAgenda.confirmarFundo }}">{{ visitaDaAgenda.confirmarRotulo }}</button><button onClick="{{ visitaDaAgenda.voltar }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-13 fw-600 cor-1a2b33 botao-secundario">Voltar</button></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ temErroAgenda }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroAgenda }}</div></sc-if>
+    </div>
+    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+      <sc-if value="{{ visitaDaAgenda.podeCancelar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.cancelar }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-b42318 mr-auto botao-secundario">Cancelar visita</button></sc-if>
+      <sc-if value="{{ visitaDaAgenda.podeRemarcar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.remarcar }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-1a2b33 botao-secundario">Remarcar</button></sc-if>
+      <sc-if value="{{ visitaDaAgenda.podeRegistrar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.registrar }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Registrar visita</button></sc-if>
+      <sc-if value="{{ visitaDaAgenda.soFechar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ fecharVisitaDaAgenda }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Fechar</button></sc-if>
+    </div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ novaVisitaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharNovaVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="nv-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">Agenda</span><h3 id="nv-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">Nova visita</h3></div><button onClick="{{ fecharNovaVisita }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <sc-if value="{{ novaVisita.temDiagnostico }}" hint-placeholder-val="{{ false }}"><div class="fundo-f7fafb raio-10 p-12-14 fs-13 lh-1p5 cor-34464d">{{ novaVisita.diagnostico }}</div></sc-if>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Escola *</span><select id="nv-escola" value="{{ novaVisita.escola }}" onChange="{{ novaVisita.escolherEscola }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Data *</span><input id="nv-data" type="date" value="{{ novaVisita.data }}" min="{{ dataMinima }}" max="{{ dataMaxima }}" onChange="{{ novaVisita.escolherData }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Horário</span><input type="time" value="{{ novaVisita.hora }}" onChange="{{ novaVisita.escolherHora }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
+      </div>
+      <div class="d-flex eixo-column gap-8"><span id="nv-origem-rot" class="fs-12 cor-5b6b70 fw-600">Origem da visita *</span><div role="radiogroup" aria-labelledby="nv-origem-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ novaVisitaOrigens }}" as="origem" hint-placeholder-count="2"><button role="radio" aria-checked="{{ origem.marcado }}" onClick="{{ origem.escolher }}" class="raio-8 p-8-12 fs-13 fw-500 botao-opcao {{ origem.classe }}" style="border:1.5px solid {{ origem.borda }};background:{{ origem.fundo }};color:{{ origem.cor }}">{{ origem.rotulo }}</button></sc-for></div></div>
+      <div class="d-flex eixo-column gap-8"><span id="nv-tipo-rot" class="fs-12 cor-5b6b70 fw-600">Tipo de atendimento</span>
+        <div role="radiogroup" aria-labelledby="nv-tipo-rot" class="d-flex quebra-wrap gap-4 fundo-e3ebed p-4 raio-10 alinha-si-flex-start segmentado"><sc-for list="{{ novaVisitaTipos }}" as="tipo" hint-placeholder-count="4"><button role="radio" aria-checked="{{ tipo.marcado }}" onClick="{{ tipo.escolher }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 {{ tipo.classe }}" style="background:{{ tipo.fundo }};color:{{ tipo.cor }}">{{ tipo.rotulo }}</button></sc-for></div>
+        <div role="radiogroup" aria-label="Detalhe do atendimento" class="d-flex quebra-wrap gap-8"><sc-for list="{{ novaVisitaDetalhes }}" as="detalhe" hint-placeholder-count="4"><button role="radio" aria-checked="{{ detalhe.marcado }}" onClick="{{ detalhe.escolher }}" class="raio-999 p-6-12 fs-13 fw-500 botao-opcao {{ detalhe.classe }}" style="border:1.5px solid {{ detalhe.borda }};background:{{ detalhe.fundo }};color:{{ detalhe.cor }}">{{ detalhe.rotulo }}</button></sc-for></div>
+      </div>
+      <div class="d-flex eixo-column gap-8"><span id="nv-foco-rot" class="fs-12 cor-5b6b70 fw-600">Foco da visita</span><div role="group" aria-labelledby="nv-foco-rot" class="d-flex quebra-wrap gap-6"><sc-for list="{{ novaVisitaFocos }}" as="foco" hint-placeholder-count="4"><button aria-pressed="{{ foco.marcado }}" onClick="{{ foco.escolher }}" class="h-32 raio-999 p-0-12 fs-13 fw-500 botao-texto {{ foco.classe }}" style="border:1px solid {{ foco.borda }};background:{{ foco.fundo }};color:{{ foco.cor }}">{{ foco.rotulo }}</button></sc-for></div></div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Observação</span><textarea rows="3" value="{{ novaVisita.orientacao }}" onChange="{{ novaVisita.escreverOrientacao }}" maxlength="1000" placeholder="ex.: pedido da direção para apoiar o 5º ano no Matific" class="borda-cfdadd raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+      <sc-if value="{{ temErroNovaVisita }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroNovaVisita }}</div></sc-if>
+    </div>
+    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharNovaVisita }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-1a2b33 botao-secundario">Cancelar</button><button onClick="{{ salvarNovaVisita }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">{{ novaVisitaBotao }}</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ visita.aberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="vd-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(500px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">{{ visita.rotulo }}</span><h3 id="vd-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ visita.titulo }}</h3></div><button onClick="{{ fecharVisita }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <dl class="m-0 d-grid colunas-minmax-0-1fr-minmax-0-1fr gap-12-16">
+        <sc-for list="{{ visita.itens }}" as="item" hint-placeholder-count="6"><div class="d-flex eixo-column gap-2 min-w-0" style="grid-column:{{ item.coluna }}"><dt class="fs-12 cor-5b6b70 fw-600">{{ item.rotulo }}</dt><dd class="m-0 fs-14 lh-1p5 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></div></sc-for>
+      </dl>
+      <sc-if value="{{ visita.temCorrecoes }}" hint-placeholder-val="{{ false }}">
+        <div class="borda-t-e8eef0 pt-12 d-flex eixo-column gap-6"><b class="fs-13">Correções</b><sc-for list="{{ visita.correcoes }}" as="correcao" hint-placeholder-count="2"><span class="fs-12 cor-34464d">{{ correcao }}</span></sc-for></div>
+      </sc-if>
+      <sc-if value="{{ visita.naoEdita }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-12 cor-5b6b70">A visita só pode ser corrigida até 7 dias depois da data.</p></sc-if>
+    </div>
+    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><sc-if value="{{ visita.podeEditar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visita.editar }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-1a2b33 mr-auto botao-secundario">Corrigir registro</button></sc-if><button onClick="{{ fecharVisita }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Fechar</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ baixa.aberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharBaixa }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="onb-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 sombra-n12-0-40-rgba-0-0-0-0p12 d-flex eixo-column largura-fundo" style="width:min(460px,100%)">
+    <div class="p-16-20 borda-b-dde6e8 d-flex alinha-flex-start gap-12"><div class="flex-1 d-flex eixo-column gap-2 min-w-0"><span class="fs-12 cor-5b6b70">Dar baixa no onboarding</span><h3 id="onb-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ baixa.nome }}</h3><span class="fs-12 cor-5b6b70">{{ baixa.escola }} · OS {{ baixa.ordem }}</span></div><button onClick="{{ fecharBaixa }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="flex-1 rolagem-y-auto p-18-20 d-flex eixo-column gap-16">
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em">Data da entrega</span><input type="date" value="{{ baixa.data }}" max="{{ baixa.dataMaxima }}" onChange="{{ escolherDataDaBaixa }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
+      <div class="d-flex eixo-column gap-8"><span id="onb-forma-rot" class="fs-12 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em">Como foi feito</span><div role="radiogroup" aria-labelledby="onb-forma-rot" class="d-flex quebra-wrap gap-6"><sc-for list="{{ baixa.formas }}" as="forma" hint-placeholder-count="3"><button role="radio" aria-checked="{{ forma.marcado }}" onClick="{{ forma.escolher }}" class="h-34 raio-999 p-0-12 fs-13 fw-500 botao-texto {{ forma.classe }}" style="border:1px solid {{ forma.borda }};background:{{ forma.fundo }};color:{{ forma.cor }}">{{ forma.rotulo }}</button></sc-for></div></div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-5b6b70 caixa-uppercase ls-0p04em">Observação</span><textarea value="{{ baixa.observacao }}" onChange="{{ escreverObservacaoDaBaixa }}" rows="4" maxlength="1000" placeholder="Ex.: primeiro acesso feito, senha redefinida, apresentado o Minecraft Education." class="borda-cfdadd raio-8 p-10 fs-14 redim-vertical"></textarea></label>
+      <sc-if value="{{ temErroBaixa }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroBaixa }}</div></sc-if>
+    </div>
+    <div class="borda-t-dde6e8 d-flex gap-10 justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharBaixa }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-16 fs-14 fw-600 cor-1a2b33 botao-secundario">Cancelar</button><button onClick="{{ confirmarBaixa }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-18 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">{{ baixaBotao }}</button></div>
+  </aside>
+</sc-if>
+
+<div class="sr-only" role="status" aria-live="polite">{{ aviso }}</div>
+<sc-if value="{{ aviso }}" hint-placeholder-val="{{ false }}">
+  <div aria-hidden="true" class="pos-fixed base-96 esquerda-50pc w-max-content fundo-13252c cor-fff p-12-18 raio-10 fs-14 z-95 sombra-0-8-24-rgba-0-0-0-0p2 largura-fundo" style="transform:translateX(-50%);max-width:calc(100% - 32px)">{{ aviso }}</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const {
+  detTipo,
+  WDL: DIAS,
+  VIS_FOCOS,
+  dataDe,
+  hojeIso,
+  agoraMin,
+  hmDe,
+  dmTs,
+  dmIso,
+  dmyIso,
+  mesIni,
+  cicloIniIso,
+  cicloFimIso,
+  segDe,
+  pct,
+  plural,
+  msgErro,
+  normTxt,
+  proxUtil,
+  agregar,
+  ANOS,
+  anoTxt,
+  hmTs
+} = Base;
+const ORIGEM = Base.ORIGEM_VISITA;
+const ATENDIMENTOS = Base.ATEND_VISITA;
+const DATA_ISO = /^\d{4}-\d{2}-\d{2}$/;
+const MENU = [
+  ['inicio', 'Início', 'Presença na escola, visita de hoje e pendências'],
+  ['agenda', 'Agenda', 'Visitas da semana · suas e vinculadas pela gerência'],
+  ['visitas', 'Registro de visitas', 'Registro e histórico das visitas, ligados à agenda'],
+  ['carteira', 'Adoção e execução das aulas', 'Execução e uso das aulas nas escolas da sua carteira'],
+  ['jornada', 'Jornada do Usuário', 'Acessos à plataforma cruzados com a agenda e as atividades'],
+  ['onb', 'Onboarding', 'Usuários ativados por Ordem de Serviço na sua carteira']
+];
+const SUBTIPO_ANTIGO = { 'Reunião com a gestão': 'Reunião com a Direção' };
+const COM_ALUNOS = new Set([
+  'Intervenção Aulas Regulares',
+  'Intervenção Programa Construtores – Minecraft',
+  'Programa Construtores – Oficina Minecraft',
+  'Aulas regulares – Alunos'
+]);
+const FORMAS_DE_BAIXA = ['Presencial na escola', 'Na visita agendada', 'Remoto'];
+const ENGAJAMENTO_TEXTO = ['', 'Muito baixo', 'Baixo', 'Médio', 'Alto', 'Muito alto'];
+const SEM_ALTERACAO = { modo: null, data: '', hora: '', motivo: '' };
+const cicloDe = (iso, deslocamento) => {
+  const competencia = Base.cicloComp(dataDe(iso));
+  return Base.iso(new Date(competencia.getFullYear(), competencia.getMonth() + (deslocamento || 0), 1));
+};
+const diasAPartirDe = (iso, dias) => Base.iso(Base.add(dataDe(iso), dias));
+const turmaDoTexto = texto => {
+  const partes = /^(.*) · Turma (.+)$/.exec(String(texto || ''));
+  const ano = partes ? ANOS.find(x => anoTxt(x) === partes[1]) : undefined;
+  return ano === undefined ? { ano: '', turma: '' } : { ano: String(ano), turma: partes[2] };
+};
+const nomesDosParticipantes = texto =>
+  String(texto || '')
+    .split(';')
+    .map(nome => nome.trim())
+    .filter(Boolean);
+const tipoDaAgenda = texto => {
+  const [principal, detalhe] = String(texto || '').split(' · ');
+  const tipo = ATENDIMENTOS[principal] ? principal : principal === 'Implementação' ? 'Implantação' : 'Suporte';
+  const subtipo = (ATENDIMENTOS[tipo] || []).find(x => normTxt(x) === normTxt(detalhe || '')) || '';
+  return { tipo, subtipo };
+};
+const registroVazio = () => ({
+  id: null,
+  escola: '',
+  data: hojeIso(),
+  agenda: null,
+  presenca: null,
+  participantes: '',
+  tipo: 'Suporte',
+  subtipo: '',
+  solucao: '',
+  observacao: '',
+  objetivo: 'Sim',
+  engajamento: 4,
+  boasPraticas: '',
+  dificuldades: '',
+  ocorrencias: ['Sem ocorrência'],
+  ocorrenciaObs: '',
+  oficineiro: '',
+  ano: '',
+  turma: ''
+});
+const focar = id =>
+  setTimeout(() => {
+    const elemento = document.getElementById(id);
+    if (elemento) elemento.focus();
+  }, 30);
+const opcao = marcada =>
+  marcada
+    ? { borda: '#0B7EA3', fundo: 'var(--fundo-e4f5fa)', cor: 'var(--texto-08617e)', classe: '' }
+    : {
+        borda: 'var(--borda-cfdadd)',
+        fundo: 'var(--fundo-ffffff)',
+        cor: 'var(--texto-1a2b33)',
+        classe: 'fundo-ffffff botao-secundario'
+      };
+const segmento = marcado => ({
+  classe: marcado ? 'fundo-ffffff' : 'fundo-transparent',
+  fundo: marcado ? 'var(--fundo-ffffff)' : 'transparent',
+  cor: marcado ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)'
+});
+
+class Component extends DCLogic {
+  state = {
+    menuAberto: false,
+    tela: 'inicio',
+    conectado: false,
+    carregando: false,
+    erro: '',
+    salvando: false,
+    aviso: '',
+    acesso: null,
+    escolas: [],
+    carteiras: [],
+    pessoas: [],
+    presencasRede: [],
+    aulasRede: [],
+    grade: [],
+    gradeAnterior: [],
+    visitas: [],
+    agenda: [],
+    presencas: [],
+    correcoes: [],
+    turmas: [],
+    ciclos: {},
+    ordensServico: null,
+    onboardings: null,
+    acessos: null,
+    carregandoAcessos: false,
+    presencaSalvando: false,
+    visitaDaAgenda: null,
+    alteracao: SEM_ALTERACAO,
+    erroAgenda: '',
+    novaVisita: null,
+    erroNovaVisita: '',
+    visitaAberta: null,
+    baixa: null,
+    erroBaixa: ''
+  };
+  memoria = {
+    inicio: { geo: { situacao: 'buscando' }, mapa: '', escola: '', observacao: '' },
+    agenda: { semana: 0 },
+    visitas: { aba: 'registrar', registro: registroVazio(), erro: '', focar: '', mes: '', escola: '' },
+    carteira: { periodo: '', escola: '', solucao: '', tipo: '' },
+    jornada: {}
+  };
+  componentDidMount() {
+    this.aoTeclar = e => {
+      if (e.key !== 'Escape') return;
+      const s = this.state;
+      if (s.notifAberto) return this.setState({ notifAberto: false });
+      if (s.baixa) return this.fecharBaixa();
+      if (s.novaVisita) return this.fecharNovaVisita();
+      if (s.visitaDaAgenda) return this.fecharVisitaDaAgenda();
+      if (s.visitaAberta) return this.fecharVisita();
+    };
+    document.addEventListener('keydown', this.aoTeclar);
+    this.relogio = setInterval(() => this.forceUpdate(), 30000);
+    this.carregar();
+  }
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.aoTeclar);
+    clearInterval(this.relogio);
+    clearTimeout(this.avisoTempo);
+    this.travarFundo(false);
+  }
+  avisar(texto) {
+    this.setState({ aviso: texto });
+    clearTimeout(this.avisoTempo);
+    this.avisoTempo = setTimeout(() => this.setState({ aviso: '' }), 3600);
+  }
+  usuario() {
+    const A = window.FSM_AUTH;
+    return A && A.usuarioId ? A.usuarioId() : '';
+  }
+  temGaveta(s) {
+    return !!(s.visitaDaAgenda || s.novaVisita || s.visitaAberta || s.baixa);
+  }
+  travarFundo(travar) {
+    document.querySelectorAll('.estrutura').forEach(el => {
+      if (travar) el.setAttribute('inert', '');
+      else el.removeAttribute('inert');
+    });
+  }
+  abrirGaveta(estado, foco) {
+    if (!this.temGaveta(this.state)) this.focoAnterior = document.activeElement;
+    this.setState({ notifAberto: false, menuAberto: false, ...estado }, () => {
+      this.travarFundo(true);
+      focar(foco);
+    });
+  }
+  fecharGaveta(estado) {
+    this.setState(estado, () => {
+      if (this.temGaveta(this.state)) return;
+      this.travarFundo(false);
+      const anterior = this.focoAnterior;
+      this.focoAnterior = null;
+      if (anterior && document.contains(anterior)) anterior.focus();
+    });
+  }
+  lembrar(tela, mudanca) {
+    Object.assign(this.memoria[tela], mudanca);
+    this.forceUpdate();
+  }
+  async carregar() {
+    const A = window.FSM_AUTH;
+    if (!A || !A.logado || !A.logado()) return;
+    if (!A.presencasAnalista || !A.registrarVisita) {
+      this.setState({
+        conectado: true,
+        erro: 'Esta versão do site está desatualizada. Gere e publique o site de novo.'
+      });
+      return;
+    }
+    this.setState({ conectado: true, carregando: true, erro: '' });
+    const hoje = hojeIso(),
+      ano = Number(hoje.slice(0, 4)),
+      inicioDasPresencas = cicloIniIso(cicloDe(hoje, -1)),
+      anoInicial = Number(inicioDasPresencas.slice(0, 4));
+    try {
+      const [
+        acesso,
+        escolas,
+        carteiras,
+        pessoas,
+        presencasRede,
+        aulasRede,
+        grade,
+        gradeAnterior,
+        visitas,
+        presencas,
+        correcoes,
+        turmas
+      ] = await Promise.all([
+        A.meuAcesso(),
+        A.escolas(),
+        A.carteiras().catch(() => []),
+        A.pessoasDaEscola().catch(() => []),
+        A.presencasRede(inicioDasPresencas, hoje),
+        A.aulasRede(inicioDasPresencas, hoje),
+        A.gradeRede(ano),
+        anoInicial !== ano ? A.gradeRede(anoInicial) : Promise.resolve([]),
+        A.visitasCompletas(mesIni(hoje, -5), hoje),
+        A.presencasAnalista(diasAPartirDe(hoje, -45), hoje),
+        A.historicoVisitas(mesIni(hoje, -5)).catch(() => []),
+        A.turmasRede ? A.turmasRede().catch(() => []) : []
+      ]);
+      this.setState(
+        {
+          acesso: acesso || {},
+          escolas: escolas || [],
+          carteiras: carteiras || [],
+          pessoas: pessoas || [],
+          presencasRede: presencasRede || [],
+          aulasRede: aulasRede || [],
+          grade: grade || [],
+          gradeAnterior: gradeAnterior || [],
+          visitas: visitas || [],
+          presencas: presencas || [],
+          correcoes: correcoes || [],
+          turmas: turmas || [],
+          carregando: false
+        },
+        () => {
+          this.carregarAgenda();
+          this.carregarOnboarding();
+        }
+      );
+    } catch (x) {
+      const semTabela = /presencas_analista|registrar_visita|PGRST2|relation/i.test(String((x && x.message) || ''));
+      this.setState({
+        carregando: false,
+        erro: semTabela
+          ? 'A presença do analista ainda não está no banco. Rode o arquivo 43_analista_campo.sql no Supabase.'
+          : msgErro(x, 'Não foi possível carregar os dados da carteira.')
+      });
+    }
+  }
+  async carregarAgenda() {
+    const hoje = hojeIso();
+    try {
+      const agenda = await window.FSM_AUTH.agendaVisitas(diasAPartirDe(hoje, -60), diasAPartirDe(hoje, 190));
+      this.setState({ agenda: agenda || [] });
+    } catch (x) {
+      this.setState({ agenda: [], erro: msgErro(x, 'Não foi possível carregar a agenda.') });
+    }
+  }
+  async carregarPresencas() {
+    const hoje = hojeIso();
+    try {
+      const presencas = await window.FSM_AUTH.presencasAnalista(diasAPartirDe(hoje, -45), hoje);
+      this.setState({ presencas: presencas || [] });
+    } catch (x) {
+      this.setState({ erro: msgErro(x, 'Não foi possível carregar suas presenças.') });
+    }
+  }
+  async carregarVisitas() {
+    const A = window.FSM_AUTH,
+      hoje = hojeIso();
+    try {
+      const [visitas, correcoes] = await Promise.all([
+        A.visitasCompletas(mesIni(hoje, -5), hoje),
+        A.historicoVisitas(mesIni(hoje, -5)).catch(() => this.state.correcoes)
+      ]);
+      this.setState({ visitas: visitas || [], correcoes: correcoes || [] });
+    } catch (x) {
+      this.setState({ erro: msgErro(x, 'Não foi possível carregar as visitas.') });
+    }
+  }
+  async carregarCiclo(ciclo) {
+    const A = window.FSM_AUTH,
+      hoje = hojeIso();
+    if (!ciclo || ciclo >= cicloDe(hoje, -1) || this.state.ciclos[ciclo]) return;
+    this.setState({ ciclos: { ...this.state.ciclos, [ciclo]: { carregando: true } } });
+    try {
+      const fim = cicloFimIso(ciclo),
+        inicio = cicloIniIso(ciclo),
+        ano = Number(ciclo.slice(0, 4)),
+        anoAtual = Number(hoje.slice(0, 4));
+      const precisaDaGrade =
+        ano !== anoAtual &&
+        !(this.state.gradeAnterior.length && Number(this.state.gradeAnterior[0].ano_letivo) === ano);
+      const [presencas, aulas, grade] = await Promise.all([
+        A.presencasRede(inicio, fim),
+        A.aulasRede(inicio, fim),
+        precisaDaGrade ? A.gradeRede(ano) : Promise.resolve(null)
+      ]);
+      this.setState({
+        ciclos: { ...this.state.ciclos, [ciclo]: { presencas: presencas || [], aulas: aulas || [], grade } }
+      });
+    } catch (x) {
+      this.setState({
+        ciclos: { ...this.state.ciclos, [ciclo]: { erro: true } },
+        erro: msgErro(x, 'Não foi possível carregar o ciclo escolhido.')
+      });
+    }
+  }
+  carregarPeriodo(periodo) {
+    return this.carregarCiclo(periodo === 'tri' ? cicloDe(hojeIso(), -2) : periodo);
+  }
+  async carregarOnboarding() {
+    const A = window.FSM_AUTH;
+    if (!A.itensOnboarding) return;
+    try {
+      const [ordensServico, onboardings] = await Promise.all([A.ordensServico().catch(() => []), A.itensOnboarding()]);
+      this.setState({ ordensServico: ordensServico || [], onboardings: onboardings || [] });
+    } catch (x) {
+      this.setState({ ordensServico: [], onboardings: [] });
+    }
+  }
+  async carregarAcessos() {
+    const A = window.FSM_AUTH;
+    if (this.state.acessos || this.state.carregandoAcessos || !A.jornadaPessoas) return;
+    this.setState({ carregandoAcessos: true });
+    try {
+      const acessos = await A.jornadaPessoas();
+      this.setState({ acessos: acessos || [], carregandoAcessos: false });
+    } catch (x) {
+      this.setState({
+        acessos: [],
+        carregandoAcessos: false,
+        erro: msgErro(x, 'Não foi possível carregar a base de acessos.')
+      });
+    }
+  }
+  irPara(tela, memoria) {
+    if (memoria) Object.assign(this.memoria[tela], memoria);
+    this.setState({ tela, menuAberto: false, notifAberto: false }, () => {
+      if (tela === 'jornada') this.carregarAcessos();
+      if (tela === 'onb') this.carregarOnboarding();
+      if (tela === 'carteira' && this.memoria.carteira.periodo) this.carregarPeriodo(this.memoria.carteira.periodo);
+    });
+  }
+  presencaAberta() {
+    return this.state.presencas.find(p => !p.fim) || null;
+  }
+  async alternarPresenca(visitaDaAgenda, comPosicao) {
+    const s = this.state;
+    if (s.presencaSalvando) return;
+    const aberta = this.presencaAberta(),
+      escola = this.memoria.inicio.escola || (visitaDaAgenda ? String(visitaDaAgenda.escola_id) : '');
+    if (!aberta && !escola) {
+      this.avisar('Escolha a escola da visita');
+      focar('an-escola');
+      return;
+    }
+    this.setState({ presencaSalvando: true });
+    comPosicao(async geo => {
+      const latitude = geo && geo.situacao === 'ok' ? geo.latitude : null,
+        longitude = geo && geo.situacao === 'ok' ? geo.longitude : null,
+        observacao = this.memoria.inicio.observacao;
+      try {
+        const resposta = aberta
+          ? await window.FSM_AUTH.presencaAnalista('fim', null, latitude, longitude, null, observacao)
+          : await window.FSM_AUTH.presencaAnalista(
+              'inicio',
+              escola,
+              latitude,
+              longitude,
+              visitaDaAgenda ? visitaDaAgenda.id : null,
+              observacao
+            );
+        await this.carregarPresencas();
+        const hora =
+          hmTs(aberta ? resposta && resposta.fim : resposta && resposta.inicio) || hmDe(new Date().toTimeString());
+        this.memoria.inicio.observacao = '';
+        if (aberta) {
+          const encerrada = this.state.presencas.find(p => p.id === aberta.id) || aberta;
+          this.setState({ presencaSalvando: false }, () => {
+            this.abrirRegistro({ presenca: encerrada });
+            this.avisar('Presença encerrada às ' + hora + ' · agora registre a visita');
+          });
+        } else {
+          this.setState({ presencaSalvando: false });
+          this.avisar('Presença iniciada às ' + hora);
+        }
+      } catch (x) {
+        this.setState({ presencaSalvando: false });
+        this.avisar(msgErro(x, 'Não foi possível registrar a presença.'));
+      }
+    });
+  }
+  oficineirosDaEscola(escolaId) {
+    const s = this.state,
+      anoAtual = Number(hojeIso().slice(0, 4)),
+      comGrade = new Set(
+        s.grade
+          .filter(g => String(g.escola_id) === String(escolaId) && Number(g.ano_letivo) === anoAtual)
+          .map(g => g.oficineiro_id)
+      );
+    return s.pessoas
+      .filter(
+        p =>
+          p.papel === 'oficineiro' &&
+          p.ativo !== false &&
+          (String(p.escola_id) === String(escolaId) || comGrade.has(p.id))
+      )
+      .sort((a, b) => String(a.nome).localeCompare(String(b.nome), 'pt-BR'));
+  }
+  turmaPara(escolaId) {
+    const oficineiros = escolaId ? this.oficineirosDaEscola(escolaId) : [];
+    return { oficineiro: oficineiros.length === 1 ? oficineiros[0].id : '', ano: '', turma: '' };
+  }
+  abrirRegistro(origem) {
+    const hoje = hojeIso(),
+      presenca = origem && origem.presenca;
+    const visitaDaAgenda =
+      (origem && origem.agenda) ||
+      (presenca && presenca.agenda_id ? this.state.agenda.find(a => a.id === presenca.agenda_id) : null);
+    const atendimento = tipoDaAgenda(visitaDaAgenda && visitaDaAgenda.tipo);
+    const escola = String((presenca && presenca.escola_id) || (visitaDaAgenda && visitaDaAgenda.escola_id) || '');
+    const registro = {
+      ...registroVazio(),
+      ...this.turmaPara(escola),
+      escola,
+      data: (presenca && presenca.data) || (visitaDaAgenda && visitaDaAgenda.data <= hoje ? visitaDaAgenda.data : hoje),
+      agenda: visitaDaAgenda && visitaDaAgenda.status === 'agendada' ? visitaDaAgenda.id : null,
+      presenca: presenca ? presenca.id : null,
+      tipo: atendimento.tipo,
+      subtipo: atendimento.subtipo
+    };
+    Object.assign(this.memoria.visitas, { aba: 'registrar', registro, erro: '', focar: 'rg-obs' });
+    this.setState({ tela: 'visitas', menuAberto: false }, () => window.scrollTo(0, 0));
+  }
+  editarRegistro(visita) {
+    const ocorrencias = String(visita.ocorrencias || '')
+      .split(', ')
+      .filter(Boolean);
+    this.fecharGaveta({ visitaAberta: null });
+    Object.assign(this.memoria.visitas, {
+      aba: 'registrar',
+      erro: '',
+      registro: {
+        ...registroVazio(),
+        id: visita.id,
+        escola: String(visita.escola_id),
+        data: visita.data,
+        agenda: visita.agenda_id,
+        presenca: visita.presenca_id,
+        participantes: visita.participantes || '',
+        tipo: ATENDIMENTOS[visita.tipo] ? visita.tipo : 'Suporte',
+        subtipo: SUBTIPO_ANTIGO[visita.subtipo] || visita.subtipo || '',
+        solucao: visita.solucao || '',
+        observacao: visita.observacao || '',
+        objetivo: visita.objetivo === 'Sim' || visita.objetivo === 'Não' ? visita.objetivo : '',
+        ...turmaDoTexto(visita.turma),
+        oficineiro: visita.oficineiro_id || '',
+        engajamento: visita.engajamento || null,
+        boasPraticas: visita.boas_praticas || '',
+        dificuldades: visita.dificuldades || '',
+        ocorrencias: ocorrencias.length ? ocorrencias : ['Sem ocorrência'],
+        ocorrenciaObs: visita.ocorrencia_obs || ''
+      }
+    });
+    this.setState({ tela: 'visitas' });
+  }
+  async enviarRegistro() {
+    const registro = this.memoria.visitas.registro,
+      hoje = hojeIso(),
+      dataMinima = diasAPartirDe(hoje, registro.id ? -7 : -30),
+      comAlunos = COM_ALUNOS.has(registro.subtipo);
+    if (this.state.salvando) return;
+    let erro = '',
+      campo = '';
+    if (!registro.escola) {
+      erro = 'Escolha a escola da visita.';
+      campo = 'rg-escola';
+    } else if (!DATA_ISO.test(registro.data) || registro.data > hoje || registro.data < dataMinima) {
+      erro = registro.id ? 'A data deve estar nos últimos 7 dias.' : 'A data deve ser de hoje ou dos últimos 30 dias.';
+      campo = 'rg-data';
+    } else if (comAlunos && (!registro.oficineiro || registro.ano === '' || !registro.turma)) {
+      erro = 'Escolha o oficineiro, o ano e a turma atendidos.';
+      campo = !registro.oficineiro ? 'rg-ofic' : registro.ano === '' ? 'rg-ano' : 'rg-turma';
+    } else if (registro.observacao.trim().length < 10) {
+      erro = 'Descreva como foi a visita.';
+      campo = 'rg-obs';
+    }
+    if (erro) {
+      this.lembrar('visitas', { erro, focar: campo });
+      return;
+    }
+    const ocorrencias = registro.ocorrencias.filter(x => x !== 'Sem ocorrência');
+    const dados = {
+      escola: Number(registro.escola),
+      data: registro.data,
+      tipo: registro.tipo,
+      subtipo: registro.subtipo,
+      participantes: nomesDosParticipantes(registro.participantes).join('; '),
+      solucao: registro.solucao,
+      turma: comAlunos ? anoTxt(registro.ano) + ' · Turma ' + registro.turma : '',
+      oficineiro: comAlunos ? registro.oficineiro : '',
+      observacao: registro.observacao.trim(),
+      objetivo: registro.objetivo || '',
+      engajamento: registro.engajamento || '',
+      boas_praticas: registro.boasPraticas.trim(),
+      dificuldades: registro.dificuldades.trim(),
+      ocorrencias: ocorrencias.join(', '),
+      ocorrencia_obs: ocorrencias.length ? registro.ocorrenciaObs.trim() : '',
+      agenda_id: registro.id ? '' : registro.agenda || '',
+      presenca_id: registro.id ? '' : registro.presenca || ''
+    };
+    this.memoria.visitas.erro = '';
+    this.setState({ salvando: true });
+    try {
+      if (registro.id) await window.FSM_AUTH.editarVisita(registro.id, dados);
+      else await window.FSM_AUTH.registrarVisita(dados);
+      await Promise.all([this.carregarVisitas(), this.carregarAgenda()]);
+      const escola = this.state.escolas.find(e => String(e.id) === String(registro.escola));
+      Object.assign(this.memoria.visitas, {
+        registro: registroVazio(),
+        aba: 'historico',
+        mes: mesIni(registro.data, 0),
+        escola: ''
+      });
+      this.setState({ salvando: false });
+      this.avisar(
+        (registro.id ? 'Registro corrigido · ' : 'Visita registrada · ') +
+          (escola ? escola.sigla : '') +
+          ' · ' +
+          dmIso(registro.data)
+      );
+    } catch (x) {
+      this.memoria.visitas.erro = msgErro(x, 'Não foi possível salvar a visita.');
+      this.setState({ salvando: false });
+    }
+  }
+  abrirVisitaDaAgenda(id) {
+    this.abrirGaveta({ visitaDaAgenda: id, alteracao: SEM_ALTERACAO, erroAgenda: '' }, 'ag-titulo');
+  }
+  fecharVisitaDaAgenda() {
+    if (this.state.salvando) return;
+    this.fecharGaveta({ visitaDaAgenda: null, alteracao: SEM_ALTERACAO, erroAgenda: '' });
+  }
+  async confirmarAlteracao() {
+    const s = this.state,
+      id = s.visitaDaAgenda;
+    if (!id || s.salvando) return;
+    const { modo, data, hora, motivo } = s.alteracao,
+      hoje = hojeIso(),
+      dataMaxima = diasAPartirDe(hoje, 180);
+    if (modo === 'remarcar') {
+      if (!DATA_ISO.test(data) || data < hoje || data > dataMaxima)
+        return this.setState({ erroAgenda: 'Escolha uma data entre hoje e os próximos 180 dias.' }, () =>
+          focar('ag-data')
+        );
+      if (!Base.letivo(dataDe(data)))
+        return this.setState({ erroAgenda: 'Escolha um dia útil: a data cai em fim de semana ou feriado.' }, () =>
+          focar('ag-data')
+        );
+    }
+    if (motivo.trim().length < 3) return this.setState({ erroAgenda: 'Informe o motivo.' }, () => focar('ag-motivo'));
+    this.setState({ salvando: true, erroAgenda: '' });
+    try {
+      if (modo === 'remarcar') await window.FSM_AUTH.remarcarVisitaAgenda(id, data, hora || null, motivo.trim());
+      else await window.FSM_AUTH.cancelarMinhaVisita(id, motivo.trim());
+      await this.carregarAgenda();
+      this.setState({ salvando: false }, () => {
+        this.fecharGaveta({ visitaDaAgenda: null, alteracao: SEM_ALTERACAO });
+        this.avisar(
+          modo === 'remarcar'
+            ? 'Visita remarcada para ' + dmIso(data) + (hora ? ' · ' + hora : '')
+            : 'Visita cancelada · saiu da agenda'
+        );
+      });
+    } catch (x) {
+      this.setState({ salvando: false, erroAgenda: msgErro(x, 'Não foi possível concluir.') });
+    }
+  }
+  agendarVisita(preenchida) {
+    this.abrirGaveta(
+      {
+        novaVisita: {
+          escola: '',
+          data: proxUtil(diasAPartirDe(hojeIso(), 1)),
+          hora: '08:00',
+          origem: 'analista',
+          tipo: 'Acompanhamento · Plano de ação',
+          focos: ['Professores'],
+          orientacao: '',
+          diagnostico: '',
+          ...(preenchida || {})
+        },
+        erroNovaVisita: ''
+      },
+      preenchida && preenchida.escola ? 'nv-data' : 'nv-escola'
+    );
+  }
+  fecharNovaVisita() {
+    if (this.state.salvando) return;
+    this.fecharGaveta({ novaVisita: null, erroNovaVisita: '' });
+  }
+  async salvarNovaVisita() {
+    const visita = this.state.novaVisita;
+    if (!visita || this.state.salvando) return;
+    const hoje = hojeIso(),
+      dataMaxima = diasAPartirDe(hoje, 180);
+    let erro = '',
+      campo = '';
+    if (!visita.escola) {
+      erro = 'Escolha a escola.';
+      campo = 'nv-escola';
+    } else if (!DATA_ISO.test(visita.data) || visita.data < hoje || visita.data > dataMaxima) {
+      erro = 'Escolha uma data entre hoje e os próximos 180 dias.';
+      campo = 'nv-data';
+    } else if (!Base.letivo(dataDe(visita.data))) {
+      erro = 'Escolha um dia útil: a data cai em fim de semana ou feriado.';
+      campo = 'nv-data';
+    }
+    if (erro) return this.setState({ erroNovaVisita: erro }, () => focar(campo));
+    this.setState({ salvando: true, erroNovaVisita: '' });
+    try {
+      await window.FSM_AUTH.agendarMinhaVisita({
+        escola: visita.escola,
+        data: visita.data,
+        hora: visita.hora || null,
+        origem: visita.origem,
+        tipo: visita.tipo,
+        foco: (visita.focos || []).join(', '),
+        orientacao: (visita.orientacao || '').trim()
+      });
+      await this.carregarAgenda();
+      const escola = this.state.escolas.find(e => String(e.id) === String(visita.escola));
+      this.setState({ salvando: false }, () => {
+        this.fecharGaveta({ novaVisita: null });
+        this.avisar(
+          'Visita agendada · ' +
+            (escola ? escola.sigla : '') +
+            ' · ' +
+            DIAS[dataDe(visita.data).getDay()] +
+            ' ' +
+            dmIso(visita.data) +
+            (visita.hora ? ' · ' + visita.hora : '')
+        );
+      });
+    } catch (x) {
+      this.setState({ salvando: false, erroNovaVisita: msgErro(x, 'Não foi possível agendar a visita.') });
+    }
+  }
+  abrirVisita(id) {
+    this.abrirGaveta({ visitaAberta: id }, 'vd-titulo');
+  }
+  fecharVisita() {
+    this.fecharGaveta({ visitaAberta: null });
+  }
+  abrirBaixa(item, escola, ordem) {
+    this.abrirGaveta(
+      {
+        baixa: {
+          id: item.id,
+          nome: item.nome,
+          escola,
+          ordem,
+          data: hojeIso(),
+          forma: FORMAS_DE_BAIXA[0],
+          observacao: ''
+        },
+        erroBaixa: ''
+      },
+      'onb-titulo'
+    );
+  }
+  fecharBaixa() {
+    if (this.state.salvando) return;
+    this.fecharGaveta({ baixa: null, erroBaixa: '' });
+  }
+  async confirmarBaixa() {
+    const baixa = this.state.baixa;
+    if (!baixa || this.state.salvando) return;
+    if (!DATA_ISO.test(baixa.data) || baixa.data > hojeIso())
+      return this.setState({ erroBaixa: 'A data da entrega não pode ser futura.' });
+    this.setState({ salvando: true, erroBaixa: '' });
+    try {
+      await window.FSM_AUTH.darBaixaOnboarding(baixa.id, baixa.data, baixa.forma, (baixa.observacao || '').trim());
+      await this.carregarOnboarding();
+      this.setState({ salvando: false }, () => {
+        this.fecharGaveta({ baixa: null });
+        this.avisar('Baixa registrada · ' + baixa.nome + ' · o Gerente de Projetos já vê a atualização');
+      });
+    } catch (x) {
+      this.setState({ salvando: false, erroBaixa: msgErro(x, 'Não foi possível dar baixa.') });
+    }
+  }
+  async desfazerBaixa(item) {
+    try {
+      await window.FSM_AUTH.reabrirOnboarding(item.id);
+      await this.carregarOnboarding();
+      this.avisar('Baixa desfeita · ' + item.nome + ' voltou para as pendências');
+    } catch (x) {
+      this.avisar(msgErro(x, 'Não foi possível desfazer a baixa.'));
+    }
+  }
+  exportar(nome, aba, linhas) {
+    if (!window.FSM_PLANILHA) return this.avisar('Exportação indisponível nesta versão do site');
+    window.FSM_PLANILHA.baixar(linhas, nome, aba);
+  }
+  contextoDaCarteira() {
+    const s = this.state,
+      hoje = hojeIso(),
+      agora = agoraMin(),
+      usuario = this.usuario(),
+      carteira = (s.acesso || {}).carteira_id || '';
+    const escolasPorId = Object.fromEntries(s.escolas.map(e => [String(e.id), e]));
+    const escolaDe = id => escolasPorId[String(id)];
+    const nomeDaEscola = id => (escolaDe(id) || {}).nome || 'Escola não encontrada';
+    const siglaDaEscola = id => (escolaDe(id) || {}).sigla || '—';
+    const nomeDaPessoa = id => (s.pessoas.find(p => p.id === id) || {}).nome || 'Oficineiro';
+    const escolasDaCarteira = s.escolas
+      .filter(e => e.ativa !== false && e.carteira_id === carteira)
+      .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    const idsDaCarteira = new Set(escolasDaCarteira.map(e => e.id));
+    const oficineiros = s.pessoas.filter(p => p.papel === 'oficineiro' && p.ativo !== false);
+    const minhasVisitas = s.visitas.filter(v => v.analista_id === usuario);
+    const agendaValida = s.agenda.filter(v => v.status !== 'cancelada');
+    const origemDe = chave => ORIGEM[chave] || ORIGEM.demanda;
+    const proximaVisita = escolaId =>
+      agendaValida
+        .filter(v => v.escola_id === escolaId && v.status === 'agendada' && v.data >= hoje)
+        .sort((a, b) => (a.data + (a.hora || '')).localeCompare(b.data + (b.hora || '')))[0];
+    const textoDaVisita = v =>
+      v ? DIAS[dataDe(v.data).getDay()].slice(0, 3) + ' ' + dmIso(v.data) + (v.hora ? ' · ' + hmDe(v.hora) : '') : '';
+    const ultimaVisita = escolaId =>
+      minhasVisitas
+        .concat(s.visitas.filter(v => v.analista_id !== usuario))
+        .filter(v => v.escola_id === escolaId)
+        .sort((a, b) => b.data.localeCompare(a.data))[0];
+    const anoAtual = Number(hoje.slice(0, 4));
+    const cicloAtual = cicloDe(hoje, 0);
+    const dadosDoCiclo = ciclo => {
+      const fim = ciclo === cicloAtual ? hoje : cicloFimIso(ciclo),
+        inicio = cicloIniIso(ciclo),
+        noCiclo = x => x.data >= inicio && x.data <= fim,
+        carregado = s.ciclos[ciclo] || {},
+        ano = Number(ciclo.slice(0, 4)),
+        recente = ciclo >= cicloDe(hoje, -1);
+      const grade =
+        ano === anoAtual
+          ? s.grade
+          : s.gradeAnterior.length && Number(s.gradeAnterior[0].ano_letivo) === ano
+            ? s.gradeAnterior
+            : carregado.grade || [];
+      return {
+        inicio,
+        fim,
+        pronto: recente || !!carregado.presencas,
+        presencas: recente ? s.presencasRede.filter(noCiclo) : carregado.presencas || [],
+        aulas: recente ? s.aulasRede.filter(noCiclo) : carregado.aulas || [],
+        grade
+      };
+    };
+    const aulasDoCiclo = (dados, ciclo) => {
+      const agregado = agregar(dados.grade, dados.aulas, dados.inicio || ciclo, dados.fim, [], hoje, agora);
+      return agregado.oc
+        .map(o => ({ ...o, extra: false }))
+        .concat(
+          agregado.extras.map(r => ({
+            g: r.grade_aula_id ? agregado.porId[r.grade_aula_id] : null,
+            iso: r.data,
+            of: r.oficineiro_id,
+            esc: r.escola_id,
+            tipo: r.tipo,
+            sol: detTipo(r),
+            reg: r,
+            anul: false,
+            st: 'extra',
+            extra: true
+          }))
+        )
+        .filter(i => idsDaCarteira.has(i.esc));
+    };
+    const resumir = aulas => {
+      const t = {
+        previstas: 0,
+        canc: 0,
+        real: 0,
+        nao: 0,
+        sreg: 0,
+        extra: 0,
+        estudantes: 0,
+        presentes: 0,
+        matriculados: 0,
+        somaEngajamento: 0,
+        notasEngajamento: 0
+      };
+      aulas.forEach(i => {
+        if (i.extra) t.extra++;
+        else {
+          t.previstas++;
+          t[i.st]++;
+        }
+        if ((i.st === 'real' || i.extra) && i.reg) {
+          t.estudantes += i.reg.presentes || 0;
+          if (i.reg.matriculados) {
+            t.presentes += i.reg.presentes || 0;
+            t.matriculados += i.reg.matriculados;
+          }
+          if (i.reg.engajamento) {
+            t.somaEngajamento += i.reg.engajamento;
+            t.notasEngajamento++;
+          }
+        }
+      });
+      t.liquidas = t.previstas - t.canc;
+      t.execucao = pct(t.real, t.liquidas);
+      t.engajamento = t.notasEngajamento ? (t.somaEngajamento / t.notasEngajamento).toFixed(1).replace('.', ',') : '—';
+      t.presenca = pct(t.presentes, t.matriculados);
+      return t;
+    };
+    const aulasDoCicloAtual = aulasDoCiclo(dadosDoCiclo(cicloAtual), cicloAtual);
+    const presencaAberta = this.presencaAberta();
+    const agendaDeHoje = agendaValida
+      .filter(v => v.data === hoje && v.status === 'agendada')
+      .sort((a, b) => String(a.hora || '').localeCompare(String(b.hora || '')));
+    const onboardings = s.onboardings || [];
+    const ordensPorId = Object.fromEntries((s.ordensServico || []).map(o => [o.id, o]));
+    const recebimentoDe = item => (ordensPorId[item.os_id] || {}).recebida_em;
+    const diasDesde = iso => (iso ? Math.max(0, Math.round((dataDe(hoje) - dataDe(iso)) / 864e5)) : 0);
+    const onboardingsPendentes = onboardings
+      .filter(i => i.status === 'pendente')
+      .sort((a, b) => String(recebimentoDe(a)).localeCompare(String(recebimentoDe(b))));
+    const onboardingsConcluidos = onboardings
+      .filter(i => i.status === 'concluido')
+      .sort((a, b) => String(b.baixa_data).localeCompare(String(a.baixa_data)));
+    const contexto = {
+      hoje,
+      agora,
+      usuario,
+      carteira,
+      conectado: s.conectado,
+      salvando: s.salvando,
+      presencaSalvando: s.presencaSalvando,
+      opacidade: String(s.carregando ? 0.55 : 1),
+      ha7Dias: diasAPartirDe(hoje, -7),
+      ha30Dias: diasAPartirDe(hoje, -30),
+      escolaDe,
+      nomeDaEscola,
+      siglaDaEscola,
+      nomeDaPessoa,
+      escolasDaCarteira,
+      opcoesDeEscola: escolasDaCarteira.map(e => ({ valor: String(e.id), rotulo: e.nome })),
+      oficineiros,
+      grade: s.grade,
+      turmas: s.turmas || [],
+      visitas: s.visitas,
+      minhasVisitas,
+      correcoesDe: id => s.correcoes.filter(c => c.visita_id === id),
+      agenda: s.agenda,
+      agendaValida,
+      agendaDeHoje,
+      origemDe,
+      proximaVisita,
+      textoDaVisita,
+      ultimaVisita,
+      presencas: s.presencas,
+      presencaAberta,
+      presencasComVisita: new Set(s.visitas.map(v => v.presenca_id).filter(Boolean)),
+      cicloRelativo: deslocamento => cicloDe(hoje, deslocamento),
+      dadosDoCiclo,
+      aulasDoCiclo,
+      aulasDoCicloAtual,
+      resumir,
+      onboardingsPendentes,
+      onboardingsConcluidos,
+      recebimentoDe,
+      diasDesde,
+      ordemDe: item => {
+        const ordem = ordensPorId[item.os_id];
+        return ordem ? ordem.secretaria + ' ' + ordem.numero : item.os_id;
+      },
+      acessos: s.acessos,
+      carregandoAcessos: s.carregandoAcessos,
+      registroVazio,
+      tipoDaAgenda,
+      nomesDosParticipantes,
+      atendimentoComAlunos: subtipo => COM_ALUNOS.has(subtipo),
+      engajamentoTexto: ENGAJAMENTO_TEXTO,
+      opcao,
+      segmento,
+      oficineirosDaEscola: escolaId => this.oficineirosDaEscola(escolaId),
+      turmaPara: escolaId => this.turmaPara(escolaId),
+      irPara: (tela, memoria) => this.irPara(tela, memoria),
+      alternarPresenca: (visitaDaAgenda, comPosicao) => this.alternarPresenca(visitaDaAgenda, comPosicao),
+      abrirRegistro: origem => this.abrirRegistro(origem),
+      enviarRegistro: () => this.enviarRegistro(),
+      abrirVisitaDaAgenda: id => this.abrirVisitaDaAgenda(id),
+      abrirVisita: id => this.abrirVisita(id),
+      agendarVisita: preenchida => this.agendarVisita(preenchida),
+      carregarPeriodo: periodo => this.carregarPeriodo(periodo),
+      abrirBaixa: (item, escola, ordem) => this.abrirBaixa(item, escola, ordem),
+      desfazerBaixa: item => this.desfazerBaixa(item),
+      exportar: (nome, aba, linhas) => this.exportar(nome, aba, linhas)
+    };
+    contexto.pendencias = this.pendenciasDaCarteira(contexto);
+    return contexto;
+  }
+  pendenciasDaCarteira(contexto) {
+    const {
+      hoje,
+      usuario,
+      ha7Dias,
+      ha30Dias,
+      agendaValida,
+      escolasDaCarteira,
+      presencaAberta,
+      onboardingsPendentes,
+      nomeDaEscola,
+      siglaDaEscola
+    } = contexto;
+    const semRegistro = agendaValida.filter(v => v.status === 'agendada' && v.data < hoje);
+    const vinculadas = agendaValida.filter(
+      v =>
+        v.status === 'agendada' &&
+        v.data >= hoje &&
+        v.criada_por &&
+        v.criada_por !== usuario &&
+        String(v.criada_em || '').slice(0, 10) >= ha7Dias
+    );
+    const semVisita = escolasDaCarteira.filter(e => {
+      const ultima = contexto.ultimaVisita(e.id);
+      return !ultima || ultima.data < ha30Dias;
+    });
+    const execucaoBaixa = escolasDaCarteira
+      .map(escola => ({
+        escola,
+        resumo: contexto.resumir(contexto.aulasDoCicloAtual.filter(i => i.esc === escola.id))
+      }))
+      .filter(x => x.resumo.liquidas > 0 && x.resumo.execucao < 60);
+    const atrasados = onboardingsPendentes.filter(i => contexto.diasDesde(contexto.recebimentoDe(i)) > 15);
+    const esquecida = presencaAberta && presencaAberta.data < hoje ? presencaAberta : null;
+    const lista = (itens, texto, limite = 4) =>
+      itens.slice(0, limite).map(texto).join(', ') +
+      (itens.length > limite ? ' e mais ' + (itens.length - limite) : '');
+    return [
+      esquecida && {
+        titulo: 'Presença de ' + dmIso(esquecida.data) + ' sem encerramento',
+        detalhe: nomeDaEscola(esquecida.escola_id) + ' · encerre para liberar a presença de hoje',
+        cor: 'var(--texto-b42318)',
+        resolver: () => this.irPara('inicio')
+      },
+      semRegistro.length && {
+        titulo: plural(semRegistro.length, 'visita da agenda sem registro', 'visitas da agenda sem registro'),
+        detalhe: lista(semRegistro, v => siglaDaEscola(v.escola_id) + ' ' + dmIso(v.data)),
+        cor: 'var(--texto-b42318)',
+        resolver: () => {
+          const visita = semRegistro.find(v => v.data >= ha30Dias);
+          if (visita) this.abrirRegistro({ agenda: visita });
+          else this.irPara('agenda');
+        }
+      },
+      vinculadas.length && {
+        titulo: plural(
+          vinculadas.length,
+          'nova visita vinculada pela gerência',
+          'novas visitas vinculadas pela gerência'
+        ),
+        detalhe: lista(vinculadas, v => siglaDaEscola(v.escola_id) + ' ' + dmIso(v.data)),
+        cor: 'var(--texto-0b7ea3)',
+        resolver: () =>
+          this.irPara('agenda', {
+            semana: Math.round((dataDe(segDe(vinculadas[0].data)) - dataDe(segDe(hoje))) / (7 * 864e5))
+          })
+      },
+      semVisita.length && {
+        titulo: plural(
+          semVisita.length,
+          'escola sem visita há mais de 30 dias',
+          'escolas sem visita há mais de 30 dias'
+        ),
+        detalhe: lista(semVisita, e => e.sigla),
+        cor: '#E0892B',
+        resolver: () => this.irPara('carteira')
+      },
+      execucaoBaixa.length && {
+        titulo: plural(execucaoBaixa.length, 'escola com execução abaixo de 60%', 'escolas com execução abaixo de 60%'),
+        detalhe: lista(execucaoBaixa, x => x.escola.sigla + ' ' + x.resumo.execucao + '%') + ' · no mês atual',
+        cor: '#E0892B',
+        resolver: () => this.irPara('carteira', { periodo: cicloDe(hoje, 0) })
+      },
+      atrasados.length && {
+        titulo: plural(
+          atrasados.length,
+          'onboarding em aberto há mais de 15 dias',
+          'onboardings em aberto há mais de 15 dias'
+        ),
+        detalhe: lista(atrasados, i => i.nome.split(' ')[0]),
+        cor: 'var(--texto-9a6212)',
+        resolver: () => this.irPara('onb')
+      }
+    ]
+      .filter(Boolean)
+      .map(p => ({ ...p, aria: 'Resolver: ' + p.titulo }));
+  }
+  avisosDaCarteira(contexto) {
+    const { hoje, agora, agendaDeHoje, presencaAberta } = contexto;
+    return [
+      Base.letivo(dataDe(hoje)) &&
+        !presencaAberta &&
+        !contexto.presencas.some(p => p.data === hoje) &&
+        agendaDeHoje.length && {
+          tit: plural(agendaDeHoje.length, 'visita na agenda de hoje', 'visitas na agenda de hoje'),
+          txt:
+            agendaDeHoje
+              .map(v => (v.hora ? hmDe(v.hora) + ' · ' : '') + contexto.siglaDaEscola(v.escola_id))
+              .join(', ') + '. Inicie a presença ao chegar na escola.',
+          acao: 'Ir para o início',
+          go: () => this.irPara('inicio'),
+          cor: 'var(--texto-0b7ea3)',
+          ref: 'hoje-' + hoje
+        },
+      presencaAberta &&
+        agora >= 17 * 60 && {
+          tit: 'Encerre a presença em andamento',
+          txt: contexto.nomeDaEscola(presencaAberta.escola_id) + ' desde ' + hmTs(presencaAberta.inicio) + '.',
+          acao: 'Ir para o início',
+          go: () => this.irPara('inicio'),
+          cor: 'var(--texto-b42318)',
+          ref: 'aberta-' + presencaAberta.id
+        },
+      ...contexto.pendencias.map(p => ({
+        tit: p.titulo,
+        txt: p.detalhe,
+        acao: 'Resolver',
+        go: () => p.resolver(),
+        cor: p.cor
+      }))
+    ]
+      .filter(Boolean)
+      .map(n => ({ ...n, temAcao: true }));
+  }
+  notificacoes(avisos) {
+    const N = window.FSM_NOTIF || {
+        usuario: () => '',
+        chave: n => n.tit + '|' + (n.ref || n.txt),
+        ler: () => [],
+        gravar: () => {}
+      },
+      usuario = N.usuario('analista');
+    if (this.notifUsuario !== usuario) {
+      this.notifUsuario = usuario;
+      this.notifVistas = N.ler(usuario);
+    }
+    const vistas = this.notifVistas || [],
+      novas = avisos.filter(n => !vistas.includes(N.chave(n))),
+      visiveis = novas.map(n => {
+        const chave = N.chave(n);
+        return {
+          ...n,
+          ariaLida: 'Marcar como lida: ' + n.tit,
+          marcarLida: () => {
+            this.notifVistas = [...(this.notifVistas || []).filter(x => x !== chave), chave];
+            N.gravar(usuario, this.notifVistas);
+            this.forceUpdate();
+          }
+        };
+      });
+    return {
+      notifs: visiveis,
+      temVariasNotif: visiveis.length > 1,
+      lerTodasNotif: () => {
+        const chaves = novas.map(N.chave);
+        this.notifVistas = [...vistas.filter(chave => !chaves.includes(chave)), ...chaves];
+        N.gravar(usuario, this.notifVistas);
+        this.forceUpdate();
+      },
+      notifN: String(novas.length),
+      temNotif: novas.length > 0,
+      semNotif: visiveis.length === 0,
+      notifAria: novas.length
+        ? 'Notificações: ' + novas.length + (novas.length === 1 ? ' nova' : ' novas')
+        : 'Notificações: nenhuma nova',
+      abrirNotif: () => this.setState({ notifAberto: true, menuAberto: false })
+    };
+  }
+  visitaDaAgendaDetalhada(contexto) {
+    const s = this.state,
+      { hoje, usuario } = contexto,
+      visita = s.visitaDaAgenda ? s.agenda.find(v => v.id === s.visitaDaAgenda) : null;
+    if (!visita) return { aberta: false, itens: [] };
+    const origem = contexto.origemDe(visita.origem),
+      minha = visita.criada_por === usuario,
+      agendada = visita.status === 'agendada',
+      podeRegistrar = agendada && visita.data <= hoje && visita.data >= contexto.ha30Dias,
+      podeAlterar = minha && agendada && visita.data >= hoje,
+      { modo } = s.alteracao,
+      alterar = campo => e => this.setState({ alteracao: { ...this.state.alteracao, [campo]: e.target.value } });
+    return {
+      aberta: true,
+      rotulo: minha ? 'Visita agendada por você' : 'Visita vinculada pela gerência',
+      titulo: contexto.nomeDaEscola(visita.escola_id),
+      itens: [
+        [
+          'Data',
+          DIAS[dataDe(visita.data).getDay()] +
+            ', ' +
+            dmyIso(visita.data) +
+            (visita.data_original ? ' (remarcada de ' + dmIso(visita.data_original) + ')' : '')
+        ],
+        ['Horário', visita.hora ? hmDe(visita.hora) : 'sem horário'],
+        ['Origem', origem[0]],
+        ['Tipo', visita.tipo || '—'],
+        ['Foco', visita.foco || '—'],
+        [minha ? 'Observação' : 'Orientação da gerência', visita.orientacao || '—'],
+        ['Situação', visita.status === 'realizada' ? 'Realizada' : visita.data < hoje ? 'Sem registro' : 'Agendada'],
+        ...(visita.motivo_alteracao ? [['Motivo da alteração', visita.motivo_alteracao]] : [])
+      ].map(([rotulo, valor]) => ({ rotulo, valor })),
+      temNota: !minha && agendada,
+      nota: 'Visitas vinculadas pela gerência só são remarcadas ou canceladas pela gerência.',
+      podeRegistrar: podeRegistrar && !modo,
+      registrar: () => {
+        this.fecharGaveta({ visitaDaAgenda: null });
+        this.abrirRegistro({ agenda: visita });
+      },
+      podeRemarcar: podeAlterar && !modo,
+      podeCancelar: podeAlterar && !modo,
+      soFechar: !(podeRegistrar || podeAlterar) || !!modo,
+      remarcar: () =>
+        this.setState(
+          {
+            alteracao: { modo: 'remarcar', data: visita.data, hora: visita.hora ? hmDe(visita.hora) : '', motivo: '' },
+            erroAgenda: ''
+          },
+          () => focar('ag-data')
+        ),
+      cancelar: () =>
+        this.setState({ alteracao: { ...SEM_ALTERACAO, modo: 'cancelar' }, erroAgenda: '' }, () => focar('ag-motivo')),
+      alterando: !!modo,
+      alteracaoTitulo: modo === 'remarcar' ? 'Remarcar a visita' : 'Cancelar a visita',
+      remarcando: modo === 'remarcar',
+      novaData: s.alteracao.data,
+      novaHora: s.alteracao.hora,
+      motivo: s.alteracao.motivo,
+      escolherData: alterar('data'),
+      escolherHora: alterar('hora'),
+      escreverMotivo: alterar('motivo'),
+      confirmarRotulo: s.salvando ? 'Salvando…' : modo === 'remarcar' ? 'Confirmar nova data' : 'Cancelar a visita',
+      confirmarClasse: modo === 'remarcar' ? 'fundo-0b7ea3' : '',
+      confirmarFundo: modo === 'remarcar' ? '#0B7EA3' : '#B42318',
+      confirmar: () => this.confirmarAlteracao(),
+      voltar: () => this.setState({ alteracao: SEM_ALTERACAO, erroAgenda: '' })
+    };
+  }
+  novaVisitaDetalhada() {
+    const visita = this.state.novaVisita || {};
+    const mudar = mudanca => this.setState({ novaVisita: { ...this.state.novaVisita, ...mudanca } });
+    const escrever = campo => e => mudar({ [campo]: e.target.value });
+    const [tipo, ...resto] = String(visita.tipo || 'Acompanhamento · Plano de ação').split(' · ');
+    const detalhe = resto.join(' · ');
+    const detalhesDoTipo = ATENDIMENTOS[tipo] || [];
+    return {
+      novaVisita: {
+        temDiagnostico: !!visita.diagnostico,
+        diagnostico: visita.diagnostico || '',
+        escola: visita.escola ? String(visita.escola) : '',
+        data: visita.data || '',
+        hora: visita.hora || '',
+        orientacao: visita.orientacao || '',
+        escolherEscola: escrever('escola'),
+        escolherData: escrever('data'),
+        escolherHora: escrever('hora'),
+        escreverOrientacao: escrever('orientacao')
+      },
+      novaVisitaOrigens: ['mapa_calor', 'demanda', 'analista'].map(chave => ({
+        rotulo: ORIGEM[chave][0],
+        marcado: visita.origem === chave ? 'true' : 'false',
+        ...opcao(visita.origem === chave),
+        escolher: () => mudar({ origem: chave })
+      })),
+      novaVisitaTipos: Object.keys(ATENDIMENTOS).map(nome => ({
+        rotulo: nome,
+        marcado: tipo === nome ? 'true' : 'false',
+        escolher: () => mudar({ tipo: nome }),
+        ...segmento(tipo === nome)
+      })),
+      novaVisitaDetalhes: detalhesDoTipo
+        .concat(detalhe && !detalhesDoTipo.includes(detalhe) ? [detalhe] : [])
+        .map(nome => ({
+          rotulo: nome,
+          marcado: detalhe === nome ? 'true' : 'false',
+          ...opcao(detalhe === nome),
+          escolher: () => mudar({ tipo: tipo + (detalhe === nome ? '' : ' · ' + nome) })
+        })),
+      novaVisitaFocos: VIS_FOCOS.map(foco => {
+        const marcado = (visita.focos || []).includes(foco);
+        return {
+          rotulo: foco,
+          marcado: marcado ? 'true' : 'false',
+          ...opcao(marcado),
+          escolher: () => {
+            const focos = this.state.novaVisita.focos || [];
+            mudar({ focos: focos.includes(foco) ? focos.filter(x => x !== foco) : [...focos, foco] });
+          }
+        };
+      })
+    };
+  }
+  visitaDetalhada(contexto) {
+    const s = this.state,
+      visita = s.visitaAberta ? s.visitas.find(v => v.id === s.visitaAberta) : null;
+    if (!visita) return { aberta: false, itens: [] };
+    const correcoes = contexto.correcoesDe(visita.id),
+      minha = visita.analista_id === contexto.usuario;
+    return {
+      aberta: true,
+      rotulo: 'Visita registrada',
+      titulo: contexto.nomeDaEscola(visita.escola_id),
+      itens: [
+        ['Data', DIAS[dataDe(visita.data).getDay()] + ', ' + dmyIso(visita.data)],
+        ['Tipo de atendimento', visita.tipo + (visita.subtipo ? ' · ' + visita.subtipo : '')],
+        ['Participantes', visita.participantes || '—'],
+        visita.turma ? ['Turma atendida', visita.turma] : ['', ''],
+        visita.oficineiro_id ? ['Oficineiro', contexto.nomeDaPessoa(visita.oficineiro_id)] : ['', ''],
+        ['Solução', visita.solucao || '—'],
+        ['Objetivo atingido', visita.objetivo || '—'],
+        [
+          'Engajamento',
+          visita.engajamento ? visita.engajamento + ' de 5 · ' + ENGAJAMENTO_TEXTO[visita.engajamento] : '—'
+        ],
+        ['Desenvolvimento da visita', visita.observacao, true],
+        ['Boas práticas', visita.boas_praticas, true],
+        ['Dúvidas e dificuldades', visita.dificuldades, true],
+        [
+          'Ocorrências técnicas',
+          visita.ocorrencias
+            ? visita.ocorrencias + (visita.ocorrencia_obs ? '\n' + visita.ocorrencia_obs : '')
+            : 'Sem ocorrência',
+          true
+        ]
+      ]
+        .filter(x => x[0] && x[1] != null && x[1] !== '')
+        .map(([rotulo, valor, longo]) => ({ rotulo, valor: String(valor), coluna: longo ? '1/-1' : 'auto' })),
+      temCorrecoes: correcoes.length > 0,
+      correcoes: correcoes.map(c => 'Corrigida em ' + dmTs(c.em) + ' às ' + hmTs(c.em)),
+      podeEditar: minha && visita.data >= contexto.ha7Dias,
+      naoEdita: minha && visita.data < contexto.ha7Dias,
+      editar: () => this.editarRegistro(visita)
+    };
+  }
+  baixaDetalhada(contexto) {
+    const baixa = this.state.baixa;
+    if (!baixa) return { aberta: false };
+    return {
+      aberta: true,
+      nome: baixa.nome,
+      escola: baixa.escola,
+      ordem: baixa.ordem,
+      data: baixa.data,
+      dataMaxima: contexto.hoje,
+      observacao: baixa.observacao,
+      formas: FORMAS_DE_BAIXA.map(forma => ({
+        rotulo: forma,
+        marcado: baixa.forma === forma ? 'true' : 'false',
+        ...opcao(baixa.forma === forma),
+        escolher: () => this.setState({ baixa: { ...this.state.baixa, forma } })
+      }))
+    };
+  }
+  renderVals() {
+    const s = this.state,
+      A = window.FSM_AUTH,
+      logado = !!(A && A.logado && A.logado());
+    const contexto = this.contextoDaCarteira();
+    const { carteira, escolasDaCarteira } = contexto;
+    const carteiraInfo = s.carteiras.find(c => c.id === carteira);
+    const selos = { inicio: contexto.pendencias.length, onb: contexto.onboardingsPendentes.length };
+    const menu = MENU.map(([tela, rotulo]) => {
+      const ativa = s.tela === tela,
+        selo = selos[tela] ? String(selos[tela]) : '';
+      return {
+        label: rotulo,
+        go: () => this.irPara(tela),
+        classe: ativa ? 'fundo-rgba-255-255-255-0p09' : 'fundo-transparent',
+        bg: ativa ? 'rgba(255,255,255,.09)' : 'transparent',
+        fg: ativa ? '#fff' : '#C9D4D7',
+        dot: ativa ? '#3ECDF3' : 'transparent',
+        tag: selo,
+        tagBg: selo ? '#F2C66D' : 'transparent',
+        atual: ativa ? 'page' : 'false'
+      };
+    });
+    const itemAtual = MENU.find(item => item[0] === s.tela) || MENU[0];
+    return {
+      ...this.notificacoes(this.avisosDaCarteira(contexto)),
+      notifAberto: !!s.notifAberto,
+      fecharNotif: () => this.setState({ notifAberto: false }),
+      menu,
+      titulo: itemAtual[1],
+      trilha: itemAtual[2],
+      carteiraLinha: carteira
+        ? 'Carteira ' +
+          (carteiraInfo ? carteiraInfo.rotulo : carteira) +
+          ' · ' +
+          plural(escolasDaCarteira.length, 'escola', 'escolas')
+        : 'Carteira de escolas',
+      temConfig: typeof window.fsmConfiguracoes === 'function',
+      abrirConfig: () => {
+        if (this.state.menuAberto) this.setState({ menuAberto: false });
+        if (typeof window.fsmConfiguracoes === 'function') window.fsmConfiguracoes();
+      },
+      temSair: typeof window.fsmSair === 'function',
+      sairConta: () => {
+        if (typeof window.fsmSair === 'function') window.fsmSair();
+      },
+      menuClasse: s.menuAberto ? 'open' : '',
+      abrirMenu: () => this.setState({ menuAberto: true }),
+      fecharMenu: () => this.setState({ menuAberto: false }),
+      is: {
+        inicio: s.tela === 'inicio',
+        agenda: s.tela === 'agenda',
+        visitas: s.tela === 'visitas',
+        carteira: s.tela === 'carteira',
+        jornada: s.tela === 'jornada',
+        onboarding: s.tela === 'onb'
+      },
+      contexto,
+      memoriaInicio: this.memoria.inicio,
+      memoriaAgenda: this.memoria.agenda,
+      memoriaVisitas: this.memoria.visitas,
+      memoriaCarteira: this.memoria.carteira,
+      memoriaJornada: this.memoria.jornada,
+      temErro: !!s.erro,
+      erro: s.erro,
+      tentarDeNovo: () => this.setState({ erro: '' }, () => this.carregar()),
+      semLogin: !logado,
+      salvando: s.salvando,
+      opcoesDeEscola: contexto.opcoesDeEscola,
+      dataMinima: contexto.hoje,
+      dataMaxima: diasAPartirDe(contexto.hoje, 180),
+      visitaDaAgenda: this.visitaDaAgendaDetalhada(contexto),
+      erroAgenda: s.erroAgenda,
+      temErroAgenda: !!s.erroAgenda,
+      fecharVisitaDaAgenda: () => this.fecharVisitaDaAgenda(),
+      novaVisitaAberta: !!s.novaVisita,
+      ...this.novaVisitaDetalhada(),
+      erroNovaVisita: s.erroNovaVisita,
+      temErroNovaVisita: !!s.erroNovaVisita,
+      novaVisitaBotao: s.salvando ? 'Salvando…' : 'Agendar visita',
+      salvarNovaVisita: () => this.salvarNovaVisita(),
+      fecharNovaVisita: () => this.fecharNovaVisita(),
+      visita: this.visitaDetalhada(contexto),
+      fecharVisita: () => this.fecharVisita(),
+      baixa: this.baixaDetalhada(contexto),
+      fecharBaixa: () => this.fecharBaixa(),
+      escolherDataDaBaixa: e => this.setState({ baixa: { ...this.state.baixa, data: e.target.value } }),
+      escreverObservacaoDaBaixa: e => this.setState({ baixa: { ...this.state.baixa, observacao: e.target.value } }),
+      confirmarBaixa: () => this.confirmarBaixa(),
+      baixaBotao: s.salvando ? 'Salvando…' : 'Confirmar baixa',
+      erroBaixa: s.erroBaixa,
+      temErroBaixa: !!s.erroBaixa,
+      aviso: s.aviso
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Oficineiro · Registro</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <sc-if value="{{ temLembretes }}" hint-placeholder-val="{{ false }}">
+    <section role="status" aria-label="{{ lembretesTitulo }}" class="fundo-fdf6e7 borda-1-solid-e3b45c raio-12 p-14-16 d-flex eixo-column gap-8">
+      <b class="fs-14 cor-5e4a26">{{ lembretesTitulo }}</b>
+      <div class="d-flex quebra-wrap gap-8">
+        <sc-for list="{{ lembretes }}" as="lembrete" hint-placeholder-count="2"><button onClick="{{ lembrete.abrir }}" aria-label="{{ lembrete.aria }}" class="min-h-36 borda-1-solid-e3b45c fundo-ffffff raio-8 p-6-12 fs-13 fw-600 cor-5e4a26 texto-left">{{ lembrete.texto }} · Registrar →</button></sc-for>
+      </div>
+    </section>
+  </sc-if>
+  <div class="empilha-celular d-grid colunas-320-minmax-0-1fr gap-20 alinha-start">
+    <section class="aderente borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-14 pos-sticky topo-84 fundo-ffffff" style="background:var(--fundo-ffffff)">
+      <div class="d-flex alinha-center gap-6">
+        <button onClick="{{ diaAnterior }}" aria-label="Dia anterior" class="w-38 h-38 flex-none borda-cfdadd fundo-ffffff raio-8 fs-18 lh-1 cor-34464d largura-fundo botao-secundario">‹</button>
+        <div class="flex-1 texto-center d-flex eixo-column lh-1p3" aria-live="polite"><b class="fs-15">{{ diaNome }}</b><span class="fs-12 cor-5b6b70">{{ diaData }}</span></div>
+        <button onClick="{{ diaSeguinte }}" aria-label="Próximo dia" class="w-38 h-38 flex-none borda-cfdadd fundo-ffffff raio-8 fs-18 lh-1 cor-34464d largura-fundo botao-secundario">›</button>
+      </div>
+      <sc-if value="{{ foraDeHoje }}" hint-placeholder-val="{{ false }}"><button onClick="{{ voltarParaHoje }}" class="h-34 borda-cfdadd fundo-ffffff raio-8 fs-13 fw-600 cor-34464d botao-secundario">Voltar para hoje</button></sc-if>
+      <sc-if value="{{ ehFeriado }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-7a4e0b fundo-fdf6e7 raio-8 p-8-10">{{ feriadoTexto }}</span></sc-if>
+      <sc-for list="{{ atividades }}" as="atividade" hint-placeholder-count="3">
+        <button onClick="{{ atividade.escolher }}" aria-pressed="{{ atividade.marcada }}" aria-label="{{ atividade.aria }}" class="texto-left raio-10 p-12-14 d-grid colunas-48-minmax-0-1fr gap-2-10 alinha-start {{ atividade.classe }}" style="border:{{ atividade.borda }};background:{{ atividade.fundo }}">
+          <span class="fs-14 fw-600 num-tabular-nums cor-34464d pt-1" style="grid-row:1 / span 3">{{ atividade.hora }}</span>
+          <span class="fs-14 fw-700 cor-1a2b33">{{ atividade.turma }}</span>
+          <span class="fs-12 lh-1p3 d--webkit-box linhas-2 orienta-vertical rolagem-hidden"><b class="fw-600" style="color:{{ atividade.corDoTexto }}">{{ atividade.tipo }}</b><sc-if value="{{ atividade.temDetalhe }}" hint-placeholder-val="{{ true }}"><span class="cor-45575e"> · {{ atividade.detalhe }}</span></sc-if></span>
+          <span class="justifica-si-start mt-4 fs-11 fw-600 p-2-8 raio-999" style="color:{{ atividade.situacaoCor }};background:{{ atividade.situacaoFundo }}">{{ atividade.situacao }}</span>
+        </button>
+      </sc-for>
+      <sc-if value="{{ semAtividades }}" hint-placeholder-val="{{ false }}">
+        <div class="d-flex eixo-column gap-10 fs-13 cor-5b6b70 lh-1p5">
+          <span>Nenhuma atividade na sua grade para este dia da semana.</span>
+          <button onClick="{{ abrirGrade }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 fs-13 fw-600 cor-34464d botao-secundario">Abrir a Grade de Atividades</button>
+        </div>
+      </sc-if>
+    </section>
+
+    <div class="d-flex eixo-column gap-16 min-w-0">
+      <sc-if value="{{ nadaEscolhido }}" hint-placeholder-val="{{ false }}">
+        <section class="borda-dde6e8 raio-12 d-flex eixo-column gap-14 alinha-center texto-center cor-5b6b70 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff);padding:20px;padding:40px 20px">Escolha uma atividade da lista para registrar.</section>
+      </sc-if>
+      <sc-if value="{{ temEscolhida }}" hint-placeholder-val="{{ true }}">
+        <section class="espaco-celular fundo-ffffff raio-12 p-20 d-flex eixo-column gap-14 largura-fundo" style="border:1px solid var(--borda-dde6e8);border-left:4px solid {{ escolhida.cor }}">
+          <div class="d-flex alinha-flex-start gap-12 quebra-wrap">
+            <div class="d-flex eixo-column gap-4 flex-1-1-220 min-w-0">
+              <span class="fs-13 cor-5b6b70">{{ escolhida.quando }}</span>
+              <h3 class="m-0 fs-18">{{ escolhida.turma }}</h3>
+              <span class="fs-14 cor-34464d"><b style="color:{{ escolhida.corDoTexto }}">{{ escolhida.tipo }}</b><sc-if value="{{ escolhida.temSolucao }}" hint-placeholder-val="{{ true }}"> · {{ escolhida.solucao }}</sc-if></span>
+              <sc-if value="{{ escolhida.temMateria }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-34464d">{{ escolhida.materiaRotulo }}: <b>{{ escolhida.materia }}</b></span></sc-if>
+              <sc-if value="{{ escolhida.temProfessor }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Professor(a) regente: {{ escolhida.professor }}</span></sc-if>
+            </div>
+            <sc-if value="{{ podeEditar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ editar }}" class="h-40 flex-none borda-1-solid-0b7ea3 fundo-ffffff cor-08617e raio-8 p-0-16 fs-14 fw-600">Editar registro</button></sc-if>
+          </div>
+          <sc-if value="{{ temRevisao }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-13 raio-8 p-10-12 lh-1p45" style="color:{{ revisaoCor }};background:{{ revisaoFundo }}">{{ revisaoTexto }}</span></sc-if>
+          <sc-if value="{{ bloqueado }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5e4a26 fundo-fdf6e7 raio-8 p-10-12 lh-1p45">{{ bloqueioTexto }}</span></sc-if>
+        </section>
+
+        <sc-if value="{{ mostraFormulario }}" hint-placeholder-val="{{ true }}">
+          <fieldset disabled="{{ somenteLeitura }}" class="registro-campos borda-0 p-0 m-0 min-w-0 d-flex eixo-column gap-16">
+          <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)">
+            <h3 class="m-0 fs-15">A atividade aconteceu?</h3>
+            <div class="d-flex quebra-wrap gap-8" role="group" aria-label="A atividade aconteceu?"><sc-for list="{{ situacoes }}" as="opcao" hint-placeholder-count="2"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="raio-8 p-9-14 fs-14 fw-500 flex-1-1-160 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div>
+            <sc-if value="{{ naoRealizada }}" hint-placeholder-val="{{ false }}">
+              <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-5b6b70 fw-600">Motivo *</span><div class="d-flex quebra-wrap gap-8" role="group" aria-label="Motivo"><sc-for list="{{ motivos }}" as="opcao" hint-placeholder-count="6"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="raio-8 fw-500 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }};padding:9px 14px;font-size:14px;font-size:13px;padding:8px 12px">{{ opcao.rotulo }}</button></sc-for></div></div>
+              <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Detalhes (opcional)</span><input value="{{ formulario.detalheDoMotivo }}" onChange="{{ mudarDetalheDoMotivo }}" maxlength="150" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fundo-ffffff fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
+            </sc-if>
+          </section>
+
+          <sc-if value="{{ realizada }}" hint-placeholder-val="{{ true }}">
+            <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)">
+              <label class="d-flex alinha-center gap-10 fs-14 fw-600 cursor-pointer min-h-32"><input type="checkbox" checked="{{ formulario.mudou }}" onChange="{{ mudarMudou }}" class="w-18 h-18 destaque-0b7ea3"></input>Houve alguma mudança de última hora?</label>
+              <span class="fs-13 cor-5b6b70 mt-n8">Marque se a atividade foi diferente do que está na grade: outro professor na sala, outra solução, horário trocado…</span>
+              <sc-if value="{{ formulario.mudou }}" hint-placeholder-val="{{ false }}">
+                <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+                  <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Professor(a) que acompanhou a atividade</span><input value="{{ formulario.professor }}" onChange="{{ mudarProfessor }}" maxlength="120" placeholder="Nome de quem estava com a turma" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fundo-ffffff fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
+                  <sc-if value="{{ mudaComponente }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Componente curricular trabalhado</span><select value="{{ formulario.componente }}" onChange="{{ mudarComponente }}" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Não informado</option><sc-for list="{{ componentes }}" as="opcao" hint-placeholder-count="9"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
+                  <sc-if value="{{ mudaOficina }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Oficina trabalhada</span><select value="{{ formulario.oficina }}" onChange="{{ mudarOficina }}" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ oficinas }}" as="opcao" hint-placeholder-count="10"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
+                  <sc-if value="{{ mudaSolucao }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Solução usada</span><select value="{{ formulario.solucao }}" onChange="{{ mudarSolucao }}" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
+                </div>
+                <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">O que mudou? *</span><input value="{{ formulario.mudanca }}" onChange="{{ mudarMudanca }}" maxlength="300" placeholder="Exemplo: a professora regente faltou e a coordenação acompanhou a turma" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fundo-ffffff fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
+              </sc-if>
+            </section>
+
+            <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)">
+              <h3 class="m-0 fs-15">Participação</h3>
+              <div class="d-grid colunas-repeat-3-minmax-0-1fr gap-12 alinha-end">
+                <sc-if value="{{ matriculadosManual }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Matriculados</span><input type="number" inputmode="numeric" min="0" value="{{ formulario.matriculados }}" onChange="{{ mudarMatriculados }}" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fundo-ffffff fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label></sc-if>
+                <sc-if value="{{ matriculadosDoCadastro }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Matriculados</span><span class="h-40 borda-dde6e8 raio-8 p-0-12 fs-14 fundo-f7fafb d-flex alinha-center tamanho-border-box num-tabular-nums">{{ matriculadosTexto }}</span><span class="fs-12 cor-5b6b70">Do cadastro da turma</span></div></sc-if>
+                <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Presentes *</span><input type="number" inputmode="numeric" min="0" value="{{ formulario.presentes }}" onChange="{{ mudarPresentes }}" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fundo-ffffff fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
+                <div class="h-40 raio-8 fundo-eff9fc d-flex alinha-center justifica-space-between p-0-12"><span class="fs-12 cor-08617e">Presença</span><b class="cor-08617e num-tabular-nums">{{ percentual }}</b></div>
+              </div>
+            </section>
+
+            <section class="espaco-celular borda-dde6e8 raio-12 p-20 d-flex eixo-column gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)">
+              <h3 class="m-0 fs-15">Desenvolvimento da atividade</h3>
+              <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+                <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">Conteúdo / atividade</span><input value="{{ formulario.atividade }}" onChange="{{ mudarAtividade }}" maxlength="200" placeholder="{{ atividadeExemplo }}" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fundo-ffffff fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
+                <sc-if value="{{ temComponente }}" hint-placeholder-val="{{ true }}"><div class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-5b6b70 fw-600">{{ componenteRotulo }}</span><span class="min-h-40 borda-dde6e8 raio-8 p-0-12 fs-14 fundo-f7fafb d-flex alinha-center tamanho-border-box">{{ componenteTexto }}</span><span class="fs-12 cor-5b6b70">{{ componenteNota }}</span></div></sc-if>
+              </div>
+              <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Como foi a atividade *</span><textarea rows="4" value="{{ formulario.descricao }}" onChange="{{ mudarDescricao }}" maxlength="2000" placeholder="Como a atividade foi conduzida, o que os alunos fizeram e produziram" class="borda-cfdadd raio-8 p-10-12 fs-14 fonte-inherit redim-vertical lh-1p5"></textarea></label>
+              <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+                <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-5b6b70 fw-600">Objetivo atingido?</span><div class="d-flex gap-6" role="group" aria-label="Objetivo atingido?"><sc-for list="{{ objetivos }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="raio-8 fs-14 fw-500 flex-1 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }};padding:9px 14px;padding:9px 6px">{{ opcao.rotulo }}</button></sc-for></div></div>
+                <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-5b6b70 fw-600">Engajamento da turma · {{ engajamentoTexto }}</span><div class="d-flex gap-6" role="group" aria-label="Engajamento da turma, de 1 a 5"><sc-for list="{{ engajamentos }}" as="opcao" hint-placeholder-count="5"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" aria-label="{{ opcao.aria }}" class="raio-8 fs-14 fw-500 flex-1 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }};padding:9px 14px;padding:9px 0">{{ opcao.rotulo }}</button></sc-for></div></div>
+              </div>
+              <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Próxima atividade (opcional)</span><input value="{{ formulario.proxima }}" onChange="{{ mudarProxima }}" maxlength="300" placeholder="O que fica para continuar com a turma" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fundo-ffffff fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
+            </section>
+          </sc-if>
+
+          </fieldset>
+          <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-b42318 fundo-fbedeb raio-8 p-10-12 lh-1p45">{{ formulario.erro }}</span></sc-if>
+          <sc-if value="{{ podeRegistrar }}" hint-placeholder-val="{{ true }}">
+            <sc-if value="{{ somenteLeitura }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70">Registro salvo. Para alterar, use “Editar registro”. {{ prazoTexto }}</span></sc-if>
+            <sc-if value="{{ preenchendo }}" hint-placeholder-val="{{ true }}"><div class="d-flex quebra-wrap alinha-center gap-10">
+              <span class="fs-12 cor-5b6b70 flex-1-1-220">{{ prazoTexto }}</span>
+              <sc-if value="{{ alterado }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-12 fw-600 cor-7a4e0b fundo-faefd9 raio-999 p-4-10">Alterações não salvas</span></sc-if>
+              <sc-if value="{{ editando }}" hint-placeholder-val="{{ false }}"><button onClick="{{ cancelar }}" disabled="{{ formulario.salvando }}" class="h-44 flex-0-1-auto borda-cfdadd fundo-ffffff cor-34464d raio-8 p-0-18 fs-15 fw-600 botao-secundario">Cancelar</button></sc-if>
+              <button onClick="{{ salvar }}" disabled="{{ formulario.salvando }}" class="h-44 flex-0-1-auto borda-0 cor-fff raio-8 p-0-22 fs-15 fw-600 botao-texto {{ salvarClasse }}" style="background:{{ salvarFundo }}">{{ salvarTexto }}</button>
+            </div></sc-if>
+          </sc-if>
+        </sc-if>
+      </sc-if>
+    </div>
+  </div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { WDL: DIAS, iso, dataDe, segDe, minDeHora, turmaTxt: turmaTexto } = Base;
+const SITUACAO = {
+  Registrada: ['var(--texto-1b5e2e)', 'var(--fundo-e2f2e5)'],
+  'Não realizada': ['var(--texto-b42318)', 'var(--fundo-fbedeb)'],
+  Pendente: ['var(--texto-7a4e0b)', 'var(--fundo-faefd9)'],
+  'Ainda não aconteceu': ['var(--texto-5b6b70)', 'var(--fundo-e8eef0)'],
+  'Sem registro': ['var(--texto-5b6b70)', 'var(--fundo-e8eef0)'],
+  'Devolvida para ajuste': ['var(--texto-b42318)', 'var(--fundo-fbedeb)'],
+  'Contestada pela direção': ['var(--texto-b42318)', 'var(--fundo-fbedeb)'],
+  Anulada: ['var(--texto-5b6b70)', 'var(--fundo-e8eef0)']
+};
+const ACONTECEU = [
+  ['sim', 'Realizada'],
+  ['nao', 'Não realizada']
+];
+const MOTIVOS = [
+  'Evento da escola',
+  'Turma ausente',
+  'Sem internet',
+  'Equipamentos indisponíveis',
+  'Ausência do oficineiro',
+  'Ausência do professor',
+  'Outro'
+];
+class Component extends DCLogic {
+  lembrar(mudanca) {
+    Object.assign(this.props.memoria, mudanca);
+    this.forceUpdate();
+  }
+  preencher(mudanca) {
+    this.lembrar({ formulario: { ...this.props.memoria.formulario, ...mudanca, erro: '', alterado: true } });
+  }
+  renderVals() {
+    const contexto = this.props.contexto,
+      memoria = this.props.memoria;
+    const { grade, registrosDoDia, lembretesPendentes, tipoDe, opcao, engajamentoTexto } = contexto;
+    const dia = contexto.diaUtil(memoria.dia),
+      diaIso = iso(dia),
+      diaDaSemana = dia.getDay();
+    const futuro = diaIso > iso(new Date()),
+      noPrazo = !futuro && iso(Base.cicloComp(dia)) === iso(Base.cicloComp(new Date()));
+    const atividadesDoDia = grade
+      .filter(a => a.dia_semana === diaDaSemana && a.ano_letivo === dia.getFullYear())
+      .map(a => contexto.efetiva(a, segDe(diaIso)))
+      .sort((a, b) => minDeHora(a.inicio) - minDeHora(b.inicio));
+    const registroDe = a => registrosDoDia.find(r => r.grade_aula_id === a.id && r.data === diaIso);
+    const detalheDe = a =>
+      [a.tipo === 'R' ? a.componente : a.tipo === 'P' ? a.oficina : '', a.tipo === 'P' ? '' : a.solucao]
+        .filter(Boolean)
+        .join(' · ');
+    const atividades = atividadesDoDia.map(a => {
+      const tipo = tipoDe(a.tipo),
+        registro = registroDe(a),
+        marcada = memoria.atividade === a.id,
+        turma = turmaTexto(a),
+        hora = String(a.inicio).slice(0, 5),
+        detalhe = detalheDe(a);
+      const situacao =
+        registro && registro.check_direcao === 'contestada' && registro.revisao_status !== 'anulado'
+          ? 'Contestada pela direção'
+          : registro && registro.revisao_status === 'devolvido'
+            ? 'Devolvida para ajuste'
+            : registro && registro.revisao_status === 'anulado'
+              ? 'Anulada'
+              : registro
+                ? registro.situacao === 'Não realizada'
+                  ? 'Não realizada'
+                  : 'Registrada'
+                : futuro
+                  ? 'Ainda não aconteceu'
+                  : noPrazo
+                    ? 'Pendente'
+                    : 'Sem registro';
+      return {
+        hora,
+        turma,
+        tipo: tipo.curto,
+        corDoTexto: tipo.corDoTexto || tipo.cor,
+        detalhe,
+        temDetalhe: !!detalhe,
+        situacao,
+        situacaoCor: SITUACAO[situacao][0],
+        situacaoFundo: SITUACAO[situacao][1],
+        marcada: marcada ? 'true' : 'false',
+        borda: marcada ? '1.5px solid #0B7EA3' : '1px solid var(--borda-dde6e8)',
+        classe: marcada ? '' : 'fundo-ffffff borda-dde6e8',
+        fundo: marcada ? 'var(--fundo-eff9fc)' : 'var(--fundo-ffffff)',
+        aria: hora + ', ' + turma + ', ' + tipo.curto + ', ' + situacao,
+        escolher: () => contexto.abrirRegistro(a)
+      };
+    });
+    const escolhida = atividadesDoDia.find(a => a.id === memoria.atividade),
+      registro = escolhida && registroDe(escolhida),
+      formulario = memoria.formulario || {};
+    const tipoDaEscolhida = tipoDe(escolhida ? escolhida.tipo : 'R');
+    const revisao = registro ? registro.revisao_status : null,
+      conferencia = registro ? registro.check_direcao : null,
+      reaberto =
+        revisao === 'devolvido' ||
+        revisao === 'corrigido' ||
+        conferencia === 'contestada' ||
+        conferencia === 'corrigida';
+    const avisoDaRevisao = !registro
+      ? null
+      : conferencia === 'contestada' && revisao !== 'anulado'
+        ? [
+            'A direção da escola contestou este registro' +
+              (registro.check_motivo ? ': ' + registro.check_motivo + '.' : '.') +
+              ' Corrija e salve de novo.',
+            'var(--texto-8a1c12)',
+            'var(--fundo-fbedeb)'
+          ]
+        : conferencia === 'corrigida' && revisao !== 'devolvido'
+          ? [
+              'Correção salva. Aguardando novo check da direção da escola.',
+              'var(--texto-1a3f9c)',
+              'var(--fundo-eff3fd)'
+            ]
+          : revisao === 'devolvido'
+            ? [
+                'O coordenador devolveu este registro para ajuste' +
+                  (registro.revisao_obs ? ': ' + registro.revisao_obs : '.') +
+                  ' Corrija e salve de novo.',
+                'var(--texto-8a1c12)',
+                'var(--fundo-fbedeb)'
+              ]
+            : revisao === 'corrigido'
+              ? [
+                  'Correção salva. Aguardando nova revisão do coordenador.' +
+                    (registro.revisao_obs ? ' Pedido do coordenador: ' + registro.revisao_obs : ''),
+                  'var(--texto-1a3f9c)',
+                  'var(--fundo-eff3fd)'
+                ]
+              : revisao === 'revisado'
+                ? ['Registro revisado pelo coordenador.', 'var(--texto-1b5e2e)', 'var(--fundo-e2f2e5)']
+                : null;
+    const bloqueio = escolhida
+      ? revisao === 'anulado'
+        ? 'O coordenador anulou este registro' +
+          (registro.revisao_obs ? ': ' + registro.revisao_obs : '.') +
+          ' Ele não conta como atividade realizada e não pode ser editado.'
+        : futuro
+          ? 'Esta atividade ainda não aconteceu. O registro fica disponível no dia da atividade.'
+          : !noPrazo && !reaberto
+            ? 'O prazo para registrar ou editar atividades deste ciclo terminou.'
+            : registro && registro.check_direcao === 'ok'
+              ? 'A direção já confirmou este registro, por isso ele não pode mais ser editado.'
+              : ''
+      : '';
+    const solucoes = [
+      ...new Set(
+        [
+          escolhida ? escolhida.solucao : '',
+          ...contexto.solucoesDe(escolhida && escolhida.tipo).filter(v => v !== 'Outra'),
+          formulario.solucao || ''
+        ].filter(Boolean)
+      )
+    ];
+    const oficinas = [
+      ...new Set([escolhida ? escolhida.oficina : '', ...contexto.oficinas, formulario.oficina || ''].filter(Boolean))
+    ];
+    const matriculadosDoCadastro = contexto.matriculadosDaTurma(escolhida),
+      matriculados = matriculadosDoCadastro != null ? matriculadosDoCadastro : formulario.matriculados;
+    const campo = nome => evento => this.preencher({ [nome]: evento.target.value });
+    const opcoes = (lista, nome) =>
+      lista.map(valor => {
+        const marcada = formulario[nome] === valor;
+        return {
+          rotulo: valor,
+          marcada: marcada ? 'true' : 'false',
+          ...opcao(marcada),
+          escolher: () => this.preencher({ [nome]: valor })
+        };
+      });
+    return {
+      temLembretes: contexto.carregado && lembretesPendentes.length > 0,
+      lembretesTitulo:
+        lembretesPendentes.length === 1
+          ? 'O coordenador pediu o registro de 1 atividade'
+          : 'O coordenador pediu o registro de ' + lembretesPendentes.length + ' atividades',
+      lembretes: lembretesPendentes.map(lembrete => {
+        const daGrade = grade.find(a => a.id === lembrete.grade_aula_id),
+          data = dataDe(lembrete.data),
+          texto =
+            Base.WD[data.getDay()] +
+            ' ' +
+            Base.dm(data) +
+            (daGrade ? ' · ' + turmaTexto(daGrade) + ' · ' + String(daGrade.inicio).slice(0, 5) : '');
+        return {
+          texto,
+          aria: 'Registrar a atividade de ' + texto,
+          abrir: () => contexto.irParaRegistro(lembrete.data, lembrete.grade_aula_id)
+        };
+      }),
+      diaNome: DIAS[diaDaSemana] + (diaIso === iso(contexto.diaUtil(0)) && diaIso === iso(new Date()) ? ' · hoje' : ''),
+      diaData: Base.dmy(dia),
+      diaAnterior: () => contexto.irParaDia(memoria.dia - 1),
+      diaSeguinte: () => contexto.irParaDia(memoria.dia + 1),
+      voltarParaHoje: () => contexto.irParaDia(0),
+      foraDeHoje: memoria.dia !== 0,
+      ehFeriado: !!Base.feriado(dia),
+      feriadoTexto: 'Feriado: ' + Base.feriado(dia),
+      atividades,
+      semAtividades: atividades.length === 0,
+      abrirGrade: () => contexto.irPara('grade'),
+      nadaEscolhido: !escolhida,
+      temEscolhida: !!escolhida,
+      escolhida: escolhida
+        ? {
+            quando:
+              DIAS[diaDaSemana] +
+              ', ' +
+              Base.dmy(dia) +
+              ' · ' +
+              String(escolhida.inicio).slice(0, 5) +
+              ' – ' +
+              String(escolhida.fim).slice(0, 5),
+            turma: turmaTexto(escolhida),
+            tipo: tipoDaEscolhida.curto,
+            cor: tipoDaEscolhida.cor,
+            corDoTexto: tipoDaEscolhida.corDoTexto || tipoDaEscolhida.cor,
+            solucao: escolhida.tipo === 'P' ? '' : escolhida.solucao || '',
+            temSolucao: escolhida.tipo !== 'P' && !!escolhida.solucao,
+            professor: escolhida.professor || '',
+            temProfessor: !!escolhida.professor,
+            materiaRotulo: escolhida.tipo === 'P' ? 'Oficina' : 'Componente curricular',
+            materia:
+              escolhida.tipo === 'P'
+                ? escolhida.oficina || ''
+                : escolhida.tipo === 'R'
+                  ? escolhida.componente || ''
+                  : '',
+            temMateria: escolhida.tipo === 'P' ? !!escolhida.oficina : escolhida.tipo === 'R' && !!escolhida.componente
+          }
+        : {},
+      bloqueado: !!bloqueio,
+      bloqueioTexto: bloqueio,
+      podeRegistrar: !!escolhida && !bloqueio,
+      mostraFormulario: !!escolhida && (!bloqueio || !!registro),
+      somenteLeitura: !!escolhida && (!!formulario.somenteLeitura || (!!bloqueio && !!registro)),
+      editando: !!escolhida && !bloqueio && !formulario.somenteLeitura && !!formulario.id && !!registro,
+      podeEditar: !!escolhida && !bloqueio && !!formulario.somenteLeitura,
+      preenchendo: !!escolhida && !bloqueio && !formulario.somenteLeitura,
+      editar: () => this.lembrar({ formulario: { ...this.props.memoria.formulario, somenteLeitura: false, erro: '' } }),
+      cancelar: () => escolhida && contexto.abrirRegistro(escolhida, true),
+      formulario,
+      temRevisao: !!(escolhida && avisoDaRevisao),
+      revisaoTexto: avisoDaRevisao ? avisoDaRevisao[0] : '',
+      revisaoCor: avisoDaRevisao ? avisoDaRevisao[1] : '',
+      revisaoFundo: avisoDaRevisao ? avisoDaRevisao[2] : '',
+      situacoes: ACONTECEU.map(([chave, rotulo]) => {
+        const marcada = formulario.situacao === chave;
+        return {
+          rotulo,
+          marcada: marcada ? 'true' : 'false',
+          ...opcao(marcada, marcada && chave === 'nao' ? '#B42318' : null),
+          escolher: () => this.preencher({ situacao: chave })
+        };
+      }),
+      naoRealizada: formulario.situacao === 'nao',
+      realizada: formulario.situacao === 'sim',
+      motivos: opcoes(MOTIVOS, 'motivo'),
+      mudarDetalheDoMotivo: campo('detalheDoMotivo'),
+      mudarMudou: evento =>
+        this.preencher({
+          mudou: !!evento.target.checked,
+          ...(evento.target.checked
+            ? {}
+            : {
+                componente: (escolhida && escolhida.componente) || '',
+                oficina: (escolhida && escolhida.oficina) || '',
+                solucao: (escolhida && escolhida.solucao) || ''
+              })
+        }),
+      mudarOficina: campo('oficina'),
+      oficinas,
+      componentes: contexto.componentes,
+      mudaComponente: !!escolhida && escolhida.tipo === 'R',
+      mudaOficina: !!escolhida && escolhida.tipo === 'P',
+      mudaSolucao: !!escolhida && escolhida.tipo !== 'P',
+      mudarProfessor: campo('professor'),
+      mudarSolucao: campo('solucao'),
+      solucoes,
+      mudarMudanca: campo('mudanca'),
+      mudarMatriculados: campo('matriculados'),
+      mudarPresentes: campo('presentes'),
+      matriculadosDoCadastro: matriculadosDoCadastro != null,
+      matriculadosManual: matriculadosDoCadastro == null,
+      matriculadosTexto: matriculadosDoCadastro != null ? String(matriculadosDoCadastro) : '',
+      percentual:
+        matriculados > 0 && formulario.presentes !== '' && formulario.presentes != null
+          ? Math.round((Math.min(Number(formulario.presentes), Number(matriculados)) / Number(matriculados)) * 100) +
+            '%'
+          : '—',
+      mudarAtividade: campo('atividade'),
+      mudarComponente: campo('componente'),
+      temComponente: !!escolhida && escolhida.tipo !== 'F',
+      componenteRotulo: escolhida && escolhida.tipo === 'P' ? 'Oficina' : 'Componente curricular',
+      componenteTexto:
+        (escolhida && escolhida.tipo === 'P'
+          ? formulario.mudou
+            ? formulario.oficina
+            : escolhida.oficina
+          : formulario.mudou
+            ? formulario.componente
+            : escolhida
+              ? escolhida.componente
+              : '') || 'Não informado na grade',
+      componenteNota: formulario.mudou
+        ? 'Alterada em “mudança de última hora”.'
+        : 'Vem da grade. Se mudou na hora, use “Houve alguma mudança de última hora?”.',
+      mudarDescricao: campo('descricao'),
+      mudarProxima: campo('proxima'),
+      atividadeExemplo: /Matific/.test(formulario.mudou ? formulario.solucao : escolhida ? escolhida.solucao : '')
+        ? 'Exemplo: frações equivalentes'
+        : 'Exemplo: construção coletiva do bairro',
+      objetivos: opcoes(['Sim', 'Não'], 'objetivo'),
+      engajamentos: [1, 2, 3, 4, 5].map(nota => {
+        const marcada = formulario.engajamento === nota;
+        return {
+          rotulo: String(nota),
+          aria: nota + ' de 5, ' + engajamentoTexto[nota],
+          marcada: marcada ? 'true' : 'false',
+          ...opcao(marcada),
+          escolher: () => this.preencher({ engajamento: nota })
+        };
+      }),
+      engajamentoTexto: engajamentoTexto[formulario.engajamento || 0],
+      temErro: !!formulario.erro,
+      prazoTexto:
+        !noPrazo && reaberto
+          ? 'Registro reaberto para correção depois do fim do ciclo.'
+          : 'Pode ser registrado e editado até ' + Base.prazo(dia) + '.',
+      salvarTexto: formulario.salvando ? 'Salvando…' : formulario.id ? 'Salvar alterações' : 'Salvar registro',
+      salvarClasse: formulario.salvando ? '' : 'fundo-0b7ea3',
+      salvarFundo: formulario.salvando ? '#A9B8BD' : '#0B7EA3',
+      salvar: () => contexto.salvarRegistro(),
+      alterado: !!formulario.alterado
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Gerente de Projetos · Analistas</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ is.analistasCarteiras }}" hint-placeholder-val="{{ false }}">
+  <sc-if value="{{ semVisitas }}" hint-placeholder-val="{{ false }}"><div class="fundo-fafcfc borda-dde6e8 raio-12 p-12-18 fs-13 cor-34464d lh-1p5">Nenhuma visita registrada no período. As visitas passam a aparecer aqui quando os analistas registrarem no perfil deles.</div></sc-if>
+  <section class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+    <div class="p-16-20"><h3 class="m-0 fs-15">Analistas · visitas e adoção da carteira</h3></div>
+    <div role="table" aria-label="Analistas" class="min-w-1060">
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-5b6b70 borda-t-dde6e8 borda-b-dde6e8" style="grid-template-columns:1.3fr .6fr .6fr .9fr 1fr .8fr 1.2fr 1.5fr"><span role="columnheader">Analista</span><span role="columnheader">Escolas</span><span role="columnheader">Visitas</span><span role="columnheader">Em campo</span><span role="columnheader">Carteira visitada</span><span role="columnheader">Presença ofic.</span><span role="columnheader">Execução das atividades</span><span role="columnheader">Origem das visitas agendadas</span></div>
+      <sc-for list="{{ analistas }}" as="analista" hint-placeholder-count="3">
+        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-e9eff1 alinha-center" style="grid-template-columns:1.3fr .6fr .6fr .9fr 1fr .8fr 1.2fr 1.5fr;background:{{ analista.fundo }}">
+          <span role="cell"><button onClick="{{ analista.escolher }}" aria-pressed="{{ analista.marcado }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-1a2b33 texto-left sublinha-3 botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:#CFDADD">{{ analista.nome }}</button></span><span role="cell" class="num-tabular-nums">{{ analista.escolas }}</span><span role="cell" class="num-tabular-nums">{{ analista.visitas }}</span><span role="cell" class="num-tabular-nums fs-12">{{ analista.campo }}</span><span role="cell" class="num-tabular-nums">{{ analista.cobertura }}</span><span role="cell" class="num-tabular-nums">{{ analista.presenca }}</span>
+          <span role="cell" class="d-flex alinha-center gap-8"><b class="w-38 num-tabular-nums">{{ analista.execucao }}</b><span class="flex-1 h-6 fundo-e8eef0 raio-3"><span class="d-block h-6 raio-3 largura-fundo" style="width:{{ analista.largura }};background:{{ analista.cor }}"></span></span></span>
+          <span role="cell" title="{{ analista.origensTexto }}" class="d-flex h-10 raio-5 rolagem-hidden fundo-e8eef0"><sc-for list="{{ analista.origens }}" as="origem" hint-placeholder-count="3"><span class="largura-fundo" style="width:{{ origem.largura }};background:{{ origem.cor }}"></span></sc-for></span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semAnalistas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhum analista ativo com carteira.</p></sc-if>
+    <div class="d-flex quebra-wrap gap-8-16 p-12-20 fs-12 cor-34464d"><sc-for list="{{ origens }}" as="origem" hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ origem.cor }}"></span>{{ origem.rotulo }}</span></sc-for></div>
+  </section>
+  <sc-if value="{{ temCarteira }}" hint-placeholder-val="{{ true }}">
+  <section class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+    <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-200">Carteira · {{ carteiraTitulo }}</h3><span class="fs-12 cor-5b6b70">Escolha um analista acima para trocar</span></div>
+    <div role="table" aria-label="Escolas da carteira" class="min-w-900">
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-5b6b70 borda-t-dde6e8 borda-b-dde6e8" style="grid-template-columns:1.8fr 1.8fr 1fr .8fr 1.1fr 1.3fr"><span role="columnheader">Escola</span><span role="columnheader">Oficineiros</span><span role="columnheader">Execução</span><span role="columnheader">Visitas</span><span role="columnheader">Última visita</span><span role="columnheader">Próxima na agenda</span></div>
+      <sc-for list="{{ escolasDaCarteira }}" as="escola" hint-placeholder-count="4">
+        <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-e9eff1 alinha-center" style="grid-template-columns:1.8fr 1.8fr 1fr .8fr 1.1fr 1.3fr">
+          <b role="cell" class="quebra-palavra-anywhere">{{ escola.nome }}</b><span role="cell" class="fs-12 cor-34464d quebra-palavra-anywhere">{{ escola.oficineiros }}</span>
+          <b role="cell" class="num-tabular-nums" style="color:{{ escola.cor }}">{{ escola.execucao }}</b><span role="cell" class="num-tabular-nums">{{ escola.visitas }}</span><span role="cell" class="num-tabular-nums fs-12">{{ escola.ultimaVisita }}</span><span role="cell" class="fs-12">{{ escola.proximaVisita }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+  </sc-if>
+</sc-if>
+
+<sc-if value="{{ is.analistasAgendas }}" hint-placeholder-val="{{ false }}">
+  <div class="d-flex quebra-wrap gap-10-12 alinha-center">
+    <div role="group" aria-label="Semana" class="d-flex alinha-center gap-6">
+      <button onClick="{{ semanaAnterior }}" aria-label="Semana anterior" class="w-36 h-36 borda-cfdadd fundo-ffffff raio-8 cor-1a2b33 fs-16 p-0 largura-fundo botao-secundario">‹</button>
+      <span class="fs-13 fw-600 min-w-170 texto-center">{{ semanaTexto }}</span>
+      <button onClick="{{ semanaSeguinte }}" aria-label="Próxima semana" class="w-36 h-36 borda-cfdadd fundo-ffffff raio-8 cor-1a2b33 fs-16 p-0 largura-fundo botao-secundario">›</button>
+      <sc-if value="{{ foraDaSemanaAtual }}" hint-placeholder-val="{{ false }}"><button onClick="{{ semanaAtual }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-1a2b33 botao-secundario">Esta semana</button></sc-if>
+    </div>
+    <div role="tablist" aria-label="Agenda de" class="d-flex gap-4 fundo-e3ebed p-4 raio-10 segmentado"><button role="tab" aria-selected="{{ abaAnalistas }}" onClick="{{ verAbaAnalistas }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 espaco-nowrap {{ abaAnalistasClasse }}" style="background:{{ abaAnalistasFundo }};color:{{ abaAnalistasCor }}">Analistas</button><button role="tab" aria-selected="{{ abaOficineiros }}" onClick="{{ verAbaOficineiros }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 espaco-nowrap {{ abaOficineirosClasse }}" style="background:{{ abaOficineirosFundo }};color:{{ abaOficineirosCor }}">Oficineiros</button></div>
+    <div class="oculto-celular flex-1"></div>
+    <sc-if value="{{ abaAnalistas }}" hint-placeholder-val="{{ true }}"><button class="largura-total-celular h-38 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3" onClick="{{ agendarVisita }}" aria-haspopup="dialog">+ Vincular visita a analista</button></sc-if>
+  </div>
+  <sc-if value="{{ temErroDaSemana }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroDaSemana }}</div></sc-if>
+  <sc-if value="{{ abaAnalistas }}" hint-placeholder-val="{{ true }}">
+  <section class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+    <div role="table" aria-label="Agenda da semana" class="d-grid colunas-150-repeat-5-minmax-150-1fr min-w-900">
+      <div role="columnheader" class="p-12-14 fs-12 cor-5b6b70 fw-600 borda-b-dde6e8">Analista</div>
+      <sc-for list="{{ diasDaSemana }}" as="dia" hint-placeholder-count="5"><div role="columnheader" class="p-12-14 fs-13 fw-600 borda-b-dde6e8 borda-e-e9eff1" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</div></sc-for>
+      <sc-for list="{{ agendaDosAnalistas }}" as="analista" hint-placeholder-count="3">
+        <div role="rowheader" class="p-12-14 borda-b-e9eff1 fw-600 fs-14 quebra-palavra-anywhere">{{ analista.nome }}</div>
+        <sc-for list="{{ analista.dias }}" as="dia" hint-placeholder-count="5">
+          <div role="cell" class="borda-b-e9eff1 borda-e-e9eff1 p-6 d-flex eixo-column gap-6 min-h-84">
+            <sc-for list="{{ dia.visitas }}" as="visita" hint-placeholder-count="1">
+              <button onClick="{{ visita.abrir }}" aria-haspopup="dialog" aria-label="{{ visita.aria }}" class="borda-0 raio-8 p-8-10 d-flex eixo-column gap-2 texto-left cor-1a2b33 w-100pc largura-fundo" style="background:{{ visita.fundo }};cursor:pointer"><span class="fs-11 num-tabular-nums cor-34464d">{{ visita.hora }}</span><span class="fs-12 fw-600">{{ visita.escola }}</span><span class="fs-11" style="color:{{ visita.cor }}">{{ visita.rotulo }}</span></button>
+            </sc-for>
+          </div>
+        </sc-for>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semAgendaDosAnalistas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhum analista ativo com carteira.</p></sc-if>
+  </section>
+  <div class="d-flex quebra-wrap gap-8-16 fs-12 cor-34464d"><sc-for list="{{ origens }}" as="origem" hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ origem.cor }}"></span>{{ origem.rotulo }}</span></sc-for><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 fundo-e2f2e5 borda-1-solid-23773a largura-fundo"></span>Visita registrada pelo analista</span></div>
+  </sc-if>
+  <sc-if value="{{ abaOficineiros }}" hint-placeholder-val="{{ false }}">
+  <section class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+    <div role="table" aria-label="Agenda dos oficineiros na semana" class="d-grid colunas-170-repeat-5-minmax-140-1fr min-w-900">
+      <div role="columnheader" class="p-12-14 fs-12 cor-5b6b70 fw-600 borda-b-dde6e8">Oficineiro</div>
+      <sc-for list="{{ diasDaSemana }}" as="dia" hint-placeholder-count="5"><div role="columnheader" class="p-12-14 fs-13 fw-600 borda-b-dde6e8 borda-e-e9eff1" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</div></sc-for>
+      <sc-for list="{{ agendaDosOficineiros }}" as="oficineiro" hint-placeholder-count="3">
+        <div role="rowheader" class="p-12-14 borda-b-e9eff1 d-flex eixo-column gap-2 min-w-0"><b class="fs-14 quebra-palavra-anywhere">{{ oficineiro.nome }}</b><span class="fs-12 cor-5b6b70">{{ oficineiro.escola }}</span></div>
+        <sc-for list="{{ oficineiro.dias }}" as="dia" hint-placeholder-count="5">
+          <div role="cell" class="borda-b-e9eff1 borda-e-e9eff1 p-6 d-flex eixo-column gap-6 min-h-70">
+            <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="1">
+              <button onClick="{{ atividade.abrir }}" aria-haspopup="dialog" aria-label="{{ atividade.aria }}" class="borda-0 raio-8 p-7-10 d-flex eixo-column gap-1 texto-left cor-1a2b33 w-100pc largura-fundo" style="background:{{ atividade.fundo }};cursor:pointer"><span class="fs-11 num-tabular-nums cor-34464d">{{ atividade.horario }}</span><b class="fs-13">{{ atividade.turma }}</b><span class="fs-12" style="color:{{ atividade.cor }}">{{ atividade.situacao }}</span></button>
+            </sc-for>
+          </div>
+        </sc-for>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semAgendaDosOficineiros }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhum oficineiro ativo com esses filtros.</p></sc-if>
+  </section>
+  <div class="d-flex quebra-wrap gap-8-16 fs-12 cor-34464d"><sc-for list="{{ situacoes }}" as="situacao" hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ situacao.cor }}"></span>{{ situacao.rotulo }}</span></sc-for></div>
+  </sc-if>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { WDL: DIAS, p2, dataDe, minDe, hmDe, dmIso, dmyIso, pctTxt, exC, plural, agregar } = Base;
+class Component extends DCLogic {
+  lembrar(mudanca) {
+    this.props.contexto.lembrar('analistas', mudanca);
+  }
+  renderVals() {
+    const contexto = this.props.contexto,
+      memoria = this.props.memoria;
+    const {
+      analistasAtivos,
+      carteiraNoFiltro,
+      resumoDasCarteiras,
+      resumir,
+      visitasDoPeriodo,
+      oficineirosFiltrados,
+      escolaAtualDe,
+      diasPresentesDe,
+      agendaValida,
+      dados,
+      diasLetivos,
+      larguraDaBarra,
+      escolasAtivas,
+      escolaNoFiltro,
+      atividades,
+      hoje,
+      proximaVisitaDa,
+      quandoDaVisita,
+      diasDaSemana,
+      siglaDaEscola,
+      nomeDaEscola,
+      visitasDaSemana,
+      segunda,
+      dadosDaSemana,
+      agora,
+      SITUACOES_DA_ATIVIDADE,
+      situacaoDe,
+      turmaDe,
+      is,
+      nomeDoArquivo,
+      periodoTexto,
+      opacidade,
+      rotuloDaCarteira,
+      ORIGENS_DE_VISITA
+    } = contexto;
+    const analistasFiltrados = analistasAtivos.filter(c => carteiraNoFiltro(c.carteira_id));
+    const analistaEscolhido = analistasFiltrados.find(c => c.id === memoria.analista) || analistasFiltrados[0];
+    const todasVisitas = contexto.visitas.concat(...Object.values(contexto.ciclos).map(m => m.visitas || []));
+    const linhasDosAnalistas = analistasFiltrados
+      .slice()
+      .sort((a, b) => String(a.carteira_id).localeCompare(String(b.carteira_id)))
+      .map(c => {
+        const cs = resumoDasCarteiras.find(x => x.c.id === c.carteira_id) || {
+            escs: [],
+            ids: new Set(),
+            t: resumir([]),
+            vis: [],
+            visEsc: 0
+          },
+          vis = visitasDoPeriodo.filter(v => v.analista_id === c.id),
+          visEsc = new Set(vis.map(v => v.escola_id)).size,
+          ofs = oficineirosFiltrados.filter(o => cs.ids.has(escolaAtualDe(o))),
+          diasT = ofs.reduce((a, o) => a + diasPresentesDe(o.id), 0),
+          ag = agendaValida.filter(v => v.analista_id === c.id && v.data >= dados.ini && v.data <= dados.fimCiclo),
+          on = analistaEscolhido && analistaEscolhido.id === c.id,
+          pa = dados.presA.filter(p => p.analista_id === c.id),
+          paMin = pa
+            .filter(p => p.fim)
+            .reduce((a, p) => a + Math.max(0, Math.round((new Date(p.fim) - new Date(p.inicio)) / 60000)), 0),
+          paDias = new Set(pa.map(p => p.data)).size;
+        const orig = Base.ORIGENS_VISITA.map(k => ({
+          k,
+          q: ag.filter(v => Base.origemVisita(v.origem) === k).length
+        })).filter(o => o.q);
+        return {
+          nome: c.nome,
+          marcado: on ? 'true' : 'false',
+          fundo: on ? 'var(--fundo-eff9fc)' : 'var(--fundo-ffffff)',
+          escolher: () => {
+            contexto.registrarConsulta({
+              tela: 'Analistas',
+              alvo: c.id,
+              descricao: 'Abriu o acompanhamento do analista'
+            });
+            this.lembrar({ analista: c.id });
+          },
+          escolas: String(cs.escs.length),
+          visitas: String(vis.length),
+          cobertura: visEsc + ' de ' + cs.escs.length,
+          campo: paDias ? plural(paDias, 'dia', 'dias') + ' · ' + Math.floor(paMin / 60) + 'h' + p2(paMin % 60) : '—',
+          presenca: ofs.length && diasLetivos ? Math.round((diasT / (ofs.length * diasLetivos)) * 100) + '%' : '—',
+          execucao: pctTxt(cs.t.ex),
+          largura: larguraDaBarra(cs.t.ex),
+          cor: exC(cs.t.ex),
+          origens: orig.map(o => ({
+            largura: Math.round((o.q / ag.length) * 100) + '%',
+            cor: ORIGENS_DE_VISITA[o.k][1]
+          })),
+          origensTexto: ag.length
+            ? orig.map(o => ORIGENS_DE_VISITA[o.k][0] + ': ' + o.q).join(' · ')
+            : 'Nenhuma visita agendada no ciclo'
+        };
+      });
+    const escolasDaCarteira = analistaEscolhido
+      ? escolasAtivas
+          .filter(e => e.carteira_id === analistaEscolhido.carteira_id && escolaNoFiltro(e.id))
+          .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+          .map(e => {
+            const t = resumir(atividades.filter(i => i.esc === e.id)),
+              ult = todasVisitas
+                .filter(v => v.escola_id === e.id && v.data <= hoje)
+                .sort((a, b) => b.data.localeCompare(a.data))[0],
+              px = proximaVisitaDa(e.id);
+            return {
+              nome: e.nome,
+              oficineiros:
+                oficineirosFiltrados
+                  .filter(o => escolaAtualDe(o) === e.id)
+                  .map(o => o.nome)
+                  .join(', ') || 'Sem oficineiro',
+              execucao: pctTxt(t.ex),
+              cor: exC(t.ex),
+              visitas: String(visitasDoPeriodo.filter(v => v.escola_id === e.id).length),
+              ultimaVisita: ult ? dmyIso(ult.data) : '—',
+              proximaVisita: px ? quandoDaVisita(px) : 'Sem visita agendada'
+            };
+          })
+      : [];
+    const cabecalhoDaSemana = diasDaSemana.map(d => {
+      const h = d === hoje,
+        fer = Base.feriado(dataDe(d));
+      return {
+        rotulo: DIAS[dataDe(d).getDay()].slice(0, 3) + ' ' + dmIso(d) + (fer ? ' · feriado' : ''),
+        fundo: h ? 'var(--fundo-e4f5fa)' : 'var(--fundo-ffffff)',
+        cor: h ? 'var(--texto-08617e)' : 'var(--texto-1a2b33)'
+      };
+    });
+    const agendaDosAnalistas = analistasFiltrados
+      .slice()
+      .sort((a, b) => String(a.carteira_id).localeCompare(String(b.carteira_id)))
+      .map(c => ({
+        nome: c.nome,
+        dias: diasDaSemana.map(d => {
+          const ag = agendaValida
+            .filter(v => v.analista_id === c.id && v.data === d)
+            .map(v => {
+              const feita = v.status === 'realizada',
+                o = ORIGENS_DE_VISITA[v.origem] || ORIGENS_DE_VISITA.gerencia;
+              return {
+                hora: v.hora ? hmDe(v.hora) : 'sem horário',
+                escola: siglaDaEscola(v.escola_id),
+                rotulo: feita ? 'Realizada · ' + o[0] : o[0],
+                fundo: feita ? 'var(--fundo-e2f2e5)' : o[2],
+                cor: feita ? 'var(--texto-1b5e2e)' : o[3],
+                aria: 'Ver visita de ' + c.nome + ' em ' + nomeDaEscola(v.escola_id) + ', ' + dmIso(d),
+                abrir: () => contexto.abrirVisita({ t: 'a', id: v.id })
+              };
+            });
+          const vincs = new Set(agendaValida.map(v => v.visita_id).filter(Boolean));
+          const reg = visitasDaSemana
+            .filter(v => v.analista_id === c.id && v.data === d && !vincs.has(v.id))
+            .map(v => ({
+              hora: 'registrada',
+              escola: siglaDaEscola(v.escola_id),
+              rotulo: v.tipo || 'Visita registrada',
+              fundo: 'var(--fundo-e2f2e5)',
+              cor: 'var(--texto-1b5e2e)',
+              aria: 'Ver visita registrada por ' + c.nome + ' em ' + nomeDaEscola(v.escola_id) + ', ' + dmIso(d),
+              abrir: () => contexto.abrirVisita({ t: 'v', id: v.id })
+            }));
+          return { visitas: ag.concat(reg) };
+        })
+      }));
+    const gradeDaSemana =
+      Number(contexto.grade.length ? contexto.grade[0].ano_letivo : segunda.slice(0, 4)) === Number(segunda.slice(0, 4))
+        ? contexto.grade
+        : contexto.gradeAnterior;
+    const aulasDaSemana = dadosDaSemana ? dadosDaSemana.aulas : [];
+    const ocorrenciasDaSemana = agregar(
+      gradeDaSemana,
+      aulasDaSemana,
+      segunda,
+      diasDaSemana[4],
+      contexto.mudancasDeEscola,
+      diasDaSemana[4],
+      24 * 60
+    ).oc.map(o => {
+      const futura = o.iso > hoje || (o.iso === hoje && minDe(o.g.fim) > agora);
+      return !o.reg && !o.anul && o.st === 'sreg' && futura ? { ...o, st: 'prev' } : o;
+    });
+    const agendaDosOficineiros = oficineirosFiltrados
+      .slice()
+      .sort(
+        (a, b) =>
+          siglaDaEscola(escolaAtualDe(a)).localeCompare(siglaDaEscola(escolaAtualDe(b))) ||
+          a.nome.localeCompare(b.nome, 'pt-BR')
+      )
+      .map(c => ({
+        nome: c.nome,
+        escola: siglaDaEscola(escolaAtualDe(c)),
+        dias: diasDaSemana.map(d => ({
+          atividades: ocorrenciasDaSemana
+            .filter(i => i.of === c.id && i.iso === d)
+            .sort((a, b) => String(a.g.inicio).localeCompare(String(b.g.inicio)))
+            .map(i => {
+              const st = SITUACOES_DA_ATIVIDADE[situacaoDe(i)] || SITUACOES_DA_ATIVIDADE.sreg;
+              return {
+                horario: hmDe(i.g.inicio) + ' – ' + hmDe(i.g.fim),
+                turma: turmaDe(i),
+                situacao: st[0],
+                cor: st[1],
+                fundo: st[2],
+                aria: 'Ver a atividade de ' + c.nome + ' em ' + dmIso(d) + ', ' + turmaDe(i) + ', ' + st[0],
+                abrir: () => contexto.abrirRegistro(i)
+              };
+            })
+        }))
+      }));
+    contexto.registrarExportador(() => {
+      if (is.analistasCarteiras)
+        return contexto.exportar(
+          nomeDoArquivo('analistas'),
+          'Analistas',
+          [
+            ['Analistas · visitas e adoção · ' + periodoTexto],
+            [],
+            [
+              'Analista',
+              'Escolas',
+              'Visitas',
+              'Em campo',
+              'Carteira visitada',
+              'Presença dos oficineiros',
+              'Execução',
+              'Origem das visitas agendadas'
+            ]
+          ].concat(
+            linhasDosAnalistas.map(r => [
+              r.nome,
+              r.escolas,
+              r.visitas,
+              r.campo,
+              r.cobertura,
+              r.presenca,
+              r.execucao,
+              r.origensTexto
+            ])
+          )
+        );
+    });
+    return {
+      is,
+      opacidade: String(opacidade),
+      semVisitas: !visitasDoPeriodo.length,
+      analistas: linhasDosAnalistas,
+      semAnalistas: linhasDosAnalistas.length === 0,
+      origens: Base.ORIGENS_VISITA.map(k => ({ rotulo: ORIGENS_DE_VISITA[k][0], cor: ORIGENS_DE_VISITA[k][1] })),
+      temCarteira: !!analistaEscolhido,
+      carteiraTitulo: analistaEscolhido
+        ? analistaEscolhido.nome + ' · ' + rotuloDaCarteira(analistaEscolhido.carteira_id)
+        : '',
+      escolasDaCarteira: escolasDaCarteira,
+      semanaTexto: 'Semana de ' + dmIso(segunda) + ' a ' + dmIso(diasDaSemana[4]),
+      semanaAnterior: () => this.lembrar({ semana: memoria.semana - 1 }),
+      semanaSeguinte: () => this.lembrar({ semana: memoria.semana + 1 }),
+      semanaAtual: () => this.lembrar({ semana: 0 }),
+      foraDaSemanaAtual: memoria.semana !== 0,
+      agendarVisita: () => contexto.agendarVisita(),
+      diasDaSemana: cabecalhoDaSemana,
+      agendaDosAnalistas: agendaDosAnalistas,
+      semAgendaDosAnalistas: agendaDosAnalistas.length === 0,
+      abaAnalistas: memoria.agenda !== 'ofic',
+      abaOficineiros: memoria.agenda === 'ofic',
+      abaAnalistasClasse: memoria.agenda !== 'ofic' ? 'fundo-ffffff' : 'fundo-transparent',
+      abaAnalistasFundo: memoria.agenda !== 'ofic' ? 'var(--fundo-ffffff)' : 'transparent',
+      abaAnalistasCor: memoria.agenda !== 'ofic' ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)',
+      abaOficineirosClasse: memoria.agenda === 'ofic' ? 'fundo-ffffff' : 'fundo-transparent',
+      abaOficineirosFundo: memoria.agenda === 'ofic' ? 'var(--fundo-ffffff)' : 'transparent',
+      abaOficineirosCor: memoria.agenda === 'ofic' ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)',
+      verAbaAnalistas: () => this.lembrar({ agenda: 'anal' }),
+      verAbaOficineiros: () => this.lembrar({ agenda: 'ofic' }),
+      agendaDosOficineiros: agendaDosOficineiros,
+      semAgendaDosOficineiros: agendaDosOficineiros.length === 0,
+      situacoes: ['real', 'nao', 'sreg', 'prev'].map(k => ({
+        rotulo: SITUACOES_DA_ATIVIDADE[k][0],
+        cor: SITUACOES_DA_ATIVIDADE[k][2]
+      })),
+      temErroDaSemana: !!(dadosDaSemana && dadosDaSemana.erro),
+      erroDaSemana: (dadosDaSemana && dadosDaSemana.erro) || ''
+    };
+  }
+}
+</script>
+</body>
+</html>

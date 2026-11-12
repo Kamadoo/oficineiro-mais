@@ -1,0 +1,2529 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Gerente de Projetos</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles/app.css">
+<style>
+@media (max-width: 900px) {
+  .pagina {
+    padding: 14px 14px 90px !important;
+    gap: 14px !important;
+  }
+  .filtros > select,
+  .filtros > input {
+    flex: 1 1 140px;
+    min-width: 0 !important;
+  }
+  .ranking-linha {
+    grid-template-columns: minmax(0, 1fr) 48px !important;
+  }
+  .ranking-linha > .ranking-extra {
+    grid-column: 1/-1;
+  }
+}
+[role="table"] {
+  position: relative;
+}
+@media (max-width: 900px) {
+  .ct-tab [role="table"] {
+    min-width: 0 !important;
+  }
+}
+@media print {
+  .menu-lateral,
+  .veu,
+  .botao-menu,
+  .sino-celular,
+  .filtros {
+    display: none !important;
+  }
+  .estrutura {
+    display: block !important;
+  }
+  .cabecalho {
+    position: static !important;
+  }
+  body {
+    background: #fff !important;
+  }
+  .pagina {
+    padding: 0 !important;
+    max-width: none !important;
+  }
+}
+</style>
+<script src="./lib/onboarding.js"></script>
+</helmet>
+<div class="estrutura d-grid colunas-236-minmax-0-1fr min-h-100vh">
+  <dc-import name="menu" navCls="{{ menuClasse }}" closeNav="{{ fecharMenu }}" perfilTitulo="Gerente de Projetos" perfilLinha="{{ linhaDoPerfil }}" menu="{{ menu }}" abrirNotif="{{ abrirNotif }}" notifAria="{{ notifAria }}" temNotif="{{ temNotif }}" notifN="{{ notifN }}" temConfig="{{ temConfig }}" abrirConfig="{{ abrirConfig }}" temSair="{{ temSair }}" sairConta="{{ sairConta }}"></dc-import>
+
+  <main class="min-w-0 d-flex eixo-column">
+    <dc-import name="cabecalho" espacamento="gap-12-16 p-10-28" blocoClasse="cabecalho-titulo min-w-0" trilha="{{ trilha }}" cortaTrilha="{{ true }}" tituloClasse="espaco-nowrap rolagem-hidden reticencias-ellipsis" abrirMenu="{{ abrirMenu }}" titulo="{{ titulo }}" abrirNotif="{{ abrirNotif }}" notifAria="{{ notifAria }}" temNotif="{{ temNotif }}" notifN="{{ notifN }}"></dc-import>
+<sc-if value="{{ notifAberto }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharNotif }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-label="Notificações" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(440px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><h3 class="m-0 fs-17 flex-1">Notificações</h3><button onClick="{{ fecharNotif }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-12 rolagem-auto flex-1">
+      <sc-if value="{{ temVariasNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex justifica-flex-end"><button onClick="{{ lerTodasNotif }}" class="h-34 borda-0 fundo-transparent cor-0b7ea3 fs-13 fw-600 p-0-4 botao-texto">Marcar todas como lidas</button></div></sc-if>
+      <sc-if value="{{ semNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column alinha-center gap-6 p-32-12 texto-center"><b class="fs-15">Tudo em dia</b><span class="fs-13 cor-5b6b70">Nenhuma notificação nova.</span></div></sc-if>
+      <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="3">
+        <div class="raio-10 p-12-14 d-flex eixo-column gap-6 fundo-ffffff largura-fundo" style="border:1px solid var(--borda-dde6e8);border-left:4px solid {{ n.cor }}">
+          <b class="fs-14">{{ n.tit }}</b>
+          <span class="fs-13 cor-34464d lh-1p5">{{ n.txt }}</span>
+          <div class="d-flex quebra-wrap gap-8 mt-2"><sc-if value="{{ n.temAcao }}" hint-placeholder-val="{{ true }}"><button onClick="{{ n.go }}" class="h-36 borda-1-solid-0b7ea3 fundo-ffffff cor-08617e raio-8 p-0-12 fs-13 fw-600">{{ n.acao }}</button></sc-if><button onClick="{{ n.marcarLida }}" aria-label="{{ n.ariaLida }}" class="h-36 borda-cfdadd fundo-ffffff cor-34464d raio-8 p-0-12 fs-13 fw-600 botao-secundario">Marcar como lida</button></div>
+        </div>
+      </sc-for>
+    </div>
+  </aside>
+</sc-if>
+
+    <div class="pagina p-28 d-flex eixo-column gap-20 max-w-1320 w-100pc">
+<sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13 d-flex quebra-wrap alinha-center gap-8-14"><span class="flex-1 min-w-200">{{ erro }}</span><button onClick="{{ tentarDeNovo }}" class="h-34 borda-1-solid-b42318 fundo-ffffff cor-b42318 raio-8 p-0-12 fs-13 fw-600">Tentar de novo</button></div></sc-if>
+<sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-dde6e8 raio-12 p-24 texto-center cor-5b6b70 fs-14 lh-1p5 fundo-ffffff" style="background:var(--fundo-ffffff)">Entre com a conta do Gerente de Projetos para ver os dados da rede.</div></sc-if>
+
+<sc-if value="{{ temFiltros }}" hint-placeholder-val="{{ true }}">
+  <div class="filtros d-flex quebra-wrap gap-8 alinha-center" role="search" aria-label="Filtros da rede">
+    <sc-if value="{{ filtroDeCiclo }}" hint-placeholder-val="{{ true }}"><select aria-label="Ciclo" value="{{ ciclo }}" onChange="{{ escolherCiclo }}" class="h-38 borda-cfdadd raio-8 p-0-10 fs-13 fw-600 fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesDeCiclo }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
+    <select aria-label="Carteira" value="{{ carteira }}" onChange="{{ escolherCarteira }}" class="h-38 borda-cfdadd raio-8 p-0-10 fs-13 max-w-260 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as carteiras</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select aria-label="Escola" value="{{ escola }}" onChange="{{ escolherEscola }}" class="h-38 borda-cfdadd raio-8 p-0-10 fs-13 max-w-300 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">{{ todasAsEscolas }}</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="8"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <sc-if value="{{ filtroDeCiclo }}" hint-placeholder-val="{{ true }}"><span role="status" aria-live="polite" class="fs-12 cor-5b6b70">{{ periodoTexto }}</span></sc-if>
+    <sc-if value="{{ temFiltro }}" hint-placeholder-val="{{ false }}"><button onClick="{{ limparFiltros }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-08617e deco-underline botao-texto">Limpar filtros</button></sc-if>
+  </div>
+</sc-if>
+
+<sc-if value="{{ temAbas }}" hint-placeholder-val="{{ false }}">
+  <div class="nao-imprimir d-flex quebra-wrap gap-10-12 alinha-center">
+    <div role="tablist" aria-label="{{ abasAria }}" class="largura-total-celular d-flex gap-4 fundo-e3ebed p-4 raio-10 rolagem-x-auto segmentado"><sc-for list="{{ abas }}" as="aba" hint-placeholder-count="2"><button role="tab" aria-selected="{{ aba.marcado }}" onClick="{{ aba.escolher }}" class="borda-0 raio-7 p-8-14 fs-14 fw-600 espaco-nowrap {{ aba.classe }}" style="background:{{ aba.fundo }};color:{{ aba.cor }}">{{ aba.rotulo }}</button></sc-for></div>
+    <div class="oculto-celular flex-1"></div>
+    <sc-if value="{{ temExportar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ imprimir }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-1a2b33 botao-secundario">Imprimir / PDF</button><button onClick="{{ exportarExcel }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-1a2b33 botao-secundario">Exportar Excel</button></sc-if>
+  </div>
+</sc-if>
+
+<sc-if value="{{ is.geral }}" hint-placeholder-val="{{ true }}"><dc-import name="gerente-geral" contexto="{{ contexto }}" memoria="{{ memoriaGeral }}"></dc-import></sc-if>
+<sc-if value="{{ is.adocao }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-adocao" contexto="{{ contexto }}" memoria="{{ memoriaAdocao }}"></dc-import></sc-if>
+<sc-if value="{{ is.oficineiros }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-oficineiros" contexto="{{ contexto }}"></dc-import></sc-if>
+<sc-if value="{{ is.analistas }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-analistas" contexto="{{ contexto }}" memoria="{{ memoriaAnalistas }}"></dc-import></sc-if>
+<sc-if value="{{ is.jornada }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-jornada" contexto="{{ contexto }}" memoria="{{ memoriaJornada }}"></dc-import></sc-if>
+<sc-if value="{{ is.onboarding }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-onboarding" contexto="{{ contexto }}" memoria="{{ memoriaOnboarding }}"></dc-import></sc-if>
+<sc-if value="{{ is.contas }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-contas" contexto="{{ contexto }}" memoria="{{ memoriaContas }}"></dc-import></sc-if>
+
+    </div>
+  </main>
+</div>
+
+<sc-if value="{{ novaContaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharConta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="ct-nv-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(520px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><h3 id="ct-nv-titulo" class="m-0 fs-17 flex-1">Novo usuário</h3><button onClick="{{ fecharConta }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Nome completo *</span><input id="ct-nv-nome" value="{{ novaConta.nome }}" onChange="{{ novaConta.escreverNome }}" maxlength="120" autocomplete="off" required="" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
+      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Telefone</span><input id="ct-nv-tel" value="{{ novaConta.telefone }}" onChange="{{ novaConta.escreverTelefone }}" placeholder="(31) 99999-9999" inputmode="tel" maxlength="16" autocomplete="off" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
+      </div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">E-mail *</span><input id="ct-nv-email" type="email" value="{{ novaConta.email }}" onChange="{{ novaConta.escreverEmail }}" inputmode="email" maxlength="160" autocomplete="off" autocapitalize="none" spellcheck="false" required="" aria-describedby="ct-nv-email-dica" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit"></input><span id="ct-nv-email-dica" class="fs-12 cor-5b6b70 lh-1p45">O código para ativar a conta é enviado para este e-mail.</span></label>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">CPF ou CNPJ *</span><input id="ct-nv-cpf" value="{{ novaConta.cpf }}" onChange="{{ novaConta.escreverCpf }}" inputmode="numeric" maxlength="18" autocomplete="off" required="" aria-describedby="ct-nv-cpf-dica" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit"></input><span id="ct-nv-cpf-dica" class="fs-12 cor-5b6b70 lh-1p45">Usado só para a pessoa ativar a conta. Fica protegido e não aparece no sistema.</span></label>
+      <div class="d-flex eixo-column gap-8"><span id="ct-nv-perfil-rot" class="fs-12 cor-5b6b70 fw-600">Perfil *</span><div role="radiogroup" aria-labelledby="ct-nv-perfil-rot" onKeyDown="{{ teclaNosPerfis }}" class="d-flex quebra-wrap gap-8"><sc-for list="{{ perfisDaNovaConta }}" as="perfil" hint-placeholder-count="4"><button id="{{ perfil.id }}" role="radio" aria-checked="{{ perfil.marcado }}" disabled="{{ perfil.desligado }}" tabindex="{{ perfil.tabulacao }}" onClick="{{ perfil.escolher }}" class="raio-8 p-8-12 fs-13 fw-500 fonte-inherit botao-opcao {{ perfil.classe }}" style="border:1.5px solid {{ perfil.borda }};background:{{ perfil.fundo }};color:{{ perfil.cor }}">{{ perfil.rotulo }}</button></sc-for></div><span class="fs-12 cor-5b6b70 lh-1p45">{{ dicaDePerfil }}</span></div>
+      <sc-if value="{{ pedeEscola }}" hint-placeholder-val="{{ true }}">
+        <label class="d-flex eixo-column gap-6 fundo-eff9fc raio-10 p-14"><span class="fs-12 cor-08617e fw-600">Escola de atuação * <span class="fw-400">(base da Presença e da Grade)</span></span><select id="ct-nv-escola" value="{{ novaConta.escola }}" onChange="{{ novaConta.escolherEscola }}" required="" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscolaDaConta }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+      </sc-if>
+      <sc-if value="{{ ehOficineiro }}" hint-placeholder-val="{{ true }}">
+        <div id="ct-nv-jornada" class="d-flex eixo-column gap-6 fundo-eff9fc raio-10 p-14"><span class="fs-12 cor-08617e fw-600">Jornada de trabalho</span><span class="fs-14 cor-1a2b33">Horário livre, até 8 horas trabalhadas por dia</span><span class="fs-12 cor-5b6b70 lh-1p45">O almoço não conta. A presença é confirmada pela localização, dentro do raio da escola.</span></div>
+        <label class="d-flex eixo-column gap-6 fundo-eff9fc raio-10 p-14"><span class="fs-12 cor-08617e fw-600">CNPJ ou CPF da contratada <span class="fw-400">(pode ser preenchido depois)</span></span><input id="ct-nv-contratada" value="{{ novaConta.contratada }}" onChange="{{ novaConta.escreverContratada }}" inputmode="numeric" maxlength="18" autocomplete="off" placeholder="00.000.000/0000-00" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fundo-ffffff fonte-inherit"></input><span class="fs-12 cor-5b6b70 lh-1p45">Pessoa jurídica (CNPJ) ou física (CPF) contratada para o serviço. Sai no relatório de presença e atividades.</span></label>
+      </sc-if>
+      <sc-if value="{{ ehAnalista }}" hint-placeholder-val="{{ false }}">
+        <label class="d-flex eixo-column gap-6 fundo-eff9fc raio-10 p-14"><span class="fs-12 cor-08617e fw-600">Carteira *</span><select id="ct-nv-carteira" value="{{ novaConta.carteira }}" onChange="{{ novaConta.escolherCarteira }}" required="" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha a carteira</option><sc-for list="{{ opcoesDeCarteiraDaConta }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+      </sc-if>
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-4-12 fs-13 fundo-f7fafb raio-10 p-12-14"><dt class="cor-5b6b70">Projeto</dt><dd class="m-0">{{ cliente.projeto }}</dd><dt class="cor-5b6b70">Cidade</dt><dd class="m-0">{{ cliente.cidade }}</dd><dt class="cor-5b6b70">Coordenador</dt><dd class="m-0">Coordenador do núcleo</dd><dt class="cor-5b6b70">Gerente</dt><dd class="m-0">Gerente do projeto</dd></dl>
+      <p class="m-0 fs-12 cor-5b6b70 lh-1p45">A pessoa ativa a conta em “Primeiro acesso”, na página de entrada, com o CPF ou CNPJ e o código enviado ao e-mail, e cria a própria senha.</p>
+      <sc-if value="{{ temErroNovaConta }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroNovaConta }}</div></sc-if>
+    </div>
+    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharConta }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Cancelar</button><button onClick="{{ criarConta }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-0b7ea3" style="background:#0B7EA3">{{ novaContaBotao }}</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ contaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharConta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="ct-det-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(520px,100%);width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">Conta de usuário</span><h3 id="ct-det-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ conta.nome }}</h3></div><button onClick="{{ fecharConta }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ conta.itens }}" as="item" hint-placeholder-count="6"><dt class="cor-5b6b70 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
+      <sc-if value="{{ conta.podeJornada }}" hint-placeholder-val="{{ false }}">
+        <div class="d-flex eixo-column gap-8 fundo-f7fafb raio-10 p-12-14">
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">CNPJ ou CPF da contratada</span><input id="ct-det-contratada" value="{{ conta.contratada }}" onChange="{{ conta.escreverContratada }}" placeholder="{{ conta.contratadaAtual }}" inputmode="numeric" maxlength="18" autocomplete="off" aria-describedby="ct-det-contratada-dica" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
+          <span id="ct-det-contratada-dica" class="fs-12 cor-5b6b70 lh-1p45">Pessoa jurídica ou física contratada para o serviço. Fica protegido: aqui aparece mascarado e sai completo só no relatório de presença e atividades do oficineiro. Para remover, apague o campo e salve.</span>
+          <sc-if value="{{ conta.contratadaMudou }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.salvarContratada }}" disabled="{{ conta.salvandoContratada }}" class="alinha-si-flex-start h-36 borda-0 cor-fff raio-8 p-0-14 fs-13 fw-600 fonte-inherit fundo-0b7ea3" style="background:#0B7EA3">{{ conta.contratadaBotao }}</button></sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{ conta.temMudanca }}" hint-placeholder-val="{{ false }}"><div class="fundo-eff3fd raio-10 p-12-14 d-flex eixo-column gap-8 alinha-flex-start"><span class="fs-13 cor-1a3f9c lh-1p5"><b>Mudança de escola agendada.</b> {{ conta.mudancaTexto }}</span><sc-if value="{{ conta.pode }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.cancelarMudanca }}" disabled="{{ salvandoConta }}" class="h-34 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Cancelar mudança agendada</button></sc-if></div></sc-if>
+      <sc-if value="{{ conta.naoPode }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-12 cor-5b6b70 lh-1p45">{{ conta.motivo }}</p></sc-if>
+      <sc-if value="{{ confirmandoDesativacao }}" hint-placeholder-val="{{ false }}"><div role="group" aria-label="Confirmar desativação" class="fundo-fbedeb raio-10 p-14 d-flex eixo-column gap-10"><span class="fs-13 cor-7a1f17 lh-1p5">A pessoa perde o acesso na hora. Presenças, grades e registros são mantidos e a conta pode ser reativada em até 30 dias. Depois disso, a conta é apagada automaticamente e o histórico fica como “Conta removida”.</span><div class="d-flex gap-8 quebra-wrap"><button id="ct-det-confirma" onClick="{{ conta.confirmar }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 fundo-b42318 cor-fff raio-8 p-0-14 fs-14 fw-600 fonte-inherit">Confirmar desativação</button><button onClick="{{ conta.voltar }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Voltar</button></div></div></sc-if>
+      <sc-if value="{{ temErroConta }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroConta }}</div></sc-if>
+    </div>
+    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+      <sc-if value="{{ conta.podeDesativar }}" hint-placeholder-val="{{ false }}"><button id="ct-det-desativar" onClick="{{ conta.desativar }}" disabled="{{ salvandoConta }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-b42318 mr-auto botao-secundario">Desativar conta</button></sc-if>
+      <sc-if value="{{ conta.podeReativar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.reativar }}" disabled="{{ salvandoConta }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-1a2b33 mr-auto botao-secundario">Reativar conta</button></sc-if>
+      <sc-if value="{{ conta.podeEscola }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.alterar }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Alterar escola</button></sc-if>
+      <button onClick="{{ fecharConta }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-0b7ea3" style="background:#0B7EA3">Fechar</button>
+    </div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ mudancaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharConta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="ct-mu-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(520px,100%);width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">Alterar escola de atuação</span><h3 id="ct-mu-titulo" class="m-0 fs-17">{{ mudanca.nome }}</h3></div><button onClick="{{ fecharConta }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
+      <div class="d-flex eixo-column gap-4"><span class="fs-12 cor-5b6b70 fw-600">Escola atual</span><span class="fs-14">{{ mudanca.atual }}</span></div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Nova escola de atuação *</span><select id="ct-mu-escola" value="{{ mudanca.escola }}" onChange="{{ mudanca.escolherEscola }}" required="" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscolaDaMudanca }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select><sc-if value="{{ temEnderecoDaMudanca }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70 lh-1p45">{{ enderecoDaMudanca }}</span></sc-if></label>
+      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Vale a partir de *</span><input id="ct-mu-vale" type="date" value="{{ mudanca.vale }}" min="{{ mudancaMinima }}" max="{{ mudancaMaxima }}" onChange="{{ mudanca.escolherData }}" required="" class="h-40 borda-cfdadd raio-8 fs-14 fonte-inherit" style="padding:0 12px;padding:0 10px"></input></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Motivo *</span><select id="ct-mu-motivo" value="{{ mudanca.motivo }}" onChange="{{ mudanca.escreverMotivo }}" required="" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha o motivo</option><option>Remanejamento do núcleo</option><option>Solicitação da SEMED</option><option>Ampliação de atendimento</option><option>Outro</option></select></label>
+      </div>
+      <div class="fundo-f7fafb raio-10 p-12-14 fs-12 cor-34464d lh-1p55">Presenças, grades e registros anteriores são preservados. A grade da nova escola começa sem atividades e precisa ser montada pelo oficineiro e validada. O oficineiro é avisado da alteração.</div>
+      <sc-if value="{{ temErroMudanca }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroMudanca }}</div></sc-if>
+    </div>
+    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharConta }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Cancelar</button><button onClick="{{ salvarMudanca }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-0b7ea3" style="background:#0B7EA3">{{ mudancaBotao }}</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ loteAberto }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharLote }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="lt-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(820px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">Gestão de Contas</span><h3 id="lt-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">Criar contas em lote</h3></div><button onClick="{{ fecharLote }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <ol class="m-0 pl-20 fs-13 lh-1p6 cor-34464d">
+        <li>Baixe o modelo e preencha uma pessoa por linha: nome, e-mail, CPF ou CNPJ, perfil (oficineiro, analista, direção, coordenador ou gerente), escola pela sigla para oficineiro e direção, carteira para analista, e a coluna Horário pode ficar em branco (a jornada do oficineiro é flexível: 8 horas entre 07:00 e 17:00). Para oficineiro, a última coluna recebe o CNPJ ou o CPF da contratada (opcional).</li>
+        <li>Envie a planilha. Nada é gravado antes da conferência.</li>
+        <li>Confira a prévia e crie as contas. Cada pessoa ativa a própria conta em "Primeiro acesso".</li>
+      </ol>
+      <div class="d-flex quebra-wrap gap-8">
+        <button onClick="{{ baixarModelo }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-1a2b33 botao-secundario">Baixar modelo (.xlsx)</button>
+        <label class="h-40 d-inline-flex alinha-center gap-8 borda-0 fundo-0b7ea3 cor-fff raio-8 p-0-16 fs-14 fw-600 cursor-pointer">Selecionar planilha<input type="file" accept=".xlsx" onChange="{{ lerLote }}" aria-label="Selecionar planilha de contas" class="pos-absolute w-1 h-1 opac-0"></input></label>
+      </div>
+      <sc-if value="{{ temErroLote }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroLote }}</div></sc-if>
+      <sc-if value="{{ lote.temArquivo }}" hint-placeholder-val="{{ false }}">
+        <div role="status" aria-live="polite" class="fs-13 fw-600 cor-1a2b33">{{ lote.resumo }}</div>
+        <div class="rolagem-auto borda-dde6e8 raio-10">
+          <div role="table" aria-label="Prévia das contas" class="min-w-760">
+            <div role="row" class="d-grid gap-8 p-10-12 fs-11 fw-600 cor-5b6b70 caixa-uppercase ls-0p03em borda-b-dde6e8" style="grid-template-columns:44px minmax(0,1.5fr) minmax(0,1.4fr) 120px minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.4fr)"><span role="columnheader">Linha</span><span role="columnheader">Nome</span><span role="columnheader">E-mail</span><span role="columnheader">CPF</span><span role="columnheader">Perfil</span><span role="columnheader">Escola / carteira</span><span role="columnheader">Situação</span></div>
+            <sc-for list="{{ lote.linhas }}" as="linha" hint-placeholder-count="4">
+              <div role="row" class="d-grid gap-8 p-9-12 fs-12 borda-b-e9eff1 alinha-center" style="grid-template-columns:44px minmax(0,1.5fr) minmax(0,1.4fr) 120px minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.4fr)">
+                <span role="cell" class="num-tabular-nums cor-5b6b70">{{ linha.numero }}</span><b role="cell" class="quebra-palavra-anywhere">{{ linha.nome }}</b><span role="cell" class="quebra-palavra-anywhere">{{ linha.email }}</span><span role="cell" class="num-tabular-nums">{{ linha.documento }}</span><span role="cell">{{ linha.perfil }}</span><span role="cell" class="quebra-palavra-anywhere">{{ linha.vinculo }}</span>
+                <span role="cell" class="fs-12 fw-600 quebra-palavra-anywhere" style="color:{{ linha.cor }}">{{ linha.situacao }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <span class="fs-12 cor-5b6b70 lh-1p5">Os CPFs e CNPJs ficam só nesta tela até a criação e são apagados ao fechar. Linhas com problema são ignoradas; corrija na planilha e envie de novo.</span>
+      </sc-if>
+    </div>
+    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharLote }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-1a2b33 botao-secundario">{{ lote.fecharTexto }}</button><sc-if value="{{ lote.podeCriar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ criarLote }}" disabled="{{ lote.criando }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">{{ lote.botao }}</button></sc-if></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ novaVisitaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharNovaVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="vs-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">Vincular visita a analista</span><h3 id="vs-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ novaVisita.titulo }}</h3></div><button onClick="{{ fecharNovaVisita }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <sc-if value="{{ novaVisita.temDiagnostico }}" hint-placeholder-val="{{ false }}"><div class="fundo-f7fafb raio-10 p-12-14 fs-13 lh-1p5 cor-34464d">{{ novaVisita.diagnostico }}</div></sc-if>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Analista *</span><select id="vs-analista" value="{{ novaVisita.analista }}" onChange="{{ novaVisita.escolherAnalista }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha o analista</option><sc-for list="{{ opcoesDeAnalista }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Escola * <span class="fw-400">(da carteira do analista)</span></span><select id="vs-escola" value="{{ novaVisita.escola }}" onChange="{{ novaVisita.escolherEscola }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscolaDaVisita }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Data *</span><input id="vs-data" type="date" value="{{ novaVisita.data }}" min="{{ dataMinima }}" max="{{ dataMaxima }}" onChange="{{ novaVisita.escolherData }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Horário</span><input type="time" value="{{ novaVisita.hora }}" onChange="{{ novaVisita.escolherHora }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
+      </div>
+      <div class="d-flex eixo-column gap-8"><span id="vs-origem-rot" class="fs-12 cor-5b6b70 fw-600">Origem da visita *</span><div role="radiogroup" aria-labelledby="vs-origem-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ novaVisitaOrigens }}" as="origem" hint-placeholder-count="4"><button role="radio" aria-checked="{{ origem.marcado }}" onClick="{{ origem.escolher }}" class="raio-8 p-8-12 fs-13 fw-500 botao-opcao {{ origem.classe }}" style="border:1.5px solid {{ origem.borda }};background:{{ origem.fundo }};color:{{ origem.cor }}">{{ origem.rotulo }}</button></sc-for></div></div>
+      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Tipo de atendimento</span><select value="{{ novaVisita.tipo }}" onChange="{{ novaVisita.escolherTipo }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ novaVisitaTipos }}" as="tipo" hint-placeholder-count="4"><option value="{{ tipo }}">{{ tipo }}</option></sc-for></select></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Detalhe do atendimento</span><select value="{{ novaVisita.detalhe }}" onChange="{{ novaVisita.escolherDetalhe }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Sem detalhe</option><sc-for list="{{ novaVisitaDetalhes }}" as="detalhe" hint-placeholder-count="4"><option value="{{ detalhe }}">{{ detalhe }}</option></sc-for></select></label>
+      </div>
+      <div class="d-flex eixo-column gap-8"><span id="vs-foco-rot" class="fs-12 cor-5b6b70 fw-600">Foco da visita</span><div role="group" aria-labelledby="vs-foco-rot" class="d-flex quebra-wrap gap-6"><sc-for list="{{ novaVisitaFocos }}" as="foco" hint-placeholder-count="4"><button aria-pressed="{{ foco.marcado }}" onClick="{{ foco.escolher }}" class="h-32 raio-999 p-0-12 fs-13 fw-500 botao-texto {{ foco.classe }}" style="border:1px solid {{ foco.borda }};background:{{ foco.fundo }};color:{{ foco.cor }}">{{ foco.rotulo }}</button></sc-for></div></div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Orientação para o analista</span><textarea id="vs-orientacao" rows="4" value="{{ novaVisita.orientacao }}" onChange="{{ novaVisita.escreverOrientacao }}" maxlength="1000" placeholder="ex.: execução abaixo de 60% e ocorrências de internet recorrentes" class="borda-cfdadd raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+      <div class="fundo-f7fafb raio-10 p-12-14 fs-12 cor-34464d lh-1p55">A visita entra na agenda do analista. Quando ele registrar a visita, ela aparece como realizada aqui.</div>
+      <sc-if value="{{ temErroNovaVisita }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erroNovaVisita }}</div></sc-if>
+    </div>
+    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharNovaVisita }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-1a2b33 botao-secundario">Cancelar</button><button onClick="{{ salvarNovaVisita }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">{{ novaVisitaBotao }}</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ visitaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="vd-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(440px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">{{ visita.rotulo }}</span><h3 id="vd-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ visita.titulo }}</h3></div><button onClick="{{ fecharVisita }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <span class="alinha-si-flex-start fs-12 fw-600 p-3-10 raio-999" style="color:{{ visita.situacaoCor }};background:{{ visita.situacaoFundo }}">{{ visita.situacao }}</span>
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ visita.itens }}" as="item" hint-placeholder-count="5"><dt class="cor-5b6b70 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></sc-for></dl>
+      <sc-if value="{{ visita.temRelatorio }}" hint-placeholder-val="{{ false }}"><section aria-labelledby="vd-rel-h" class="borda-t-e9eff1 pt-14 d-flex eixo-column gap-10"><h4 id="vd-rel-h" class="m-0 fs-14">Relatório da visita</h4><dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ visita.relatorio }}" as="item" hint-placeholder-count="5"><dt class="cor-5b6b70 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere espaco-pre-line lh-1p5">{{ item.valor }}</dd></sc-for></dl></section></sc-if>
+      <sc-if value="{{ confirmandoCancelamento }}" hint-placeholder-val="{{ false }}"><div role="group" aria-label="Confirmar cancelamento" class="fundo-fbedeb raio-10 p-14 d-flex eixo-column gap-10"><span class="fs-13 cor-7a1f17 lh-1p5">A visita sai da agenda do analista. Continuar?</span><div class="d-flex gap-8 quebra-wrap"><button id="vd-confirma" onClick="{{ visita.cancelar }}" disabled="{{ salvando }}" class="h-36 borda-0 fundo-b42318 cor-fff raio-8 p-0-14 fs-13 fw-600">Cancelar a visita</button><button onClick="{{ visita.voltar }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-13 fw-600 cor-1a2b33 botao-secundario">Manter</button></div></div></sc-if>
+    </div>
+    <div class="borda-t-dde6e8 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><sc-if value="{{ visita.podeCancelar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visita.perguntar }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 cor-b42318 mr-auto botao-secundario">Cancelar visita</button></sc-if><button onClick="{{ fecharVisita }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Fechar</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ registroAberto }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharRegistro }}" aria-hidden="true" class="pos-fixed inset-0 fundo-rgba-19-37-44-0p45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="rg-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-ffffff z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(500px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-dde6e8 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-5b6b70">{{ registro.oficineiro }} · somente visualização</span><h3 id="rg-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ registro.titulo }}</h3></div><button onClick="{{ fecharRegistro }}" aria-label="Fechar" class="borda-0 fundo-eef3f4 raio-8 w-40 h-40 fs-18 cor-1a2b33 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <div class="d-flex quebra-wrap gap-6"><span class="fs-12 fw-600 p-3-8 raio-4" style="color:{{ registro.tipoCor }};background:{{ registro.tipoFundo }}">{{ registro.tipo }}</span><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ registro.situacaoCor }};background:{{ registro.situacaoFundo }}">{{ registro.situacao }}</span></div>
+      <dl class="m-0 d-grid colunas-minmax-0-1fr-minmax-0-1fr gap-12-16">
+        <sc-for list="{{ registro.itens }}" as="item" hint-placeholder-count="6"><div class="d-flex eixo-column gap-2 min-w-0" style="grid-column:{{ item.coluna }}"><dt class="fs-12 cor-5b6b70 fw-600">{{ item.rotulo }}</dt><dd class="m-0 fs-14 lh-1p5 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></div></sc-for>
+      </dl>
+    </div>
+    <div class="borda-t-dde6e8 d-flex justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharRegistro }}" class="h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fundo-0b7ea3" style="background:#0B7EA3">Fechar</button></div>
+  </aside>
+</sc-if>
+
+<div class="sr-only" role="status" aria-live="polite">{{ aviso }}</div>
+<sc-if value="{{ aviso }}" hint-placeholder-val="{{ false }}">
+  <div aria-hidden="true" class="pos-fixed base-96 esquerda-50pc w-max-content fundo-13252c cor-fff p-12-18 raio-10 fs-14 z-95 sombra-0-8-24-rgba-0-0-0-0p2 largura-fundo" style="transform:translateX(-50%);max-width:calc(100% - 32px)">{{ aviso }}</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const {
+  TIPOS,
+  MESES,
+  WDL: DIAS,
+  VIS_FOCOS,
+  p2,
+  dataDe,
+  hojeIso,
+  agoraMin,
+  hmDe,
+  dmIso,
+  dmyIso,
+  mesIni,
+  cicloIniIso,
+  cicloFimIso,
+  mesTxt,
+  segDe,
+  turmaTxt,
+  detTipo,
+  pct,
+  plural,
+  msgErro,
+  normTxt,
+  prazoDe,
+  proxUtil,
+  agregar
+} = Base;
+const NOMES_DE_PERFIL = {
+  oficineiro: 'Oficineiro de Inclusão Digital',
+  analista: 'Analista',
+  direcao: 'Direção da escola',
+  coordenador: 'Coordenador',
+  gerente: 'Gerente de Projetos',
+  administrador: 'Administrador'
+};
+const SITUACOES_DE_CONTA = {
+  ativa: ['Ativo', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)'],
+  primeiro: ['Aguardando 1º acesso', 'var(--texto-7a4e0b)', 'var(--fundo-faefd9)'],
+  desativada: ['Desativado', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)']
+};
+const ORIGENS_DE_VISITA = Base.ORIGEM_VISITA;
+const FAIXAS_DE_EXECUCAO = [
+  ['No ritmo', '≥ 90%', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)', v => v >= 90],
+  ['Estável', '75–89%', 'var(--texto-6c60e6)', 'var(--fundo-ecebfc)', v => v >= 75 && v < 90],
+  ['Atenção', '50–74%', '#E0892B', 'var(--fundo-faefd9)', v => v >= 50 && v < 75],
+  ['Reforçar apoio', '< 50%', 'var(--texto-b42318)', 'var(--fundo-fbedeb)', v => v < 50]
+];
+const ATENDIMENTOS_DE_VISITA = Base.ATEND_VISITA;
+const cicloDe = (iso, k) => {
+  const c = Base.cicloComp(dataDe(iso));
+  return Base.iso(new Date(c.getFullYear(), c.getMonth() + (k || 0), 1));
+};
+const nomeDoMes = iso => MESES[Number(String(iso).slice(5, 7)) - 1];
+const presencaFechada = p => !!p.fim && !(p.pausa_inicio && !p.pausa_fim);
+const minutosValidos = p => (presencaFechada(p) ? Math.min(p.trabalhado_min || 0, 480) : 0);
+const minutosExcedentes = p => (presencaFechada(p) ? Math.max(0, (p.trabalhado_min || 0) - 480) : 0);
+const documentoValido = c => {
+  const d = String(c || '').replace(/\D/g, '');
+  if (d.length === 14) {
+    if (/^(\d)\1{13}$/.test(d)) return false;
+    const dj = n => {
+      let t = 0;
+      for (let i = 0; i < n; i++) t += Number(d[i]) * (((n - 1 - i) % 8) + 2);
+      const r = t % 11;
+      return r < 2 ? 0 : 11 - r;
+    };
+    return dj(12) === Number(d[12]) && dj(13) === Number(d[13]);
+  }
+  if (d.length !== 11 || /^(\d)\1{10}$/.test(d)) return false;
+  const dv = n => {
+    let t = 0;
+    for (let i = 0; i < n; i++) t += Number(d[i]) * (n + 1 - i);
+    const r = (t * 10) % 11;
+    return r === 10 ? 0 : r;
+  };
+  return dv(9) === Number(d[9]) && dv(10) === Number(d[10]);
+};
+const documentoMascarado = c => {
+  const d = String(c || '').replace(/\D/g, '');
+  if (d.length === 14) return '**.***.' + d.slice(5, 8) + '/' + d.slice(8, 12) + '-**';
+  return d.length === 11 ? '***.' + d.slice(3, 6) + '.' + d.slice(6, 9) + '-**' : d ? 'inválido' : '—';
+};
+class Component extends DCLogic {
+  state = {
+    menuAberto: false,
+    tela: 'geral',
+    abas: { adocao: 'cons', ofic: 'pres', anal: 'cart' },
+    conectado: false,
+    carregando: false,
+    erro: '',
+    salvando: false,
+    aviso: '',
+    escolas: [],
+    carteiras: [],
+    contas: [],
+    mudancasDeEscola: [],
+    presencasRede: [],
+    aulasRede: [],
+    grade: [],
+    gradeAnterior: [],
+    envios: [],
+    relatorios: null,
+    relatoriosPorCiclo: {},
+    visitas: [],
+    presencasAnalistas: [],
+    agenda: [],
+    ciclos: {},
+    cicloFiltro: '',
+    carteiraFiltro: '',
+    escolaFiltro: '',
+    registroAberto: null,
+    novaVisita: null,
+    erroNovaVisita: '',
+    visitaAberta: null,
+    semanas: {},
+    confirmandoCancelamento: false,
+    acessos: null,
+    carregandoAcessos: false,
+    ordensServico: null,
+    onboardings: null,
+    previaDaOs: null,
+    erroOnboarding: '',
+    resultadoDaOs: '',
+    carregandoContas: false,
+    erroContas: '',
+    novaConta: null,
+    contaAberta: null,
+    mudanca: null,
+    confirmandoDesativacao: false,
+    erroConta: '',
+    erroMudanca: '',
+    contratadas: {},
+    contratadaEditada: null,
+    salvandoContratada: false,
+    salvandoConta: false,
+    lote: null,
+    erroLote: ''
+  };
+  memoria = {
+    geral: { relatoriosAbertos: false },
+    adocao: { corte: 'carteira', oficineiro: '', tipo: '', solucao: '', situacao: '', busca: '', limite: 100 },
+    analistas: { analista: '', semana: 0, agenda: 'anal' },
+    jornada: {},
+    onboarding: { filtro: { ordem: '', carteira: '', situacao: 'pendente' } },
+    contas: { busca: '', perfil: '', carteira: '', escola: '', situacao: '', limite: 50 }
+  };
+  componentDidMount() {
+    this.aoTeclar = e => {
+      if (e.key !== 'Escape') return;
+      const s = this.state;
+      if (s.notifAberto) return this.setState({ notifAberto: false });
+      if (s.lote) return this.fecharLote();
+      if (s.novaVisita) return this.fecharNovaVisita();
+      if (s.visitaAberta) return this.fecharVisita();
+      if (s.registroAberto) return this.fecharRegistro();
+      if (s.novaConta || s.contaAberta || s.mudanca) return this.fecharGavetaDeConta();
+    };
+    document.addEventListener('keydown', this.aoTeclar);
+    this.relogio = setInterval(() => this.forceUpdate(), 60000);
+    this.carregar();
+  }
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.aoTeclar);
+    clearInterval(this.relogio);
+    clearTimeout(this.temporizadorDoAviso);
+  }
+  estiloOpcao(on) {
+    return on
+      ? { borda: '#0B7EA3', fundo: 'var(--fundo-e4f5fa)', cor: 'var(--texto-08617e)', classe: '' }
+      : {
+          borda: 'var(--borda-cfdadd)',
+          fundo: 'var(--fundo-ffffff)',
+          cor: 'var(--texto-1a2b33)',
+          classe: 'fundo-ffffff botao-secundario'
+        };
+  }
+  avisar(t) {
+    this.setState({ aviso: t });
+    clearTimeout(this.temporizadorDoAviso);
+    this.temporizadorDoAviso = setTimeout(() => this.setState({ aviso: '' }), 3200);
+  }
+  lembrar(tela, mudanca) {
+    Object.assign(this.memoria[tela], mudanca);
+    this.forceUpdate();
+  }
+  abrirContas(filtro) {
+    Object.assign(this.memoria.contas, { perfil: '', situacao: '', busca: '', escola: '', carteira: '', ...filtro });
+    this.irPara('contas');
+  }
+  focar(id) {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) el.focus();
+    }, 30);
+  }
+  async carregar() {
+    const A = window.FSM_AUTH;
+    if (!A || !A.logado || !A.logado()) return;
+    if (!A.agendaVisitas || !A.contasGestao) {
+      this.setState({
+        conectado: true,
+        erro: 'Esta versão do site está desatualizada. Gere e publique o site de novo.'
+      });
+      return;
+    }
+    this.setState({ conectado: true, carregando: true, erro: '' });
+    const hoje = hojeIso(),
+      ini = cicloIniIso(cicloDe(hoje, -1)),
+      ano = Number(hoje.slice(0, 4)),
+      anoIni = Number(ini.slice(0, 4));
+    try {
+      const [escolas, carteiras, contas, mud, pres, aulas, grade, gradeAnt, envios, visitas, presA] = await Promise.all(
+        [
+          A.escolas(),
+          A.carteiras(),
+          A.contasGestao(),
+          A.mudancasEscola().catch(() => []),
+          A.presencasRede(ini, hoje),
+          A.aulasRede(ini, hoje),
+          A.gradeRede(ano),
+          anoIni !== ano ? A.gradeRede(anoIni) : Promise.resolve([]),
+          A.envioDaGrade(ano).catch(() => []),
+          A.visitasPeriodo(ini, hoje).catch(() => []),
+          A.presencasAnalista ? A.presencasAnalista(ini, hoje).catch(() => []) : Promise.resolve([])
+        ]
+      );
+      this.setState(
+        {
+          escolas: escolas || [],
+          carteiras: carteiras || [],
+          contas: Array.isArray(contas) ? contas : [],
+          mudancasDeEscola: mud || [],
+          presencasRede: pres || [],
+          aulasRede: aulas || [],
+          grade: grade || [],
+          gradeAnterior: gradeAnt || [],
+          envios: envios || [],
+          visitas: visitas || [],
+          presencasAnalistas: presA || [],
+          carregando: false,
+          cicloFiltro: this.state.cicloFiltro || cicloDe(hoje, 0)
+        },
+        () => {
+          this.carregarAgenda();
+          this.carregarRelatorios();
+          this.carregarOnboarding(true);
+          this.carregarContratadas();
+        }
+      );
+    } catch (x) {
+      this.setState({ carregando: false, erro: msgErro(x, 'Não foi possível carregar os dados da rede.') });
+    }
+  }
+  async carregarSemana(seg) {
+    const A = window.FSM_AUTH;
+    if (!A || !A.visitasCompletas || !A.aulasRede) return;
+    this.semanasPedidas = this.semanasPedidas || new Set();
+    if (this.semanasPedidas.has(seg)) return;
+    this.semanasPedidas.add(seg);
+    const fim = Base.iso(Base.add(dataDe(seg), 4));
+    try {
+      const [visitas, aulas] = await Promise.all([A.visitasCompletas(seg, fim), A.aulasRede(seg, fim)]);
+      this.setState({ semanas: { ...this.state.semanas, [seg]: { visitas: visitas || [], aulas: aulas || [] } } });
+    } catch (x) {
+      this.semanasPedidas.delete(seg);
+      this.setState({
+        semanas: {
+          ...this.state.semanas,
+          [seg]: { visitas: [], aulas: [], erro: msgErro(x, 'Não foi possível carregar a semana.') }
+        }
+      });
+    }
+  }
+  async carregarAgenda() {
+    const A = window.FSM_AUTH,
+      hoje = hojeIso();
+    try {
+      const ag = await A.agendaVisitas(mesIni(hoje, -6), Base.iso(Base.add(dataDe(hoje), 190)));
+      this.semanasPedidas = new Set();
+      this.setState({ agenda: ag || [], semanas: {} });
+    } catch (x) {
+      const semTabela = /visitas_agenda|PGRST2|relation/i.test(String((x && x.message) || ''));
+      this.setState({
+        agenda: [],
+        erro: semTabela
+          ? 'A agenda de visitas ainda não está no banco. Rode o arquivo 42_gerente_agenda_visitas.sql no Supabase.'
+          : msgErro(x, 'Não foi possível carregar a agenda dos analistas.')
+      });
+    }
+  }
+  async carregarRelatorios() {
+    const A = window.FSM_AUTH;
+    if (!A.relatoriosEscola) return;
+    try {
+      const r = await A.relatoriosEscola(cicloDe(hojeIso(), -1));
+      this.setState({ relatorios: r || [] });
+    } catch (x) {
+      this.setState({ relatorios: [] });
+    }
+  }
+  async carregarRelatoriosDoCiclo(comp) {
+    const A = window.FSM_AUTH,
+      hoje = hojeIso();
+    if (!A || !A.relatoriosEscola || !comp || comp >= cicloDe(hoje, -1) || this.state.relatoriosPorCiclo[comp]) return;
+    this.setState({ relatoriosPorCiclo: { ...this.state.relatoriosPorCiclo, [comp]: { busy: true } } });
+    try {
+      const r = await A.relatoriosEscola(comp);
+      this.setState({ relatoriosPorCiclo: { ...this.state.relatoriosPorCiclo, [comp]: { lista: r || [] } } });
+    } catch (x) {
+      this.setState({ relatoriosPorCiclo: { ...this.state.relatoriosPorCiclo, [comp]: { lista: [] } } });
+    }
+  }
+  async carregarCiclo(comp) {
+    const A = window.FSM_AUTH,
+      hoje = hojeIso();
+    if (!comp || comp >= cicloDe(hoje, -1) || this.state.ciclos[comp]) return;
+    this.setState({ ciclos: { ...this.state.ciclos, [comp]: { busy: true } } });
+    try {
+      const oIni = cicloIniIso(comp),
+        oFim = cicloFimIso(comp),
+        ano = Number(comp.slice(0, 4)),
+        anoAt = Number(hoje.slice(0, 4));
+      const precisaGrade =
+        ano !== anoAt && !(this.state.gradeAnterior.length && Number(this.state.gradeAnterior[0].ano_letivo) === ano);
+      const [pres, aulas, visitas, grade, presA] = await Promise.all([
+        A.presencasRede(oIni, oFim),
+        A.aulasRede(oIni, oFim),
+        A.visitasPeriodo(oIni, oFim).catch(() => []),
+        precisaGrade ? A.gradeRede(ano) : Promise.resolve(null),
+        A.presencasAnalista ? A.presencasAnalista(oIni, oFim).catch(() => []) : Promise.resolve([])
+      ]);
+      this.setState({
+        ciclos: {
+          ...this.state.ciclos,
+          [comp]: { pres: pres || [], aulas: aulas || [], visitas: visitas || [], grade, presA: presA || [] }
+        }
+      });
+    } catch (x) {
+      this.setState({
+        ciclos: { ...this.state.ciclos, [comp]: { erro: true } },
+        erro: msgErro(x, 'Não foi possível carregar o ciclo escolhido.')
+      });
+    }
+  }
+  carregarEvolucao() {
+    const hoje = hojeIso();
+    for (let k = -5; k <= -2; k++) this.carregarCiclo(cicloDe(hoje, k));
+  }
+  async carregarAcessos() {
+    const A = window.FSM_AUTH;
+    if (this.state.acessos || this.state.carregandoAcessos || !A.jornadaPessoas) return;
+    this.setState({ carregandoAcessos: true });
+    try {
+      const p = await A.jornadaPessoas();
+      this.setState({ acessos: p || [], carregandoAcessos: false });
+    } catch (x) {
+      this.setState({
+        acessos: [],
+        carregandoAcessos: false,
+        erro: msgErro(x, 'Não foi possível carregar a base de acessos.')
+      });
+    }
+  }
+  async carregarOnboarding(silencioso) {
+    const A = window.FSM_AUTH;
+    if (!A.itensOnboarding) return;
+    try {
+      const [os, itens] = await Promise.all([A.ordensServico(), A.itensOnboarding()]);
+      this.setState({ ordensServico: os || [], onboardings: itens || [] });
+    } catch (x) {
+      this.setState({ ordensServico: [], onboardings: [] });
+      if (!silencioso) this.setState({ erroOnboarding: msgErro(x, 'Não foi possível carregar as ordens de serviço.') });
+    }
+  }
+  async carregarContas() {
+    const A = window.FSM_AUTH;
+    this.setState({ carregandoContas: true, erroContas: '' });
+    try {
+      const [c, mud] = await Promise.all([
+        A.contasGestao(),
+        A.mudancasEscola().catch(() => this.state.mudancasDeEscola)
+      ]);
+      this.setState({ contas: Array.isArray(c) ? c : [], mudancasDeEscola: mud || [], carregandoContas: false });
+      this.carregarContratadas();
+    } catch (x) {
+      this.setState({ carregandoContas: false, erroContas: msgErro(x, 'Não foi possível carregar as contas.') });
+    }
+  }
+  irPara(k, extra) {
+    this.setState({ tela: k, menuAberto: false, notifAberto: false, ...(extra || {}) }, () => {
+      if (k === 'jornada') this.carregarAcessos();
+      if (k === 'onb') this.carregarOnboarding();
+      if (k === 'contas') this.carregarContas();
+      if (k === 'adocao') this.carregarEvolucao();
+    });
+  }
+  temGaveta(s) {
+    return !!(
+      s.novaConta ||
+      s.contaAberta ||
+      s.mudanca ||
+      s.novaVisita ||
+      s.visitaAberta ||
+      s.registroAberto ||
+      s.lote
+    );
+  }
+  travarFundo(on) {
+    document.querySelectorAll('.estrutura').forEach(el => {
+      if (on) el.setAttribute('inert', '');
+      else el.removeAttribute('inert');
+    });
+  }
+  abrirGaveta(estado, foco) {
+    if (!this.temGaveta(this.state)) this.focoAnterior = document.activeElement;
+    this.setState({ notifAberto: false, menuAberto: false, ...estado }, () => {
+      this.travarFundo(true);
+      this.focar(foco);
+    });
+  }
+  fecharGaveta(estado) {
+    this.setState(estado, () => {
+      if (this.temGaveta(this.state)) return;
+      this.travarFundo(false);
+      const v = this.focoAnterior;
+      this.focoAnterior = null;
+      if (v && document.contains(v)) v.focus();
+    });
+  }
+  registrarConsulta(d) {
+    const A = window.FSM_AUTH;
+    if (A && A.registrarAtividade) A.registrarAtividade('CONSULTA', d);
+  }
+  abrirGavetaDeConta(estado, foco) {
+    if (estado && estado.contaAberta)
+      this.registrarConsulta({ tela: 'Contas', alvo: estado.contaAberta, descricao: 'Abriu os dados da conta' });
+    this.abrirGaveta(
+      {
+        novaConta: null,
+        contaAberta: null,
+        mudanca: null,
+        confirmandoDesativacao: false,
+        erroConta: '',
+        erroMudanca: '',
+        contratadaEditada: null,
+        ...estado
+      },
+      foco
+    );
+  }
+  fecharGavetaDeConta() {
+    if (this.state.salvandoConta) return;
+    this.fecharGaveta({
+      novaConta: null,
+      contaAberta: null,
+      mudanca: null,
+      confirmandoDesativacao: false,
+      erroConta: '',
+      erroMudanca: ''
+    });
+  }
+  contasMudaram() {
+    this.carregarContas();
+  }
+  async criarConta() {
+    const f = this.state.novaConta;
+    if (!f || this.state.salvandoConta) return;
+    const nome = f.nome.trim().replace(/\s+/g, ' '),
+      email = f.email.trim(),
+      tel = f.telefone.replace(/\D/g, '');
+    let erro = '',
+      campo = '';
+    if (nome.length < 3) {
+      erro = 'Digite o nome completo.';
+      campo = 'ct-nv-nome';
+    } else if (tel && (tel.length < 10 || tel.length > 11)) {
+      erro = 'Telefone: digite o DDD e o número.';
+      campo = 'ct-nv-tel';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      erro = 'Digite um e-mail válido.';
+      campo = 'ct-nv-email';
+    } else if (!documentoValido(f.cpf)) {
+      erro = 'CPF ou CNPJ inválido. Confira os números.';
+      campo = 'ct-nv-cpf';
+    } else if (!f.papel) {
+      erro = 'Escolha o perfil.';
+      campo = 'ct-nv-perfil';
+    } else if ((f.papel === 'oficineiro' || f.papel === 'direcao') && !f.escola) {
+      erro = 'Escolha a escola de atuação.';
+      campo = 'ct-nv-escola';
+    } else if (f.papel === 'analista' && !f.carteira) {
+      erro = 'Escolha a carteira do analista.';
+      campo = 'ct-nv-carteira';
+    } else if (
+      f.papel === 'oficineiro' &&
+      String(f.contratada || '').replace(/\D/g, '') &&
+      ![11, 14].includes(String(f.contratada || '').replace(/\D/g, '').length)
+    ) {
+      erro = 'Informe o CNPJ (14 números) ou o CPF (11 números) da contratada, ou deixe em branco.';
+      campo = 'ct-nv-contratada';
+    }
+    if (erro) {
+      this.setState({ erroConta: erro }, () => this.focar(campo));
+      return;
+    }
+    this.setState({ salvandoConta: true, erroConta: '' });
+    try {
+      const novo = await window.FSM_AUTH.cadastrarUsuario({
+        nome,
+        email,
+        cpf: f.cpf,
+        papel: f.papel,
+        telefone: tel,
+        escola_sigla: f.papel === 'oficineiro' || f.papel === 'direcao' ? f.escola : '',
+        carteira_id: f.papel === 'analista' ? f.carteira : ''
+      });
+      let semContratada = false;
+      if (f.papel === 'oficineiro' && novo && novo.id) {
+        if (String(f.contratada || '').replace(/\D/g, ''))
+          try {
+            await window.FSM_AUTH.definirContratada(novo.id, f.contratada);
+          } catch (x) {
+            semContratada = true;
+          }
+      }
+      this.setState({ salvandoConta: false }, () => {
+        this.fecharGavetaDeConta();
+        this.avisar(
+          semContratada
+            ? 'Usuário criado, mas o CNPJ/CPF da contratada não foi salvo · abra a conta e confira o número'
+            : 'Usuário criado · ' +
+                nome +
+                ' ativa a conta em “Primeiro acesso”, com o CPF ou CNPJ e o código enviado ao e-mail'
+        );
+        this.contasMudaram();
+      });
+    } catch (x) {
+      this.setState({ salvandoConta: false, erroConta: msgErro(x, 'Não foi possível criar a conta.') });
+    }
+  }
+  async ativarConta(c, ativa) {
+    if (this.state.salvandoConta) return;
+    this.setState({ salvandoConta: true, erroConta: '' });
+    try {
+      await window.FSM_AUTH.ativarConta(c.id, ativa);
+      this.setState({ salvandoConta: false, confirmandoDesativacao: false }, () => {
+        this.avisar(
+          ativa
+            ? 'Conta reativada · ' + c.nome + ' volta a entrar no sistema'
+            : 'Conta desativada · ' + c.nome + ' não entra mais no sistema'
+        );
+        this.contasMudaram();
+        this.focar('ct-det-titulo');
+      });
+    } catch (x) {
+      this.setState({ salvandoConta: false, erroConta: msgErro(x, 'Não foi possível concluir.') });
+    }
+  }
+  async carregarContratadas() {
+    const A = window.FSM_AUTH;
+    if (!A || !A.contratadasGestao || !this.state.conectado) return;
+    try {
+      const l = await A.contratadasGestao();
+      const m = {};
+      (l || []).forEach(x => (m[x.id] = x));
+      this.setState({ contratadas: m });
+    } catch (x) {}
+  }
+  async salvarContratada(c) {
+    const v = this.state.contratadaEditada;
+    if (v == null || this.state.salvandoContratada) return;
+    this.setState({ salvandoContratada: true, erroConta: '' });
+    try {
+      await window.FSM_AUTH.definirContratada(c.id, v);
+      this.setState({ salvandoContratada: false, contratadaEditada: null });
+      this.avisar(
+        (String(v).replace(/\D/g, '') ? 'CNPJ/CPF da contratada salvo · ' : 'CNPJ/CPF da contratada removido · ') +
+          c.nome
+      );
+      this.carregarContratadas();
+    } catch (x) {
+      this.setState({
+        salvandoContratada: false,
+        erroConta:
+          x && x.message
+            ? x.message.charAt(0).toUpperCase() + x.message.slice(1)
+            : 'Não foi possível salvar o CNPJ/CPF da contratada.'
+      });
+    }
+  }
+  async salvarMudanca() {
+    const m = this.state.mudanca;
+    if (!m || this.state.salvandoConta) return;
+    let erro = '',
+      campo = '';
+    if (!m.escola) {
+      erro = 'Escolha a nova escola.';
+      campo = 'ct-mu-escola';
+    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(m.vale)) {
+      erro = 'Escolha a data em que a mudança vale.';
+      campo = 'ct-mu-vale';
+    } else if (!m.motivo) {
+      erro = 'Escolha o motivo.';
+      campo = 'ct-mu-motivo';
+    }
+    if (erro) {
+      this.setState({ erroMudanca: erro }, () => this.focar(campo));
+      return;
+    }
+    this.setState({ salvandoConta: true, erroMudanca: '' });
+    try {
+      const r = await window.FSM_AUTH.alterarEscola(m.id, m.escola, m.vale, m.motivo);
+      this.setState({ salvandoConta: false }, () => {
+        this.fecharGavetaDeConta();
+        this.avisar(
+          (r === 'agendada' ? 'Mudança de escola agendada para ' + dmyIso(m.vale) : 'Escola de atuação alterada') +
+            ' · ' +
+            m.nome +
+            ' foi avisado(a)'
+        );
+        this.contasMudaram();
+      });
+    } catch (x) {
+      this.setState({ salvandoConta: false, erroMudanca: msgErro(x, 'Não foi possível salvar.') });
+    }
+  }
+  async cancelarMudanca(c) {
+    if (this.state.salvandoConta) return;
+    this.setState({ salvandoConta: true, erroConta: '' });
+    try {
+      await window.FSM_AUTH.cancelarMudancaEscola(c.id);
+      this.setState({ salvandoConta: false }, () => {
+        this.avisar('Mudança de escola cancelada · ' + c.nome + ' continua na escola atual');
+        this.contasMudaram();
+      });
+    } catch (x) {
+      this.setState({ salvandoConta: false, erroConta: msgErro(x, 'Não foi possível cancelar.') });
+    }
+  }
+  abrirMudanca(c) {
+    const t = proxUtil(Base.iso(Base.add(dataDe(hojeIso()), 1)));
+    this.abrirGavetaDeConta(
+      { mudanca: { id: c.id, nome: c.nome, atual: c.escola_id, escola: '', vale: t, motivo: '' } },
+      'ct-mu-escola'
+    );
+  }
+  agendarVisita(pre) {
+    const d = proxUtil(Base.iso(Base.add(dataDe(hojeIso()), 1)));
+    this.abrirGaveta(
+      {
+        novaVisita: {
+          analista: '',
+          escola: '',
+          data: d,
+          hora: '08:00',
+          origem: 'gerencia',
+          tipo: 'Acompanhamento · Plano de ação',
+          focos: ['Professores'],
+          orientacao: '',
+          diag: '',
+          ...(pre || {})
+        },
+        erroNovaVisita: ''
+      },
+      pre && pre.analista ? 'vs-data' : 'vs-analista'
+    );
+  }
+  fecharNovaVisita() {
+    if (this.state.salvando) return;
+    this.fecharGaveta({ novaVisita: null, erroNovaVisita: '' });
+  }
+  async salvarNovaVisita() {
+    const v = this.state.novaVisita;
+    if (!v || this.state.salvando) return;
+    const hoje = hojeIso(),
+      max = Base.iso(Base.add(dataDe(hoje), 180));
+    let erro = '',
+      campo = '';
+    if (!v.analista) {
+      erro = 'Escolha o analista.';
+      campo = 'vs-analista';
+    } else if (!v.escola) {
+      erro = 'Escolha a escola da carteira do analista.';
+      campo = 'vs-escola';
+    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(v.data) || v.data < hoje || v.data > max) {
+      erro = 'Escolha uma data entre hoje e os próximos 180 dias.';
+      campo = 'vs-data';
+    } else if (!Base.letivo(dataDe(v.data))) {
+      erro = 'Escolha um dia útil: a data cai em fim de semana ou feriado.';
+      campo = 'vs-data';
+    } else if (v.hora && !/^\d{2}:\d{2}$/.test(v.hora)) {
+      erro = 'Horário inválido.';
+    } else if (!ORIGENS_DE_VISITA[v.origem]) {
+      erro = 'Escolha a origem da visita.';
+    }
+    if (erro) {
+      this.setState({ erroNovaVisita: erro }, () => campo && this.focar(campo));
+      return;
+    }
+    this.setState({ salvando: true, erroNovaVisita: '' });
+    try {
+      await window.FSM_AUTH.agendarVisita({
+        analista: v.analista,
+        escola: v.escola,
+        data: v.data,
+        hora: v.hora || null,
+        origem: v.origem,
+        tipo: v.tipo,
+        foco: (v.focos || []).join(', '),
+        orientacao: (v.orientacao || '').trim()
+      });
+      const an = this.state.contas.find(c => c.id === v.analista);
+      this.setState({ salvando: false }, () => {
+        this.fecharGaveta({ novaVisita: null, erroNovaVisita: '' });
+        this.avisar(
+          'Visita vinculada à agenda de ' +
+            (an ? an.nome : 'analista') +
+            ' · ' +
+            DIAS[dataDe(v.data).getDay()] +
+            ' ' +
+            dmIso(v.data) +
+            (v.hora ? ' · ' + v.hora : '')
+        );
+        this.carregarAgenda();
+      });
+    } catch (x) {
+      this.setState({ salvando: false, erroNovaVisita: msgErro(x, 'Não foi possível vincular a visita.') });
+    }
+  }
+  abrirVisita(ref) {
+    this.abrirGaveta({ visitaAberta: ref, confirmandoCancelamento: false }, 'vd-titulo');
+  }
+  fecharVisita() {
+    if (this.state.salvando) return;
+    this.fecharGaveta({ visitaAberta: null, confirmandoCancelamento: false });
+  }
+  async cancelarVisita() {
+    const r = this.state.visitaAberta;
+    if (!r || r.t !== 'a' || this.state.salvando) return;
+    this.setState({ salvando: true });
+    try {
+      await window.FSM_AUTH.cancelarVisitaAgenda(r.id);
+      this.setState({ salvando: false }, () => {
+        this.fecharGaveta({ visitaAberta: null, confirmandoCancelamento: false });
+        this.avisar('Visita cancelada · saiu da agenda do analista');
+        this.carregarAgenda();
+      });
+    } catch (x) {
+      this.setState({
+        salvando: false,
+        confirmandoCancelamento: false,
+        erro: msgErro(x, 'Não foi possível cancelar a visita.')
+      });
+    }
+  }
+  abrirRegistro(o) {
+    this.abrirGaveta({ registroAberto: o }, 'rg-titulo');
+  }
+  fecharRegistro() {
+    this.fecharGaveta({ registroAberto: null });
+  }
+  abrirLote() {
+    this.abrirGaveta({ lote: { linhas: null, arquivo: '', criando: false, feito: false }, erroLote: '' }, 'lt-titulo');
+  }
+  fecharLote() {
+    if (this.state.lote && this.state.lote.criando) return;
+    this.fecharGaveta({ lote: null, erroLote: '' });
+  }
+  baixarModelo() {
+    if (!window.FSM_PLANILHA) return this.avisar('Exportação indisponível nesta versão do site');
+    window.FSM_PLANILHA.baixar(
+      [
+        [
+          'Nome completo',
+          'E-mail',
+          'CPF ou CNPJ',
+          'Perfil',
+          'Escola (sigla)',
+          'Carteira',
+          'Horário',
+          'Telefone',
+          'CNPJ ou CPF da contratada'
+        ]
+      ],
+      'modelo_contas_oficineiro_mais',
+      'Contas'
+    );
+  }
+  async lerLote(e) {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!f || !this.state.lote) return;
+    try {
+      const P = await window.FSM_ONB.lerPlanilha(f);
+      const col = re => P.colunas.find(c => re.test(c)) || '';
+      const C = {
+        nome: col(/^nome/),
+        email: col(/mail/),
+        cpf: col(/^cpf/),
+        perfil: col(/perfil|papel/),
+        escola: col(/escola|sigla/),
+        carteira: col(/carteira/),
+        horario: col(/horario|jornada/),
+        telefone: col(/telefone|celular/),
+        contratada: col(/contratada/) || col(/^cnpj/)
+      };
+      const falta = ['nome', 'email', 'cpf', 'perfil'].filter(k => !C[k]);
+      if (falta.length) throw new Error('faltam as colunas ' + falta.join(', ') + '. Use o modelo.');
+      if (!P.linhas.length) throw new Error('a planilha não tem pessoas.');
+      if (P.linhas.length > 200) throw new Error('envie no máximo 200 pessoas por vez.');
+      const escolas = this.state.escolas.filter(x => x.ativa !== false),
+        carts = this.state.carteiras;
+      const vistosCpf = {},
+        vistosEmail = {};
+      const linhas = P.linhas.map((r, i) => {
+        const nome = String(r[C.nome] || '')
+            .trim()
+            .replace(/\s+/g, ' '),
+          email = String(r[C.email] || '')
+            .trim()
+            .toLowerCase(),
+          cpf = String(r[C.cpf] || '').replace(/\D/g, ''),
+          pn = normTxt(r[C.perfil]),
+          papel = /oficin/.test(pn)
+            ? 'oficineiro'
+            : /analist/.test(pn)
+              ? 'analista'
+              : /dire/.test(pn)
+                ? 'direcao'
+                : /coord/.test(pn)
+                  ? 'coordenador'
+                  : /gerent/.test(pn)
+                    ? 'gerente'
+                    : '',
+          escTxt = String((C.escola && r[C.escola]) || '').trim(),
+          esc = escTxt
+            ? escolas.find(x => normTxt(x.sigla) === normTxt(escTxt) || normTxt(x.nome) === normTxt(escTxt))
+            : null,
+          cartTxt = String((C.carteira && r[C.carteira]) || '').trim(),
+          cart = cartTxt
+            ? carts.find(x => normTxt(x.id) === normTxt(cartTxt) || normTxt(x.rotulo) === normTxt(cartTxt))
+            : null,
+          hTxt = String((C.horario && r[C.horario]) || '').trim(),
+          hMatch = hTxt.match(/^\s*0?([78])(?:[:h.]?00)?\s*h?\s*$/i),
+          jornada = hTxt && !hMatch ? '' : '07:00',
+          tel = String((C.telefone && r[C.telefone]) || '').replace(/\D/g, ''),
+          contratada = String((C.contratada && r[C.contratada]) || '').replace(/\D/g, '');
+        let erro = '';
+        if (nome.length < 3 || nome.length > 120) erro = 'Nome inválido';
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 160) erro = 'E-mail inválido';
+        else if (!documentoValido(cpf)) erro = 'CPF ou CNPJ inválido';
+        else if (vistosCpf[cpf]) erro = 'CPF ou CNPJ repetido na linha ' + vistosCpf[cpf];
+        else if (vistosEmail[email]) erro = 'E-mail repetido na linha ' + vistosEmail[email];
+        else if (!papel) erro = 'Perfil não reconhecido';
+        else if ((papel === 'oficineiro' || papel === 'direcao') && !esc) erro = 'Escola não encontrada';
+        else if (papel === 'analista' && !cart) erro = 'Carteira não encontrada';
+        else if (papel === 'oficineiro' && !jornada) erro = 'Horário: deixe em branco (jornada flexível)';
+        else if (tel && (tel.length < 10 || tel.length > 11)) erro = 'Telefone inválido';
+        else if (papel === 'oficineiro' && contratada && ![11, 14].includes(contratada.length))
+          erro = 'CNPJ/CPF da contratada inválido';
+        if (!erro) {
+          vistosCpf[cpf] = i + 2;
+          vistosEmail[email] = i + 2;
+        }
+        return {
+          n: i + 2,
+          nome,
+          email,
+          cpf,
+          papel,
+          escola: papel === 'oficineiro' || papel === 'direcao' ? esc : null,
+          carteira: papel === 'analista' ? cart : null,
+          jornada: papel === 'oficineiro' ? jornada : '',
+          contratada: papel === 'oficineiro' ? contratada : '',
+          tel,
+          erro,
+          st: erro ? 'erro' : 'pronta',
+          msg: ''
+        };
+      });
+      this.setState({ lote: { linhas, arquivo: f.name, criando: false, feito: false }, erroLote: '' });
+    } catch (x) {
+      this.setState({
+        lote: { linhas: null, arquivo: '', criando: false, feito: false },
+        erroLote: 'Não foi possível ler a planilha: ' + ((x && x.message) || 'arquivo inválido.')
+      });
+    }
+  }
+  async criarLote() {
+    const L = this.state.lote;
+    if (!L || L.criando || !L.linhas) return;
+    const fila = L.linhas.filter(l => l.st === 'pronta').map(l => l.n);
+    if (!fila.length) return;
+    const atual = n => this.state.lote.linhas.find(l => l.n === n);
+    const marcar = (n, ch) =>
+      new Promise(r =>
+        this.setState(
+          { lote: { ...this.state.lote, linhas: this.state.lote.linhas.map(l => (l.n === n ? { ...l, ...ch } : l)) } },
+          r
+        )
+      );
+    await new Promise(r => this.setState({ lote: { ...L, criando: true } }, r));
+    let ok = 0,
+      falhas = 0;
+    for (const n of fila) {
+      if (!this.state.lote) return;
+      const l = atual(n);
+      await marcar(n, { st: 'criando' });
+      try {
+        const novo = await window.FSM_AUTH.cadastrarUsuario({
+          nome: l.nome,
+          email: l.email,
+          cpf: l.cpf,
+          papel: l.papel,
+          telefone: l.tel,
+          escola_sigla: l.escola ? l.escola.sigla : '',
+          carteira_id: l.carteira ? l.carteira.id : ''
+        });
+        let semContratada = false;
+        if (l.papel === 'oficineiro' && novo && novo.id) {
+          if (l.contratada)
+            try {
+              await window.FSM_AUTH.definirContratada(novo.id, l.contratada);
+            } catch (x) {
+              semContratada = true;
+            }
+        }
+        ok++;
+        await marcar(n, {
+          st: 'criada',
+          msg: semContratada ? 'CNPJ/CPF da contratada não salvo' : '',
+          cpf: '',
+          contratada: ''
+        });
+      } catch (x) {
+        falhas++;
+        await marcar(n, { st: 'falha', msg: msgErro(x, 'Não foi possível criar.') });
+      }
+    }
+    if (!this.state.lote) return;
+    this.setState({ lote: { ...this.state.lote, criando: false, feito: true } });
+    this.avisar(
+      plural(ok, 'conta criada', 'contas criadas') + (falhas ? ' · ' + plural(falhas, 'falha', 'falhas') : '')
+    );
+    this.carregarContas();
+  }
+  baixarPendentes(g) {
+    if (!window.FSM_PLANILHA) return this.avisar('Exportação indisponível nesta versão do site');
+    window.FSM_PLANILHA.baixar(
+      [['Nome', 'Perfil', 'Escola / carteira', 'Conta criada em']].concat(
+        g.pend.map(c => [
+          c.nome,
+          NOMES_DE_PERFIL[c.papel] || c.papel,
+          g.atuacao(c),
+          dmyIso(String(c.criado_em || '').slice(0, 10))
+        ])
+      ),
+      'primeiro_acesso_' + normTxt(g.n).replace(/[^a-z0-9]+/g, '_'),
+      'Primeiro acesso'
+    );
+  }
+  async lerOrdemDeServico(e) {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!f) return;
+    try {
+      const os = await window.FSM_ONB.lerOS(f);
+      if (!os.rows.length) throw new Error('a aba de ativação não tem usuários.');
+      if (!/^\d{1,5}$/.test(String(os.num)))
+        throw new Error('não encontrei o número da OS. Renomeie o arquivo incluindo “OS 016”, por exemplo.');
+      const lista = this.state.escolas
+        .filter(x => x.ativa !== false)
+        .map(x => ({ sig: x.sigla, n: x.nome, cs: x.carteira_id, id: x.id }));
+      const rows = os.rows.map((r, i) => {
+        const m = window.FSM_ONB.matchEscola(r.lotacao, lista),
+          esc = m ? lista.find(x => x.sig === m.sig) : null;
+        return {
+          k: i,
+          seq: r.seq || String(i + 1),
+          nome: r.nome,
+          email: r.email,
+          cargo: r.cargo,
+          tipo: r.tipo,
+          matricula: r.matricula,
+          lotacao: r.lotacao,
+          cpf: String(r.login || '').replace(/\D/g, ''),
+          escola: esc ? String(esc.id) : '',
+          cart: esc && esc.cs ? esc.cs : ''
+        };
+      });
+      this.setState({
+        erroOnboarding: '',
+        resultadoDaOs: '',
+        previaDaOs: { num: String(os.num).padStart(3, '0'), sec: os.sec, arquivo: os.arquivo, rows }
+      });
+    } catch (x) {
+      this.setState({
+        erroOnboarding: 'Não foi possível ler o arquivo: ' + ((x && x.message) || 'arquivo inválido.'),
+        previaDaOs: null
+      });
+    }
+  }
+  async importarOrdemDeServico() {
+    const P = this.state.previaDaOs;
+    if (!P || this.state.salvando) return;
+    const validas = P.rows.filter(r => documentoValido(r.cpf));
+    if (!validas.length) {
+      this.setState({ erroOnboarding: 'Nenhuma linha com CPF ou CNPJ válido nesta OS.' });
+      return;
+    }
+    const escPorId = Object.fromEntries(this.state.escolas.map(x => [String(x.id), x]));
+    this.setState({ salvando: true, erroOnboarding: '' });
+    try {
+      const r = await window.FSM_AUTH.importarOs({
+        numero: P.num,
+        secretaria: P.sec,
+        arquivo: P.arquivo,
+        recebida_em: hojeIso(),
+        linhas: validas.map(x => ({
+          seq: x.seq,
+          nome: x.nome,
+          email: x.email,
+          cpf: x.cpf,
+          matricula: x.matricula,
+          cargo: x.cargo,
+          tipo: x.tipo,
+          lotacao: x.lotacao,
+          escola_sigla: escPorId[x.escola] ? escPorId[x.escola].sigla : '',
+          carteira_id: x.cart || ''
+        }))
+      });
+      const dup = r && r.duplicados ? r.duplicados.length : 0,
+        inv = (r && r.invalidos ? r.invalidos.length : 0) + (P.rows.length - validas.length),
+        ins = (r && r.inseridos) || 0;
+      this.memoria.onboarding.filtro = { ordem: (r && r.os) || '', carteira: '', situacao: 'pendente' };
+      this.setState(
+        {
+          salvando: false,
+          previaDaOs: null,
+          resultadoDaOs:
+            'OS ' +
+            P.sec +
+            ' ' +
+            P.num +
+            ' importada · ' +
+            plural(ins, 'pendência enviada', 'pendências enviadas') +
+            ' aos analistas' +
+            (dup ? ' · ' + plural(dup, 'já estava em outra OS', 'já estavam em outra OS') : '') +
+            (inv
+              ? ' · ' +
+                plural(
+                  inv,
+                  'linha ignorada por documento ou nome inválido',
+                  'linhas ignoradas por documento ou nome inválido'
+                )
+              : '')
+        },
+        () => this.carregarOnboarding()
+      );
+    } catch (x) {
+      this.setState({ salvando: false, erroOnboarding: msgErro(x, 'Não foi possível importar a OS.') });
+    }
+  }
+  async atribuirOnboarding(id, cart) {
+    if (!cart) return;
+    try {
+      await window.FSM_AUTH.atribuirOnboarding(id, cart);
+      const c = this.state.carteiras.find(x => x.id === cart);
+      this.avisar('Pendência enviada para a carteira ' + (c ? c.rotulo : cart));
+      this.carregarOnboarding();
+    } catch (x) {
+      this.setState({ erroOnboarding: msgErro(x, 'Não foi possível atribuir o analista.') });
+    }
+  }
+  mudarLinhaDaPrevia(indice, mudanca) {
+    this.setState({
+      previaDaOs: {
+        ...this.state.previaDaOs,
+        rows: this.state.previaDaOs.rows.map((linha, posicao) =>
+          posicao === indice ? { ...linha, ...mudanca } : linha
+        )
+      }
+    });
+  }
+  cancelarPrevia() {
+    this.setState({ previaDaOs: null });
+  }
+  exportar(nome, aba, linhas) {
+    if (!window.FSM_PLANILHA) return this.avisar('Exportação indisponível nesta versão do site');
+    window.FSM_PLANILHA.baixar(linhas, nome, aba);
+  }
+  renderVals() {
+    const s = this.state,
+      hoje = hojeIso(),
+      agora = agoraMin(),
+      A = window.FSM_AUTH,
+      logado = !!(A && A.logado && A.logado());
+    const escolaPorId = Object.fromEntries(s.escolas.map(e => [String(e.id), e]));
+    const carteiraPorId = Object.fromEntries(s.carteiras.map(c => [c.id, c]));
+    const contaPorId = Object.fromEntries(s.contas.map(c => [c.id, c]));
+    const escolaDe = id => escolaPorId[String(id)];
+    const nomeDaEscola = id => (escolaDe(id) || {}).nome || 'Escola não encontrada';
+    const siglaDaEscola = id => (escolaDe(id) || {}).sigla || '—';
+    const carteiraDaEscola = id => (escolaDe(id) || {}).carteira_id || '';
+    const rotuloDaCarteira = id => (carteiraPorId[id] ? carteiraPorId[id].rotulo : id || 'Sem carteira');
+    const nomeDaPessoa = id => (contaPorId[id] ? contaPorId[id].nome : 'Pessoa não encontrada');
+    const ativosDoPerfil = papel => s.contas.filter(c => c.papel === papel && c.ativo);
+    const oficineirosAtivos = ativosDoPerfil('oficineiro');
+    const analistasAtivos = ativosDoPerfil('analista').filter(c => c.carteira_id);
+    const analistasDaCarteira = id => analistasAtivos.filter(c => c.carteira_id === id);
+    const escolasAtivas = s.escolas.filter(e => e.ativa !== false);
+    const escolaNoFiltro = id =>
+      (!s.escolaFiltro || String(id) === s.escolaFiltro) &&
+      (!s.carteiraFiltro || carteiraDaEscola(id) === s.carteiraFiltro);
+    const carteiraNoFiltro = id => !s.carteiraFiltro || id === s.carteiraFiltro;
+    const anoAtual = Number(hoje.slice(0, 4));
+    const ultimosCiclos = [-5, -4, -3, -2, -1, 0].map(k => cicloDe(hoje, k));
+    const ciclo = ultimosCiclos.includes(s.cicloFiltro) ? s.cicloFiltro : cicloDe(hoje, 0),
+      cicloAtual = ciclo === cicloDe(hoje, 0),
+      fimDoPeriodo = cicloAtual ? hoje : cicloFimIso(ciclo);
+    const dadosDoCiclo = c => {
+      const at = c === cicloDe(hoje, 0) ? hoje : cicloFimIso(c),
+        ini = cicloIniIso(c),
+        noMes = x => x.data >= ini && x.data <= at,
+        m = s.ciclos[c] || {},
+        ano = Number(c.slice(0, 4)),
+        rec = c >= cicloDe(hoje, -1);
+      const grade =
+        ano === anoAtual
+          ? s.grade
+          : s.gradeAnterior.length && Number(s.gradeAnterior[0].ano_letivo) === ano
+            ? s.gradeAnterior
+            : m.grade || [];
+      return {
+        ini,
+        fimCiclo: cicloFimIso(c),
+        ate: at,
+        pronto: rec || !!m.pres,
+        pres: rec ? s.presencasRede.filter(noMes) : m.pres || [],
+        aulas: rec ? s.aulasRede.filter(noMes) : m.aulas || [],
+        visitas: rec ? s.visitas.filter(noMes) : m.visitas || [],
+        presA: rec ? s.presencasAnalistas.filter(noMes) : m.presA || [],
+        grade
+      };
+    };
+    const dados = dadosDoCiclo(ciclo);
+    const diasLetivos = (() => {
+      let n = 0;
+      for (let d = dataDe(cicloIniIso(ciclo)); Base.iso(d) <= fimDoPeriodo; d = Base.add(d, 1)) if (Base.letivo(d)) n++;
+      return n;
+    })();
+    const atividadesDoCiclo = (dm, c) => {
+      const AG = agregar(dm.grade, dm.aulas, dm.ini || c, dm.ate, s.mudancasDeEscola, hoje, agora);
+      return AG.oc
+        .map(o => ({ ...o, extra: false }))
+        .concat(
+          AG.extras.map(r => ({
+            g: r.grade_aula_id ? AG.porId[r.grade_aula_id] : null,
+            iso: r.data,
+            of: r.oficineiro_id,
+            esc: r.escola_id,
+            tipo: r.tipo,
+            sol: detTipo(r),
+            reg: r,
+            anul: false,
+            st: 'extra',
+            extra: true
+          }))
+        );
+    };
+    const atividades = atividadesDoCiclo(dados, ciclo).filter(i => escolaNoFiltro(i.esc));
+    const resumir = loteAtual => {
+      const t = {
+        prev: 0,
+        canc: 0,
+        real: 0,
+        nao: 0,
+        sreg: 0,
+        extra: 0,
+        est: 0,
+        pres: 0,
+        matr: 0,
+        engS: 0,
+        engN: 0,
+        mc: 0,
+        mt: 0,
+        feitas: 0
+      };
+      const esc = new Set();
+      loteAtual.forEach(i => {
+        esc.add(i.esc);
+        if (i.extra) t.extra++;
+        else {
+          t.prev++;
+          t[i.st]++;
+        }
+        if ((i.st === 'real' || i.extra) && i.reg) {
+          t.feitas++;
+          t.est += i.reg.presentes || 0;
+          if (i.reg.matriculados) {
+            t.pres += i.reg.presentes || 0;
+            t.matr += i.reg.matriculados;
+          }
+          if (i.reg.engajamento) {
+            t.engS += i.reg.engajamento;
+            t.engN++;
+          }
+          const so = normTxt(i.sol);
+          if (/minecraft/.test(so)) t.mc++;
+          else if (/matific/.test(so)) t.mt++;
+        }
+      });
+      t.liq = t.prev - t.canc;
+      t.ex = pct(t.real, t.liq);
+      t.nEsc = esc.size;
+      t.eng = t.engN ? (t.engS / t.engN).toFixed(1).replace('.', ',') : '—';
+      t.presAl = pct(t.pres, t.matr);
+      t.sol = t.feitas ? pct(t.mc, t.feitas) + '% · ' + pct(t.mt, t.feitas) + '%' : '—';
+      return t;
+    };
+    const total = resumir(atividades);
+    const larguraDaBarra = v => (v == null ? '0%' : Math.min(100, v) + '%');
+    const escolaAtualDe = c => {
+      if (!c.mudanca_escola || !c.mudanca_vale || c.mudanca_vale > hoje) return c.escola_id;
+      return c.mudanca_escola;
+    };
+    const oficineirosFiltrados = oficineirosAtivos.filter(c => escolaNoFiltro(escolaAtualDe(c)));
+    const presencasDe = id => dados.pres.filter(p => p.oficineiro_id === id);
+    const diasPresentesDe = id =>
+      new Set(
+        presencasDe(id)
+          .filter(p => p.fim || p.data === hoje)
+          .map(p => p.data)
+      ).size;
+    const horasTexto = m => Math.floor(m / 60) + 'h' + (m % 60 ? p2(m % 60) : '');
+    const resumoDosOficineiros = oficineirosFiltrados.map(c => {
+      const ps = presencasDe(c.id),
+        t = resumir(atividades.filter(i => i.of === c.id));
+      return {
+        c,
+        dias: diasPresentesDe(c.id),
+        valid: ps.reduce((a, p) => a + minutosValidos(p), 0),
+        exc: ps.reduce((a, p) => a + minutosExcedentes(p), 0),
+        t
+      };
+    });
+    const presencaMedia =
+      resumoDosOficineiros.length && diasLetivos
+        ? Math.round(
+            (resumoDosOficineiros.reduce((a, o) => a + o.dias, 0) / (resumoDosOficineiros.length * diasLetivos)) * 100
+          )
+        : null;
+    const minutosValidosTotais = resumoDosOficineiros.reduce((a, o) => a + o.valid, 0);
+    const periodoTexto =
+      (cicloAtual
+        ? mesTxt(ciclo).replace(/^./, x => x.toUpperCase()) + ' até ' + dmIso(hoje)
+        : mesTxt(ciclo).replace(/^./, x => x.toUpperCase())) +
+      ' · ' +
+      plural(diasLetivos, 'dia letivo', 'dias letivos');
+    const carregandoCiclo = !dados.pronto;
+    const opacidade = s.carregando || carregandoCiclo ? 0.55 : 1;
+    const visitasDoPeriodo = dados.visitas.filter(v => escolaNoFiltro(v.escola_id));
+    const agendaValida = s.agenda.filter(v => v.status !== 'cancelada');
+    const proximaVisitaDa = escId =>
+      agendaValida
+        .filter(v => v.escola_id === escId && v.status === 'agendada' && v.data >= hoje)
+        .sort((a, b) => (a.data + (a.hora || '')).localeCompare(b.data + (b.hora || '')))[0];
+    const quandoDaVisita = v =>
+      v ? DIAS[dataDe(v.data).getDay()].slice(0, 3) + ' ' + dmIso(v.data) + (v.hora ? ' · ' + hmDe(v.hora) : '') : '';
+    const cicloDosRelatorios = cicloDe(hoje, -1),
+      prazoDosRelatorios = prazoDe(cicloDosRelatorios),
+      relatoriosFiltrados = (s.relatorios || []).filter(r => escolaNoFiltro(r.escola_id));
+    const relatorioAtrasado = r => r.status !== 'aprovado_coordenacao' && hoje > prazoDosRelatorios;
+    const onboardings = s.onboardings || [];
+    const seteDiasAtras = Base.iso(Base.add(dataDe(hoje), -7));
+    const contasSemPrimeiroAcesso = s.contas.filter(
+      c =>
+        c.ativo &&
+        c.primeiro_acesso &&
+        !c.eu &&
+        c.papel !== 'administrador' &&
+        String(c.criado_em || '').slice(0, 10) <= seteDiasAtras
+    );
+    const escolasComDirecao = new Set(ativosDoPerfil('direcao').map(c => c.escola_id)),
+      escolasComOficineiro = new Set(oficineirosAtivos.map(c => escolaAtualDe(c)));
+    const escolasSemDirecao = escolasAtivas.filter(
+      e => escolasComOficineiro.has(e.id) && !escolasComDirecao.has(e.id) && escolaNoFiltro(e.id)
+    );
+    const escolasSemOficineiro = escolasAtivas.filter(
+      e => escolasComDirecao.has(e.id) && !escolasComOficineiro.has(e.id) && escolaNoFiltro(e.id)
+    );
+    const gradesAguardando = s.envios.filter(
+      g =>
+        g.status === 'enviada' &&
+        contaPorId[g.oficineiro_id] &&
+        escolaNoFiltro(escolaAtualDe(contaPorId[g.oficineiro_id]))
+    );
+    const relatoriosVencidos = relatoriosFiltrados.filter(relatorioAtrasado);
+    const onboardingsSemAnalista = onboardings.filter(i => i.status === 'pendente' && !i.carteira_id);
+    const carteirasSemAnalista = s.carteiras.filter(
+      c =>
+        carteiraNoFiltro(c.id) && !analistasDaCarteira(c.id).length && escolasAtivas.some(e => e.carteira_id === c.id)
+    );
+    const enumerar = (loteAtual, f, n) =>
+      loteAtual
+        .slice(0, n || 4)
+        .map(f)
+        .join(', ') + (loteAtual.length > (n || 4) ? ' e mais ' + (loteAtual.length - (n || 4)) : '');
+    const pendencias = [
+      escolasSemDirecao.length && {
+        titulo: plural(
+          escolasSemDirecao.length,
+          'escola com oficineiro sem conta da direção',
+          'escolas com oficineiro sem conta da direção'
+        ),
+        detalhe: enumerar(escolasSemDirecao, e => e.sigla) + ' · a direção confere as atividades e aprova o relatório',
+        cor: '#E0892B',
+        resolver: () => this.abrirContas({ perfil: 'direcao' })
+      },
+      escolasSemOficineiro.length && {
+        titulo: plural(
+          escolasSemOficineiro.length,
+          'escola com direção e sem oficineiro',
+          'escolas com direção e sem oficineiro'
+        ),
+        detalhe: enumerar(escolasSemOficineiro, e => e.sigla),
+        cor: 'var(--texto-9a6212)',
+        resolver: () => this.irPara('ofic', { abas: { ...s.abas, ofic: 'grade' } })
+      },
+      gradesAguardando.length && {
+        titulo: plural(gradesAguardando.length, 'grade aguardando validação', 'grades aguardando validação'),
+        detalhe:
+          enumerar(gradesAguardando, g => nomeDaPessoa(g.oficineiro_id).split(' ')[0]) +
+          ' · validação feita pela direção da escola',
+        cor: 'var(--texto-1a3f9c)',
+        resolver: () => this.irPara('ofic', { abas: { ...s.abas, ofic: 'grade' } })
+      },
+      relatoriosVencidos.length && {
+        titulo: plural(
+          relatoriosVencidos.length,
+          'relatório de ' + nomeDoMes(cicloDosRelatorios) + ' com prazo vencido',
+          'relatórios de ' + nomeDoMes(cicloDosRelatorios) + ' com prazo vencido'
+        ),
+        detalhe:
+          'Prazo encerrado em ' +
+          dmIso(prazoDosRelatorios) +
+          ' · ' +
+          enumerar(relatoriosVencidos, r => siglaDaEscola(r.escola_id)),
+        cor: 'var(--texto-b42318)',
+        resolver: () => {
+          this.memoria.geral.relatoriosAbertos = true;
+          this.irPara('geral');
+        }
+      },
+      contasSemPrimeiroAcesso.length && {
+        titulo: plural(
+          contasSemPrimeiroAcesso.length,
+          'conta aguardando o 1º acesso há mais de 7 dias',
+          'contas aguardando o 1º acesso há mais de 7 dias'
+        ),
+        detalhe: enumerar(contasSemPrimeiroAcesso, c => c.nome.split(' ')[0]),
+        cor: 'var(--texto-7a4e0b)',
+        resolver: () => this.abrirContas({ situacao: 'primeiro' })
+      },
+      onboardingsSemAnalista.length && {
+        titulo: plural(onboardingsSemAnalista.length, 'pessoa da OS sem analista', 'pessoas da OS sem analista'),
+        detalhe: 'Escola não reconhecida ou carteira sem analista · atribua em Onboarding',
+        cor: 'var(--texto-b42318)',
+        resolver: () => {
+          this.memoria.onboarding.filtro = { ordem: '', carteira: '-', situacao: 'pendente' };
+          this.irPara('onb');
+        }
+      },
+      carteirasSemAnalista.length && {
+        titulo: plural(carteirasSemAnalista.length, 'carteira sem analista ativo', 'carteiras sem analista ativo'),
+        detalhe:
+          enumerar(carteirasSemAnalista, c => c.id) +
+          ' · as visitas e o onboarding dessas escolas ficam sem responsável',
+        cor: '#E0892B',
+        resolver: () => this.abrirContas({ perfil: 'analista' })
+      }
+    ].filter(Boolean);
+    const pendenciasRotuladas = pendencias.map(p => ({ ...p, aria: 'Resolver: ' + p.titulo }));
+    const semRegistroTotal = resumoDosOficineiros.reduce((a, o) => a + o.t.sreg, 0);
+    const carteirasFiltradas = s.carteiras.filter(
+      c => carteiraNoFiltro(c.id) && (s.carteiraFiltro === c.id || escolasAtivas.some(e => e.carteira_id === c.id))
+    );
+    const resumoDasCarteiras = carteirasFiltradas.map(c => {
+      const escs = escolasAtivas.filter(e => e.carteira_id === c.id && escolaNoFiltro(e.id)),
+        ids = new Set(escs.map(e => e.id)),
+        t = resumir(atividades.filter(i => ids.has(i.esc))),
+        vis = visitasDoPeriodo.filter(v => ids.has(v.escola_id)),
+        visEsc = new Set(vis.map(v => v.escola_id)).size,
+        ofs = oficineirosFiltrados.filter(o => ids.has(escolaAtualDe(o))).length;
+      return { c, escs, ids, t, vis, visEsc, ofs };
+    });
+    const ABAS = {
+      adocao: [
+        ['cons', 'Consolidado'],
+        ['det', 'Detalhado']
+      ],
+      ofic: [
+        ['pres', 'Presença e horas'],
+        ['grade', 'Escolas e grade']
+      ],
+      anal: [
+        ['cart', 'Carteiras'],
+        ['agenda', 'Agendas']
+      ]
+    };
+    const tela = s.tela,
+      aba = s.abas[tela];
+    const is = {
+      geral: tela === 'geral',
+      adocaoConsolidado: tela === 'adocao' && aba === 'cons',
+      adocaoDetalhado: tela === 'adocao' && aba === 'det',
+      oficineirosPresenca: tela === 'ofic' && aba === 'pres',
+      oficineirosGrade: tela === 'ofic' && aba === 'grade',
+      analistasCarteiras: tela === 'anal' && aba === 'cart',
+      analistasAgendas: tela === 'anal' && aba === 'agenda',
+      jornada: tela === 'jornada',
+      onboarding: tela === 'onb',
+      contas: tela === 'contas',
+      adocao: tela === 'adocao',
+      oficineiros: tela === 'ofic',
+      analistas: tela === 'anal'
+    };
+    const MENU = [
+      ['geral', 'Visão geral', 'Pendências, relatórios e execução da rede'],
+      ['adocao', 'Adoção', 'Adoção das soluções nas atividades dos oficineiros'],
+      ['ofic', 'Oficineiros', 'Presença, horas, escolas e grade'],
+      ['anal', 'Analistas', 'Visitas, carteiras e agendas'],
+      ['jornada', 'Jornada do Usuário', 'Acessos às plataformas cruzados com as atividades'],
+      ['onb', 'Onboarding · OS', 'Novos usuários por Ordem de Serviço'],
+      ['contas', 'Gestão de Contas', 'Todas as contas · hierarquia completa']
+    ];
+    const contadores = { geral: pendenciasRotuladas.length, onb: onboardingsSemAnalista.length };
+    const menu = MENU.map(([k, l]) => {
+      const on = tela === k,
+        tag = contadores[k] ? String(contadores[k]) : '';
+      return {
+        label: l,
+        go: () => this.irPara(k),
+        classe: on ? 'fundo-rgba-255-255-255-0p09' : 'fundo-transparent',
+        bg: on ? 'rgba(255,255,255,.09)' : 'transparent',
+        fg: on ? '#fff' : '#C9D4D7',
+        dot: on ? '#3ECDF3' : 'transparent',
+        tag,
+        tagBg: tag ? '#F2C66D' : 'transparent',
+        atual: on ? 'page' : 'false'
+      };
+    });
+    const itemDoMenu = MENU.find(i => i[0] === tela) || MENU[0];
+    const abasDaTela = (ABAS[tela] || []).map(([k, l]) => ({
+      rotulo: l,
+      marcado: aba === k ? 'true' : 'false',
+      escolher: () => this.setState({ abas: { ...s.abas, [tela]: k } }),
+      classe: aba === k ? 'fundo-ffffff' : 'fundo-transparent',
+      fundo: aba === k ? 'var(--fundo-ffffff)' : 'transparent',
+      cor: aba === k ? 'var(--texto-1a2b33)' : 'var(--texto-5b6b70)'
+    }));
+    const temFiltros = logado && ['geral', 'adocao', 'ofic', 'anal'].includes(tela);
+    const nomeDoArquivo = base => base + '_' + ciclo.slice(0, 7);
+    const SITUACOES_DA_ATIVIDADE = {
+      real: ['Realizada', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)'],
+      parcial: ['Realizada parcialmente', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)'],
+      nao: ['Não realizada', 'var(--texto-b42318)', 'var(--fundo-fbedeb)'],
+      sreg: ['Sem registro', 'var(--texto-9a6212)', 'var(--fundo-faefd9)'],
+      anul: ['Anulada', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)'],
+      extra: ['Realizada · fora da grade', 'var(--texto-1a3f9c)', 'var(--fundo-eff3fd)'],
+      prev: ['Prevista', 'var(--texto-08617e)', 'var(--fundo-e4f5fa)'],
+      canc: ['Feriado ou recesso', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)']
+    };
+    const situacaoDe = i =>
+      i.extra
+        ? 'extra'
+        : i.anul
+          ? 'anul'
+          : i.st === 'real'
+            ? i.reg.situacao === 'Realizada parcialmente'
+              ? 'parcial'
+              : 'real'
+            : i.st;
+    const turmaDe = i => (i.reg && i.reg.turma ? i.reg.turma : i.g ? turmaTxt(i.g) : '—');
+    const registro = s.registroAberto;
+    const registroDetalhado = registro
+      ? (() => {
+          const r = registro.reg || {},
+            g = registro.g || {},
+            st = SITUACOES_DA_ATIVIDADE[situacaoDe(registro)],
+            tp = TIPOS[registro.tipo] || TIPOS.R;
+          const it = [
+            ['Data', DIAS[dataDe(registro.iso).getDay()] + ', ' + dmyIso(registro.iso)],
+            ['Horário', hmDe(r.inicio || g.inicio) + ' – ' + hmDe(r.fim || g.fim)],
+            ['Escola', nomeDaEscola(registro.esc)],
+            ...(registro.tipo === 'R' ? [['Professor regente', r.professor_aula || g.professor || '—']] : []),
+            [registro.tipo === 'P' ? 'Oficina' : 'Solução', registro.sol || '—'],
+            [
+              'Presentes / matriculados',
+              r.situacao && r.situacao !== 'Não realizada'
+                ? (r.presentes ?? '—') + ' / ' + (r.matriculados ?? '—')
+                : '—'
+            ],
+            ['Engajamento', r.engajamento ? r.engajamento + ' de 5' : '—'],
+            ...(registro.tipo === 'R' ? [['Componente curricular', r.componente || g.componente || '—']] : []),
+            ['Atividade', r.atividade, true],
+            ['Objetivo', r.objetivo, true],
+            ['Conteúdo', r.conteudo, true],
+            ['Motivo', r.motivo, true],
+            ['Mudança no planejamento', r.mudanca, true],
+            ['Próxima atividade', r.proxima_aula, true],
+            [
+              'Check da direção',
+              r.check_direcao === 'ok'
+                ? 'Confirmada pela direção'
+                : r.check_direcao === 'contestada'
+                  ? 'Contestada pela direção' + (r.check_motivo ? ' · ' + r.check_motivo : '')
+                  : r.check_direcao === 'corrigida'
+                    ? 'Corrigida pelo oficineiro após contestação'
+                    : 'Ainda não conferida'
+            ],
+            ['Revisão da coordenação', r.revisao_obs ? r.revisao_obs : '', true]
+          ]
+            .filter(x => x[1] != null && x[1] !== '')
+            .map(([l, v, longo]) => ({ rotulo: l, valor: String(v), coluna: longo ? '1/-1' : 'auto' }));
+          return {
+            titulo: turmaDe(registro),
+            oficineiro: nomeDaPessoa(registro.of),
+            tipo: tp[0],
+            tipoCor: tp[1],
+            tipoFundo: tp[2],
+            situacao: st[0],
+            situacaoCor: st[1],
+            situacaoFundo: st[2],
+            itens: it
+          };
+        })()
+      : {};
+    const segunda = Base.iso(Base.add(dataDe(segDe(hoje)), this.memoria.analistas.semana * 7));
+    const diasDaSemana = [0, 1, 2, 3, 4].map(k => Base.iso(Base.add(dataDe(segunda), k)));
+    const dadosDaSemana = s.semanas[segunda];
+    if (is.analistasAgendas && logado && !dadosDaSemana && !(this.semanasPedidas && this.semanasPedidas.has(segunda)))
+      setTimeout(() => this.carregarSemana(segunda), 0);
+    const visitasDaSemana = dadosDaSemana
+      ? dadosDaSemana.visitas
+      : s.visitas.filter(v => v.data >= segunda && v.data <= diasDaSemana[4]);
+    const visitaAberta = s.visitaAberta;
+    const itemDaVisita = visitaAberta
+      ? visitaAberta.t === 'a'
+        ? s.agenda.find(v => v.id === visitaAberta.id)
+        : visitasDaSemana.find(v => v.id === visitaAberta.id) || s.visitas.find(v => v.id === visitaAberta.id)
+      : null;
+    const visitaRealizada = itemDaVisita
+      ? visitaAberta.t === 'a'
+        ? itemDaVisita.visita_id
+          ? visitasDaSemana.find(v => v.id === itemDaVisita.visita_id) ||
+            s.visitas.find(v => v.id === itemDaVisita.visita_id) ||
+            null
+          : null
+        : itemDaVisita
+      : null;
+    const relatorioDaVisita = v =>
+      [
+        ['Turma', v.turma],
+        ['Oficineiro', v.oficineiro_id ? nomeDaPessoa(v.oficineiro_id) : ''],
+        ['Tipo', [v.tipo, v.subtipo].filter(Boolean).join(' · ')],
+        ['Solução', v.solucao],
+        ['Participantes', v.participantes],
+        ['Objetivo atingido', v.objetivo],
+        ['Engajamento', v.engajamento ? v.engajamento + ' de 5' : ''],
+        ['Observações', v.observacao],
+        ['Boas práticas', v.boas_praticas],
+        ['Dificuldades', v.dificuldades],
+        ['Ocorrências', [v.ocorrencias, v.ocorrencia_obs].filter(Boolean).join(' · ')]
+      ]
+        .filter(([, x]) => x != null && String(x).trim() !== '')
+        .map(([l, x]) => ({ rotulo: l, valor: String(x) }));
+    const visitaDetalhada = itemDaVisita
+      ? visitaAberta.t === 'a'
+        ? {
+            rotulo: 'Agenda do analista',
+            titulo: nomeDaEscola(itemDaVisita.escola_id),
+            ...(() => {
+              const st =
+                itemDaVisita.status === 'realizada'
+                  ? ['Visita realizada', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)']
+                  : itemDaVisita.status === 'cancelada'
+                    ? ['Cancelada', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)']
+                    : itemDaVisita.data < hoje
+                      ? ['Sem registro do analista', 'var(--texto-9a6212)', 'var(--fundo-faefd9)']
+                      : ['Agendada', 'var(--texto-08617e)', 'var(--fundo-e4f5fa)'];
+              return { situacao: st[0], situacaoCor: st[1], situacaoFundo: st[2] };
+            })(),
+            temRelatorio: !!visitaRealizada,
+            relatorio: visitaRealizada ? relatorioDaVisita(visitaRealizada) : [],
+            itens: [
+              ['Analista', nomeDaPessoa(itemDaVisita.analista_id)],
+              ['Data', DIAS[dataDe(itemDaVisita.data).getDay()] + ', ' + dmyIso(itemDaVisita.data)],
+              ['Horário', itemDaVisita.hora ? hmDe(itemDaVisita.hora) : 'sem horário'],
+              ['Origem', (ORIGENS_DE_VISITA[itemDaVisita.origem] || ['—'])[0]],
+              ['Tipo', itemDaVisita.tipo || '—'],
+              ['Foco', itemDaVisita.foco || '—'],
+              ['Orientação', itemDaVisita.orientacao || '—'],
+              [
+                'Situação',
+                itemDaVisita.status === 'realizada'
+                  ? 'Realizada pelo analista'
+                  : itemDaVisita.status === 'cancelada'
+                    ? 'Cancelada'
+                    : 'Agendada'
+              ]
+            ].map(([l, v]) => ({ rotulo: l, valor: v })),
+            podeCancelar: itemDaVisita.status === 'agendada' && itemDaVisita.data >= hoje
+          }
+        : {
+            rotulo: 'Visita registrada pelo analista',
+            titulo: nomeDaEscola(itemDaVisita.escola_id),
+            situacao: 'Visita realizada',
+            situacaoCor: 'var(--texto-23773a)',
+            situacaoFundo: 'var(--fundo-e2f2e5)',
+            temRelatorio: true,
+            relatorio: relatorioDaVisita(itemDaVisita),
+            itens: [
+              ['Analista', nomeDaPessoa(itemDaVisita.analista_id)],
+              ['Data', DIAS[dataDe(itemDaVisita.data).getDay()] + ', ' + dmyIso(itemDaVisita.data)],
+              ['Fora da agenda', 'Registrada sem visita agendada']
+            ].map(([l, v]) => ({ rotulo: l, valor: v })),
+            podeCancelar: false
+          }
+      : { itens: [], relatorio: [] };
+    const novaVisita = s.novaVisita || {};
+    const analistaDaVisita = analistasAtivos.find(c => c.id === novaVisita.analista);
+    const definirNaVisita = k => e => this.setState({ novaVisita: { ...this.state.novaVisita, [k]: e.target.value } });
+    const novaVisitaDetalhada = {
+      titulo: novaVisita.escola ? nomeDaEscola(novaVisita.escola) : 'Nova visita',
+      temDiagnostico: !!novaVisita.diag,
+      diagnostico: novaVisita.diag || '',
+      analista: novaVisita.analista || '',
+      escola: novaVisita.escola ? String(novaVisita.escola) : '',
+      data: novaVisita.data || '',
+      hora: novaVisita.hora || '',
+      tipoCompleto: novaVisita.tipo || 'Acompanhamento · Plano de ação',
+      tipo: String(novaVisita.tipo || 'Acompanhamento · Plano de ação').split(' · ')[0],
+      detalhe: String(novaVisita.tipo || 'Acompanhamento · Plano de ação')
+        .split(' · ')
+        .slice(1)
+        .join(' · '),
+      escolherTipo: e => this.setState({ novaVisita: { ...this.state.novaVisita, tipo: e.target.value } }),
+      escolherDetalhe: e => {
+        const a = String(this.state.novaVisita.tipo || 'Acompanhamento').split(' · ')[0];
+        this.setState({
+          novaVisita: { ...this.state.novaVisita, tipo: a + (e.target.value ? ' · ' + e.target.value : '') }
+        });
+      },
+      orientacao: novaVisita.orientacao || '',
+      escolherAnalista: e => {
+        const a = analistasAtivos.find(c => c.id === e.target.value),
+          v = this.state.novaVisita,
+          esc = escolaDe(v.escola);
+        this.setState({
+          novaVisita: {
+            ...v,
+            analista: e.target.value,
+            escola: a && esc && esc.carteira_id === a.carteira_id ? v.escola : ''
+          }
+        });
+      },
+      escolherEscola: definirNaVisita('escola'),
+      escolherData: definirNaVisita('data'),
+      escolherHora: definirNaVisita('hora'),
+      escreverOrientacao: definirNaVisita('orientacao')
+    };
+    const situacaoDaConta = c => (!c.ativo ? 'desativada' : c.primeiro_acesso ? 'primeiro' : 'ativa');
+    const atuacaoDaConta = c =>
+      c.papel === 'oficineiro' || c.papel === 'direcao'
+        ? nomeDaEscola(c.escola_id)
+        : c.papel === 'analista'
+          ? 'Carteira ' + rotuloDaCarteira(c.carteira_id)
+          : 'Toda a rede';
+    const podeAlterarConta = c => !c.eu && c.papel !== 'administrador';
+    const contasNaSituacao = k => s.contas.filter(c => situacaoDaConta(c) === k).length;
+    const contaAberta = s.contaAberta ? s.contas.find(c => c.id === s.contaAberta) : null;
+    const telefoneTexto = t => {
+      const d = String(t || '');
+      return d.length === 11
+        ? '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7)
+        : d.length === 10
+          ? '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6)
+          : '';
+    };
+    const dataHoraTexto = v => {
+      if (!v) return '';
+      const d = new Date(v);
+      return isNaN(d)
+        ? ''
+        : d.toLocaleDateString('pt-BR') +
+            ' às ' +
+            d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    };
+    const contaDetalhada = contaAberta
+      ? {
+          nome: contaAberta.nome,
+          pode: podeAlterarConta(contaAberta),
+          naoPode: !podeAlterarConta(contaAberta),
+          motivo: contaAberta.eu
+            ? 'Você não pode alterar a própria conta.'
+            : 'Contas de administrador só são alteradas pelo painel do Supabase.',
+          itens: [
+            ['Perfil', NOMES_DE_PERFIL[contaAberta.papel] || contaAberta.papel],
+            ['Login', contaAberta.usuario || 'gerado no primeiro acesso'],
+            [contaAberta.papel === 'analista' ? 'Carteira' : 'Escola de atuação', atuacaoDaConta(contaAberta)],
+            ...(contaAberta.papel === 'oficineiro'
+              ? [
+                  ['Jornada', 'Flexível · 8 horas entre 07:00 e 17:00'],
+                  [
+                    ((s.contratadas || {})[contaAberta.id] || {}).tipo === 'CPF'
+                      ? 'CPF da contratada'
+                      : 'CNPJ da contratada',
+                    ((s.contratadas || {})[contaAberta.id] || {}).mascara || 'não informado'
+                  ]
+                ]
+              : []),
+            ['Situação', SITUACOES_DE_CONTA[situacaoDaConta(contaAberta)][0]],
+            ...(!contaAberta.ativo && contaAberta.desativado_em
+              ? [
+                  ['Desativada em', new Date(contaAberta.desativado_em).toLocaleDateString('pt-BR')],
+                  [
+                    'Remoção automática',
+                    'a partir de ' +
+                      new Date(new Date(contaAberta.desativado_em).getTime() + 30 * 864e5).toLocaleDateString('pt-BR')
+                  ]
+                ]
+              : []),
+            ['Telefone', telefoneTexto(contaAberta.telefone) || 'não informado'],
+            ['Conta criada em', dmyIso(String(contaAberta.criado_em || '').slice(0, 10))],
+            ['Último acesso', dataHoraTexto(contaAberta.ultimo_acesso) || 'ainda não entrou']
+          ].map(([l, v]) => ({ rotulo: l, valor: v })),
+          temMudanca: !!contaAberta.mudanca_escola,
+          mudancaTexto: contaAberta.mudanca_escola
+            ? 'Muda para ' +
+              nomeDaEscola(contaAberta.mudanca_escola) +
+              ' a partir de ' +
+              dmyIso(contaAberta.mudanca_vale) +
+              ' · ' +
+              contaAberta.mudanca_motivo
+            : '',
+          podeEscola: podeAlterarConta(contaAberta) && contaAberta.papel === 'oficineiro' && contaAberta.ativo,
+          podeJornada: podeAlterarConta(contaAberta) && contaAberta.papel === 'oficineiro' && contaAberta.ativo,
+          contratada: s.contratadaEditada != null ? s.contratadaEditada : '',
+          escreverContratada: e => this.setState({ contratadaEditada: e.target.value }),
+          contratadaMudou: s.contratadaEditada != null,
+          salvarContratada: () => this.salvarContratada(contaAberta),
+          contratadaBotao: s.salvandoContratada ? 'Salvando…' : 'Salvar CNPJ/CPF',
+          salvandoContratada: s.salvandoContratada,
+          contratadaAtual: ((s.contratadas || {})[contaAberta.id] || {}).mascara || '',
+          podeDesativar: podeAlterarConta(contaAberta) && contaAberta.ativo,
+          podeReativar: podeAlterarConta(contaAberta) && !contaAberta.ativo,
+          alterar: () => this.abrirMudanca(contaAberta),
+          desativar: () => this.setState({ confirmandoDesativacao: true }, () => this.focar('ct-det-confirma')),
+          voltar: () => this.setState({ confirmandoDesativacao: false }, () => this.focar('ct-det-desativar')),
+          confirmar: () => this.ativarConta(contaAberta, false),
+          reativar: () => this.ativarConta(contaAberta, true),
+          cancelarMudanca: () => this.cancelarMudanca(contaAberta)
+        }
+      : {};
+    const novaConta = s.novaConta || {};
+    const definirNaConta = k => e => this.setState({ novaConta: { ...this.state.novaConta, [k]: e.target.value } });
+    const PERFIS = [
+      ['oficineiro', 'Oficineiro de Inclusão Digital'],
+      ['analista', 'Analista'],
+      ['direcao', 'Direção da escola'],
+      ['coordenador', 'Coordenador'],
+      ['gerente', 'Gerente de Projetos']
+    ];
+    const perfisDaNovaConta = PERFIS.map(([k, l], i) => {
+      const on = novaConta.papel === k;
+      return {
+        rotulo: l,
+        marcado: on ? 'true' : 'false',
+        desligado: false,
+        id: i === 0 ? 'ct-nv-perfil' : 'ct-nv-perfil-' + k,
+        tabulacao: on || (!novaConta.papel && i === 0) ? '0' : '-1',
+        borda: on ? '#0B7EA3' : 'var(--borda-cfdadd)',
+        classe: on ? '' : 'fundo-ffffff botao-secundario',
+        fundo: on ? 'var(--fundo-e4f5fa)' : 'var(--fundo-ffffff)',
+        cor: on ? 'var(--texto-08617e)' : 'var(--texto-1a2b33)',
+        escolher: () => this.setState({ novaConta: { ...this.state.novaConta, papel: k } })
+      };
+    });
+    const teclaNosPerfis = e => {
+      const ks = PERFIS.map(p => p[0]);
+      const i = ks.indexOf(this.state.novaConta && this.state.novaConta.papel);
+      let j = -1;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % ks.length;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + ks.length) % ks.length;
+      else return;
+      e.preventDefault();
+      this.setState({ novaConta: { ...this.state.novaConta, papel: ks[j] } }, () =>
+        this.focar(j === 0 ? 'ct-nv-perfil' : 'ct-nv-perfil-' + ks[j])
+      );
+    };
+    const mudanca = s.mudanca || {};
+    const definirNaMudanca = k => e => this.setState({ mudanca: { ...this.state.mudanca, [k]: e.target.value } });
+    const escolaDaMudanca = escolaPorId[String(mudanca.escola)];
+    const loteAtual = s.lote;
+    const SITUACOES_DO_LOTE = {
+      pronta: ['Pronta para criar', 'var(--texto-23773a)'],
+      erro: ['', 'var(--texto-b42318)'],
+      criando: ['Criando…', 'var(--texto-1a3f9c)'],
+      criada: ['Conta criada', 'var(--texto-23773a)'],
+      falha: ['', 'var(--texto-b42318)']
+    };
+    const linhasDoLote = loteAtual && loteAtual.linhas ? loteAtual.linhas : [];
+    const prontas = linhasDoLote.filter(l => l.st === 'pronta').length,
+      comErro = linhasDoLote.filter(l => l.st === 'erro').length,
+      criadas = linhasDoLote.filter(l => l.st === 'criada').length,
+      comFalha = linhasDoLote.filter(l => l.st === 'falha').length;
+    const loteDetalhado = {
+      temArquivo: !!(loteAtual && loteAtual.linhas),
+      resumo:
+        loteAtual && loteAtual.linhas
+          ? loteAtual.arquivo +
+            ' · ' +
+            plural(linhasDoLote.length, 'pessoa', 'pessoas') +
+            ' · ' +
+            plural(prontas, 'pronta', 'prontas') +
+            ' · ' +
+            plural(comErro, 'com problema', 'com problema') +
+            (criadas || comFalha
+              ? ' · ' +
+                plural(criadas, 'criada', 'criadas') +
+                (comFalha ? ' · ' + plural(comFalha, 'falha', 'falhas') : '')
+              : '')
+          : '',
+      linhas: linhasDoLote.map(l => ({
+        numero: String(l.n),
+        nome: l.nome || '—',
+        email: l.email || '—',
+        documento: l.st === 'criada' ? 'apagado' : documentoMascarado(l.cpf),
+        perfil: NOMES_DE_PERFIL[l.papel] || '—',
+        vinculo: l.escola
+          ? l.escola.sigla
+          : l.carteira
+            ? l.carteira.id
+            : l.papel === 'coordenador' || l.papel === 'gerente'
+              ? 'Toda a rede'
+              : '—',
+        situacao:
+          l.st === 'erro'
+            ? l.erro
+            : l.st === 'falha'
+              ? 'Falhou · ' + l.msg
+              : SITUACOES_DO_LOTE[l.st][0] + (l.msg ? ' · ' + l.msg : ''),
+        cor: SITUACOES_DO_LOTE[l.st][1]
+      })),
+      podeCriar: !!(loteAtual && loteAtual.linhas && (prontas || loteAtual.criando)),
+      criando: !!(loteAtual && loteAtual.criando),
+      botao: loteAtual && loteAtual.criando ? 'Criando contas…' : 'Criar ' + plural(prontas, 'conta', 'contas'),
+      fecharTexto: loteAtual && loteAtual.feito ? 'Concluir' : 'Cancelar'
+    };
+    const avisos = pendencias.map(p => ({
+      tit: p.titulo,
+      txt: p.detalhe,
+      acao: 'Resolver',
+      go: () => p.resolver(),
+      cor: p.cor,
+      temAcao: true
+    }));
+    const contexto = {
+      is,
+      cicloAtual,
+      cicloDosRelatorios,
+      ciclo,
+      escolaNoFiltro,
+      hoje,
+      resumoDosOficineiros,
+      escolasAtivas,
+      resumir,
+      atividades,
+      opacidade,
+      pendenciasRotuladas,
+      total,
+      presencaMedia,
+      oficineirosFiltrados,
+      visitasDoPeriodo,
+      contasNaSituacao,
+      horasTexto,
+      minutosValidosTotais,
+      semRegistroTotal,
+      resumoDasCarteiras,
+      larguraDaBarra,
+      carteiraDaEscola,
+      rotuloDaCarteira,
+      analistasDaCarteira,
+      nomeDaEscola,
+      nomeDaPessoa,
+      contaPorId,
+      siglaDaEscola,
+      escolaAtualDe,
+      tela,
+      ultimosCiclos,
+      dadosDoCiclo,
+      atividadesDoCiclo,
+      turmaDe,
+      SITUACOES_DA_ATIVIDADE,
+      situacaoDe,
+      nomeDoArquivo,
+      periodoTexto,
+      oficineirosAtivos,
+      diasLetivos,
+      anoAtual,
+      analistasAtivos,
+      carteiraNoFiltro,
+      diasPresentesDe,
+      agendaValida,
+      dados,
+      proximaVisitaDa,
+      quandoDaVisita,
+      diasDaSemana,
+      visitasDaSemana,
+      segunda,
+      dadosDaSemana,
+      agora,
+      escolaPorId,
+      situacaoDaConta,
+      atuacaoDaConta,
+      podeAlterarConta,
+      relatorios: s.relatorios,
+      relatoriosPorCiclo: s.relatoriosPorCiclo,
+      contas: s.contas,
+      abas: s.abas,
+      envios: s.envios,
+      grade: s.grade,
+      visitas: s.visitas,
+      ciclos: s.ciclos,
+      gradeAnterior: s.gradeAnterior,
+      mudancasDeEscola: s.mudancasDeEscola,
+      carregandoAcessos: s.carregandoAcessos,
+      acessos: s.acessos,
+      onboardings: s.onboardings,
+      ordensServico: s.ordensServico,
+      previaDaOs: s.previaDaOs,
+      carteiras: s.carteiras,
+      erroOnboarding: s.erroOnboarding,
+      resultadoDaOs: s.resultadoDaOs,
+      salvando: s.salvando,
+      escolas: s.escolas,
+      erroContas: s.erroContas,
+      carregandoContas: s.carregandoContas,
+      FAIXAS_DE_EXECUCAO,
+      nomeDoMes,
+      ORIGENS_DE_VISITA,
+      cicloDe,
+      documentoValido,
+      SITUACOES_DE_CONTA,
+      NOMES_DE_PERFIL,
+      lembrar: (tela, mudanca) => this.lembrar(tela, mudanca),
+      irPara: (...argumentos) => this.irPara(...argumentos),
+      abrirRegistro: (...argumentos) => this.abrirRegistro(...argumentos),
+      exportar: (...argumentos) => this.exportar(...argumentos),
+      estiloOpcao: (...argumentos) => this.estiloOpcao(...argumentos),
+      abrirMudanca: (...argumentos) => this.abrirMudanca(...argumentos),
+      registrarConsulta: (...argumentos) => this.registrarConsulta(...argumentos),
+      abrirVisita: (...argumentos) => this.abrirVisita(...argumentos),
+      agendarVisita: (...argumentos) => this.agendarVisita(...argumentos),
+      atribuirOnboarding: (...argumentos) => this.atribuirOnboarding(...argumentos),
+      lerOrdemDeServico: (...argumentos) => this.lerOrdemDeServico(...argumentos),
+      importarOrdemDeServico: (...argumentos) => this.importarOrdemDeServico(...argumentos),
+      abrirGavetaDeConta: (...argumentos) => this.abrirGavetaDeConta(...argumentos),
+      focar: (...argumentos) => this.focar(...argumentos),
+      baixarPendentes: (...argumentos) => this.baixarPendentes(...argumentos),
+      abrirLote: (...argumentos) => this.abrirLote(...argumentos),
+      mudarLinhaDaPrevia: (...argumentos) => this.mudarLinhaDaPrevia(...argumentos),
+      cancelarPrevia: (...argumentos) => this.cancelarPrevia(...argumentos),
+      registrarExportador: exportador => (this.exportadorDaTela = exportador)
+    };
+    return {
+      cliente: Base.cliente(),
+      linhaDoPerfil: Base.cliente().cidade ? Base.cliente().cidade + ' · oficineiros e analistas' : 'Oficineiros e analistas',
+      ...(() => {
+        const N = window.FSM_NOTIF || {
+            usuario: () => '',
+            chave: n => n.tit + '|' + (n.ref || n.txt),
+            ler: () => [],
+            gravar: () => {}
+          },
+          nUid = N.usuario('gerente');
+        if (this._nUid !== nUid) {
+          this._nUid = nUid;
+          this._nVistas = N.ler(nUid);
+        }
+        const vistas = this._nVistas || [],
+          novas = avisos.filter(n => !vistas.includes(N.chave(n))),
+          vis = novas.map(n => {
+            const k = N.chave(n);
+            return {
+              ...n,
+              ariaLida: 'Marcar como lida: ' + n.tit,
+              marcarLida: () => {
+                this._nVistas = [...(this._nVistas || []).filter(x => x !== k), k];
+                N.gravar(nUid, this._nVistas);
+                this.forceUpdate();
+              }
+            };
+          });
+        return {
+          notifs: vis,
+          temVariasNotif: vis.length > 1,
+          lerTodasNotif: () => {
+            const ks = novas.map(N.chave);
+            this._nVistas = [...vistas.filter(k => !ks.includes(k)), ...ks];
+            N.gravar(nUid, this._nVistas);
+            this.forceUpdate();
+          },
+          notifN: String(novas.length),
+          temNotif: novas.length > 0,
+          semNotif: vis.length === 0,
+          notifAria: novas.length
+            ? 'Notificações: ' + novas.length + (novas.length === 1 ? ' nova' : ' novas')
+            : 'Notificações: nenhuma nova',
+          abrirNotif: () => this.setState({ notifAberto: true, menuAberto: false })
+        };
+      })(),
+      notifAberto: !!s.notifAberto,
+      fecharNotif: () => this.setState({ notifAberto: false }),
+      menu,
+      titulo: itemDoMenu[1],
+      trilha: itemDoMenu[2],
+      temConfig: typeof window.fsmConfiguracoes === 'function',
+      abrirConfig: () => {
+        if (this.state.menuAberto) this.setState({ menuAberto: false });
+        if (typeof window.fsmConfiguracoes === 'function') window.fsmConfiguracoes();
+      },
+      temSair: typeof window.fsmSair === 'function',
+      sairConta: () => {
+        if (typeof window.fsmSair === 'function') window.fsmSair();
+      },
+      menuClasse: s.menuAberto ? 'open' : '',
+      abrirMenu: () => this.setState({ menuAberto: true }),
+      fecharMenu: () => this.setState({ menuAberto: false }),
+      is,
+      temErro: !!s.erro,
+      erro: s.erro,
+      tentarDeNovo: () => this.setState({ erro: '' }, () => this.carregar()),
+      semLogin: !logado,
+      temFiltros,
+      ciclo: ciclo,
+      opcoesDeCiclo: ultimosCiclos
+        .slice()
+        .reverse()
+        .map(c => ({
+          valor: c,
+          rotulo: mesTxt(c).replace(/^./, x => x.toUpperCase()) + ' · ' + Base.cicloTxt(dataDe(c))
+        })),
+      escolherCiclo: e => {
+        const v = e.target.value;
+        this.memoria.adocao.limite = 100;
+        this.setState({ cicloFiltro: v }, () => {
+          this.carregarCiclo(v);
+          this.carregarRelatoriosDoCiclo(v);
+        });
+      },
+      carteira: s.carteiraFiltro,
+      opcoesDeCarteira: s.carteiras.map(c => ({ valor: c.id, rotulo: c.rotulo })),
+      escolherCarteira: e => {
+        const v = e.target.value,
+          esc = escolaPorId[s.escolaFiltro];
+        this.memoria.adocao.limite = 100;
+        this.setState({ carteiraFiltro: v, escolaFiltro: esc && v && esc.carteira_id !== v ? '' : s.escolaFiltro });
+      },
+      escola: s.escolaFiltro,
+      escolherEscola: e => {
+        this.memoria.adocao.limite = 100;
+        this.setState({ escolaFiltro: e.target.value });
+      },
+      opcoesDeEscola: escolasAtivas
+        .filter(e => !s.carteiraFiltro || e.carteira_id === s.carteiraFiltro)
+        .map(e => ({ valor: String(e.id), rotulo: e.nome })),
+      todasAsEscolas:
+        'Todas as escolas (' +
+        escolasAtivas.filter(e => !s.carteiraFiltro || e.carteira_id === s.carteiraFiltro).length +
+        ')',
+      periodoTexto: carregandoCiclo ? 'Carregando ' + mesTxt(ciclo) + '…' : periodoTexto,
+      temFiltro: !!(s.carteiraFiltro || s.escolaFiltro || !cicloAtual),
+      limparFiltros: () => {
+        this.memoria.adocao.limite = 100;
+        this.setState({ carteiraFiltro: '', escolaFiltro: '', cicloFiltro: cicloDe(hoje, 0) });
+      },
+      temAbas: !!ABAS[tela] && logado,
+      abasAria: 'Seções de ' + itemDoMenu[1],
+      abas: abasDaTela,
+      temExportar:
+        logado &&
+        (is.adocaoConsolidado ||
+          is.adocaoDetalhado ||
+          is.oficineirosPresenca ||
+          is.oficineirosGrade ||
+          is.analistasCarteiras),
+      imprimir: () => window.print(),
+      exportarExcel: () => this.exportadorDaTela && this.exportadorDaTela(),
+      registroAberto: !!registro,
+      registro: registroDetalhado,
+      fecharRegistro: () => this.fecharRegistro(),
+      filtroDeCiclo: !is.analistasAgendas,
+      novaVisitaAberta: !!s.novaVisita,
+      novaVisita: novaVisitaDetalhada,
+      opcoesDeAnalista: analistasAtivos
+        .slice()
+        .sort((a, b) => String(a.carteira_id).localeCompare(String(b.carteira_id)))
+        .map(c => ({ valor: c.id, rotulo: c.nome + ' · ' + c.carteira_id })),
+      opcoesDeEscolaDaVisita: analistaDaVisita
+        ? escolasAtivas
+            .filter(e => e.carteira_id === analistaDaVisita.carteira_id)
+            .map(e => ({ valor: String(e.id), rotulo: e.nome }))
+        : [],
+      dataMinima: hoje,
+      dataMaxima: Base.iso(Base.add(dataDe(hoje), 180)),
+      novaVisitaOrigens: Base.ORIGENS_VISITA.filter(k => k !== 'analista').map(k => ({
+        rotulo: ORIGENS_DE_VISITA[k][0],
+        marcado: novaVisita.origem === k ? 'true' : 'false',
+        ...this.estiloOpcao(novaVisita.origem === k),
+        escolher: () => this.setState({ novaVisita: { ...this.state.novaVisita, origem: k } })
+      })),
+      novaVisitaTipos: Object.keys(ATENDIMENTOS_DE_VISITA),
+      novaVisitaDetalhes: ATENDIMENTOS_DE_VISITA[String(novaVisita.tipo || 'Acompanhamento').split(' · ')[0]] || [],
+      novaVisitaFocos: VIS_FOCOS.map(f => {
+        const on = (novaVisita.focos || []).includes(f);
+        return {
+          rotulo: f,
+          marcado: on ? 'true' : 'false',
+          ...this.estiloOpcao(on),
+          escolher: () => {
+            const fs = this.state.novaVisita.focos || [];
+            this.setState({
+              novaVisita: { ...this.state.novaVisita, focos: fs.includes(f) ? fs.filter(x => x !== f) : [...fs, f] }
+            });
+          }
+        };
+      }),
+      erroNovaVisita: s.erroNovaVisita,
+      temErroNovaVisita: !!s.erroNovaVisita,
+      novaVisitaBotao: s.salvando ? 'Salvando…' : 'Vincular visita',
+      salvarNovaVisita: () => this.salvarNovaVisita(),
+      fecharNovaVisita: () => this.fecharNovaVisita(),
+      salvando: s.salvando,
+      visitaAberta: !!itemDaVisita,
+      visita: {
+        ...visitaDetalhada,
+        perguntar: () => this.setState({ confirmandoCancelamento: true }, () => this.focar('vd-confirma')),
+        voltar: () => this.setState({ confirmandoCancelamento: false }),
+        cancelar: () => this.cancelarVisita()
+      },
+      confirmandoCancelamento: !!s.confirmandoCancelamento,
+      fecharVisita: () => this.fecharVisita(),
+      fecharConta: () => this.fecharGavetaDeConta(),
+      novaContaAberta: !!s.novaConta,
+      novaConta: {
+        nome: novaConta.nome || '',
+        telefone: novaConta.telefone || '',
+        email: novaConta.email || '',
+        cpf: novaConta.cpf || '',
+        escola: novaConta.escola || '',
+        carteira: novaConta.carteira || '',
+        jornada: novaConta.jornada || '07:00',
+        escolherJornada: definirNaConta('jornada'),
+        contratada: novaConta.contratada || '',
+        escreverContratada: definirNaConta('contratada'),
+        escreverNome: definirNaConta('nome'),
+        escreverTelefone: definirNaConta('telefone'),
+        escreverEmail: definirNaConta('email'),
+        escreverCpf: definirNaConta('cpf'),
+        escolherEscola: definirNaConta('escola'),
+        escolherCarteira: definirNaConta('carteira')
+      },
+      perfisDaNovaConta: perfisDaNovaConta,
+      dicaDePerfil: 'Contas de coordenador e de gerente veem toda a rede. Crie só para quem precisa.',
+      teclaNosPerfis: teclaNosPerfis,
+      pedeEscola: novaConta.papel === 'oficineiro' || novaConta.papel === 'direcao',
+      ehOficineiro: novaConta.papel === 'oficineiro',
+      ehAnalista: novaConta.papel === 'analista',
+      opcoesDeEscolaDaConta: escolasAtivas.map(e => ({ valor: e.sigla, rotulo: e.nome })),
+      opcoesDeCarteiraDaConta: s.carteiras.map(c => ({ valor: c.id, rotulo: c.rotulo })),
+      erroNovaConta: s.erroConta,
+      temErroNovaConta: !!(s.novaConta && s.erroConta),
+      criarConta: () => this.criarConta(),
+      novaContaBotao: s.salvandoConta ? 'Criando…' : 'Criar usuário',
+      salvandoConta: s.salvandoConta,
+      contaAberta: !!contaAberta,
+      conta: contaDetalhada,
+      confirmandoDesativacao: s.confirmandoDesativacao,
+      erroConta: s.erroConta,
+      temErroConta: !!(contaAberta && s.erroConta),
+      mudancaAberta: !!s.mudanca,
+      mudanca: {
+        nome: mudanca.nome || '',
+        atual: mudanca.atual ? nomeDaEscola(mudanca.atual) : '—',
+        escola: mudanca.escola || '',
+        vale: mudanca.vale || '',
+        motivo: mudanca.motivo || '',
+        escolherEscola: definirNaMudanca('escola'),
+        escolherData: definirNaMudanca('vale'),
+        escreverMotivo: definirNaMudanca('motivo')
+      },
+      opcoesDeEscolaDaMudanca: escolasAtivas
+        .filter(e => e.id !== mudanca.atual)
+        .map(e => ({ valor: String(e.id), rotulo: e.nome })),
+      enderecoDaMudanca: escolaDaMudanca && escolaDaMudanca.endereco ? escolaDaMudanca.endereco : '',
+      temEnderecoDaMudanca: !!(escolaDaMudanca && escolaDaMudanca.endereco),
+      mudancaMinima: Base.iso(Base.add(dataDe(hoje), 1)),
+      mudancaMaxima: Base.iso(Base.add(dataDe(hoje), 180)),
+      erroMudanca: s.erroMudanca,
+      temErroMudanca: !!s.erroMudanca,
+      salvarMudanca: () => this.salvarMudanca(),
+      mudancaBotao: s.salvandoConta ? 'Salvando…' : 'Salvar alteração',
+      loteAberto: !!loteAtual,
+      lote: loteDetalhado,
+      erroLote: s.erroLote,
+      temErroLote: !!s.erroLote,
+      fecharLote: () => this.fecharLote(),
+      baixarModelo: () => this.baixarModelo(),
+      lerLote: e => this.lerLote(e),
+      criarLote: () => this.criarLote(),
+      aviso: s.aviso,
+      contexto,
+      memoriaGeral: this.memoria.geral,
+      memoriaAdocao: this.memoria.adocao,
+      memoriaAnalistas: this.memoria.analistas,
+      memoriaJornada: this.memoria.jornada,
+      memoriaOnboarding: this.memoria.onboarding,
+      memoriaContas: this.memoria.contas
+    };
+  }
+}
+</script>
+</body>
+</html>

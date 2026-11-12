@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Oficineiro · Presença</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <div class="w-100pc max-w-640 m-0-auto d-flex eixo-column gap-16">
+    <div class="d-flex eixo-column gap-6">
+      <div role="tablist" aria-label="Presença na Escola" class="d-flex gap-4 rolagem-x-auto borda-b-dde6e8"><sc-for list="{{ abas }}" as="aba" hint-placeholder-count="3"><button role="tab" onClick="{{ aba.abrir }}" aria-selected="{{ aba.atual }}" class="min-h-44 p-10-8 fundo-transparent fs-14 espaco-nowrap largura-fundo" style="border:0;border-bottom:3px solid {{ aba.borda }};color:{{ aba.cor }};font-weight:{{ aba.peso }}">{{ aba.rotulo }}</button></sc-for></div>
+    </div>
+
+    <sc-if value="{{ abaAtual.registrar }}" hint-placeholder-val="{{ true }}">
+      <div class="d-flex eixo-column gap-2">
+        <h1 class="m-0 fs-22 fw-800 cor-1a2b33">{{ saudacao }}</h1>
+        <span class="fs-14 cor-5b6b70">{{ dataTexto }}</span>
+      </div>
+      <section class="borda-dde6e8 raio-20 p-22-20 d-flex eixo-column alinha-center gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)">
+        <sc-if value="{{ temMapa }}" hint-placeholder-val="{{ true }}"><div id="mapa-escola" role="img" aria-label="{{ mapaAria }}" class="w-100pc h-220 raio-14 isola-isolate largura-fundo" style="overflow:hidden;background:var(--fundo-eef3f4)"></div></sc-if>
+        <span class="fs-13 cor-5b6b70 fw-600">Horário atual (Brasília)</span>
+        <span id="pres-relogio" class="fs-52 fw-800 ls-n1 num-tabular-nums lh-1 cor-1a2b33">{{ hora }}</span>
+        <div class="w-100pc d-flex alinha-center gap-12 fundo-eef3f4 raio-14 p-12-14 tamanho-border-box largura-fundo">
+          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0B7EA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-none"><path d="M3 21h18"></path><path d="M5 21V8l7-5 7 5v13"></path><path d="M10 21v-6h4v6"></path></svg>
+          <span class="fs-14 fw-700 cor-1a2b33 min-w-0">{{ escola }}</span>
+        </div>
+        <sc-if value="{{ selo.tem }}" hint-placeholder-val="{{ true }}"><div role="status" class="d-flex alinha-center gap-6 raio-999 p-6-12 fs-12 fw-700" style="background:{{ selo.fundo }};color:{{ selo.cor }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>{{ selo.texto }}</div></sc-if>
+      </section>
+      <div class="d-flex eixo-column gap-8">
+        <button onClick="{{ marcar }}" disabled="{{ botao.desligado }}" aria-busy="{{ botao.ocupado }}" class="h-64 borda-0 raio-16 cor-fff fs-18 fw-800 d-flex alinha-center justifica-center gap-10 {{ botao.classe }}" style="background:{{ botao.fundo }};cursor:pointer">
+          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+          {{ botao.rotulo }}
+        </button>
+        <sc-if value="{{ semAlmoco }}" hint-placeholder-val="{{ false }}"><button onClick="{{ marcarSaida }}" disabled="{{ botao.desligado }}" class="alinha-si-center min-h-44 borda-0 fundo-transparent cor-08617e fs-14 fw-600 deco-underline">Registrar saída sem almoço (jornada curta)</button></sc-if>
+        <sc-if value="{{ erro.tem }}" hint-placeholder-val="{{ false }}">
+          <div role="alert" class="d-flex eixo-column gap-6 fundo-fbedeb raio-12 p-12-14 cor-b42318 fs-13">
+            <b>{{ erro.titulo }}</b>
+            <span class="cor-1a2b33">{{ erro.texto }}</span>
+            <sc-if value="{{ erro.justificar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ justificarForaDoRaio }}" class="alinha-si-flex-start min-h-36 borda-0 fundo-transparent p-0 cor-08617e fs-13 fw-700 deco-underline botao-texto">Abrir justificativa "Registro fora do raio"</button></sc-if>
+          </div>
+        </sc-if>
+        <span class="fs-12 cor-5b6b70 texto-center">A presença é confirmada pela sua localização: o navegador pede permissão e o registro só é aceito dentro do raio da escola.</span>
+      </div>
+      <section class="borda-dde6e8 raio-20 p-16-18 d-flex eixo-column gap-10 fundo-ffffff" style="background:var(--fundo-ffffff)">
+        <div class="d-flex justifica-space-between alinha-baseline gap-8">
+          <h2 class="m-0 fs-15 fw-700 cor-1a2b33">Registros de hoje</h2>
+          <span class="fs-12 cor-5b6b70 fw-600">{{ total }} de 8h00 (máx.)</span>
+        </div>
+        <div class="h-8 raio-4 fundo-e3ebed"><div class="h-8 raio-4 largura-fundo" style="background:{{ barra.cor }};width:{{ barra.percentual }}%"></div></div>
+        <sc-if value="{{ temLimite }}" hint-placeholder-val="{{ true }}"><span role="status" class="fs-13 fw-600" style="color:{{ barra.corDoAviso }}">{{ limiteTexto }}</span></sc-if>
+        <sc-if value="{{ semRegistros }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70">Nenhum registro ainda.</span></sc-if>
+        <sc-for list="{{ registros }}" as="registro" hint-placeholder-count="2">
+          <div class="d-flex alinha-center gap-12 p-6-0 borda-t-dde6e8">
+            <span class="w-10 h-10 raio-5 flex-none largura-fundo" style="background:{{ registro.cor }}"></span>
+            <span class="fs-14 fw-700 cresce-1 cor-1a2b33">{{ registro.tipo }}</span>
+            <span class="fs-14 fw-700 num-tabular-nums cor-1a2b33">{{ registro.hora }}</span>
+            <span class="fs-12 cor-5b6b70">{{ registro.local }}</span>
+          </div>
+        </sc-for>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ abaAtual.espelho }}" hint-placeholder-val="{{ false }}">
+      <div id="esp-folha" class="d-flex eixo-column gap-14">
+        <div class="d-flex alinha-center justifica-space-between gap-12 quebra-wrap">
+          <h1 class="m-0 fs-22 fw-800 cor-1a2b33">Espelho de presença</h1>
+          <button class="espelho-nao-imprimir min-h-44 borda-cfdadd fundo-ffffff cor-08617e raio-12 p-0-16 fs-14 fw-700 botao-secundario" onClick="{{ baixarEspelho }}">Baixar PDF</button>
+        </div>
+        <div class="d-flex alinha-center justifica-space-between gap-8 borda-dde6e8 raio-14 p-6 fundo-ffffff" style="background:var(--fundo-ffffff)">
+          <button class="espelho-nao-imprimir w-44 h-44 borda-0 fundo-transparent cor-08617e fs-20 fw-700 largura-fundo" onClick="{{ mesAnterior }}" aria-label="Mês anterior">‹</button>
+          <span class="fs-15 fw-700 cor-1a2b33 texto-center">{{ mesTexto }}</span>
+          <button class="espelho-nao-imprimir w-44 h-44 borda-0 fundo-transparent cor-08617e fs-20 fw-700 largura-fundo" onClick="{{ mesSeguinte }}" disabled="{{ semMesSeguinte }}" aria-label="Próximo mês">›</button>
+        </div>
+        <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))"><sc-for list="{{ cartoes }}" as="cartao" hint-placeholder-count="4"><div class="borda-dde6e8 raio-14 p-12-14 d-flex eixo-column gap-2 fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-12 cor-5b6b70 fw-600">{{ cartao.titulo }}</span><b class="fs-22 cor-1a2b33 num-tabular-nums">{{ cartao.valor }}</b><span class="fs-11 cor-5b6b70">{{ cartao.nota }}</span></div></sc-for></div>
+        <section class="borda-dde6e8 raio-16 p-6-16 d-flex eixo-column fundo-ffffff" style="background:var(--fundo-ffffff)">
+          <sc-if value="{{ espelhoVazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70 p-12-0">{{ espelhoVazioTexto }}</span></sc-if>
+          <sc-for list="{{ dias }}" as="dia" hint-placeholder-count="3">
+            <div class="d-grid colunas-minmax-0-1fr-auto gap-4-12 p-10-0 borda-t-dde6e8">
+              <span class="fs-14 fw-700 cor-1a2b33">{{ dia.data }}</span>
+              <span class="fs-14 fw-700 cor-1a2b33 num-tabular-nums texto-right">{{ dia.total }}</span>
+              <span class="fs-13 cor-5b6b70 num-tabular-nums">{{ dia.horarios }}</span>
+              <span class="justifica-si-end fs-12 fw-700 raio-999 p-3-10" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.situacao }}</span>
+              <sc-if value="{{ dia.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70" style="grid-column:1 / -1">{{ dia.observacao }}</span></sc-if>
+            </div>
+          </sc-for>
+        </section>
+        <sc-if value="{{ assinatura.tem }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-13 fw-600 cor-1b5e2e">{{ assinatura.texto }}</span></sc-if>
+        <div class="espelho-nao-imprimir d-flex gap-10 quebra-wrap">
+          <button onClick="{{ solicitarAjuste }}" class="flex-1 min-h-44 borda-cfdadd fundo-ffffff cor-08617e raio-12 p-0-16 fs-14 fw-700 botao-secundario">Solicitar ajuste</button>
+          <button onClick="{{ assinarEspelho }}" disabled="{{ assinatura.tem }}" class="flex-1 min-h-44 borda-0 cor-fff raio-12 p-0-16 fs-14 fw-700 botao-texto {{ assinatura.classe }}" style="background:{{ assinatura.fundo }}">Assinar espelho</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ abaAtual.justificativas }}" hint-placeholder-val="{{ false }}">
+      <section class="borda-dde6e8 raio-20 p-18 d-flex eixo-column gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)">
+        <h1 class="m-0 fs-18 fw-800 cor-1a2b33">Solicitar ajuste de presença</h1>
+        <div class="d-flex eixo-column gap-8"><span id="aj-tipo-rot" class="fs-12 cor-5b6b70 fw-600">Tipo de solicitação *</span><div role="radiogroup" aria-labelledby="aj-tipo-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ tiposDeAjuste }}" as="tipo" hint-placeholder-count="5"><button role="radio" aria-checked="{{ tipo.marcado }}" onClick="{{ tipo.escolher }}" class="min-h-40 raio-999 p-6-14 fs-13 fw-600 botao-opcao {{ tipo.classe }}" style="border:1.5px solid {{ tipo.borda }};background:{{ tipo.fundo }};color:{{ tipo.cor }}">{{ tipo.rotulo }}</button></sc-for></div></div>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Data *</span><input type="date" value="{{ ajuste.data }}" max="{{ ajuste.dataMaxima }}" onChange="{{ ajuste.mudarData }}" class="h-44 borda-cfdadd raio-10 p-0-12 fs-15 fundo-ffffff cor-1a2b33"></input></label>
+        <sc-if value="{{ ajuste.comHorarios }}" hint-placeholder-val="{{ true }}">
+          <div class="d-grid colunas-1fr-1fr gap-10"><sc-for list="{{ horariosDoAjuste }}" as="horario" hint-placeholder-count="4"><label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">{{ horario.rotulo }}</span><input type="time" value="{{ horario.valor }}" onChange="{{ horario.mudar }}" class="h-44 borda-cfdadd raio-10 p-0-12 fs-15 fundo-ffffff cor-1a2b33"></input></label></sc-for></div>
+          <span class="fs-12 cor-5b6b70">Horário livre: o total do dia não pode passar de 8h, sem contar o almoço.</span>
+        </sc-if>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Motivo *</span><textarea value="{{ ajuste.motivo }}" onChange="{{ ajuste.mudarMotivo }}" maxlength="1000" rows="3" class="borda-cfdadd raio-10 p-10-12 fs-15 fonte-inherit redim-vertical fundo-ffffff cor-1a2b33"></textarea></label>
+        <sc-if value="{{ ajuste.temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 fw-600 cor-b42318">{{ ajuste.erro }}</span></sc-if>
+        <sc-if value="{{ ajuste.enviado }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-13 fw-600 cor-1b5e2e">Solicitação enviada para a direção da escola.</span></sc-if>
+        <button onClick="{{ enviarAjuste }}" disabled="{{ ajuste.enviando }}" class="min-h-48 borda-0 raio-12 cor-fff fs-15 fw-700 fundo-0b7ea3" style="background:#0B7EA3">Enviar para aprovação</button>
+      </section>
+      <section class="borda-dde6e8 raio-20 p-6-18-10 d-flex eixo-column fundo-ffffff" style="background:var(--fundo-ffffff)">
+        <h2 class="m-10-0-4 fs-15 fw-700 cor-1a2b33">Minhas solicitações</h2>
+        <sc-if value="{{ semAjustes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-5b6b70 p-8-0">Nenhuma solicitação enviada.</span></sc-if>
+        <sc-for list="{{ ajustes }}" as="item" hint-placeholder-count="2">
+          <div class="d-grid colunas-minmax-0-1fr-auto gap-4-12 p-10-0 borda-t-dde6e8">
+            <span class="fs-14 fw-700 cor-1a2b33">{{ item.tipo }} · {{ item.data }}</span>
+            <span class="justifica-si-end fs-12 fw-700 raio-999 p-3-10" style="background:{{ item.fundo }};color:{{ item.cor }}">{{ item.situacao }}</span>
+            <span class="fs-13 cor-5b6b70" style="grid-column:1 / -1">{{ item.motivo }}</span>
+            <sc-if value="{{ item.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-1a2b33" style="grid-column:1 / -1">Direção: {{ item.observacao }}</span></sc-if>
+          </div>
+        </sc-for>
+      </section>
+    </sc-if>
+  </div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { iso, dur: duracao, hmTs: horaDeBrasilia } = Base;
+const TIPOS_DE_AJUSTE = {
+  falta: 'Falta',
+  esquecimento: 'Esquecimento de registro',
+  fora_raio: 'Registro fora do raio',
+  almoco: 'Intervalo de almoço',
+  externa: 'Atividade externa'
+};
+function rotuloSeguro(texto) {
+  const rotulo = document.createElement('span');
+  rotulo.textContent = String(texto);
+  return rotulo;
+}
+const ABAS = { registrar: 'Registrar presença', espelho: 'Espelho de presença', justificativas: 'Justificativas' };
+const SITUACAO_DO_DIA = {
+  regular: ['Regular', 'var(--fundo-e2f2e5)', 'var(--texto-1b5e2e)'],
+  acima_8h: ['Acima de 8h', 'var(--fundo-faefd9)', 'var(--texto-7a4e0b)'],
+  pendente: ['Pendente', 'var(--fundo-e3ebed)', 'var(--texto-34464d)'],
+  falta: ['Falta', 'var(--fundo-fbedeb)', 'var(--texto-b42318)']
+};
+const AJUSTE_NO_ESPELHO = {
+  em_analise: 'Justificativa em análise',
+  aprovada: 'Justificativa aprovada',
+  recusada: 'Justificativa recusada'
+};
+const SITUACAO_DO_AJUSTE = {
+  em_analise: ['Em análise', 'var(--fundo-faefd9)', 'var(--texto-7a4e0b)'],
+  aprovada: ['Aprovada', 'var(--fundo-e2f2e5)', 'var(--texto-1b5e2e)'],
+  recusada: ['Recusada', 'var(--fundo-fbedeb)', 'var(--texto-b42318)']
+};
+const HORARIOS_DO_AJUSTE = [
+  ['entrada', 'Entrada'],
+  ['saidaAlmoco', 'Saída almoço'],
+  ['retornoAlmoco', 'Volta almoço'],
+  ['saida', 'Saída']
+];
+const horaDoRelogio = desvio =>
+  new Date(Date.now() + (desvio || 0)).toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour12: false });
+let leafletCarregando = null;
+const carregarLeaflet = () => {
+  if (window.L && window.L.map) return Promise.resolve(window.L);
+  if (!leafletCarregando)
+    leafletCarregando = new Promise((ok, erro) => {
+      const estilo = document.createElement('link');
+      estilo.rel = 'stylesheet';
+      estilo.href = '../vendor/leaflet/leaflet-1.9.4.css';
+      document.head.appendChild(estilo);
+      const script = document.createElement('script');
+      script.src = '../vendor/leaflet/leaflet-1.9.4.js';
+      script.onload = () => (window.L ? ok(window.L) : erro());
+      script.onerror = erro;
+      document.head.appendChild(script);
+    });
+  return leafletCarregando;
+};
+class Component extends DCLogic {
+  componentDidMount() {
+    this.relogio = setInterval(() => {
+      const elemento = document.getElementById('pres-relogio');
+      if (elemento) elemento.textContent = horaDoRelogio(this.props.contexto.desvioDoRelogio);
+    }, 1000);
+    this.montarMapa();
+  }
+  componentDidUpdate() {
+    this.montarMapa();
+  }
+  componentWillUnmount() {
+    clearInterval(this.relogio);
+    this.removerMapa();
+  }
+  lembrar(mudanca) {
+    Object.assign(this.props.memoria, mudanca);
+    this.forceUpdate();
+  }
+  removerMapa() {
+    if (this.mapa) {
+      try {
+        this.mapa.remove();
+      } catch (x) {}
+      this.mapa = null;
+    }
+  }
+  montarMapa() {
+    const elemento = document.getElementById('mapa-escola');
+    if (!elemento) {
+      if (this.mapa) {
+        this.mapa.remove();
+        this.mapa = null;
+      }
+      return;
+    }
+    const escola = this.props.contexto.escola;
+    if (this.mapa && this.elementoDoMapa !== elemento) {
+      this.mapa.remove();
+      this.mapa = null;
+    }
+    if (!this.mapa) {
+      if (this.carregandoMapa) return;
+      this.carregandoMapa = true;
+      carregarLeaflet()
+        .then(L => {
+          this.carregandoMapa = false;
+          if (!document.body.contains(elemento) || this.mapa) return;
+          const centro = [escola.latitude, escola.longitude];
+          const mapa = L.map(elemento, { zoomControl: false, attributionControl: true }).setView(centro, 17);
+          L.tileLayer(
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+            {
+              maxZoom: 19,
+              attribution: 'Mapa © Esri',
+              referrerPolicy: 'no-referrer'
+            }
+          ).addTo(mapa);
+          L.circle(centro, {
+            radius: escola.raio,
+            color: '#0B7EA3',
+            weight: 2,
+            dashArray: '6 6',
+            fillColor: '#0B7EA3',
+            fillOpacity: 0.1
+          }).addTo(mapa);
+          L.circleMarker(centro, { radius: 7, color: '#fff', weight: 3, fillColor: '#0B7EA3', fillOpacity: 1 })
+            .addTo(mapa)
+            .bindTooltip(rotuloSeguro(escola.sigla || 'Escola'), {
+              permanent: true,
+              direction: 'bottom',
+              offset: [0, 8]
+            });
+          this.mapa = mapa;
+          this.elementoDoMapa = elemento;
+          this.leaflet = L;
+          this.posicaoNoMapa = null;
+          this.atualizarMapa();
+        })
+        .catch(() => {
+          this.carregandoMapa = false;
+        });
+      return;
+    }
+    this.atualizarMapa();
+  }
+  atualizarMapa() {
+    const mapa = this.mapa,
+      L = this.leaflet,
+      { posicao, escola } = this.props.contexto;
+    if (!mapa || !posicao || posicao.latitude == null) return;
+    const chave = posicao.latitude + ',' + posicao.longitude + ',' + posicao.precisao;
+    if (chave === this.posicaoNoMapa) return;
+    this.posicaoNoMapa = chave;
+    (this.marcasDoUsuario || []).forEach(marca => mapa.removeLayer(marca));
+    const ponto = [posicao.latitude, posicao.longitude];
+    this.marcasDoUsuario = [
+      L.circle(ponto, {
+        radius: posicao.precisao,
+        color: '#6C60E6',
+        weight: 1,
+        fillColor: '#6C60E6',
+        fillOpacity: 0.12
+      }).addTo(mapa),
+      L.circleMarker(ponto, { radius: 8, color: '#fff', weight: 3, fillColor: '#6C60E6', fillOpacity: 1 })
+        .addTo(mapa)
+        .bindTooltip('Você', { permanent: true, direction: 'top', offset: [0, -8] })
+    ];
+    mapa.fitBounds(L.latLngBounds([[escola.latitude, escola.longitude], ponto]).pad(0.3), {
+      maxZoom: 17,
+      animate: false
+    });
+  }
+  mudarAjuste(campo) {
+    return evento =>
+      this.lembrar({ ajuste: { ...this.props.memoria.ajuste, [campo]: evento.target.value, erro: '', ok: false } });
+  }
+  renderVals() {
+    const contexto = this.props.contexto,
+      memoria = this.props.memoria;
+    const { presencaDeHoje, posicao, escola, marcandoPresenca, erroDaPresenca, rotuloDaMarcacao } = contexto;
+    const limite = (presencaDeHoje && presencaDeHoje.limite_min) || 480;
+    const agora = new Date(Date.now() + (contexto.desvioDoRelogio || 0));
+    const marcacoes = (presencaDeHoje && presencaDeHoje.marcacoes) || [];
+    const proxima = presencaDeHoje ? presencaDeHoje.proxima : 'entrada';
+    const minutosDesde = instante => Math.max(0, Math.round((agora - new Date(instante)) / 60000));
+    let total = 0;
+    if (presencaDeHoje) {
+      const horaDe = {};
+      marcacoes.forEach(m => (horaDe[m.tipo] = m.em));
+      if (horaDe.entrada) {
+        const fimDaManha = horaDe.saida_almoco || horaDe.saida;
+        total = fimDaManha
+          ? Math.round((new Date(fimDaManha) - new Date(horaDe.entrada)) / 60000)
+          : minutosDesde(horaDe.entrada);
+        if (horaDe.retorno_almoco)
+          total += horaDe.saida
+            ? Math.round((new Date(horaDe.saida) - new Date(horaDe.retorno_almoco)) / 60000)
+            : minutosDesde(horaDe.retorno_almoco);
+      }
+    }
+    const encerrada = !!presencaDeHoje && proxima == null;
+    const restante = Math.max(0, limite - total);
+    const pertoDoLimite = !encerrada && marcacoes.length > 0 && restante <= 30;
+    let aviso;
+    if (encerrada) aviso = 'Jornada encerrada com ' + duracao(total) + ' trabalhadas.';
+    else if (total >= limite) aviso = 'Você atingiu o limite de 8h. Registre sua saída.';
+    else if (!marcacoes.length) aviso = '';
+    else if (proxima === 'retorno_almoco')
+      aviso = 'Em almoço: este tempo não conta. Você ainda pode trabalhar ' + duracao(restante) + ' hoje.';
+    else aviso = 'Você ainda pode trabalhar ' + duracao(restante) + ' hoje (o almoço não conta).';
+    const ehSaida = proxima === 'saida_almoco' || proxima === 'saida';
+    const dataTexto = agora.toLocaleDateString('pt-BR', {
+      timeZone: 'America/Sao_Paulo',
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long'
+    });
+    const ultima = marcacoes.length ? marcacoes[marcacoes.length - 1] : null;
+    const abaDe = chave => ({
+      rotulo: ABAS[chave],
+      atual: memoria.aba === chave ? 'true' : 'false',
+      borda: memoria.aba === chave ? '#0B7EA3' : 'transparent',
+      cor: memoria.aba === chave ? 'var(--texto-08617e)' : 'var(--texto-5b6b70)',
+      peso: memoria.aba === chave ? 700 : 600,
+      abrir: () => {
+        this.lembrar({ aba: chave });
+        if (chave === 'espelho') contexto.carregarEspelho();
+        if (chave === 'justificativas') contexto.carregarAjustes();
+        if (chave === 'registrar') contexto.carregarPresencaDeHoje();
+      }
+    });
+
+    const espelho = contexto.espelho;
+    const diasDoEspelho = (espelho && espelho.dias) || [];
+    const somar = campo => diasDoEspelho.reduce((soma, dia) => soma + (dia[campo] || 0), 0);
+    const competencia = espelho ? new Date(espelho.competencia + 'T12:00:00') : Base.cicloComp(new Date());
+    const competenciaAtual = Base.cicloComp(new Date());
+    const mudarMes = passo => () =>
+      contexto.carregarEspelho(iso(new Date(competencia.getFullYear(), competencia.getMonth() + passo, 1)));
+    const assinadoEm = espelho && espelho.assinado_em;
+
+    const ajuste = memoria.ajuste;
+    return {
+      abas: Object.keys(ABAS).map(abaDe),
+      abaAtual: {
+        registrar: memoria.aba === 'registrar',
+        espelho: memoria.aba === 'espelho',
+        justificativas: memoria.aba === 'justificativas'
+      },
+      temMapa: escola && escola.latitude != null && escola.longitude != null && !!escola.raio,
+      mapaAria: 'Mapa da escola com o raio de presença' + (posicao ? ' e a sua localização' : ''),
+      saudacao: 'Olá' + (contexto.nomeDoUsuario ? ', ' + contexto.nomeDoUsuario.split(' ')[0] : ''),
+      dataTexto: dataTexto.charAt(0).toUpperCase() + dataTexto.slice(1),
+      hora: horaDoRelogio(contexto.desvioDoRelogio),
+      escola: (presencaDeHoje && presencaDeHoje.escola) || (escola && escola.nome) || '',
+      selo: posicao
+        ? posicao.fora
+          ? {
+              tem: true,
+              texto: 'Fora do raio da escola · ' + posicao.distancia + ' m',
+              fundo: 'var(--fundo-fbedeb)',
+              cor: 'var(--texto-b42318)'
+            }
+          : {
+              tem: true,
+              texto: 'Dentro do raio da escola · ' + posicao.distancia + ' m',
+              fundo: 'var(--fundo-e2f2e5)',
+              cor: 'var(--texto-1b5e2e)'
+            }
+        : ultima && ultima.distancia_m != null
+          ? {
+              tem: true,
+              texto: 'Dentro do raio da escola · ' + ultima.distancia_m + ' m',
+              fundo: 'var(--fundo-e2f2e5)',
+              cor: 'var(--texto-1b5e2e)'
+            }
+          : { tem: false, texto: '', fundo: 'transparent', cor: 'var(--texto-1a2b33)' },
+      botao: {
+        rotulo: marcandoPresenca
+          ? 'Registrando…'
+          : encerrada
+            ? 'Jornada encerrada'
+            : 'Registrar ' + rotuloDaMarcacao[proxima].toLowerCase(),
+        classe: encerrada || !presencaDeHoje || ehSaida ? '' : 'fundo-0b7ea3',
+        fundo: encerrada || !presencaDeHoje ? '#5B6B70' : ehSaida ? '#1A2B33' : '#0B7EA3',
+        desligado: encerrada || !presencaDeHoje || marcandoPresenca,
+        ocupado: marcandoPresenca ? 'true' : 'false'
+      },
+      marcar: () => proxima && contexto.marcarPresenca(proxima),
+      semAlmoco: proxima === 'saida_almoco',
+      marcarSaida: () => contexto.marcarPresenca('saida'),
+      erro: erroDaPresenca
+        ? { tem: true, ...erroDaPresenca }
+        : { tem: false, titulo: '', texto: '', justificar: false },
+      justificarForaDoRaio: () => contexto.abrirAjuste('fora_raio'),
+      total: duracao(total),
+      barra: {
+        percentual: Math.min(100, Math.round((total / limite) * 100)),
+        cor: pertoDoLimite ? 'var(--texto-b42318)' : 'var(--texto-0b7ea3)',
+        corDoAviso: pertoDoLimite ? 'var(--texto-b42318)' : 'var(--texto-5b6b70)'
+      },
+      limiteTexto: aviso,
+      temLimite: !!aviso,
+      semRegistros: !marcacoes.length,
+      registros: marcacoes.map(m => ({
+        tipo: rotuloDaMarcacao[m.tipo],
+        hora: horaDeBrasilia(m.em),
+        local: m.distancia_m != null ? 'No raio · ' + m.distancia_m + ' m' : 'No raio',
+        cor: m.tipo === 'saida_almoco' || m.tipo === 'saida' ? 'var(--texto-1a2b33)' : 'var(--texto-0b7ea3)'
+      })),
+
+      mesTexto: Base.Mes(competencia) + ' · ' + Base.cicloTxt(competencia),
+      mesAnterior: mudarMes(-1),
+      mesSeguinte: mudarMes(1),
+      semMesSeguinte: competencia >= competenciaAtual,
+      cartoes: [
+        { titulo: 'Horas trabalhadas', valor: duracao(somar('contabilizado_min')), nota: 'limite de 8h por dia' },
+        {
+          titulo: 'Não contabilizadas',
+          valor: duracao(somar('nao_contabilizado_min')),
+          nota: 'acima do limite de 8h'
+        },
+        {
+          titulo: 'Dias acima de 8h',
+          valor: String(diasDoEspelho.filter(dia => dia.situacao === 'acima_8h').length),
+          nota: 'no mês'
+        },
+        {
+          titulo: 'Pendências',
+          valor: String(diasDoEspelho.filter(dia => dia.situacao === 'pendente' || dia.situacao === 'falta').length),
+          nota: 'dias para regularizar'
+        }
+      ],
+      espelhoVazio: !diasDoEspelho.length,
+      espelhoVazioTexto: espelho ? 'Nenhum registro neste mês.' : 'Carregando o espelho…',
+      dias: diasDoEspelho.map(dia => {
+        const data = new Date(dia.data + 'T12:00:00');
+        const situacao = SITUACAO_DO_DIA[dia.situacao] || SITUACAO_DO_DIA.pendente;
+        const faixa = (inicio, fim) =>
+          inicio ? horaDeBrasilia(inicio) + '–' + (fim ? horaDeBrasilia(fim) : '--:--') : '';
+        const horarios = dia.saida_almoco
+          ? faixa(dia.entrada, dia.saida_almoco) + ' · ' + faixa(dia.retorno_almoco, dia.saida)
+          : faixa(dia.entrada, dia.saida);
+        let observacao = '';
+        if (dia.situacao === 'acima_8h') observacao = dia.nao_contabilizado_min + ' min não contabilizados';
+        else if (dia.situacao === 'regular' && !dia.saida_almoco) observacao = 'Sem almoço (jornada curta)';
+        else if (dia.situacao === 'pendente')
+          observacao = !dia.saida ? 'Saída não registrada' : 'Volta do almoço não registrada';
+        if (dia.ajuste) observacao = (observacao ? observacao + ' · ' : '') + AJUSTE_NO_ESPELHO[dia.ajuste];
+        return {
+          data: Base.WDL[data.getDay()] + ', ' + Base.dmy(data),
+          horarios: horarios || '—',
+          total: dia.contabilizado_min != null ? duracao(dia.contabilizado_min) : '—',
+          situacao: situacao[0],
+          fundo: situacao[1],
+          cor: situacao[2],
+          temObservacao: !!observacao,
+          observacao
+        };
+      }),
+      assinatura: assinadoEm
+        ? {
+            tem: true,
+            texto:
+              'Espelho assinado em ' + new Date(assinadoEm).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+            fundo: '#5B6B70',
+            classe: ''
+          }
+        : { tem: false, texto: '', fundo: '#0B7EA3', classe: 'fundo-0b7ea3' },
+      baixarEspelho: () => contexto.baixarEspelho(),
+      solicitarAjuste: () => contexto.abrirAjuste('esquecimento'),
+      assinarEspelho: () => contexto.assinarEspelho(),
+
+      tiposDeAjuste: Object.keys(TIPOS_DE_AJUSTE).map(chave => ({
+        rotulo: TIPOS_DE_AJUSTE[chave],
+        marcado: ajuste.tipo === chave ? 'true' : 'false',
+        ...contexto.opcao(ajuste.tipo === chave),
+        escolher: () => this.lembrar({ ajuste: { ...this.props.memoria.ajuste, tipo: chave, erro: '', ok: false } })
+      })),
+      ajuste: {
+        data: ajuste.data,
+        dataMaxima: iso(new Date()),
+        mudarData: this.mudarAjuste('data'),
+        comHorarios: ajuste.tipo !== 'falta',
+        motivo: ajuste.motivo,
+        mudarMotivo: this.mudarAjuste('motivo'),
+        temErro: !!ajuste.erro,
+        erro: ajuste.erro,
+        enviado: !!ajuste.ok,
+        enviando: !!ajuste.enviando
+      },
+      horariosDoAjuste: HORARIOS_DO_AJUSTE.map(([campo, rotulo]) => ({
+        rotulo,
+        valor: ajuste[campo],
+        mudar: this.mudarAjuste(campo)
+      })),
+      enviarAjuste: () => contexto.enviarAjuste(),
+      semAjustes: !contexto.ajustes.length,
+      ajustes: contexto.ajustes.map(item => {
+        const situacao = SITUACAO_DO_AJUSTE[item.status] || SITUACAO_DO_AJUSTE.em_analise;
+        return {
+          tipo: TIPOS_DE_AJUSTE[item.tipo] || item.tipo,
+          data: Base.dmy(new Date(item.data + 'T12:00:00')),
+          motivo: item.motivo,
+          situacao: situacao[0],
+          fundo: situacao[1],
+          cor: situacao[2],
+          temObservacao: !!item.analise_obs,
+          observacao: item.analise_obs || ''
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

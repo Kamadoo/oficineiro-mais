@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Analista · Registro de visitas</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <div class="d-flex quebra-wrap gap-10-12 alinha-center">
+    <div role="tablist" aria-label="Visitas" class="largura-total-celular d-flex gap-4 fundo-e3ebed p-4 raio-10 rolagem-x-auto segmentado"><sc-for list="{{ abas }}" as="aba" hint-placeholder-count="2"><button role="tab" aria-selected="{{ aba.marcado }}" onClick="{{ aba.escolher }}" class="borda-0 raio-7 p-8-14 fs-14 fw-600 espaco-nowrap {{ aba.classe }}" style="background:{{ aba.fundo }};color:{{ aba.cor }}">{{ aba.rotulo }}</button></sc-for></div>
+    <div class="oculto-celular flex-1"></div>
+    <sc-if value="{{ abaHistorico }}" hint-placeholder-val="{{ false }}"><button onClick="{{ exportar }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 cor-1a2b33 botao-secundario">Exportar Excel</button></sc-if>
+  </div>
+  <sc-if value="{{ abaRegistrar }}" hint-placeholder-val="{{ true }}">
+    <section class="espaco-celular borda-dde6e8 raio-12 p-22 d-flex eixo-column gap-18 max-w-900 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="an-h-reg">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 id="an-h-reg" class="m-0 fs-16 flex-1">{{ registro.titulo }}</h3><sc-if value="{{ registro.editando }}" hint-placeholder-val="{{ false }}"><button onClick="{{ cancelarCorrecao }}" class="borda-0 fundo-transparent p-0 fs-13 fw-600 cor-08617e deco-underline botao-texto">Cancelar correção</button></sc-if></div>
+      <sc-if value="{{ registro.temVinculo }}" hint-placeholder-val="{{ false }}"><div class="fundo-eff9fc raio-10 p-12-14 fs-13 cor-08617e lh-1p5">{{ registro.vinculo }}</div></sc-if>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Visita da agenda</span><select id="rg-agenda" value="{{ registro.agenda }}" onChange="{{ registro.escolherAgenda }}" disabled="{{ registro.travaAgenda }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Visita sem agendamento</option><sc-for list="{{ visitasDaAgenda }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select><span class="fs-12 cor-5b6b70">{{ registro.agendaNota }}</span></label>
+      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Escola *</span><select id="rg-escola" value="{{ registro.escola }}" onChange="{{ registro.escolherEscola }}" disabled="{{ registro.travaEscola }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Data *</span><input id="rg-data" type="date" value="{{ registro.data }}" min="{{ registro.dataMinima }}" max="{{ registro.dataMaxima }}" onChange="{{ registro.escolherData }}" disabled="{{ registro.travaData }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14"></input></label>
+      </div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Participantes · separe os nomes com ponto e vírgula (;)</span><input value="{{ registro.participantes }}" onChange="{{ registro.escreverParticipantes }}" maxlength="500" placeholder="ex.: Prof.ª Ana (5º ano); Diretora Bia; 6 professores do turno da manhã" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14"></input><sc-if value="{{ registro.temNomes }}" hint-placeholder-val="{{ false }}"><span class="d-flex quebra-wrap gap-6"><sc-for list="{{ registro.nomes }}" as="nome" hint-placeholder-count="2"><span class="fs-12 fw-600 cor-08617e fundo-e4f5fa p-3-10 raio-999">{{ nome }}</span></sc-for></span></sc-if></label>
+      <div class="d-flex eixo-column gap-8"><span id="rg-tipo-rot" class="fs-12 cor-5b6b70 fw-600">Tipo de atendimento *</span>
+        <div role="radiogroup" aria-labelledby="rg-tipo-rot" class="d-flex quebra-wrap gap-4 fundo-e3ebed p-4 raio-10 alinha-si-flex-start segmentado"><sc-for list="{{ tipos }}" as="tipo" hint-placeholder-count="4"><button role="radio" aria-checked="{{ tipo.marcado }}" onClick="{{ tipo.escolher }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 {{ tipo.classe }}" style="background:{{ tipo.fundo }};color:{{ tipo.cor }}">{{ tipo.rotulo }}</button></sc-for></div>
+        <div role="radiogroup" aria-label="Detalhe do atendimento" class="d-flex quebra-wrap gap-8"><sc-for list="{{ subtipos }}" as="subtipo" hint-placeholder-count="4"><button role="radio" aria-checked="{{ subtipo.marcado }}" onClick="{{ subtipo.escolher }}" class="raio-999 p-6-12 fs-13 fw-500 botao-opcao {{ subtipo.classe }}" style="border:1.5px solid {{ subtipo.borda }};background:{{ subtipo.fundo }};color:{{ subtipo.cor }}">{{ subtipo.rotulo }}</button></sc-for></div>
+      </div>
+      <sc-if value="{{ comAlunos }}" hint-placeholder-val="{{ false }}">
+        <div class="d-flex eixo-column gap-6">
+          <div class="empilha-celular d-grid gap-12" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr)">
+            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Oficineiro *</span><select id="rg-ofic" value="{{ registro.oficineiro }}" onChange="{{ registro.escolherOficineiro }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha o oficineiro</option><sc-for list="{{ oficineiros }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Ano *</span><select id="rg-ano" value="{{ registro.ano }}" onChange="{{ registro.escolherAno }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha o ano</option><sc-for list="{{ anos }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Turma *</span><select id="rg-turma" value="{{ registro.turma }}" onChange="{{ registro.escolherTurma }}" disabled="{{ semAno }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Escolha a turma</option><sc-for list="{{ turmas }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label>
+          </div>
+          <span class="fs-12 cor-5b6b70">{{ turmaNota }}</span>
+        </div>
+      </sc-if>
+      <label class="d-flex eixo-column gap-6 max-w-420"><span class="fs-12 cor-5b6b70 fw-600">Solução trabalhada</span><select value="{{ registro.solucao }}" onChange="{{ registro.escolherSolucao }}" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Nenhuma em especial</option><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label>
+      <div class="d-flex eixo-column gap-16 borda-t-e8eef0 pt-18">
+        <label class="d-flex eixo-column gap-6"><span class="fs-16 fw-600 cor-1a2b33">Desenvolvimento da visita *</span><textarea id="rg-obs" rows="4" value="{{ registro.observacao }}" onChange="{{ registro.escreverObservacao }}" maxlength="2000" placeholder="Como a visita foi conduzida, o que foi feito com professores e gestão, e o que foi combinado" class="borda-cfdadd raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+        <div class="empilha-celular d-grid gap-16" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+          <div class="d-flex eixo-column gap-8"><span id="rg-obj-rot" class="fs-12 cor-5b6b70 fw-600">Objetivo da visita atingido?</span><div role="radiogroup" aria-labelledby="rg-obj-rot" class="d-flex gap-8 quebra-wrap"><sc-for list="{{ objetivos }}" as="objetivo" hint-placeholder-count="3"><button role="radio" aria-checked="{{ objetivo.marcado }}" onClick="{{ objetivo.escolher }}" class="raio-8 p-9-14 fs-14 fw-500 botao-opcao {{ objetivo.classe }}" style="border:1.5px solid {{ objetivo.borda }};background:{{ objetivo.fundo }};color:{{ objetivo.cor }}">{{ objetivo.rotulo }}</button></sc-for></div></div>
+          <div class="d-flex eixo-column gap-8"><span id="rg-eng-rot" class="fs-12 cor-5b6b70 fw-600">Engajamento do público atendido · {{ engajamentoTexto }}</span><div role="radiogroup" aria-labelledby="rg-eng-rot" class="d-flex gap-6"><sc-for list="{{ engajamentos }}" as="nota" hint-placeholder-count="5"><button role="radio" aria-checked="{{ nota.marcado }}" aria-label="{{ nota.aria }}" onClick="{{ nota.escolher }}" class="w-44 h-40 raio-8 fs-14 fw-600 largura-fundo botao-opcao {{ nota.classe }}" style="border:1.5px solid {{ nota.borda }};background:{{ nota.fundo }};color:{{ nota.cor }}">{{ nota.rotulo }}</button></sc-for></div></div>
+        </div>
+        <div class="empilha-celular d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Boas práticas identificadas</span><textarea rows="2" value="{{ registro.boasPraticas }}" onChange="{{ registro.escreverBoasPraticas }}" maxlength="1000" placeholder="Usos das soluções pelos professores, iniciativas da escola" class="borda-cfdadd raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-5b6b70 fw-600">Dúvidas e dificuldades relatadas</span><textarea rows="2" value="{{ registro.dificuldades }}" onChange="{{ registro.escreverDificuldades }}" maxlength="1000" placeholder="Pedagógicas, de uso da ferramenta ou de acesso" class="borda-cfdadd raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+        </div>
+        <div class="d-flex eixo-column gap-8"><span id="rg-oc-rot" class="fs-12 cor-5b6b70 fw-600">Ocorrências técnicas</span><div role="group" aria-labelledby="rg-oc-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ ocorrencias }}" as="ocorrencia" hint-placeholder-count="6"><button aria-pressed="{{ ocorrencia.marcado }}" onClick="{{ ocorrencia.escolher }}" class="raio-999 p-7-14 fs-13 fw-500 botao-opcao {{ ocorrencia.classe }}" style="border:1.5px solid {{ ocorrencia.borda }};background:{{ ocorrencia.fundo }};color:{{ ocorrencia.cor }}">{{ ocorrencia.rotulo }}</button></sc-for></div></div>
+        <sc-if value="{{ temOcorrencia }}" hint-placeholder-val="{{ false }}"><input value="{{ registro.ocorrenciaObs }}" onChange="{{ registro.escreverOcorrenciaObs }}" maxlength="1000" aria-label="Descreva a ocorrência e o encaminhamento dado" placeholder="Descreva a ocorrência e o encaminhamento dado" class="h-40 borda-cfdadd raio-8 p-0-12 fs-14"></input></sc-if>
+      </div>
+      <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erro }}</div></sc-if>
+      <div class="d-flex justifica-flex-end"><button class="largura-total-celular h-44 borda-0 cor-fff raio-8 p-0-22 fs-15 fw-600 fundo-0b7ea3" style="background:#0B7EA3" onClick="{{ enviar }}" disabled="{{ salvando }}">{{ botao }}</button></div>
+    </section>
+  </sc-if>
+  <sc-if value="{{ abaHistorico }}" hint-placeholder-val="{{ false }}">
+    <div class="filtros d-flex quebra-wrap gap-8 alinha-center">
+      <select aria-label="Mês" value="{{ mes }}" onChange="{{ escolherMes }}" class="h-38 borda-cfdadd raio-8 p-0-10 fs-13 fw-600 fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ meses }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+      <select aria-label="Escola" value="{{ escola }}" onChange="{{ escolherEscola }}" class="h-38 borda-cfdadd raio-8 p-0-10 fs-13 max-w-300 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as escolas da carteira</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+      <span role="status" aria-live="polite" class="fs-12 cor-5b6b70">{{ resumo }}</span>
+    </div>
+    <section class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+      <div role="table" aria-label="Visitas realizadas" class="min-w-900">
+        <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-5b6b70 borda-b-dde6e8" style="grid-template-columns:60px 1.5fr 1.4fr 1.3fr 1fr .9fr .5fr 1fr"><span role="columnheader">Data</span><span role="columnheader">Escola</span><span role="columnheader">Tipo de atendimento</span><span role="columnheader">Participantes</span><span role="columnheader">Solução</span><span role="columnheader">Objetivo</span><span role="columnheader">Eng.</span><span role="columnheader">Ocorrências</span></div>
+        <sc-for list="{{ visitas }}" as="visita" hint-placeholder-count="6">
+          <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-e8eef0 alinha-center" style="grid-template-columns:60px 1.5fr 1.4fr 1.3fr 1fr .9fr .5fr 1fr">
+            <span role="cell" class="num-tabular-nums">{{ visita.data }}</span>
+            <span role="cell" class="d-flex eixo-column alinha-flex-start min-w-0"><button onClick="{{ visita.abrir }}" aria-haspopup="dialog" aria-label="{{ visita.aria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-1a2b33 texto-left sublinha-3 quebra-palavra-anywhere botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:#CFDADD">{{ visita.escola }}</button><sc-if value="{{ visita.temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-5b6b70">{{ visita.nota }}</span></sc-if></span>
+            <span role="cell" class="quebra-palavra-anywhere">{{ visita.tipo }}</span><span role="cell" class="fs-12 quebra-palavra-anywhere">{{ visita.participantes }}</span><span role="cell" class="quebra-palavra-anywhere">{{ visita.solucao }}</span>
+            <span role="cell" class="justifica-si-start fs-12 fw-600 p-2-8 raio-999" style="color:{{ visita.objetivoCor }};background:{{ visita.objetivoFundo }}">{{ visita.objetivo }}</span>
+            <span role="cell" class="num-tabular-nums">{{ visita.engajamento }}</span><span role="cell" class="fs-12 quebra-palavra-anywhere" style="color:{{ visita.ocorrenciasCor }}">{{ visita.ocorrencias }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ semVisitas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-5b6b70 texto-center">Nenhuma visita registrada neste período.</p></sc-if>
+    </section>
+  </sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { dataDe, hmDe, hmTs, dmIso, dmyIso, mesIni, mesTxt, plural, ANOS, TURMAS_PADRAO, anoTxt } = Base;
+const ATENDIMENTOS = Base.ATEND_VISITA;
+const SOLUCOES = [
+  'Minecraft for Education',
+  'Matific',
+  'Portal Serpro Virtual',
+  'Canva',
+  'MS Copilot 365',
+  'Eduminers',
+  'GED',
+  'MS Reflect',
+  'Pacote Office',
+  'Oficineiro+',
+  'Outra'
+];
+const OCORRENCIAS = ['Sem ocorrência', 'Internet', 'Equipamento', 'Login/acesso', 'Plataforma instável', 'Outro'];
+const OBJETIVOS = {
+  Sim: ['Sim', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)'],
+  Parcialmente: ['Parcialmente', 'var(--texto-9a6212)', 'var(--fundo-faefd9)'],
+  Não: ['Não', 'var(--texto-b42318)', 'var(--fundo-fbedeb)']
+};
+const SEM_OBJETIVO = ['—', 'var(--texto-5b6b70)', 'var(--fundo-e8eef0)'];
+const fimDoMes = iso => {
+  const dia = dataDe(iso);
+  return Base.iso(new Date(dia.getFullYear(), dia.getMonth() + 1, 0));
+};
+const focar = id =>
+  setTimeout(() => {
+    const elemento = document.getElementById(id);
+    if (elemento) elemento.focus();
+  }, 30);
+class Component extends DCLogic {
+  componentDidMount() {
+    this.focarPendente();
+  }
+  componentDidUpdate() {
+    this.focarPendente();
+  }
+  focarPendente() {
+    const memoria = this.props.memoria;
+    if (!memoria.focar) return;
+    const id = memoria.focar;
+    memoria.focar = '';
+    focar(id);
+  }
+  lembrar(mudanca) {
+    Object.assign(this.props.memoria, mudanca);
+    this.forceUpdate();
+  }
+  renderVals() {
+    const contexto = this.props.contexto,
+      memoria = this.props.memoria;
+    const { hoje, usuario, agendaValida, nomeDaEscola, origemDe, opcao, segmento } = contexto;
+    const registro = memoria.registro;
+    const mudar = mudanca => this.lembrar({ registro: { ...this.props.memoria.registro, ...mudanca } });
+    const escrever = campo => e => mudar({ [campo]: e.target.value });
+    const anoAtual = Number(hoje.slice(0, 4));
+    const oficineiros = contexto.oficineirosDaEscola(registro.escola).map(o => ({ valor: o.id, rotulo: o.nome }));
+    const turmasDaEscola = contexto.turmas
+      .filter(t => String(t.escola_id) === String(registro.escola))
+      .map(t => ({ ano: Number(t.ano), turma: t.turma }))
+      .concat(
+        contexto.grade
+          .filter(
+            g =>
+              String(g.escola_id) === String(registro.escola) &&
+              Number(g.ano_letivo) === anoAtual &&
+              g.ano != null &&
+              g.turma &&
+              (!registro.oficineiro || g.oficineiro_id === registro.oficineiro)
+          )
+          .map(g => ({ ano: Number(g.ano), turma: g.turma }))
+      )
+      .filter(t => ANOS.includes(t.ano) && t.turma);
+    const anosDaEscola = [...new Set(turmasDaEscola.map(t => t.ano))].sort((a, b) => a - b);
+    const anosBase = anosDaEscola.length ? anosDaEscola : ANOS;
+    const anos = anosBase
+      .concat(registro.ano !== '' && !anosBase.includes(Number(registro.ano)) ? [Number(registro.ano)] : [])
+      .map(ano => ({ valor: String(ano), rotulo: anoTxt(ano) }));
+    const turmasDoAno = [
+      ...new Set(turmasDaEscola.filter(t => String(t.ano) === String(registro.ano)).map(t => String(t.turma)))
+    ].sort();
+    const turmasBase = turmasDoAno.length ? turmasDoAno : TURMAS_PADRAO;
+    const turmas =
+      registro.ano === ''
+        ? []
+        : turmasBase.concat(registro.turma && !turmasBase.includes(registro.turma) ? [registro.turma] : []);
+    const presenca = registro.presenca ? contexto.presencas.find(p => p.id === registro.presenca) : null;
+    const visitasDaAgenda = agendaValida
+      .filter(
+        v =>
+          (v.status === 'agendada' || v.id === registro.agenda) &&
+          v.analista_id === usuario &&
+          v.data <= hoje &&
+          v.data >= contexto.ha30Dias &&
+          (!presenca || v.escola_id === presenca.escola_id)
+      )
+      .sort((a, b) => b.data.localeCompare(a.data) || String(a.hora || '').localeCompare(String(b.hora || '')))
+      .map(v => ({
+        valor: String(v.id),
+        rotulo:
+          dmIso(v.data) +
+          (v.hora ? ' ' + hmDe(v.hora) : '') +
+          ' · ' +
+          (contexto.escolaDe(v.escola_id) || {}).sigla +
+          (v.tipo ? ' · ' + v.tipo : '') +
+          ' · ' +
+          origemDe(v.origem)[0]
+      }));
+    const visitaDaAgenda = registro.agenda ? contexto.agenda.find(v => v.id === registro.agenda) : null;
+    const vinculo = [
+      visitaDaAgenda
+        ? 'Visita da agenda de ' +
+          dmIso(visitaDaAgenda.data) +
+          ' · ' +
+          origemDe(visitaDaAgenda.origem)[0] +
+          (visitaDaAgenda.orientacao ? ' · ' + visitaDaAgenda.orientacao : '')
+        : '',
+      presenca ? 'Presença das ' + hmTs(presenca.inicio) + (presenca.fim ? ' às ' + hmTs(presenca.fim) : '') : ''
+    ].filter(Boolean);
+    const nomes = contexto.nomesDosParticipantes(registro.participantes);
+    const detalhesDoTipo = ATENDIMENTOS[registro.tipo] || [];
+
+    const meses = [-5, -4, -3, -2, -1, 0].map(k => mesIni(hoje, k));
+    const mes = meses.includes(memoria.mes) ? memoria.mes : mesIni(hoje, 0);
+    const visitasDoMes = contexto.minhasVisitas.filter(
+      v => v.data >= mes && v.data <= fimDoMes(mes) && (!memoria.escola || String(v.escola_id) === memoria.escola)
+    );
+    const visitas = visitasDoMes.map(v => {
+      const objetivo = OBJETIVOS[v.objetivo] || SEM_OBJETIVO,
+        correcoes = contexto.correcoesDe(v.id).length;
+      return {
+        data: dmIso(v.data),
+        escola: nomeDaEscola(v.escola_id),
+        aria: 'Ver a visita de ' + dmIso(v.data) + ' em ' + nomeDaEscola(v.escola_id),
+        abrir: () => contexto.abrirVisita(v.id),
+        temNota: !!(v.agenda_id || correcoes),
+        nota: [
+          v.agenda_id ? 'da agenda' : '',
+          correcoes ? (correcoes === 1 ? 'corrigida 1 vez' : 'corrigida ' + correcoes + ' vezes') : ''
+        ]
+          .filter(Boolean)
+          .join(' · '),
+        tipo: v.tipo + (v.subtipo ? ' · ' + v.subtipo : '') + (v.turma ? ' · ' + v.turma : ''),
+        participantes: v.participantes || '—',
+        solucao: v.solucao || '—',
+        objetivo: objetivo[0],
+        objetivoCor: objetivo[1],
+        objetivoFundo: objetivo[2],
+        engajamento: v.engajamento ? v.engajamento + '/5' : '—',
+        ocorrencias: v.ocorrencias || 'Sem ocorrência',
+        ocorrenciasCor: v.ocorrencias ? 'var(--texto-b42318)' : 'var(--texto-5b6b70)'
+      };
+    });
+    return {
+      opacidade: contexto.opacidade,
+      salvando: contexto.salvando,
+      opcoesDeEscola: contexto.opcoesDeEscola,
+      abaRegistrar: memoria.aba === 'registrar',
+      abaHistorico: memoria.aba === 'historico',
+      abas: [
+        ['registrar', registro.id ? 'Corrigir registro' : 'Registrar'],
+        ['historico', 'Histórico']
+      ].map(([aba, rotulo]) => ({
+        rotulo,
+        marcado: memoria.aba === aba ? 'true' : 'false',
+        escolher: () => this.lembrar({ aba }),
+        ...segmento(memoria.aba === aba)
+      })),
+      registro: {
+        titulo: registro.id ? 'Corrigir o registro da visita' : 'Registrar visita',
+        editando: !!registro.id,
+        temVinculo: vinculo.length > 0,
+        vinculo: vinculo.join(' · '),
+        escola: registro.escola,
+        data: registro.data,
+        dataMinima: Base.iso(Base.add(dataDe(hoje), registro.id ? -7 : -30)),
+        dataMaxima: hoje,
+        travaEscola: !!(registro.id || visitaDaAgenda || presenca),
+        travaData: !!presenca,
+        participantes: registro.participantes,
+        nomes,
+        temNomes: nomes.length > 1,
+        agenda: registro.agenda ? String(registro.agenda) : '',
+        travaAgenda: !!registro.id,
+        agendaNota: registro.id
+          ? 'O vínculo com a agenda não muda na correção.'
+          : visitasDaAgenda.length
+            ? 'Escolha a visita agendada para ligar o registro à agenda.'
+            : 'Nenhuma visita agendada nos últimos 30 dias.',
+        escolherAgenda: e => {
+          const id = e.target.value,
+            visita = id ? contexto.agenda.find(v => String(v.id) === id) : null,
+            atual = this.props.memoria.registro;
+          if (!visita) return mudar({ agenda: null });
+          const atendimento = contexto.tipoDaAgenda(visita.tipo);
+          mudar({
+            agenda: visita.id,
+            escola: String(visita.escola_id),
+            data: atual.presenca ? atual.data : visita.data,
+            tipo: visita.tipo ? atendimento.tipo : atual.tipo,
+            subtipo: visita.tipo ? atendimento.subtipo : atual.subtipo,
+            ...(String(visita.escola_id) === atual.escola ? {} : contexto.turmaPara(String(visita.escola_id)))
+          });
+        },
+        oficineiro: registro.oficineiro,
+        ano: registro.ano,
+        turma: registro.turma,
+        escolherOficineiro: escrever('oficineiro'),
+        escolherAno: e => mudar({ ano: e.target.value, turma: '' }),
+        escolherTurma: escrever('turma'),
+        solucao: registro.solucao,
+        observacao: registro.observacao,
+        boasPraticas: registro.boasPraticas,
+        dificuldades: registro.dificuldades,
+        ocorrenciaObs: registro.ocorrenciaObs,
+        escolherEscola: e => mudar({ escola: e.target.value, ...contexto.turmaPara(e.target.value) }),
+        escolherData: escrever('data'),
+        escreverParticipantes: escrever('participantes'),
+        escolherSolucao: escrever('solucao'),
+        escreverObservacao: escrever('observacao'),
+        escreverBoasPraticas: escrever('boasPraticas'),
+        escreverDificuldades: escrever('dificuldades'),
+        escreverOcorrenciaObs: escrever('ocorrenciaObs')
+      },
+      cancelarCorrecao: () => this.lembrar({ registro: contexto.registroVazio(), erro: '', aba: 'historico' }),
+      tipos: Object.keys(ATENDIMENTOS).map(tipo => ({
+        rotulo: tipo,
+        marcado: registro.tipo === tipo ? 'true' : 'false',
+        escolher: () => mudar({ tipo, subtipo: '' }),
+        ...segmento(registro.tipo === tipo)
+      })),
+      subtipos: detalhesDoTipo
+        .concat(registro.subtipo && !detalhesDoTipo.includes(registro.subtipo) ? [registro.subtipo] : [])
+        .map(subtipo => ({
+          rotulo: subtipo,
+          marcado: registro.subtipo === subtipo ? 'true' : 'false',
+          ...opcao(registro.subtipo === subtipo),
+          escolher: () => mudar({ subtipo: this.props.memoria.registro.subtipo === subtipo ? '' : subtipo })
+        })),
+      solucoes: SOLUCOES.concat(registro.solucao && !SOLUCOES.includes(registro.solucao) ? [registro.solucao] : []),
+      visitasDaAgenda,
+      comAlunos: contexto.atendimentoComAlunos(registro.subtipo),
+      oficineiros,
+      anos,
+      turmas,
+      semAno: registro.ano === '',
+      turmaNota: !registro.escola
+        ? 'Escolha a escola para ver os oficineiros e as turmas.'
+        : !oficineiros.length
+          ? 'Nenhum oficineiro ativo nesta escola.'
+          : oficineiros.length === 1
+            ? 'Oficineiro da escola preenchido automaticamente.'
+            : 'Escolha o oficineiro que atende a turma.',
+      objetivos: ['Sim', 'Não'].map(objetivo => ({
+        rotulo: objetivo,
+        marcado: registro.objetivo === objetivo ? 'true' : 'false',
+        ...opcao(registro.objetivo === objetivo),
+        escolher: () => mudar({ objetivo })
+      })),
+      engajamentos: [1, 2, 3, 4, 5].map(nota => ({
+        rotulo: String(nota),
+        aria: nota + ' · ' + contexto.engajamentoTexto[nota],
+        marcado: registro.engajamento === nota ? 'true' : 'false',
+        ...opcao(registro.engajamento === nota),
+        escolher: () => mudar({ engajamento: nota })
+      })),
+      engajamentoTexto: registro.engajamento ? contexto.engajamentoTexto[registro.engajamento] : 'não informado',
+      ocorrencias: OCORRENCIAS.map(ocorrencia => ({
+        rotulo: ocorrencia,
+        marcado: registro.ocorrencias.includes(ocorrencia) ? 'true' : 'false',
+        ...opcao(registro.ocorrencias.includes(ocorrencia)),
+        escolher: () => {
+          const atuais = this.props.memoria.registro.ocorrencias;
+          const novas =
+            ocorrencia === 'Sem ocorrência'
+              ? ['Sem ocorrência']
+              : atuais.includes(ocorrencia)
+                ? atuais.filter(x => x !== ocorrencia)
+                : [...atuais.filter(x => x !== 'Sem ocorrência'), ocorrencia];
+          mudar({ ocorrencias: novas.length ? novas : ['Sem ocorrência'] });
+        }
+      })),
+      temOcorrencia: !registro.ocorrencias.includes('Sem ocorrência') && registro.ocorrencias.length > 0,
+      erro: memoria.erro,
+      temErro: !!memoria.erro,
+      botao: contexto.salvando ? 'Salvando…' : registro.id ? 'Salvar correção' : 'Registrar visita',
+      enviar: () => contexto.enviarRegistro(),
+      meses: meses
+        .slice()
+        .reverse()
+        .map(valor => ({ valor, rotulo: mesTxt(valor).replace(/^./, letra => letra.toUpperCase()) })),
+      mes,
+      escolherMes: e => this.lembrar({ mes: e.target.value }),
+      escola: memoria.escola,
+      escolherEscola: e => this.lembrar({ escola: e.target.value }),
+      resumo: plural(visitasDoMes.length, 'visita', 'visitas') + ' em ' + mesTxt(mes),
+      visitas,
+      semVisitas: visitas.length === 0,
+      exportar: () =>
+        contexto.exportar(
+          'visitas_' + mes.slice(0, 7),
+          'Visitas',
+          [
+            [
+              'Data',
+              'Escola',
+              'Tipo de atendimento',
+              'Detalhe',
+              'Participantes',
+              'Turma atendida',
+              'Oficineiro',
+              'Solução',
+              'Objetivo atingido',
+              'Engajamento',
+              'Desenvolvimento',
+              'Boas práticas',
+              'Dificuldades',
+              'Ocorrências',
+              'Encaminhamento'
+            ]
+          ].concat(
+            visitasDoMes.map(v => [
+              dmyIso(v.data),
+              nomeDaEscola(v.escola_id),
+              v.tipo,
+              v.subtipo || '',
+              v.participantes || '',
+              v.turma || '',
+              v.oficineiro_id ? contexto.nomeDaPessoa(v.oficineiro_id) : '',
+              v.solucao || '',
+              v.objetivo || '',
+              v.engajamento || '',
+              v.observacao || '',
+              v.boas_praticas || '',
+              v.dificuldades || '',
+              v.ocorrencias || '',
+              v.ocorrencia_obs || ''
+            ])
+          )
+        )
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Direção Escolar · Relatório mensal</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <section class="espaco-celular borda-dde6e8 raio-12 p-18-20 d-flex eixo-column gap-14 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="dir-h-fluxo">
+    <div class="d-flex quebra-wrap gap-10 alinha-center"><h3 id="dir-h-fluxo" class="m-0 fs-15 flex-1 min-w-220">Fluxo de aprovação do relatório de atividades · mensal</h3><select aria-label="Mês do relatório" value="{{ ciclo }}" onChange="{{ escolherCiclo }}" class="h-36 borda-cfdadd raio-8 p-0-8 fs-13 fundo-ffffff" style="background:var(--fundo-ffffff)"><sc-for list="{{ opcoesCiclo }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></div>
+    <ol class="lista-none m-0 p-0 d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+      <sc-for list="{{ etapas }}" as="etapa" hint-placeholder-count="4">
+        <li class="raio-10 p-12-14 d-flex eixo-column gap-4" style="background:{{ etapa.fundo }};border:1.5px solid {{ etapa.borda }}">
+          <span class="num-tabular-nums fs-11 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ etapa.cor }}">{{ etapa.numero }}</span>
+          <b class="fs-14">{{ etapa.titulo }}</b><span class="fs-12 cor-34464d">{{ etapa.situacao }}</span>
+        </li>
+      </sc-for>
+    </ol>
+  </section>
+  <section aria-label="Relatórios dos oficineiros" class="borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}">
+    <div class="dir-tab min-w-960" role="table" aria-label="Relatórios dos oficineiros">
+      <div class="dir-cab d-grid gap-10 p-12-20 fs-12 fw-600 cor-5b6b70 borda-b-dde6e8" style="grid-template-columns:1.5fr .7fr .9fr .9fr .9fr .9fr 1.4fr 230px" role="row"><span role="columnheader">Oficineiro</span><span role="columnheader">Dias</span><span role="columnheader">Horas válidas</span><span role="columnheader">Atividades realizadas</span><span role="columnheader">Não realizadas</span><span role="columnheader">Check da escola</span><span role="columnheader">Situação</span><span role="columnheader"><span class="sr-only">Ações</span></span></div>
+      <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="2">
+        <div class="dir-linha d-grid gap-10 p-14-20 fs-13 borda-b-e9eff1 alinha-center" style="grid-template-columns:1.5fr .7fr .9fr .9fr .9fr .9fr 1.4fr 230px" role="row">
+          <span role="cell" class="dir-larga d-flex eixo-column min-w-0"><b class="quebra-palavra-anywhere">{{ linha.nome }}</b><span class="fs-11 cor-5b6b70">{{ linha.fechamento }}</span></span>
+          <span role="cell" data-r="Dias" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ linha.dias }}</span><span role="cell" data-r="Horas válidas" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ linha.horas }}</span><span role="cell" data-r="Aulas realizadas" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ linha.realizadas }}</span><span role="cell" data-r="Não realizadas" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ linha.naoRealizadas }}</span><span role="cell" data-r="Check da escola" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.checkCor }}">{{ linha.check }}</span>
+          <span role="cell" class="d-flex eixo-column gap-4 alinha-flex-start min-w-0"><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ linha.situacaoCor }};background:{{ linha.situacaoFundo }}">{{ linha.situacao }}</span><sc-if value="{{ linha.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-5b6b70 quebra-palavra-anywhere">{{ linha.observacao }}</span></sc-if></span>
+          <span role="cell" class="dir-larga dir-acoes d-flex gap-6 justifica-flex-end quebra-wrap">
+            <button onClick="{{ linha.ver }}" aria-haspopup="dialog" aria-label="{{ linha.rotuloVer }}" class="h-32 borda-cfdadd fundo-ffffff raio-6 p-0-10 fs-12 fw-500 cor-1a2b33 botao-secundario">Ver relatório</button>
+            <sc-if value="{{ linha.podeAprovar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ linha.aprovar }}" disabled="{{ salvando }}" aria-label="{{ linha.rotuloAprovar }}" class="h-32 borda-0 cor-fff raio-6 p-0-12 fs-12 fw-600 fundo-0b7ea3" style="background:#0B7EA3">{{ linha.aprovarTexto }}</button></sc-if>
+          </span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semLinhas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-24-20 texto-center fs-14 cor-5b6b70">{{ semLinhasTexto }}</p></sc-if>
+  </section>
+  <div class="fs-12 cor-5b6b70 lh-1p5">Após a aprovação da direção, o relatório segue para a coordenação do núcleo. Devolvido ao oficineiro, volta para ajuste e precisa ser reenviado. Os meses fecham sozinhos depois do último dia.</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Base = window.FSM_BASE;
+const { dataDe, hmTs, dmTs, dmIso, cicloFimIso, mesTxt, prazoDe } = Base;
+const SITUACOES = {
+  fechado: ['Aguardando sua aprovação', 'var(--texto-08617e)', 'var(--fundo-e4f5fa)'],
+  aprovado_direcao: ['Aprovado · com a coordenação', 'var(--texto-1a3f9c)', 'var(--fundo-eff3fd)'],
+  aprovado_coordenacao: ['Aprovado pela coordenação', 'var(--texto-23773a)', 'var(--fundo-e2f2e5)'],
+  devolvido: ['Devolvido ao oficineiro', 'var(--texto-b42318)', 'var(--fundo-fbedeb)']
+};
+const etapa = (numero, titulo, situacao, estado) => ({
+  numero: 'ETAPA ' + numero,
+  titulo,
+  situacao,
+  fundo:
+    estado === 'feita' ? 'var(--fundo-e2f2e5)' : estado === 'atual' ? 'var(--fundo-e4f5fa)' : 'var(--fundo-f7fafb)',
+  borda: estado === 'feita' ? '#23773A' : estado === 'atual' ? '#0B7EA3' : 'var(--borda-dde6e8)',
+  cor: estado === 'feita' ? 'var(--texto-23773a)' : estado === 'atual' ? 'var(--texto-08617e)' : 'var(--texto-5b6b70)'
+});
+class Component extends DCLogic {
+  renderVals() {
+    const contexto = this.props.contexto;
+    const { hoje, relatorios } = contexto;
+    const { ciclo, lista } = relatorios;
+    const total = lista.length;
+    const fechados = lista.filter(r => r.status === 'fechado').length;
+    const devolvidos = lista.filter(r => r.status === 'devolvido').length;
+    const aprovadosDirecao = lista.filter(
+      r => r.status === 'aprovado_direcao' || r.status === 'aprovado_coordenacao'
+    ).length;
+    const aprovadosCoordenacao = lista.filter(r => r.status === 'aprovado_coordenacao').length;
+    const concluido = total && aprovadosCoordenacao === total;
+    const opcoesCiclo = [];
+    for (let k = 1; k <= 12; k++) {
+      const valor = contexto.cicloRelativo(-k);
+      opcoesCiclo.push({
+        valor,
+        rotulo: mesTxt(valor).charAt(0).toUpperCase() + mesTxt(valor).slice(1) + ' · ' + Base.cicloTxt(dataDe(valor))
+      });
+    }
+    return {
+      opacidade: relatorios.ocupado ? 0.6 : 1,
+      salvando: contexto.salvando,
+      ciclo,
+      opcoesCiclo,
+      escolherCiclo: e => relatorios.escolherCiclo(e.target.value),
+      etapas: [
+        etapa(
+          '1',
+          'Oficineiro fecha o ciclo',
+          !total
+            ? 'Nenhum relatório neste ciclo'
+            : devolvidos
+              ? devolvidos + ' devolvido(s) aguardando reenvio'
+              : 'Fechado em ' + dmIso(Base.iso(Base.add(dataDe(cicloFimIso(ciclo)), 1))),
+          total && !devolvidos ? 'feita' : devolvidos ? 'atual' : 'seguinte'
+        ),
+        etapa(
+          '2',
+          'Direção Escolar aprova',
+          !total
+            ? '—'
+            : fechados
+              ? fechados +
+                ' aguardando você · ' +
+                (hoje > prazoDe(ciclo) ? 'prazo vencido' : 'prazo ' + dmIso(prazoDe(ciclo)))
+              : devolvidos
+                ? 'Aguardando reenvio'
+                : 'Concluído',
+          !total ? 'seguinte' : fechados ? 'atual' : devolvidos ? 'seguinte' : 'feita'
+        ),
+        etapa(
+          '3',
+          'Coordenação do núcleo aprova',
+          !aprovadosDirecao
+            ? 'Depois da direção'
+            : aprovadosCoordenacao === total
+              ? 'Concluído'
+              : aprovadosDirecao - aprovadosCoordenacao + ' com a coordenação',
+          concluido ? 'feita' : aprovadosDirecao > aprovadosCoordenacao ? 'atual' : 'seguinte'
+        ),
+        etapa('4', 'Medição do ciclo', 'Horas e atividades entram na medição', concluido ? 'feita' : 'seguinte')
+      ],
+      linhas: lista.map(r => {
+        const situacao = SITUACOES[r.status] || SITUACOES.fechado;
+        const quem = r.devolvido_nome
+          ? ' por ' +
+            (r.devolvido_papel === 'direcao'
+              ? 'você'
+              : r.devolvido_papel === 'coordenador'
+                ? 'coordenação'
+                : r.devolvido_nome)
+          : '';
+        return {
+          nome: r.oficineiro,
+          fechamento:
+            r.status === 'devolvido'
+              ? 'devolvido' + (r.devolvido_em ? ' em ' + dmTs(r.devolvido_em) : '') + quem
+              : 'fechado em ' + dmTs(r.fechado_em) + (r.fechado_em ? ' · ' + hmTs(r.fechado_em) : ''),
+          dias: String(r.dias_presenca),
+          horas: Base.dur(r.validos_min || 0),
+          realizadas: String(r.realizadas),
+          naoRealizadas: String(r.nao_realizadas),
+          check: r.confirmadas + ' de ' + r.registradas,
+          checkCor: r.registradas && r.confirmadas === r.registradas ? 'var(--texto-23773a)' : 'var(--texto-9a6212)',
+          situacao: situacao[0],
+          situacaoCor: situacao[1],
+          situacaoFundo: situacao[2],
+          temObservacao: r.status === 'devolvido' ? !!r.motivo_devolucao : r.status !== 'fechado',
+          observacao:
+            r.status === 'devolvido'
+              ? r.motivo_devolucao || ''
+              : r.status === 'aprovado_direcao'
+                ? 'Aprovado por ' + (r.direcao_nome || 'direção') + (r.direcao_em ? ' em ' + dmTs(r.direcao_em) : '')
+                : r.status === 'aprovado_coordenacao'
+                  ? 'Aprovado pela coordenação' + (r.coordenacao_em ? ' em ' + dmTs(r.coordenacao_em) : '')
+                  : '',
+          podeAprovar: r.status === 'fechado',
+          aprovarTexto: 'Aprovar',
+          rotuloVer: 'Ver o relatório de ' + r.oficineiro,
+          rotuloAprovar: 'Aprovar o relatório de ' + r.oficineiro,
+          ver: () => relatorios.abrir(r.id),
+          aprovar: () => relatorios.aprovar(r)
+        };
+      }),
+      semLinhas: !total && !relatorios.ocupado,
+      semLinhasTexto: 'Nenhum relatório de ' + mesTxt(ciclo) + ' para os oficineiros desta escola.'
+    };
+  }
+}
+</script>
+</body>
+</html>

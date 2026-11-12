@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Coordenador do núcleo · Visão geral do sistema</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erro }}</div></sc-if>
+  <section aria-label="Resumo do sistema" class="duas-colunas-celular d-grid colunas-repeat-4-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="4">
+      <div class="borda-dde6e8 raio-12 p-16-18 d-flex eixo-column gap-4 fundo-ffffff" style="background:var(--fundo-ffffff)"><span class="fs-12 cor-5b6b70 fw-600">{{ indicador.titulo }}</span><b class="fs-26 lh-1p2">{{ indicador.valor }}</b><span class="fs-12 cor-5b6b70">{{ indicador.nota }}</span></div>
+    </sc-for>
+  </section>
+  <section class="espaco-celular borda-dde6e8 raio-12 p-18-20 d-flex eixo-column gap-12 fundo-ffffff" style="background:var(--fundo-ffffff)" aria-labelledby="adm-h-atencao">
+    <h3 id="adm-h-atencao" class="m-0 fs-15">Pontos de atenção</h3>
+    <sc-if value="{{ semPontosDeAtencao }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-13 cor-5b6b70">Nenhum ponto de atenção no momento.</p></sc-if>
+    <sc-for list="{{ pontosDeAtencao }}" as="ponto" hint-placeholder-count="3">
+      <div class="d-flex quebra-wrap alinha-center gap-8-16 borda-e-4-solid-e0a21b fundo-fdf6e7 raio-10 p-12-14">
+        <div class="flex-1 min-w-220 d-flex eixo-column gap-4"><b class="fs-14">{{ ponto.titulo }}</b><span class="fs-13 cor-34464d lh-1p5">{{ ponto.detalhe }}</span></div>
+        <button onClick="{{ ponto.abrir }}" class="h-36 borda-cfdadd fundo-ffffff raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-1a2b33 botao-secundario">{{ ponto.acao }}</button>
+      </div>
+    </sc-for>
+  </section>
+  <section aria-labelledby="adm-h-ultimas" class="borda-dde6e8 raio-12 rolagem-hidden fundo-ffffff" style="background:var(--fundo-ffffff)">
+    <div class="d-flex alinha-center gap-12 p-16-20 borda-b-dde6e8"><h3 id="adm-h-ultimas" class="m-0 fs-15 flex-1">Últimas alterações no sistema</h3><button onClick="{{ verAuditoria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-08617e fonte-inherit deco-underline botao-texto">Ver auditoria completa</button></div>
+    <sc-if value="{{ semAlteracoes }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-16-20 fs-13 cor-5b6b70">Nenhuma alteração registrada ainda.</p></sc-if>
+    <sc-for list="{{ alteracoes }}" as="registro" hint-placeholder-count="5">
+      <button onClick="{{ registro.abrir }}" aria-haspopup="dialog" aria-label="{{ registro.aria }}" class="adm-linha d-grid gap-4-12 w-100pc texto-left fundo-ffffff p-12-20 fs-13 fonte-inherit cor-1a2b33 largura-fundo" style="grid-template-columns:150px minmax(0,1fr) minmax(0,1.2fr);border:0;border-bottom:1px solid var(--borda-e8eef0);cursor:pointer"><span class="cor-5b6b70">{{ registro.quando }}</span><b class="fw-600">{{ registro.acao }} · {{ registro.onde }}</b><span class="cor-34464d quebra-palavra-anywhere">{{ registro.quem }}</span></button>
+    </sc-for>
+  </section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const contexto = this.props.contexto;
+    const { ativas, escAtivas, turmas, escs, contasDoSistema, audLinha } = contexto;
+    const dias = v => (v ? Math.floor((Date.now() - new Date(v).getTime()) / 86400000) : null);
+    const semAcesso = ativas
+      .filter(c => !c.eu && !c.primeiro_acesso && (dias(c.ultimo_acesso) === null || dias(c.ultimo_acesso) >= 30))
+      .sort((a, b) => (dias(b.ultimo_acesso) ?? 99999) - (dias(a.ultimo_acesso) ?? 99999));
+    const escSemLoc = escAtivas.filter(e => e.latitude == null || !e.posicao_confirmada);
+    const turmasSemMatr = turmas.filter(
+      t => t.matriculados == null && (escs.find(e => e.id === t.escola_id) || {}).ativa !== false
+    );
+    return {
+      opacidade: contexto.carregandoSistema ? 0.6 : 1,
+      temErro: !!contexto.erroSistema,
+      erro: contexto.erroSistema,
+      indicadores: [
+        ['Contas ativas', String(ativas.length), contasDoSistema.length - ativas.length + ' desativadas'],
+        [
+          'Aguardando 1º acesso',
+          String(ativas.filter(c => c.primeiro_acesso).length),
+          'contas criadas que ainda não entraram'
+        ],
+        ['Sem acesso há 30 dias', String(semAcesso.length), 'contas ativas paradas'],
+        ['Escolas ativas', String(escAtivas.length), escSemLoc.length + ' sem localização confirmada']
+      ].map(([l, v, x]) => ({ titulo: l, valor: v, nota: x })),
+      pontosDeAtencao: [
+        ...(escSemLoc.length
+          ? [
+              {
+                titulo:
+                  escSemLoc.length === 1
+                    ? '1 escola sem localização confirmada'
+                    : escSemLoc.length + ' escolas sem localização confirmada',
+                detalhe: escSemLoc.map(e => e.sigla).join(', ') + '. Sem a localização, a presença não confere o raio.',
+                acao: 'Abrir escolas',
+                abrir: () => contexto.setState({ tela: 'escolas' })
+              }
+            ]
+          : []),
+        ...(turmasSemMatr.length
+          ? [
+              {
+                titulo:
+                  turmasSemMatr.length === 1
+                    ? '1 turma sem número de matriculados'
+                    : turmasSemMatr.length + ' turmas sem número de matriculados',
+                detalhe: 'O oficineiro precisa digitar os matriculados a cada registro dessas turmas.',
+                acao: 'Abrir escolas',
+                abrir: () => contexto.setState({ tela: 'escolas' })
+              }
+            ]
+          : []),
+        ...(semAcesso.length
+          ? [
+              {
+                titulo:
+                  semAcesso.length === 1
+                    ? '1 conta ativa sem acesso há 30 dias ou mais'
+                    : semAcesso.length + ' contas ativas sem acesso há 30 dias ou mais',
+                detalhe:
+                  semAcesso
+                    .slice(0, 6)
+                    .map(
+                      c =>
+                        c.nome.split(' ')[0] + (c.ultimo_acesso ? ' (' + dias(c.ultimo_acesso) + ' dias)' : ' (nunca)')
+                    )
+                    .join(', ') +
+                  (semAcesso.length > 6 ? ' e outras' : '') +
+                  '. Confira se ainda precisam do acesso.',
+                acao: 'Abrir contas',
+                abrir: () =>
+                  contexto.setState({ tela: 'contas', situacaoFiltro: 'ativa' }, () => contexto.carregarContas())
+              }
+            ]
+          : [])
+      ],
+      semPontosDeAtencao: !escSemLoc.length && !turmasSemMatr.length && !semAcesso.length,
+      alteracoes: (contexto.auditoria || []).slice(0, 8).map(audLinha),
+      semAlteracoes: !(contexto.auditoria || []).length,
+      verAuditoria: () => contexto.setState({ tela: 'auditoria' }, () => contexto.carregarAtividadesDoSistema())
+    };
+  }
+}
+</script>
+</body>
+</html>

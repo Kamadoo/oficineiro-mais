@@ -1,0 +1,20 @@
+{
+  "name": "oficineiro-mais",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gestão das oficinas nas escolas da rede municipal: presença, grade, registro de aulas, relatórios e visitas de campo.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "python scripts/build.py",
+    "serve": "python scripts/serve.py",
+    "lint": "eslint .",
+    "format:check": "prettier --check \"src/lib/*.js\" eslint.config.js",
+    "privacy": "python scripts/privacy_check.py"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
+    "prettier": "^3.3.0"
+  }
+}

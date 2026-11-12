@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Coordenador do núcleo · Gestão de Contas</title>
+<script src="./runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <sc-if value="{{ conectado }}" hint-placeholder-val="{{ false }}">
+  <div class="filtros d-flex gap-8-10 alinha-center quebra-wrap" role="search" aria-label="Filtrar contas">
+    <input id="ct-busca" type="search" class="largura-total-celular h-40 borda-cfdadd raio-8 p-0-12 fs-14 fonte-inherit min-w-260 max-w-360" style="flex:1 1 260px" value="{{ busca }}" onChange="{{ buscar }}" placeholder="Buscar por nome ou login" aria-label="Buscar por nome ou login" autocomplete="off"></input>
+    <select value="{{ perfil }}" onChange="{{ escolherPerfil }}" aria-label="Perfil" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit max-w-240 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todos os perfis</option><sc-for list="{{ opcoesDePerfil }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select value="{{ escola }}" onChange="{{ escolherEscola }}" aria-label="Escola" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit max-w-240 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as escolas</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select value="{{ situacao }}" onChange="{{ escolherSituacao }}" aria-label="Situação" class="h-40 borda-cfdadd raio-8 p-0-10 fs-14 fonte-inherit max-w-220 largura-fundo fundo-ffffff" style="background:var(--fundo-ffffff)"><option value="">Todas as situações</option><option value="ativa">Ativos</option><option value="primeiro">Aguardando 1º acesso</option><option value="desativada">Desativados</option></select>
+    <div class="oculto-celular flex-1"></div>
+    <sc-if value="{{ ehAdmin }}" hint-placeholder-val="{{ false }}"><button class="largura-total-celular h-40 borda-1-solid-0b7ea3 fundo-ffffff cor-08617e raio-8 p-0-14 fs-14 fw-600 fonte-inherit" onClick="{{ abrirLote }}" aria-haspopup="dialog">Criar contas em lote</button></sc-if>
+    <button class="largura-total-celular h-40 borda-0 cor-fff raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-0b7ea3" style="background:#0B7EA3" onClick="{{ novaConta }}" aria-haspopup="dialog">+ Novo usuário</button>
+  </div>
+  <div role="status" aria-live="polite" class="d-flex quebra-wrap alinha-center gap-4-12 fs-13 cor-5b6b70 min-h-20"><span>{{ resumo }}</span><sc-if value="{{ temFiltro }}" hint-placeholder-val="{{ false }}"><button onClick="{{ limparFiltros }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-08617e deco-underline fonte-inherit botao-texto" style="cursor:pointer">Limpar filtros</button></sc-if></div>
+  <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-fbedeb cor-7a1f17 raio-10 p-12-14 fs-13">{{ erro }}</div></sc-if>
+  <section class="au-tabela borda-dde6e8 raio-12 rolagem-auto fundo-ffffff" style="background:var(--fundo-ffffff);opacity:{{ opacidade }}" aria-labelledby="ct-h-lista">
+    <h3 id="ct-h-lista" class="sr-only">Contas de usuário</h3>
+    <div role="table" aria-labelledby="ct-h-lista" class="min-w-900">
+      <div role="row" class="ct-cab d-grid gap-10 p-12-20 fs-12 fw-600 cor-5b6b70 borda-b-dde6e8" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1.3fr) minmax(0,1.7fr) 150px 128px"><span role="columnheader">Nome</span><span role="columnheader">Login</span><span role="columnheader">Perfil</span><span role="columnheader">Escola de atuação</span><span role="columnheader">Status</span><span role="columnheader"><span class="sr-only">Ações</span></span></div>
+      <sc-for list="{{ contas }}" as="conta" hint-placeholder-count="6">
+        <div role="row" class="ct-linha d-grid gap-6-10 p-12-20 fs-13 borda-b-e8eef0 alinha-center" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1.3fr) minmax(0,1.7fr) 150px 128px">
+          <span role="cell" class="ct-larga d-flex eixo-column alinha-flex-start gap-2 min-w-0"><button onClick="{{ conta.abrir }}" aria-haspopup="dialog" aria-label="{{ conta.aria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-14 fw-600 cor-1a2b33 texto-left fonte-inherit sublinha-3 botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:#CFDADD">{{ conta.nome }}</button><sc-if value="{{ conta.temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70">{{ conta.nota }}</span></sc-if></span>
+          <span role="cell" class="min-w-0 quebra-palavra-anywhere"><sc-if value="{{ conta.semLogin }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-5b6b70">definido no 1º acesso</span></sc-if><span class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ conta.login }}</span></span>
+          <span role="cell">{{ conta.perfil }}</span>
+          <span role="cell" class="fs-12 min-w-0">{{ conta.atuacao }}</span>
+          <span role="cell"><span class="d-inline-block fs-12 fw-600 p-2-8 raio-999" style="color:{{ conta.situacaoCor }};background:{{ conta.situacaoFundo }}">{{ conta.situacao }}</span></span>
+          <span role="cell"><sc-if value="{{ conta.podeEscola }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.alterar }}" aria-haspopup="dialog" aria-label="{{ conta.ariaEscola }}" class="h-32 borda-cfdadd fundo-ffffff raio-6 p-0-10 fs-12 fw-600 fonte-inherit cor-1a2b33 botao-secundario">Alterar escola</button></sc-if></span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ carregando }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-18-20 fs-13 cor-5b6b70">Carregando contas…</p></sc-if>
+    <sc-if value="{{ semContas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-18-20 fs-13 cor-5b6b70">Nenhuma conta encontrada com esses filtros.</p></sc-if>
+    <sc-if value="{{ temMais }}" hint-placeholder-val="{{ false }}"><div class="p-12-20"><button onClick="{{ mostrarMais }}" class="h-40 borda-cfdadd fundo-ffffff raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-1a2b33 botao-secundario">{{ maisTexto }}</button></div></sc-if>
+  </section>
+  </sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const contexto = this.props.contexto;
+    const {
+      escolaPorId,
+      situacaoDaConta,
+      SITUACOES_DE_CONTA,
+      NOMES_DE_PERFIL,
+      atuacaoDaConta,
+      dataBr,
+      podeGerir,
+      abrirMudanca
+    } = contexto;
+    const normalizar = t =>
+      String(t || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    const termoDaBusca = normalizar(contexto.buscaDeContas.trim());
+    const escolaDoFiltro = escolaPorId[contexto.escolaFiltro];
+    const contasFiltradas = contexto.contas.filter(
+      c =>
+        (!termoDaBusca || normalizar(c.nome).includes(termoDaBusca) || normalizar(c.usuario).includes(termoDaBusca)) &&
+        (!contexto.perfilFiltro || c.papel === contexto.perfilFiltro) &&
+        (!contexto.situacaoFiltro || situacaoDaConta(c) === contexto.situacaoFiltro) &&
+        (!contexto.escolaFiltro ||
+          String(c.escola_id) === contexto.escolaFiltro ||
+          String(c.mudanca_escola) === contexto.escolaFiltro ||
+          (c.papel === 'analista' && escolaDoFiltro && escolaDoFiltro.carteira_id === c.carteira_id))
+    );
+    const contasNaSituacao = k => contexto.contas.filter(c => situacaoDaConta(c) === k).length;
+    const plural = (n, um, varios) => n + ' ' + (n === 1 ? um : varios);
+    const resumo = contexto.contas.length
+      ? [
+          plural(contexto.contas.length, 'conta', 'contas'),
+          plural(contasNaSituacao('primeiro'), 'aguardando 1º acesso', 'aguardando 1º acesso'),
+          plural(contasNaSituacao('desativada'), 'desativada', 'desativadas')
+        ].join(' · ') +
+        (contasFiltradas.length !== contexto.contas.length
+          ? ' · ' + plural(contasFiltradas.length, 'encontrada com os filtros', 'encontradas com os filtros')
+          : '')
+      : '';
+    const abrirConta = c => contexto.abrirGavetaDeConta({ contaAberta: c.id }, 'ct-det-titulo');
+    const linhasDeContas = contasFiltradas.slice(0, contexto.limiteDeContas).map(c => {
+      const st = SITUACOES_DE_CONTA[situacaoDaConta(c)];
+      return {
+        nome: c.nome,
+        aria: 'Ver detalhes da conta de ' + c.nome,
+        login: c.usuario || '',
+        semLogin: !c.usuario,
+        perfil: NOMES_DE_PERFIL[c.papel] || c.papel,
+        atuacao: atuacaoDaConta(c),
+        nota: c.eu
+          ? 'sua conta'
+          : c.mudanca_escola
+            ? 'muda para ' +
+              ((escolaPorId[String(c.mudanca_escola)] || {}).sigla || 'outra escola') +
+              ' em ' +
+              dataBr(c.mudanca_vale)
+            : '',
+        temNota: !!(c.eu || c.mudanca_escola),
+        situacao: st[0],
+        situacaoCor: st[1],
+        situacaoFundo: st[2],
+        podeEscola: podeGerir(c) && c.papel === 'oficineiro' && c.ativo,
+        ariaEscola: 'Alterar a escola de ' + c.nome,
+        abrir: () => abrirConta(c),
+        alterar: () => abrirMudanca(c)
+      };
+    });
+    return {
+      abrirLote: () => contexto.abrirLote(),
+      ehAdmin: !!contexto.ehAdmin,
+      conectado: contexto.conectado,
+      resumo,
+      contas: linhasDeContas,
+      opacidade: contexto.carregandoContas ? 0.6 : 1,
+      carregando: contexto.carregandoContas && !contexto.contasCarregadas,
+      semContas:
+        contexto.contasCarregadas && !contexto.carregandoContas && !contexto.erroContas && contasFiltradas.length === 0,
+      erro: contexto.erroContas,
+      temErro: !!contexto.erroContas,
+      temMais: contasFiltradas.length > contexto.limiteDeContas,
+      maisTexto:
+        'Mostrar mais ' +
+        Math.min(50, contasFiltradas.length - contexto.limiteDeContas) +
+        ' de ' +
+        (contasFiltradas.length - contexto.limiteDeContas) +
+        ' restantes',
+      mostrarMais: () => contexto.setState({ limiteDeContas: contexto.limiteDeContas + 50 }),
+      busca: contexto.buscaDeContas,
+      buscar: e => contexto.setState({ buscaDeContas: e.target.value, limiteDeContas: 50 }),
+      perfil: contexto.perfilFiltro,
+      escolherPerfil: e => contexto.setState({ perfilFiltro: e.target.value, limiteDeContas: 50 }),
+      opcoesDePerfil: [
+        ['oficineiro', 'Oficineiro de Inclusão Digital'],
+        ['analista', 'Analista'],
+        ['direcao', 'Direção da escola'],
+        ['coordenador', 'Coordenador'],
+        ['gerente', 'Gerente de Projetos']
+      ]
+        .filter(([v]) => contexto.ehAdmin || v === 'oficineiro' || v === 'direcao')
+        .map(([v, l]) => ({ valor: v, rotulo: l })),
+      escola: contexto.escolaFiltro,
+      escolherEscola: e => contexto.setState({ escolaFiltro: e.target.value, limiteDeContas: 50 }),
+      situacao: contexto.situacaoFiltro,
+      escolherSituacao: e => contexto.setState({ situacaoFiltro: e.target.value, limiteDeContas: 50 }),
+      opcoesDeEscola: (contexto.escolas || []).map(e => ({ valor: String(e.id), rotulo: e.nome })),
+      limparFiltros: () =>
+        contexto.setState({
+          buscaDeContas: '',
+          perfilFiltro: '',
+          escolaFiltro: '',
+          situacaoFiltro: '',
+          limiteDeContas: 50
+        }),
+      temFiltro: !!(
+        contexto.buscaDeContas ||
+        contexto.perfilFiltro ||
+        contexto.escolaFiltro ||
+        contexto.situacaoFiltro
+      ),
+      novaConta: () =>
+        contexto.abrirGavetaDeConta(
+          {
+            novaConta: {
+              nome: '',
+              telefone: '',
+              email: '',
+              cpf: '',
+              papel: 'oficineiro',
+              escola: '',
+              carteira: '',
+              jornada: '07:00'
+            }
+          },
+          'ct-nv-nome'
+        )
+    };
+  }
+}
+</script>
+</body>
+</html>
