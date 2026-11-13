@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Gerente de Projetos · Gavetas</title>
+<script src="../vendor/dc-runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ contaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharConta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="ct-det-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(520px,100%);width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Conta de usuário</span><h3 id="ct-det-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ conta.nome }}</h3></div><button onClick="{{ fecharConta }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ conta.itens }}" as="item" hint-placeholder-count="6"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
+      <sc-if value="{{ conta.podeJornada }}" hint-placeholder-val="{{ false }}">
+        <div class="d-flex eixo-column gap-8 fundo-cinza-20 raio-10 p-12-14">
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">CNPJ ou CPF da contratada</span><input id="ct-det-contratada" value="{{ conta.contratada }}" onChange="{{ conta.escreverContratada }}" placeholder="{{ conta.contratadaAtual }}" inputmode="numeric" maxlength="18" autocomplete="off" aria-describedby="ct-det-contratada-dica" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
+          <span id="ct-det-contratada-dica" class="fs-12 cor-cinza-600 lh-1p45">Pessoa jurídica ou física contratada para o serviço. Fica protegido: aqui aparece mascarado e sai completo só no relatório de presença e atividades do oficineiro. Para remover, apague o campo e salve.</span>
+          <sc-if value="{{ conta.contratadaMudou }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.salvarContratada }}" disabled="{{ conta.salvandoContratada }}" class="alinha-si-flex-start h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">{{ conta.contratadaBotao }}</button></sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{ conta.temMudanca }}" hint-placeholder-val="{{ false }}"><div class="fundo-azul-40 raio-10 p-12-14 d-flex eixo-column gap-8 alinha-flex-start"><span class="fs-13 cor-azul-640 lh-1p5"><b>Mudança de escola agendada.</b> {{ conta.mudancaTexto }}</span><sc-if value="{{ conta.pode }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.cancelarMudanca }}" disabled="{{ salvandoConta }}" class="h-34 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar mudança agendada</button></sc-if></div></sc-if>
+      <sc-if value="{{ conta.naoPode }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-12 cor-cinza-600 lh-1p45">{{ conta.motivo }}</p></sc-if>
+      <sc-if value="{{ confirmandoDesativacao }}" hint-placeholder-val="{{ false }}"><div role="group" aria-label="Confirmar desativação" class="fundo-vermelho-50 raio-10 p-14 d-flex eixo-column gap-10"><span class="fs-13 cor-vermelho-720 lh-1p5">A pessoa perde o acesso na hora. Presenças, grades e registros são mantidos e a conta pode ser reativada em até 30 dias. Depois disso, a conta é apagada automaticamente e o histórico fica como “Conta removida”.</span><div class="d-flex gap-8 quebra-wrap"><button id="ct-det-confirma" onClick="{{ conta.confirmar }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 fundo-vermelho-600 cor-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit">Confirmar desativação</button><button onClick="{{ conta.voltar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Voltar</button></div></div></sc-if>
+      <sc-if value="{{ temErroConta }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroConta }}</div></sc-if>
+    </div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+      <sc-if value="{{ conta.podeDesativar }}" hint-placeholder-val="{{ false }}"><button id="ct-det-desativar" onClick="{{ conta.desativar }}" disabled="{{ salvandoConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-vermelho-600 mr-auto botao-secundario">Desativar conta</button></sc-if>
+      <sc-if value="{{ conta.podeReativar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.reativar }}" disabled="{{ salvandoConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 mr-auto botao-secundario">Reativar conta</button></sc-if>
+      <sc-if value="{{ conta.podeEscola }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.alterar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Alterar escola</button></sc-if>
+      <button onClick="{{ fecharConta }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">Fechar</button>
+    </div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ novaVisitaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharNovaVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="vs-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Vincular visita a analista</span><h3 id="vs-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ novaVisita.titulo }}</h3></div><button onClick="{{ fecharNovaVisita }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <sc-if value="{{ novaVisita.temDiagnostico }}" hint-placeholder-val="{{ false }}"><div class="fundo-cinza-20 raio-10 p-12-14 fs-13 lh-1p5 cor-cinza-750">{{ novaVisita.diagnostico }}</div></sc-if>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Analista *</span><select id="vs-analista" value="{{ novaVisita.analista }}" onChange="{{ novaVisita.escolherAnalista }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha o analista</option><sc-for list="{{ opcoesDeAnalista }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Escola * <span class="fw-400">(da carteira do analista)</span></span><select id="vs-escola" value="{{ novaVisita.escola }}" onChange="{{ novaVisita.escolherEscola }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscolaDaVisita }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Data *</span><input id="vs-data" type="date" value="{{ novaVisita.data }}" min="{{ dataMinima }}" max="{{ dataMaxima }}" onChange="{{ novaVisita.escolherData }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Horário</span><input type="time" value="{{ novaVisita.hora }}" onChange="{{ novaVisita.escolherHora }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
+      </div>
+      <div class="d-flex eixo-column gap-8"><span id="vs-origem-rot" class="fs-12 cor-cinza-600 fw-600">Origem da visita *</span><div role="radiogroup" aria-labelledby="vs-origem-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ novaVisitaOrigens }}" as="origem" hint-placeholder-count="4"><button role="radio" aria-checked="{{ origem.marcado }}" onClick="{{ origem.escolher }}" class="raio-8 p-8-12 fs-13 fw-500 botao-opcao {{ origem.classe }}" style="border:1.5px solid {{ origem.borda }};background:{{ origem.fundo }};color:{{ origem.cor }}">{{ origem.rotulo }}</button></sc-for></div></div>
+      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Tipo de atendimento</span><select value="{{ novaVisita.tipo }}" onChange="{{ novaVisita.escolherTipo }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ novaVisitaTipos }}" as="tipo" hint-placeholder-count="4"><option value="{{ tipo }}">{{ tipo }}</option></sc-for></select></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Detalhe do atendimento</span><select value="{{ novaVisita.detalhe }}" onChange="{{ novaVisita.escolherDetalhe }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><option value="">Sem detalhe</option><sc-for list="{{ novaVisitaDetalhes }}" as="detalhe" hint-placeholder-count="4"><option value="{{ detalhe }}">{{ detalhe }}</option></sc-for></select></label>
+      </div>
+      <div class="d-flex eixo-column gap-8"><span id="vs-foco-rot" class="fs-12 cor-cinza-600 fw-600">Foco da visita</span><div role="group" aria-labelledby="vs-foco-rot" class="d-flex quebra-wrap gap-6"><sc-for list="{{ novaVisitaFocos }}" as="foco" hint-placeholder-count="4"><button aria-pressed="{{ foco.marcado }}" onClick="{{ foco.escolher }}" class="h-32 raio-999 p-0-12 fs-13 fw-500 botao-texto {{ foco.classe }}" style="border:1px solid {{ foco.borda }};background:{{ foco.fundo }};color:{{ foco.cor }}">{{ foco.rotulo }}</button></sc-for></div></div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Orientação para o analista</span><textarea id="vs-orientacao" rows="4" value="{{ novaVisita.orientacao }}" onChange="{{ novaVisita.escreverOrientacao }}" maxlength="1000" placeholder="ex.: execução abaixo de 60% e ocorrências de internet recorrentes" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+      <div class="fundo-cinza-20 raio-10 p-12-14 fs-12 cor-cinza-750 lh-1p55">A visita entra na agenda do analista. Quando ele registrar a visita, ela aparece como realizada aqui.</div>
+      <sc-if value="{{ temErroNovaVisita }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroNovaVisita }}</div></sc-if>
+    </div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharNovaVisita }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ salvarNovaVisita }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ novaVisitaBotao }}</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ visitaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="vd-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(440px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">{{ visita.rotulo }}</span><h3 id="vd-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ visita.titulo }}</h3></div><button onClick="{{ fecharVisita }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <span class="alinha-si-flex-start fs-12 fw-600 p-3-10 raio-999" style="color:{{ visita.situacaoCor }};background:{{ visita.situacaoFundo }}">{{ visita.situacao }}</span>
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ visita.itens }}" as="item" hint-placeholder-count="5"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></sc-for></dl>
+      <sc-if value="{{ visita.temRelatorio }}" hint-placeholder-val="{{ false }}"><section aria-labelledby="vd-rel-h" class="borda-t-cinza-75 pt-14 d-flex eixo-column gap-10"><h4 id="vd-rel-h" class="m-0 fs-14">Relatório da visita</h4><dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ visita.relatorio }}" as="item" hint-placeholder-count="5"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere espaco-pre-line lh-1p5">{{ item.valor }}</dd></sc-for></dl></section></sc-if>
+      <sc-if value="{{ confirmandoCancelamento }}" hint-placeholder-val="{{ false }}"><div role="group" aria-label="Confirmar cancelamento" class="fundo-vermelho-50 raio-10 p-14 d-flex eixo-column gap-10"><span class="fs-13 cor-vermelho-720 lh-1p5">A visita sai da agenda do analista. Continuar?</span><div class="d-flex gap-8 quebra-wrap"><button id="vd-confirma" onClick="{{ visita.cancelar }}" disabled="{{ salvando }}" class="h-36 borda-0 fundo-vermelho-600 cor-branco raio-8 p-0-14 fs-13 fw-600">Cancelar a visita</button><button onClick="{{ visita.voltar }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 cor-ciano-850 botao-secundario">Manter</button></div></div></sc-if>
+    </div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><sc-if value="{{ visita.podeCancelar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visita.perguntar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-vermelho-600 mr-auto botao-secundario">Cancelar visita</button></sc-if><button onClick="{{ fecharVisita }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Fechar</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ registroAberto }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharRegistro }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="rg-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(500px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">{{ registro.oficineiro }} · somente visualização</span><h3 id="rg-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ registro.titulo }}</h3></div><button onClick="{{ fecharRegistro }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <div class="d-flex quebra-wrap gap-6"><span class="fs-12 fw-600 p-3-8 raio-4" style="color:{{ registro.tipoCor }};background:{{ registro.tipoFundo }}">{{ registro.tipo }}</span><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ registro.situacaoCor }};background:{{ registro.situacaoFundo }}">{{ registro.situacao }}</span></div>
+      <dl class="m-0 d-grid colunas-minmax-0-1fr-minmax-0-1fr gap-12-16">
+        <sc-for list="{{ registro.itens }}" as="item" hint-placeholder-count="6"><div class="d-flex eixo-column gap-2 min-w-0" style="grid-column:{{ item.coluna }}"><dt class="fs-12 cor-cinza-600 fw-600">{{ item.rotulo }}</dt><dd class="m-0 fs-14 lh-1p5 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></div></sc-for>
+      </dl>
+    </div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharRegistro }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Fechar</button></div>
+  </aside>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return this.props.gavetas;
+  }
+}
+</script>
+</body>
+</html>

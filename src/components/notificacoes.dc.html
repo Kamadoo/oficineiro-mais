@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Notificações</title>
+<script src="../vendor/dc-runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ notifAberto }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharNotif }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-label="Notificações" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(440px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><h3 class="m-0 fs-17 flex-1">Notificações</h3><button onClick="{{ fecharNotif }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-12 rolagem-auto flex-1">
+      <sc-if value="{{ temVariasNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex justifica-flex-end"><button onClick="{{ lerTodasNotif }}" class="h-34 borda-0 fundo-transparent cor-ciano-660 fs-13 fw-600 p-0-4 botao-texto">Marcar todas como lidas</button></div></sc-if>
+      <sc-if value="{{ semNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column alinha-center gap-6 p-32-12 texto-center"><b class="fs-15">Tudo em dia</b><span class="fs-13 cor-cinza-600">Nenhuma notificação nova.</span></div></sc-if>
+      <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="3">
+        <div class="raio-10 p-12-14 d-flex eixo-column gap-6 fundo-branco largura-fundo" style="border:1px solid var(--borda-cinza-110);border-left:4px solid {{ n.cor }}">
+          <b class="fs-14">{{ n.tit }}</b>
+          <span class="fs-13 cor-cinza-750 lh-1p5">{{ n.txt }}</span>
+          <div class="d-flex quebra-wrap gap-8 mt-2"><sc-if value="{{ n.temAcao }}" hint-placeholder-val="{{ true }}"><button onClick="{{ n.go }}" class="h-36 borda-1-solid-0b7ea3 fundo-branco cor-ciano-740 raio-8 p-0-12 fs-13 fw-600">{{ n.acao }}</button></sc-if><button onClick="{{ n.marcarLida }}" aria-label="{{ n.ariaLida }}" class="h-36 borda-cinza-160 fundo-branco cor-cinza-750 raio-8 p-0-12 fs-13 fw-600 botao-secundario">Marcar como lida</button></div>
+        </div>
+      </sc-for>
+    </div>
+  </aside>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return this.props.gavetas;
+  }
+}
+</script>
+</body>
+</html>

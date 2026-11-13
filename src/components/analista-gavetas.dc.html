@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Analista · Gavetas</title>
+<script src="../vendor/dc-runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ novaVisitaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharNovaVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="nv-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Agenda</span><h3 id="nv-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">Nova visita</h3></div><button onClick="{{ fecharNovaVisita }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <sc-if value="{{ novaVisita.temDiagnostico }}" hint-placeholder-val="{{ false }}"><div class="fundo-cinza-20 raio-10 p-12-14 fs-13 lh-1p5 cor-cinza-750">{{ novaVisita.diagnostico }}</div></sc-if>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Escola *</span><select id="nv-escola" value="{{ novaVisita.escola }}" onChange="{{ novaVisita.escolherEscola }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Data *</span><input id="nv-data" type="date" value="{{ novaVisita.data }}" min="{{ dataMinima }}" max="{{ dataMaxima }}" onChange="{{ novaVisita.escolherData }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Horário</span><input type="time" value="{{ novaVisita.hora }}" onChange="{{ novaVisita.escolherHora }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
+      </div>
+      <div class="d-flex eixo-column gap-8"><span id="nv-origem-rot" class="fs-12 cor-cinza-600 fw-600">Origem da visita *</span><div role="radiogroup" aria-labelledby="nv-origem-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ novaVisitaOrigens }}" as="origem" hint-placeholder-count="2"><button role="radio" aria-checked="{{ origem.marcado }}" onClick="{{ origem.escolher }}" class="raio-8 p-8-12 fs-13 fw-500 botao-opcao {{ origem.classe }}" style="border:1.5px solid {{ origem.borda }};background:{{ origem.fundo }};color:{{ origem.cor }}">{{ origem.rotulo }}</button></sc-for></div></div>
+      <div class="d-flex eixo-column gap-8"><span id="nv-tipo-rot" class="fs-12 cor-cinza-600 fw-600">Tipo de atendimento</span>
+        <div role="radiogroup" aria-labelledby="nv-tipo-rot" class="d-flex quebra-wrap gap-4 fundo-cinza-90 p-4 raio-10 alinha-si-flex-start segmentado"><sc-for list="{{ novaVisitaTipos }}" as="tipo" hint-placeholder-count="4"><button role="radio" aria-checked="{{ tipo.marcado }}" onClick="{{ tipo.escolher }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 {{ tipo.classe }}" style="background:{{ tipo.fundo }};color:{{ tipo.cor }}">{{ tipo.rotulo }}</button></sc-for></div>
+        <div role="radiogroup" aria-label="Detalhe do atendimento" class="d-flex quebra-wrap gap-8"><sc-for list="{{ novaVisitaDetalhes }}" as="detalhe" hint-placeholder-count="4"><button role="radio" aria-checked="{{ detalhe.marcado }}" onClick="{{ detalhe.escolher }}" class="raio-999 p-6-12 fs-13 fw-500 botao-opcao {{ detalhe.classe }}" style="border:1.5px solid {{ detalhe.borda }};background:{{ detalhe.fundo }};color:{{ detalhe.cor }}">{{ detalhe.rotulo }}</button></sc-for></div>
+      </div>
+      <div class="d-flex eixo-column gap-8"><span id="nv-foco-rot" class="fs-12 cor-cinza-600 fw-600">Foco da visita</span><div role="group" aria-labelledby="nv-foco-rot" class="d-flex quebra-wrap gap-6"><sc-for list="{{ novaVisitaFocos }}" as="foco" hint-placeholder-count="4"><button aria-pressed="{{ foco.marcado }}" onClick="{{ foco.escolher }}" class="h-32 raio-999 p-0-12 fs-13 fw-500 botao-texto {{ foco.classe }}" style="border:1px solid {{ foco.borda }};background:{{ foco.fundo }};color:{{ foco.cor }}">{{ foco.rotulo }}</button></sc-for></div></div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Observação</span><textarea rows="3" value="{{ novaVisita.orientacao }}" onChange="{{ novaVisita.escreverOrientacao }}" maxlength="1000" placeholder="ex.: pedido da direção para apoiar o 5º ano no Matific" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+      <sc-if value="{{ temErroNovaVisita }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroNovaVisita }}</div></sc-if>
+    </div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharNovaVisita }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ salvarNovaVisita }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ novaVisitaBotao }}</button></div>
+  </aside>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return this.props.gavetas;
+  }
+}
+</script>
+</body>
+</html>

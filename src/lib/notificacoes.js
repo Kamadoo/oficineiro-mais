@@ -1,6 +1,12 @@
 window.FSM_NOTIF = (() => {
   'use strict';
 
+  const CHAVES_DA_GAVETA = ['fecharNotif', 'lerTodasNotif', 'notifAberto', 'notifs', 'semNotif', 'temVariasNotif'];
+
+  function chavesDaGaveta(chaves) {
+    return window.FSM_BASE.escolher(chaves, CHAVES_DA_GAVETA);
+  }
+
   function usuario(perfil) {
     const A = window.FSM_AUTH;
     const id = A && A.usuarioId ? A.usuarioId() : '';
@@ -77,5 +83,5 @@ window.FSM_NOTIF = (() => {
     };
   }
 
-  return { usuario, chave, ler, gravar, sino };
+  return { usuario, chave, ler, gravar, sino, chavesDaGaveta };
 })();

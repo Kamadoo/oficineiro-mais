@@ -436,6 +436,11 @@ window.FSM_BASE = (() => {
     const minutos = trabalhados === undefined ? presenca.trabalhado_min : trabalhados;
     return Math.min(minutos || 0, MINUTOS_DO_DIA);
   }
+  function escolher(objeto, chaves) {
+    const escolhido = {};
+    chaves.forEach(chave => (escolhido[chave] = objeto[chave]));
+    return escolhido;
+  }
   function segmento(marcado) {
     return {
       classe: marcado ? 'fundo-branco' : 'fundo-transparent',
@@ -658,6 +663,7 @@ window.FSM_BASE = (() => {
     minutosValidos,
     estiloOpcao,
     segmento,
+    escolher,
     MINUTOS_DO_DIA,
     dmyIso,
     mesIni,

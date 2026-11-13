@@ -68,23 +68,7 @@
 
   <main class="min-w-0 d-flex eixo-column">
     <dc-import name="cabecalho" espacamento="gap-12-16 p-10-28" blocoClasse="cabecalho-titulo min-w-0" trilha="{{ trilha }}" cortaTrilha="{{ true }}" tituloClasse="espaco-nowrap rolagem-hidden reticencias-ellipsis" abrirMenu="{{ abrirMenu }}" titulo="{{ titulo }}" abrirNotif="{{ abrirNotif }}" notifAria="{{ notifAria }}" temNotif="{{ temNotif }}" notifN="{{ notifN }}"></dc-import>
-<sc-if value="{{ notifAberto }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharNotif }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-label="Notificações" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(440px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><h3 class="m-0 fs-17 flex-1">Notificações</h3><button onClick="{{ fecharNotif }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 largura-fundo">×</button></div>
-    <div class="p-20 d-flex eixo-column gap-12 rolagem-auto flex-1">
-      <sc-if value="{{ temVariasNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex justifica-flex-end"><button onClick="{{ lerTodasNotif }}" class="h-34 borda-0 fundo-transparent cor-ciano-660 fs-13 fw-600 p-0-4 botao-texto">Marcar todas como lidas</button></div></sc-if>
-      <sc-if value="{{ semNotif }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column alinha-center gap-6 p-32-12 texto-center"><b class="fs-15">Tudo em dia</b><span class="fs-13 cor-cinza-600">Nenhuma notificação nova.</span></div></sc-if>
-      <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="3">
-        <div class="raio-10 p-12-14 d-flex eixo-column gap-6 fundo-branco largura-fundo" style="border:1px solid var(--borda-cinza-110);border-left:4px solid {{ n.cor }}">
-          <b class="fs-14">{{ n.tit }}</b>
-          <span class="fs-13 cor-cinza-750 lh-1p5">{{ n.txt }}</span>
-          <div class="d-flex quebra-wrap gap-8 mt-2"><sc-if value="{{ n.temAcao }}" hint-placeholder-val="{{ true }}"><button onClick="{{ n.go }}" class="h-36 borda-1-solid-0b7ea3 fundo-branco cor-ciano-740 raio-8 p-0-12 fs-13 fw-600">{{ n.acao }}</button></sc-if><button onClick="{{ n.marcarLida }}" aria-label="{{ n.ariaLida }}" class="h-36 borda-cinza-160 fundo-branco cor-cinza-750 raio-8 p-0-12 fs-13 fw-600 botao-secundario">Marcar como lida</button></div>
-        </div>
-      </sc-for>
-    </div>
-  </aside>
-</sc-if>
+<dc-import name="notificacoes" gavetas="{{ gavetaDeNotificacoes }}"></dc-import>
 
     <div class="pagina p-28 d-flex eixo-column gap-20 max-w-1320 w-100pc">
 <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13 d-flex quebra-wrap alinha-center gap-8-14"><span class="flex-1 min-w-200">{{ erro }}</span><button onClick="{{ tentarDeNovo }}" class="h-34 borda-1-solid-b42318 fundo-branco cor-vermelho-600 raio-8 p-0-12 fs-13 fw-600">Tentar de novo</button></div></sc-if>
@@ -120,169 +104,14 @@
   </main>
 </div>
 
-<sc-if value="{{ novaContaAberta }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharConta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="ct-nv-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(520px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><h3 id="ct-nv-titulo" class="m-0 fs-17 flex-1">Novo usuário</h3><button onClick="{{ fecharConta }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
-    <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Nome completo *</span><input id="ct-nv-nome" value="{{ novaConta.nome }}" onChange="{{ novaConta.escreverNome }}" maxlength="120" autocomplete="off" required="" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
-      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Telefone</span><input id="ct-nv-tel" value="{{ novaConta.telefone }}" onChange="{{ novaConta.escreverTelefone }}" placeholder="(31) 99999-9999" inputmode="tel" maxlength="16" autocomplete="off" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
-      </div>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">E-mail *</span><input id="ct-nv-email" type="email" value="{{ novaConta.email }}" onChange="{{ novaConta.escreverEmail }}" inputmode="email" maxlength="160" autocomplete="off" autocapitalize="none" spellcheck="false" required="" aria-describedby="ct-nv-email-dica" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input><span id="ct-nv-email-dica" class="fs-12 cor-cinza-600 lh-1p45">O código para ativar a conta é enviado para este e-mail.</span></label>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">CPF ou CNPJ *</span><input id="ct-nv-cpf" value="{{ novaConta.cpf }}" onChange="{{ novaConta.escreverCpf }}" inputmode="numeric" maxlength="18" autocomplete="off" required="" aria-describedby="ct-nv-cpf-dica" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input><span id="ct-nv-cpf-dica" class="fs-12 cor-cinza-600 lh-1p45">Usado só para a pessoa ativar a conta. Fica protegido e não aparece no sistema.</span></label>
-      <div class="d-flex eixo-column gap-8"><span id="ct-nv-perfil-rot" class="fs-12 cor-cinza-600 fw-600">Perfil *</span><div role="radiogroup" aria-labelledby="ct-nv-perfil-rot" onKeyDown="{{ teclaNosPerfis }}" class="d-flex quebra-wrap gap-8"><sc-for list="{{ perfisDaNovaConta }}" as="perfil" hint-placeholder-count="4"><button id="{{ perfil.id }}" role="radio" aria-checked="{{ perfil.marcado }}" disabled="{{ perfil.desligado }}" tabindex="{{ perfil.tabulacao }}" onClick="{{ perfil.escolher }}" class="raio-8 p-8-12 fs-13 fw-500 fonte-inherit botao-opcao {{ perfil.classe }}" style="border:1.5px solid {{ perfil.borda }};background:{{ perfil.fundo }};color:{{ perfil.cor }}">{{ perfil.rotulo }}</button></sc-for></div><span class="fs-12 cor-cinza-600 lh-1p45">{{ dicaDePerfil }}</span></div>
-      <sc-if value="{{ pedeEscola }}" hint-placeholder-val="{{ true }}">
-        <label class="d-flex eixo-column gap-6 fundo-ciano-40 raio-10 p-14"><span class="fs-12 cor-ciano-740 fw-600">Escola de atuação * <span class="fw-400">(base da Presença e da Grade)</span></span><select id="ct-nv-escola" value="{{ novaConta.escola }}" onChange="{{ novaConta.escolherEscola }}" required="" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscolaDaConta }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-      </sc-if>
-      <sc-if value="{{ ehOficineiro }}" hint-placeholder-val="{{ true }}">
-        <div id="ct-nv-jornada" class="d-flex eixo-column gap-6 fundo-ciano-40 raio-10 p-14"><span class="fs-12 cor-ciano-740 fw-600">Jornada de trabalho</span><span class="fs-14 cor-ciano-850">Horário livre, até 8 horas trabalhadas por dia</span><span class="fs-12 cor-cinza-600 lh-1p45">O almoço não conta. A presença é confirmada pela localização, dentro do raio da escola.</span></div>
-        <label class="d-flex eixo-column gap-6 fundo-ciano-40 raio-10 p-14"><span class="fs-12 cor-ciano-740 fw-600">CNPJ ou CPF da contratada <span class="fw-400">(pode ser preenchido depois)</span></span><input id="ct-nv-contratada" value="{{ novaConta.contratada }}" onChange="{{ novaConta.escreverContratada }}" inputmode="numeric" maxlength="18" autocomplete="off" placeholder="00.000.000/0000-00" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit"></input><span class="fs-12 cor-cinza-600 lh-1p45">Pessoa jurídica (CNPJ) ou física (CPF) contratada para o serviço. Sai no relatório de presença e atividades.</span></label>
-      </sc-if>
-      <sc-if value="{{ ehAnalista }}" hint-placeholder-val="{{ false }}">
-        <label class="d-flex eixo-column gap-6 fundo-ciano-40 raio-10 p-14"><span class="fs-12 cor-ciano-740 fw-600">Carteira *</span><select id="ct-nv-carteira" value="{{ novaConta.carteira }}" onChange="{{ novaConta.escolherCarteira }}" required="" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha a carteira</option><sc-for list="{{ opcoesDeCarteiraDaConta }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-      </sc-if>
-      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-4-12 fs-13 fundo-cinza-20 raio-10 p-12-14"><dt class="cor-cinza-600">Projeto</dt><dd class="m-0">{{ cliente.projeto }}</dd><dt class="cor-cinza-600">Cidade</dt><dd class="m-0">{{ cliente.cidade }}</dd><dt class="cor-cinza-600">Coordenador</dt><dd class="m-0">Coordenador do núcleo</dd><dt class="cor-cinza-600">Gerente</dt><dd class="m-0">Gerente do projeto</dd></dl>
-      <p class="m-0 fs-12 cor-cinza-600 lh-1p45">A pessoa ativa a conta em “Primeiro acesso”, na página de entrada, com o CPF ou CNPJ e o código enviado ao e-mail, e cria a própria senha.</p>
-      <sc-if value="{{ temErroNovaConta }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroNovaConta }}</div></sc-if>
-    </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ criarConta }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">{{ novaContaBotao }}</button></div>
-  </aside>
-</sc-if>
 
-<sc-if value="{{ contaAberta }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharConta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="ct-det-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(520px,100%);width:min(480px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Conta de usuário</span><h3 id="ct-det-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ conta.nome }}</h3></div><button onClick="{{ fecharConta }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
-    <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
-      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ conta.itens }}" as="item" hint-placeholder-count="6"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
-      <sc-if value="{{ conta.podeJornada }}" hint-placeholder-val="{{ false }}">
-        <div class="d-flex eixo-column gap-8 fundo-cinza-20 raio-10 p-12-14">
-          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">CNPJ ou CPF da contratada</span><input id="ct-det-contratada" value="{{ conta.contratada }}" onChange="{{ conta.escreverContratada }}" placeholder="{{ conta.contratadaAtual }}" inputmode="numeric" maxlength="18" autocomplete="off" aria-describedby="ct-det-contratada-dica" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
-          <span id="ct-det-contratada-dica" class="fs-12 cor-cinza-600 lh-1p45">Pessoa jurídica ou física contratada para o serviço. Fica protegido: aqui aparece mascarado e sai completo só no relatório de presença e atividades do oficineiro. Para remover, apague o campo e salve.</span>
-          <sc-if value="{{ conta.contratadaMudou }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.salvarContratada }}" disabled="{{ conta.salvandoContratada }}" class="alinha-si-flex-start h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">{{ conta.contratadaBotao }}</button></sc-if>
-        </div>
-      </sc-if>
-      <sc-if value="{{ conta.temMudanca }}" hint-placeholder-val="{{ false }}"><div class="fundo-azul-40 raio-10 p-12-14 d-flex eixo-column gap-8 alinha-flex-start"><span class="fs-13 cor-azul-640 lh-1p5"><b>Mudança de escola agendada.</b> {{ conta.mudancaTexto }}</span><sc-if value="{{ conta.pode }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.cancelarMudanca }}" disabled="{{ salvandoConta }}" class="h-34 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar mudança agendada</button></sc-if></div></sc-if>
-      <sc-if value="{{ conta.naoPode }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-12 cor-cinza-600 lh-1p45">{{ conta.motivo }}</p></sc-if>
-      <sc-if value="{{ confirmandoDesativacao }}" hint-placeholder-val="{{ false }}"><div role="group" aria-label="Confirmar desativação" class="fundo-vermelho-50 raio-10 p-14 d-flex eixo-column gap-10"><span class="fs-13 cor-vermelho-720 lh-1p5">A pessoa perde o acesso na hora. Presenças, grades e registros são mantidos e a conta pode ser reativada em até 30 dias. Depois disso, a conta é apagada automaticamente e o histórico fica como “Conta removida”.</span><div class="d-flex gap-8 quebra-wrap"><button id="ct-det-confirma" onClick="{{ conta.confirmar }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 fundo-vermelho-600 cor-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit">Confirmar desativação</button><button onClick="{{ conta.voltar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Voltar</button></div></div></sc-if>
-      <sc-if value="{{ temErroConta }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroConta }}</div></sc-if>
-    </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
-      <sc-if value="{{ conta.podeDesativar }}" hint-placeholder-val="{{ false }}"><button id="ct-det-desativar" onClick="{{ conta.desativar }}" disabled="{{ salvandoConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-vermelho-600 mr-auto botao-secundario">Desativar conta</button></sc-if>
-      <sc-if value="{{ conta.podeReativar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.reativar }}" disabled="{{ salvandoConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 mr-auto botao-secundario">Reativar conta</button></sc-if>
-      <sc-if value="{{ conta.podeEscola }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.alterar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Alterar escola</button></sc-if>
-      <button onClick="{{ fecharConta }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">Fechar</button>
-    </div>
-  </aside>
-</sc-if>
+<dc-import name="gerente-gavetas" gavetas="{{ gavetasDoGerente }}"></dc-import>
 
-<sc-if value="{{ mudancaAberta }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharConta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="ct-mu-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(520px,100%);width:min(480px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Alterar escola de atuação</span><h3 id="ct-mu-titulo" class="m-0 fs-17">{{ mudanca.nome }}</h3></div><button onClick="{{ fecharConta }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
-    <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
-      <div class="d-flex eixo-column gap-4"><span class="fs-12 cor-cinza-600 fw-600">Escola atual</span><span class="fs-14">{{ mudanca.atual }}</span></div>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Nova escola de atuação *</span><select id="ct-mu-escola" value="{{ mudanca.escola }}" onChange="{{ mudanca.escolherEscola }}" required="" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscolaDaMudanca }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select><sc-if value="{{ temEnderecoDaMudanca }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600 lh-1p45">{{ enderecoDaMudanca }}</span></sc-if></label>
-      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Vale a partir de *</span><input id="ct-mu-vale" type="date" value="{{ mudanca.vale }}" min="{{ mudancaMinima }}" max="{{ mudancaMaxima }}" onChange="{{ mudanca.escolherData }}" required="" class="h-40 borda-cinza-160 raio-8 fs-14 fonte-inherit" style="padding:0 12px;padding:0 10px"></input></label>
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Motivo *</span><select id="ct-mu-motivo" value="{{ mudanca.motivo }}" onChange="{{ mudanca.escreverMotivo }}" required="" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha o motivo</option><option>Remanejamento do núcleo</option><option>Solicitação da SEMED</option><option>Ampliação de atendimento</option><option>Outro</option></select></label>
-      </div>
-      <div class="fundo-cinza-20 raio-10 p-12-14 fs-12 cor-cinza-750 lh-1p55">Presenças, grades e registros anteriores são preservados. A grade da nova escola começa sem atividades e precisa ser montada pelo oficineiro e validada. O oficineiro é avisado da alteração.</div>
-      <sc-if value="{{ temErroMudanca }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroMudanca }}</div></sc-if>
-    </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ salvarMudanca }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">{{ mudancaBotao }}</button></div>
-  </aside>
-</sc-if>
 
-<sc-if value="{{ loteAberto }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharLote }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="lt-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(820px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Gestão de Contas</span><h3 id="lt-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">Criar contas em lote</h3></div><button onClick="{{ fecharLote }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
-    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
-      <ol class="m-0 pl-20 fs-13 lh-1p6 cor-cinza-750">
-        <li>Baixe o modelo e preencha uma pessoa por linha: nome, e-mail, CPF ou CNPJ, perfil (oficineiro, analista, direção, coordenador ou gerente), escola pela sigla para oficineiro e direção, carteira para analista, e a coluna Horário pode ficar em branco (a jornada do oficineiro é flexível: 8 horas entre 07:00 e 17:00). Para oficineiro, a última coluna recebe o CNPJ ou o CPF da contratada (opcional).</li>
-        <li>Envie a planilha. Nada é gravado antes da conferência.</li>
-        <li>Confira a prévia e crie as contas. Cada pessoa ativa a própria conta em "Primeiro acesso".</li>
-      </ol>
-      <div class="d-flex quebra-wrap gap-8">
-        <button onClick="{{ baixarModelo }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">Baixar modelo (.xlsx)</button>
-        <label class="h-40 d-inline-flex alinha-center gap-8 borda-0 fundo-ciano-660 cor-branco raio-8 p-0-16 fs-14 fw-600 cursor-pointer">Selecionar planilha<input type="file" accept=".xlsx" onChange="{{ lerLote }}" aria-label="Selecionar planilha de contas" class="pos-absolute w-1 h-1 opac-0"></input></label>
-      </div>
-      <sc-if value="{{ temErroLote }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroLote }}</div></sc-if>
-      <sc-if value="{{ lote.temArquivo }}" hint-placeholder-val="{{ false }}">
-        <div role="status" aria-live="polite" class="fs-13 fw-600 cor-ciano-850">{{ lote.resumo }}</div>
-        <div class="rolagem-auto borda-cinza-110 raio-10">
-          <div role="table" aria-label="Prévia das contas" class="min-w-760">
-            <div role="row" class="d-grid gap-8 p-10-12 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em borda-b-cinza-110" style="grid-template-columns:44px minmax(0,1.5fr) minmax(0,1.4fr) 120px minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.4fr)"><span role="columnheader">Linha</span><span role="columnheader">Nome</span><span role="columnheader">E-mail</span><span role="columnheader">CPF</span><span role="columnheader">Perfil</span><span role="columnheader">Escola / carteira</span><span role="columnheader">Situação</span></div>
-            <sc-for list="{{ lote.linhas }}" as="linha" hint-placeholder-count="4">
-              <div role="row" class="d-grid gap-8 p-9-12 fs-12 borda-b-cinza-75 alinha-center" style="grid-template-columns:44px minmax(0,1.5fr) minmax(0,1.4fr) 120px minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.4fr)">
-                <span role="cell" class="num-tabular-nums cor-cinza-600">{{ linha.numero }}</span><b role="cell" class="quebra-palavra-anywhere">{{ linha.nome }}</b><span role="cell" class="quebra-palavra-anywhere">{{ linha.email }}</span><span role="cell" class="num-tabular-nums">{{ linha.documento }}</span><span role="cell">{{ linha.perfil }}</span><span role="cell" class="quebra-palavra-anywhere">{{ linha.vinculo }}</span>
-                <span role="cell" class="fs-12 fw-600 quebra-palavra-anywhere" style="color:{{ linha.cor }}">{{ linha.situacao }}</span>
-              </div>
-            </sc-for>
-          </div>
-        </div>
-        <span class="fs-12 cor-cinza-600 lh-1p5">Os CPFs e CNPJs ficam só nesta tela até a criação e são apagados ao fechar. Linhas com problema são ignoradas; corrija na planilha e envie de novo.</span>
-      </sc-if>
-    </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharLote }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">{{ lote.fecharTexto }}</button><sc-if value="{{ lote.podeCriar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ criarLote }}" disabled="{{ lote.criando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ lote.botao }}</button></sc-if></div>
-  </aside>
-</sc-if>
+<dc-import name="contas-gavetas" gavetas="{{ gavetasDeContas }}"></dc-import>
 
-<sc-if value="{{ novaVisitaAberta }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharNovaVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="vs-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Vincular visita a analista</span><h3 id="vs-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ novaVisita.titulo }}</h3></div><button onClick="{{ fecharNovaVisita }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
-    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
-      <sc-if value="{{ novaVisita.temDiagnostico }}" hint-placeholder-val="{{ false }}"><div class="fundo-cinza-20 raio-10 p-12-14 fs-13 lh-1p5 cor-cinza-750">{{ novaVisita.diagnostico }}</div></sc-if>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Analista *</span><select id="vs-analista" value="{{ novaVisita.analista }}" onChange="{{ novaVisita.escolherAnalista }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha o analista</option><sc-for list="{{ opcoesDeAnalista }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Escola * <span class="fw-400">(da carteira do analista)</span></span><select id="vs-escola" value="{{ novaVisita.escola }}" onChange="{{ novaVisita.escolherEscola }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscolaDaVisita }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Data *</span><input id="vs-data" type="date" value="{{ novaVisita.data }}" min="{{ dataMinima }}" max="{{ dataMaxima }}" onChange="{{ novaVisita.escolherData }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Horário</span><input type="time" value="{{ novaVisita.hora }}" onChange="{{ novaVisita.escolherHora }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
-      </div>
-      <div class="d-flex eixo-column gap-8"><span id="vs-origem-rot" class="fs-12 cor-cinza-600 fw-600">Origem da visita *</span><div role="radiogroup" aria-labelledby="vs-origem-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ novaVisitaOrigens }}" as="origem" hint-placeholder-count="4"><button role="radio" aria-checked="{{ origem.marcado }}" onClick="{{ origem.escolher }}" class="raio-8 p-8-12 fs-13 fw-500 botao-opcao {{ origem.classe }}" style="border:1.5px solid {{ origem.borda }};background:{{ origem.fundo }};color:{{ origem.cor }}">{{ origem.rotulo }}</button></sc-for></div></div>
-      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Tipo de atendimento</span><select value="{{ novaVisita.tipo }}" onChange="{{ novaVisita.escolherTipo }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ novaVisitaTipos }}" as="tipo" hint-placeholder-count="4"><option value="{{ tipo }}">{{ tipo }}</option></sc-for></select></label>
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Detalhe do atendimento</span><select value="{{ novaVisita.detalhe }}" onChange="{{ novaVisita.escolherDetalhe }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco" style="background:var(--fundo-branco)"><option value="">Sem detalhe</option><sc-for list="{{ novaVisitaDetalhes }}" as="detalhe" hint-placeholder-count="4"><option value="{{ detalhe }}">{{ detalhe }}</option></sc-for></select></label>
-      </div>
-      <div class="d-flex eixo-column gap-8"><span id="vs-foco-rot" class="fs-12 cor-cinza-600 fw-600">Foco da visita</span><div role="group" aria-labelledby="vs-foco-rot" class="d-flex quebra-wrap gap-6"><sc-for list="{{ novaVisitaFocos }}" as="foco" hint-placeholder-count="4"><button aria-pressed="{{ foco.marcado }}" onClick="{{ foco.escolher }}" class="h-32 raio-999 p-0-12 fs-13 fw-500 botao-texto {{ foco.classe }}" style="border:1px solid {{ foco.borda }};background:{{ foco.fundo }};color:{{ foco.cor }}">{{ foco.rotulo }}</button></sc-for></div></div>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Orientação para o analista</span><textarea id="vs-orientacao" rows="4" value="{{ novaVisita.orientacao }}" onChange="{{ novaVisita.escreverOrientacao }}" maxlength="1000" placeholder="ex.: execução abaixo de 60% e ocorrências de internet recorrentes" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
-      <div class="fundo-cinza-20 raio-10 p-12-14 fs-12 cor-cinza-750 lh-1p55">A visita entra na agenda do analista. Quando ele registrar a visita, ela aparece como realizada aqui.</div>
-      <sc-if value="{{ temErroNovaVisita }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroNovaVisita }}</div></sc-if>
-    </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharNovaVisita }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ salvarNovaVisita }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ novaVisitaBotao }}</button></div>
-  </aside>
-</sc-if>
 
-<sc-if value="{{ visitaAberta }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="vd-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(440px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">{{ visita.rotulo }}</span><h3 id="vd-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ visita.titulo }}</h3></div><button onClick="{{ fecharVisita }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
-    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
-      <span class="alinha-si-flex-start fs-12 fw-600 p-3-10 raio-999" style="color:{{ visita.situacaoCor }};background:{{ visita.situacaoFundo }}">{{ visita.situacao }}</span>
-      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ visita.itens }}" as="item" hint-placeholder-count="5"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></sc-for></dl>
-      <sc-if value="{{ visita.temRelatorio }}" hint-placeholder-val="{{ false }}"><section aria-labelledby="vd-rel-h" class="borda-t-cinza-75 pt-14 d-flex eixo-column gap-10"><h4 id="vd-rel-h" class="m-0 fs-14">Relatório da visita</h4><dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ visita.relatorio }}" as="item" hint-placeholder-count="5"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere espaco-pre-line lh-1p5">{{ item.valor }}</dd></sc-for></dl></section></sc-if>
-      <sc-if value="{{ confirmandoCancelamento }}" hint-placeholder-val="{{ false }}"><div role="group" aria-label="Confirmar cancelamento" class="fundo-vermelho-50 raio-10 p-14 d-flex eixo-column gap-10"><span class="fs-13 cor-vermelho-720 lh-1p5">A visita sai da agenda do analista. Continuar?</span><div class="d-flex gap-8 quebra-wrap"><button id="vd-confirma" onClick="{{ visita.cancelar }}" disabled="{{ salvando }}" class="h-36 borda-0 fundo-vermelho-600 cor-branco raio-8 p-0-14 fs-13 fw-600">Cancelar a visita</button><button onClick="{{ visita.voltar }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 cor-ciano-850 botao-secundario">Manter</button></div></div></sc-if>
-    </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><sc-if value="{{ visita.podeCancelar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visita.perguntar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-vermelho-600 mr-auto botao-secundario">Cancelar visita</button></sc-if><button onClick="{{ fecharVisita }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Fechar</button></div>
-  </aside>
-</sc-if>
 
-<sc-if value="{{ registroAberto }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ fecharRegistro }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="rg-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(500px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">{{ registro.oficineiro }} · somente visualização</span><h3 id="rg-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ registro.titulo }}</h3></div><button onClick="{{ fecharRegistro }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
-    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
-      <div class="d-flex quebra-wrap gap-6"><span class="fs-12 fw-600 p-3-8 raio-4" style="color:{{ registro.tipoCor }};background:{{ registro.tipoFundo }}">{{ registro.tipo }}</span><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ registro.situacaoCor }};background:{{ registro.situacaoFundo }}">{{ registro.situacao }}</span></div>
-      <dl class="m-0 d-grid colunas-minmax-0-1fr-minmax-0-1fr gap-12-16">
-        <sc-for list="{{ registro.itens }}" as="item" hint-placeholder-count="6"><div class="d-flex eixo-column gap-2 min-w-0" style="grid-column:{{ item.coluna }}"><dt class="fs-12 cor-cinza-600 fw-600">{{ item.rotulo }}</dt><dd class="m-0 fs-14 lh-1p5 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></div></sc-for>
-      </dl>
-    </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharRegistro }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Fechar</button></div>
-  </aside>
-</sc-if>
 
 <div class="sr-only" role="status" aria-live="polite">{{ aviso }}</div>
 <sc-if value="{{ aviso }}" hint-placeholder-val="{{ false }}">
@@ -291,7 +120,123 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 const Base = window.FSM_BASE;
+const ESTADO_DAS_TELAS = [
+  'relatorios',
+  'relatoriosPorCiclo',
+  'contas',
+  'abas',
+  'envios',
+  'grade',
+  'visitas',
+  'ciclos',
+  'gradeAnterior',
+  'mudancasDeEscola',
+  'carregandoAcessos',
+  'acessos',
+  'onboardings',
+  'ordensServico',
+  'previaDaOs',
+  'carteiras',
+  'erroOnboarding',
+  'resultadoDaOs',
+  'salvando',
+  'escolas',
+  'erroContas',
+  'carregandoContas'
+];
+const VALORES_DAS_TELAS = [
+  'is',
+  'cicloAtual',
+  'cicloDosRelatorios',
+  'ciclo',
+  'escolaNoFiltro',
+  'hoje',
+  'resumoDosOficineiros',
+  'escolasAtivas',
+  'resumir',
+  'atividades',
+  'opacidade',
+  'pendenciasRotuladas',
+  'total',
+  'presencaMedia',
+  'oficineirosFiltrados',
+  'visitasDoPeriodo',
+  'contasNaSituacao',
+  'horasTexto',
+  'minutosValidosTotais',
+  'semRegistroTotal',
+  'resumoDasCarteiras',
+  'larguraDaBarra',
+  'carteiraDaEscola',
+  'rotuloDaCarteira',
+  'analistasDaCarteira',
+  'nomeDaEscola',
+  'nomeDaPessoa',
+  'contaPorId',
+  'siglaDaEscola',
+  'escolaAtualDe',
+  'tela',
+  'ultimosCiclos',
+  'dadosDoCiclo',
+  'atividadesDoCiclo',
+  'turmaDe',
+  'SITUACOES_DA_ATIVIDADE',
+  'situacaoDe',
+  'nomeDoArquivo',
+  'periodoTexto',
+  'oficineirosAtivos',
+  'diasLetivos',
+  'anoAtual',
+  'analistasAtivos',
+  'carteiraNoFiltro',
+  'diasPresentesDe',
+  'agendaValida',
+  'dados',
+  'proximaVisitaDa',
+  'quandoDaVisita',
+  'diasDaSemana',
+  'visitasDaSemana',
+  'segunda',
+  'dadosDaSemana',
+  'agora',
+  'escolaPorId',
+  'situacaoDaConta',
+  'atuacaoDaConta',
+  'podeAlterarConta'
+];
 const Contas = window.FSM_CONTAS;
+const CHAVES_DAS_GAVETAS = [
+  'confirmandoCancelamento',
+  'confirmandoDesativacao',
+  'conta',
+  'contaAberta',
+  'dataMaxima',
+  'dataMinima',
+  'erroConta',
+  'erroNovaVisita',
+  'fecharConta',
+  'fecharNovaVisita',
+  'fecharRegistro',
+  'fecharVisita',
+  'novaVisita',
+  'novaVisitaAberta',
+  'novaVisitaBotao',
+  'novaVisitaDetalhes',
+  'novaVisitaFocos',
+  'novaVisitaOrigens',
+  'novaVisitaTipos',
+  'opcoesDeAnalista',
+  'opcoesDeEscolaDaVisita',
+  'registro',
+  'registroAberto',
+  'salvando',
+  'salvandoConta',
+  'salvarNovaVisita',
+  'temErroConta',
+  'temErroNovaVisita',
+  'visita',
+  'visitaAberta'
+];
 const {
   TIPOS,
   MESES,
@@ -1028,11 +973,17 @@ class Component extends DCLogic {
     Object.assign(v, this.valoresDasContas(s, v));
     Object.assign(v, this.valoresDoLote(s, v));
     Object.assign(v, this.contextoDasTelas(s, v));
-    return {
+    const chaves = {
       ...this.chavesDoCabecalho(s, v),
       ...this.chavesDasVisitas(s, v),
       ...this.chavesDasContas(s, v),
       ...this.chavesDasTelas(s, v)
+    };
+    return {
+      ...chaves,
+      gavetasDeContas: Contas.chavesDasGavetas(chaves),
+      gavetaDeNotificacoes: window.FSM_NOTIF.chavesDaGaveta(chaves),
+      gavetasDoGerente: Base.escolher(chaves, CHAVES_DAS_GAVETAS)
     };
   }
   valoresDeApoio(s) {
@@ -1896,146 +1847,20 @@ class Component extends DCLogic {
   }
   contextoDasTelas(s, v) {
     const {
-      SITUACOES_DA_ATIVIDADE,
-      agendaValida,
-      agora,
       analistasAtivos,
-      analistasDaCarteira,
-      anoAtual,
-      atividades,
       atividadesDoCiclo,
-      atuacaoDaConta,
-      carteiraDaEscola,
-      carteiraNoFiltro,
-      ciclo,
-      cicloAtual,
-      cicloDosRelatorios,
-      contaPorId,
-      contasNaSituacao,
-      dados,
-      dadosDaSemana,
       dadosDoCiclo,
-      diasDaSemana,
-      diasLetivos,
-      diasPresentesDe,
       escolaAtualDe,
-      escolaNoFiltro,
       escolaPorId,
-      escolasAtivas,
       hoje,
-      horasTexto,
-      is,
-      larguraDaBarra,
-      minutosValidosTotais,
-      nomeDaEscola,
-      nomeDaPessoa,
-      nomeDoArquivo,
       oficineirosAtivos,
-      oficineirosFiltrados,
-      opacidade,
-      pendenciasRotuladas,
-      periodoTexto,
-      podeAlterarConta,
-      presencaMedia,
       proximaVisitaDa,
       quandoDaVisita,
-      resumir,
-      resumoDasCarteiras,
-      resumoDosOficineiros,
-      rotuloDaCarteira,
-      segunda,
-      semRegistroTotal,
-      siglaDaEscola,
-      situacaoDaConta,
-      situacaoDe,
-      tela,
-      total,
-      turmaDe,
-      ultimosCiclos,
-      visitasDaSemana,
-      visitasDoPeriodo
+      resumir
     } = v;
     const contexto = {
-      is,
-      cicloAtual,
-      cicloDosRelatorios,
-      ciclo,
-      escolaNoFiltro,
-      hoje,
-      resumoDosOficineiros,
-      escolasAtivas,
-      resumir,
-      atividades,
-      opacidade,
-      pendenciasRotuladas,
-      total,
-      presencaMedia,
-      oficineirosFiltrados,
-      visitasDoPeriodo,
-      contasNaSituacao,
-      horasTexto,
-      minutosValidosTotais,
-      semRegistroTotal,
-      resumoDasCarteiras,
-      larguraDaBarra,
-      carteiraDaEscola,
-      rotuloDaCarteira,
-      analistasDaCarteira,
-      nomeDaEscola,
-      nomeDaPessoa,
-      contaPorId,
-      siglaDaEscola,
-      escolaAtualDe,
-      tela,
-      ultimosCiclos,
-      dadosDoCiclo,
-      atividadesDoCiclo,
-      turmaDe,
-      SITUACOES_DA_ATIVIDADE,
-      situacaoDe,
-      nomeDoArquivo,
-      periodoTexto,
-      oficineirosAtivos,
-      diasLetivos,
-      anoAtual,
-      analistasAtivos,
-      carteiraNoFiltro,
-      diasPresentesDe,
-      agendaValida,
-      dados,
-      proximaVisitaDa,
-      quandoDaVisita,
-      diasDaSemana,
-      visitasDaSemana,
-      segunda,
-      dadosDaSemana,
-      agora,
-      escolaPorId,
-      situacaoDaConta,
-      atuacaoDaConta,
-      podeAlterarConta,
-      relatorios: s.relatorios,
-      relatoriosPorCiclo: s.relatoriosPorCiclo,
-      contas: s.contas,
-      abas: s.abas,
-      envios: s.envios,
-      grade: s.grade,
-      visitas: s.visitas,
-      ciclos: s.ciclos,
-      gradeAnterior: s.gradeAnterior,
-      mudancasDeEscola: s.mudancasDeEscola,
-      carregandoAcessos: s.carregandoAcessos,
-      acessos: s.acessos,
-      onboardings: s.onboardings,
-      ordensServico: s.ordensServico,
-      previaDaOs: s.previaDaOs,
-      carteiras: s.carteiras,
-      erroOnboarding: s.erroOnboarding,
-      resultadoDaOs: s.resultadoDaOs,
-      salvando: s.salvando,
-      escolas: s.escolas,
-      erroContas: s.erroContas,
-      carregandoContas: s.carregandoContas,
+      ...Base.escolher(s, ESTADO_DAS_TELAS),
+      ...Base.escolher(v, VALORES_DAS_TELAS),
       FAIXAS_DE_EXECUCAO,
       nomeDoMes,
       ORIGENS_DE_VISITA,
@@ -2319,6 +2144,7 @@ class Component extends DCLogic {
         atual: mudanca.atual ? nomeDaEscola(mudanca.atual) : '—',
         escola: mudanca.escola || '',
         vale: mudanca.vale || '',
+        comData: true,
         motivo: mudanca.motivo || '',
         escolherEscola: definirNaMudanca('escola'),
         escolherData: definirNaMudanca('vale'),

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Coordenador · Gavetas</title>
+<script src="../vendor/dc-runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ contaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharConta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="ct-det-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(520px,100%);width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Conta de usuário</span><h3 id="ct-det-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ conta.nome }}</h3></div><button onClick="{{ fecharConta }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ conta.itens }}" as="item" hint-placeholder-count="6"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
+      <sc-if value="{{ conta.podeJornada }}" hint-placeholder-val="{{ false }}">
+        <div class="d-flex eixo-column gap-8 fundo-cinza-20 raio-10 p-12-14">
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">CNPJ ou CPF da contratada</span><input id="ct-det-contratada" value="{{ conta.contratada }}" onChange="{{ conta.escreverContratada }}" placeholder="{{ conta.contratadaAtual }}" inputmode="numeric" maxlength="18" autocomplete="off" aria-describedby="ct-det-contratada-dica" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
+          <span id="ct-det-contratada-dica" class="fs-12 cor-cinza-600 lh-1p45">Pessoa jurídica ou física contratada para o serviço. Fica protegido: aqui aparece mascarado e sai completo só no relatório de presença e atividades do oficineiro. Para remover, apague o campo e salve.</span>
+          <sc-if value="{{ conta.contratadaMudou }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.salvarContratada }}" disabled="{{ conta.salvandoContratada }}" class="alinha-si-flex-start h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">{{ conta.contratadaBotao }}</button></sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{ conta.temMudanca }}" hint-placeholder-val="{{ false }}"><div class="fundo-azul-40 raio-10 p-12-14 d-flex eixo-column gap-8 alinha-flex-start"><span class="fs-13 cor-azul-640 lh-1p5"><b>Mudança de escola agendada.</b> {{ conta.mudancaTexto }}</span><sc-if value="{{ conta.pode }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.cancelarMudanca }}" disabled="{{ salvandoConta }}" class="h-34 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar mudança agendada</button></sc-if></div></sc-if>
+      <sc-if value="{{ temAdministracao }}" hint-placeholder-val="{{ false }}">
+        <div role="group" aria-labelledby="ct-adm-h" class="d-flex eixo-column gap-12 borda-cinza-160 raio-12 p-14">
+          <span id="ct-adm-h" class="fs-14 fw-600">Administração da conta</span>
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Motivo da alteração *</span><textarea id="ct-adm-motivo" rows="2" value="{{ administracao.motivo }}" onChange="{{ administracao.escreverMotivo }}" maxlength="500" placeholder="Fica registrado na auditoria" class="borda-cinza-160 raio-8 p-10-12 fs-14 fonte-inherit redim-vertical lh-1p5"></textarea></label>
+          <div role="group" aria-labelledby="ct-adm-email-h" class="d-flex eixo-column gap-8 fundo-cinza-20 raio-10 p-12">
+            <span id="ct-adm-email-h" class="fs-12 cor-cinza-600 fw-600">E-mail de acesso</span>
+            <sc-if value="{{ administracao.emailOculto }}" hint-placeholder-val="{{ true }}"><div class="d-flex alinha-center gap-10 quebra-wrap"><span class="fs-14 cor-cinza-600">Oculto</span><button id="ct-adm-email-ver" onClick="{{ administracao.verEmail }}" disabled="{{ administracao.carregandoEmail }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">{{ administracao.verEmailBotao }}</button></div></sc-if>
+            <sc-if value="{{ administracao.mostrarEmail }}" hint-placeholder-val="{{ false }}"><div class="d-flex alinha-center gap-10 quebra-wrap"><span id="ct-adm-email-valor" class="fs-14 cor-ciano-850 quebra-palavra-anywhere">{{ administracao.email }}</span><button id="ct-adm-email-alterar" onClick="{{ administracao.editarEmail }}" disabled="{{ salvandoConta }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Alterar e-mail</button></div></sc-if>
+            <sc-if value="{{ administracao.editandoEmail }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column gap-8"><label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Novo e-mail</span><input id="ct-adm-email" type="email" autocomplete="off" spellcheck="false" maxlength="160" value="{{ administracao.novoEmail }}" onChange="{{ administracao.escreverNovoEmail }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit"></input></label><div class="d-flex gap-8 quebra-wrap"><button onClick="{{ administracao.salvarEmail }}" disabled="{{ salvandoConta }}" class="h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">{{ administracao.salvarEmailBotao }}</button><button onClick="{{ administracao.cancelarEmail }}" disabled="{{ salvandoConta }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button></div></div></sc-if>
+            <span class="fs-12 cor-cinza-600 lh-1p45">O código do primeiro acesso é enviado para este e-mail. Consultar e alterar o e-mail fica registrado na auditoria.</span>
+          </div>
+          <div class="d-flex eixo-column gap-8 fundo-cinza-20 raio-10 p-12">
+            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Perfil</span><select value="{{ administracao.perfil }}" onChange="{{ administracao.escolherPerfil }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDePerfil }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+            <sc-if value="{{ administracao.pedeEscola }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Escola de atuação</span><select id="ct-adm-escola" value="{{ administracao.escola }}" onChange="{{ administracao.escolherEscola }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscolaAtiva }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+            <sc-if value="{{ administracao.pedeCarteira }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Carteira</span><select id="ct-adm-carteira" value="{{ administracao.carteira }}" onChange="{{ administracao.escolherCarteira }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha a carteira</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+            <sc-if value="{{ administracao.mudou }}" hint-placeholder-val="{{ false }}"><button onClick="{{ administracao.salvarPerfil }}" disabled="{{ salvandoConta }}" class="alinha-si-flex-start h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">Salvar perfil</button></sc-if>
+            <span class="fs-12 cor-cinza-600 lh-1p45">A troca de escola por aqui vale na hora. Para agendar uma mudança de escola de oficineiro, use Alterar escola.</span>
+          </div>
+          <div class="d-flex quebra-wrap gap-8">
+            <sc-if value="{{ administracao.podeExigirSenha }}" hint-placeholder-val="{{ false }}"><button onClick="{{ administracao.exigirSenha }}" disabled="{{ salvandoConta }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Exigir troca de senha</button></sc-if>
+            <sc-if value="{{ administracao.podeRedefinirAutenticador }}" hint-placeholder-val="{{ false }}"><button onClick="{{ administracao.redefinirAutenticador }}" disabled="{{ salvandoConta }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Redefinir autenticador</button></sc-if>
+            <button id="ct-adm-apagar" onClick="{{ administracao.pedirApagar }}" disabled="{{ salvandoConta }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-vermelho-600 botao-secundario">Apagar conta</button>
+          </div>
+          <sc-if value="{{ administracao.apagando }}" hint-placeholder-val="{{ false }}"><div role="group" aria-label="Confirmar exclusão da conta" class="fundo-vermelho-50 raio-10 p-14 d-flex eixo-column gap-10"><span class="fs-13 cor-vermelho-720 lh-1p5"><b>Apagar a conta de {{ administracao.nome }}?</b> O login e os dados pessoais (nome, CPF ou CNPJ, e-mail e telefone) são apagados de forma definitiva. Presenças, aulas e relatórios já registrados ficam no histórico como “Conta removida”. Não é possível desfazer.</span><div class="d-flex gap-8 quebra-wrap"><button id="ct-adm-apagar-confirma" onClick="{{ administracao.apagar }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 fundo-vermelho-600 cor-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit">{{ administracao.apagarBotao }}</button><button onClick="{{ administracao.cancelarApagar }}" disabled="{{ salvandoConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Voltar</button></div></div></sc-if>
+          <sc-if value="{{ administracao.senhaPendente }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-ambar-745">Esta conta já precisa trocar a senha no próximo acesso.</span></sc-if>
+          <span class="fs-12 cor-cinza-600 lh-1p45">Redefinir o autenticador serve para quem trocou ou perdeu o celular: no próximo acesso, a pessoa cadastra o aplicativo de novo. Contas desativadas por 30 dias são apagadas automaticamente.</span>
+        </div>
+      </sc-if>
+      <sc-if value="{{ conta.naoPode }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-12 cor-cinza-600 lh-1p45">{{ conta.motivo }}</p></sc-if>
+      <sc-if value="{{ confirmandoDesativacao }}" hint-placeholder-val="{{ false }}"><div role="group" aria-label="Confirmar desativação" class="fundo-vermelho-50 raio-10 p-14 d-flex eixo-column gap-10"><span class="fs-13 cor-vermelho-720 lh-1p5">A pessoa perde o acesso na hora. Presenças, grades e registros são mantidos e a conta pode ser reativada em até 30 dias. Depois disso, a conta é apagada automaticamente e o histórico fica como “Conta removida”.</span><div class="d-flex gap-8 quebra-wrap"><button id="ct-det-confirma" onClick="{{ conta.confirmar }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 fundo-vermelho-600 cor-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit">Confirmar desativação</button><button onClick="{{ conta.voltar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Voltar</button></div></div></sc-if>
+      <sc-if value="{{ temErroConta }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroConta }}</div></sc-if>
+    </div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+      <sc-if value="{{ conta.podeDesativar }}" hint-placeholder-val="{{ false }}"><button id="ct-det-desativar" onClick="{{ conta.desativar }}" disabled="{{ salvandoConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-vermelho-600 mr-auto botao-secundario">Desativar conta</button></sc-if>
+      <sc-if value="{{ conta.podeReativar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.reativar }}" disabled="{{ salvandoConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 mr-auto botao-secundario">Reativar conta</button></sc-if>
+      <sc-if value="{{ conta.podeEscola }}" hint-placeholder-val="{{ false }}"><button onClick="{{ conta.alterar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Alterar escola</button></sc-if>
+      <button onClick="{{ fecharConta }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">Fechar</button>
+    </div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ escolaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharGaveta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="adm-esc-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(560px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Cadastro de escola</span><h3 id="adm-esc-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ escolaTitulo }}</h3></div><button onClick="{{ fecharGaveta }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <div class="empilha-celular d-grid colunas-120-minmax-0-1fr gap-12">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Sigla *</span><input id="adm-esc-sigla" value="{{ escolaEditada.sigla }}" onChange="{{ escolaEditada.escreverSigla }}" maxlength="8" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif"></input></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Nome da escola *</span><input id="adm-esc-nome" value="{{ escolaEditada.nome }}" onChange="{{ escolaEditada.escreverNome }}" maxlength="160" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
+      </div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Endereço</span><input value="{{ escolaEditada.endereco }}" onChange="{{ escolaEditada.escreverEndereco }}" maxlength="200" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
+      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Telefone</span><input value="{{ escolaEditada.telefone }}" onChange="{{ escolaEditada.escreverTelefone }}" inputmode="tel" maxlength="20" placeholder="(31) 3333-4444" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Carteira</span><select value="{{ escolaEditada.carteira_id }}" onChange="{{ escolaEditada.escolherCarteira }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco" style="background:var(--fundo-branco)"><option value="">Sem carteira</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+      </div>
+      <div class="d-flex eixo-column gap-10 fundo-cinza-20 raio-10 p-12-14">
+        <span class="fs-13 fw-600">Localização para a presença</span>
+        <div class="empilha-celular d-grid colunas-1fr-1fr-110 gap-10">
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Latitude</span><input id="adm-esc-lat" value="{{ escolaEditada.latitude }}" onChange="{{ escolaEditada.escreverLatitude }}" inputmode="decimal" placeholder="-20.0051" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit fundo-branco min-w-0 largura-fundo"></input></label>
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Longitude</span><input id="adm-esc-lng" value="{{ escolaEditada.longitude }}" onChange="{{ escolaEditada.escreverLongitude }}" inputmode="decimal" placeholder="-43.8463" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit fundo-branco min-w-0 largura-fundo"></input></label>
+          <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Raio (m)</span><input id="adm-esc-raio" value="{{ escolaEditada.raio_m }}" onChange="{{ escolaEditada.escreverRaio }}" inputmode="numeric" maxlength="3" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit fundo-branco min-w-0 largura-fundo"></input></label>
+        </div>
+        <span class="fs-12 cor-cinza-600 lh-1p5">Copie as coordenadas do Google Maps (clique com o botão direito no prédio da escola). O raio vai de 20 a 500 metros.</span>
+      </div>
+      <label class="d-flex alinha-center gap-10 fs-14"><input type="checkbox" checked="{{ escolaEditada.ativa }}" onChange="{{ escolaEditada.marcarAtiva }}" class="w-18 h-18 destaque-ciano-660"></input>Escola ativa</label>
+      <sc-if value="{{ escolaExiste }}" hint-placeholder-val="{{ false }}">
+        <div class="d-flex eixo-column gap-10 borda-t-cinza-110 pt-14">
+          <span class="fs-14 fw-600">Turmas e matriculados</span>
+          <sc-if value="{{ semTurmas }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma turma cadastrada nesta escola.</span></sc-if>
+          <sc-for list="{{ turmas }}" as="turma" hint-placeholder-count="4">
+            <div class="d-flex quebra-wrap alinha-center gap-8 borda-cinza-70 raio-10 p-8-10">
+              <span class="flex-1 min-w-140 fs-13 fw-600">{{ turma.nome }}</span>
+              <input value="{{ turma.matriculados }}" onChange="{{ turma.escreverMatriculados }}" aria-label="{{ turma.aria }}" inputmode="numeric" maxlength="3" placeholder="matr." class="w-80 h-36 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit"></input>
+              <sc-if value="{{ turma.mudou }}" hint-placeholder-val="{{ false }}"><button onClick="{{ turma.salvar }}" disabled="{{ salvando }}" class="h-36 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">Salvar</button></sc-if>
+              <button onClick="{{ turma.remover }}" disabled="{{ salvando }}" class="h-36 borda-cinza-160 raio-8 p-0-12 fs-13 fw-600 fonte-inherit botao-texto botao-secundario {{ turma.removerClasse }}" style="background:{{ turma.removerFundo }};color:{{ turma.removerCor }}">{{ turma.removerTexto }}</button>
+            </div>
+          </sc-for>
+          <div role="group" aria-label="Incluir turma" class="d-flex quebra-wrap alinha-flex-end gap-8 fundo-cinza-20 raio-10 p-10">
+            <label class="d-flex eixo-column gap-4"><span class="fs-12 cor-cinza-600 fw-600">Ano</span><select value="{{ novaTurma.ano }}" onChange="{{ novaTurma.escolherAno }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-14 fonte-inherit fundo-branco" style="background:var(--fundo-branco)"><option value="">Escolha</option><sc-for list="{{ opcoesDeAno }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+            <label class="d-flex eixo-column gap-4"><span class="fs-12 cor-cinza-600 fw-600">Turma</span><input value="{{ novaTurma.turma }}" onChange="{{ novaTurma.escreverTurma }}" maxlength="4" placeholder="A" class="w-70 h-36 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco largura-fundo"></input></label>
+            <label class="d-flex eixo-column gap-4"><span class="fs-12 cor-cinza-600 fw-600">Matriculados</span><input value="{{ novaTurma.matr }}" onChange="{{ novaTurma.escreverMatriculados }}" inputmode="numeric" maxlength="3" class="w-90 h-36 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco largura-fundo"></input></label>
+            <button onClick="{{ incluirTurma }}" disabled="{{ salvando }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Incluir turma</button>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ temErroGaveta }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroGaveta }}</div></sc-if>
+    </div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharGaveta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Fechar</button><button onClick="{{ salvarEscola }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">{{ escolaBotao }}</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ carteiraAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharGaveta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="adm-cart-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(440px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Cadastro de carteira</span><h3 id="adm-cart-titulo" class="m-0 fs-17">{{ carteiraEditada.rotulo }}</h3></div><button onClick="{{ fecharGaveta }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <sc-if value="{{ carteiraNova }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Código *</span><input id="adm-cart-id" value="{{ carteiraEditada.id }}" onChange="{{ carteiraEditada.escreverCodigo }}" maxlength="5" placeholder="CS1" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif"></input><span class="fs-12 cor-cinza-600">2 ou 3 letras e 1 ou 2 números. Não pode ser mudado depois.</span></label></sc-if>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Nome da carteira *</span><input id="adm-cart-rotulo" value="{{ carteiraEditada.rotulo }}" onChange="{{ carteiraEditada.escreverRotulo }}" maxlength="80" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
+      <sc-if value="{{ temErroGaveta }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroGaveta }}</div></sc-if>
+    </div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharGaveta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ salvarCarteira }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">{{ carteiraBotao }}</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ registroAberto }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharGaveta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="adm-ev-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(520px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Registro de auditoria · somente visualização</span><h3 id="adm-ev-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ registro.titulo }}</h3></div><button onClick="{{ fecharGaveta }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ registro.itens }}" as="item" hint-placeholder-count="5"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
+      <div class="d-flex eixo-column gap-6">
+        <span class="fs-13 fw-600">O que foi registrado</span>
+        <sc-if value="{{ registro.semCampos }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Sem detalhes adicionais.</span></sc-if>
+        <sc-for list="{{ registro.campos }}" as="campo" hint-placeholder-count="5">
+          <div class="d-grid colunas-minmax-0-1fr-minmax-0-2fr gap-10 borda-b-cinza-70 p-8-0 fs-13"><span class="cor-cinza-600 fs-13 quebra-palavra-anywhere">{{ campo.campo }}</span><span class="quebra-palavra-anywhere">{{ campo.texto }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharGaveta }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">Fechar</button></div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ presencaAberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fecharGaveta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="adm-pr-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(480px,100%)">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">{{ presencaEditada.pessoa }}</span><h3 id="adm-pr-titulo" tabindex="-1" class="m-0 fs-17">{{ presencaEditada.titulo }}</h3></div><button onClick="{{ fecharGaveta }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Motivo *</span><textarea id="adm-pr-motivo" value="{{ presencaEditada.motivo }}" onChange="{{ presencaEditada.escreverMotivo }}" maxlength="500" rows="2" placeholder="Ex.: encerramento registrado errado, confirmado pela direção" class="borda-cinza-160 raio-8 p-10-12 fs-14 fonte-inherit redim-vertical"></textarea><span class="fs-12 cor-cinza-600">Vale para qualquer alteração feita nesta janela. Mínimo de 10 caracteres.</span></label>
+      <sc-if value="{{ presencaEditada.nova }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Data *</span><input type="date" value="{{ presencaEditada.data }}" onChange="{{ presencaEditada.escolherData }}" max="{{ presencaEditada.max }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"></input></label></sc-if>
+      <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Início *</span><input type="time" value="{{ presencaEditada.ini }}" onChange="{{ presencaEditada.escreverInicio }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"></input></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Encerramento</span><input type="time" value="{{ presencaEditada.fim }}" onChange="{{ presencaEditada.escreverFim }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"></input></label>
+      </div>
+      <span class="fs-12 cor-cinza-600 mt-n6">Horário de Brasília. As horas trabalhadas são recalculadas ao salvar.</span>
+      <div class="d-flex justifica-flex-end"><button onClick="{{ presencaEditada.salvarHorarios }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">{{ presencaEditada.botao }}</button></div>
+      <sc-if value="{{ presencaEditada.existe }}" hint-placeholder-val="{{ false }}">
+        <div class="borda-t-cinza-110 pt-14 d-flex eixo-column gap-12">
+          <span class="fs-13 cor-cinza-600">{{ presencaEditada.resumo }}</span>
+        </div>
+      </sc-if>
+      <sc-if value="{{ temErroGaveta }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroGaveta }}</div></sc-if>
+    </div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharGaveta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Fechar</button></div>
+  </aside>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return this.props.gavetas;
+  }
+}
+</script>
+</body>
+</html>

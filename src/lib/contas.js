@@ -1,6 +1,50 @@
 window.FSM_CONTAS = (() => {
   const Base = window.FSM_BASE;
 
+  const CHAVES_DAS_GAVETAS = [
+    'baixarModelo',
+    'cliente',
+    'criarConta',
+    'criarLote',
+    'dicaDePerfil',
+    'ehAdmin',
+    'ehAnalista',
+    'ehOficineiro',
+    'enderecoDaMudanca',
+    'erroLote',
+    'erroMudanca',
+    'erroNovaConta',
+    'fecharConta',
+    'fecharLote',
+    'lerLote',
+    'lote',
+    'loteAberto',
+    'mudanca',
+    'mudancaAberta',
+    'mudancaBotao',
+    'mudancaMaxima',
+    'mudancaMinima',
+    'novaConta',
+    'novaContaAberta',
+    'novaContaBotao',
+    'opcoesDeCarteiraDaConta',
+    'opcoesDeEscolaDaConta',
+    'opcoesDeEscolaDaMudanca',
+    'pedeEscola',
+    'perfisDaNovaConta',
+    'salvandoConta',
+    'salvarMudanca',
+    'teclaNosPerfis',
+    'temEnderecoDaMudanca',
+    'temErroLote',
+    'temErroMudanca',
+    'temErroNovaConta'
+  ];
+
+  function chavesDasGavetas(chaves) {
+    return Base.escolher(chaves, CHAVES_DAS_GAVETAS);
+  }
+
   function avisar(t) {
     this.setState({ aviso: t });
     clearTimeout(this.temporizadorDoAviso);
@@ -495,6 +539,7 @@ window.FSM_CONTAS = (() => {
     salvarMudanca,
     cancelarMudanca,
     documentoMascarado,
-    detalharLote
+    detalharLote,
+    chavesDasGavetas
   };
 })();
