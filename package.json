@@ -7,8 +7,9 @@
   "scripts": {
     "build": "python scripts/build.py",
     "serve": "python scripts/serve.py",
+    "test": "node --test \"tests/unit/*.test.js\"",
     "lint": "eslint . && node scripts/lint_components.js",
-    "format:check": "prettier --check \"src/lib/*.js\" \"scripts/*.js\" eslint.config.js",
+    "format:check": "prettier --check \"src/lib/*.js\" \"scripts/*.js\" \"tests/**/*.js\" eslint.config.js",
     "format:components": "node scripts/lint_components.js --formatar",
     "privacy": "python scripts/privacy_check.py"
   },
