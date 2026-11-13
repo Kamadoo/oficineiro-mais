@@ -1265,48 +1265,9 @@ class Component extends DCLogic {
       .map(n => ({ ...n, temAcao: true }));
   }
   notificacoes(avisos) {
-    const N = window.FSM_NOTIF || {
-        usuario: () => '',
-        chave: n => n.tit + '|' + (n.ref || n.txt),
-        ler: () => [],
-        gravar: () => {}
-      },
-      usuario = N.usuario('analista');
-    if (this.notifUsuario !== usuario) {
-      this.notifUsuario = usuario;
-      this.notifVistas = N.ler(usuario);
-    }
-    const vistas = this.notifVistas || [],
-      novas = avisos.filter(n => !vistas.includes(N.chave(n))),
-      visiveis = novas.map(n => {
-        const chave = N.chave(n);
-        return {
-          ...n,
-          ariaLida: 'Marcar como lida: ' + n.tit,
-          marcarLida: () => {
-            this.notifVistas = [...(this.notifVistas || []).filter(x => x !== chave), chave];
-            N.gravar(usuario, this.notifVistas);
-            this.forceUpdate();
-          }
-        };
-      });
-    return {
-      notifs: visiveis,
-      temVariasNotif: visiveis.length > 1,
-      lerTodasNotif: () => {
-        const chaves = novas.map(N.chave);
-        this.notifVistas = [...vistas.filter(chave => !chaves.includes(chave)), ...chaves];
-        N.gravar(usuario, this.notifVistas);
-        this.forceUpdate();
-      },
-      notifN: String(novas.length),
-      temNotif: novas.length > 0,
-      semNotif: visiveis.length === 0,
-      notifAria: novas.length
-        ? 'Notificações: ' + novas.length + (novas.length === 1 ? ' nova' : ' novas')
-        : 'Notificações: nenhuma nova',
-      abrirNotif: () => this.setState({ notifAberto: true, menuAberto: false })
-    };
+    return window.FSM_NOTIF.sino(this, 'analista', avisos, () =>
+      this.setState({ notifAberto: true, menuAberto: false })
+    );
   }
   visitaDaAgendaDetalhada(contexto) {
     const s = this.state,

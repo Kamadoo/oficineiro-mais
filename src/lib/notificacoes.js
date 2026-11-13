@@ -39,5 +39,43 @@ window.FSM_NOTIF = (() => {
     } catch (e) {}
   }
 
-  return { usuario, chave, ler, gravar };
+  function sino(componente, perfil, avisos, abrir) {
+    const uid = usuario(perfil);
+    if (componente.usuarioDasNotificacoes !== uid) {
+      componente.usuarioDasNotificacoes = uid;
+      componente.notificacoesVistas = ler(uid);
+    }
+    const marcar = lista => {
+      componente.notificacoesVistas = lista;
+      gravar(uid, lista);
+      componente.forceUpdate();
+    };
+    const vistas = componente.notificacoesVistas || [];
+    const novas = avisos.filter(n => !vistas.includes(chave(n)));
+    const visiveis = novas.map(n => {
+      const k = chave(n);
+      return {
+        ...n,
+        ariaLida: 'Marcar como lida: ' + n.tit,
+        marcarLida: () => marcar([...(componente.notificacoesVistas || []).filter(x => x !== k), k])
+      };
+    });
+    return {
+      notifs: visiveis,
+      temVariasNotif: visiveis.length > 1,
+      lerTodasNotif: () => {
+        const chaves = novas.map(chave);
+        marcar([...vistas.filter(k => !chaves.includes(k)), ...chaves]);
+      },
+      notifN: String(novas.length),
+      temNotif: novas.length > 0,
+      semNotif: visiveis.length === 0,
+      notifAria: novas.length
+        ? 'Notificações: ' + novas.length + (novas.length === 1 ? ' nova' : ' novas')
+        : 'Notificações: nenhuma nova',
+      abrirNotif: abrir
+    };
+  }
+
+  return { usuario, chave, ler, gravar, sino };
 })();

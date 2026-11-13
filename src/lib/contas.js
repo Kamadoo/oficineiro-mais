@@ -416,6 +416,64 @@ window.FSM_CONTAS = (() => {
       });
     }
   }
+  function detalharLote(loteAtual, nomesDePerfil) {
+    const SITUACOES_DO_LOTE = {
+      pronta: ['Pronta para criar', 'var(--texto-verde-700)'],
+      erro: ['', 'var(--texto-vermelho-600)'],
+      criando: ['Criando…', 'var(--texto-azul-640)'],
+      criada: ['Conta criada', 'var(--texto-verde-700)'],
+      falha: ['', 'var(--texto-vermelho-600)']
+    };
+    const linhasDoLote = loteAtual && loteAtual.linhas ? loteAtual.linhas : [];
+    const prontas = linhasDoLote.filter(l => l.st === 'pronta').length,
+      comErro = linhasDoLote.filter(l => l.st === 'erro').length,
+      criadas = linhasDoLote.filter(l => l.st === 'criada').length,
+      comFalha = linhasDoLote.filter(l => l.st === 'falha').length;
+    return {
+      temArquivo: !!(loteAtual && loteAtual.linhas),
+      resumo:
+        loteAtual && loteAtual.linhas
+          ? loteAtual.arquivo +
+            ' · ' +
+            Base.plural(linhasDoLote.length, 'pessoa', 'pessoas') +
+            ' · ' +
+            Base.plural(prontas, 'pronta', 'prontas') +
+            ' · ' +
+            Base.plural(comErro, 'com problema', 'com problema') +
+            (criadas || comFalha
+              ? ' · ' +
+                Base.plural(criadas, 'criada', 'criadas') +
+                (comFalha ? ' · ' + Base.plural(comFalha, 'falha', 'falhas') : '')
+              : '')
+          : '',
+      linhas: linhasDoLote.map(l => ({
+        numero: String(l.n),
+        nome: l.nome || '—',
+        email: l.email || '—',
+        documento: l.st === 'criada' ? 'apagado' : documentoMascarado(l.cpf),
+        perfil: nomesDePerfil[l.papel] || '—',
+        vinculo: l.escola
+          ? l.escola.sigla
+          : l.carteira
+            ? l.carteira.id
+            : l.papel === 'coordenador' || l.papel === 'gerente'
+              ? 'Toda a rede'
+              : '—',
+        situacao:
+          l.st === 'erro'
+            ? l.erro
+            : l.st === 'falha'
+              ? 'Falhou · ' + l.msg
+              : SITUACOES_DO_LOTE[l.st][0] + (l.msg ? ' · ' + l.msg : ''),
+        cor: SITUACOES_DO_LOTE[l.st][1]
+      })),
+      podeCriar: !!(loteAtual && loteAtual.linhas && (prontas || loteAtual.criando)),
+      criando: !!(loteAtual && loteAtual.criando),
+      botao: loteAtual && loteAtual.criando ? 'Criando contas…' : 'Criar ' + Base.plural(prontas, 'conta', 'contas'),
+      fecharTexto: loteAtual && loteAtual.feito ? 'Concluir' : 'Cancelar'
+    };
+  }
+
   function documentoMascarado(c) {
     const d = String(c || '').replace(/\D/g, '');
     if (d.length === 14) return '**.***.' + d.slice(5, 8) + '/' + d.slice(8, 12) + '-**';
@@ -436,6 +494,7 @@ window.FSM_CONTAS = (() => {
     ativarConta,
     salvarMudanca,
     cancelarMudanca,
-    documentoMascarado
+    documentoMascarado,
+    detalharLote
   };
 })();

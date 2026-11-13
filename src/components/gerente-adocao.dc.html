@@ -365,7 +365,7 @@ class Component extends DCLogic {
       cortes: Object.keys(CORTES).map(k => ({
         rotulo: CORTES[k][0],
         marcado: corte === k ? 'true' : 'false',
-        ...contexto.estiloOpcao(corte === k),
+        ...Base.estiloOpcao(corte === k),
         escolher: () => this.lembrar({ corte: k })
       })),
       consolidadoTitulo: 'Adoção e execução das atividades · ' + tituloDoCorte.toLowerCase(),
@@ -374,7 +374,9 @@ class Component extends DCLogic {
       semLinhasConsolidadas: gruposDoCorte.length === 0,
       porSolucao: adocaoPorSolucao.length
         ? adocaoPorSolucao
-        : [{ nome: 'Nenhuma atividade realizada', parcela: '0%', detalhe: 'no período', cor: 'var(--borda-cinza-160)' }],
+        : [
+            { nome: 'Nenhuma atividade realizada', parcela: '0%', detalhe: 'no período', cor: 'var(--borda-cinza-160)' }
+          ],
       porTipo: adocaoPorTipo,
       evolucao: evolucao,
       evolucaoAria: evolucaoAria,

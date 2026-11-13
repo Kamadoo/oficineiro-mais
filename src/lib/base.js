@@ -1,4 +1,5 @@
 window.FSM_BASE = (() => {
+  const MINUTOS_DO_DIA = 480;
   const MES = [
     'janeiro',
     'fevereiro',
@@ -425,7 +426,25 @@ window.FSM_BASE = (() => {
       : '';
   }
   function dmIso(dia) {
-    return String(dia).slice(8, 10) + '/' + String(dia).slice(5, 7);
+    return dia ? String(dia).slice(8, 10) + '/' + String(dia).slice(5, 7) : '';
+  }
+  function presencaFechada(presenca) {
+    return !!presenca.fim && !(presenca.pausa_inicio && !presenca.pausa_fim);
+  }
+  function minutosValidos(presenca, trabalhados) {
+    if (!presencaFechada(presenca)) return 0;
+    const minutos = trabalhados === undefined ? presenca.trabalhado_min : trabalhados;
+    return Math.min(minutos || 0, MINUTOS_DO_DIA);
+  }
+  function estiloOpcao(ativa) {
+    return ativa
+      ? { borda: '#0B7EA3', fundo: 'var(--fundo-ciano-60)', cor: 'var(--texto-ciano-740)', classe: '' }
+      : {
+          borda: 'var(--borda-cinza-160)',
+          fundo: 'var(--fundo-branco)',
+          cor: 'var(--texto-ciano-850)',
+          classe: 'fundo-branco botao-secundario'
+        };
   }
   function dmyIso(dia) {
     return dia ? dmIso(dia) + '/' + String(dia).slice(0, 4) : '';
@@ -628,6 +647,10 @@ window.FSM_BASE = (() => {
     hmDe,
     dmTs,
     dmIso,
+    presencaFechada,
+    minutosValidos,
+    estiloOpcao,
+    MINUTOS_DO_DIA,
     dmyIso,
     mesIni,
     cicloIniIso,

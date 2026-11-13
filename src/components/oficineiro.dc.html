@@ -536,14 +536,14 @@ const faixaDaPausa = presenca =>
         Base.hm(minutosDoInstante(presenca.pausa_fim))
       : ' · pausa desde ' + Base.hm(minutosDoInstante(presenca.pausa_inicio))
     : '';
-const LIMITE_DO_DIA = 480;
+const LIMITE_DO_DIA = Base.MINUTOS_DO_DIA;
 const trabalhadoEm = presenca =>
-  presenca.fim && !(presenca.pausa_inicio && !presenca.pausa_fim)
+  Base.presencaFechada(presenca)
     ? presenca.trabalhado_min != null
       ? presenca.trabalhado_min
       : minutosTrabalhados(presenca.inicio, presenca.fim, presenca.pausa_inicio, presenca.pausa_fim)
     : null;
-const minutosValidos = presenca => Math.min(trabalhadoEm(presenca) || 0, LIMITE_DO_DIA);
+const minutosValidos = presenca => Base.minutosValidos(presenca, trabalhadoEm(presenca));
 const horaValida = hora => /^([01]\d|2[0-3]):[0-5]\d$/.test(String(hora || ''));
 const horarioPadrao = numero => horaDe(INICIO_DA_GRADE + (Number(numero) - 1) * 50);
 const horarioDe = minutos => Math.max(1, Math.min(12, Math.floor((minutos - INICIO_DA_GRADE) / 50) + 1));
@@ -1800,7 +1800,7 @@ class Component extends DCLogic {
           fim = presenca.fim ? new Date(presenca.fim) : null,
           minutos = trabalhadoEm(presenca),
           validos = minutosValidos(presenca),
-          pendente = !fim || (presenca.pausa_inicio && !presenca.pausa_fim);
+          pendente = !Base.presencaFechada(presenca);
         const situacao = pendente
           ? presenca.data === hoje
             ? 'Em andamento'
@@ -2317,50 +2317,9 @@ class Component extends DCLogic {
     return lista.map(notificacao => ({ ...notificacao, temAcao: !!(notificacao.acao && notificacao.go) }));
   }
   sino(notificacoes) {
-    const Notificacoes = window.FSM_NOTIF || {
-        usuario: () => '',
-        chave: notificacao => notificacao.tit + '|' + (notificacao.ref || notificacao.txt),
-        ler: () => [],
-        gravar: () => {}
-      },
-      usuario = Notificacoes.usuario('oficineiro');
-    if (this.usuarioDasNotificacoes !== usuario) {
-      this.usuarioDasNotificacoes = usuario;
-      this.notificacoesVistas = Notificacoes.ler(usuario);
-    }
-    const vistas = this.notificacoesVistas || [],
-      novas = notificacoes.filter(notificacao => !vistas.includes(Notificacoes.chave(notificacao))),
-      visiveis = novas.map(notificacao => {
-        const chave = Notificacoes.chave(notificacao);
-        return {
-          ...notificacao,
-          ariaLida: 'Marcar como lida: ' + notificacao.tit,
-          marcarLida: () => {
-            this.notificacoesVistas = [...(this.notificacoesVistas || []).filter(x => x !== chave), chave];
-            Notificacoes.gravar(usuario, this.notificacoesVistas);
-            this.forceUpdate();
-          }
-        };
-      });
-    return {
-      notifs: visiveis,
-      temVariasNotif: visiveis.length > 1,
-      lerTodasNotif: () => {
-        const chaves = novas.map(Notificacoes.chave);
-        this.notificacoesVistas = [...vistas.filter(chave => !chaves.includes(chave)), ...chaves];
-        Notificacoes.gravar(usuario, this.notificacoesVistas);
-        this.forceUpdate();
-      },
-      notifN: String(novas.length),
-      temNotif: novas.length > 0,
-      semNotif: visiveis.length === 0,
-      notifAria: novas.length
-        ? 'Notificações: ' + novas.length + (novas.length === 1 ? ' nova' : ' novas')
-        : 'Notificações: nenhuma nova',
-      abrirNotif: () => {
-        this.setState({ gaveta: 'notif', menuAberto: false });
-      }
-    };
+    return window.FSM_NOTIF.sino(this, 'oficineiro', notificacoes, () => {
+      this.setState({ gaveta: 'notif', menuAberto: false });
+    });
   }
 
   contexto(relatorio, lembretesPendentes) {

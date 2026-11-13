@@ -378,7 +378,7 @@ const mesCurto = iso => Base.MESES[Number(String(iso).slice(5, 7)) - 1] + '/' + 
 const turmaDaGrade = g => (g.tipo === 'F' || g.ano == null ? 'Professores' : anoTxt(g.ano) + ' · Turma ' + g.turma);
 const primeiroNome = nome => String(nome || '').split(' ')[0];
 const temposDeAula = (inicio, fim) => Math.max(1, Math.round((minDe(fim) - minDe(inicio)) / 50));
-const minutosValidos = p => (!p.fim || (p.pausa_inicio && !p.pausa_fim) ? 0 : Math.min(p.trabalhado_min || 0, 480));
+const minutosValidos = p => Base.minutosValidos(p);
 const situacaoDoRegistro = a =>
   a.revisao_status === 'anulado'
     ? ['Anulada pela coordenação', 'var(--texto-cinza-600)', 'var(--fundo-cinza-70)']
@@ -387,7 +387,11 @@ const situacaoDoRegistro = a =>
       : a.situacao === 'Realizada parcialmente'
         ? ['Realizada parcialmente', 'var(--texto-verde-700)', 'var(--fundo-verde-80)']
         : a.situacao === 'Não realizada'
-          ? ['Não realizada' + (a.motivo ? ' · ' + a.motivo : ''), 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)']
+          ? [
+              'Não realizada' + (a.motivo ? ' · ' + a.motivo : ''),
+              'var(--texto-vermelho-600)',
+              'var(--fundo-vermelho-50)'
+            ]
           : [a.situacao || 'Pendente de registro', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)'];
 const pendenteDeCheck = a =>
   REGISTRADAS.includes(a.situacao) &&
@@ -505,16 +509,6 @@ class Component extends DCLogic {
   componentWillUnmount() {
     document.removeEventListener('keydown', this.aoTeclar);
     clearInterval(this.relogio);
-  }
-  estiloOpcao(ativa) {
-    return ativa
-      ? { borda: '#0B7EA3', fundo: 'var(--fundo-ciano-60)', cor: 'var(--texto-ciano-740)', classe: '' }
-      : {
-          borda: 'var(--borda-cinza-160)',
-          fundo: 'var(--fundo-branco)',
-          cor: 'var(--texto-ciano-850)',
-          classe: 'fundo-branco botao-secundario'
-        };
   }
   avisar(texto) {
     this.setState({ aviso: texto });
@@ -1353,50 +1347,9 @@ class Component extends DCLogic {
     return lista.map(aviso => ({ ...aviso, temAcao: !!(aviso.acao && aviso.go) }));
   }
   notificacoes(avisos) {
-    const N = window.FSM_NOTIF || {
-        usuario: () => '',
-        chave: n => n.tit + '|' + (n.ref || n.txt),
-        ler: () => [],
-        gravar: () => {}
-      },
-      usuario = N.usuario('direcao');
-    if (this.notifUsuario !== usuario) {
-      this.notifUsuario = usuario;
-      this.notifVistas = N.ler(usuario);
-    }
-    const vistas = this.notifVistas || [],
-      novas = avisos.filter(n => !vistas.includes(N.chave(n))),
-      visiveis = novas.map(n => {
-        const chave = N.chave(n);
-        return {
-          ...n,
-          ariaLida: 'Marcar como lida: ' + n.tit,
-          marcarLida: () => {
-            this.notifVistas = [...(this.notifVistas || []).filter(x => x !== chave), chave];
-            N.gravar(usuario, this.notifVistas);
-            this.forceUpdate();
-          }
-        };
-      });
-    return {
-      notifs: visiveis,
-      temVariasNotif: visiveis.length > 1,
-      lerTodasNotif: () => {
-        const chaves = novas.map(N.chave);
-        this.notifVistas = [...vistas.filter(chave => !chaves.includes(chave)), ...chaves];
-        N.gravar(usuario, this.notifVistas);
-        this.forceUpdate();
-      },
-      notifN: String(novas.length),
-      temNotif: novas.length > 0,
-      semNotif: visiveis.length === 0,
-      notifAria: novas.length
-        ? 'Notificações: ' + novas.length + (novas.length === 1 ? ' nova' : ' novas')
-        : 'Notificações: nenhuma nova',
-      abrirNotif: () => {
-        this.setState({ notifAberto: true, menuAberto: false });
-      }
-    };
+    return window.FSM_NOTIF.sino(this, 'direcao', avisos, () => {
+      this.setState({ notifAberto: true, menuAberto: false });
+    });
   }
   renderVals() {
     const s = this.state;
@@ -1523,7 +1476,7 @@ class Component extends DCLogic {
         return {
           rotulo: motivo,
           ativo: ativo ? 'true' : 'false',
-          ...this.estiloOpcao(ativo),
+          ...Base.estiloOpcao(ativo),
           escolher: () => this.setState({ contestacaoMotivo: motivo })
         };
       }),

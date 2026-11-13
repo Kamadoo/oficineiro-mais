@@ -477,8 +477,6 @@ const descricaoDoTipo = atividade =>
         .join(' · ');
 const isoDaData = d =>
   d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-const quantidadeComRotulo = (n, um, varios) => Number(n || 0).toLocaleString('pt-BR') + ' ' + (n === 1 ? um : varios);
-const documentoMascarado = Contas.documentoMascarado;
 const PERFIS_DO_LOTE = {
   oficineiro: 'Oficineiro de Inclusão Digital',
   analista: 'Analista',
@@ -1835,8 +1833,8 @@ class Component extends DCLogic {
       if (p.pausa_inicio) return Math.max(0, b - pausaDaPresenca(p));
       return b > 360 ? b - 60 : b;
     };
-    const presencaFechada = p => !!p.fim && !(p.pausa_inicio && !p.pausa_fim);
-    const minutosValidos = p => (presencaFechada(p) ? Math.min(minutosTrabalhados(p), 480) : 0);
+    const presencaFechada = Base.presencaFechada;
+    const minutosValidos = p => Base.minutosValidos(p, minutosTrabalhados(p));
     const minutosContabilizados = minutosValidos;
     const dataDeHoje = Base.iso(new Date());
     const situacaoDaPresenca = p => {
@@ -3031,7 +3029,7 @@ class Component extends DCLogic {
     const adSet = k => e =>
       this.setState({ acaoDeAdmin: { ...this.state.acaoDeAdmin, [k]: e.target.value }, erroConta: '' });
     const minTxt = m => (m == null ? '—' : Math.floor(m / 60) + 'h' + String(m % 60).padStart(2, '0'));
-    const dmIso = d => (d ? String(d).slice(8, 10) + '/' + String(d).slice(5, 7) : '');
+    const dmIso = Base.dmIso;
     const dmaIso = d => (d ? dmIso(d) + '/' + String(d).slice(0, 4) : '');
     const hojeSP = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' });
     const cd = s.dadosDaConsulta,
@@ -3085,66 +3083,7 @@ class Component extends DCLogic {
     };
   }
   valoresDoLote(s) {
-    const loteAtual = s.lote;
-    const SITUACOES_DA_LINHA = {
-      pronta: ['Pronta para criar', 'var(--texto-verde-700)'],
-      erro: ['', 'var(--texto-vermelho-600)'],
-      criando: ['Criando…', 'var(--texto-azul-640)'],
-      criada: ['Conta criada', 'var(--texto-verde-700)'],
-      falha: ['', 'var(--texto-vermelho-600)']
-    };
-    const linhasDoLote = loteAtual && loteAtual.linhas ? loteAtual.linhas : [];
-    const quantasProntas = linhasDoLote.filter(l => l.st === 'pronta').length,
-      quantasComErro = linhasDoLote.filter(l => l.st === 'erro').length,
-      quantasCriadas = linhasDoLote.filter(l => l.st === 'criada').length,
-      quantasComFalha = linhasDoLote.filter(l => l.st === 'falha').length;
-    const lote = {
-      temArquivo: !!(loteAtual && loteAtual.linhas),
-      resumo:
-        loteAtual && loteAtual.linhas
-          ? loteAtual.arquivo +
-            ' · ' +
-            quantidadeComRotulo(linhasDoLote.length, 'pessoa', 'pessoas') +
-            ' · ' +
-            quantidadeComRotulo(quantasProntas, 'pronta', 'prontas') +
-            ' · ' +
-            quantidadeComRotulo(quantasComErro, 'com problema', 'com problema') +
-            (quantasCriadas || quantasComFalha
-              ? ' · ' +
-                quantidadeComRotulo(quantasCriadas, 'criada', 'criadas') +
-                (quantasComFalha ? ' · ' + quantidadeComRotulo(quantasComFalha, 'falha', 'falhas') : '')
-              : '')
-          : '',
-      linhas: linhasDoLote.map(l => ({
-        numero: String(l.n),
-        nome: l.nome || '—',
-        email: l.email || '—',
-        documento: l.st === 'criada' ? 'apagado' : documentoMascarado(l.cpf),
-        perfil: PERFIS_DO_LOTE[l.papel] || '—',
-        vinculo: l.escola
-          ? l.escola.sigla
-          : l.carteira
-            ? l.carteira.id
-            : l.papel === 'coordenador' || l.papel === 'gerente'
-              ? 'Toda a rede'
-              : '—',
-        situacao:
-          l.st === 'erro'
-            ? l.erro
-            : l.st === 'falha'
-              ? 'Falhou · ' + l.msg
-              : SITUACOES_DA_LINHA[l.st][0] + (l.msg ? ' · ' + l.msg : ''),
-        cor: SITUACOES_DA_LINHA[l.st][1]
-      })),
-      podeCriar: !!(loteAtual && loteAtual.linhas && (quantasProntas || loteAtual.criando)),
-      criando: !!(loteAtual && loteAtual.criando),
-      botao:
-        loteAtual && loteAtual.criando
-          ? 'Criando contas…'
-          : 'Criar ' + quantidadeComRotulo(quantasProntas, 'conta', 'contas'),
-      fecharTexto: loteAtual && loteAtual.feito ? 'Concluir' : 'Cancelar'
-    };
-    return { lote, loteAtual };
+    return { lote: Contas.detalharLote(s.lote, PERFIS_DO_LOTE), loteAtual: s.lote };
   }
   telasVisiveis(s, v) {
     const { naAba } = v;
@@ -3690,52 +3629,9 @@ class Component extends DCLogic {
     return {
       perfilTitulo: s.ehAdmin ? 'Administrador' : 'Coordenador do núcleo',
       temSino: !s.ehAdmin,
-      ...(() => {
-        const N = window.FSM_NOTIF || {
-            usuario: () => '',
-            chave: n => n.tit + '|' + (n.ref || n.txt),
-            ler: () => [],
-            gravar: () => {}
-          },
-          nUid = N.usuario('coordenador');
-        if (this.usuarioDasNotificacoes !== nUid) {
-          this.usuarioDasNotificacoes = nUid;
-          this.notificacoesVistas = N.ler(nUid);
-        }
-        const vistas = this.notificacoesVistas || [],
-          novas = notificacoes.filter(n => !vistas.includes(N.chave(n))),
-          vis = novas.map(n => {
-            const k = N.chave(n);
-            return {
-              ...n,
-              ariaLida: 'Marcar como lida: ' + n.tit,
-              marcarLida: () => {
-                this.notificacoesVistas = [...(this.notificacoesVistas || []).filter(x => x !== k), k];
-                N.gravar(nUid, this.notificacoesVistas);
-                this.forceUpdate();
-              }
-            };
-          });
-        return {
-          notifs: vis,
-          temVariasNotif: vis.length > 1,
-          lerTodasNotif: () => {
-            const ks = novas.map(N.chave);
-            this.notificacoesVistas = [...vistas.filter(k => !ks.includes(k)), ...ks];
-            N.gravar(nUid, this.notificacoesVistas);
-            this.forceUpdate();
-          },
-          notifN: String(novas.length),
-          temNotif: novas.length > 0,
-          semNotif: vis.length === 0,
-          notifAria: novas.length
-            ? 'Notificações: ' + novas.length + (novas.length === 1 ? ' nova' : ' novas')
-            : 'Notificações: nenhuma nova',
-          abrirNotif: () => {
-            this.setState({ notificacoesAbertas: true, menuAberto: false });
-          }
-        };
-      })(),
+      ...window.FSM_NOTIF.sino(this, 'coordenador', notificacoes, () => {
+        this.setState({ notificacoesAbertas: true, menuAberto: false });
+      }),
       notifAberto: !!s.notificacoesAbertas,
       fecharNotif: () => this.setState({ notificacoesAbertas: false }),
       temFiltros: ['aulas', 'rel', 'prod'].includes(s.tela) && s.conectado,

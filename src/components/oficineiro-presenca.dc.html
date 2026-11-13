@@ -163,23 +163,8 @@ const HORARIOS_DO_AJUSTE = [
 ];
 const horaDoRelogio = desvio =>
   new Date(Date.now() + (desvio || 0)).toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour12: false });
-let leafletCarregando = null;
-const carregarLeaflet = () => {
-  if (window.L && window.L.map) return Promise.resolve(window.L);
-  if (!leafletCarregando)
-    leafletCarregando = new Promise((ok, erro) => {
-      const estilo = document.createElement('link');
-      estilo.rel = 'stylesheet';
-      estilo.href = '../vendor/leaflet/leaflet-1.9.4.css';
-      document.head.appendChild(estilo);
-      const script = document.createElement('script');
-      script.src = '../vendor/leaflet/leaflet-1.9.4.js';
-      script.onload = () => (window.L ? ok(window.L) : erro());
-      script.onerror = erro;
-      document.head.appendChild(script);
-    });
-  return leafletCarregando;
-};
+const carregarLeaflet = () =>
+  window.FSM_MAPA.carregarLeaflet('../vendor/leaflet/leaflet-1.9.4.css', '../vendor/leaflet/leaflet-1.9.4.js');
 class Component extends DCLogic {
   componentDidMount() {
     this.relogio = setInterval(() => {
