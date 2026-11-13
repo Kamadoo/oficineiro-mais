@@ -49,7 +49,7 @@ Gatilhos em todas as tabelas de negócio registram quem alterou o quê e quando.
 | `Referrer-Policy` | `no-referrer` |
 | `Permissions-Policy` | geolocalização só no próprio site; câmera e microfone bloqueados |
 
-O React é carregado com Subresource Integrity, e todos os arquivos de terceiros têm o SHA-256 conferido no build. Conteúdo vindo do banco nunca é interpretado como HTML.
+O React é carregado com Subresource Integrity, e todos os arquivos de terceiros têm o SHA-256 conferido no build. Conteúdo vindo do banco nunca é interpretado como HTML. O código do site não usa `innerHTML`; o runtime de componentes usa `innerHTML` só para compilar os modelos dos próprios arquivos `.dc.html`, publicados pelo build com hash no nome, e os valores do banco entram nos modelos por interpolação, que o React escapa.
 
 ## Verificação
 

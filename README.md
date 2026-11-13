@@ -24,6 +24,12 @@ O Oficineiro+ acompanha o trabalho dos oficineiros que levam soluções de tecno
 
 Cada perfil vê apenas o que lhe cabe. As regras de acesso ficam no banco de dados, com Row Level Security em todas as tabelas, e cada operação sensível fica registrada em auditoria.
 
+## In English
+
+Oficineiro+ is a management system for the technology workshops that run in a city's public schools. Workshop instructors check in at school with location verification, keep a weekly timetable, log every class and sign a monthly report; school principals validate timetables and reports; field analysts plan and record school visits; managers and coordinators follow adoption, attendance and accounts across the network.
+
+It is a static site backed by PostgreSQL on Supabase, with no application server: business and access rules live in the database as Row Level Security policies and SQL functions (57 migrations, 664 pgTAP assertions), and two Deno Edge Functions handle sign-in and account administration. The interface is written in declarative components rendered with React 18, served under a strict Content Security Policy. Continuous integration runs the database tests, an RLS audit, unit tests, a Playwright sweep of every screen with axe-core accessibility checks, and linting for JavaScript, Python and TypeScript. The code and documentation are in Portuguese, the language of the users.
+
 ## Perfis
 
 | Perfil | Responsabilidades |
@@ -99,7 +105,7 @@ Detalhes em [docs/seguranca.md](docs/seguranca.md).
 - Testes unitários das bibliotecas com `node:test` (`tests/unit`).
 - Varredura de todas as telas nos temas claro e escuro com Playwright e checagem de acessibilidade com axe-core (`tests/ui`).
 - ESLint e Prettier em todo o JavaScript, inclusive o script de cada componente; Ruff nos scripts Python; `deno fmt`, `deno lint` e `deno check` nas funções de borda.
-- Integração contínua no GitHub Actions com ações fixadas por versão e Dependabot.
+- Integração contínua no GitHub Actions com ações fixadas pelo commit e Dependabot.
 
 Como rodar cada grupo em [docs/testes.md](docs/testes.md).
 
@@ -110,7 +116,7 @@ src/
   index.dc.html        página de entrada e autenticação
   components/          perfis, telas, menu e cabeçalho
   lib/                 autenticação, base comum, planilhas, notificações, aparência
-  styles/              folha de estilo comum com tema claro e escuro
+  styles/              estilo comum com tema claro e escuro e estilo da página de entrada
 public/                marca, ícones e manifesto
 vendor/                runtime de componentes, React, Leaflet e fonte Inter (terceiros, com hash conferido no build)
 supabase/

@@ -14,11 +14,15 @@ Cada tela é um arquivo `.dc.html` com três partes:
 - **estilo** declarado no `<helmet>` do componente;
 - **lógica** numa classe JavaScript que estende `DCLogic` e expõe os valores do modelo em `renderVals`.
 
+O formato vem da ferramenta de prototipação com que as telas foram desenhadas e foi mantido porque cada arquivo reúne a tela inteira (marcação, estilo e comportamento) e é servido como está, sem etapa de transpilação: o build só publica os arquivos com hash no nome. O custo é não poder usar JSX nem módulos dentro do componente e depender do runtime para interpretar o modelo, cujos limites estão abaixo.
+
 Os componentes são compostos com `<dc-import name="...">`. O runtime (`vendor/dc-runtime/dc-runtime.js`) é de terceiros; a origem e os ajustes estão em `vendor/README.md`. Ele carrega cada componente sob demanda a partir de `./components/<nome>.dc.html`, compila o modelo e o renderiza com React 18.
 
 Cada perfil é um componente de nível superior (`oficineiro`, `direcao`, `analista`, `coordenador`, `gerente`) que mantém o estado compartilhado, as gavetas, as notificações e as ações que gravam no banco, e entrega a cada tela um objeto `contexto`. As telas (`gerente-contas`, `oficineiro-presenca` etc.) ficam responsáveis apenas pela apresentação e pelos filtros próprios, guardados em memória por tela. O menu lateral e o cabeçalho são componentes comuns a todos os perfis.
 
 ### Bibliotecas
+
+As bibliotecas são scripts clássicos que publicam um objeto global (`window.FSM_BASE`, `window.FSM_AUTH` etc.), carregados pela página de entrada. Não são módulos ES porque o runtime executa a lógica de cada componente como script comum, sem `import`; converter exigiria mudar o runtime de terceiros ou acrescentar um empacotador ao build, com risco para a CSP e para os hashes publicados. Cada global é criado uma única vez; o único estado guardado neles é a sessão em `FSM_AUTH`, as preferências em `FSM_APARENCIA` e o carregamento do Leaflet em `FSM_MAPA`.
 
 | Arquivo | Papel |
 | --- | --- |
@@ -28,10 +32,13 @@ Cada perfil é um componente de nível superior (`oficineiro`, `direcao`, `anali
 | `lib/notificacoes.js` | central de avisos de cada perfil |
 | `lib/aparencia.js` | tema claro e escuro e preferências de exibição |
 | `lib/onboarding.js` | leitura das planilhas de onboarding e associação dos registros às escolas |
+| `lib/contas.js` | criação de contas, lote de contas, mudança de escola e máscara de documentos, comuns ao Coordenador e ao Gerente |
+| `lib/mapa.js` | carregamento do Leaflet sob demanda |
+| `lib/sobre.js` | versão, data de geração e contato de suporte exibidos em Configurações |
 
 ### Estilo
 
-`src/styles/app.css` concentra as classes utilitárias e os componentes visuais. Todas as cores passam por variáveis CSS, o que permite o tema escuro sem duplicar regras. Classes e variáveis de cor seguem uma escala por família e tom, de 0 (mais claro) a 1000 (mais escuro): `fundo-cinza-20`, `cor-ciano-850`, `borda-cinza-160`; transparências levam o sufixo `-a` com a opacidade (`fundo-branco-a9`). `src/lib/aparencia.js` associa cada tom claro ao equivalente do tema escuro.
+`src/styles/app.css` concentra as classes utilitárias e os componentes visuais. `src/styles/entrada.css` traz o estilo da página de entrada e os ajustes globais da área logada (menu, campos, foco, animações e tema escuro). Todas as cores passam por variáveis CSS, o que permite o tema escuro sem duplicar regras. Classes e variáveis de cor seguem uma escala por família e tom, de 0 (mais claro) a 1000 (mais escuro): `fundo-cinza-20`, `cor-ciano-850`, `borda-cinza-160`; transparências levam o sufixo `-a` com a opacidade (`fundo-branco-a9`). `src/lib/aparencia.js` associa cada tom claro ao equivalente do tema escuro.
 
 ## Build
 
