@@ -117,13 +117,13 @@ class Component extends DCLogic {
         : '';
     const atvTexto = r => {
       const d = r.detalhes && typeof r.detalhes === 'object' ? r.detalhes : {},
-        v = k => atvVal(d, k),
-        tem = k => v(k) != null && v(k) !== '',
+        valorDe = k => atvVal(d, k),
+        tem = k => valorDe(k) != null && valorDe(k) !== '',
         junta = (...p) => p.filter(Boolean).join(' · '),
         outro = r.alvo_nome && r.alvo_id !== r.usuario_id ? r.alvo_nome : '',
         de = outro ? 'de ' + outro : '',
-        esc = r.escola || '',
-        dist = (k, rot) => (tem(k) ? 'a ' + atvDist(v(k)) + ' da escola' : rot || ''),
+        escola = r.escola || '',
+        dist = (k, rot) => (tem(k) ? 'a ' + atvDist(valorDe(k)) + ' da escola' : rot || ''),
         sit = () =>
           ['conferencia_status', 'excedente_status', 'deficit_status', 'horario_status', 'revisao_status', 'status']
             .map(k => (d[k] && typeof d[k] === 'object' && 'para' in d[k] ? ST_ATV[d[k].para] : null))
@@ -139,30 +139,41 @@ class Component extends DCLogic {
         case 'entrada':
           return [
             'Registrou entrada na escola',
-            junta(esc, marcado(v('inicio')), dist('distancia_inicio_m', 'sem localização'), v('conferencia'))
+            junta(
+              escola,
+              marcado(valorDe('inicio')),
+              dist('distancia_inicio_m', 'sem localização'),
+              valorDe('conferencia')
+            )
           ];
         case 'saida':
           return [
             'Registrou saída da escola',
-            junta(esc, marcado(v('fim')), dist('distancia_fim_m'), v('conferencia'))
+            junta(escola, marcado(valorDe('fim')), dist('distancia_fim_m'), valorDe('conferencia'))
           ];
         case 'entrada_raio':
-          return ['Entrou no raio da escola', junta(esc, marcado(v('entrou_raio_em')), dist('distancia_entrada_m'))];
+          return [
+            'Entrou no raio da escola',
+            junta(escola, marcado(valorDe('entrou_raio_em')), dist('distancia_entrada_m'))
+          ];
         case 'justificativa':
           return [
             'Enviou justificativa de presença',
-            junta(esc, v('motivo') || v('motivo_excedente') || v('motivo_deficit') || v('motivo_horario'))
+            junta(
+              escola,
+              valorDe('motivo') || valorDe('motivo_excedente') || valorDe('motivo_deficit') || valorDe('motivo_horario')
+            )
           ];
         case 'decisao_presenca':
-          return ['Conferiu presença', junta(de, esc, sit())];
+          return ['Conferiu presença', junta(de, escola, sit())];
         case 'reabertura':
-          return ['Reabriu a presença do dia', junta(esc, atvData(v('data')))];
+          return ['Reabriu a presença do dia', junta(escola, atvData(valorDe('data')))];
         case 'recusa':
           return [
             'Presença recusada',
             junta(
               (d.evento || 'Presença') + ' não aceita' + (d.motivo ? ': ' + d.motivo : ''),
-              esc,
+              escola,
               d.quando ? 'marcado no aparelho em ' + dataHora(d.quando, true) : ''
             )
           ];
@@ -175,49 +186,52 @@ class Component extends DCLogic {
               : r.evento === 'aula_editada'
                 ? 'Alterou registro de atividade'
                 : 'Excluiu registro de atividade',
-            junta(esc, atvData(v('data')), v('turma'), v('solucao'), v('situacao'))
+            junta(escola, atvData(valorDe('data')), valorDe('turma'), valorDe('solucao'), valorDe('situacao'))
           ];
         case 'aula_direcao':
-          return ['Direção conferiu registro de atividade', junta(de, esc)];
+          return ['Direção conferiu registro de atividade', junta(de, escola)];
         case 'aula_revisada':
-          return ['Revisou registro de atividade', junta(de, esc, sit())];
+          return ['Revisou registro de atividade', junta(de, escola, sit())];
         case 'grade_enviada':
-          return ['Enviou a grade de atividades', junta(esc, tem('ano_letivo') ? 'Ano ' + v('ano_letivo') : '')];
+          return [
+            'Enviou a grade de atividades',
+            junta(escola, tem('ano_letivo') ? 'Ano ' + valorDe('ano_letivo') : '')
+          ];
         case 'grade_validada':
-          return ['Validou a grade de atividades', junta(de, esc)];
+          return ['Validou a grade de atividades', junta(de, escola)];
         case 'grade_devolvida':
-          return ['Devolveu a grade de atividades', junta(de, esc, v('comentario'))];
+          return ['Devolveu a grade de atividades', junta(de, escola, valorDe('comentario'))];
         case 'relatorio_fechado':
-          return ['Fechou o relatório mensal', junta(esc, atvData(v('competencia')).slice(3))];
+          return ['Fechou o relatório mensal', junta(escola, atvData(valorDe('competencia')).slice(3))];
         case 'relatorio_aprovado':
-          return ['Aprovou relatório mensal', junta(de, esc, sit())];
+          return ['Aprovou relatório mensal', junta(de, escola, sit())];
         case 'relatorio_devolvido':
-          return ['Devolveu relatório mensal', junta(de, esc, v('motivo_devolucao'))];
+          return ['Devolveu relatório mensal', junta(de, escola, valorDe('motivo_devolucao'))];
         case 'visita_registrada':
-          return ['Registrou visita', junta(esc, atvData(v('data')), v('tipo'))];
+          return ['Registrou visita', junta(escola, atvData(valorDe('data')), valorDe('tipo'))];
         case 'visita_corrigida':
-          return ['Corrigiu registro de visita', junta(esc)];
+          return ['Corrigiu registro de visita', junta(escola)];
         case 'visita_agendada':
           return [
             'Agendou visita',
             junta(
               outro ? 'para ' + outro : '',
-              esc,
-              atvData(v('data')),
-              tem('hora') ? String(v('hora')).slice(0, 5) : ''
+              escola,
+              atvData(valorDe('data')),
+              tem('hora') ? String(valorDe('hora')).slice(0, 5) : ''
             )
           ];
         case 'visita_cancelada':
-          return ['Cancelou visita agendada', junta(de, esc, v('motivo_alteracao'))];
+          return ['Cancelou visita agendada', junta(de, escola, valorDe('motivo_alteracao'))];
         case 'visita_remarcada':
           return [
             'Remarcou visita',
-            junta(esc, tem('data') ? 'para ' + atvData(v('data')) : '', v('motivo_alteracao'))
+            junta(escola, tem('data') ? 'para ' + atvData(valorDe('data')) : '', valorDe('motivo_alteracao'))
           ];
         case 'onboarding_baixa':
-          return ['Deu baixa em onboarding', junta(esc, v('baixa_forma'))];
+          return ['Deu baixa em onboarding', junta(escola, valorDe('baixa_forma'))];
         case 'onboarding_reaberto':
-          return ['Reabriu onboarding', junta(esc)];
+          return ['Reabriu onboarding', junta(escola)];
         case 'consulta':
           return [
             outro ? 'Consultou dados de outra pessoa' : 'Consultou dados',
@@ -239,7 +253,7 @@ class Component extends DCLogic {
             junta(d.tela, d.arquivo ? 'arquivo ' + d.arquivo : '', d.linhas ? d.linhas + ' linhas' : '')
           ];
         default:
-          return [ACAO[String(r.evento || '').toUpperCase()] || 'Atividade', junta(outro, esc, d.motivo)];
+          return [ACAO[String(r.evento || '').toUpperCase()] || 'Atividade', junta(outro, escola, d.motivo)];
       }
     };
     const atvLinha = r => {

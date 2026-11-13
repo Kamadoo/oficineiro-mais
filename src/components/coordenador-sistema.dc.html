@@ -21,8 +21,8 @@
 class Component extends DCLogic {
   renderVals() {
     const contexto = this.props.contexto;
-    const cf = contexto.configuracoes || {};
-    const cfSet = k => e =>
+    const configuracoes = contexto.configuracoes || {};
+    const definirNaConfiguracao = k => e =>
       contexto.setState({
         configuracoes: { ...contexto.estado().configuracoes, [k]: e.target.value },
         erroSistema: ''
@@ -31,10 +31,10 @@ class Component extends DCLogic {
       temErro: !!contexto.erroSistema,
       erro: contexto.erroSistema,
       configuracoes: {
-        ...cf,
-        escreverEmail: cfSet('email'),
-        escreverTelefone: cfSet('telefone'),
-        escreverHorario: cfSet('horario'),
+        ...configuracoes,
+        escreverEmail: definirNaConfiguracao('email'),
+        escreverTelefone: definirNaConfiguracao('telefone'),
+        escreverHorario: definirNaConfiguracao('horario'),
         salvar: () => contexto.salvarConfiguracoes(),
         botao: contexto.salvandoSistema ? 'Salvando…' : 'Salvar'
       }

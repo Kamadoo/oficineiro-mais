@@ -170,24 +170,24 @@ class Component extends DCLogic {
     const presenca = registro.presenca ? contexto.presencas.find(p => p.id === registro.presenca) : null;
     const visitasDaAgenda = agendaValida
       .filter(
-        v =>
-          (v.status === 'agendada' || v.id === registro.agenda) &&
-          v.analista_id === usuario &&
-          v.data <= hoje &&
-          v.data >= contexto.ha30Dias &&
-          (!presenca || v.escola_id === presenca.escola_id)
+        visita =>
+          (visita.status === 'agendada' || visita.id === registro.agenda) &&
+          visita.analista_id === usuario &&
+          visita.data <= hoje &&
+          visita.data >= contexto.ha30Dias &&
+          (!presenca || visita.escola_id === presenca.escola_id)
       )
       .sort((a, b) => b.data.localeCompare(a.data) || String(a.hora || '').localeCompare(String(b.hora || '')))
-      .map(v => ({
-        valor: String(v.id),
+      .map(visita => ({
+        valor: String(visita.id),
         rotulo:
-          dmIso(v.data) +
-          (v.hora ? ' ' + hmDe(v.hora) : '') +
+          dmIso(visita.data) +
+          (visita.hora ? ' ' + hmDe(visita.hora) : '') +
           ' · ' +
-          (contexto.escolaDe(v.escola_id) || {}).sigla +
-          (v.tipo ? ' · ' + v.tipo : '') +
+          (contexto.escolaDe(visita.escola_id) || {}).sigla +
+          (visita.tipo ? ' · ' + visita.tipo : '') +
           ' · ' +
-          origemDe(v.origem)[0]
+          origemDe(visita.origem)[0]
       }));
     const visitaDaAgenda = registro.agenda ? contexto.agenda.find(v => v.id === registro.agenda) : null;
     const vinculo = [
@@ -208,30 +208,30 @@ class Component extends DCLogic {
     const visitasDoMes = contexto.minhasVisitas.filter(
       v => v.data >= mes && v.data <= fimDoMes(mes) && (!memoria.escola || String(v.escola_id) === memoria.escola)
     );
-    const visitas = visitasDoMes.map(v => {
-      const objetivo = OBJETIVOS[v.objetivo] || SEM_OBJETIVO,
-        correcoes = contexto.correcoesDe(v.id).length;
+    const visitas = visitasDoMes.map(visita => {
+      const objetivo = OBJETIVOS[visita.objetivo] || SEM_OBJETIVO,
+        correcoes = contexto.correcoesDe(visita.id).length;
       return {
-        data: dmIso(v.data),
-        escola: nomeDaEscola(v.escola_id),
-        aria: 'Ver a visita de ' + dmIso(v.data) + ' em ' + nomeDaEscola(v.escola_id),
-        abrir: () => contexto.abrirVisita(v.id),
-        temNota: !!(v.agenda_id || correcoes),
+        data: dmIso(visita.data),
+        escola: nomeDaEscola(visita.escola_id),
+        aria: 'Ver a visita de ' + dmIso(visita.data) + ' em ' + nomeDaEscola(visita.escola_id),
+        abrir: () => contexto.abrirVisita(visita.id),
+        temNota: !!(visita.agenda_id || correcoes),
         nota: [
-          v.agenda_id ? 'da agenda' : '',
+          visita.agenda_id ? 'da agenda' : '',
           correcoes ? (correcoes === 1 ? 'corrigida 1 vez' : 'corrigida ' + correcoes + ' vezes') : ''
         ]
           .filter(Boolean)
           .join(' · '),
-        tipo: v.tipo + (v.subtipo ? ' · ' + v.subtipo : '') + (v.turma ? ' · ' + v.turma : ''),
-        participantes: v.participantes || '—',
-        solucao: v.solucao || '—',
+        tipo: visita.tipo + (visita.subtipo ? ' · ' + visita.subtipo : '') + (visita.turma ? ' · ' + visita.turma : ''),
+        participantes: visita.participantes || '—',
+        solucao: visita.solucao || '—',
         objetivo: objetivo[0],
         objetivoCor: objetivo[1],
         objetivoFundo: objetivo[2],
-        engajamento: v.engajamento ? v.engajamento + '/5' : '—',
-        ocorrencias: v.ocorrencias || 'Sem ocorrência',
-        ocorrenciasCor: v.ocorrencias ? 'var(--texto-vermelho-600)' : 'var(--texto-cinza-600)'
+        engajamento: visita.engajamento ? visita.engajamento + '/5' : '—',
+        ocorrencias: visita.ocorrencias || 'Sem ocorrência',
+        ocorrenciasCor: visita.ocorrencias ? 'var(--texto-vermelho-600)' : 'var(--texto-cinza-600)'
       };
     });
     return {
@@ -402,22 +402,22 @@ class Component extends DCLogic {
               'Encaminhamento'
             ]
           ].concat(
-            visitasDoMes.map(v => [
-              dmyIso(v.data),
-              nomeDaEscola(v.escola_id),
-              v.tipo,
-              v.subtipo || '',
-              v.participantes || '',
-              v.turma || '',
-              v.oficineiro_id ? contexto.nomeDaPessoa(v.oficineiro_id) : '',
-              v.solucao || '',
-              v.objetivo || '',
-              v.engajamento || '',
-              v.observacao || '',
-              v.boas_praticas || '',
-              v.dificuldades || '',
-              v.ocorrencias || '',
-              v.ocorrencia_obs || ''
+            visitasDoMes.map(visita => [
+              dmyIso(visita.data),
+              nomeDaEscola(visita.escola_id),
+              visita.tipo,
+              visita.subtipo || '',
+              visita.participantes || '',
+              visita.turma || '',
+              visita.oficineiro_id ? contexto.nomeDaPessoa(visita.oficineiro_id) : '',
+              visita.solucao || '',
+              visita.objetivo || '',
+              visita.engajamento || '',
+              visita.observacao || '',
+              visita.boas_praticas || '',
+              visita.dificuldades || '',
+              visita.ocorrencias || '',
+              visita.ocorrencia_obs || ''
             ])
           )
         )

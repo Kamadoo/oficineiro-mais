@@ -364,8 +364,8 @@ const VALORES_DAS_TELAS = [
   'PAPEL_AUD',
   'campos',
   'hojeSP',
-  'cdP',
-  'cd',
+  'perfilDaConsulta',
+  'dadosDaConsulta',
   'dmIso',
   'minTxt',
   'dmaIso'
@@ -647,13 +647,13 @@ class Component extends DCLogic {
     const A = window.FSM_AUTH;
     if (!A || !A.logado || !A.logado()) return;
     try {
-      const [ofs, escs] = await Promise.all([A.oficineiros(), A.escolas()]);
-      const lista = (ofs || []).filter(o => o.ativo !== false);
+      const [oficineiros, escolas] = await Promise.all([A.oficineiros(), A.escolas()]);
+      const lista = (oficineiros || []).filter(o => o.ativo !== false);
       this.setState(
         {
           conectado: true,
           oficineiros: lista,
-          escolas: escs || [],
+          escolas: escolas || [],
           oficineiroDaPresenca: this.state.oficineiroDaPresenca || (lista[0] ? lista[0].id : ''),
           oficineiroDaAgenda: this.state.oficineiroDaAgenda || (lista[0] ? lista[0].id : ''),
           escolaDaAgenda: this.state.escolaDaAgenda || String((lista.find(o => o.escola_id) || {}).escola_id || '')
@@ -805,21 +805,22 @@ class Component extends DCLogic {
   }
   async salvarRaioDaEscola(e) {
     const d = this.state.raiosEditados[e.id] || {},
-      v = Number(String(d.v == null ? e.raio_m : d.v).trim());
+      raio = Number(String(d.v == null ? e.raio_m : d.v).trim());
     const marca = o =>
       this.setState(s => ({
         raiosEditados: { ...s.raiosEditados, [e.id]: { ...(s.raiosEditados[e.id] || {}), ...o } }
       }));
-    if (!Number.isInteger(v) || v < 20 || v > 500) return marca({ erro: 'Use um número inteiro entre 20 e 500.' });
+    if (!Number.isInteger(raio) || raio < 20 || raio > 500)
+      return marca({ erro: 'Use um número inteiro entre 20 e 500.' });
     marca({ salvando: true, erro: '' });
     try {
-      await window.FSM_AUTH.definirRaioEscola(e.id, v);
+      await window.FSM_AUTH.definirRaioEscola(e.id, raio);
       this.setState(s => {
         const n = { ...s.raiosEditados };
         delete n[e.id];
-        return { raiosEditados: n, escolas: s.escolas.map(x => (x.id === e.id ? { ...x, raio_m: v } : x)) };
+        return { raiosEditados: n, escolas: s.escolas.map(x => (x.id === e.id ? { ...x, raio_m: raio } : x)) };
       });
-      this.avisar('Raio de ' + e.sigla + ' salvo · ' + v + ' m');
+      this.avisar('Raio de ' + e.sigla + ' salvo · ' + raio + ' m');
     } catch (x) {
       marca({ salvando: false, erro: (x && x.message) || 'Não foi possível salvar.' });
     }
@@ -1057,9 +1058,9 @@ class Component extends DCLogic {
       },
       () => {
         this.travarFundo(false);
-        const v = this.focoAnterior;
+        const anterior = this.focoAnterior;
         this.focoAnterior = null;
-        if (v && document.contains(v)) v.focus();
+        if (anterior && document.contains(anterior)) anterior.focus();
       }
     );
   }
@@ -1077,9 +1078,9 @@ class Component extends DCLogic {
     if (this.state.lote && this.state.lote.criando) return;
     this.setState({ lote: null, erroLote: '' }, () => {
       this.travarFundo(false);
-      const v = this.focoAnterior;
+      const anterior = this.focoAnterior;
       this.focoAnterior = null;
-      if (v && document.contains(v)) v.focus();
+      if (anterior && document.contains(anterior)) anterior.focus();
     });
   }
   baixarModelo() {
@@ -1101,8 +1102,8 @@ class Component extends DCLogic {
     const A = window.FSM_AUTH;
     if (!A || !A.meuAcesso || !A.escolasAdmin) return;
     try {
-      const ac = await A.meuAcesso();
-      if (!ac || ac.papel !== 'administrador') return;
+      const acesso = await A.meuAcesso();
+      if (!acesso || acesso.papel !== 'administrador') return;
       this.setState({ ehAdmin: true }, () => {
         this.carregarAdminDados();
         this.carregarAuditoria();
@@ -1358,12 +1359,12 @@ class Component extends DCLogic {
   }
   async executarAcaoDeConta(c, tipo) {
     const A = window.FSM_AUTH,
-      ad = this.state.acaoDeAdmin || {};
+      acaoDeAdmin = this.state.acaoDeAdmin || {};
     if (this.state.salvandoConta) return;
-    const motivo = String(ad.motivo || '').trim();
-    const papel = ad.papel || c.papel,
-      escola = ad.escola != null ? ad.escola : c.escola_id ? String(c.escola_id) : '',
-      carteira = ad.carteira != null ? ad.carteira : c.carteira_id || '';
+    const motivo = String(acaoDeAdmin.motivo || '').trim();
+    const papel = acaoDeAdmin.papel || c.papel,
+      escola = acaoDeAdmin.escola != null ? acaoDeAdmin.escola : c.escola_id ? String(c.escola_id) : '',
+      carteira = acaoDeAdmin.carteira != null ? acaoDeAdmin.carteira : c.carteira_id || '';
     let erro = '',
       campo = 'ct-adm-motivo';
     const emailNovo = String((this.state.emailRevelado || {}).novo || '')
@@ -1503,9 +1504,9 @@ class Component extends DCLogic {
       },
       () => {
         this.travarFundo(false);
-        const v = this.focoAnteriorDeAdmin;
+        const anterior = this.focoAnteriorDeAdmin;
         this.focoAnteriorDeAdmin = null;
-        if (v && document.contains(v)) v.focus();
+        if (anterior && document.contains(anterior)) anterior.focus();
       }
     );
   }
@@ -1581,12 +1582,12 @@ class Component extends DCLogic {
     this.setState({ salvandoSistema: true, erroDaGaveta: '' });
     try {
       await window.FSM_AUTH.adminSalvarTurma(e.id, t.ano, turma, matr === '' ? null : Number(matr));
-      const ed = { ...this.state.turmasEditadas };
-      if (t.id) delete ed[t.id];
+      const turmasEditadas = { ...this.state.turmasEditadas };
+      if (t.id) delete turmasEditadas[t.id];
       this.setState(
         {
           salvandoSistema: false,
-          turmasEditadas: ed,
+          turmasEditadas: turmasEditadas,
           ...(t.id ? {} : { novaTurma: { ano: '', turma: '', matr: '' } })
         },
         () => {
@@ -1738,21 +1739,21 @@ class Component extends DCLogic {
   }
   renderVals() {
     const s = this.state;
-    const v = {};
-    Object.assign(v, this.valoresDeApoio(s));
-    Object.assign(v, this.valoresDasAtividades(s, v));
-    Object.assign(v, this.valoresDosFiltros(s, v));
-    Object.assign(v, this.valoresDoMenu(s, v));
-    Object.assign(v, this.valoresDasContas(s));
-    Object.assign(v, this.valoresDoSistema(s, v));
-    Object.assign(v, this.valoresDoLote(s));
-    Object.assign(v, this.telasVisiveis(s, v));
-    Object.assign(v, this.contextoDasTelas(s, v));
+    const valores = {};
+    Object.assign(valores, this.valoresDeApoio(s));
+    Object.assign(valores, this.valoresDasAtividades(s, valores));
+    Object.assign(valores, this.valoresDosFiltros(s, valores));
+    Object.assign(valores, this.valoresDoMenu(s, valores));
+    Object.assign(valores, this.valoresDasContas(s));
+    Object.assign(valores, this.valoresDoSistema(s, valores));
+    Object.assign(valores, this.valoresDoLote(s));
+    Object.assign(valores, this.telasVisiveis(s, valores));
+    Object.assign(valores, this.contextoDasTelas(s, valores));
     const chaves = {
-      ...this.chavesDoLote(s, v),
-      ...this.chavesDaAdministracao(s, v),
-      ...this.chavesDoCabecalho(s, v),
-      ...this.chavesDasContas(s, v)
+      ...this.chavesDoLote(s, valores),
+      ...this.chavesDaAdministracao(s, valores),
+      ...this.chavesDoCabecalho(s, valores),
+      ...this.chavesDasContas(s, valores)
     };
     return {
       ...chaves,
@@ -1905,7 +1906,7 @@ class Component extends DCLogic {
       situacaoDaPresenca
     };
   }
-  valoresDasAtividades(s, v) {
+  valoresDasAtividades(s, valores) {
     const {
       escolaDe,
       gradePorId,
@@ -1914,7 +1915,7 @@ class Component extends DCLogic {
       nomeDoOficineiro,
       ocorrenciasPendentes,
       siglaDaEscola
-    } = v;
+    } = valores;
     const SITUACOES_DA_ATIVIDADE = {
       Realizada: ['var(--texto-verde-760)', 'var(--fundo-verde-80)'],
       'Realizada parcialmente': ['var(--texto-verde-760)', 'var(--fundo-verde-80)'],
@@ -1932,9 +1933,9 @@ class Component extends DCLogic {
       const g = r.grade_aula_id ? gradePorId[r.grade_aula_id] : null,
         tp = TIPOS_DE_ATIVIDADE[r.tipo] || TIPOS_DE_ATIVIDADE.R,
         dt = new Date(r.data + 'T12:00:00');
-      const sc = SITUACOES_DA_ATIVIDADE[r.situacao] || SITUACOES_DA_ATIVIDADE['Realizada'],
+      const situacao = SITUACOES_DA_ATIVIDADE[r.situacao] || SITUACOES_DA_ATIVIDADE['Realizada'],
         rv = REVISOES_DA_ATIVIDADE[r.revisao_status],
-        ac = s.acoesDeRevisao[r.id] || {};
+        acaoDeRevisao = s.acoesDeRevisao[r.id] || {};
       const realizou = r.situacao !== 'Não realizada',
         nome = nomeDoOficineiro(r.oficineiro_id),
         quando = Base.dm(dt) + ' às ' + String(r.inicio).slice(0, 5);
@@ -1946,7 +1947,7 @@ class Component extends DCLogic {
             : '';
       const decidido =
         r.revisao_status === 'revisado' || r.revisao_status === 'devolvido' || r.revisao_status === 'anulado';
-      const modo = ac.modo || '';
+      const modo = acaoDeRevisao.modo || '';
       return {
         key: 'r' + r.id,
         id: r.id,
@@ -1973,8 +1974,8 @@ class Component extends DCLogic {
         presentesMatriculados:
           realizou && r.presentes != null ? r.presentes + (r.matriculados ? '/' + r.matriculados : '') : '—',
         situacao: r.situacao === 'Realizada parcialmente' ? 'Realizada parcialmente' : r.situacao,
-        situacaoCor: sc[0],
-        situacaoFundo: sc[1],
+        situacaoCor: situacao[0],
+        situacaoFundo: situacao[1],
         ocorrencia: oc,
         temOcorrencia: !!oc,
         temRevisao: !!rv,
@@ -2001,12 +2002,16 @@ class Component extends DCLogic {
           modo === 'devolvido'
             ? 'Devolver para ajuste: o oficineiro volta a poder editar este registro.'
             : 'Anular: o registro deixa de contar como atividade realizada.',
-        painelBotao: ac.salvando ? 'Salvando…' : modo === 'devolvido' ? 'Confirmar devolução' : 'Confirmar anulação',
-        comentario: ac.coment || '',
+        painelBotao: acaoDeRevisao.salvando
+          ? 'Salvando…'
+          : modo === 'devolvido'
+            ? 'Confirmar devolução'
+            : 'Confirmar anulação',
+        comentario: acaoDeRevisao.coment || '',
         escreverComentario: e => this.mudarAcaoDeRevisao(r.id, { coment: e.target.value, erro: '' }),
-        temErro: !!ac.erro,
-        erro: ac.erro || '',
-        salvando: !!ac.salvando,
+        temErro: !!acaoDeRevisao.erro,
+        erro: acaoDeRevisao.erro || '',
+        salvando: !!acaoDeRevisao.salvando,
         revisar: () => this.decidirRevisao(r.id, 'revisado'),
         devolver: () => {
           this.mudarAcaoDeRevisao(r.id, { modo: 'devolvido', erro: '' });
@@ -2040,7 +2045,7 @@ class Component extends DCLogic {
     const linhaDaPendencia = o => {
       const g = o.g,
         tp = TIPOS_DE_ATIVIDADE[g.tipo] || TIPOS_DE_ATIVIDADE.R,
-        sc = SITUACOES_DA_ATIVIDADE['Pendente de registro'];
+        situacao = SITUACOES_DA_ATIVIDADE['Pendente de registro'];
       return {
         key: 'p' + g.id + o.iso,
         id: null,
@@ -2062,8 +2067,8 @@ class Component extends DCLogic {
         solucao: [g.tipo === 'R' ? g.componente : '', detTipo(g)].filter(Boolean).join(' · ') || '—',
         presentesMatriculados: '—',
         situacao: 'Pendente de registro',
-        situacaoCor: sc[0],
-        situacaoFundo: sc[1],
+        situacaoCor: situacao[0],
+        situacaoFundo: situacao[1],
         ocorrencia: '',
         temOcorrencia: false,
         temRevisao: false,
@@ -2211,7 +2216,7 @@ class Component extends DCLogic {
       turmaEscolhida
     };
   }
-  valoresDosFiltros(s, v) {
+  valoresDosFiltros(s, valores) {
     const {
       abaDasAtividades,
       atividades,
@@ -2224,7 +2229,7 @@ class Component extends DCLogic {
       pendenciasDeRegistro,
       periodo,
       turmaEscolhida
-    } = v;
+    } = valores;
     const opcoesDePeriodo = [['m0'], ['m1'], ['m2'], ['7d'], ['hoje']].map(([k]) => {
       const pa = this.intervaloDoPeriodo(k);
       return { valor: k, rotulo: pa.rotulo + (pa.ciclo ? ' · ' + pa.ciclo : '') };
@@ -2314,8 +2319,8 @@ class Component extends DCLogic {
     };
     return { exportarAtividades, opcoesDeEscola, opcoesDeOficineiro, opcoesDePeriodo, textoDoFiltro };
   }
-  valoresDoMenu(s, v) {
-    const { gradesAguardando, ocorrenciasPendentes, semLembrete } = v;
+  valoresDoMenu(s, valores) {
+    const { gradesAguardando, ocorrenciasPendentes, semLembrete } = valores;
     const itensDoMenu = [
       ['presenca', 'Presença na Escola', 0],
       ['agendas', 'Agendas dos oficineiros', 0],
@@ -2390,16 +2395,16 @@ class Component extends DCLogic {
           });
       const n = (k, um, varios) => (k === 1 ? um : k + ' ' + varios);
       if (s.conectado) {
-        const crP = (s.relatoriosDoCicloBase || []).filter(r => r.status === 'aprovado_direcao');
-        if (crP.length)
+        const relatoriosAprovados = (s.relatoriosDoCicloBase || []).filter(r => r.status === 'aprovado_direcao');
+        if (relatoriosAprovados.length)
           lista.push({
             tit: n(
-              crP.length,
+              relatoriosAprovados.length,
               '1 relatório mensal aguardando sua aprovação',
               'relatórios mensais aguardando sua aprovação'
             ),
-            txt: 'Aprovados pela direção da escola: ' + crP.map(r => r.oficineiro).join(', ') + '.',
-            ref: crP.map(r => r.id).join(','),
+            txt: 'Aprovados pela direção da escola: ' + relatoriosAprovados.map(r => r.oficineiro).join(', ') + '.',
+            ref: relatoriosAprovados.map(r => r.id).join(','),
             acao: 'Abrir relatórios',
             go: () =>
               this.setState(
@@ -2455,7 +2460,7 @@ class Component extends DCLogic {
       fundo: abaAtual === k ? 'var(--fundo-branco)' : 'transparent',
       cor: abaAtual === k ? 'var(--texto-ciano-850)' : 'var(--texto-cinza-600)'
     }));
-    const naAba = (sc, k) => s.tela === sc && abaAtual === k;
+    const naAba = (tela, k) => s.tela === tela && abaAtual === k;
     return { menu, naAba, notificacoes, tabs, titulos };
   }
   valoresDasContas(s) {
@@ -2636,17 +2641,17 @@ class Component extends DCLogic {
       };
     });
     const teclaNosPerfis = e => {
-      const ks = s.ehAdmin
+      const perfis = s.ehAdmin
         ? ['oficineiro', 'direcao', 'analista', 'coordenador', 'gerente']
         : ['oficineiro', 'direcao'];
-      const i = ks.indexOf(this.state.novaConta && this.state.novaConta.papel);
+      const i = perfis.indexOf(this.state.novaConta && this.state.novaConta.papel);
       let j = -1;
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % ks.length;
-      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + ks.length) % ks.length;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % perfis.length;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + perfis.length) % perfis.length;
       else return;
       e.preventDefault();
-      this.setState({ novaConta: { ...this.state.novaConta, papel: ks[j] } }, () => {
-        const b = document.getElementById(j === 0 ? 'ct-nv-perfil' : 'ct-nv-perfil-' + ks[j]);
+      this.setState({ novaConta: { ...this.state.novaConta, papel: perfis[j] } }, () => {
+        const b = document.getElementById(j === 0 ? 'ct-nv-perfil' : 'ct-nv-perfil-' + perfis[j]);
         if (b) b.focus();
       });
     };
@@ -2683,15 +2688,15 @@ class Component extends DCLogic {
       teclaNosPerfis
     };
   }
-  valoresDoSistema(s, v) {
-    const { NOMES_DE_PERFIL, carteiraPorId, quando } = v;
-    const escs = s.escolasDoSistema || [],
+  valoresDoSistema(s, valores) {
+    const { NOMES_DE_PERFIL, carteiraPorId, quando } = valores;
+    const escolasDoSistema = s.escolasDoSistema || [],
       turmas = s.turmasDoSistema || [],
       carts = s.carteiras || [],
       contasDoSistema = s.contas || [];
     const turmasDe = id => turmas.filter(t => t.escola_id === id);
     const ativas = contasDoSistema.filter(c => c.ativo);
-    const escAtivas = escs.filter(e => e.ativa !== false);
+    const escAtivas = escolasDoSistema.filter(e => e.ativa !== false);
     const ACAO = {
       INSERT: 'Inclusão',
       UPDATE: 'Alteração',
@@ -2909,7 +2914,7 @@ class Component extends DCLogic {
       if (ehHora(v)) return dataHora(v, det);
       if (ehData(v)) return v.slice(8, 10) + '/' + v.slice(5, 7) + '/' + v.slice(0, 4);
       if (k === 'escola_id') {
-        const e = escs.find(x => String(x.id) === String(v));
+        const e = escolasDoSistema.find(x => String(x.id) === String(v));
         return e ? e.sigla + ' · ' + e.nome : 'Escola nº ' + v;
       }
       if (k === 'carteira_id') return (carteiraPorId[v] || {}).rotulo || String(v);
@@ -2921,12 +2926,13 @@ class Component extends DCLogic {
       if (!d || typeof d !== 'object') return [];
       return Object.keys(d)
         .map(k => {
-          const v = d[k];
-          const mudou = v && typeof v === 'object' && !Array.isArray(v) && ('de' in v || 'para' in v);
-          if (mudou && JSON.stringify(v.de) === JSON.stringify(v.para)) return null;
+          const valor = d[k];
+          const mudou =
+            valor && typeof valor === 'object' && !Array.isArray(valor) && ('de' in valor || 'para' in valor);
+          if (mudou && JSON.stringify(valor.de) === JSON.stringify(valor.para)) return null;
           return {
             campo: rotCampo(k),
-            texto: mudou ? valTxt(k, v.de, det) + ' → ' + valTxt(k, v.para, det) : valTxt(k, v, det)
+            texto: mudou ? valTxt(k, valor.de, det) + ' → ' + valTxt(k, valor.para, det) : valTxt(k, valor, det)
           };
         })
         .filter(Boolean);
@@ -2950,85 +2956,89 @@ class Component extends DCLogic {
       abrir: () => this.abrirGavetaDeAdmin({ eventoAberto: ev.id }, 'adm-ev-titulo')
     });
     const ev = s.eventoAberto ? (s.auditoria || []).find(x => x.id === s.eventoAberto) : null;
-    const esc = s.escolaEditada;
-    const escSet = k => e =>
+    const escolaEditada = s.escolaEditada;
+    const definirNaEscola = k => e =>
       this.setState({
         escolaEditada: { ...this.state.escolaEditada, [k]: k === 'ativa' ? e.target.checked : e.target.value }
       });
     const cart = s.carteiraEditada;
-    const cartSet = k => e =>
+    const definirNaCarteira = k => e =>
       this.setState({ carteiraEditada: { ...this.state.carteiraEditada, [k]: e.target.value } });
-    const tn = s.novaTurma || {};
-    const tnSet = k => e => this.setState({ novaTurma: { ...this.state.novaTurma, [k]: e.target.value } });
+    const novaTurma = s.novaTurma || {};
+    const definirNaTurma = k => e => this.setState({ novaTurma: { ...this.state.novaTurma, [k]: e.target.value } });
     const contaAdministrada = s.contaAberta ? contasDoSistema.find(c => c.id === s.contaAberta) : null;
-    const ad = s.acaoDeAdmin || {};
-    const adPapel = contaAdministrada ? ad.papel || contaAdministrada.papel : '',
-      adEscola = contaAdministrada
-        ? ad.escola != null
-          ? ad.escola
+    const acaoDeAdmin = s.acaoDeAdmin || {};
+    const papelDaAcao = contaAdministrada ? acaoDeAdmin.papel || contaAdministrada.papel : '',
+      escolaDaAcao = contaAdministrada
+        ? acaoDeAdmin.escola != null
+          ? acaoDeAdmin.escola
           : contaAdministrada.escola_id
             ? String(contaAdministrada.escola_id)
             : ''
         : '',
-      adCarteira = contaAdministrada ? (ad.carteira != null ? ad.carteira : contaAdministrada.carteira_id || '') : '';
-    const adMudou =
+      carteiraDaAcao = contaAdministrada
+        ? acaoDeAdmin.carteira != null
+          ? acaoDeAdmin.carteira
+          : contaAdministrada.carteira_id || ''
+        : '';
+    const acaoMudou =
       !!contaAdministrada &&
-      (adPapel !== contaAdministrada.papel ||
-        ((adPapel === 'oficineiro' || adPapel === 'direcao') &&
-          adEscola !== String(contaAdministrada.escola_id || '')) ||
-        (adPapel === 'analista' && adCarteira !== (contaAdministrada.carteira_id || '')));
-    const adSet = k => e =>
+      (papelDaAcao !== contaAdministrada.papel ||
+        ((papelDaAcao === 'oficineiro' || papelDaAcao === 'direcao') &&
+          escolaDaAcao !== String(contaAdministrada.escola_id || '')) ||
+        (papelDaAcao === 'analista' && carteiraDaAcao !== (contaAdministrada.carteira_id || '')));
+    const definirNaAcao = k => e =>
       this.setState({ acaoDeAdmin: { ...this.state.acaoDeAdmin, [k]: e.target.value }, erroConta: '' });
     const minTxt = m => (m == null ? '—' : Math.floor(m / 60) + 'h' + String(m % 60).padStart(2, '0'));
     const dmIso = Base.dmIso;
     const dmaIso = d => (d ? dmIso(d) + '/' + String(d).slice(0, 4) : '');
     const hojeSP = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' });
-    const cd = s.dadosDaConsulta,
-      cdP = (cd && cd.perfil) || null;
+    const dadosDaConsulta = s.dadosDaConsulta,
+      perfilDaConsulta = (dadosDaConsulta && dadosDaConsulta.perfil) || null;
     const presencaEditada = s.presencaEditada;
-    const prSet = k => e =>
+    const definirNaPresenca = k => e =>
       this.setState({ presencaEditada: { ...this.state.presencaEditada, [k]: e.target.value }, erroDaGaveta: '' });
-    const prAtual =
-      presencaEditada && !presencaEditada.nova && cd
-        ? (cd.presencas || []).find(x => x.id === presencaEditada.id)
+    const presencaAtual =
+      presencaEditada && !presencaEditada.nova && dadosDaConsulta
+        ? (dadosDaConsulta.presencas || []).find(x => x.id === presencaEditada.id)
         : null;
     return {
       ACAO,
       PAPEL_AUD,
-      ad,
-      adCarteira,
-      adEscola,
-      adMudou,
-      adPapel,
-      adSet,
+      acaoDeAdmin,
+      carteiraDaAcao,
+      escolaDaAcao,
+      acaoMudou,
+      papelDaAcao,
+      definirNaAcao,
       ativas,
       audLinha,
       campos,
       cart,
-      cartSet,
+      definirNaCarteira,
       carts,
-      cd,
-      cdP,
+      dadosDaConsulta,
+      perfilDaConsulta,
       contaAdministrada,
       contasDoSistema,
       dataHora,
       dmIso,
       dmaIso,
       ehUuid,
-      esc,
+      escolaEditada,
       escAtivas,
-      escSet,
-      escs,
+      definirNaEscola,
+      escs: escolasDoSistema,
       ev,
       hojeSP,
       minTxt,
       onde,
-      prAtual,
-      prSet,
+      presencaAtual,
+      definirNaPresenca,
       presencaEditada,
       quem,
-      tn,
-      tnSet,
+      novaTurma,
+      definirNaTurma,
       turmas,
       turmasDe
     };
@@ -3036,8 +3046,8 @@ class Component extends DCLogic {
   valoresDoLote(s) {
     return { lote: Contas.detalharLote(s.lote, PERFIS_DO_LOTE), loteAtual: s.lote };
   }
-  telasVisiveis(s, v) {
-    const { naAba } = v;
+  telasVisiveis(s, valores) {
+    const { naAba } = valores;
     const is = {
       produtividade: s.tela === 'prod',
       presencaAgora: naAba('presenca', 'agora'),
@@ -3067,10 +3077,10 @@ class Component extends DCLogic {
     };
     return { is };
   }
-  contextoDasTelas(s, v) {
+  contextoDasTelas(s, valores) {
     const contexto = {
       ...Base.escolher(s, ESTADO_DAS_TELAS),
-      ...Base.escolher(v, VALORES_DAS_TELAS),
+      ...Base.escolher(valores, VALORES_DAS_TELAS),
       dataDoIso,
       segundaDaSemana,
       TIPOS_DE_ATIVIDADE,
@@ -3106,8 +3116,8 @@ class Component extends DCLogic {
     };
     return { contexto };
   }
-  chavesDoLote(s, v) {
-    const { lote, loteAtual } = v;
+  chavesDoLote(s, valores) {
+    const { lote, loteAtual } = valores;
     return {
       cliente: Base.cliente(),
       loteAberto: !!loteAtual,
@@ -3120,68 +3130,72 @@ class Component extends DCLogic {
       criarLote: () => this.criarLote()
     };
   }
-  chavesDaAdministracao(s, v) {
+  chavesDaAdministracao(s, valores) {
     const {
       ACAO,
-      ad,
-      adCarteira,
-      adEscola,
-      adMudou,
-      adPapel,
-      adSet,
+      acaoDeAdmin,
+      carteiraDaAcao,
+      escolaDaAcao,
+      acaoMudou,
+      papelDaAcao,
+      definirNaAcao,
       campos,
       cart,
-      cartSet,
+      definirNaCarteira,
       carts,
-      cdP,
+      perfilDaConsulta,
       contaAdministrada,
       dataHora,
       dmaIso,
       ehUuid,
-      esc,
+      escolaEditada,
       escAtivas,
-      escSet,
+      definirNaEscola,
       ev,
       hojeSP,
       minTxt,
       onde,
-      prAtual,
-      prSet,
+      presencaAtual,
+      definirNaPresenca,
       presencaEditada,
       quem,
-      tn,
-      tnSet,
+      novaTurma,
+      definirNaTurma,
       turmasDe
-    } = v;
+    } = valores;
     return {
       ehAdmin: !!s.ehAdmin,
       ...(s.ehAdmin
         ? {
-            escolaAberta: !!esc,
-            admEscNova: !!esc && !esc.id,
-            escolaExiste: !!(esc && esc.id),
-            escolaTitulo: esc ? (esc.id ? esc.nome || 'Escola' : 'Nova escola') : '',
-            escolaEditada: esc
+            escolaAberta: !!escolaEditada,
+            admEscNova: !!escolaEditada && !escolaEditada.id,
+            escolaExiste: !!(escolaEditada && escolaEditada.id),
+            escolaTitulo: escolaEditada ? (escolaEditada.id ? escolaEditada.nome || 'Escola' : 'Nova escola') : '',
+            escolaEditada: escolaEditada
               ? {
-                  ...esc,
-                  escreverSigla: escSet('sigla'),
-                  escreverNome: escSet('nome'),
-                  escreverEndereco: escSet('endereco'),
-                  escreverTelefone: escSet('telefone'),
-                  escolherCarteira: escSet('carteira_id'),
-                  escreverLatitude: escSet('latitude'),
-                  escreverLongitude: escSet('longitude'),
-                  escreverRaio: escSet('raio_m'),
-                  marcarAtiva: escSet('ativa')
+                  ...escolaEditada,
+                  escreverSigla: definirNaEscola('sigla'),
+                  escreverNome: definirNaEscola('nome'),
+                  escreverEndereco: definirNaEscola('endereco'),
+                  escreverTelefone: definirNaEscola('telefone'),
+                  escolherCarteira: definirNaEscola('carteira_id'),
+                  escreverLatitude: definirNaEscola('latitude'),
+                  escreverLongitude: definirNaEscola('longitude'),
+                  escreverRaio: definirNaEscola('raio_m'),
+                  marcarAtiva: definirNaEscola('ativa')
                 }
               : {},
             opcoesDeCarteira: carts.map(c => ({ valor: c.id, rotulo: c.rotulo })),
             salvarEscola: () => this.salvarEscola(),
-            escolaBotao: s.salvandoSistema ? 'Salvando…' : esc && esc.id ? 'Salvar alterações' : 'Cadastrar escola',
+            escolaBotao: s.salvandoSistema
+              ? 'Salvando…'
+              : escolaEditada && escolaEditada.id
+                ? 'Salvar alterações'
+                : 'Cadastrar escola',
             turmas:
-              esc && esc.id
-                ? turmasDe(esc.id).map(t => {
-                    const v =
+              escolaEditada && escolaEditada.id
+                ? turmasDe(escolaEditada.id).map(t => {
+                    const raio =
                       s.turmasEditadas[t.id] != null
                         ? s.turmasEditadas[t.id]
                         : t.matriculados == null
@@ -3189,12 +3203,12 @@ class Component extends DCLogic {
                           : String(t.matriculados);
                     return {
                       nome: anoTxt(t.ano) + (t.turma ? ' · Turma ' + t.turma : ''),
-                      matriculados: v,
+                      matriculados: raio,
                       aria: 'Matriculados de ' + anoTxt(t.ano) + (t.turma ? ' turma ' + t.turma : ''),
                       escreverMatriculados: e =>
                         this.setState({ turmasEditadas: { ...this.state.turmasEditadas, [t.id]: e.target.value } }),
-                      mudou: v !== (t.matriculados == null ? '' : String(t.matriculados)),
-                      salvar: () => this.salvarTurma({ id: t.id, ano: t.ano, turma: t.turma, matr: v }),
+                      mudou: raio !== (t.matriculados == null ? '' : String(t.matriculados)),
+                      salvar: () => this.salvarTurma({ id: t.id, ano: t.ano, turma: t.turma, matr: raio }),
                       remover: () => this.removerTurma(t),
                       removerTexto: s.turmaARemover === t.id ? 'Confirmar remoção' : 'Remover',
                       removerCor: s.turmaARemover === t.id ? 'var(--destaque-branco)' : 'var(--texto-vermelho-600)',
@@ -3203,18 +3217,20 @@ class Component extends DCLogic {
                     };
                   })
                 : [],
-            semTurmas: !!(esc && esc.id && !turmasDe(esc.id).length),
+            semTurmas: !!(escolaEditada && escolaEditada.id && !turmasDe(escolaEditada.id).length),
             novaTurma: {
-              ...tn,
-              escolherAno: tnSet('ano'),
-              escreverTurma: tnSet('turma'),
-              escreverMatriculados: tnSet('matr')
+              ...novaTurma,
+              escolherAno: definirNaTurma('ano'),
+              escreverTurma: definirNaTurma('turma'),
+              escreverMatriculados: definirNaTurma('matr')
             },
             opcoesDeAno: ANOS.map(a => ({ valor: String(a), rotulo: anoTxt(a) })),
-            incluirTurma: () => this.salvarTurma({ ano: tn.ano, turma: tn.turma, matr: tn.matr }),
+            incluirTurma: () => this.salvarTurma({ ano: novaTurma.ano, turma: novaTurma.turma, matr: novaTurma.matr }),
             carteiraAberta: !!cart,
             carteiraNova: !!(cart && cart.nova),
-            carteiraEditada: cart ? { ...cart, escreverCodigo: cartSet('id'), escreverRotulo: cartSet('rotulo') } : {},
+            carteiraEditada: cart
+              ? { ...cart, escreverCodigo: definirNaCarteira('id'), escreverRotulo: definirNaCarteira('rotulo') }
+              : {},
             salvarCarteira: () => this.salvarCarteira(),
             carteiraBotao: s.salvandoSistema
               ? 'Salvando…'
@@ -3241,17 +3257,19 @@ class Component extends DCLogic {
             presencaEditada: presencaEditada
               ? {
                   ...presencaEditada,
-                  pessoa: cdP ? cdP.nome : '',
+                  pessoa: perfilDaConsulta ? perfilDaConsulta.nome : '',
                   titulo: presencaEditada.nova ? 'Lançar presença' : 'Presença de ' + dmaIso(presencaEditada.data),
                   max: hojeSP,
-                  escreverMotivo: prSet('motivo'),
-                  escolherData: prSet('data'),
-                  escreverInicio: prSet('ini'),
-                  escreverFim: prSet('fim'),
+                  escreverMotivo: definirNaPresenca('motivo'),
+                  escolherData: definirNaPresenca('data'),
+                  escreverInicio: definirNaPresenca('ini'),
+                  escreverFim: definirNaPresenca('fim'),
                   salvarHorarios: () => this.salvarHorariosPresenca(),
                   botao: s.salvandoSistema ? 'Salvando…' : presencaEditada.nova ? 'Lançar presença' : 'Salvar horários',
-                  existe: !presencaEditada.nova && !!prAtual,
-                  resumo: prAtual ? 'Trabalhado ' + minTxt(prAtual.trabalhado_min) + ' · limite de 8h por dia' : ''
+                  existe: !presencaEditada.nova && !!presencaAtual,
+                  resumo: presencaAtual
+                    ? 'Trabalhado ' + minTxt(presencaAtual.trabalhado_min) + ' · limite de 8h por dia'
+                    : ''
                 }
               : {},
             fecharGaveta: () => this.fecharGavetaDeAdmin(),
@@ -3265,17 +3283,17 @@ class Component extends DCLogic {
             ),
             administracao: contaAdministrada
               ? {
-                  motivo: ad.motivo || '',
-                  escreverMotivo: adSet('motivo'),
-                  perfil: adPapel,
-                  escolherPerfil: adSet('papel'),
-                  escola: adEscola,
-                  escolherEscola: adSet('escola'),
-                  carteira: adCarteira,
-                  escolherCarteira: adSet('carteira'),
-                  pedeEscola: adPapel === 'oficineiro' || adPapel === 'direcao',
-                  pedeCarteira: adPapel === 'analista',
-                  mudou: adMudou,
+                  motivo: acaoDeAdmin.motivo || '',
+                  escreverMotivo: definirNaAcao('motivo'),
+                  perfil: papelDaAcao,
+                  escolherPerfil: definirNaAcao('papel'),
+                  escola: escolaDaAcao,
+                  escolherEscola: definirNaAcao('escola'),
+                  carteira: carteiraDaAcao,
+                  escolherCarteira: definirNaAcao('carteira'),
+                  pedeEscola: papelDaAcao === 'oficineiro' || papelDaAcao === 'direcao',
+                  pedeCarteira: papelDaAcao === 'analista',
+                  mudou: acaoMudou,
                   salvarPerfil: () => this.executarAcaoDeConta(contaAdministrada, 'papel'),
                   podeExigirSenha:
                     !!contaAdministrada.usuario && !contaAdministrada.trocar_senha && contaAdministrada.ativo,
@@ -3345,7 +3363,7 @@ class Component extends DCLogic {
         : { temAdministracao: false })
     };
   }
-  chavesDoCabecalho(s, v) {
+  chavesDoCabecalho(s, valores) {
     const {
       exportarAtividades,
       is,
@@ -3357,7 +3375,7 @@ class Component extends DCLogic {
       opcoesDePeriodo,
       tabs,
       titulos
-    } = v;
+    } = valores;
     return {
       perfilTitulo: s.ehAdmin ? 'Administrador' : 'Coordenador do núcleo',
       temSino: !s.ehAdmin,
@@ -3413,7 +3431,7 @@ class Component extends DCLogic {
       mostrarRelatorios: s.tela === 'rel' && s.conectado
     };
   }
-  chavesDasContas(s, v) {
+  chavesDasContas(s, valores) {
     const {
       contaAberta,
       contexto,
@@ -3429,7 +3447,7 @@ class Component extends DCLogic {
       nova,
       perfisDaNovaConta,
       teclaNosPerfis
-    } = v;
+    } = valores;
     return {
       fecharConta: () => this.fecharGavetaDeConta(),
       novaContaAberta: !!s.novaConta,

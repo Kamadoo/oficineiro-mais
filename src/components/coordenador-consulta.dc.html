@@ -89,11 +89,11 @@ class Component extends DCLogic {
     const {
       escs,
       hojeSP,
-      cdP,
+      perfilDaConsulta,
       contasDoSistema,
       PAPEL_AUD,
       carteiraPorId,
-      cd,
+      dadosDaConsulta,
       situacaoDaPresenca,
       dmIso,
       minTxt,
@@ -146,9 +146,9 @@ class Component extends DCLogic {
     ];
     const mesTxt = ym => (ym ? MESES[Number(ym.slice(5, 7)) - 1] + ' de ' + ym.slice(0, 4) : '');
     const cicloSP = Base.cicloComp(dataDoIso(hojeSP));
-    const co = contexto.consulta || {},
-      ehOfic = !!(cdP && cdP.papel === 'oficineiro');
-    const coSet = k => e =>
+    const consulta = contexto.consulta || {},
+      ehOfic = !!(perfilDaConsulta && perfilDaConsulta.papel === 'oficineiro');
+    const definirNaConsulta = k => e =>
       contexto.setState({
         consulta: { ...contexto.estado().consulta, [k]: e.target.value },
         dadosDaConsulta: null,
@@ -176,10 +176,10 @@ class Component extends DCLogic {
     const A = window.FSM_AUTH;
     return {
       consulta: {
-        pessoa: co.usuario || '',
-        ciclo: co.mes || '',
-        escolherPessoa: coSet('usuario'),
-        escolherCiclo: coSet('mes'),
+        pessoa: consulta.usuario || '',
+        ciclo: consulta.mes || '',
+        escolherPessoa: definirNaConsulta('usuario'),
+        escolherCiclo: definirNaConsulta('mes'),
         pessoas: contasDoSistema
           .filter(c => c.papel !== 'administrador')
           .slice()
@@ -198,51 +198,51 @@ class Component extends DCLogic {
         botao: contexto.carregandoConsulta ? 'Consultando…' : 'Consultar',
         temErro: !!contexto.erroConsulta,
         erro: contexto.erroConsulta,
-        temPessoa: !!cdP,
+        temPessoa: !!perfilDaConsulta,
         opacidade: contexto.carregandoConsulta || contexto.salvandoSistema ? 0.6 : 1,
-        nome: cdP ? cdP.nome : '',
-        itens: cdP
+        nome: perfilDaConsulta ? perfilDaConsulta.nome : '',
+        itens: perfilDaConsulta
           ? [
-              ['Perfil', PAPEL_AUD[cdP.papel] || cdP.papel],
-              ['Login', cdP.usuario || '—'],
+              ['Perfil', PAPEL_AUD[perfilDaConsulta.papel] || perfilDaConsulta.papel],
+              ['Login', perfilDaConsulta.usuario || '—'],
               [
                 'Escola',
-                cdP.escola_id
-                  ? escSig(cdP.escola_id)
-                  : cdP.carteira_id
-                    ? (carteiraPorId[cdP.carteira_id] || {}).rotulo || cdP.carteira_id
+                perfilDaConsulta.escola_id
+                  ? escSig(perfilDaConsulta.escola_id)
+                  : perfilDaConsulta.carteira_id
+                    ? (carteiraPorId[perfilDaConsulta.carteira_id] || {}).rotulo || perfilDaConsulta.carteira_id
                     : '—'
               ],
-              ['Conta', cdP.ativo ? 'Ativa' : 'Desativada']
+              ['Conta', perfilDaConsulta.ativo ? 'Ativa' : 'Desativada']
             ].map(([l, v]) => ({ rotulo: l, valor: v }))
           : [],
         ehOficineiro: ehOfic,
-        naoEhOficineiro: !!cdP && !ehOfic,
+        naoEhOficineiro: !!perfilDaConsulta && !ehOfic,
         motivo: contexto.motivoDaCorrecao || '',
         escreverMotivo: e => contexto.setState({ motivoDaCorrecao: e.target.value, erroConsulta: '' }),
-        cicloTexto: cd
-          ? mesTxt(String(cd.competencia).slice(0, 7)) +
+        cicloTexto: dadosDaConsulta
+          ? mesTxt(String(dadosDaConsulta.competencia).slice(0, 7)) +
             ' (' +
-            (cd.ciclo_inicio && cd.ciclo_fim
-              ? Base.dm(dataDoIso(cd.ciclo_inicio)) + ' a ' + Base.dm(dataDoIso(cd.ciclo_fim))
-              : Base.cicloTxt(dataDoIso(String(cd.competencia).slice(0, 10)))) +
+            (dadosDaConsulta.ciclo_inicio && dadosDaConsulta.ciclo_fim
+              ? Base.dm(dataDoIso(dadosDaConsulta.ciclo_inicio)) + ' a ' + Base.dm(dataDoIso(dadosDaConsulta.ciclo_fim))
+              : Base.cicloTxt(dataDoIso(String(dadosDaConsulta.competencia).slice(0, 10)))) +
             ')'
           : '',
-        relatorioTexto: cd
-          ? cd.relatorio
-            ? SIT_REL[cd.relatorio.status] || cd.relatorio.status
-            : String(cd.competencia).slice(0, 7) === Base.iso(cicloSP).slice(0, 7)
+        relatorioTexto: dadosDaConsulta
+          ? dadosDaConsulta.relatorio
+            ? SIT_REL[dadosDaConsulta.relatorio.status] || dadosDaConsulta.relatorio.status
+            : String(dadosDaConsulta.competencia).slice(0, 7) === Base.iso(cicloSP).slice(0, 7)
               ? 'Ciclo em andamento · aberto para registros'
               : 'Encerrado sem relatório gerado'
           : '',
         podeReabrir:
-          !!cd &&
-          (cd.relatorio
-            ? cd.relatorio.status !== 'devolvido'
-            : String(cd.competencia).slice(0, 7) !== Base.iso(cicloSP).slice(0, 7)),
+          !!dadosDaConsulta &&
+          (dadosDaConsulta.relatorio
+            ? dadosDaConsulta.relatorio.status !== 'devolvido'
+            : String(dadosDaConsulta.competencia).slice(0, 7) !== Base.iso(cicloSP).slice(0, 7)),
         reabrir: () =>
           corrigir(
-            m => A.adminReabrirMes(cdP.id, String(cd.competencia).slice(0, 10), m),
+            m => A.adminReabrirMes(perfilDaConsulta.id, String(dadosDaConsulta.competencia).slice(0, 10), m),
             'Ciclo reaberto · o oficineiro já pode corrigir os registros'
           ),
         lancarPresenca: () =>
@@ -250,7 +250,7 @@ class Component extends DCLogic {
             { presencaEditada: { nova: true, data: '', ini: '', fim: '', motivo: '' } },
             'adm-pr-motivo'
           ),
-        presencas: ((cd && cd.presencas) || []).map(p => {
+        presencas: ((dadosDaConsulta && dadosDaConsulta.presencas) || []).map(p => {
           const [sit, cor, fundo] = situacaoDaPresenca(p);
           return {
             data: dmIso(p.data),
@@ -271,9 +271,9 @@ class Component extends DCLogic {
             abrir: () => abrirPres(p)
           };
         }),
-        semPresencas: !!cd && !(cd.presencas || []).length,
+        semPresencas: !!dadosDaConsulta && !(dadosDaConsulta.presencas || []).length,
         opcoesDeGrade: opts(SIT_GRADE),
-        grades: ((cd && cd.grades) || []).map(g => {
+        grades: ((dadosDaConsulta && dadosDaConsulta.grades) || []).map(g => {
           const valor = (contexto.gradesEditadas || {})[g.ano_letivo] || g.status;
           return {
             ano: String(g.ano_letivo),
@@ -287,14 +287,17 @@ class Component extends DCLogic {
             aplicar: () =>
               valor === g.status
                 ? contexto.setState({ erroConsulta: 'Escolha uma situação diferente da atual.' })
-                : corrigir(m => A.adminSituacaoGrade(cdP.id, g.ano_letivo, valor, m), 'Situação da grade alterada')
+                : corrigir(
+                    m => A.adminSituacaoGrade(perfilDaConsulta.id, g.ano_letivo, valor, m),
+                    'Situação da grade alterada'
+                  )
           };
         }),
-        semGrade: !!cd && !(cd.grades || []).length,
+        semGrade: !!dadosDaConsulta && !(dadosDaConsulta.grades || []).length,
         opcoesDeRegistro: opts(SIT_REG),
-        registros: ((cd && cd.registros) || []).map(r => {
-          const ed = (contexto.registrosEditados || {})[r.id],
-            valor = ed != null ? ed : r.revisao_status || '';
+        registros: ((dadosDaConsulta && dadosDaConsulta.registros) || []).map(r => {
+          const edicao = (contexto.registrosEditados || {})[r.id],
+            valor = edicao != null ? edicao : r.revisao_status || '';
           return {
             data: dmIso(r.data),
             inicio: r.inicio || '—',
@@ -311,7 +314,7 @@ class Component extends DCLogic {
             aplicar: () => corrigir(m => A.adminSituacaoRegistro(r.id, valor, m), 'Situação do registro alterada')
           };
         }),
-        semRegistros: !!cd && !(cd.registros || []).length
+        semRegistros: !!dadosDaConsulta && !(dadosDaConsulta.registros || []).length
       }
     };
   }

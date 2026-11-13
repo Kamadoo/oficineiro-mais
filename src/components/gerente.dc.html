@@ -621,9 +621,9 @@ class Component extends DCLogic {
     this.setState(estado, () => {
       if (this.temGaveta(this.state)) return;
       this.travarFundo(false);
-      const v = this.focoAnterior;
+      const anterior = this.focoAnterior;
       this.focoAnterior = null;
-      if (v && document.contains(v)) v.focus();
+      if (anterior && document.contains(anterior)) anterior.focus();
     });
   }
   registrarConsulta(d) {
@@ -711,27 +711,27 @@ class Component extends DCLogic {
     this.fecharGaveta({ novaVisita: null, erroNovaVisita: '' });
   }
   async salvarNovaVisita() {
-    const v = this.state.novaVisita;
-    if (!v || this.state.salvando) return;
+    const visita = this.state.novaVisita;
+    if (!visita || this.state.salvando) return;
     const hoje = hojeIso(),
       max = Base.iso(Base.add(dataDe(hoje), 180));
     let erro = '',
       campo = '';
-    if (!v.analista) {
+    if (!visita.analista) {
       erro = 'Escolha o analista.';
       campo = 'vs-analista';
-    } else if (!v.escola) {
+    } else if (!visita.escola) {
       erro = 'Escolha a escola da carteira do analista.';
       campo = 'vs-escola';
-    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(v.data) || v.data < hoje || v.data > max) {
+    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(visita.data) || visita.data < hoje || visita.data > max) {
       erro = 'Escolha uma data entre hoje e os próximos 180 dias.';
       campo = 'vs-data';
-    } else if (!Base.letivo(dataDe(v.data))) {
+    } else if (!Base.letivo(dataDe(visita.data))) {
       erro = 'Escolha um dia útil: a data cai em fim de semana ou feriado.';
       campo = 'vs-data';
-    } else if (v.hora && !/^\d{2}:\d{2}$/.test(v.hora)) {
+    } else if (visita.hora && !/^\d{2}:\d{2}$/.test(visita.hora)) {
       erro = 'Horário inválido.';
-    } else if (!ORIGENS_DE_VISITA[v.origem]) {
+    } else if (!ORIGENS_DE_VISITA[visita.origem]) {
       erro = 'Escolha a origem da visita.';
     }
     if (erro) {
@@ -741,26 +741,26 @@ class Component extends DCLogic {
     this.setState({ salvando: true, erroNovaVisita: '' });
     try {
       await window.FSM_AUTH.agendarVisita({
-        analista: v.analista,
-        escola: v.escola,
-        data: v.data,
-        hora: v.hora || null,
-        origem: v.origem,
-        tipo: v.tipo,
-        foco: (v.focos || []).join(', '),
-        orientacao: (v.orientacao || '').trim()
+        analista: visita.analista,
+        escola: visita.escola,
+        data: visita.data,
+        hora: visita.hora || null,
+        origem: visita.origem,
+        tipo: visita.tipo,
+        foco: (visita.focos || []).join(', '),
+        orientacao: (visita.orientacao || '').trim()
       });
-      const an = this.state.contas.find(c => c.id === v.analista);
+      const an = this.state.contas.find(c => c.id === visita.analista);
       this.setState({ salvando: false }, () => {
         this.fecharGaveta({ novaVisita: null, erroNovaVisita: '' });
         this.avisar(
           'Visita vinculada à agenda de ' +
             (an ? an.nome : 'analista') +
             ' · ' +
-            DIAS[dataDe(v.data).getDay()] +
+            DIAS[dataDe(visita.data).getDay()] +
             ' ' +
-            dmIso(v.data) +
-            (v.hora ? ' · ' + v.hora : '')
+            dmIso(visita.data) +
+            (visita.hora ? ' · ' + visita.hora : '')
         );
         this.carregarAgenda();
       });
@@ -845,7 +845,7 @@ class Component extends DCLogic {
         .map(x => ({ sig: x.sigla, n: x.nome, cs: x.carteira_id, id: x.id }));
       const rows = os.rows.map((r, i) => {
         const m = window.FSM_ONB.matchEscola(r.lotacao, lista),
-          esc = m ? lista.find(x => x.sig === m.sig) : null;
+          escola = m ? lista.find(x => x.sig === m.sig) : null;
         return {
           k: i,
           seq: r.seq || String(i + 1),
@@ -856,8 +856,8 @@ class Component extends DCLogic {
           matricula: r.matricula,
           lotacao: r.lotacao,
           cpf: String(r.login || '').replace(/\D/g, ''),
-          escola: esc ? String(esc.id) : '',
-          cart: esc && esc.cs ? esc.cs : ''
+          escola: escola ? String(escola.id) : '',
+          cart: escola && escola.cs ? escola.cs : ''
         };
       });
       this.setState({
@@ -963,21 +963,21 @@ class Component extends DCLogic {
   }
   renderVals() {
     const s = this.state;
-    const v = {};
-    Object.assign(v, this.valoresDeApoio(s));
-    Object.assign(v, this.valoresDoCiclo(s, v));
-    Object.assign(v, this.valoresDasPendencias(s, v));
-    Object.assign(v, this.valoresDoMenu(s, v));
-    Object.assign(v, this.valoresDoRegistro(s, v));
-    Object.assign(v, this.valoresDasVisitas(s, v));
-    Object.assign(v, this.valoresDasContas(s, v));
-    Object.assign(v, this.valoresDoLote(s, v));
-    Object.assign(v, this.contextoDasTelas(s, v));
+    const valores = {};
+    Object.assign(valores, this.valoresDeApoio(s));
+    Object.assign(valores, this.valoresDoCiclo(s, valores));
+    Object.assign(valores, this.valoresDasPendencias(s, valores));
+    Object.assign(valores, this.valoresDoMenu(s, valores));
+    Object.assign(valores, this.valoresDoRegistro(s, valores));
+    Object.assign(valores, this.valoresDasVisitas(s, valores));
+    Object.assign(valores, this.valoresDasContas(s, valores));
+    Object.assign(valores, this.valoresDoLote(s, valores));
+    Object.assign(valores, this.contextoDasTelas(s, valores));
     const chaves = {
-      ...this.chavesDoCabecalho(s, v),
-      ...this.chavesDasVisitas(s, v),
-      ...this.chavesDasContas(s, v),
-      ...this.chavesDasTelas(s, v)
+      ...this.chavesDoCabecalho(s, valores),
+      ...this.chavesDasVisitas(s, valores),
+      ...this.chavesDasContas(s, valores),
+      ...this.chavesDasTelas(s, valores)
     };
     return {
       ...chaves,
@@ -1040,8 +1040,8 @@ class Component extends DCLogic {
       ultimosCiclos
     };
   }
-  valoresDoCiclo(s, v) {
-    const { agora, anoAtual, ciclo, cicloAtual, escolaNoFiltro, fimDoPeriodo, hoje, oficineirosAtivos } = v;
+  valoresDoCiclo(s, valores) {
+    const { agora, anoAtual, ciclo, cicloAtual, escolaNoFiltro, fimDoPeriodo, hoje, oficineirosAtivos } = valores;
     const dadosDoCiclo = c => {
       const at = c === cicloDe(hoje, 0) ? hoje : cicloFimIso(c),
         ini = cicloIniIso(c),
@@ -1110,9 +1110,9 @@ class Component extends DCLogic {
         mt: 0,
         feitas: 0
       };
-      const esc = new Set();
+      const escolas = new Set();
       loteAtual.forEach(i => {
-        esc.add(i.esc);
+        escolas.add(i.esc);
         if (i.extra) t.extra++;
         else {
           t.prev++;
@@ -1136,7 +1136,7 @@ class Component extends DCLogic {
       });
       t.liq = t.prev - t.canc;
       t.ex = pct(t.real, t.liq);
-      t.nEsc = esc.size;
+      t.nEsc = escolas.size;
       t.eng = t.engN ? (t.engS / t.engN).toFixed(1).replace('.', ',') : '—';
       t.presAl = pct(t.pres, t.matr);
       t.sol = t.feitas ? pct(t.mc, t.feitas) + '% · ' + pct(t.mt, t.feitas) + '%' : '—';
@@ -1204,7 +1204,7 @@ class Component extends DCLogic {
       total
     };
   }
-  valoresDasPendencias(s, v) {
+  valoresDasPendencias(s, valores) {
     const {
       analistasDaCarteira,
       atividades,
@@ -1222,7 +1222,7 @@ class Component extends DCLogic {
       resumir,
       resumoDosOficineiros,
       siglaDaEscola
-    } = v;
+    } = valores;
     const visitasDoPeriodo = dados.visitas.filter(v => escolaNoFiltro(v.escola_id));
     const agendaValida = s.agenda.filter(v => v.status !== 'cancelada');
     const proximaVisitaDa = escId =>
@@ -1350,13 +1350,13 @@ class Component extends DCLogic {
       c => carteiraNoFiltro(c.id) && (s.carteiraFiltro === c.id || escolasAtivas.some(e => e.carteira_id === c.id))
     );
     const resumoDasCarteiras = carteirasFiltradas.map(c => {
-      const escs = escolasAtivas.filter(e => e.carteira_id === c.id && escolaNoFiltro(e.id)),
-        ids = new Set(escs.map(e => e.id)),
+      const escolasDaCarteira = escolasAtivas.filter(e => e.carteira_id === c.id && escolaNoFiltro(e.id)),
+        ids = new Set(escolasDaCarteira.map(e => e.id)),
         t = resumir(atividades.filter(i => ids.has(i.esc))),
         vis = visitasDoPeriodo.filter(v => ids.has(v.escola_id)),
         visEsc = new Set(vis.map(v => v.escola_id)).size,
         ofs = oficineirosFiltrados.filter(o => ids.has(escolaAtualDe(o))).length;
-      return { c, escs, ids, t, vis, visEsc, ofs };
+      return { c, escs: escolasDaCarteira, ids, t, vis, visEsc, ofs };
     });
     return {
       agendaValida,
@@ -1371,8 +1371,8 @@ class Component extends DCLogic {
       visitasDoPeriodo
     };
   }
-  valoresDoMenu(s, v) {
-    const { ciclo, logado, onboardingsSemAnalista, pendenciasRotuladas } = v;
+  valoresDoMenu(s, valores) {
+    const { ciclo, logado, onboardingsSemAnalista, pendenciasRotuladas } = valores;
     const ABAS = {
       adocao: [
         ['cons', 'Consolidado'],
@@ -1475,8 +1475,8 @@ class Component extends DCLogic {
       turmaDe
     };
   }
-  valoresDoRegistro(s, v) {
-    const { SITUACOES_DA_ATIVIDADE, nomeDaEscola, nomeDaPessoa, situacaoDe, turmaDe } = v;
+  valoresDoRegistro(s, valores) {
+    const { SITUACOES_DA_ATIVIDADE, nomeDaEscola, nomeDaPessoa, situacaoDe, turmaDe } = valores;
     const registro = s.registroAberto;
     const registroDetalhado = registro
       ? (() => {
@@ -1533,8 +1533,8 @@ class Component extends DCLogic {
       : {};
     return { registro, registroDetalhado };
   }
-  valoresDasVisitas(s, v) {
-    const { analistasAtivos, escolaDe, hoje, is, logado, nomeDaEscola, nomeDaPessoa } = v;
+  valoresDasVisitas(s, valores) {
+    const { analistasAtivos, escolaDe, hoje, is, logado, nomeDaEscola, nomeDaPessoa } = valores;
     const segunda = Base.iso(Base.add(dataDe(segDe(hoje)), this.memoria.analistas.semana * 7));
     const diasDaSemana = [0, 1, 2, 3, 4].map(k => Base.iso(Base.add(dataDe(segunda), k)));
     const dadosDaSemana = s.semanas[segunda];
@@ -1654,13 +1654,13 @@ class Component extends DCLogic {
       orientacao: novaVisita.orientacao || '',
       escolherAnalista: e => {
         const a = analistasAtivos.find(c => c.id === e.target.value),
-          v = this.state.novaVisita,
-          esc = escolaDe(v.escola);
+          visita = this.state.novaVisita,
+          escola = escolaDe(visita.escola);
         this.setState({
           novaVisita: {
-            ...v,
+            ...visita,
             analista: e.target.value,
-            escola: a && esc && esc.carteira_id === a.carteira_id ? v.escola : ''
+            escola: a && escola && escola.carteira_id === a.carteira_id ? visita.escola : ''
           }
         });
       },
@@ -1681,8 +1681,8 @@ class Component extends DCLogic {
       visitasDaSemana
     };
   }
-  valoresDasContas(s, v) {
-    const { escolaPorId, nomeDaEscola, rotuloDaCarteira } = v;
+  valoresDasContas(s, valores) {
+    const { escolaPorId, nomeDaEscola, rotuloDaCarteira } = valores;
     const situacaoDaConta = c => (!c.ativo ? 'desativada' : c.primeiro_acesso ? 'primeiro' : 'ativa');
     const atuacaoDaConta = c =>
       c.papel === 'oficineiro' || c.papel === 'direcao'
@@ -1801,15 +1801,15 @@ class Component extends DCLogic {
       };
     });
     const teclaNosPerfis = e => {
-      const ks = PERFIS.map(p => p[0]);
-      const i = ks.indexOf(this.state.novaConta && this.state.novaConta.papel);
+      const perfis = PERFIS.map(p => p[0]);
+      const i = perfis.indexOf(this.state.novaConta && this.state.novaConta.papel);
       let j = -1;
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % ks.length;
-      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + ks.length) % ks.length;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % perfis.length;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + perfis.length) % perfis.length;
       else return;
       e.preventDefault();
-      this.setState({ novaConta: { ...this.state.novaConta, papel: ks[j] } }, () =>
-        this.focar(j === 0 ? 'ct-nv-perfil' : 'ct-nv-perfil-' + ks[j])
+      this.setState({ novaConta: { ...this.state.novaConta, papel: perfis[j] } }, () =>
+        this.focar(j === 0 ? 'ct-nv-perfil' : 'ct-nv-perfil-' + perfis[j])
       );
     };
     const mudanca = s.mudanca || {};
@@ -1831,8 +1831,8 @@ class Component extends DCLogic {
       teclaNosPerfis
     };
   }
-  valoresDoLote(s, v) {
-    const { pendencias } = v;
+  valoresDoLote(s, valores) {
+    const { pendencias } = valores;
     const loteAtual = s.lote;
     const loteDetalhado = Contas.detalharLote(loteAtual, NOMES_DE_PERFIL);
     const avisos = pendencias.map(p => ({
@@ -1845,7 +1845,7 @@ class Component extends DCLogic {
     }));
     return { avisos, loteAtual, loteDetalhado };
   }
-  contextoDasTelas(s, v) {
+  contextoDasTelas(s, valores) {
     const {
       analistasAtivos,
       atividadesDoCiclo,
@@ -1857,10 +1857,10 @@ class Component extends DCLogic {
       proximaVisitaDa,
       quandoDaVisita,
       resumir
-    } = v;
+    } = valores;
     const contexto = {
       ...Base.escolher(s, ESTADO_DAS_TELAS),
-      ...Base.escolher(v, VALORES_DAS_TELAS),
+      ...Base.escolher(valores, VALORES_DAS_TELAS),
       FAIXAS_DE_EXECUCAO,
       nomeDoMes,
       ORIGENS_DE_VISITA,
@@ -1907,7 +1907,7 @@ class Component extends DCLogic {
     };
     return { contexto };
   }
-  chavesDoCabecalho(s, v) {
+  chavesDoCabecalho(s, valores) {
     const {
       ABAS,
       abasDaTela,
@@ -1928,7 +1928,7 @@ class Component extends DCLogic {
       tela,
       temFiltros,
       ultimosCiclos
-    } = v;
+    } = valores;
     return {
       cliente: Base.cliente(),
       linhaDoPerfil: Base.cliente().cidade
@@ -1967,20 +1967,23 @@ class Component extends DCLogic {
           rotulo: mesTxt(c).replace(/^./, x => x.toUpperCase()) + ' · ' + Base.cicloTxt(dataDe(c))
         })),
       escolherCiclo: e => {
-        const v = e.target.value;
+        const valor = e.target.value;
         this.memoria.adocao.limite = 100;
-        this.setState({ cicloFiltro: v }, () => {
-          this.carregarCiclo(v);
-          this.carregarRelatoriosDoCiclo(v);
+        this.setState({ cicloFiltro: valor }, () => {
+          this.carregarCiclo(valor);
+          this.carregarRelatoriosDoCiclo(valor);
         });
       },
       carteira: s.carteiraFiltro,
       opcoesDeCarteira: s.carteiras.map(c => ({ valor: c.id, rotulo: c.rotulo })),
       escolherCarteira: e => {
-        const v = e.target.value,
-          esc = escolaPorId[s.escolaFiltro];
+        const valor = e.target.value,
+          escola = escolaPorId[s.escolaFiltro];
         this.memoria.adocao.limite = 100;
-        this.setState({ carteiraFiltro: v, escolaFiltro: esc && v && esc.carteira_id !== v ? '' : s.escolaFiltro });
+        this.setState({
+          carteiraFiltro: valor,
+          escolaFiltro: escola && valor && escola.carteira_id !== valor ? '' : s.escolaFiltro
+        });
       },
       escola: s.escolaFiltro,
       escolherEscola: e => {
@@ -2018,7 +2021,7 @@ class Component extends DCLogic {
       filtroDeCiclo: !is.analistasAgendas
     };
   }
-  chavesDasVisitas(s, v) {
+  chavesDasVisitas(s, valores) {
     const {
       analistaDaVisita,
       analistasAtivos,
@@ -2028,7 +2031,7 @@ class Component extends DCLogic {
       novaVisita,
       novaVisitaDetalhada,
       visitaDetalhada
-    } = v;
+    } = valores;
     return {
       novaVisitaAberta: !!s.novaVisita,
       novaVisita: novaVisitaDetalhada,
@@ -2082,7 +2085,7 @@ class Component extends DCLogic {
       fecharVisita: () => this.fecharVisita()
     };
   }
-  chavesDasContas(s, v) {
+  chavesDasContas(s, valores) {
     const {
       contaAberta,
       contaDetalhada,
@@ -2098,7 +2101,7 @@ class Component extends DCLogic {
       novaConta,
       perfisDaNovaConta,
       teclaNosPerfis
-    } = v;
+    } = valores;
     return {
       fecharConta: () => this.fecharGavetaDeConta(),
       novaContaAberta: !!s.novaConta,
@@ -2172,8 +2175,8 @@ class Component extends DCLogic {
       aviso: s.aviso
     };
   }
-  chavesDasTelas(s, v) {
-    const { contexto } = v;
+  chavesDasTelas(s, valores) {
+    const { contexto } = valores;
     return {
       contexto,
       memoriaGeral: this.memoria.geral,

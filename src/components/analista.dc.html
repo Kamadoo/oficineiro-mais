@@ -929,8 +929,13 @@ class Component extends DCLogic {
       agendaValida
         .filter(v => v.escola_id === escolaId && v.status === 'agendada' && v.data >= hoje)
         .sort((a, b) => (a.data + (a.hora || '')).localeCompare(b.data + (b.hora || '')))[0];
-    const textoDaVisita = v =>
-      v ? DIAS[dataDe(v.data).getDay()].slice(0, 3) + ' ' + dmIso(v.data) + (v.hora ? ' · ' + hmDe(v.hora) : '') : '';
+    const textoDaVisita = visita =>
+      visita
+        ? DIAS[dataDe(visita.data).getDay()].slice(0, 3) +
+          ' ' +
+          dmIso(visita.data) +
+          (visita.hora ? ' · ' + hmDe(visita.hora) : '')
+        : '';
     const ultimaVisita = escolaId =>
       minhasVisitas
         .concat(s.visitas.filter(v => v.analista_id !== usuario))
@@ -1134,12 +1139,12 @@ class Component extends DCLogic {
     } = contexto;
     const semRegistro = agendaValida.filter(v => v.status === 'agendada' && v.data < hoje);
     const vinculadas = agendaValida.filter(
-      v =>
-        v.status === 'agendada' &&
-        v.data >= hoje &&
-        v.criada_por &&
-        v.criada_por !== usuario &&
-        String(v.criada_em || '').slice(0, 10) >= ha7Dias
+      visita =>
+        visita.status === 'agendada' &&
+        visita.data >= hoje &&
+        visita.criada_por &&
+        visita.criada_por !== usuario &&
+        String(visita.criada_em || '').slice(0, 10) >= ha7Dias
     );
     const semVisita = escolasDaCarteira.filter(e => {
       const ultima = contexto.ultimaVisita(e.id);

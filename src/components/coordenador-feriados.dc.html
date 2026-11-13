@@ -37,18 +37,18 @@ class Component extends DCLogic {
   renderVals() {
     const contexto = this.props.contexto;
     const { dmaIso } = contexto;
-    const fe = contexto.novoFeriado || {};
-    const feSet = k => e =>
+    const novoFeriado = contexto.novoFeriado || {};
+    const definirNoFeriado = k => e =>
       contexto.setState({ novoFeriado: { ...contexto.estado().novoFeriado, [k]: e.target.value }, erroSistema: '' });
     const TIPO_FER = { feriado: 'Feriado', recesso: 'Recesso escolar', ponto_facultativo: 'Ponto facultativo' };
     return {
       temErro: !!contexto.erroSistema,
       erro: contexto.erroSistema,
       novoFeriado: {
-        ...fe,
-        escolherData: feSet('data'),
-        escreverNome: feSet('nome'),
-        escolherTipo: feSet('tipo'),
+        ...novoFeriado,
+        escolherData: definirNoFeriado('data'),
+        escreverNome: definirNoFeriado('nome'),
+        escolherTipo: definirNoFeriado('tipo'),
         incluir: () => contexto.salvarFeriado(),
         feriados: (contexto.feriados || []).map(f => {
           const d = String(f.data).slice(0, 10),
