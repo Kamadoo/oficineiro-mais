@@ -95,9 +95,13 @@ Detalhes em [docs/seguranca.md](docs/seguranca.md).
 ## Qualidade
 
 - 664 asserções pgTAP cobrindo regras de negócio, permissões e fluxos de cada perfil (`supabase/tests`).
-- Auditoria automática de RLS executada a cada push (`tests/security`).
-- ESLint e Prettier no front-end.
-- Integração contínua no GitHub Actions: lint, build, testes do banco e auditoria.
+- Auditoria automática de RLS, matriz de permissões das RPC e testes de escopo (`tests/security`).
+- Testes unitários das bibliotecas com `node:test` (`tests/unit`).
+- Varredura de todas as telas nos temas claro e escuro com Playwright e checagem de acessibilidade com axe-core (`tests/ui`).
+- ESLint e Prettier em todo o JavaScript, inclusive o script de cada componente; Ruff nos scripts Python; `deno fmt`, `deno lint` e `deno check` nas funções de borda.
+- Integração contínua no GitHub Actions com ações fixadas por versão e Dependabot.
+
+Como rodar cada grupo em [docs/testes.md](docs/testes.md).
 
 ## Estrutura
 
@@ -114,16 +118,18 @@ supabase/
   functions/           Edge Functions
   tests/database/      testes pgTAP
   scripts/             verificação de segurança e promoção de administrador
-scripts/               build, servidor local e verificação de dados pessoais
+scripts/               build, servidor local, lint dos componentes e verificação de dados pessoais
 tests/
   security/            auditoria de RLS, matriz de RPC e testes de escopo
+  unit/                testes unitários das bibliotecas
+  ui/                  varredura das telas e acessibilidade
   fixtures/            dados fictícios para os testes
-docs/                  arquitetura e segurança
+docs/                  arquitetura, segurança e testes
 ```
 
 ## Executando localmente
 
-Requisitos: Python 3.10+, Node.js 20+ e a [CLI do Supabase](https://supabase.com/docs/guides/cli).
+Requisitos: Python 3.12+, Node.js 22+ e a [CLI do Supabase](https://supabase.com/docs/guides/cli).
 
 ```bash
 supabase start

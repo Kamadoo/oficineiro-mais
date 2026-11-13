@@ -4,6 +4,9 @@
   "private": true,
   "description": "Gestão das oficinas nas escolas da rede municipal: presença, grade, registro de aulas, relatórios e visitas de campo.",
   "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "python scripts/build.py",
     "serve": "python scripts/serve.py",
