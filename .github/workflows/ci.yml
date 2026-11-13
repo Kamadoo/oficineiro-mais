@@ -46,3 +46,19 @@ jobs:
           psql -d postgres -v ON_ERROR_STOP=1 -q -f supabase/seed.sql
           psql -d postgres -v ON_ERROR_STOP=1 -q -f tests/fixtures/dados_teste.sql
           python3 tests/security/rls_audit.py
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: cp src/config.example.js src/config.js
+      - run: python3 scripts/build.py
+      - name: Varredura das telas e acessibilidade
+        env:
+          PGHOST: 127.0.0.1
+          PGPORT: 54322
+          PGUSER: postgres
+          PGPASSWORD: postgres
+          PGDATABASE: postgres
+        run: npm run test:ui

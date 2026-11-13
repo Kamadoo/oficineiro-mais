@@ -35,5 +35,11 @@ module.exports = [
       sourceType: 'commonjs',
       globals: globals.node
     }
+  },
+  {
+    files: ['tests/ui/*.js'],
+    languageOptions: {
+      globals: { ...globals.node, window: 'readonly' }
+    }
   }
 ];

@@ -8,15 +8,18 @@
     "build": "python scripts/build.py",
     "serve": "python scripts/serve.py",
     "test": "node --test \"tests/unit/*.test.js\"",
+    "test:ui": "node tests/ui/varredura.js",
     "lint": "eslint . && node scripts/lint_components.js",
     "format:check": "prettier --check \"src/lib/*.js\" \"scripts/*.js\" \"tests/**/*.js\" eslint.config.js",
     "format:components": "node scripts/lint_components.js --formatar",
     "privacy": "python scripts/privacy_check.py"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@eslint/js": "^9.0.0",
     "eslint": "^9.0.0",
     "globals": "^15.0.0",
+    "playwright": "1.65.0",
     "prettier": "^3.3.0"
   }
 }
