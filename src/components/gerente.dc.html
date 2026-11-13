@@ -112,7 +112,7 @@
 <sc-if value="{{ is.adocao }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-adocao" contexto="{{ contexto }}" memoria="{{ memoriaAdocao }}"></dc-import></sc-if>
 <sc-if value="{{ is.oficineiros }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-oficineiros" contexto="{{ contexto }}"></dc-import></sc-if>
 <sc-if value="{{ is.analistas }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-analistas" contexto="{{ contexto }}" memoria="{{ memoriaAnalistas }}"></dc-import></sc-if>
-<sc-if value="{{ is.jornada }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-jornada" contexto="{{ contexto }}" memoria="{{ memoriaJornada }}"></dc-import></sc-if>
+<sc-if value="{{ is.jornada }}" hint-placeholder-val="{{ false }}"><dc-import name="jornada" perfil="gerente" contexto="{{ contexto }}" memoria="{{ memoriaJornada }}"></dc-import></sc-if>
 <sc-if value="{{ is.onboarding }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-onboarding" contexto="{{ contexto }}" memoria="{{ memoriaOnboarding }}"></dc-import></sc-if>
 <sc-if value="{{ is.contas }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-contas" contexto="{{ contexto }}" memoria="{{ memoriaContas }}"></dc-import></sc-if>
 
@@ -2039,11 +2039,29 @@ class Component extends DCLogic {
       FAIXAS_DE_EXECUCAO,
       nomeDoMes,
       ORIGENS_DE_VISITA,
-      cicloDe,
       documentoValido,
       SITUACOES_DE_CONTA,
       NOMES_DE_PERFIL,
       lembrar: (tela, mudanca) => this.lembrar(tela, mudanca),
+      jornada: {
+        escolaDe: id => escolaPorId[String(id)],
+        aulas: () => atividadesDoCiclo(dadosDoCiclo(cicloDe(hoje, 0)), cicloDe(hoje, 0)),
+        execucao: aulas => resumir(aulas).ex,
+        oficineirosDaEscola: id => oficineirosAtivos.filter(o => escolaAtualDe(o) === id),
+        visitaDaEscola: id => {
+          const proxima = proximaVisitaDa(id);
+          return proxima ? quandoDaVisita(proxima) : '';
+        },
+        agendarVisita: ({ carteira, diagnostico, ...pedido }) => {
+          const analista = analistasAtivos.find(a => a.carteira_id === carteira);
+          this.agendarVisita({
+            ...pedido,
+            analista: analista ? analista.id : '',
+            escola: analista ? pedido.escola : '',
+            diag: diagnostico
+          });
+        }
+      },
       irPara: (...argumentos) => this.irPara(...argumentos),
       abrirRegistro: (...argumentos) => this.abrirRegistro(...argumentos),
       exportar: (...argumentos) => this.exportar(...argumentos),

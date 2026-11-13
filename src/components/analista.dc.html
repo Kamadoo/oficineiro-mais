@@ -91,7 +91,7 @@
 <sc-if value="{{ is.agenda }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-agenda" contexto="{{ contexto }}" memoria="{{ memoriaAgenda }}"></dc-import></sc-if>
 <sc-if value="{{ is.visitas }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-visitas" contexto="{{ contexto }}" memoria="{{ memoriaVisitas }}"></dc-import></sc-if>
 <sc-if value="{{ is.carteira }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-carteira" contexto="{{ contexto }}" memoria="{{ memoriaCarteira }}"></dc-import></sc-if>
-<sc-if value="{{ is.jornada }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-jornada" contexto="{{ contexto }}" memoria="{{ memoriaJornada }}"></dc-import></sc-if>
+<sc-if value="{{ is.jornada }}" hint-placeholder-val="{{ false }}"><dc-import name="jornada" perfil="analista" contexto="{{ contexto }}" memoria="{{ memoriaJornada }}"></dc-import></sc-if>
 <sc-if value="{{ is.onboarding }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-onboarding" contexto="{{ contexto }}"></dc-import></sc-if>
 
     </div>
@@ -292,11 +292,7 @@ const opcao = marcada =>
         cor: 'var(--texto-ciano-850)',
         classe: 'fundo-branco botao-secundario'
       };
-const segmento = marcado => ({
-  classe: marcado ? 'fundo-branco' : 'fundo-transparent',
-  fundo: marcado ? 'var(--fundo-branco)' : 'transparent',
-  cor: marcado ? 'var(--texto-ciano-850)' : 'var(--texto-cinza-600)'
-});
+const segmento = Base.segmento;
 
 class Component extends DCLogic {
   state = {
@@ -1086,7 +1082,6 @@ class Component extends DCLogic {
       agendaDeHoje,
       origemDe,
       proximaVisita,
-      textoDaVisita,
       ultimaVisita,
       presencas: s.presencas,
       presencaAberta,
@@ -1122,6 +1117,21 @@ class Component extends DCLogic {
       abrirVisitaDaAgenda: id => this.abrirVisitaDaAgenda(id),
       abrirVisita: id => this.abrirVisita(id),
       agendarVisita: preenchida => this.agendarVisita(preenchida),
+      jornada: {
+        escolaDe,
+        aulas: () => aulasDoCicloAtual,
+        execucao: aulas => resumir(aulas).execucao,
+        oficineirosDaEscola: id => oficineiros.filter(o => o.escola_id === id),
+        visitaDaEscola: id => {
+          const proxima = proximaVisita(id);
+          return proxima ? textoDaVisita(proxima) : '';
+        },
+        agendarVisita: pedido => {
+          const preenchida = { ...pedido };
+          delete preenchida.carteira;
+          this.agendarVisita(preenchida);
+        }
+      },
       carregarPeriodo: periodo => this.carregarPeriodo(periodo),
       abrirBaixa: (item, escola, ordem) => this.abrirBaixa(item, escola, ordem),
       desfazerBaixa: item => this.desfazerBaixa(item),

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Oficineiro+ · Analista · Jornada do Usuário</title>
+<title>Oficineiro+ · Jornada do Usuário</title>
 <script src="../vendor/dc-runtime/dc-runtime.js"></script>
 </head>
 <body>
@@ -15,6 +15,7 @@
     <div class="d-flex gap-2 fundo-cinza-70 raio-10 p-3 quebra-wrap">
       <sc-for list="{{ abas }}" as="aba" hint-placeholder-count="3"><button onClick="{{ aba.escolher }}" class="borda-0 raio-8 p-8-14 fs-13 fw-600 {{ aba.classe }}" style="background:{{ aba.fundo }};color:{{ aba.cor }}">{{ aba.rotulo }}</button></sc-for>
     </div>
+<sc-if value="{{ porCarteira }}" hint-placeholder-val="{{ false }}"><select aria-label="Carteira" onChange="{{ escolherCarteira }}" value="{{ carteira }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
     <select aria-label="Perfil" onChange="{{ escolherPerfil }}" value="{{ perfil }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><option value="todos">Todos os perfis</option><option value="A">Alunos</option><option value="P">Professores</option><option value="S">Servidores</option></select>
     <select aria-label="Lotação" onChange="{{ escolherLotacao }}" value="{{ lotacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><option value="escolas">Escolas e CEIs</option><option value="todas">Todas as lotações</option></select>
     <span class="ml-auto fs-12 cor-cinza-600">Base de acessos de <b class="cor-ciano-850">{{ dataDaBase }}</b></span>
@@ -32,7 +33,7 @@
     </div>
     <div class="empilha-celular d-grid colunas-minmax-0-1p25fr-minmax-0-1fr gap-16 alinha-start">
       <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
-        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Escolas que precisam de reforço na adoção</h3><span class="fs-12 cor-cinza-600">ordenadas por prioridade · cruzadas com a sua agenda</span></div>
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Escolas que precisam de reforço na adoção</h3><span class="fs-12 cor-cinza-600">{{ textos.ordem }}</span></div>
         <sc-for list="{{ sugestoes }}" as="linha" hint-placeholder-count="5">
           <div class="d-flex quebra-wrap alinha-center gap-8-12 p-12-0 borda-t-cinza-70">
             <span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.prioridadeCor }};background:{{ linha.prioridadeFundo }}">{{ linha.prioridade }}</span>
@@ -41,14 +42,14 @@
               <span class="fs-12 cor-cinza-750 lh-1p45">{{ linha.diagnostico }}</span>
             </div>
             <sc-if value="{{ linha.temVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-verde-700 fundo-verde-80 p-4-10 raio-999 espaco-nowrap">Na agenda · {{ linha.visita }}</span></sc-if>
-            <sc-if value="{{ linha.semVisita }}" hint-placeholder-val="{{ true }}"><button onClick="{{ linha.agendar }}" class="h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660" style="background:#0B7EA3">Agendar visita</button></sc-if>
+            <sc-if value="{{ linha.semVisita }}" hint-placeholder-val="{{ true }}"><button onClick="{{ linha.agendar }}" class="h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660" style="background:#0B7EA3">{{ textos.agendar }}</button></sc-if>
           </div>
         </sc-for>
         <sc-if value="{{ semSugestoes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma escola com prioridade alta ou média neste filtro.</span></sc-if>
       </section>
       <div class="d-flex eixo-column gap-16">
         <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
-          <h3 class="m-0 fs-15">Temperatura por escola</h3>
+          <h3 class="m-0 fs-15">{{ textos.barras }}</h3>
           <sc-for list="{{ barras }}" as="barra" hint-placeholder-count="7">
             <div class="d-grid colunas-44-minmax-0-1fr-48 gap-10 alinha-center fs-12">
               <span class="fw-600" style="color:{{ barra.cor }}">{{ barra.sigla }}</span>
@@ -98,7 +99,7 @@
           </sc-for>
         </div>
       </div>
-      <span class="fs-12 cor-cinza-600">Atividades oficineiros = execução das atividades no mês (realizadas ÷ previstas). Prioridade: Alta com menos de 20% de engajados; Média de 20% a 39%; sobe um nível quando a execução das atividades está abaixo de 75%.</span>
+      <span class="fs-12 cor-cinza-600">{{ textos.nota }}</span>
     </section>
   </sc-if>
 
@@ -107,7 +108,7 @@
       <select onChange="{{ escolherEscola }}" value="{{ escolaNome }}" class="h-40 flex-1-1-320 max-w-520 borda-cinza-160 raio-8 p-0-10 fs-14 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
       <span class="fs-11 fw-700 p-4-10 raio-999 segmentado" style="color:{{ escola.prioridadeCor }};background:{{ escola.prioridadeFundo }}">Prioridade {{ escola.prioridade }}</span>
       <sc-if value="{{ escola.temVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-verde-700 fundo-verde-80 p-4-10 raio-999">Na agenda · {{ escola.visita }}</span></sc-if>
-      <sc-if value="{{ escola.semVisita }}" hint-placeholder-val="{{ true }}"><button onClick="{{ escola.agendar }}" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 ml-auto fundo-ciano-660" style="background:#0B7EA3">Agendar visita</button></sc-if>
+      <sc-if value="{{ escola.semVisita }}" hint-placeholder-val="{{ true }}"><button onClick="{{ escola.agendar }}" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 ml-auto fundo-ciano-660" style="background:#0B7EA3">{{ textos.agendar }}</button></sc-if>
     </div>
     <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
       <sc-for list="{{ escola.indicadores }}" as="indicador" hint-placeholder-count="6">
@@ -206,8 +207,23 @@ const PRIORIDADES = {
 };
 const ORDEM_DAS_PRIORIDADES = { Alta: 0, Média: 1, Baixa: 2 };
 const PERFIS = { A: 'Aluno', P: 'Professor', S: 'Servidor' };
+const TEXTOS = {
+  analista: {
+    ordem: 'ordenadas por prioridade · cruzadas com a sua agenda',
+    agendar: 'Agendar visita',
+    barras: 'Temperatura por escola',
+    nota: 'Atividades oficineiros = execução das atividades no mês (realizadas ÷ previstas). Prioridade: Alta com menos de 20% de engajados; Média de 20% a 39%; sobe um nível quando a execução das atividades está abaixo de 75%.'
+  },
+  gerente: {
+    ordem: 'ordenadas por prioridade · cruzadas com a agenda dos analistas',
+    agendar: 'Vincular visita',
+    barras: 'Temperatura por grupo CS',
+    nota: 'Atividades oficineiros = execução das atividades no ciclo de cada oficineiro (realizadas ÷ previstas). Prioridade: Alta com menos de 20% de engajados; Média de 20% a 39%; sobe um nível quando a execução das atividades está abaixo de 75%.'
+  }
+};
 const PADRAO = {
   aba: 'geral',
+  carteira: 'todos',
   perfil: 'todos',
   lotacao: 'escolas',
   ordem: 'prio',
@@ -255,6 +271,8 @@ class Component extends DCLogic {
   }
   renderVals() {
     const contexto = this.props.contexto,
+      jornada = contexto.jornada,
+      porCarteira = this.props.perfil === 'gerente',
       memoria = { ...PADRAO, ...this.props.memoria },
       acessos = contexto.acessos;
     if (!Array.isArray(acessos) || !acessos.length)
@@ -268,7 +286,7 @@ class Component extends DCLogic {
     const porEscola = {};
     let dataDaBase = '';
     acessos.forEach(p => {
-      const escola = contexto.escolaDe(p.escola_id);
+      const escola = jornada.escolaDe(p.escola_id);
       if (!escola) return;
       const local = (porEscola[escola.id] = porEscola[escola.id] || {
         id: escola.id,
@@ -287,12 +305,13 @@ class Component extends DCLogic {
       });
       if (p.base_ref > dataDaBase) dataDaBase = p.base_ref;
     });
-    const locais = Object.values(porEscola).filter(local => memoria.lotacao === 'todas' || ehEscola(local.nome));
+    const todosOsLocais = Object.values(porEscola);
+    const locais = todosOsLocais.filter(local => memoria.lotacao === 'todas' || ehEscola(local.nome));
     const contasDe = local =>
       memoria.perfil === 'todos' ? local.contas : local.contas.filter(c => c.perfil === memoria.perfil);
-    const aulasDoCiclo = contexto.aulasDoCicloAtual,
-      execucaoDe = id => contexto.resumir(aulasDoCiclo.filter(aula => aula.esc === id)).execucao;
-    const oficineirosDe = id => contexto.oficineiros.filter(o => o.escola_id === id);
+    const aulasDoCiclo = jornada.aulas(),
+      execucaoDe = id => jornada.execucao(aulasDoCiclo.filter(aula => aula.esc === id));
+    const oficineirosDe = jornada.oficineirosDaEscola;
     const diagnostico = (local, total, execucao) => {
       const anos = alunosPorAno(local.contas);
       let pior = null;
@@ -318,8 +337,9 @@ class Component extends DCLogic {
     };
     const agendar = (local, total, execucao) => () => {
       const onboarding = total.N > total.S;
-      contexto.agendarVisita({
+      jornada.agendarVisita({
         escola: String(local.id),
+        carteira: local.carteira,
         origem: 'mapa_calor',
         tipo: onboarding ? 'Implantação · Onboarding de novos usuários' : 'Acompanhamento · Plano de ação',
         focos: onboarding ? ['Alunos', 'Professores'] : ['Professores'],
@@ -328,20 +348,20 @@ class Component extends DCLogic {
       });
     };
     const abrir = local => () => this.lembrar({ aba: 'escola', escola: local.nome, limite: 40 });
-    const unidades = locais
+    const todasAsUnidades = locais
       .map(local => {
         const total = contar(contasDe(local)),
-          execucao = execucaoDe(local.id),
-          proxima = contexto.proximaVisita(local.id);
+          execucao = execucaoDe(local.id);
         return {
           local,
           total,
           execucao,
           prioridade: prioridadeDe(total.engajados, execucao),
-          visita: proxima ? contexto.textoDaVisita(proxima) : ''
+          visita: jornada.visitaDaEscola(local.id)
         };
       })
       .filter(u => u.total.n > 0);
+    const unidades = todasAsUnidades.filter(u => memoria.carteira === 'todos' || u.local.carteira === memoria.carteira);
     const ordenadas = unidades
       .slice()
       .sort((a, b) =>
@@ -378,12 +398,41 @@ class Component extends DCLogic {
       agendar: agendar(u.local, u.total, u.execucao),
       diagnostico: diagnostico(u.local, u.total, u.execucao)
     });
-    const siglas = unidades
-      .slice()
-      .sort((a, b) => b.total.n - a.total.n)
-      .slice(0, 10)
-      .map(u => u.local.sigla);
-    const porNome = unidades.slice().sort((a, b) => a.local.nome.localeCompare(b.local.nome, 'pt-BR'));
+    const carteiras = Array.from(new Set(todosOsLocais.map(local => local.carteira).filter(Boolean))).sort();
+    const barra = (rotulo, cor, doGrupo) => {
+      const total = contar([].concat(...doGrupo.map(u => contasDe(u.local))));
+      return {
+        sigla: rotulo,
+        cor,
+        engajados: total.engajados + '%',
+        faixas: FAIXAS.map(faixa => ({
+          largura: parcela(total[faixa], total.n) + '%',
+          cor: TEMPERATURAS[faixa][1],
+          titulo: TEMPERATURAS[faixa][0] + ' ' + parcela(total[faixa], total.n) + '%'
+        }))
+      };
+    };
+    const barras = porCarteira
+      ? carteiras.map(carteira =>
+          barra(
+            carteira,
+            carteira === memoria.carteira ? 'var(--texto-ciano-660)' : 'var(--texto-ciano-850)',
+            todasAsUnidades.filter(u => u.local.carteira === carteira)
+          )
+        )
+      : unidades
+          .slice()
+          .sort((a, b) => b.total.n - a.total.n)
+          .slice(0, 10)
+          .map(u => u.local.sigla)
+          .map(sigla =>
+            barra(
+              sigla,
+              'var(--texto-ciano-850)',
+              unidades.filter(u => u.local.sigla === sigla)
+            )
+          );
+    const porNome = todasAsUnidades.slice().sort((a, b) => a.local.nome.localeCompare(b.local.nome, 'pt-BR'));
     const escolhida = porNome.find(u => u.local.nome === memoria.escola) || ordenadas[0] || porNome[0];
     let escola = {};
     if (escolhida) {
@@ -540,6 +589,13 @@ class Component extends DCLogic {
       semBase: false,
       pronto: true,
       dataDaBase: dataDaBase ? dmyIso(dataDaBase) : '—',
+      textos: TEXTOS[this.props.perfil] || TEXTOS.analista,
+      porCarteira,
+      carteira: memoria.carteira,
+      opcoesDeCarteira: [{ valor: 'todos', rotulo: 'Toda a rede' }].concat(
+        carteiras.map(carteira => ({ valor: carteira, rotulo: carteira }))
+      ),
+      escolherCarteira: e => this.lembrar({ carteira: e.target.value }),
       perfil: memoria.perfil,
       lotacao: memoria.lotacao,
       ordem: memoria.ordem,
@@ -553,7 +609,7 @@ class Component extends DCLogic {
       ].map(([aba, rotulo]) => ({
         rotulo,
         escolher: () => this.lembrar({ aba }),
-        ...contexto.segmento(memoria.aba === aba)
+        ...Base.segmento(memoria.aba === aba)
       })),
       escolherPerfil: e => this.lembrar({ perfil: e.target.value }),
       escolherLotacao: e => this.lembrar({ lotacao: e.target.value }),
@@ -592,19 +648,7 @@ class Component extends DCLogic {
         .slice(0, 6)
         .map(linha),
       semSugestoes: !ordenadas.some(u => u.prioridade !== 'Baixa' && u.total.n >= 20),
-      barras: siglas.map(sigla => {
-        const total = contar([].concat(...unidades.filter(u => u.local.sigla === sigla).map(u => contasDe(u.local))));
-        return {
-          sigla,
-          cor: 'var(--texto-ciano-850)',
-          engajados: total.engajados + '%',
-          faixas: FAIXAS.map(faixa => ({
-            largura: parcela(total[faixa], total.n) + '%',
-            cor: TEMPERATURAS[faixa][1],
-            titulo: TEMPERATURAS[faixa][0] + ' ' + parcela(total[faixa], total.n) + '%'
-          }))
-        };
-      }),
+      barras,
       legenda: FAIXAS.map(faixa => ({ rotulo: TEMPERATURAS[faixa][0], cor: TEMPERATURAS[faixa][1] })),
       regua: FAIXAS.map(faixa => ({
         rotulo: TEMPERATURAS[faixa][0],

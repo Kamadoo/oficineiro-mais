@@ -436,6 +436,13 @@ window.FSM_BASE = (() => {
     const minutos = trabalhados === undefined ? presenca.trabalhado_min : trabalhados;
     return Math.min(minutos || 0, MINUTOS_DO_DIA);
   }
+  function segmento(marcado) {
+    return {
+      classe: marcado ? 'fundo-branco' : 'fundo-transparent',
+      fundo: marcado ? 'var(--fundo-branco)' : 'transparent',
+      cor: marcado ? 'var(--texto-ciano-850)' : 'var(--texto-cinza-600)'
+    };
+  }
   function estiloOpcao(ativa) {
     return ativa
       ? { borda: '#0B7EA3', fundo: 'var(--fundo-ciano-60)', cor: 'var(--texto-ciano-740)', classe: '' }
@@ -650,6 +657,7 @@ window.FSM_BASE = (() => {
     presencaFechada,
     minutosValidos,
     estiloOpcao,
+    segmento,
     MINUTOS_DO_DIA,
     dmyIso,
     mesIni,
