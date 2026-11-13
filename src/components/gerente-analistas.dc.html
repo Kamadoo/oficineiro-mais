@@ -64,18 +64,10 @@
       <button onClick="{{ semanaSeguinte }}" aria-label="Próxima semana" class="w-36 h-36 borda-cinza-160 fundo-branco raio-8 cor-ciano-850 fs-16 p-0 largura-fundo botao-secundario">›</button>
       <sc-if value="{{ foraDaSemanaAtual }}" hint-placeholder-val="{{ false }}"><button onClick="{{ semanaAtual }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-ciano-850 botao-secundario">Esta semana</button></sc-if>
     </div>
-    <div role="tablist" aria-label="Agenda de" class="d-flex gap-4 fundo-cinza-90 p-4 raio-10 segmentado"><button
-      role="tab" aria-selected="{{ abaAnalistas }}" onClick="{{ verAbaAnalistas }}"
-      class="borda-0 raio-7 p-7-14 fs-13 fw-600 espaco-nowrap {{ abaAnalistasClasse }}"
-      style="background:{{ abaAnalistasFundo }};color:{{ abaAnalistasCor }}">Analistas</button><button role="tab"
-      aria-selected="{{ abaOficineiros }}" onClick="{{ verAbaOficineiros }}"
-      class="borda-0 raio-7 p-7-14 fs-13 fw-600 espaco-nowrap {{ abaOficineirosClasse }}"
-      style="background:{{ abaOficineirosFundo }};color:{{ abaOficineirosCor }}">Oficineiros</button></div>
     <div class="oculto-celular flex-1"></div>
-    <sc-if value="{{ abaAnalistas }}" hint-placeholder-val="{{ true }}"><button style="background:var(--destaque-ciano-660)" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" onClick="{{ agendarVisita }}" aria-haspopup="dialog">+ Vincular visita a analista</button></sc-if>
+    <button style="background:var(--destaque-ciano-660)" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" onClick="{{ agendarVisita }}" aria-haspopup="dialog">+ Vincular visita a analista</button>
   </div>
   <sc-if value="{{ temErroDaSemana }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroDaSemana }}</div></sc-if>
-  <sc-if value="{{ abaAnalistas }}" hint-placeholder-val="{{ true }}">
   <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div role="table" aria-label="Agenda da semana" class="d-grid colunas-150-repeat-5-minmax-150-1fr min-w-900">
       <div role="columnheader" class="p-12-14 fs-12 cor-cinza-600 fw-600 borda-b-cinza-110">Analista</div>
@@ -103,37 +95,11 @@
     style="background:{{ origem.cor }}"></span>{{ origem.rotulo }}</span></sc-for><span
     class="d-flex alinha-center gap-6"><span
     class="w-10 h-10 raio-2 fundo-verde-80 borda-1-solid-23773a largura-fundo"></span>Visita registrada pelo analista</span></div>
-  </sc-if>
-  <sc-if value="{{ abaOficineiros }}" hint-placeholder-val="{{ false }}">
-  <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
-    <div role="table" aria-label="Agenda dos oficineiros na semana" class="d-grid colunas-170-repeat-5-minmax-140-1fr min-w-900">
-      <div role="columnheader" class="p-12-14 fs-12 cor-cinza-600 fw-600 borda-b-cinza-110">Oficineiro</div>
-      <sc-for list="{{ diasDaSemana }}" as="dia" hint-placeholder-count="5"><div role="columnheader" class="p-12-14 fs-13 fw-600 borda-b-cinza-110 borda-e-cinza-75" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</div></sc-for>
-      <sc-for list="{{ agendaDosOficineiros }}" as="oficineiro" hint-placeholder-count="3">
-        <div role="rowheader" class="p-12-14 borda-b-cinza-75 d-flex eixo-column gap-2 min-w-0"><b class="fs-14 quebra-palavra-anywhere">{{ oficineiro.nome }}</b><span class="fs-12 cor-cinza-600">{{ oficineiro.escola }}</span></div>
-        <sc-for list="{{ oficineiro.dias }}" as="dia" hint-placeholder-count="5">
-          <div role="cell" class="borda-b-cinza-75 borda-e-cinza-75 p-6 d-flex eixo-column gap-6 min-h-70">
-            <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="1">
-              <button onClick="{{ atividade.abrir }}" aria-haspopup="dialog" aria-label="{{ atividade.aria }}"
-                class="borda-0 raio-8 p-7-10 d-flex eixo-column gap-1 texto-left cor-ciano-850 w-100pc largura-fundo"
-                style="background:{{ atividade.fundo }};cursor:pointer"><span
-                class="fs-11 num-tabular-nums cor-cinza-750">{{ atividade.horario }}</span><b
-                class="fs-13">{{ atividade.turma }}</b><span class="fs-12"
-                style="color:{{ atividade.cor }}">{{ atividade.situacao }}</span></button>
-            </sc-for>
-          </div>
-        </sc-for>
-      </sc-for>
-    </div>
-    <sc-if value="{{ semAgendaDosOficineiros }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhum oficineiro ativo com esses filtros.</p></sc-if>
-  </section>
-  <div class="d-flex quebra-wrap gap-8-16 fs-12 cor-cinza-750"><sc-for list="{{ situacoes }}" as="situacao" hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ situacao.cor }}"></span>{{ situacao.rotulo }}</span></sc-for></div>
-  </sc-if>
 </sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 const Base = window.FSM_BASE;
-const { WDL: DIAS, p2, dataDe, minDe, hmDe, dmIso, dmyIso, pctTxt, exC, plural, agregar } = Base;
+const { WDL: DIAS, p2, dataDe, hmDe, dmIso, dmyIso, pctTxt, exC, plural } = Base;
 class Component extends DCLogic {
   lembrar(mudanca) {
     this.props.contexto.lembrar('analistas', mudanca);
@@ -161,15 +127,10 @@ class Component extends DCLogic {
       proximaVisitaDa,
       quandoDaVisita,
       diasDaSemana,
-      siglaDaEscola,
       nomeDaEscola,
       visitasDaSemana,
       segunda,
       dadosDaSemana,
-      agora,
-      SITUACOES_DA_ATIVIDADE,
-      situacaoDe,
-      turmaDe,
       is,
       nomeDoArquivo,
       periodoTexto,
@@ -282,7 +243,7 @@ class Component extends DCLogic {
                 o = ORIGENS_DE_VISITA[v.origem] || ORIGENS_DE_VISITA.gerencia;
               return {
                 hora: v.hora ? hmDe(v.hora) : 'sem horário',
-                escola: siglaDaEscola(v.escola_id),
+                escola: nomeDaEscola(v.escola_id),
                 rotulo: feita ? 'Realizada · ' + o[0] : o[0],
                 fundo: feita ? 'var(--fundo-verde-80)' : o[2],
                 cor: feita ? 'var(--texto-verde-760)' : o[3],
@@ -295,7 +256,7 @@ class Component extends DCLogic {
             .filter(v => v.analista_id === c.id && v.data === d && !vincs.has(v.id))
             .map(v => ({
               hora: 'registrada',
-              escola: siglaDaEscola(v.escola_id),
+              escola: nomeDaEscola(v.escola_id),
               rotulo: v.tipo || 'Visita registrada',
               fundo: 'var(--fundo-verde-80)',
               cor: 'var(--texto-verde-760)',
@@ -304,51 +265,6 @@ class Component extends DCLogic {
             }));
           return { visitas: ag.concat(reg) };
         })
-      }));
-    const gradeDaSemana =
-      Number(contexto.grade.length ? contexto.grade[0].ano_letivo : segunda.slice(0, 4)) === Number(segunda.slice(0, 4))
-        ? contexto.grade
-        : contexto.gradeAnterior;
-    const aulasDaSemana = dadosDaSemana ? dadosDaSemana.aulas : [];
-    const ocorrenciasDaSemana = agregar(
-      gradeDaSemana,
-      aulasDaSemana,
-      segunda,
-      diasDaSemana[4],
-      contexto.mudancasDeEscola,
-      diasDaSemana[4],
-      24 * 60
-    ).oc.map(o => {
-      const futura = o.iso > hoje || (o.iso === hoje && minDe(o.g.fim) > agora);
-      return !o.reg && !o.anul && o.st === 'sreg' && futura ? { ...o, st: 'prev' } : o;
-    });
-    const agendaDosOficineiros = oficineirosFiltrados
-      .slice()
-      .sort(
-        (a, b) =>
-          siglaDaEscola(escolaAtualDe(a)).localeCompare(siglaDaEscola(escolaAtualDe(b))) ||
-          a.nome.localeCompare(b.nome, 'pt-BR')
-      )
-      .map(c => ({
-        nome: c.nome,
-        escola: siglaDaEscola(escolaAtualDe(c)),
-        dias: diasDaSemana.map(d => ({
-          atividades: ocorrenciasDaSemana
-            .filter(i => i.of === c.id && i.iso === d)
-            .sort((a, b) => String(a.g.inicio).localeCompare(String(b.g.inicio)))
-            .map(i => {
-              const st = SITUACOES_DA_ATIVIDADE[situacaoDe(i)] || SITUACOES_DA_ATIVIDADE.sreg;
-              return {
-                horario: hmDe(i.g.inicio) + ' – ' + hmDe(i.g.fim),
-                turma: turmaDe(i),
-                situacao: st[0],
-                cor: st[1],
-                fundo: st[2],
-                aria: 'Ver a atividade de ' + c.nome + ' em ' + dmIso(d) + ', ' + turmaDe(i) + ', ' + st[0],
-                abrir: () => contexto.abrirRegistro(i)
-              };
-            })
-        }))
       }));
     contexto.registrarExportador(() => {
       if (is.analistasCarteiras)
@@ -403,22 +319,6 @@ class Component extends DCLogic {
       diasDaSemana: cabecalhoDaSemana,
       agendaDosAnalistas: agendaDosAnalistas,
       semAgendaDosAnalistas: agendaDosAnalistas.length === 0,
-      abaAnalistas: memoria.agenda !== 'ofic',
-      abaOficineiros: memoria.agenda === 'ofic',
-      abaAnalistasClasse: memoria.agenda !== 'ofic' ? 'fundo-branco' : 'fundo-transparent',
-      abaAnalistasFundo: memoria.agenda !== 'ofic' ? 'var(--fundo-branco)' : 'transparent',
-      abaAnalistasCor: memoria.agenda !== 'ofic' ? 'var(--texto-ciano-850)' : 'var(--texto-cinza-600)',
-      abaOficineirosClasse: memoria.agenda === 'ofic' ? 'fundo-branco' : 'fundo-transparent',
-      abaOficineirosFundo: memoria.agenda === 'ofic' ? 'var(--fundo-branco)' : 'transparent',
-      abaOficineirosCor: memoria.agenda === 'ofic' ? 'var(--texto-ciano-850)' : 'var(--texto-cinza-600)',
-      verAbaAnalistas: () => this.lembrar({ agenda: 'anal' }),
-      verAbaOficineiros: () => this.lembrar({ agenda: 'ofic' }),
-      agendaDosOficineiros: agendaDosOficineiros,
-      semAgendaDosOficineiros: agendaDosOficineiros.length === 0,
-      situacoes: ['real', 'nao', 'sreg', 'prev'].map(k => ({
-        rotulo: SITUACOES_DA_ATIVIDADE[k][0],
-        cor: SITUACOES_DA_ATIVIDADE[k][2]
-      })),
       temErroDaSemana: !!(dadosDaSemana && dadosDaSemana.erro),
       erroDaSemana: (dadosDaSemana && dadosDaSemana.erro) || ''
     };

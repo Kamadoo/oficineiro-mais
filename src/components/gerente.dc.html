@@ -112,7 +112,7 @@
 
 <sc-if value="{{ is.geral }}" hint-placeholder-val="{{ true }}"><dc-import name="gerente-geral" contexto="{{ contexto }}" memoria="{{ memoriaGeral }}"></dc-import></sc-if>
 <sc-if value="{{ is.adocao }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-adocao" contexto="{{ contexto }}" memoria="{{ memoriaAdocao }}"></dc-import></sc-if>
-<sc-if value="{{ is.oficineiros }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-oficineiros" contexto="{{ contexto }}"></dc-import></sc-if>
+<sc-if value="{{ is.oficineiros }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-oficineiros" contexto="{{ contexto }}" memoria="{{ memoriaOficineiros }}"></dc-import></sc-if>
 <sc-if value="{{ is.analistas }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-analistas" contexto="{{ contexto }}" memoria="{{ memoriaAnalistas }}"></dc-import></sc-if>
 <sc-if value="{{ is.jornada }}" hint-placeholder-val="{{ false }}"><dc-import name="jornada" perfil="gerente" contexto="{{ contexto }}" memoria="{{ memoriaJornada }}"></dc-import></sc-if>
 <sc-if value="{{ is.onboarding }}" hint-placeholder-val="{{ false }}"><dc-import name="gerente-onboarding" contexto="{{ contexto }}" memoria="{{ memoriaOnboarding }}"></dc-import></sc-if>
@@ -371,7 +371,8 @@ class Component extends DCLogic {
   memoria = {
     geral: { relatoriosAbertos: false },
     adocao: { corte: 'carteira', oficineiro: '', tipo: '', solucao: '', situacao: '', busca: '', limite: 100 },
-    analistas: { analista: '', semana: 0, agenda: 'anal' },
+    oficineiros: { semana: 0 },
+    analistas: { analista: '', semana: 0 },
     jornada: {},
     onboarding: { filtro: { ordem: '', carteira: '', situacao: 'pendente' } },
     contas: { busca: '', perfil: '', carteira: '', escola: '', situacao: '', limite: 50 }
@@ -1398,7 +1399,8 @@ class Component extends DCLogic {
       ],
       ofic: [
         ['pres', 'Presença e horas'],
-        ['grade', 'Escolas e grade']
+        ['grade', 'Escolas e grade'],
+        ['agenda', 'Agendas']
       ],
       anal: [
         ['cart', 'Carteiras'],
@@ -1413,6 +1415,7 @@ class Component extends DCLogic {
       adocaoDetalhado: tela === 'adocao' && aba === 'det',
       oficineirosPresenca: tela === 'ofic' && aba === 'pres',
       oficineirosGrade: tela === 'ofic' && aba === 'grade',
+      oficineirosAgendas: tela === 'ofic' && aba === 'agenda',
       analistasCarteiras: tela === 'anal' && aba === 'cart',
       analistasAgendas: tela === 'anal' && aba === 'agenda',
       jornada: tela === 'jornada',
@@ -1553,10 +1556,16 @@ class Component extends DCLogic {
   }
   valoresDasVisitas(s, valores) {
     const { analistasAtivos, escolaDe, hoje, is, logado, nomeDaEscola, nomeDaPessoa } = valores;
-    const segunda = Base.iso(Base.add(dataDe(segDe(hoje)), this.memoria.analistas.semana * 7));
+    const semanaEscolhida = is.oficineirosAgendas ? this.memoria.oficineiros.semana : this.memoria.analistas.semana;
+    const segunda = Base.iso(Base.add(dataDe(segDe(hoje)), semanaEscolhida * 7));
     const diasDaSemana = [0, 1, 2, 3, 4].map(k => Base.iso(Base.add(dataDe(segunda), k)));
     const dadosDaSemana = s.semanas[segunda];
-    if (is.analistasAgendas && logado && !dadosDaSemana && !(this.semanasPedidas && this.semanasPedidas.has(segunda)))
+    if (
+      (is.analistasAgendas || is.oficineirosAgendas) &&
+      logado &&
+      !dadosDaSemana &&
+      !(this.semanasPedidas && this.semanasPedidas.has(segunda))
+    )
       setTimeout(() => this.carregarSemana(segunda), 0);
     const visitasDaSemana = dadosDaSemana
       ? dadosDaSemana.visitas
@@ -2036,7 +2045,7 @@ class Component extends DCLogic {
       registroAberto: !!registro,
       registro: registroDetalhado,
       fecharRegistro: () => this.fecharRegistro(),
-      filtroDeCiclo: !is.analistasAgendas
+      filtroDeCiclo: !is.analistasAgendas && !is.oficineirosAgendas
     };
   }
   chavesDasVisitas(s, valores) {
@@ -2199,6 +2208,7 @@ class Component extends DCLogic {
       contexto,
       memoriaGeral: this.memoria.geral,
       memoriaAdocao: this.memoria.adocao,
+      memoriaOficineiros: this.memoria.oficineiros,
       memoriaAnalistas: this.memoria.analistas,
       memoriaJornada: this.memoria.jornada,
       memoriaOnboarding: this.memoria.onboarding,
