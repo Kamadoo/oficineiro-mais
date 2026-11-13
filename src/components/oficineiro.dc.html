@@ -964,7 +964,9 @@ class Component extends DCLogic {
     try {
       const turmas = await window.FSM_AUTH.turmasDaEscola();
       this.setState({ turmas: turmas || [] });
-    } catch (x) {}
+    } catch (x) {
+      this.avisar('Não foi possível carregar as turmas da escola');
+    }
   }
   async carregarGrade() {
     if (!this.state.carregado) return;

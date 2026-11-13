@@ -3422,7 +3422,9 @@ class Component extends DCLogic {
       exportarPdf: () => {
         try {
           window.print();
-        } catch (x) {}
+        } catch (x) {
+          this.avisar('Não foi possível abrir a impressão neste navegador');
+        }
       },
       exportarExcel: exportarAtividades,
       menu,
