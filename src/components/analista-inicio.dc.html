@@ -504,12 +504,12 @@ class Component extends DCLogic {
       botao: presencaAberta
         ? {
             rotulo: contexto.presencaSalvando ? 'Encerrando…' : 'Encerrar atividades na escola',
-            fundo: bloqueio ? 'var(--destaque-cinza-300)' : 'var(--destaque-ciano-880)'
+            fundo: bloqueio ? 'var(--destaque-cinza-600)' : 'var(--destaque-ciano-880)'
           }
         : {
             rotulo: contexto.presencaSalvando ? 'Iniciando…' : 'Iniciar atividades na escola',
             classe: escolaId && !bloqueio ? 'fundo-ciano-660' : '',
-            fundo: escolaId && !bloqueio ? 'var(--destaque-ciano-660)' : 'var(--destaque-cinza-300)'
+            fundo: escolaId && !bloqueio ? 'var(--destaque-ciano-660)' : 'var(--destaque-cinza-600)'
           },
       alternarPresenca: () =>
         contexto.alternarPresenca(

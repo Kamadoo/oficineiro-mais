@@ -28,7 +28,7 @@
       style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span
       class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for>
   </div>
-  <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
+  <section tabindex="0" aria-label="Escolas da carteira" class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-200">Execução e adoção por escola</h3><span class="fs-12 cor-cinza-600">Execução = realizadas ÷ previstas líquidas · extras fora da taxa</span></div>
     <div role="table" aria-label="Execução e adoção por escola" class="min-w-1180">
       <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-cinza-600 borda-t-cinza-110 borda-b-cinza-110"

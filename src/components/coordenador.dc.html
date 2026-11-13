@@ -461,8 +461,8 @@ const sextaDaSemana = iso => {
 };
 const TIPOS_DE_ATIVIDADE = {
   R: { curto: 'Aula regular', fg: 'var(--texto-azul-550)', bg: 'var(--fundo-azul-50)' },
-  P: { curto: 'Projeto tempo integral', fg: 'var(--texto-ambar-660)', bg: 'var(--fundo-ambar-80)' },
-  F: { curto: 'Formação de professores', fg: 'var(--texto-indigo-360)', bg: 'var(--fundo-indigo-50)' },
+  P: { curto: 'Projeto tempo integral', fg: 'var(--texto-ambar-745)', bg: 'var(--fundo-ambar-80)' },
+  F: { curto: 'Formação de professores', fg: 'var(--texto-indigo-510)', bg: 'var(--fundo-indigo-50)' },
   C: { curto: 'Oficina de tecnologia', fg: 'var(--texto-verde-700)', bg: 'var(--fundo-verde-80)' },
   X: { curto: 'Planejamento', fg: 'var(--texto-cinza-600)', bg: 'var(--fundo-cinza-70)' }
 };
@@ -2055,7 +2055,7 @@ class Component extends DCLogic {
           }),
         desfazer: () => this.decidirRevisao(r.id, 'aguardando'),
         comentarioId: 'au-coment-' + r.id,
-        ariaRevisar: 'Marcar como revisada a atividade de ' + nome + ', ' + quando,
+        ariaRevisar: 'Revisado: marcar como revisada a atividade de ' + nome + ', ' + quando,
         ariaDevolver: 'Devolver para ajuste a atividade de ' + nome + ', ' + quando,
         ariaAnular: 'Anular a atividade de ' + nome + ', ' + quando,
         ariaDesfazer: 'Desfazer a decisão sobre a atividade de ' + nome + ', ' + quando

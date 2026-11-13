@@ -122,7 +122,7 @@
         <span class="num-tabular-nums fs-13 w-48" style="font-family:'Inter',system-ui,sans-serif">{{ pendencia.data }}</span>
         <b class="min-w-150">{{ pendencia.oficineiro }}</b>
         <div class="flex-1-1-200 min-w-0 d-flex eixo-column gap-2"><span class="fw-600">{{ pendencia.turma }} · {{ pendencia.escola }}</span><span class="fs-12 cor-cinza-600">{{ pendencia.tipo }} · {{ pendencia.horario }}</span><sc-if value="{{ pendencia.temInfo }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">{{ pendencia.info }}</span></sc-if></div>
-        <span class="fs-12 cor-ambar-660 fundo-ambar-80 p-3-10 raio-999 fw-600">{{ pendencia.atraso }}</span>
+        <span class="fs-12 cor-ambar-745 fundo-ambar-80 p-3-10 raio-999 fw-600">{{ pendencia.atraso }}</span>
         <sc-if value="{{ pendencia.podeLembrar }}" hint-placeholder-val="{{ true }}"><button class="nao-imprimir h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario" onClick="{{ pendencia.lembrar }}" disabled="{{ pendencia.bloqueado }}" aria-label="{{ pendencia.aria }}">{{ pendencia.botao }}</button></sc-if>
       </div>
     </sc-for>

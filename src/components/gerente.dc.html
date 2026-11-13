@@ -298,7 +298,7 @@ const SITUACOES_DE_CONTA = {
 const ORIGENS_DE_VISITA = Base.ORIGEM_VISITA;
 const FAIXAS_DE_EXECUCAO = [
   ['No ritmo', '≥ 90%', 'var(--texto-verde-700)', 'var(--fundo-verde-80)', v => v >= 90],
-  ['Estável', '75–89%', 'var(--texto-indigo-360)', 'var(--fundo-indigo-50)', v => v >= 75 && v < 90],
+  ['Estável', '75–89%', 'var(--texto-indigo-510)', 'var(--fundo-indigo-50)', v => v >= 75 && v < 90],
   ['Atenção', '50–74%', 'var(--destaque-laranja-480)', 'var(--fundo-ambar-80)', v => v >= 50 && v < 75],
   ['Reforçar apoio', '< 50%', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)', v => v < 50]
 ];
@@ -1462,7 +1462,7 @@ class Component extends DCLogic {
       real: ['Realizada', 'var(--texto-verde-700)', 'var(--fundo-verde-80)'],
       parcial: ['Realizada parcialmente', 'var(--texto-verde-700)', 'var(--fundo-verde-80)'],
       nao: ['Não realizada', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)'],
-      sreg: ['Sem registro', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)'],
+      sreg: ['Sem registro', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)'],
       anul: ['Anulada', 'var(--texto-cinza-600)', 'var(--fundo-cinza-70)'],
       extra: ['Realizada · fora da grade', 'var(--texto-azul-640)', 'var(--fundo-azul-40)'],
       prev: ['Prevista', 'var(--texto-ciano-740)', 'var(--fundo-ciano-60)'],
@@ -1604,7 +1604,7 @@ class Component extends DCLogic {
                   : itemDaVisita.status === 'cancelada'
                     ? ['Cancelada', 'var(--texto-cinza-600)', 'var(--fundo-cinza-70)']
                     : itemDaVisita.data < hoje
-                      ? ['Sem registro do analista', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)']
+                      ? ['Sem registro do analista', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)']
                       : ['Agendada', 'var(--texto-ciano-740)', 'var(--fundo-ciano-60)'];
               return { situacao: st[0], situacaoCor: st[1], situacaoFundo: st[2] };
             })(),

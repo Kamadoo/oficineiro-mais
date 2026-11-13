@@ -191,7 +191,7 @@ class Component extends DCLogic {
                   : '',
           podeAprovar: r.status === 'fechado',
           aprovarTexto: 'Aprovar',
-          rotuloVer: 'Ver o relatório de ' + r.oficineiro,
+          rotuloVer: 'Ver relatório de ' + r.oficineiro,
           rotuloAprovar: 'Aprovar o relatório de ' + r.oficineiro,
           ver: () => relatorios.abrir(r.id),
           aprovar: () => relatorios.aprovar(r)

@@ -130,7 +130,7 @@ class Component extends DCLogic {
         situacaoCor: st[1],
         situacaoFundo: st[2],
         podeEscola: podeGerir(c) && c.papel === 'oficineiro' && c.ativo,
-        ariaEscola: 'Alterar a escola de ' + c.nome,
+        ariaEscola: 'Alterar escola de ' + c.nome,
         abrir: () => abrirConta(c),
         alterar: () => abrirMudanca(c)
       };

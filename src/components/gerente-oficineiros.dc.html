@@ -74,7 +74,7 @@ const SITUACOES_DA_GRADE = {
   enviada: ['Aguardando validação', 'var(--texto-azul-640)', 'var(--fundo-azul-40)'],
   validada: ['Grade validada', 'var(--texto-verde-700)', 'var(--fundo-verde-80)'],
   devolvida: ['Devolvida para ajuste', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)'],
-  alterada: ['Alterada · aguardando novo envio', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)']
+  alterada: ['Alterada · aguardando novo envio', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)']
 };
 const temposDeAula = (ini, fim) => Math.max(1, Math.round((minDe(fim) - minDe(ini)) / 50));
 class Component extends DCLogic {
@@ -190,7 +190,7 @@ class Component extends DCLogic {
           situacao: st[0],
           cor: st[1],
           fundo: st[2],
-          aria: 'Alterar a escola de ' + c.nome,
+          aria: 'Alterar escola de ' + c.nome,
           alterar: () => contexto.abrirMudanca(c)
         };
       });

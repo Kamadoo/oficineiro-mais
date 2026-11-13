@@ -343,7 +343,7 @@ window.FSM_BASE = (() => {
     ],
     demanda: ['Demanda da escola', 'var(--texto-cinza-420)', 'var(--fundo-cinza-55)', 'var(--texto-cinza-680)'],
     gerencia: ['Vinculada pela gerência', 'var(--texto-ciano-660)', 'var(--fundo-ciano-60)', 'var(--texto-ciano-740)'],
-    analista: ['Iniciativa do analista', 'var(--texto-indigo-360)', 'var(--fundo-indigo-50)', 'var(--texto-indigo-510)']
+    analista: ['Iniciativa do analista', 'var(--texto-indigo-510)', 'var(--fundo-indigo-50)', 'var(--texto-indigo-510)']
   };
   const ORIGENS_VISITA = ['mapa_calor', 'demanda', 'gerencia', 'analista'];
   function origemVisita(k) {
@@ -407,8 +407,8 @@ window.FSM_BASE = (() => {
 
   const TIPOS = {
     R: ['Aula regular', 'var(--texto-azul-550)', 'var(--fundo-azul-50)'],
-    P: ['Projeto tempo integral', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)'],
-    F: ['Formação de professores', 'var(--texto-indigo-360)', 'var(--fundo-indigo-50)'],
+    P: ['Projeto tempo integral', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)'],
+    F: ['Formação de professores', 'var(--texto-indigo-510)', 'var(--fundo-indigo-50)'],
     C: ['Oficina de tecnologia', 'var(--texto-verde-700)', 'var(--fundo-verde-80)']
   };
   function detTipo(g) {

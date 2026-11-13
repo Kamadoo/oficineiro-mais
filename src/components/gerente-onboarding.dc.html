@@ -26,7 +26,7 @@
     <sc-if value="{{ previa.aberta }}" hint-placeholder-val="{{ false }}">
       <section class="espaco-celular fundo-branco borda-ciano-150 raio-12 p-20 d-flex eixo-column gap-12">
         <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Prévia · OS {{ previa.secretaria }} {{ previa.numero }}</h3><span class="fs-12 cor-cinza-600">{{ previa.arquivo }} · {{ previa.resumo }}</span></div>
-        <div class="rolagem-x-auto m-0-n4"><div class="min-w-980 d-flex eixo-column p-0-4">
+        <div tabindex="0" role="region" aria-label="Prévia da ordem de serviço" class="rolagem-x-auto m-0-n4"><div class="min-w-980 d-flex eixo-column p-0-4">
           <div class="d-grid gap-8 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em pb-8" style="grid-template-columns:40px minmax(180px,1.3fr) 130px minmax(180px,1.2fr) minmax(220px,1.4fr) 190px 120px;font-size:11px"><span>Seq.</span><span>Usuário</span><span>Cargo</span><span>Lotação na OS</span><span>Escola reconhecida</span><span>Analista</span><span>Situação</span></div>
           <sc-for list="{{ previa.linhas }}" as="pessoa" hint-placeholder-count="5">
             <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:40px minmax(180px,1.3fr) 130px minmax(180px,1.2fr) minmax(220px,1.4fr) 190px 120px">
@@ -34,12 +34,12 @@
               <div class="d-flex eixo-column min-w-0"><span class="fw-600">{{ pessoa.nome }}</span><span class="fs-12 cor-cinza-600 rolagem-hidden reticencias-ellipsis">{{ pessoa.email }}</span></div>
               <span class="cor-cinza-750">{{ pessoa.cargo }}</span>
               <span class="cor-cinza-750">{{ pessoa.lotacao }}</span>
-              <select onChange="{{ pessoa.escolherEscola }}" value="{{ pessoa.escola }}"
+              <select aria-label="{{ pessoa.rotuloDaEscola }}" onChange="{{ pessoa.escolherEscola }}" value="{{ pessoa.escola }}"
                 class="h-36 raio-8 p-0-8 fs-13 w-100pc largura-fundo fundo-branco"
                 style="border:1px solid var(--borda-cinza-160);background:var(--fundo-branco);border-color:{{ pessoa.escolaBorda }}"><option
                 value="">Não reconhecida · selecione</option><sc-for list="{{ opcoesDeEscola }}" as="opcao"
                 hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-              <select onChange="{{ pessoa.escolherCarteira }}" value="{{ pessoa.carteira }}"
+              <select aria-label="{{ pessoa.rotuloDaCarteira }}" onChange="{{ pessoa.escolherCarteira }}" value="{{ pessoa.carteira }}"
                 class="h-36 raio-8 p-0-8 fs-13 w-100pc largura-fundo fundo-branco"
                 style="border:1px solid var(--borda-cinza-160);background:var(--fundo-branco);border-color:{{ pessoa.carteiraBorda }}"><option
                 value="">Sem analista · atribuir</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao"
@@ -59,14 +59,14 @@
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
       <div class="d-flex quebra-wrap alinha-center gap-8-10">
         <h3 class="m-0 fs-15 flex-1-1-220">Pendências de onboarding</h3>
-        <select style="background:var(--fundo-branco)" onChange="{{ escolherOrdem }}" value="{{ filtro.ordem }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="">Todas as OS</option><sc-for list="{{ opcoesDeOrdem }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-        <select style="background:var(--fundo-branco)" onChange="{{ escolherCarteira }}" value="{{ filtro.carteira }}"
+        <select style="background:var(--fundo-branco)" aria-label="Ordem de serviço" onChange="{{ escolherOrdem }}" value="{{ filtro.ordem }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="">Todas as OS</option><sc-for list="{{ opcoesDeOrdem }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+        <select style="background:var(--fundo-branco)" aria-label="Analista" onChange="{{ escolherCarteira }}" value="{{ filtro.carteira }}"
           class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="">Todos os analistas</option><option
           value="-">Sem analista</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="6"><option
           value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-        <select style="background:var(--fundo-branco)" onChange="{{ escolherSituacao }}" value="{{ filtro.situacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="">Todas as situações</option><option value="pendente">Pendente</option><option value="concluido">Concluído</option></select>
+        <select style="background:var(--fundo-branco)" aria-label="Situação" onChange="{{ escolherSituacao }}" value="{{ filtro.situacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="">Todas as situações</option><option value="pendente">Pendente</option><option value="concluido">Concluído</option></select>
       </div>
-      <div class="rolagem-x-auto m-0-n4"><div class="min-w-1040 d-flex eixo-column p-0-4">
+      <div tabindex="0" role="region" aria-label="Pessoas das ordens de serviço" class="rolagem-x-auto m-0-n4"><div class="min-w-1040 d-flex eixo-column p-0-4">
         <div class="d-grid gap-8 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em pb-8" style="grid-template-columns:90px minmax(200px,1.4fr) 130px minmax(200px,1.3fr) 190px 90px 80px minmax(170px,1fr);font-size:11px"><span>OS</span><span>Usuário</span><span>Cargo</span><span>Escola</span><span>Analista</span><span>Recebido</span><span class="texto-right">Em aberto</span><span>Situação</span></div>
         <sc-for list="{{ linhas }}" as="item" hint-placeholder-count="6">
           <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:90px minmax(200px,1.4fr) 130px minmax(200px,1.3fr) 190px 90px 80px minmax(170px,1fr)">
@@ -74,7 +74,7 @@
             <div class="d-flex eixo-column min-w-0"><span class="fw-600">{{ item.nome }}</span><span class="fs-12 cor-cinza-600 rolagem-hidden reticencias-ellipsis">{{ item.email }}</span></div>
             <span class="cor-cinza-750">{{ item.cargo }}</span>
             <span class="cor-cinza-750">{{ item.escola }}</span>
-            <select onChange="{{ item.escolherCarteira }}" value="{{ item.carteira }}"
+            <select aria-label="{{ item.rotuloDaCarteira }}" onChange="{{ item.escolherCarteira }}" value="{{ item.carteira }}"
               class="h-36 raio-8 p-0-8 fs-13 w-100pc largura-fundo fundo-branco"
               style="border:1px solid var(--borda-cinza-160);background:var(--fundo-branco);border-color:{{ item.carteiraBorda }}"><option
               value="">Sem analista · atribuir</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao"
@@ -130,6 +130,7 @@ class Component extends DCLogic {
         return {
           ordem: i.os_id,
           nome: i.nome,
+          rotuloDaCarteira: 'Analista de ' + i.nome,
           email: i.email || '—',
           cargo: i.cargo || '—',
           escola: i.escola_id
@@ -163,6 +164,8 @@ class Component extends DCLogic {
           return {
             numero: p.seq,
             nome: p.nome,
+            rotuloDaEscola: 'Escola de ' + p.nome,
+            rotuloDaCarteira: 'Analista de ' + p.nome,
             email: p.email || '—',
             cargo: p.cargo || '—',
             lotacao: p.lotacao || '—',

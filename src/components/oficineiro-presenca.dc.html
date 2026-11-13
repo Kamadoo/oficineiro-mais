@@ -22,7 +22,7 @@
         <span class="fs-14 cor-cinza-600">{{ dataTexto }}</span>
       </div>
       <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-20 p-22-20 d-flex eixo-column alinha-center gap-14 fundo-branco">
-        <sc-if value="{{ temMapa }}" hint-placeholder-val="{{ true }}"><div style="background:var(--fundo-cinza-55)" id="mapa-escola" role="img" aria-label="{{ mapaAria }}" class="w-100pc h-220 raio-14 isola-isolate largura-fundo rolagem-hidden fundo-cinza-55"></div></sc-if>
+        <sc-if value="{{ temMapa }}" hint-placeholder-val="{{ true }}"><div style="background:var(--fundo-cinza-55)" id="mapa-escola" role="region" aria-label="{{ mapaAria }}" class="w-100pc h-220 raio-14 isola-isolate largura-fundo rolagem-hidden fundo-cinza-55"></div></sc-if>
         <span class="fs-13 cor-cinza-600 fw-600">Horário atual (Brasília)</span>
         <span id="pres-relogio" class="fs-52 fw-800 ls-n1 num-tabular-nums lh-1 cor-ciano-850">{{ hora }}</span>
         <div class="w-100pc d-flex alinha-center gap-12 fundo-cinza-55 raio-14 p-12-14 tamanho-border-box largura-fundo">

@@ -151,7 +151,7 @@ class Component extends DCLogic {
                 ? CORRIGIDA
                 : contexto.situacaoDoRegistro(registro)
               : minDe(g.fim) <= agora
-                ? ['Pendente de registro', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)']
+                ? ['Pendente de registro', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)']
                 : minDe(g.inicio) <= agora
                   ? ['Em andamento', 'var(--texto-azul-640)', 'var(--fundo-azul-40)']
                   : ['A realizar', 'var(--texto-cinza-600)', 'var(--fundo-cinza-70)'];
@@ -209,7 +209,7 @@ class Component extends DCLogic {
             ? ['Encerrou às ' + hmTs(presenca.fim), 'var(--texto-cinza-750)', 'var(--fundo-cinza-70)']
             : ['Na escola desde ' + hmTs(presenca.inicio), 'var(--texto-verde-700)', 'var(--fundo-verde-80)']
           : hojeLetivo
-            ? ['Sem presença hoje', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)']
+            ? ['Sem presença hoje', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)']
             : ['Sem expediente hoje', 'var(--texto-cinza-600)', 'var(--fundo-cinza-70)'];
         const horasAula = grade
           .filter(g => g.oficineiro_id === o.id && Number(g.ano_letivo) === ano)

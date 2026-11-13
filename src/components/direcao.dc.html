@@ -291,7 +291,7 @@ const situacaoDoRegistro = a =>
               'var(--texto-vermelho-600)',
               'var(--fundo-vermelho-50)'
             ]
-          : [a.situacao || 'Pendente de registro', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)'];
+          : [a.situacao || 'Pendente de registro', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)'];
 const pendenteDeCheck = a =>
   REGISTRADAS.includes(a.situacao) &&
   a.revisao_status !== 'anulado' &&
@@ -309,8 +309,8 @@ const diasUteisAte = (de, ate) => {
 };
 const SITUACOES_PRESENCA = {
   ok: ['No raio da escola', 'var(--texto-verde-700)', 'var(--fundo-verde-80)'],
-  'Fora do raio': ['Fora do raio', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)'],
-  'Sem encerramento': ['Sem encerramento', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)'],
+  'Fora do raio': ['Fora do raio', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)'],
+  'Sem encerramento': ['Sem encerramento', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)'],
   'Enviado sem internet': ['Enviado sem internet', 'var(--texto-azul-640)', 'var(--fundo-azul-40)'],
   'Sem localização': ['Sem localização', 'var(--texto-cinza-600)', 'var(--fundo-cinza-70)'],
   aberta: ['Na escola agora', 'var(--texto-azul-640)', 'var(--fundo-azul-40)'],

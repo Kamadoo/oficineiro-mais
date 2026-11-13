@@ -76,23 +76,25 @@
 
     <sc-if value="{{ abaAtividades }}" hint-placeholder-val="{{ true }}">
       <sc-for list="{{ grupos }}" as="grupo" hint-placeholder-count="3">
-        <div role="table" id="{{ grupo.id }}" aria-label="{{ grupo.titulo }}" style="background:{{ grupo.fundo }};box-shadow:{{ grupo.sombra }};transition:background 0.4s ease,box-shadow 0.4s ease">
+        <div id="{{ grupo.id }}" style="background:{{ grupo.fundo }};box-shadow:{{ grupo.sombra }};transition:background 0.4s ease,box-shadow 0.4s ease">
           <div class="d-flex alinha-center gap-10 p-14-16-10 borda-t-cinza-75">
             <span class="w-10 h-10 raio-5 flex-none largura-fundo" style="background:{{ grupo.cor }}" aria-hidden="true"></span>
             <h3 class="m-0 fs-15">{{ grupo.titulo }}</h3>
             <span class="fs-12 fw-600 cor-cinza-600 fundo-cinza-65 raio-999 p-2-8">{{ grupo.total }}</span>
           </div>
+          <div role="table" aria-label="{{ grupo.titulo }}">
           <div role="row" class="oculto-celular d-grid gap-12 p-6-16 fs-12 fw-600 cor-cinza-600" style="background:var(--fundo-cinza-30);grid-template-columns:96px minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,1fr)">
             <span role="columnheader">Data</span><span role="columnheader">Turma</span><span role="columnheader">Tipo · solução</span><span role="columnheader">{{ grupo.coluna }}</span>
           </div>
           <sc-for list="{{ grupo.linhas }}" as="linha" hint-placeholder-count="3">
             <button role="row" onClick="{{ linha.abrir }}" aria-label="{{ linha.aria }}" class="relatorio-linha d-grid gap-4-12 alinha-center w-100pc texto-left p-12-16 fs-14 cor-ciano-850 largura-fundo fundo-branco" style="grid-template-columns:96px minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,1fr);border:0;border-top:1px solid var(--borda-cinza-75);background:var(--fundo-branco)">
-              <span class="num-tabular-nums fw-600">{{ linha.data }}</span>
-              <span class="fw-600">{{ linha.turma }}</span>
-              <span class="d-flex eixo-column min-w-0"><span class="fs-13 fw-600" style="color:{{ linha.corDoTexto }}">{{ linha.tipo }}</span><span class="fs-12 cor-cinza-600 rolagem-hidden reticencias-ellipsis espaco-nowrap">{{ linha.detalhe }}</span></span>
-              <span class="fs-13 num-tabular-nums" style="color:{{ linha.extraCor }};font-weight:{{ linha.extraPeso }}">{{ linha.extra }}</span>
+              <span role="cell" class="num-tabular-nums fw-600">{{ linha.data }}</span>
+              <span role="cell" class="fw-600">{{ linha.turma }}</span>
+              <span role="cell" class="d-flex eixo-column min-w-0"><span class="fs-13 fw-600" style="color:{{ linha.corDoTexto }}">{{ linha.tipo }}</span><span class="fs-12 cor-cinza-600 rolagem-hidden reticencias-ellipsis espaco-nowrap">{{ linha.detalhe }}</span></span>
+              <span role="cell" class="fs-13 num-tabular-nums" style="color:{{ linha.extraCor }};font-weight:{{ linha.extraPeso }}">{{ linha.extra }}</span>
             </button>
           </sc-for>
+          </div>
         </div>
       </sc-for>
       <sc-if value="{{ semAtividades }}" hint-placeholder-val="{{ false }}"><div class="p-28-16 texto-center fs-14 cor-cinza-600 borda-t-cinza-75">{{ semAtividadesTexto }}</div></sc-if>
