@@ -28,7 +28,7 @@
       <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Observação</span><textarea rows="3" value="{{ novaVisita.orientacao }}" onChange="{{ novaVisita.escreverOrientacao }}" maxlength="1000" placeholder="ex.: pedido da direção para apoiar o 5º ano no Matific" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
       <sc-if value="{{ temErroNovaVisita }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroNovaVisita }}</div></sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharNovaVisita }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ salvarNovaVisita }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ novaVisitaBotao }}</button></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharNovaVisita }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ salvarNovaVisita }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ novaVisitaBotao }}</button></div>
   </aside>
 </sc-if>
 </x-dc>

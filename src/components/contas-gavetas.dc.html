@@ -39,7 +39,7 @@
         <span class="fs-12 cor-cinza-600 lh-1p5">Os CPFs e CNPJs ficam só nesta tela até a criação e são apagados ao fechar. Linhas com problema são ignoradas; corrija na planilha e envie de novo.</span>
       </sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharLote }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">{{ lote.fecharTexto }}</button><sc-if value="{{ lote.podeCriar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ criarLote }}" disabled="{{ lote.criando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ lote.botao }}</button></sc-if></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharLote }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">{{ lote.fecharTexto }}</button><sc-if value="{{ lote.podeCriar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ criarLote }}" disabled="{{ lote.criando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ lote.botao }}</button></sc-if></div>
   </aside>
 </sc-if>
 
@@ -69,7 +69,7 @@
       <p class="m-0 fs-12 cor-cinza-600 lh-1p45">A pessoa ativa a conta em “Primeiro acesso”, na página de entrada, com o CPF ou CNPJ e o código enviado ao e-mail, e cria a própria senha.</p>
       <sc-if value="{{ temErroNovaConta }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroNovaConta }}</div></sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ criarConta }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">{{ novaContaBotao }}</button></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ criarConta }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ novaContaBotao }}</button></div>
   </aside>
 </sc-if>
 
@@ -88,7 +88,7 @@
       <div class="fundo-cinza-20 raio-10 p-12-14 fs-12 cor-cinza-750 lh-1p55">Presenças, grades e registros anteriores são preservados. A grade da nova escola começa sem atividades e precisa ser montada pelo oficineiro e validada. O oficineiro é avisado da alteração.</div>
       <sc-if value="{{ temErroMudanca }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroMudanca }}</div></sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ salvarMudanca }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">{{ mudancaBotao }}</button></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ salvarMudanca }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ mudancaBotao }}</button></div>
   </aside>
 </sc-if>
 </x-dc>

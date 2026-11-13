@@ -80,7 +80,7 @@
       </div>
       <p class="m-0 fs-12 cor-cinza-600 lh-1p45">A grade é editada somente pelo oficineiro. Se algo estiver errado, devolva a grade explicando o ajuste.</p>
     </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharDetalhe }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">Fechar</button></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharDetalhe }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:var(--destaque-ciano-660)">Fechar</button></div>
   </aside>
 </sc-if>
 <sc-if value="{{ is.agendasEscolas }}" hint-placeholder-val="{{ false }}">
@@ -328,7 +328,11 @@ class Component extends DCLogic {
           return {
             data: DIAS_DA_SEMANA[d.getDay()] + ', ' + Base.dm(d),
             texto: f ? 'Feriado: ' + f : x.txt + (x.e.personalizada ? ' · alterada nesta semana' : ''),
-            cor: f ? 'var(--texto-vermelho-600)' : x.e.personalizada ? 'var(--texto-ambar-745)' : 'var(--texto-cinza-750)'
+            cor: f
+              ? 'var(--texto-vermelho-600)'
+              : x.e.personalizada
+                ? 'var(--texto-ambar-745)'
+                : 'var(--texto-cinza-750)'
           };
         })
       };

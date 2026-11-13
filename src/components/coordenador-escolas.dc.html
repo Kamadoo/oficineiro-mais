@@ -10,7 +10,7 @@
 <x-dc>
   <div class="d-flex gap-10-12 alinha-center quebra-wrap">
     <p class="m-0 fs-13 cor-cinza-600 flex-1 min-w-220 lh-1p5">Cadastro das escolas, da localização usada na presença e das turmas com o número de matriculados.</p>
-    <button class="largura-total-celular h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3" onClick="{{ novaEscola }}" aria-haspopup="dialog">+ Nova escola</button>
+    <button class="largura-total-celular h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:var(--destaque-ciano-660)" onClick="{{ novaEscola }}" aria-haspopup="dialog">+ Nova escola</button>
   </div>
   <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erro }}</div></sc-if>
   <section class="adm-tabela borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}" aria-labelledby="adm-h-escolas">
@@ -20,7 +20,7 @@
       <sc-for list="{{ escolas }}" as="escola" hint-placeholder-count="6">
         <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-cinza-70 alinha-center" style="grid-template-columns:80px minmax(0,2fr) minmax(0,1fr) 70px 130px minmax(0,1.2fr) 110px">
           <span role="cell" class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ escola.sigla }}</span>
-          <span role="cell" class="min-w-0"><button onClick="{{ escola.abrir }}" aria-haspopup="dialog" aria-label="{{ escola.aria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-14 fw-600 cor-ciano-850 texto-left fonte-inherit sublinha-3 quebra-palavra-anywhere botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:#CFDADD">{{ escola.nome }}</button></span>
+          <span role="cell" class="min-w-0"><button onClick="{{ escola.abrir }}" aria-haspopup="dialog" aria-label="{{ escola.aria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-14 fw-600 cor-ciano-850 texto-left fonte-inherit sublinha-3 quebra-palavra-anywhere botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:var(--destaque-cinza-160)">{{ escola.nome }}</button></span>
           <span role="cell" class="fs-12">{{ escola.carteira }}</span>
           <span role="cell">{{ escola.raio }}</span>
           <span role="cell" class="fs-12 fw-600" style="color:{{ escola.localizacaoCor }}">{{ escola.localizacao }}</span>

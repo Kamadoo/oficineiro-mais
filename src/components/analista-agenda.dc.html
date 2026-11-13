@@ -16,7 +16,7 @@
       <sc-if value="{{ foraDaSemanaAtual }}" hint-placeholder-val="{{ false }}"><button onClick="{{ semanaAtual }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-ciano-850 botao-secundario">Esta semana</button></sc-if>
     </div>
     <div class="oculto-celular flex-1"></div>
-    <button class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3" onClick="{{ agendarVisita }}" aria-haspopup="dialog">+ Nova visita</button>
+    <button class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)" onClick="{{ agendarVisita }}" aria-haspopup="dialog">+ Nova visita</button>
   </div>
   <div class="empilha-celular d-grid colunas-repeat-5-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
     <sc-for list="{{ semana }}" as="dia" hint-placeholder-count="5">

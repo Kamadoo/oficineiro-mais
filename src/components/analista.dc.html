@@ -52,7 +52,7 @@
     position: static !important;
   }
   body {
-    background: #fff !important;
+    background: var(--destaque-branco) !important;
   }
   .pagina {
     padding: 0 !important;
@@ -106,8 +106,8 @@
     <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
       <sc-if value="{{ visitaDaAgenda.podeCancelar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.cancelar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-vermelho-600 mr-auto botao-secundario">Cancelar visita</button></sc-if>
       <sc-if value="{{ visitaDaAgenda.podeRemarcar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.remarcar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">Remarcar</button></sc-if>
-      <sc-if value="{{ visitaDaAgenda.podeRegistrar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.registrar }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Registrar visita</button></sc-if>
-      <sc-if value="{{ visitaDaAgenda.soFechar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ fecharVisitaDaAgenda }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Fechar</button></sc-if>
+      <sc-if value="{{ visitaDaAgenda.podeRegistrar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.registrar }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Registrar visita</button></sc-if>
+      <sc-if value="{{ visitaDaAgenda.soFechar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ fecharVisitaDaAgenda }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Fechar</button></sc-if>
     </div>
   </aside>
 </sc-if>
@@ -127,7 +127,7 @@
       </sc-if>
       <sc-if value="{{ visita.naoEdita }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-12 cor-cinza-600">A visita só pode ser corrigida até 7 dias depois da data.</p></sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><sc-if value="{{ visita.podeEditar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visita.editar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 mr-auto botao-secundario">Corrigir registro</button></sc-if><button onClick="{{ fecharVisita }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Fechar</button></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><sc-if value="{{ visita.podeEditar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visita.editar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 mr-auto botao-secundario">Corrigir registro</button></sc-if><button onClick="{{ fecharVisita }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Fechar</button></div>
   </aside>
 </sc-if>
 
@@ -141,7 +141,7 @@
       <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">Observação</span><textarea value="{{ baixa.observacao }}" onChange="{{ escreverObservacaoDaBaixa }}" rows="4" maxlength="1000" placeholder="Ex.: primeiro acesso feito, senha redefinida, apresentado o Minecraft Education." class="borda-cinza-160 raio-8 p-10 fs-14 redim-vertical"></textarea></label>
       <sc-if value="{{ temErroBaixa }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroBaixa }}</div></sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex gap-10 justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharBaixa }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-16 fs-14 fw-600 cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ confirmarBaixa }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ baixaBotao }}</button></div>
+    <div class="borda-t-cinza-110 d-flex gap-10 justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharBaixa }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-16 fs-14 fw-600 cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ confirmarBaixa }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ baixaBotao }}</button></div>
   </aside>
 </sc-if>
 
@@ -264,7 +264,7 @@ const focar = id =>
   }, 30);
 const opcao = marcada =>
   marcada
-    ? { borda: '#0B7EA3', fundo: 'var(--fundo-ciano-60)', cor: 'var(--texto-ciano-740)', classe: '' }
+    ? { borda: 'var(--destaque-ciano-660)', fundo: 'var(--fundo-ciano-60)', cor: 'var(--texto-ciano-740)', classe: '' }
     : {
         borda: 'var(--borda-cinza-160)',
         fundo: 'var(--fundo-branco)',
@@ -1193,13 +1193,13 @@ class Component extends DCLogic {
           'escolas sem visita há mais de 30 dias'
         ),
         detalhe: lista(semVisita, e => e.sigla),
-        cor: '#E0892B',
+        cor: 'var(--destaque-laranja-480)',
         resolver: () => this.irPara('carteira')
       },
       execucaoBaixa.length && {
         titulo: plural(execucaoBaixa.length, 'escola com execução abaixo de 60%', 'escolas com execução abaixo de 60%'),
         detalhe: lista(execucaoBaixa, x => x.escola.sigla + ' ' + x.resumo.execucao + '%') + ' · no mês atual',
-        cor: '#E0892B',
+        cor: 'var(--destaque-laranja-480)',
         resolver: () => this.irPara('carteira', { periodo: cicloDe(hoje, 0) })
       },
       atrasados.length && {
@@ -1321,7 +1321,7 @@ class Component extends DCLogic {
       escreverMotivo: alterar('motivo'),
       confirmarRotulo: s.salvando ? 'Salvando…' : modo === 'remarcar' ? 'Confirmar nova data' : 'Cancelar a visita',
       confirmarClasse: modo === 'remarcar' ? 'fundo-ciano-660' : '',
-      confirmarFundo: modo === 'remarcar' ? '#0B7EA3' : '#B42318',
+      confirmarFundo: modo === 'remarcar' ? 'var(--destaque-ciano-660)' : 'var(--destaque-vermelho-600)',
       confirmar: () => this.confirmarAlteracao(),
       voltar: () => this.setState({ alteracao: SEM_ALTERACAO, erroAgenda: '' })
     };
@@ -1465,10 +1465,10 @@ class Component extends DCLogic {
         go: () => this.irPara(tela),
         classe: ativa ? 'fundo-branco-a9' : 'fundo-transparent',
         bg: ativa ? 'rgba(255,255,255,.09)' : 'transparent',
-        fg: ativa ? '#fff' : '#C9D4D7',
-        dot: ativa ? '#3ECDF3' : 'transparent',
+        fg: ativa ? 'var(--destaque-branco)' : 'var(--destaque-cinza-180)',
+        dot: ativa ? 'var(--destaque-ciano-400)' : 'transparent',
         tag: selo,
-        tagBg: selo ? '#F2C66D' : 'transparent',
+        tagBg: selo ? 'var(--destaque-ambar-310)' : 'transparent',
         atual: ativa ? 'page' : 'false'
       };
     });

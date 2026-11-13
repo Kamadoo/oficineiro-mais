@@ -52,7 +52,7 @@
     padding: 0 !important;
   }
   body {
-    background: #fff !important;
+    background: var(--destaque-branco) !important;
   }
 }
 [role="table"] {
@@ -68,7 +68,7 @@
   transform: rotate(180deg);
 }
 .pr-esc > summary:focus-visible {
-  outline: 2px solid #0B7EA3;
+  outline: 2px solid var(--destaque-ciano-660);
   outline-offset: -2px;
 }
 @media (max-width: 900px) {
@@ -128,10 +128,10 @@
   }
 }
 .agenda-clicavel:hover {
-  background: #F5F9FA !important;
+  background: var(--destaque-cinza-40) !important;
 }
 .agenda-clicavel:focus-visible {
-  outline: 2px solid #0B7EA3;
+  outline: 2px solid var(--destaque-ciano-660);
   outline-offset: -2px;
 }
 </style>
@@ -2344,7 +2344,7 @@ class Component extends DCLogic {
       return {
         label: l,
         tag: q ? String(q) : '',
-        tagBg: q ? '#F2C66D' : 'transparent',
+        tagBg: q ? 'var(--destaque-ambar-310)' : 'transparent',
         go: () =>
           this.setState({ tela: k, menuAberto: false }, () => {
             if (k === 'contas' && this.state.conectado) this.carregarContas();
@@ -2358,8 +2358,8 @@ class Component extends DCLogic {
           }),
         classe: ativo ? 'fundo-branco-a9' : 'fundo-transparent',
         bg: ativo ? 'rgba(255,255,255,.09)' : 'transparent',
-        fg: ativo ? '#fff' : '#C9D4D7',
-        dot: ativo ? '#3ECDF3' : 'transparent',
+        fg: ativo ? 'var(--destaque-branco)' : 'var(--destaque-cinza-180)',
+        dot: ativo ? 'var(--destaque-ciano-400)' : 'transparent',
         atual: ativo ? 'page' : 'false'
       };
     });
@@ -2626,7 +2626,7 @@ class Component extends DCLogic {
         desligado: off,
         id: i === 0 ? 'ct-nv-perfil' : 'ct-nv-perfil-' + k,
         tabulacao: marcado || (!nova.papel && i === 0) ? '0' : '-1',
-        borda: marcado ? '#0B7EA3' : 'var(--borda-cinza-160)',
+        borda: marcado ? 'var(--destaque-ciano-660)' : 'var(--borda-cinza-160)',
         classe: marcado ? '' : 'fundo-branco botao-secundario',
         fundo: marcado ? 'var(--fundo-ciano-60)' : 'var(--fundo-branco)',
         cor: off ? 'var(--texto-cinza-470)' : marcado ? 'var(--texto-ciano-740)' : 'var(--texto-ciano-850)',
@@ -3197,9 +3197,9 @@ class Component extends DCLogic {
                       salvar: () => this.salvarTurma({ id: t.id, ano: t.ano, turma: t.turma, matr: v }),
                       remover: () => this.removerTurma(t),
                       removerTexto: s.turmaARemover === t.id ? 'Confirmar remoção' : 'Remover',
-                      removerCor: s.turmaARemover === t.id ? '#fff' : 'var(--texto-vermelho-600)',
+                      removerCor: s.turmaARemover === t.id ? 'var(--destaque-branco)' : 'var(--texto-vermelho-600)',
                       removerClasse: s.turmaARemover === t.id ? '' : 'fundo-branco',
-                      removerFundo: s.turmaARemover === t.id ? '#B42318' : 'var(--fundo-branco)'
+                      removerFundo: s.turmaARemover === t.id ? 'var(--destaque-vermelho-600)' : 'var(--fundo-branco)'
                     };
                   })
                 : [],

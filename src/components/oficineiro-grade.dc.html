@@ -14,7 +14,7 @@
     <div class="oculto-celular flex-1"></div>
     <div class="largura-total-celular d-flex gap-8 quebra-wrap">
       <button onClick="{{ novaAtividade }}" class="h-40 flex-1-1-auto borda-cinza-160 fundo-branco cor-cinza-750 raio-8 p-0-16 fs-14 fw-600 botao-secundario">+ Nova atividade</button>
-      <sc-if value="{{ podeEnviar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ enviarGrade }}" disabled="{{ enviando }}" class="h-40 flex-1-1-auto borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ enviarTexto }}</button></sc-if>
+      <sc-if value="{{ podeEnviar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ enviarGrade }}" disabled="{{ enviando }}" class="h-40 flex-1-1-auto borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ enviarTexto }}</button></sc-if>
     </div>
   </div>
   <sc-if value="{{ devolvida }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-13 cor-vermelho-720 fundo-vermelho-50 raio-10 p-12-14 lh-1p5">{{ devolvidaTexto }}</span></sc-if>
@@ -266,7 +266,11 @@ class Component extends DCLogic {
                     cor: 'var(--texto-ambar-745)',
                     fundo: 'var(--fundo-ambar-80)'
                   }
-                : { texto: 'Ainda não enviada à direção', cor: 'var(--texto-ambar-745)', fundo: 'var(--fundo-ambar-80)' },
+                : {
+                    texto: 'Ainda não enviada à direção',
+                    cor: 'var(--texto-ambar-745)',
+                    fundo: 'var(--fundo-ambar-80)'
+                  },
       novaAtividade: () => contexto.abrirAtividade(null, diaDeHoje >= 1 && diaDeHoje <= 5 ? diaDeHoje : 1),
       podeEnviar: !envioDaGrade || ['devolvida', 'alterada'].includes(envioDaGrade.status),
       enviando: contexto.enviandoGrade,
@@ -308,7 +312,7 @@ class Component extends DCLogic {
           texto: dmIso(d) + (d === semanaDeHoje ? ' · atual' : ''),
           marcada: marcada ? 'true' : 'false',
           ponto: alteradas.has(d) ? 'inline-block' : 'none',
-          borda: marcada ? '#0B7EA3' : 'var(--borda-cinza-160)',
+          borda: marcada ? 'var(--destaque-ciano-660)' : 'var(--borda-cinza-160)',
           classe: marcada ? '' : 'fundo-branco botao-secundario',
           fundo: marcada ? 'var(--fundo-ciano-40)' : 'var(--fundo-branco)',
           cor: marcada ? 'var(--texto-ciano-740)' : passada ? 'var(--texto-cinza-470)' : 'var(--texto-ciano-850)',

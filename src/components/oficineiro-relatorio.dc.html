@@ -14,16 +14,16 @@
     <div class="oculto-celular flex-1"></div>
     <div class="largura-total-celular d-flex gap-8 quebra-wrap">
       <button onClick="{{ abrirDocumento }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-cinza-750 flex-1-1-auto botao-secundario">Imprimir / PDF</button>
-      <sc-if value="{{ podeReenviar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ pedirReenvio }}" class="h-40 flex-1-1-auto borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Reenviar para aprovação</button></sc-if>
+      <sc-if value="{{ podeReenviar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ pedirReenvio }}" class="h-40 flex-1-1-auto borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Reenviar para aprovação</button></sc-if>
     </div>
   </div>
   <sc-if value="{{ devolvido }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-13 cor-vermelho-720 fundo-vermelho-50 raio-10 p-12-14 lh-1p5">{{ devolvidoTexto }}</span></sc-if>
   <sc-if value="{{ confirmando }}" hint-placeholder-val="{{ false }}">
-    <div role="alertdialog" aria-label="Confirmar envio do ciclo" class="fundo-branco raio-12 p-16-18 d-flex eixo-column gap-12 largura-fundo" style="border:1px solid var(--borda-cinza-110);border-color:#0B7EA3">
+    <div role="alertdialog" aria-label="Confirmar envio do ciclo" class="fundo-branco raio-12 p-16-18 d-flex eixo-column gap-12 largura-fundo" style="border:1px solid var(--borda-cinza-110);border-color:var(--destaque-ciano-660)">
       <b class="fs-15">Reenviar {{ cicloNome }} para aprovação?</b>
       <span class="fs-14 cor-cinza-750 lh-1p5">Depois de reenviado, os registros e as presenças deste ciclo voltam a ficar travados.</span>
       <sc-if value="{{ temPendencias }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-ambar-745 fundo-ambar-55 raio-8 p-8-10">Atenção: ainda há {{ pendenciasTexto }}.</span></sc-if>
-      <div class="d-flex gap-8 quebra-wrap"><button onClick="{{ confirmarReenvio }}" disabled="{{ ocupado }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Confirmar reenvio</button><button onClick="{{ cancelarReenvio }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-cinza-750 botao-secundario">Cancelar</button></div>
+      <div class="d-flex gap-8 quebra-wrap"><button onClick="{{ confirmarReenvio }}" disabled="{{ ocupado }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Confirmar reenvio</button><button onClick="{{ cancelarReenvio }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-cinza-750 botao-secundario">Cancelar</button></div>
     </div>
   </sc-if>
 
@@ -35,7 +35,7 @@
 
 
   <sc-if value="{{ temPendencias }}" hint-placeholder-val="{{ false }}">
-    <section class="espaco-celular fundo-branco raio-12 p-18-20 d-flex eixo-column gap-4 largura-fundo" style="border:1px solid var(--borda-cinza-110);border-left:4px solid #E0A93B">
+    <section class="espaco-celular fundo-branco raio-12 p-18-20 d-flex eixo-column gap-4 largura-fundo" style="border:1px solid var(--borda-cinza-110);border-left:4px solid var(--destaque-ambar-450)">
       <h3 class="m-0-0-6 fs-15">Pendências do ciclo</h3>
       <sc-for list="{{ pendencias }}" as="pendencia" hint-placeholder-count="3">
         <div class="d-flex quebra-wrap alinha-center gap-6-12 p-10-0 borda-t-cinza-75">
@@ -110,7 +110,7 @@ const Base = window.FSM_BASE;
 const { dataDe } = Base;
 const GRUPOS = [
   ['Realizada', 'realizadas', 'Atividades realizadas', 'var(--texto-verde-700)', 'Presentes'],
-  ['Pendente', 'pendentes', 'Atividades pendentes de registro', '#E0A93B', ''],
+  ['Pendente', 'pendentes', 'Atividades pendentes de registro', 'var(--destaque-ambar-450)', ''],
   ['Não realizada', 'nao', 'Atividades não realizadas', 'var(--texto-vermelho-600)', 'Motivo'],
   ['Anulada', 'anuladas', 'Atividades anuladas pelo coordenador', 'var(--texto-cinza-420)', 'Motivo'],
   ['Feriado', 'feriados', 'Feriados', 'var(--texto-cinza-420)', '']
@@ -171,7 +171,7 @@ class Component extends DCLogic {
         linhas: doGrupo,
         id: 'rel-g-' + id,
         fundo: destaque ? 'var(--fundo-ambar-55)' : 'transparent',
-        sombra: destaque ? 'inset 4px 0 0 #E0A93B' : 'none'
+        sombra: destaque ? 'inset 4px 0 0 var(--destaque-ambar-450)' : 'none'
       };
     }).filter(grupo => grupo.linhas.length);
     const previstas = linhas.filter(linha => linha.situacao !== 'Feriado').length,

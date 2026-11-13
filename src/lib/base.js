@@ -279,7 +279,12 @@ window.FSM_BASE = (() => {
         turma: i.turma || '—',
         atividade: i.atividade || '—',
         sit: i.sit,
-        sitCor: i.sit === 'Realizada' ? '#1B5E2F' : i.sit === 'Não realizada' ? '#B42319' : '#7A4E0C',
+        sitCor:
+          i.sit === 'Realizada'
+            ? 'var(--destaque-verde-760)'
+            : i.sit === 'Não realizada'
+              ? 'var(--destaque-vermelho-600)'
+              : 'var(--destaque-ambar-745)',
         estud: i.sit === 'Realizada' && i.presentes != null ? String(i.presentes) : '—',
         registro: i.sit === 'Agendada' ? 'Sem registro' : corta(i.registro)
       })),
@@ -321,8 +326,18 @@ window.FSM_BASE = (() => {
     Formação: ['Formação de professores', 'Formação de servidores', 'Formação com Oficineiros']
   };
   const ORIGEM_VISITA = {
-    mapa_calor: ['Mapa de calor · Jornada do Usuário', '#E0892B', 'var(--fundo-ambar-80)', 'var(--texto-ambar-745)'],
-    relatorio: ['Mapa de calor · Jornada do Usuário', '#E0892B', 'var(--fundo-ambar-80)', 'var(--texto-ambar-745)'],
+    mapa_calor: [
+      'Mapa de calor · Jornada do Usuário',
+      'var(--destaque-laranja-480)',
+      'var(--fundo-ambar-80)',
+      'var(--texto-ambar-745)'
+    ],
+    relatorio: [
+      'Mapa de calor · Jornada do Usuário',
+      'var(--destaque-laranja-480)',
+      'var(--fundo-ambar-80)',
+      'var(--texto-ambar-745)'
+    ],
     demanda: ['Demanda da escola', 'var(--texto-cinza-420)', 'var(--fundo-cinza-55)', 'var(--texto-cinza-680)'],
     gerencia: ['Vinculada pela gerência', 'var(--texto-ciano-660)', 'var(--fundo-ciano-60)', 'var(--texto-ciano-740)'],
     analista: ['Iniciativa do analista', 'var(--texto-indigo-360)', 'var(--fundo-indigo-50)', 'var(--texto-indigo-510)']
@@ -450,7 +465,12 @@ window.FSM_BASE = (() => {
   }
   function estiloOpcao(ativa) {
     return ativa
-      ? { borda: '#0B7EA3', fundo: 'var(--fundo-ciano-60)', cor: 'var(--texto-ciano-740)', classe: '' }
+      ? {
+          borda: 'var(--destaque-ciano-660)',
+          fundo: 'var(--fundo-ciano-60)',
+          cor: 'var(--texto-ciano-740)',
+          classe: ''
+        }
       : {
           borda: 'var(--borda-cinza-160)',
           fundo: 'var(--fundo-branco)',
@@ -493,7 +513,7 @@ window.FSM_BASE = (() => {
         : v >= 75
           ? 'var(--texto-indigo-360)'
           : v >= 50
-            ? '#E0892B'
+            ? 'var(--destaque-laranja-480)'
             : 'var(--texto-vermelho-600)';
   }
   function numero(n) {

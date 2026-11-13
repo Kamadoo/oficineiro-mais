@@ -120,7 +120,7 @@
     </div>
     <div class="borda-t-cinza-110 d-flex gap-8 justifica-flex-end quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
       <sc-if value="{{ resumo.podeCorrigir }}" hint-placeholder-val="{{ false }}"><button onClick="{{ resumo.corrigir }}" class="h-40 borda-1p5-solid-0b7ea3 fundo-branco cor-ciano-740 raio-8 p-0-16 fs-14 fw-600 mr-auto botao-opcao">Corrigir registro</button></sc-if>
-      <button onClick="{{ fecharResumo }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Fechar</button>
+      <button onClick="{{ fecharResumo }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Fechar</button>
     </div>
   </aside>
 </sc-if>
@@ -146,7 +146,7 @@
       <div class="d-flex alinha-center gap-12 borda-b-2-solid-0b7ea4 pb-8">
         <img src="../public/brand/logo-cliente.png" alt="{{ cliente.orgao }}" class="w-120 h-46 obj-ajuste-contain obj-pos-left-center"></img>
         <div class="flex-1 texto-center d-flex eixo-column gap-2"><b class="ls-0p3" style="font-size:12.5pt">{{ cliente.orgaoTitulo }}</b><b class="fs-10pt cor-ciano-745">{{ oficial.titulo }}</b></div>
-        <div class="w-120 h-46 d-flex alinha-center justifica-center gap-7"><svg role="img" aria-label="Oficineiro+" viewBox="0 0 31 31" width="30" height="30"><rect x="0" y="0" width="14" height="14" rx="3" fill="#DD2287"></rect><rect x="17" y="0" width="14" height="14" rx="3" fill="#6C60E7"></rect><rect x="0" y="17" width="14" height="14" rx="3" fill="#3ECDF3"></rect><rect x="17" y="17" width="14" height="14" rx="3" fill="#35E47D"></rect></svg><span class="fs-13pt fw-800 ls-n0p2 cor-ciano-855">Oficineiro<b class="cor-ciano-665">+</b></span></div>
+        <div class="w-120 h-46 d-flex alinha-center justifica-center gap-7"><svg role="img" aria-label="Oficineiro+" viewBox="0 0 31 31" width="30" height="30"><rect x="0" y="0" width="14" height="14" rx="3" fill="var(--destaque-rosa-500)"></rect><rect x="17" y="0" width="14" height="14" rx="3" fill="var(--destaque-indigo-360)"></rect><rect x="0" y="17" width="14" height="14" rx="3" fill="var(--destaque-ciano-400)"></rect><rect x="17" y="17" width="14" height="14" rx="3" fill="var(--destaque-verde-450)"></rect></svg><span class="fs-13pt fw-800 ls-n0p2 cor-ciano-855">Oficineiro<b class="cor-ciano-665">+</b></span></div>
       </div>
       <div class="d-grid colunas-2fr-1fr borda-1-solid-9fb0b6 mt-8">
         <div class="p-4-6 borda-b-1-solid-dde6e9 borda-d-1-solid-dde6e9"><small class="cor-cinza-605 d-block fs-7pt caixa-uppercase">Oficineiro(a)</small>{{ oficial.nome }}</div>

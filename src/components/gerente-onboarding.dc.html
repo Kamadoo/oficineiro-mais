@@ -36,7 +36,7 @@
             </div>
           </sc-for>
         </div></div>
-        <div class="d-flex quebra-wrap gap-10 justifica-flex-end alinha-center"><span class="fs-12 cor-cinza-600 mr-auto">Usuários já importados em outra OS (mesmo CPF ou CNPJ) são ignorados pelo banco. Os analistas recebem a pendência na tela deles.</span><button onClick="{{ cancelarPrevia }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-16 fs-14 fw-600 botao-secundario">Cancelar</button><button onClick="{{ importar }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ previa.botao }}</button></div>
+        <div class="d-flex quebra-wrap gap-10 justifica-flex-end alinha-center"><span class="fs-12 cor-cinza-600 mr-auto">Usuários já importados em outra OS (mesmo CPF ou CNPJ) são ignorados pelo banco. Os analistas recebem a pendência na tela deles.</span><button onClick="{{ cancelarPrevia }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-16 fs-14 fw-600 botao-secundario">Cancelar</button><button onClick="{{ importar }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ previa.botao }}</button></div>
       </section>
     </sc-if>
     <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
@@ -112,7 +112,7 @@ class Component extends DCLogic {
             ? (escolaPorId[String(i.escola_id)] || {}).nome || '—'
             : i.lotacao_original || 'Escola não reconhecida',
           carteira: i.carteira_id || '',
-          carteiraBorda: i.carteira_id ? 'var(--borda-cinza-160)' : '#E3B45C',
+          carteiraBorda: i.carteira_id ? 'var(--borda-cinza-160)' : 'var(--destaque-laranja-370)',
           recebimento: rec ? dmIso(rec) : '—',
           emAberto: i.status === 'pendente' ? d + (d === 1 ? ' dia' : ' dias') : '—',
           emAbertoCor: i.status === 'pendente' && d > 15 ? 'var(--texto-vermelho-600)' : 'var(--texto-ciano-850)',
@@ -144,8 +144,8 @@ class Component extends DCLogic {
             lotacao: p.lotacao || '—',
             escola: p.escola,
             carteira: p.cart,
-            escolaBorda: p.escola ? 'var(--borda-cinza-160)' : '#E3B45C',
-            carteiraBorda: p.cart ? 'var(--borda-cinza-160)' : '#E3B45C',
+            escolaBorda: p.escola ? 'var(--borda-cinza-160)' : 'var(--destaque-laranja-370)',
+            carteiraBorda: p.cart ? 'var(--borda-cinza-160)' : 'var(--destaque-laranja-370)',
             situacao: !cpfOk
               ? 'CPF ou CNPJ inválido · ignorado'
               : !p.escola
@@ -174,7 +174,12 @@ class Component extends DCLogic {
     const validas = P ? P.rows.filter(p => documentoValido(p.cpf)) : [];
     return {
       indicadores: [
-        { titulo: 'Pendentes', valor: numero(pend.length), nota: 'aguardando onboarding', cor: '#E0892B' },
+        {
+          titulo: 'Pendentes',
+          valor: numero(pend.length),
+          nota: 'aguardando onboarding',
+          cor: 'var(--destaque-laranja-480)'
+        },
         {
           titulo: 'Concluídos',
           valor: numero(itens.length - pend.length),

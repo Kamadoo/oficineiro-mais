@@ -11,7 +11,7 @@
   <sc-if value="{{ temRelatorioPendente }}" hint-placeholder-val="{{ true }}">
     <section aria-label="Relatório aguardando aprovação" class="fundo-ciano-40 borda-ciano-150 raio-12 p-16-20 d-flex quebra-wrap gap-12-20 alinha-center">
       <div class="flex-1 min-w-240 d-flex eixo-column gap-2"><b class="cor-ciano-740">{{ relatorioPendenteTitulo }}</b><span class="fs-13 cor-cinza-750 lh-1p5">{{ relatorioPendenteTexto }}</span><span class="fs-13 fw-600" style="color:{{ relatorioPrazoCor }}">{{ relatorioPrazo }}</span></div>
-      <button onClick="{{ abrirRelatorios }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Revisar e aprovar</button>
+      <button onClick="{{ abrirRelatorios }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Revisar e aprovar</button>
     </section>
   </sc-if>
   <section aria-label="Resumo do mês" class="duas-colunas-celular d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));opacity:{{ opacidade }}">

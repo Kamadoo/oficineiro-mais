@@ -214,7 +214,7 @@ class Component extends DCLogic {
         situacaoCor: SITUACAO[situacao][0],
         situacaoFundo: SITUACAO[situacao][1],
         marcada: marcada ? 'true' : 'false',
-        borda: marcada ? '1.5px solid #0B7EA3' : '1px solid var(--borda-cinza-110)',
+        borda: marcada ? '1.5px solid var(--destaque-ciano-660)' : '1px solid var(--borda-cinza-110)',
         classe: marcada ? '' : 'fundo-branco borda-cinza-110',
         fundo: marcada ? 'var(--fundo-ciano-40)' : 'var(--fundo-branco)',
         aria: hora + ', ' + turma + ', ' + tipo.curto + ', ' + situacao,
@@ -385,7 +385,7 @@ class Component extends DCLogic {
         return {
           rotulo,
           marcada: marcada ? 'true' : 'false',
-          ...opcao(marcada, marcada && chave === 'nao' ? '#B42318' : null),
+          ...opcao(marcada, marcada && chave === 'nao' ? 'var(--destaque-vermelho-600)' : null),
           escolher: () => this.preencher({ situacao: chave })
         };
       }),
@@ -465,7 +465,7 @@ class Component extends DCLogic {
           : 'Pode ser registrado e editado até ' + Base.prazo(dia) + '.',
       salvarTexto: formulario.salvando ? 'Salvando…' : formulario.id ? 'Salvar alterações' : 'Salvar registro',
       salvarClasse: formulario.salvando ? '' : 'fundo-ciano-660',
-      salvarFundo: formulario.salvando ? '#A9B8BD' : '#0B7EA3',
+      salvarFundo: formulario.salvando ? 'var(--destaque-cinza-300)' : 'var(--destaque-ciano-660)',
       salvar: () => contexto.salvarRegistro(),
       alterado: !!formulario.alterado
     };

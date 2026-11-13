@@ -99,6 +99,9 @@ window.FSM_APARENCIA =
       '#FFFFFF': 'branco'
     };
 
+    const DESTAQUES =
+      '--destaque-ambar-310:#F2C66D;--destaque-ambar-450:#E0A93B;--destaque-ambar-510:#E0A21B;--destaque-ambar-745:#7A4E0B;--destaque-azul-500:#3B82C4;--destaque-azul-640:#1A3F9C;--destaque-azul-645:#1F5F99;--destaque-branco:#FFFFFF;--destaque-ciano-400:#3ECDF3;--destaque-ciano-660:#0B7EA3;--destaque-ciano-810:#22363E;--destaque-ciano-850:#1A2B33;--destaque-ciano-870:#15252B;--destaque-ciano-880:#13252C;--destaque-cinza-160:#CFDADD;--destaque-cinza-180:#C9D4D7;--destaque-cinza-210:#C3CFD2;--destaque-cinza-300:#A9B8BD;--destaque-cinza-40:#F5F9FA;--destaque-cinza-540:#6B7280;--destaque-cinza-55:#EEF3F4;--destaque-cinza-600:#5B6B70;--destaque-cinza-660:#4A5C62;--destaque-cinza-670:#555555;--destaque-indigo-360:#6C60E6;--destaque-laranja-370:#E3B45C;--destaque-laranja-480:#E0892B;--destaque-laranja-520:#E8590C;--destaque-laranja-630:#B5470A;--destaque-laranja-730:#8A5A00;--destaque-rosa-500:#DD2287;--destaque-verde-450:#35E47D;--destaque-verde-700:#23773A;--destaque-verde-760:#1B5E2E;--destaque-vermelho-600:#B42318';
+
     const variaveis = escuro =>
       Object.entries(PALETA)
         .flatMap(([papel, pares]) =>
@@ -111,7 +114,7 @@ window.FSM_APARENCIA =
     const css = () => {
       const E = 'html[data-tema="escuro"]';
       return (
-        `:root{${variaveis(false)};--fundo-ciano-880:#13252C;--fundo-mapa:#EBF1F2;--grade-mapa:#D7E2E5}` +
+        `:root{${variaveis(false)};${DESTAQUES};--fundo-ciano-880:#13252C;--fundo-mapa:#EBF1F2;--grade-mapa:#D7E2E5}` +
         '@media screen{' +
         `${E}{color-scheme:dark}` +
         `${E} body{background:#0E1A1E!important}` +

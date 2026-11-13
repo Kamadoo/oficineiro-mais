@@ -53,7 +53,7 @@
     position: static !important;
   }
   body {
-    background: #fff !important;
+    background: var(--destaque-branco) !important;
   }
   .pagina {
     padding: 0 !important;
@@ -281,7 +281,7 @@ const ORIGENS_DE_VISITA = Base.ORIGEM_VISITA;
 const FAIXAS_DE_EXECUCAO = [
   ['No ritmo', '≥ 90%', 'var(--texto-verde-700)', 'var(--fundo-verde-80)', v => v >= 90],
   ['Estável', '75–89%', 'var(--texto-indigo-360)', 'var(--fundo-indigo-50)', v => v >= 75 && v < 90],
-  ['Atenção', '50–74%', '#E0892B', 'var(--fundo-ambar-80)', v => v >= 50 && v < 75],
+  ['Atenção', '50–74%', 'var(--destaque-laranja-480)', 'var(--fundo-ambar-80)', v => v >= 50 && v < 75],
   ['Reforçar apoio', '< 50%', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)', v => v < 50]
 ];
 const ATENDIMENTOS_DE_VISITA = Base.ATEND_VISITA;
@@ -1278,7 +1278,7 @@ class Component extends DCLogic {
           'escolas com oficineiro sem conta da direção'
         ),
         detalhe: enumerar(escolasSemDirecao, e => e.sigla) + ' · a direção confere as atividades e aprova o relatório',
-        cor: '#E0892B',
+        cor: 'var(--destaque-laranja-480)',
         resolver: () => this.abrirContas({ perfil: 'direcao' })
       },
       escolasSemOficineiro.length && {
@@ -1340,7 +1340,7 @@ class Component extends DCLogic {
         detalhe:
           enumerar(carteirasSemAnalista, c => c.id) +
           ' · as visitas e o onboarding dessas escolas ficam sem responsável',
-        cor: '#E0892B',
+        cor: 'var(--destaque-laranja-480)',
         resolver: () => this.abrirContas({ perfil: 'analista' })
       }
     ].filter(Boolean);
@@ -1422,10 +1422,10 @@ class Component extends DCLogic {
         go: () => this.irPara(k),
         classe: on ? 'fundo-branco-a9' : 'fundo-transparent',
         bg: on ? 'rgba(255,255,255,.09)' : 'transparent',
-        fg: on ? '#fff' : '#C9D4D7',
-        dot: on ? '#3ECDF3' : 'transparent',
+        fg: on ? 'var(--destaque-branco)' : 'var(--destaque-cinza-180)',
+        dot: on ? 'var(--destaque-ciano-400)' : 'transparent',
         tag,
-        tagBg: tag ? '#F2C66D' : 'transparent',
+        tagBg: tag ? 'var(--destaque-ambar-310)' : 'transparent',
         atual: on ? 'page' : 'false'
       };
     });
@@ -1793,7 +1793,7 @@ class Component extends DCLogic {
         desligado: false,
         id: i === 0 ? 'ct-nv-perfil' : 'ct-nv-perfil-' + k,
         tabulacao: on || (!novaConta.papel && i === 0) ? '0' : '-1',
-        borda: on ? '#0B7EA3' : 'var(--borda-cinza-160)',
+        borda: on ? 'var(--destaque-ciano-660)' : 'var(--borda-cinza-160)',
         classe: on ? '' : 'fundo-branco botao-secundario',
         fundo: on ? 'var(--fundo-ciano-60)' : 'var(--fundo-branco)',
         cor: on ? 'var(--texto-ciano-740)' : 'var(--texto-ciano-850)',

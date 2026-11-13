@@ -14,10 +14,10 @@
 <link rel="stylesheet" href="./styles/app.css">
 <style>
 .relatorio-linha:hover {
-  background: #F5F9FA !important;
+  background: var(--destaque-cinza-40) !important;
 }
 .relatorio-linha:focus-visible {
-  outline: 2px solid #0B7EA3;
+  outline: 2px solid var(--destaque-ciano-660);
   outline-offset: -2px;
 }
 @media (max-width: 900px) {
@@ -51,21 +51,21 @@
 .grade-vazio:hover,
 .grade-vazio:focus-visible {
   opacity: 1;
-  border-color: #CFDADD !important;
-  background: #F5F9FA !important;
+  border-color: var(--destaque-cinza-160) !important;
+  background: var(--destaque-cinza-40) !important;
 }
 .grade-atividade:hover {
   filter: brightness(0.97);
 }
 .grade-atividade:focus-visible,
 .grade-vazio:focus-visible {
-  outline: 2px solid #0B7EA3;
+  outline: 2px solid var(--destaque-ciano-660);
   outline-offset: 2px;
 }
 @media (hover: none) {
   .grade-vazio {
     opacity: 1;
-    color: #C2CED1 !important;
+    color: var(--destaque-cinza-210) !important;
   }
 }
 .navegacao-inferior {
@@ -112,7 +112,7 @@
     margin: 10mm;
   }
   body {
-    background: #fff !important;
+    background: var(--destaque-branco) !important;
   }
   body:has(#rel-horas) #app-main,
   #rel-toolbar,
@@ -1569,7 +1569,7 @@ class Component extends DCLogic {
   opcao(marcada, cor) {
     return marcada
       ? {
-          borda: cor || '#0B7EA3',
+          borda: cor || 'var(--destaque-ciano-660)',
           fundo: cor ? 'var(--fundo-branco)' : 'var(--fundo-ciano-60)',
           cor: cor || 'var(--texto-ciano-740)',
           classe: cor ? 'fundo-branco' : ''
@@ -1895,7 +1895,7 @@ class Component extends DCLogic {
         bloqueado: !!bloqueio || !s.carregado,
         bloqueio: s.carregado ? bloqueio : 'Carregando os dados…',
         botaoClasse: bloqueio || !s.carregado ? '' : 'fundo-ciano-660',
-        botaoFundo: bloqueio || !s.carregado ? '#5B6B70' : '#0B7EA3',
+        botaoFundo: bloqueio || !s.carregado ? 'var(--destaque-cinza-600)' : 'var(--destaque-ciano-660)',
         temPendencias: !cicloAtual && textos.length > 0,
         pendencias: textos,
         temObservacoes: !!String((s.observacoes || {})[competencia] || '').trim()
@@ -2486,7 +2486,7 @@ class Component extends DCLogic {
       usarGradePadrao: () => this.salvarAtividadeDaSemana(true),
       salvarNaSemanaTexto: edicaoDaSemana.salvando ? 'Salvando…' : 'Salvar só nesta semana',
       salvarNaSemanaClasse: edicaoDaSemana.salvando ? '' : 'fundo-ciano-660',
-      salvarNaSemanaFundo: edicaoDaSemana.salvando ? '#A9B8BD' : '#0B7EA3',
+      salvarNaSemanaFundo: edicaoDaSemana.salvando ? 'var(--destaque-cinza-300)' : 'var(--destaque-ciano-660)',
       copia,
       copiaComErro: !!copia.erro,
       escolheSemanas: copia.modo === 'escolher',
@@ -2548,7 +2548,7 @@ class Component extends DCLogic {
       copiar: () => this.copiarSemana(),
       copiarTexto: copia.salvando ? 'Copiando…' : 'Copiar semana',
       copiarClasse: copia.salvando ? '' : 'fundo-ciano-660',
-      copiarFundo: copia.salvando ? '#A9B8BD' : '#0B7EA3'
+      copiarFundo: copia.salvando ? 'var(--destaque-cinza-300)' : 'var(--destaque-ciano-660)'
     };
   }
   edicaoDaAtividade() {
@@ -2647,11 +2647,11 @@ class Component extends DCLogic {
       editando: !!edicao.id,
       salvarTexto: edicao.salvando ? 'Salvando…' : edicao.id ? 'Salvar edição' : 'Adicionar à grade',
       salvarClasse: edicao.salvando ? '' : 'fundo-ciano-660',
-      salvarFundo: edicao.salvando ? '#A9B8BD' : '#0B7EA3',
+      salvarFundo: edicao.salvando ? 'var(--destaque-cinza-300)' : 'var(--destaque-ciano-660)',
       excluirTexto: edicao.confirmarExcluir ? 'Confirmar exclusão' : 'Excluir atividade',
       excluirClasse: edicao.confirmarExcluir ? '' : 'fundo-branco',
-      excluirFundo: edicao.confirmarExcluir ? '#B42318' : 'var(--fundo-branco)',
-      excluirCor: edicao.confirmarExcluir ? '#fff' : 'var(--texto-vermelho-600)',
+      excluirFundo: edicao.confirmarExcluir ? 'var(--destaque-vermelho-600)' : 'var(--fundo-branco)',
+      excluirCor: edicao.confirmarExcluir ? 'var(--destaque-branco)' : 'var(--texto-vermelho-600)',
       salvarAtividade: () => this.salvarAtividade(),
       excluirAtividade: () => this.excluirAtividade()
     };
@@ -2674,7 +2674,7 @@ class Component extends DCLogic {
     const menu = TELAS.map(([chave, rotulo]) => {
       const atual = s.tela === chave,
         tag = selos[chave] || '',
-        tagBg = tag ? '#F2C66D' : 'transparent',
+        tagBg = tag ? 'var(--destaque-ambar-310)' : 'transparent',
         abrir = () => this.irPara(chave);
       navegacao[chave] = {
         abrir,
@@ -2689,8 +2689,8 @@ class Component extends DCLogic {
         go: abrir,
         classe: atual ? 'fundo-branco-a9' : 'fundo-transparent',
         bg: atual ? 'rgba(255,255,255,.09)' : 'transparent',
-        fg: atual ? '#fff' : '#C9D4D7',
-        dot: atual ? '#3ECDF3' : 'transparent',
+        fg: atual ? 'var(--destaque-branco)' : 'var(--destaque-cinza-180)',
+        dot: atual ? 'var(--destaque-ciano-400)' : 'transparent',
         atual: atual ? 'page' : 'false'
       };
     });
@@ -2738,11 +2738,11 @@ class Component extends DCLogic {
       abaPresenca: !atividades,
       abaAtividades: atividades,
       abaPresencaClasse: atividades ? 'fundo-transparent' : '',
-      abaPresencaFundo: atividades ? 'transparent' : '#FEFEFE',
-      abaPresencaCor: atividades ? '#FEFEFE' : '#13252C',
+      abaPresencaFundo: atividades ? 'transparent' : 'var(--destaque-branco)',
+      abaPresencaCor: atividades ? 'var(--destaque-branco)' : 'var(--destaque-ciano-880)',
       abaAtividadesClasse: atividades ? '' : 'fundo-transparent',
-      abaAtividadesFundo: atividades ? '#FEFEFE' : 'transparent',
-      abaAtividadesCor: atividades ? '#13252C' : '#FEFEFE',
+      abaAtividadesFundo: atividades ? 'var(--destaque-branco)' : 'transparent',
+      abaAtividadesCor: atividades ? 'var(--destaque-ciano-880)' : 'var(--destaque-branco)',
       verPresenca: () => this.setState({ abaDoDocumento: 'presenca' }),
       verAtividades: () => this.setState({ abaDoDocumento: 'atividades' }),
       declaracao: atividades
@@ -2761,7 +2761,7 @@ class Component extends DCLogic {
         estilo.textContent =
           '@media print{@page{size:A4;margin:12mm 12mm 16mm;@bottom-left{content:' +
           entreAspas((s.nomeDoUsuario || '—') + ' · ' + doDocumento.codigo) +
-          ';font:8pt Inter,system-ui,sans-serif;color:#555}@bottom-right{content:"Página " counter(page) " de " counter(pages);font:8pt Inter,system-ui,sans-serif;color:#555}}}';
+          ';font:8pt Inter,system-ui,sans-serif;color:var(--destaque-cinza-670)}@bottom-right{content:"Página " counter(page) " de " counter(pages);font:8pt Inter,system-ui,sans-serif;color:var(--destaque-cinza-670)}}}';
         document.head.appendChild(estilo);
         try {
           window.print();

@@ -30,7 +30,7 @@
           <span role="cell" class="au-larga d-flex gap-6 quebra-wrap justifica-flex-end">
             <sc-if value="{{ relatorio.podeDecidir }}" hint-placeholder-val="{{ false }}">
               <button onClick="{{ relatorio.devolver }}" disabled="{{ salvando }}" aria-expanded="{{ relatorio.devolucaoAberta }}" aria-label="{{ relatorio.ariaDevolver }}" class="h-32 borda-cinza-160 fundo-branco cor-vermelho-600 raio-6 p-0-10 fs-12 fw-600 botao-secundario">Devolver</button>
-              <button onClick="{{ relatorio.aprovar }}" disabled="{{ salvando }}" aria-label="{{ relatorio.ariaAprovar }}" class="h-32 borda-0 cor-branco raio-6 p-0-12 fs-12 fw-600 fundo-ciano-660" style="background:#0B7EA3">Aprovar</button>
+              <button onClick="{{ relatorio.aprovar }}" disabled="{{ salvando }}" aria-label="{{ relatorio.ariaAprovar }}" class="h-32 borda-0 cor-branco raio-6 p-0-12 fs-12 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Aprovar</button>
             </sc-if>
           </span>
           <sc-if value="{{ relatorio.mostrarDevolucao }}" hint-placeholder-val="{{ false }}">
@@ -269,12 +269,12 @@ class Component extends DCLogic {
         execucao: percentual(r.real, r.liq),
         barra: r.liq ? Math.min(100, Math.round((r.real / r.liq) * 100)) + '%' : '0%',
         corDaBarra: !r.liq
-          ? '#A9B8BD'
+          ? 'var(--destaque-cinza-300)'
           : r.real / r.liq >= 0.9
-            ? '#23773A'
+            ? 'var(--destaque-verde-700)'
             : r.real / r.liq >= 0.75
-              ? '#E0892B'
-              : '#B42318',
+              ? 'var(--destaque-laranja-480)'
+              : 'var(--destaque-vermelho-600)',
         fundo: i === a.length - 1 ? 'var(--fundo-cinza-20)' : 'var(--fundo-branco)',
         peso: i === a.length - 1 ? '600' : '400',
         total: i === a.length - 1,
@@ -512,7 +512,11 @@ class Component extends DCLogic {
       ...(() => {
         const SITC = {
           fechado: ['Aguardando a direção da escola', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)'],
-          aprovado_direcao: ['Aprovado pela direção · aguardando você', 'var(--texto-ciano-740)', 'var(--fundo-ciano-60)'],
+          aprovado_direcao: [
+            'Aprovado pela direção · aguardando você',
+            'var(--texto-ciano-740)',
+            'var(--fundo-ciano-60)'
+          ],
           aprovado_coordenacao: ['Aprovado · entra na medição', 'var(--texto-verde-760)', 'var(--fundo-verde-80)'],
           devolvido: ['Devolvido ao oficineiro', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)']
         };

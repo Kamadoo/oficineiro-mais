@@ -29,7 +29,7 @@
           <span role="cell" class="d-flex eixo-column gap-4 alinha-flex-start min-w-0"><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ linha.situacaoCor }};background:{{ linha.situacaoFundo }}">{{ linha.situacao }}</span><sc-if value="{{ linha.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-cinza-600 quebra-palavra-anywhere">{{ linha.observacao }}</span></sc-if></span>
           <span role="cell" class="dir-larga dir-acoes d-flex gap-6 justifica-flex-end quebra-wrap">
             <button onClick="{{ linha.ver }}" aria-haspopup="dialog" aria-label="{{ linha.rotuloVer }}" class="h-32 borda-cinza-160 fundo-branco raio-6 p-0-10 fs-12 fw-500 cor-ciano-850 botao-secundario">Ver relatório</button>
-            <sc-if value="{{ linha.podeAprovar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ linha.aprovar }}" disabled="{{ salvando }}" aria-label="{{ linha.rotuloAprovar }}" class="h-32 borda-0 cor-branco raio-6 p-0-12 fs-12 fw-600 fundo-ciano-660" style="background:#0B7EA3">{{ linha.aprovarTexto }}</button></sc-if>
+            <sc-if value="{{ linha.podeAprovar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ linha.aprovar }}" disabled="{{ salvando }}" aria-label="{{ linha.rotuloAprovar }}" class="h-32 borda-0 cor-branco raio-6 p-0-12 fs-12 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ linha.aprovarTexto }}</button></sc-if>
           </span>
         </div>
       </sc-for>
@@ -52,9 +52,23 @@ const etapa = (numero, titulo, situacao, estado) => ({
   titulo,
   situacao,
   fundo:
-    estado === 'feita' ? 'var(--fundo-verde-80)' : estado === 'atual' ? 'var(--fundo-ciano-60)' : 'var(--fundo-cinza-20)',
-  borda: estado === 'feita' ? '#23773A' : estado === 'atual' ? '#0B7EA3' : 'var(--borda-cinza-110)',
-  cor: estado === 'feita' ? 'var(--texto-verde-700)' : estado === 'atual' ? 'var(--texto-ciano-740)' : 'var(--texto-cinza-600)'
+    estado === 'feita'
+      ? 'var(--fundo-verde-80)'
+      : estado === 'atual'
+        ? 'var(--fundo-ciano-60)'
+        : 'var(--fundo-cinza-20)',
+  borda:
+    estado === 'feita'
+      ? 'var(--destaque-verde-700)'
+      : estado === 'atual'
+        ? 'var(--destaque-ciano-660)'
+        : 'var(--borda-cinza-110)',
+  cor:
+    estado === 'feita'
+      ? 'var(--texto-verde-700)'
+      : estado === 'atual'
+        ? 'var(--texto-ciano-740)'
+        : 'var(--texto-cinza-600)'
 });
 class Component extends DCLogic {
   renderVals() {
@@ -141,7 +155,8 @@ class Component extends DCLogic {
           realizadas: String(r.realizadas),
           naoRealizadas: String(r.nao_realizadas),
           check: r.confirmadas + ' de ' + r.registradas,
-          checkCor: r.registradas && r.confirmadas === r.registradas ? 'var(--texto-verde-700)' : 'var(--texto-ambar-660)',
+          checkCor:
+            r.registradas && r.confirmadas === r.registradas ? 'var(--texto-verde-700)' : 'var(--texto-ambar-660)',
           situacao: situacao[0],
           situacaoCor: situacao[1],
           situacaoFundo: situacao[2],

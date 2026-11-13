@@ -52,7 +52,7 @@
         <sc-if value="{{ temOcorrencia }}" hint-placeholder-val="{{ false }}"><input value="{{ registro.ocorrenciaObs }}" onChange="{{ registro.escreverOcorrenciaObs }}" maxlength="1000" aria-label="Descreva a ocorrência e o encaminhamento dado" placeholder="Descreva a ocorrência e o encaminhamento dado" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14"></input></sc-if>
       </div>
       <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erro }}</div></sc-if>
-      <div class="d-flex justifica-flex-end"><button class="largura-total-celular h-44 borda-0 cor-branco raio-8 p-0-22 fs-15 fw-600 fundo-ciano-660" style="background:#0B7EA3" onClick="{{ enviar }}" disabled="{{ salvando }}">{{ botao }}</button></div>
+      <div class="d-flex justifica-flex-end"><button class="largura-total-celular h-44 borda-0 cor-branco raio-8 p-0-22 fs-15 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)" onClick="{{ enviar }}" disabled="{{ salvando }}">{{ botao }}</button></div>
     </section>
   </sc-if>
   <sc-if value="{{ abaHistorico }}" hint-placeholder-val="{{ false }}">
@@ -67,7 +67,7 @@
         <sc-for list="{{ visitas }}" as="visita" hint-placeholder-count="6">
           <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-cinza-70 alinha-center" style="grid-template-columns:60px 1.5fr 1.4fr 1.3fr 1fr .9fr .5fr 1fr">
             <span role="cell" class="num-tabular-nums">{{ visita.data }}</span>
-            <span role="cell" class="d-flex eixo-column alinha-flex-start min-w-0"><button onClick="{{ visita.abrir }}" aria-haspopup="dialog" aria-label="{{ visita.aria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-ciano-850 texto-left sublinha-3 quebra-palavra-anywhere botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:#CFDADD">{{ visita.escola }}</button><sc-if value="{{ visita.temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-cinza-600">{{ visita.nota }}</span></sc-if></span>
+            <span role="cell" class="d-flex eixo-column alinha-flex-start min-w-0"><button onClick="{{ visita.abrir }}" aria-haspopup="dialog" aria-label="{{ visita.aria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-ciano-850 texto-left sublinha-3 quebra-palavra-anywhere botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:var(--destaque-cinza-160)">{{ visita.escola }}</button><sc-if value="{{ visita.temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-cinza-600">{{ visita.nota }}</span></sc-if></span>
             <span role="cell" class="quebra-palavra-anywhere">{{ visita.tipo }}</span><span role="cell" class="fs-12 quebra-palavra-anywhere">{{ visita.participantes }}</span><span role="cell" class="quebra-palavra-anywhere">{{ visita.solucao }}</span>
             <span role="cell" class="justifica-si-start fs-12 fw-600 p-2-8 raio-999" style="color:{{ visita.objetivoCor }};background:{{ visita.objetivoFundo }}">{{ visita.objetivo }}</span>
             <span role="cell" class="num-tabular-nums">{{ visita.engajamento }}</span><span role="cell" class="fs-12 quebra-palavra-anywhere" style="color:{{ visita.ocorrenciasCor }}">{{ visita.ocorrencias }}</span>

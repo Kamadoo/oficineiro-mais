@@ -23,7 +23,7 @@
         <span class="fs-13 cor-cinza-600 fw-600">Horário atual (Brasília)</span>
         <span id="pres-relogio" class="fs-52 fw-800 ls-n1 num-tabular-nums lh-1 cor-ciano-850">{{ hora }}</span>
         <div class="w-100pc d-flex alinha-center gap-12 fundo-cinza-55 raio-14 p-12-14 tamanho-border-box largura-fundo">
-          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0B7EA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-none"><path d="M3 21h18"></path><path d="M5 21V8l7-5 7 5v13"></path><path d="M10 21v-6h4v6"></path></svg>
+          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--destaque-ciano-660)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-none"><path d="M3 21h18"></path><path d="M5 21V8l7-5 7 5v13"></path><path d="M10 21v-6h4v6"></path></svg>
           <span class="fs-14 fw-700 cor-ciano-850 min-w-0">{{ escola }}</span>
         </div>
         <sc-if value="{{ selo.tem }}" hint-placeholder-val="{{ true }}"><div role="status" class="d-flex alinha-center gap-6 raio-999 p-6-12 fs-12 fw-700" style="background:{{ selo.fundo }};color:{{ selo.cor }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>{{ selo.texto }}</div></sc-if>
@@ -106,7 +106,7 @@
         <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Motivo *</span><textarea value="{{ ajuste.motivo }}" onChange="{{ ajuste.mudarMotivo }}" maxlength="1000" rows="3" class="borda-cinza-160 raio-10 p-10-12 fs-15 fonte-inherit redim-vertical fundo-branco cor-ciano-850"></textarea></label>
         <sc-if value="{{ ajuste.temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 fw-600 cor-vermelho-600">{{ ajuste.erro }}</span></sc-if>
         <sc-if value="{{ ajuste.enviado }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-13 fw-600 cor-verde-760">Solicitação enviada para a direção da escola.</span></sc-if>
-        <button onClick="{{ enviarAjuste }}" disabled="{{ ajuste.enviando }}" class="min-h-48 borda-0 raio-12 cor-branco fs-15 fw-700 fundo-ciano-660" style="background:#0B7EA3">Enviar para aprovação</button>
+        <button onClick="{{ enviarAjuste }}" disabled="{{ ajuste.enviando }}" class="min-h-48 borda-0 raio-12 cor-branco fs-15 fw-700 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Enviar para aprovação</button>
       </section>
       <section class="borda-cinza-110 raio-20 p-6-18-10 d-flex eixo-column fundo-branco" style="background:var(--fundo-branco)">
         <h2 class="m-10-0-4 fs-15 fw-700 cor-ciano-850">Minhas solicitações</h2>
@@ -225,13 +225,19 @@ class Component extends DCLogic {
           ).addTo(mapa);
           L.circle(centro, {
             radius: escola.raio,
-            color: '#0B7EA3',
+            color: 'var(--destaque-ciano-660)',
             weight: 2,
             dashArray: '6 6',
-            fillColor: '#0B7EA3',
+            fillColor: 'var(--destaque-ciano-660)',
             fillOpacity: 0.1
           }).addTo(mapa);
-          L.circleMarker(centro, { radius: 7, color: '#fff', weight: 3, fillColor: '#0B7EA3', fillOpacity: 1 })
+          L.circleMarker(centro, {
+            radius: 7,
+            color: 'var(--destaque-branco)',
+            weight: 3,
+            fillColor: 'var(--destaque-ciano-660)',
+            fillOpacity: 1
+          })
             .addTo(mapa)
             .bindTooltip(rotuloSeguro(escola.sigla || 'Escola'), {
               permanent: true,
@@ -264,12 +270,18 @@ class Component extends DCLogic {
     this.marcasDoUsuario = [
       L.circle(ponto, {
         radius: posicao.precisao,
-        color: '#6C60E6',
+        color: 'var(--destaque-indigo-360)',
         weight: 1,
-        fillColor: '#6C60E6',
+        fillColor: 'var(--destaque-indigo-360)',
         fillOpacity: 0.12
       }).addTo(mapa),
-      L.circleMarker(ponto, { radius: 8, color: '#fff', weight: 3, fillColor: '#6C60E6', fillOpacity: 1 })
+      L.circleMarker(ponto, {
+        radius: 8,
+        color: 'var(--destaque-branco)',
+        weight: 3,
+        fillColor: 'var(--destaque-indigo-360)',
+        fillOpacity: 1
+      })
         .addTo(mapa)
         .bindTooltip('Você', { permanent: true, direction: 'top', offset: [0, -8] })
     ];
@@ -327,7 +339,7 @@ class Component extends DCLogic {
     const abaDe = chave => ({
       rotulo: ABAS[chave],
       atual: memoria.aba === chave ? 'true' : 'false',
-      borda: memoria.aba === chave ? '#0B7EA3' : 'transparent',
+      borda: memoria.aba === chave ? 'var(--destaque-ciano-660)' : 'transparent',
       cor: memoria.aba === chave ? 'var(--texto-ciano-740)' : 'var(--texto-cinza-600)',
       peso: memoria.aba === chave ? 700 : 600,
       abrir: () => {
@@ -390,7 +402,12 @@ class Component extends DCLogic {
             ? 'Jornada encerrada'
             : 'Registrar ' + rotuloDaMarcacao[proxima].toLowerCase(),
         classe: encerrada || !presencaDeHoje || ehSaida ? '' : 'fundo-ciano-660',
-        fundo: encerrada || !presencaDeHoje ? '#5B6B70' : ehSaida ? '#1A2B33' : '#0B7EA3',
+        fundo:
+          encerrada || !presencaDeHoje
+            ? 'var(--destaque-cinza-600)'
+            : ehSaida
+              ? 'var(--destaque-ciano-850)'
+              : 'var(--destaque-ciano-660)',
         desligado: encerrada || !presencaDeHoje || marcandoPresenca,
         ocupado: marcandoPresenca ? 'true' : 'false'
       },
@@ -471,10 +488,10 @@ class Component extends DCLogic {
             tem: true,
             texto:
               'Espelho assinado em ' + new Date(assinadoEm).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
-            fundo: '#5B6B70',
+            fundo: 'var(--destaque-cinza-600)',
             classe: ''
           }
-        : { tem: false, texto: '', fundo: '#0B7EA3', classe: 'fundo-ciano-660' },
+        : { tem: false, texto: '', fundo: 'var(--destaque-ciano-660)', classe: 'fundo-ciano-660' },
       baixarEspelho: () => contexto.baixarEspelho(),
       solicitarAjuste: () => contexto.abrirAjuste('esquecimento'),
       assinarEspelho: () => contexto.assinarEspelho(),

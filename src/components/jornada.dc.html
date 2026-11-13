@@ -42,7 +42,7 @@
               <span class="fs-12 cor-cinza-750 lh-1p45">{{ linha.diagnostico }}</span>
             </div>
             <sc-if value="{{ linha.temVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-verde-700 fundo-verde-80 p-4-10 raio-999 espaco-nowrap">Na agenda · {{ linha.visita }}</span></sc-if>
-            <sc-if value="{{ linha.semVisita }}" hint-placeholder-val="{{ true }}"><button onClick="{{ linha.agendar }}" class="h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660" style="background:#0B7EA3">{{ textos.agendar }}</button></sc-if>
+            <sc-if value="{{ linha.semVisita }}" hint-placeholder-val="{{ true }}"><button onClick="{{ linha.agendar }}" class="h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ textos.agendar }}</button></sc-if>
           </div>
         </sc-for>
         <sc-if value="{{ semSugestoes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma escola com prioridade alta ou média neste filtro.</span></sc-if>
@@ -108,7 +108,7 @@
       <select onChange="{{ escolherEscola }}" value="{{ escolaNome }}" class="h-40 flex-1-1-320 max-w-520 borda-cinza-160 raio-8 p-0-10 fs-14 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
       <span class="fs-11 fw-700 p-4-10 raio-999 segmentado" style="color:{{ escola.prioridadeCor }};background:{{ escola.prioridadeFundo }}">Prioridade {{ escola.prioridade }}</span>
       <sc-if value="{{ escola.temVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-verde-700 fundo-verde-80 p-4-10 raio-999">Na agenda · {{ escola.visita }}</span></sc-if>
-      <sc-if value="{{ escola.semVisita }}" hint-placeholder-val="{{ true }}"><button onClick="{{ escola.agendar }}" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 ml-auto fundo-ciano-660" style="background:#0B7EA3">{{ textos.agendar }}</button></sc-if>
+      <sc-if value="{{ escola.semVisita }}" hint-placeholder-val="{{ true }}"><button onClick="{{ escola.agendar }}" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 ml-auto fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ textos.agendar }}</button></sc-if>
     </div>
     <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
       <sc-for list="{{ escola.indicadores }}" as="indicador" hint-placeholder-count="6">
@@ -173,20 +173,25 @@ const { dataDe, dmyIso, exC, numero, plural, normTxt } = Base;
 const TEMPERATURAS = {
   Q: [
     'Quente',
-    '#E8590C',
+    'var(--destaque-laranja-520)',
     '0 a 5 dias sem acesso',
     'Ativos e engajados. Manter contato leve, reforçar valor e colher feedback.'
   ],
-  M: ['Morno', '#E0A21B', '6 a 10 dias', 'Começando a se afastar. Lembrete, reforço de benefícios e oferta de ajuda.'],
+  M: [
+    'Morno',
+    'var(--destaque-ambar-510)',
+    '6 a 10 dias',
+    'Começando a se afastar. Lembrete, reforço de benefícios e oferta de ajuda.'
+  ],
   F: [
     'Frio',
-    '#3B82C4',
+    'var(--destaque-azul-500)',
     '11 a 30 dias',
     'Risco de abandono. Abordagem direta: contato com a escola, apoio em atividade, incentivo.'
   ],
   S: [
     'Sem uso',
-    '#6B7280',
+    'var(--destaque-cinza-540)',
     'mais de 30 dias',
     'Praticamente em abandono. Entender o motivo, campanha de reingresso com a direção.'
   ],
@@ -199,7 +204,13 @@ const TEMPERATURAS = {
 };
 const FAIXAS = ['Q', 'M', 'F', 'S', 'N'];
 const RGB = { Q: [232, 89, 12], M: [224, 162, 27], F: [59, 130, 196], S: [107, 114, 128], N: [107, 63, 224] };
-const COR_DO_TEXTO = { Q: '#B5470A', M: '#8A5A00', F: '#1F5F99', S: '#4A5C62', N: 'var(--texto-indigo-510)' };
+const COR_DO_TEXTO = {
+  Q: 'var(--destaque-laranja-630)',
+  M: 'var(--destaque-laranja-730)',
+  F: 'var(--destaque-azul-645)',
+  S: 'var(--destaque-cinza-660)',
+  N: 'var(--texto-indigo-510)'
+};
 const PRIORIDADES = {
   Alta: ['var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)'],
   Média: ['var(--texto-ambar-660)', 'var(--fundo-ambar-80)'],
@@ -248,7 +259,7 @@ const celula = (total, faixa) => {
     valor: total.n ? p + '%' : '—',
     titulo: TEMPERATURAS[faixa][0] + ': ' + total[faixa] + ' de ' + total.n,
     fundo: 'rgba(' + RGB[faixa].join(',') + ',' + alfa.toFixed(2) + ')',
-    cor: alfa > 0.5 ? '#fff' : 'var(--texto-ciano-850)'
+    cor: alfa > 0.5 ? 'var(--destaque-branco)' : 'var(--texto-ciano-850)'
   };
 };
 const corDosEngajados = engajados =>
@@ -515,7 +526,7 @@ class Component extends DCLogic {
             titulo: 'Contas',
             valor: numero(total.n),
             nota: 'A ' + doPerfil('A') + ' · P ' + doPerfil('P') + ' · S ' + doPerfil('S'),
-            cor: '#13252C',
+            cor: 'var(--destaque-ciano-880)',
             valorCor: 'var(--texto-ciano-850)'
           },
           {
@@ -529,14 +540,14 @@ class Component extends DCLogic {
             titulo: 'Frio',
             valor: parcela(total.F, total.n) + '%',
             nota: numero(total.F) + ' contas · 11 a 30 dias',
-            cor: '#3B82C4',
+            cor: 'var(--destaque-azul-500)',
             valorCor: 'var(--texto-ciano-850)'
           },
           {
             titulo: 'Sem uso',
             valor: parcela(total.S, total.n) + '%',
             nota: numero(total.S) + ' contas · +30 dias',
-            cor: '#6B7280',
+            cor: 'var(--destaque-cinza-540)',
             valorCor: 'var(--texto-ciano-850)'
           },
           {
@@ -624,7 +635,7 @@ class Component extends DCLogic {
           titulo: 'Contas criadas',
           valor: numero(geral.n),
           nota: plural(unidades.length, 'unidade', 'unidades'),
-          cor: '#13252C',
+          cor: 'var(--destaque-ciano-880)',
           valorCor: 'var(--texto-ciano-850)'
         },
         {

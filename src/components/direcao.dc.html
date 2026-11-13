@@ -24,11 +24,11 @@ button:disabled {
   position: static;
 }
 .dir-click:hover {
-  background: #F5F9FA !important;
+  background: var(--destaque-cinza-40) !important;
 }
 .dir-click:focus-visible,
 .dir-foco:focus-visible {
-  outline: 2px solid #0B7EA3;
+  outline: 2px solid var(--destaque-ciano-660);
   outline-offset: -2px;
 }
 @media (max-width: 900px) {
@@ -69,7 +69,7 @@ button:disabled {
     display: block;
     font-size: 11px;
     font-weight: 500;
-    color: #5B6B70;
+    color: var(--destaque-cinza-600);
     font-family: "Inter", system-ui, sans-serif;
     margin-bottom: 2px;
   }
@@ -80,7 +80,7 @@ button:disabled {
     position: sticky;
     left: 0;
     z-index: 2;
-    background-color: #fff;
+    background-color: var(--destaque-branco);
   }
   .dir-barra > .dir-esp {
     display: none;
@@ -112,13 +112,13 @@ button:disabled {
   }
 }
 .dir-of:hover {
-  background-color: #EEF3F4 !important;
+  background-color: var(--destaque-cinza-55) !important;
 }
 html[data-tema="escuro"] .dir-of:hover {
-  background-color: #22363E !important;
+  background-color: var(--destaque-ciano-810) !important;
 }
 html[data-tema="escuro"] .dir-h {
-  background-color: #15252B;
+  background-color: var(--destaque-ciano-870);
 }
 @media print {
   body * {
@@ -1271,7 +1271,7 @@ class Component extends DCLogic {
       return {
         label: rotulo,
         tag: selo,
-        tagBg: selo ? '#F2C66D' : 'transparent',
+        tagBg: selo ? 'var(--destaque-ambar-310)' : 'transparent',
         atual: ativa ? 'page' : 'false',
         go: () => {
           if (tela === 'check') Object.assign(this.memoria.check, contexto.filtrosDoCheck(aguardandoCheck));
@@ -1284,8 +1284,8 @@ class Component extends DCLogic {
         },
         classe: ativa ? 'fundo-branco-a9' : 'fundo-transparent',
         bg: ativa ? 'rgba(255,255,255,.09)' : 'transparent',
-        fg: ativa ? '#fff' : '#C9D4D7',
-        dot: ativa ? '#3ECDF3' : 'transparent'
+        fg: ativa ? 'var(--destaque-branco)' : 'var(--destaque-cinza-180)',
+        dot: ativa ? 'var(--destaque-ciano-400)' : 'transparent'
       };
     });
     const trilhas = {
@@ -1306,7 +1306,10 @@ class Component extends DCLogic {
       : null;
     const relatorio = this.relatorioDetalhado(contexto, relatorioSelecionado);
     const abaAtividades = s.relatorioAba === 'atividades';
-    const estiloAba = ativa => (ativa ? ['', '#FEFEFE', '#13252C'] : ['fundo-transparent', 'transparent', '#FEFEFE']);
+    const estiloAba = ativa =>
+      ativa
+        ? ['', 'var(--destaque-branco)', 'var(--destaque-ciano-880)']
+        : ['fundo-transparent', 'transparent', 'var(--destaque-branco)'];
     const [abaPresencaClasse, abaPresencaFundo, abaPresencaCor] = estiloAba(!abaAtividades);
     const [abaAtividadesClasse, abaAtividadesFundo, abaAtividadesCor] = estiloAba(abaAtividades);
     return {

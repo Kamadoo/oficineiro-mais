@@ -12,7 +12,7 @@
     <div class="fundo-ciano-40 borda-ciano-150 raio-12 p-14-16 d-flex quebra-wrap alinha-center gap-10-14">
       <span class="num-tabular-nums fs-22 fw-600 cor-ciano-740">{{ onboardingTotal }}</span>
       <div class="flex-1-1-260 d-flex eixo-column gap-2"><span class="fs-14 fw-600 cor-ciano-850">{{ onboardingTitulo }}</span><span class="fs-12 cor-cinza-750">{{ onboardingDetalhe }}</span></div>
-      <button onClick="{{ verOnboarding }}" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 fundo-ciano-660" style="background:#0B7EA3">Ver pendências</button>
+      <button onClick="{{ verOnboarding }}" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Ver pendências</button>
     </div>
   </sc-if>
   <div class="empilha-celular d-grid colunas-minmax-0-1p3fr-minmax-0-1fr gap-20">
@@ -74,7 +74,7 @@
           <div class="d-grid colunas-minmax-0-1fr-auto gap-4-10 p-12 raio-8 fundo-cinza-20 alinha-center">
             <span class="fw-600 fs-14 min-w-0 quebra-palavra-anywhere">{{ presenca.escola }}</span><span class="num-tabular-nums fw-600 fs-13">{{ presenca.tempo }}</span>
             <span class="fs-12 cor-cinza-600 num-tabular-nums">{{ presenca.faixa }} · {{ presenca.origem }}</span><span class="fs-12 texto-right" style="color:{{ presenca.cor }}">{{ presenca.situacao }}</span>
-            <sc-if value="{{ presenca.faltaRegistrar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ presenca.registrar }}" class="justifica-si-start h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 fundo-ciano-660" style="grid-column:1/-1;background:#0B7EA3">Registrar esta visita</button></sc-if>
+            <sc-if value="{{ presenca.faltaRegistrar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ presenca.registrar }}" class="justifica-si-start h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 fundo-ciano-660" style="grid-column:1/-1;background:var(--destaque-ciano-660)">Registrar esta visita</button></sc-if>
           </div>
         </sc-for>
       </section>
@@ -263,13 +263,19 @@ class Component extends DCLogic {
         });
         L.circle(centro, {
           radius: escola.raio,
-          color: '#6C60E6',
+          color: 'var(--destaque-indigo-360)',
           weight: 2,
           dashArray: '6 6',
-          fillColor: '#0B7EA3',
+          fillColor: 'var(--destaque-ciano-660)',
           fillOpacity: 0.1
         }).addTo(mapa);
-        L.circleMarker(centro, { radius: 7, color: '#fff', weight: 3, fillColor: '#0B7EA3', fillOpacity: 1 })
+        L.circleMarker(centro, {
+          radius: 7,
+          color: 'var(--destaque-branco)',
+          weight: 3,
+          fillColor: 'var(--destaque-ciano-660)',
+          fillOpacity: 1
+        })
           .addTo(mapa)
           .bindTooltip(rotuloSeguro(escola.sigla || ''), { permanent: true, direction: 'bottom', offset: [0, 8] });
         this.mapa = mapa;
@@ -297,12 +303,18 @@ class Component extends DCLogic {
     this.marcasDoUsuario = [
       L.circle(posicao, {
         radius: geo.precisao,
-        color: '#6C60E6',
+        color: 'var(--destaque-indigo-360)',
         weight: 1,
-        fillColor: '#6C60E6',
+        fillColor: 'var(--destaque-indigo-360)',
         fillOpacity: 0.12
       }).addTo(mapa),
-      L.circleMarker(posicao, { radius: 8, color: '#fff', weight: 3, fillColor: '#6C60E6', fillOpacity: 1 })
+      L.circleMarker(posicao, {
+        radius: 8,
+        color: 'var(--destaque-branco)',
+        weight: 3,
+        fillColor: 'var(--destaque-indigo-360)',
+        fillOpacity: 1
+      })
         .addTo(mapa)
         .bindTooltip('Você', { permanent: true, direction: 'top', offset: [0, -8] })
     ];
@@ -489,12 +501,12 @@ class Component extends DCLogic {
       botao: presencaAberta
         ? {
             rotulo: contexto.presencaSalvando ? 'Encerrando…' : 'Encerrar atividades na escola',
-            fundo: bloqueio ? '#A9B8BD' : '#13252C'
+            fundo: bloqueio ? 'var(--destaque-cinza-300)' : 'var(--destaque-ciano-880)'
           }
         : {
             rotulo: contexto.presencaSalvando ? 'Iniciando…' : 'Iniciar atividades na escola',
             classe: escolaId && !bloqueio ? 'fundo-ciano-660' : '',
-            fundo: escolaId && !bloqueio ? '#0B7EA3' : '#A9B8BD'
+            fundo: escolaId && !bloqueio ? 'var(--destaque-ciano-660)' : 'var(--destaque-cinza-300)'
           },
       alternarPresenca: () =>
         contexto.alternarPresenca(

@@ -14,7 +14,7 @@
     <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">E-mail do suporte</span><input type="email" value="{{ configuracoes.email }}" onChange="{{ configuracoes.escreverEmail }}" maxlength="120" placeholder="Endereço que receberá os pedidos de ajuda" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
     <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Telefone do suporte</span><input value="{{ configuracoes.telefone }}" onChange="{{ configuracoes.escreverTelefone }}" inputmode="tel" maxlength="20" placeholder="(31) 3333-4444" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
     <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Horário de atendimento</span><input value="{{ configuracoes.horario }}" onChange="{{ configuracoes.escreverHorario }}" maxlength="120" placeholder="Segunda a sexta, das 8h às 17h" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
-    <div class="d-flex justifica-flex-end"><button onClick="{{ configuracoes.salvar }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:#0B7EA3">{{ configuracoes.botao }}</button></div>
+    <div class="d-flex justifica-flex-end"><button onClick="{{ configuracoes.salvar }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ configuracoes.botao }}</button></div>
   </section>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
