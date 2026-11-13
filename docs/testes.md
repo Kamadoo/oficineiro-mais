@@ -60,7 +60,7 @@ Cada biblioteca é carregada num contexto isolado com um `window` mínimo, como 
 
 ## Interface
 
-A varredura abre o site gerado em `dist/` com o Chromium do Playwright, entra em cada perfil com as contas fictícias de `tests/fixtures/dados_teste.sql`, percorre todas as telas do menu e falha se uma tela ficar vazia, se houver erro de JavaScript, se alguma chamada ao banco for recusada ou se o axe-core apontar problema de acessibilidade grave ou crítico. Rótulos acessíveis que não repetem o texto visível (`label-content-name-mismatch`, comuns nos cartões da agenda e da grade, cujo rótulo é um resumo do conteúdo) aparecem como aviso, sem reprovar a varredura. As chamadas ao Supabase são atendidas por `tests/ui/postgrest.js`, que traduz as requisições do PostgREST em SQL executado no banco local com as permissões do usuário, sem precisar do serviço de autenticação.
+A varredura abre o site gerado em `dist/` com o Chromium do Playwright, entra em cada perfil com as contas fictícias de `tests/fixtures/dados_teste.sql`, percorre todas as telas do menu e falha se uma tela ficar vazia, se houver erro de JavaScript, se alguma chamada ao banco for recusada ou se o axe-core apontar problema de acessibilidade grave ou crítico. As chamadas ao Supabase são atendidas por `tests/ui/postgrest.js`, que traduz as requisições do PostgREST em SQL executado no banco local com as permissões do usuário, sem precisar do serviço de autenticação.
 
 ```bash
 npx playwright install chromium

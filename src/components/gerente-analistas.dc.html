@@ -22,7 +22,7 @@
         <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-cinza-75 alinha-center" style="grid-template-columns:1.3fr .6fr .6fr .9fr 1fr .8fr 1.2fr 1.5fr;background:{{ analista.fundo }}">
           <span role="cell"><button onClick="{{ analista.escolher }}" aria-pressed="{{ analista.marcado }}"
             class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-ciano-850 texto-left sublinha-3 botao-texto cursor-pointer deco-underline"
-            style="text-decoration-color:var(--destaque-cinza-160)">{{ analista.nome }}</button></span><span role="cell"
+            style="text-decoration-color:var(--borda-cinza-160)">{{ analista.nome }}</button></span><span role="cell"
             class="num-tabular-nums">{{ analista.escolas }}</span><span role="cell"
             class="num-tabular-nums">{{ analista.visitas }}</span><span role="cell"
             class="num-tabular-nums fs-12">{{ analista.campo }}</span><span role="cell"
@@ -89,6 +89,7 @@
       </sc-for>
     </div>
     <sc-if value="{{ semAgendaDosAnalistas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhum analista ativo com carteira.</p></sc-if>
+    <sc-if value="{{ semanaSemVisitas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhuma visita agendada ou registrada nesta semana.</p></sc-if>
   </section>
   <div class="d-flex quebra-wrap gap-8-16 fs-12 cor-cinza-750"><sc-for list="{{ origens }}" as="origem"
     hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo"
@@ -267,6 +268,30 @@ class Component extends DCLogic {
         })
       }));
     contexto.registrarExportador(() => {
+      if (is.analistasAgendas)
+        return contexto.exportar(
+          'agenda_analistas_' + segunda,
+          'Agenda dos analistas',
+          [
+            ['Agenda dos analistas · semana de ' + dmIso(segunda) + ' a ' + dmIso(diasDaSemana[4])],
+            [],
+            ['Analista', 'Dia', 'Horário', 'Escola', 'Situação']
+          ].concat(
+            ...agendaDosAnalistas.map(analista =>
+              [].concat(
+                ...analista.dias.map((dia, i) =>
+                  dia.visitas.map(visita => [
+                    analista.nome,
+                    cabecalhoDaSemana[i].rotulo,
+                    visita.hora,
+                    visita.escola,
+                    visita.rotulo
+                  ])
+                )
+              )
+            )
+          )
+        );
       if (is.analistasCarteiras)
         return contexto.exportar(
           nomeDoArquivo('analistas'),
@@ -319,6 +344,9 @@ class Component extends DCLogic {
       diasDaSemana: cabecalhoDaSemana,
       agendaDosAnalistas: agendaDosAnalistas,
       semAgendaDosAnalistas: agendaDosAnalistas.length === 0,
+      semanaSemVisitas:
+        agendaDosAnalistas.length > 0 &&
+        agendaDosAnalistas.every(analista => analista.dias.every(dia => !dia.visitas.length)),
       temErroDaSemana: !!(dadosDaSemana && dadosDaSemana.erro),
       erroDaSemana: (dadosDaSemana && dadosDaSemana.erro) || ''
     };

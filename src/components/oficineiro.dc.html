@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="./styles/app.css">
 <style>
 .relatorio-linha:hover {
-  background: var(--destaque-cinza-40) !important;
+  background: var(--fundo-cinza-40) !important;
 }
 .relatorio-linha:focus-visible {
   outline: 2px solid var(--destaque-ciano-660);
@@ -51,8 +51,8 @@
 .grade-vazio:hover,
 .grade-vazio:focus-visible {
   opacity: 1;
-  border-color: var(--destaque-cinza-160) !important;
-  background: var(--destaque-cinza-40) !important;
+  border-color: var(--borda-cinza-160) !important;
+  background: var(--fundo-cinza-40) !important;
 }
 .grade-atividade:hover {
   filter: brightness(0.97);
@@ -112,7 +112,7 @@
     margin: 10mm;
   }
   body {
-    background: var(--destaque-branco) !important;
+    background: var(--fundo-branco) !important;
   }
   body:has(#rel-horas) #app-main,
   #rel-toolbar,
@@ -2775,7 +2775,7 @@ class Component extends DCLogic {
         estilo.textContent =
           '@media print{@page{size:A4;margin:12mm 12mm 16mm;@bottom-left{content:' +
           entreAspas((s.nomeDoUsuario || '—') + ' · ' + doDocumento.codigo) +
-          ';font:8pt Inter,system-ui,sans-serif;color:var(--destaque-cinza-670)}@bottom-right{content:"Página " counter(page) " de " counter(pages);font:8pt Inter,system-ui,sans-serif;color:var(--destaque-cinza-670)}}}';
+          ';font:8pt Inter,system-ui,sans-serif;color:#555555}@bottom-right{content:"Página " counter(page) " de " counter(pages);font:8pt Inter,system-ui,sans-serif;color:#555555}}}';
         document.head.appendChild(estilo);
         try {
           window.print();

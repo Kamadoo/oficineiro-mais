@@ -26,7 +26,6 @@ const TIPOS = {
   '.webmanifest': 'application/manifest+json'
 };
 const IMPACTOS_GRAVES = ['serious', 'critical'];
-const REGRAS_DE_AVISO = ['label-content-name-mismatch'];
 
 function servir() {
   const servidor = http.createServer((pedido, resposta) => {
@@ -50,11 +49,7 @@ async function esperarCarregar(pagina) {
 async function acessibilidade(pagina) {
   const resultado = await new AxeBuilder({ page: pagina }).include('#area-logada').analyze();
   const descrever = v => v.id + ' (' + v.nodes.length + '): ' + v.nodes[0].html.replace(/\s+/g, ' ').slice(0, 220);
-  const relevantes = resultado.violations.filter(v => IMPACTOS_GRAVES.includes(v.impact));
-  return {
-    graves: relevantes.filter(v => !REGRAS_DE_AVISO.includes(v.id)).map(descrever),
-    avisos: relevantes.filter(v => REGRAS_DE_AVISO.includes(v.id)).map(descrever)
-  };
+  return resultado.violations.filter(v => IMPACTOS_GRAVES.includes(v.impact)).map(descrever);
 }
 
 async function varrerPerfil(navegador, perfil, usuario, tema) {
@@ -67,7 +62,6 @@ async function varrerPerfil(navegador, perfil, usuario, tema) {
   const pagina = await contexto.newPage();
   await pagina.clock.setFixedTime(new Date('2026-11-09T10:00:00-03:00'));
   const falhas = [];
-  const avisos = [];
   pagina.on('pageerror', erro => falhas.push('erro de página: ' + erro.message));
   await contexto.route(
     u => !u.hostname.endsWith('supabase.co') && u.hostname !== '127.0.0.1',
@@ -113,16 +107,14 @@ async function varrerPerfil(navegador, perfil, usuario, tema) {
       await esperarCarregar(pagina);
       const texto = await pagina.locator('main').innerText();
       if (!texto.trim()) falhas.push(rotulo + ': tela vazia');
-      const { graves, avisos: alertas } = await acessibilidade(pagina);
-      graves.forEach(violacao => falhas.push(rotulo + ': acessibilidade ' + violacao));
-      alertas.forEach(violacao => avisos.push(rotulo + ': ' + violacao));
+      for (const violacao of await acessibilidade(pagina)) falhas.push(rotulo + ': acessibilidade ' + violacao);
       telas.push(rotulo);
     }
   } catch (erro) {
     falhas.push('a varredura parou: ' + erro.message.split('\n')[0]);
   }
   await contexto.close();
-  return { telas, falhas, avisos };
+  return { telas, falhas };
 }
 
 async function principal() {
@@ -139,7 +131,6 @@ async function principal() {
       falhas += resultado.falhas.length;
       console.log(`${tema} · ${perfil}: ${resultado.telas.length} telas, ${resultado.falhas.length} falha(s)`);
       resultado.falhas.forEach(falha => console.log('  - ' + falha));
-      resultado.avisos.forEach(aviso => console.log('  aviso: ' + aviso));
     }
   }
   await navegador.close();

@@ -96,7 +96,7 @@
           <span role="cell" class="min-w-0"><sc-if value="{{ linha.temRegistro }}"
             hint-placeholder-val="{{ true }}"><button onClick="{{ linha.ver }}" aria-haspopup="dialog" aria-label="{{ linha.aria }}"
             class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-ciano-850 texto-left sublinha-3 quebra-palavra-anywhere botao-texto cursor-pointer deco-underline"
-            style="text-decoration-color:var(--destaque-cinza-160)">{{ linha.oficineiro }}</button></sc-if><sc-if
+            style="text-decoration-color:var(--borda-cinza-160)">{{ linha.oficineiro }}</button></sc-if><sc-if
             value="{{ linha.semRegistro }}" hint-placeholder-val="{{ false }}"><b
             class="quebra-palavra-anywhere">{{ linha.oficineiro }}</b></sc-if></span>
           <span role="cell" class="justifica-si-start fs-12 fw-600 p-2-8 raio-4" style="color:{{ linha.tipoCor }};background:{{ linha.tipoFundo }}">{{ linha.tipo }}</span>
@@ -128,7 +128,6 @@ class Component extends DCLogic {
       nomeDaEscola,
       nomeDaPessoa,
       contaPorId,
-      siglaDaEscola,
       escolaAtualDe,
       atividades,
       resumir,
@@ -177,7 +176,7 @@ class Component extends DCLogic {
         'Oficineiro',
         i => i.of,
         k => nomeDaPessoa(k),
-        k => (contaPorId[k] ? siglaDaEscola(escolaAtualDe(contaPorId[k])) : '')
+        k => (contaPorId[k] ? nomeDaEscola(escolaAtualDe(contaPorId[k])) : '')
       ],
       solucao: ['Por solução', 'Solução', i => i.sol || '', k => k || 'Sem solução informada', () => ''],
       tipo: ['Por tipo de atividade', 'Tipo de atividade', i => i.tipo || 'R', k => (TIPOS[k] || TIPOS.R)[0], () => '']

@@ -53,7 +53,7 @@
     position: static !important;
   }
   body {
-    background: var(--destaque-branco) !important;
+    background: var(--fundo-branco) !important;
   }
   .pagina {
     padding: 0 !important;
@@ -2039,7 +2039,9 @@ class Component extends DCLogic {
           is.adocaoDetalhado ||
           is.oficineirosPresenca ||
           is.oficineirosGrade ||
-          is.analistasCarteiras),
+          is.oficineirosAgendas ||
+          is.analistasCarteiras ||
+          is.analistasAgendas),
       imprimir: () => window.print(),
       exportarExcel: () => this.exportadorDaTela && this.exportadorDaTela(),
       registroAberto: !!registro,

@@ -48,7 +48,7 @@
           <span role="cell" class="ct-larga d-flex eixo-column alinha-flex-start gap-2 min-w-0"><button
             onClick="{{ conta.abrir }}" aria-haspopup="dialog" aria-label="{{ conta.aria }}"
             class="borda-0 fundo-transparent p-0 min-h-0 fs-14 fw-600 cor-ciano-850 texto-left fonte-inherit sublinha-3 botao-texto cursor-pointer deco-underline"
-            style="text-decoration-color:var(--destaque-cinza-160)">{{ conta.nome }}</button><sc-if value="{{ conta.temNota }}"
+            style="text-decoration-color:var(--borda-cinza-160)">{{ conta.nome }}</button><sc-if value="{{ conta.temNota }}"
             hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">{{ conta.nota }}</span></sc-if></span>
           <span role="cell" class="min-w-0 quebra-palavra-anywhere"><sc-if value="{{ conta.semLogin }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">definido no 1º acesso</span></sc-if><span class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ conta.login }}</span></span>
           <span role="cell">{{ conta.perfil }}</span>

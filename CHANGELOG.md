@@ -1,5 +1,20 @@
 # Histórico de mudanças
 
+## 13/11/2026 (tarde)
+
+### Agendas do Gerente
+
+- Cartões das agendas com o nome da escola, e não só a sigla; aulas do oficineiro com tipo e solução da grade.
+- Agenda dos oficineiros na tela Oficineiros, em aba própria e com semana independente; Analistas › Agendas mostra só os analistas.
+- Exportação para Excel das duas agendas e aviso quando a semana não tem visitas ou atividades.
+- Legenda da agenda dos oficineiros com quadrados visíveis.
+
+### Interface
+
+- Nome da escola no lugar da sigla sozinha em Atividades, Produtividade e Adoção.
+- Cartões com conteúdo (agenda, grade, registro, Visão geral, Produtividade, Início da Direção) têm como nome acessível o próprio texto; os botões de ação têm rótulo que começa pelo texto visível. A varredura de acessibilidade passa a reprovar rótulos que não contêm o texto visível.
+- Bordas, fundos e textos que repetiam cores da paleta passam a acompanhar o tema escuro; botões e cores de marca seguem fixos.
+
 ## 13/11/2026
 
 ### Organização do código

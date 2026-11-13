@@ -26,7 +26,7 @@
       <sc-if value="{{ foraDeHoje }}" hint-placeholder-val="{{ false }}"><button onClick="{{ voltarParaHoje }}" class="h-34 borda-cinza-160 fundo-branco raio-8 fs-13 fw-600 cor-cinza-750 botao-secundario">Voltar para hoje</button></sc-if>
       <sc-if value="{{ ehFeriado }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-ambar-745 fundo-ambar-55 raio-8 p-8-10">{{ feriadoTexto }}</span></sc-if>
       <sc-for list="{{ atividades }}" as="atividade" hint-placeholder-count="3">
-        <button onClick="{{ atividade.escolher }}" aria-pressed="{{ atividade.marcada }}" aria-label="{{ atividade.aria }}" class="texto-left raio-10 p-12-14 d-grid colunas-48-minmax-0-1fr gap-2-10 alinha-start {{ atividade.classe }}" style="border:{{ atividade.borda }};background:{{ atividade.fundo }}">
+        <button onClick="{{ atividade.escolher }}" aria-pressed="{{ atividade.marcada }}" class="texto-left raio-10 p-12-14 d-grid colunas-48-minmax-0-1fr gap-2-10 alinha-start {{ atividade.classe }}" style="border:{{ atividade.borda }};background:{{ atividade.fundo }}">
           <span class="fs-14 fw-600 num-tabular-nums cor-cinza-750 pt-1" style="grid-row:1 / span 3">{{ atividade.hora }}</span>
           <span class="fs-14 fw-700 cor-ciano-850">{{ atividade.turma }}</span>
           <span class="fs-12 lh-1p3 d--webkit-box linhas-2 orienta-vertical rolagem-hidden"><b class="fw-600" style="color:{{ atividade.corDoTexto }}">{{ atividade.tipo }}</b><sc-if value="{{ atividade.temDetalhe }}" hint-placeholder-val="{{ true }}"><span class="cor-cinza-680"> · {{ atividade.detalhe }}</span></sc-if></span>

@@ -97,8 +97,9 @@
       </sc-for>
     </div>
     <sc-if value="{{ semAgendaDosOficineiros }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhum oficineiro ativo com esses filtros.</p></sc-if>
+    <sc-if value="{{ semanaSemAtividades }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhuma atividade na grade desta semana para os oficineiros filtrados.</p></sc-if>
   </section>
-  <div class="d-flex quebra-wrap gap-8-16 fs-12 cor-cinza-750"><sc-for list="{{ situacoes }}" as="situacao" hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ situacao.cor }}"></span>{{ situacao.rotulo }}</span></sc-for></div>
+  <div class="d-flex quebra-wrap gap-8-16 fs-12 cor-cinza-750"><sc-for list="{{ situacoes }}" as="situacao" hint-placeholder-count="4"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ situacao.cor }};border:1px solid {{ situacao.borda }}"></span>{{ situacao.rotulo }}</span></sc-for></div>
 </sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -306,6 +307,32 @@ class Component extends DCLogic {
       });
     const gradesValidadas = gradesDosOficineiros.filter(r => r.situacao === SITUACOES_DA_GRADE.validada[0]).length;
     contexto.registrarExportador(() => {
+      if (is.oficineirosAgendas)
+        return contexto.exportar(
+          'agenda_oficineiros_' + segunda,
+          'Agenda dos oficineiros',
+          [
+            ['Agenda dos oficineiros · semana de ' + dmIso(segunda) + ' a ' + dmIso(diasDaSemana[4])],
+            [],
+            ['Oficineiro', 'Escola', 'Dia', 'Horário', 'Turma', 'Tipo e solução', 'Situação']
+          ].concat(
+            ...agendaDosOficineiros.map(oficineiro =>
+              [].concat(
+                ...oficineiro.dias.map((dia, i) =>
+                  dia.atividades.map(atividade => [
+                    oficineiro.nome,
+                    oficineiro.escola,
+                    cabecalhoDaSemana[i].rotulo,
+                    atividade.horario,
+                    atividade.turma,
+                    atividade.solucao,
+                    atividade.situacao
+                  ])
+                )
+              )
+            )
+          )
+        );
       if (is.oficineirosPresenca)
         return contexto.exportar(
           nomeDoArquivo('oficineiros'),
@@ -362,9 +389,13 @@ class Component extends DCLogic {
       diasDaSemana: cabecalhoDaSemana,
       agendaDosOficineiros,
       semAgendaDosOficineiros: agendaDosOficineiros.length === 0,
+      semanaSemAtividades:
+        agendaDosOficineiros.length > 0 &&
+        agendaDosOficineiros.every(oficineiro => oficineiro.dias.every(dia => !dia.atividades.length)),
       situacoes: ['real', 'nao', 'sreg', 'prev'].map(k => ({
         rotulo: SITUACOES_DA_ATIVIDADE[k][0],
-        cor: SITUACOES_DA_ATIVIDADE[k][2]
+        cor: SITUACOES_DA_ATIVIDADE[k][2],
+        borda: SITUACOES_DA_ATIVIDADE[k][1]
       })),
       temErroDaSemana: !!(dadosDaSemana && dadosDaSemana.erro),
       erroDaSemana: (dadosDaSemana && dadosDaSemana.erro) || '',

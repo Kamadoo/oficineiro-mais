@@ -24,7 +24,7 @@ button:disabled {
   position: static;
 }
 .dir-click:hover {
-  background: var(--destaque-cinza-40) !important;
+  background: var(--fundo-cinza-40) !important;
 }
 .dir-click:focus-visible,
 .dir-foco:focus-visible {
@@ -69,7 +69,7 @@ button:disabled {
     display: block;
     font-size: 11px;
     font-weight: 500;
-    color: var(--destaque-cinza-600);
+    color: var(--texto-cinza-600);
     font-family: "Inter", system-ui, sans-serif;
     margin-bottom: 2px;
   }
@@ -80,7 +80,7 @@ button:disabled {
     position: sticky;
     left: 0;
     z-index: 2;
-    background-color: var(--destaque-branco);
+    background-color: var(--fundo-branco);
   }
   .dir-barra > .dir-esp {
     display: none;
@@ -112,7 +112,7 @@ button:disabled {
   }
 }
 .dir-of:hover {
-  background-color: var(--destaque-cinza-55) !important;
+  background-color: var(--fundo-cinza-55) !important;
 }
 html[data-tema="escuro"] .dir-of:hover {
   background-color: var(--destaque-ciano-810) !important;
@@ -779,14 +779,14 @@ class Component extends DCLogic {
               ver: () => this.abrirAtividade(registro.id),
               confirmar: () => this.confirmarAtividade(registro.id),
               contestar: contestar(registro, situacaoDoRegistro(registro)[0]),
-              rotuloVer: 'Ver o registro de ' + nomeOficineiro(registro.oficineiro_id) + ', ' + hmDe(registro.inicio),
+              rotuloVer: 'Ver registro de ' + nomeOficineiro(registro.oficineiro_id) + ', ' + hmDe(registro.inicio),
               ...rotulosDaAtividade(registro)
             }
           : {
               podeConferir: false,
               ver: registro ? () => this.abrirAtividade(registro.id) : null,
               rotuloVer: registro
-                ? 'Ver o registro de ' + nomeOficineiro(registro.oficineiro_id) + ', ' + hmDe(registro.inicio)
+                ? 'Ver registro de ' + nomeOficineiro(registro.oficineiro_id) + ', ' + hmDe(registro.inicio)
                 : ''
             },
       linhaDaAtividade: a => {

@@ -74,7 +74,7 @@
         </sc-if>
         <sc-if value="{{ celula.ehAtividade }}" hint-placeholder-val="{{ false }}">
           <div class="p-2-4 d-flex pos-relative z-1 min-h-0" style="grid-row:{{ celula.linha }};grid-column:{{ celula.coluna }}">
-            <button onClick="{{ celula.abrir }}" aria-label="{{ celula.aria }}" title="{{ celula.aria }}" class="grade-aula flex-1 min-w-0 min-h-0 rolagem-hidden texto-left raio-8 p-6-10 cor-ciano-850 d-flex eixo-column justifica-flex-start gap-2 largura-fundo" style="border:0;border-left:4px solid {{ celula.cor }};background:{{ celula.fundo }}">
+            <button onClick="{{ celula.abrir }}" title="{{ celula.aria }}" class="grade-aula flex-1 min-w-0 min-h-0 rolagem-hidden texto-left raio-8 p-6-10 cor-ciano-850 d-flex eixo-column justifica-flex-start gap-2 largura-fundo" style="border:0;border-left:4px solid {{ celula.cor }};background:{{ celula.fundo }}">
               <span class="fs-11 fw-600 cor-cinza-680 num-tabular-nums espaco-nowrap rolagem-hidden reticencias-ellipsis">{{ celula.horario }}</span>
               <span class="fs-13 fw-700 lh-1p25 espaco-nowrap rolagem-hidden reticencias-ellipsis">{{ celula.turma }}</span>
               <span class="fs-12 lh-1p3 d--webkit-box linhas-2 orienta-vertical rolagem-hidden"><b class="fw-600" style="color:{{ celula.corDoTexto }}">{{ celula.tipo }}</b><sc-if value="{{ celula.temDetalhe }}" hint-placeholder-val="{{ true }}"><span class="cor-cinza-680"> · {{ celula.detalhe }}</span></sc-if></span>

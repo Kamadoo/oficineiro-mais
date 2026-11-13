@@ -28,7 +28,7 @@
       <div class="d-flex alinha-baseline gap-10 quebra-wrap"><h3 id="dir-h-of" class="m-0 fs-15 flex-1">Oficineiros da escola</h3><span class="fs-12 cor-cinza-600">Abra um nome para ver a presença do mês</span></div>
       <sc-if value="{{ semOficineiros }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-13 cor-cinza-600">Nenhum oficineiro ativo nesta escola.</p></sc-if>
       <sc-for list="{{ oficineiros }}" as="oficineiro" hint-placeholder-count="2">
-        <button class="dir-of d-grid colunas-40-minmax-0-1fr-auto gap-4-12 alinha-center p-12 borda-0 raio-10 fundo-cinza-20 w-100pc texto-left cor-ciano-850 largura-fundo cursor-pointer" style="font:inherit" onClick="{{ oficineiro.verPresenca }}" aria-haspopup="dialog" aria-label="{{ oficineiro.rotuloPresenca }}">
+        <button class="dir-of d-grid colunas-40-minmax-0-1fr-auto gap-4-12 alinha-center p-12 borda-0 raio-10 fundo-cinza-20 w-100pc texto-left cor-ciano-850 largura-fundo cursor-pointer" style="font:inherit" onClick="{{ oficineiro.verPresenca }}" aria-haspopup="dialog">
           <span aria-hidden="true" class="lin-span-2 w-40 h-40 raio-20 fundo-ciano-60 cor-ciano-740 d-grid centra-center fw-600 fs-13 largura-fundo">{{ oficineiro.iniciais }}</span>
           <b class="fs-14 min-w-0 quebra-palavra-anywhere">{{ oficineiro.nome }}</b>
           <span class="fs-12 fw-600 p-3-10 raio-999 espaco-nowrap" style="color:{{ oficineiro.presencaCor }};background:{{ oficineiro.presencaFundo }}">{{ oficineiro.presenca }}</span>
@@ -222,7 +222,6 @@ class Component extends DCLogic {
           nome: o.nome,
           iniciais: iniciais(o.nome),
           verPresenca: () => contexto.abrirPresenca(o.id),
-          rotuloPresenca: 'Ver a presença de ' + o.nome + ' no ciclo',
           presenca: situacao[0],
           presencaCor: situacao[1],
           presencaFundo: situacao[2],

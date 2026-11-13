@@ -64,7 +64,7 @@
         <sc-if value="{{ celula.ehAtividade }}" hint-placeholder-val="{{ false }}">
           <div class="p-2-4 d-flex eixo-column gap-4 pos-relative z-1 min-h-0" style="grid-row:{{ celula.linha }};grid-column:{{ celula.coluna }}">
             <sc-for list="{{ celula.atividades }}" as="atividade" hint-placeholder-count="1">
-              <button onClick="{{ atividade.abrir }}" aria-haspopup="dialog" aria-label="{{ atividade.rotuloVer }}" class="flex-1 min-w-0 min-h-0 rolagem-hidden raio-8 p-6-10 d-flex eixo-column alinha-flex-start justifica-flex-start gap-2 texto-left cor-ciano-850 largura-fundo" style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }};cursor:pointer;font:inherit">
+              <button onClick="{{ atividade.abrir }}" aria-haspopup="dialog" class="flex-1 min-w-0 min-h-0 rolagem-hidden raio-8 p-6-10 d-flex eixo-column alinha-flex-start justifica-flex-start gap-2 texto-left cor-ciano-850 largura-fundo" style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }};cursor:pointer;font:inherit">
                 <span class="fs-11 fw-600 cor-cinza-680 num-tabular-nums espaco-nowrap rolagem-hidden reticencias-ellipsis max-w-100pc">{{ atividade.horario }}</span>
                 <span class="fs-13 fw-700 lh-1p25 espaco-nowrap rolagem-hidden reticencias-ellipsis max-w-100pc">{{ atividade.turma }}</span>
                 <span class="fs-12 lh-1p3 d--webkit-box linhas-2 orienta-vertical rolagem-hidden"><b class="fw-600" style="color:{{ atividade.cor }}">{{ atividade.tipo }}</b><sc-if value="{{ atividade.temSolucao }}" hint-placeholder-val="{{ true }}"><span class="cor-cinza-680"> · {{ atividade.solucao }}</span></sc-if></span>
@@ -82,7 +82,7 @@
       <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-14 d-flex eixo-column gap-8 fundo-branco" aria-label="{{ dia.nome }}">
         <h3 class="m-0 fs-15">{{ dia.nome }}</h3>
         <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="2"><button
-          onClick="{{ atividade.abrir }}" aria-haspopup="dialog" aria-label="{{ atividade.rotuloVer }}"
+          onClick="{{ atividade.abrir }}" aria-haspopup="dialog"
           class="d-grid colunas-52-minmax-0-1fr gap-2-12 raio-8 p-10-12 texto-left cor-ciano-850 w-100pc largura-fundo"
           style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }};cursor:pointer;font:inherit"><span
           class="fw-600 num-tabular-nums" style="grid-row:1 / span 4">{{ atividade.hora }}</span><span
@@ -208,14 +208,6 @@ class Component extends DCLogic {
         cor: feriado ? 'var(--texto-cinza-600)' : tipo[1],
         fundo: feriado ? 'var(--fundo-cinza-70)' : tipo[2],
         hora: hmDe(aula.inicio),
-        rotuloVer:
-          'Ver detalhes: ' +
-          turmaDaGrade(aula) +
-          (componente ? ', ' + componente : '') +
-          ', ' +
-          DIAS[dia.getDay()] +
-          ' · ' +
-          horarioTexto(aula),
         abrir: () => contexto.mostrarDetalheGrade(detalhe(g, dia))
       };
     };

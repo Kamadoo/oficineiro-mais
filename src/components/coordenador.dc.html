@@ -52,7 +52,7 @@
     padding: 0 !important;
   }
   body {
-    background: var(--destaque-branco) !important;
+    background: var(--fundo-branco) !important;
   }
 }
 [role="table"] {
@@ -128,7 +128,7 @@
   }
 }
 .agenda-clicavel:hover {
-  background: var(--destaque-cinza-40) !important;
+  background: var(--fundo-cinza-40) !important;
 }
 .agenda-clicavel:focus-visible {
   outline: 2px solid var(--destaque-ciano-660);
@@ -1926,15 +1926,8 @@ class Component extends DCLogic {
     };
   }
   valoresDasAtividades(s, valores) {
-    const {
-      escolaDe,
-      gradePorId,
-      hojeDasAtividades,
-      noFiltroDasAtividades,
-      nomeDoOficineiro,
-      ocorrenciasPendentes,
-      siglaDaEscola
-    } = valores;
+    const { escolaDe, gradePorId, hojeDasAtividades, noFiltroDasAtividades, nomeDoOficineiro, ocorrenciasPendentes } =
+      valores;
     const SITUACOES_DA_ATIVIDADE = {
       Realizada: ['var(--texto-verde-760)', 'var(--fundo-verde-80)'],
       'Realizada parcialmente': ['var(--texto-verde-760)', 'var(--fundo-verde-80)'],
@@ -1977,7 +1970,7 @@ class Component extends DCLogic {
         reg: r,
         data: Base.dm(dt),
         oficineiro: nome,
-        escola: siglaDaEscola(r.escola_id),
+        escola: escolaDe(r.escola_id),
         escolaNome: escolaDe(r.escola_id),
         tipo: tp.curto,
         tipoCor: tp.fg,
@@ -2075,7 +2068,7 @@ class Component extends DCLogic {
         g,
         data: Base.dm(o.d),
         oficineiro: nomeDoOficineiro(g.oficineiro_id),
-        escola: siglaDaEscola(g.escola_id),
+        escola: escolaDe(g.escola_id),
         escolaNome: escolaDe(g.escola_id),
         tipo: tp.curto,
         tipoCor: tp.fg,
