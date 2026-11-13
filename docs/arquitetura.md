@@ -44,6 +44,10 @@ Cada perfil é um componente de nível superior (`oficineiro`, `direcao`, `anali
 5. Grava `_headers` com CSP, HSTS e demais cabeçalhos de segurança, além de `robots.txt` e manifesto.
 6. Recusa a geração se encontrar CPF válido, e-mail fora dos domínios de teste ou nomes de uma base de referência (`scripts/privacy_check.py`).
 
+### Peso e minificação
+
+Os arquivos não são minificados. O site gerado tem cerca de 1,9 MB de texto, dos quais 1,25 MB são componentes; com a compressão que o Cloudflare aplica na entrega, o total cai para perto de 0,5 MB. Cada perfil baixa só os próprios componentes, sob demanda, e todos ficam em cache imutável pelo nome com hash. Minificar exigiria reescrever o JavaScript dentro dos `.dc.html` e o espaço entre elementos dos modelos, que o runtime interpreta como texto, com risco de mudar o resultado na tela para um ganho pequeno depois da compressão.
+
 ## Configuração por implantação
 
 `src/config.js`, fora do controle de versão, define o endereço e a chave pública do Supabase e a identidade do órgão cliente (`cliente.orgao`, `cliente.cidade`, `cliente.projeto`), usada no cabeçalho dos documentos oficiais e em Configurações. O logotipo do cliente é `public/brand/logo-cliente.png`; quando a variável `OFICINEIRO_MARCA` aponta para uma pasta com um arquivo de mesmo nome, o build publica esse arquivo no lugar do genérico. Assim o repositório não carrega a marca de nenhum cliente.
