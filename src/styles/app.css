@@ -2722,10 +2722,6 @@ select {
   font-size: 7.8pt;
 }
 
-.sublinhado-cinza-160 {
-  text-decoration-color: var(--destaque-cinza-160);
-}
-
 .largura-480 {
   width: min(480px, 100%);
 }
