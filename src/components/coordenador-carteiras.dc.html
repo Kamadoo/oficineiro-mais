@@ -10,7 +10,7 @@
 <x-dc>
   <div class="d-flex gap-10-12 alinha-center quebra-wrap">
     <p class="m-0 fs-13 cor-cinza-600 flex-1 min-w-220 lh-1p5">Cada analista acompanha as escolas de uma carteira.</p>
-    <button class="largura-total-celular h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" style="background:var(--destaque-ciano-660)" onClick="{{ novaCarteira }}" aria-haspopup="dialog">+ Nova carteira</button>
+    <button style="background:var(--destaque-ciano-660)" class="largura-total-celular h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660" onClick="{{ novaCarteira }}" aria-haspopup="dialog">+ Nova carteira</button>
   </div>
   <section class="adm-tabela borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}" aria-labelledby="adm-h-carteiras">
     <h3 id="adm-h-carteiras" class="sr-only">Carteiras</h3>
@@ -19,7 +19,7 @@
       <sc-for list="{{ carteiras }}" as="carteira" hint-placeholder-count="4">
         <div role="row" class="d-grid colunas-90-minmax-0-2fr-120-120 gap-10 p-12-20 fs-13 borda-b-cinza-70 alinha-center">
           <span role="cell" class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ carteira.codigo }}</span>
-          <span role="cell" class="min-w-0"><button onClick="{{ carteira.abrir }}" aria-haspopup="dialog" aria-label="{{ carteira.aria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-14 fw-600 cor-ciano-850 texto-left fonte-inherit sublinha-3 botao-texto" style="cursor:pointer;text-decoration:underline;text-decoration-color:var(--destaque-cinza-160)">{{ carteira.rotulo }}</button></span>
+          <span role="cell" class="min-w-0"><button onClick="{{ carteira.abrir }}" aria-haspopup="dialog" aria-label="{{ carteira.aria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-14 fw-600 cor-ciano-850 texto-left fonte-inherit sublinha-3 botao-texto cursor-pointer deco-underline" style="text-decoration-color:var(--destaque-cinza-160)">{{ carteira.rotulo }}</button></span>
           <span role="cell">{{ carteira.escolas }}</span>
           <span role="cell">{{ carteira.analistas }}</span>
         </div>

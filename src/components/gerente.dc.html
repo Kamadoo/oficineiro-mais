@@ -72,13 +72,13 @@
 
     <div class="pagina p-28 d-flex eixo-column gap-20 max-w-1320 w-100pc">
 <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13 d-flex quebra-wrap alinha-center gap-8-14"><span class="flex-1 min-w-200">{{ erro }}</span><button onClick="{{ tentarDeNovo }}" class="h-34 borda-1-solid-b42318 fundo-branco cor-vermelho-600 raio-8 p-0-12 fs-13 fw-600">Tentar de novo</button></div></sc-if>
-<sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-cinza-110 raio-12 p-24 texto-center cor-cinza-600 fs-14 lh-1p5 fundo-branco" style="background:var(--fundo-branco)">Entre com a conta do Gerente de Projetos para ver os dados da rede.</div></sc-if>
+<sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-24 texto-center cor-cinza-600 fs-14 lh-1p5 fundo-branco">Entre com a conta do Gerente de Projetos para ver os dados da rede.</div></sc-if>
 
 <sc-if value="{{ temFiltros }}" hint-placeholder-val="{{ true }}">
   <div class="filtros d-flex quebra-wrap gap-8 alinha-center" role="search" aria-label="Filtros da rede">
-    <sc-if value="{{ filtroDeCiclo }}" hint-placeholder-val="{{ true }}"><select aria-label="Ciclo" value="{{ ciclo }}" onChange="{{ escolherCiclo }}" class="h-38 borda-cinza-160 raio-8 p-0-10 fs-13 fw-600 fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeCiclo }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
-    <select aria-label="Carteira" value="{{ carteira }}" onChange="{{ escolherCarteira }}" class="h-38 borda-cinza-160 raio-8 p-0-10 fs-13 max-w-260 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><option value="">Todas as carteiras</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-    <select aria-label="Escola" value="{{ escola }}" onChange="{{ escolherEscola }}" class="h-38 borda-cinza-160 raio-8 p-0-10 fs-13 max-w-300 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><option value="">{{ todasAsEscolas }}</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="8"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <sc-if value="{{ filtroDeCiclo }}" hint-placeholder-val="{{ true }}"><select style="background:var(--fundo-branco)" aria-label="Ciclo" value="{{ ciclo }}" onChange="{{ escolherCiclo }}" class="h-38 borda-cinza-160 raio-8 p-0-10 fs-13 fw-600 fundo-branco"><sc-for list="{{ opcoesDeCiclo }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
+    <select style="background:var(--fundo-branco)" aria-label="Carteira" value="{{ carteira }}" onChange="{{ escolherCarteira }}" class="h-38 borda-cinza-160 raio-8 p-0-10 fs-13 max-w-260 largura-fundo fundo-branco"><option value="">Todas as carteiras</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select style="background:var(--fundo-branco)" aria-label="Escola" value="{{ escola }}" onChange="{{ escolherEscola }}" class="h-38 borda-cinza-160 raio-8 p-0-10 fs-13 max-w-300 largura-fundo fundo-branco"><option value="">{{ todasAsEscolas }}</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="8"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
     <sc-if value="{{ filtroDeCiclo }}" hint-placeholder-val="{{ true }}"><span role="status" aria-live="polite" class="fs-12 cor-cinza-600">{{ periodoTexto }}</span></sc-if>
     <sc-if value="{{ temFiltro }}" hint-placeholder-val="{{ false }}"><button onClick="{{ limparFiltros }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-ciano-740 deco-underline botao-texto">Limpar filtros</button></sc-if>
   </div>
@@ -115,7 +115,7 @@
 
 <div class="sr-only" role="status" aria-live="polite">{{ aviso }}</div>
 <sc-if value="{{ aviso }}" hint-placeholder-val="{{ false }}">
-  <div aria-hidden="true" class="pos-fixed base-96 esquerda-50pc w-max-content fundo-ciano-880 cor-branco p-12-18 raio-10 fs-14 z-95 sombra-0-8-24-rgba-0-0-0-0p2 largura-fundo" style="transform:translateX(-50%);max-width:calc(100% - 32px)">{{ aviso }}</div>
+  <div aria-hidden="true" class="pos-fixed base-96 esquerda-50pc w-max-content fundo-ciano-880 cor-branco p-12-18 raio-10 fs-14 z-95 sombra-0-8-24-rgba-0-0-0-0p2 largura-fundo max-w-menos-32" style="transform:translateX(-50%)">{{ aviso }}</div>
 </sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script>

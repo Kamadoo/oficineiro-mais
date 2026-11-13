@@ -70,7 +70,7 @@
 
     <div class="pagina p-28 d-flex eixo-column gap-20 max-w-1320 w-100pc">
 <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13 d-flex quebra-wrap alinha-center gap-8-14"><span class="flex-1 min-w-200">{{ erro }}</span><button onClick="{{ tentarDeNovo }}" class="h-34 borda-1-solid-b42318 fundo-branco cor-vermelho-600 raio-8 p-0-12 fs-13 fw-600">Tentar de novo</button></div></sc-if>
-<sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div class="borda-cinza-110 raio-12 p-24 texto-center cor-cinza-600 fs-14 lh-1p5 fundo-branco" style="background:var(--fundo-branco)">Entre com a conta de analista para ver a sua carteira.</div></sc-if>
+<sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-24 texto-center cor-cinza-600 fs-14 lh-1p5 fundo-branco">Entre com a conta de analista para ver a sua carteira.</div></sc-if>
 <sc-if value="{{ is.inicio }}" hint-placeholder-val="{{ true }}"><dc-import name="analista-inicio" contexto="{{ contexto }}" memoria="{{ memoriaInicio }}"></dc-import></sc-if>
 <sc-if value="{{ is.agenda }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-agenda" contexto="{{ contexto }}" memoria="{{ memoriaAgenda }}"></dc-import></sc-if>
 <sc-if value="{{ is.visitas }}" hint-placeholder-val="{{ false }}"><dc-import name="analista-visitas" contexto="{{ contexto }}" memoria="{{ memoriaVisitas }}"></dc-import></sc-if>
@@ -84,7 +84,7 @@
 
 <sc-if value="{{ visitaDaAgenda.aberta }}" hint-placeholder-val="{{ false }}">
   <div onClick="{{ fecharVisitaDaAgenda }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="ag-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(460px,100%)">
+  <aside role="dialog" aria-modal="true" aria-labelledby="ag-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo largura-460">
     <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">{{ visitaDaAgenda.rotulo }}</span><h3 id="ag-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ visitaDaAgenda.titulo }}</h3></div><button onClick="{{ fecharVisitaDaAgenda }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
       <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ visitaDaAgenda.itens }}" as="item" hint-placeholder-count="5"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere espaco-pre-line">{{ item.valor }}</dd></sc-for></dl>
@@ -103,11 +103,11 @@
       </sc-if>
       <sc-if value="{{ temErroAgenda }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroAgenda }}</div></sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))">
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap rodape-gaveta">
       <sc-if value="{{ visitaDaAgenda.podeCancelar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.cancelar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-vermelho-600 mr-auto botao-secundario">Cancelar visita</button></sc-if>
       <sc-if value="{{ visitaDaAgenda.podeRemarcar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.remarcar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">Remarcar</button></sc-if>
-      <sc-if value="{{ visitaDaAgenda.podeRegistrar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visitaDaAgenda.registrar }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Registrar visita</button></sc-if>
-      <sc-if value="{{ visitaDaAgenda.soFechar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ fecharVisitaDaAgenda }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Fechar</button></sc-if>
+      <sc-if value="{{ visitaDaAgenda.podeRegistrar }}" hint-placeholder-val="{{ false }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ visitaDaAgenda.registrar }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660">Registrar visita</button></sc-if>
+      <sc-if value="{{ visitaDaAgenda.soFechar }}" hint-placeholder-val="{{ true }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ fecharVisitaDaAgenda }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660">Fechar</button></sc-if>
     </div>
   </aside>
 </sc-if>
@@ -127,13 +127,13 @@
       </sc-if>
       <sc-if value="{{ visita.naoEdita }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-12 cor-cinza-600">A visita só pode ser corrigida até 7 dias depois da data.</p></sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><sc-if value="{{ visita.podeEditar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visita.editar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 mr-auto botao-secundario">Corrigir registro</button></sc-if><button onClick="{{ fecharVisita }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Fechar</button></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 rodape-gaveta"><sc-if value="{{ visita.podeEditar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ visita.editar }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 mr-auto botao-secundario">Corrigir registro</button></sc-if><button style="background:var(--destaque-ciano-660)" onClick="{{ fecharVisita }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660">Fechar</button></div>
   </aside>
 </sc-if>
 
 <sc-if value="{{ baixa.aberta }}" hint-placeholder-val="{{ false }}">
   <div onClick="{{ fecharBaixa }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
-  <aside role="dialog" aria-modal="true" aria-labelledby="onb-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 sombra-n12-0-40-rgba-0-0-0-0p12 d-flex eixo-column largura-fundo" style="width:min(460px,100%)">
+  <aside role="dialog" aria-modal="true" aria-labelledby="onb-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 sombra-n12-0-40-rgba-0-0-0-0p12 d-flex eixo-column largura-fundo largura-460">
     <div class="p-16-20 borda-b-cinza-110 d-flex alinha-flex-start gap-12"><div class="flex-1 d-flex eixo-column gap-2 min-w-0"><span class="fs-12 cor-cinza-600">Dar baixa no onboarding</span><h3 id="onb-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ baixa.nome }}</h3><span class="fs-12 cor-cinza-600">{{ baixa.escola }} · OS {{ baixa.ordem }}</span></div><button onClick="{{ fecharBaixa }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="flex-1 rolagem-y-auto p-18-20 d-flex eixo-column gap-16">
       <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">Data da entrega</span><input type="date" value="{{ baixa.data }}" max="{{ baixa.dataMaxima }}" onChange="{{ escolherDataDaBaixa }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
@@ -141,13 +141,13 @@
       <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">Observação</span><textarea value="{{ baixa.observacao }}" onChange="{{ escreverObservacaoDaBaixa }}" rows="4" maxlength="1000" placeholder="Ex.: primeiro acesso feito, senha redefinida, apresentado o Minecraft Education." class="borda-cinza-160 raio-8 p-10 fs-14 redim-vertical"></textarea></label>
       <sc-if value="{{ temErroBaixa }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroBaixa }}</div></sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex gap-10 justifica-flex-end" style="padding:12px 20px calc(12px + env(safe-area-inset-bottom))"><button onClick="{{ fecharBaixa }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-16 fs-14 fw-600 cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ confirmarBaixa }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ baixaBotao }}</button></div>
+    <div class="borda-t-cinza-110 d-flex gap-10 justifica-flex-end rodape-gaveta"><button onClick="{{ fecharBaixa }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-16 fs-14 fw-600 cor-ciano-850 botao-secundario">Cancelar</button><button style="background:var(--destaque-ciano-660)" onClick="{{ confirmarBaixa }}" disabled="{{ salvando }}" class="h-40 borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660">{{ baixaBotao }}</button></div>
   </aside>
 </sc-if>
 
 <div class="sr-only" role="status" aria-live="polite">{{ aviso }}</div>
 <sc-if value="{{ aviso }}" hint-placeholder-val="{{ false }}">
-  <div aria-hidden="true" class="pos-fixed base-96 esquerda-50pc w-max-content fundo-ciano-880 cor-branco p-12-18 raio-10 fs-14 z-95 sombra-0-8-24-rgba-0-0-0-0p2 largura-fundo" style="transform:translateX(-50%);max-width:calc(100% - 32px)">{{ aviso }}</div>
+  <div aria-hidden="true" class="pos-fixed base-96 esquerda-50pc w-max-content fundo-ciano-880 cor-branco p-12-18 raio-10 fs-14 z-95 sombra-0-8-24-rgba-0-0-0-0p2 largura-fundo max-w-menos-32" style="transform:translateX(-50%)">{{ aviso }}</div>
 </sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script>

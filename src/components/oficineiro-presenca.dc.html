@@ -18,8 +18,8 @@
         <h1 class="m-0 fs-22 fw-800 cor-ciano-850">{{ saudacao }}</h1>
         <span class="fs-14 cor-cinza-600">{{ dataTexto }}</span>
       </div>
-      <section class="borda-cinza-110 raio-20 p-22-20 d-flex eixo-column alinha-center gap-14 fundo-branco" style="background:var(--fundo-branco)">
-        <sc-if value="{{ temMapa }}" hint-placeholder-val="{{ true }}"><div id="mapa-escola" role="img" aria-label="{{ mapaAria }}" class="w-100pc h-220 raio-14 isola-isolate largura-fundo" style="overflow:hidden;background:var(--fundo-cinza-55)"></div></sc-if>
+      <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-20 p-22-20 d-flex eixo-column alinha-center gap-14 fundo-branco">
+        <sc-if value="{{ temMapa }}" hint-placeholder-val="{{ true }}"><div style="background:var(--fundo-cinza-55)" id="mapa-escola" role="img" aria-label="{{ mapaAria }}" class="w-100pc h-220 raio-14 isola-isolate largura-fundo rolagem-hidden fundo-cinza-55"></div></sc-if>
         <span class="fs-13 cor-cinza-600 fw-600">Horário atual (Brasília)</span>
         <span id="pres-relogio" class="fs-52 fw-800 ls-n1 num-tabular-nums lh-1 cor-ciano-850">{{ hora }}</span>
         <div class="w-100pc d-flex alinha-center gap-12 fundo-cinza-55 raio-14 p-12-14 tamanho-border-box largura-fundo">
@@ -43,7 +43,7 @@
         </sc-if>
         <span class="fs-12 cor-cinza-600 texto-center">A presença é confirmada pela sua localização: o navegador pede permissão e o registro só é aceito dentro do raio da escola.</span>
       </div>
-      <section class="borda-cinza-110 raio-20 p-16-18 d-flex eixo-column gap-10 fundo-branco" style="background:var(--fundo-branco)">
+      <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-20 p-16-18 d-flex eixo-column gap-10 fundo-branco">
         <div class="d-flex justifica-space-between alinha-baseline gap-8">
           <h2 class="m-0 fs-15 fw-700 cor-ciano-850">Registros de hoje</h2>
           <span class="fs-12 cor-cinza-600 fw-600">{{ total }} de 8h00 (máx.)</span>
@@ -68,13 +68,13 @@
           <h1 class="m-0 fs-22 fw-800 cor-ciano-850">Espelho de presença</h1>
           <button class="espelho-nao-imprimir min-h-44 borda-cinza-160 fundo-branco cor-ciano-740 raio-12 p-0-16 fs-14 fw-700 botao-secundario" onClick="{{ baixarEspelho }}">Baixar PDF</button>
         </div>
-        <div class="d-flex alinha-center justifica-space-between gap-8 borda-cinza-110 raio-14 p-6 fundo-branco" style="background:var(--fundo-branco)">
+        <div style="background:var(--fundo-branco)" class="d-flex alinha-center justifica-space-between gap-8 borda-cinza-110 raio-14 p-6 fundo-branco">
           <button class="espelho-nao-imprimir w-44 h-44 borda-0 fundo-transparent cor-ciano-740 fs-20 fw-700 largura-fundo" onClick="{{ mesAnterior }}" aria-label="Mês anterior">‹</button>
           <span class="fs-15 fw-700 cor-ciano-850 texto-center">{{ mesTexto }}</span>
           <button class="espelho-nao-imprimir w-44 h-44 borda-0 fundo-transparent cor-ciano-740 fs-20 fw-700 largura-fundo" onClick="{{ mesSeguinte }}" disabled="{{ semMesSeguinte }}" aria-label="Próximo mês">›</button>
         </div>
-        <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))"><sc-for list="{{ cartoes }}" as="cartao" hint-placeholder-count="4"><div class="borda-cinza-110 raio-14 p-12-14 d-flex eixo-column gap-2 fundo-branco" style="background:var(--fundo-branco)"><span class="fs-12 cor-cinza-600 fw-600">{{ cartao.titulo }}</span><b class="fs-22 cor-ciano-850 num-tabular-nums">{{ cartao.valor }}</b><span class="fs-11 cor-cinza-600">{{ cartao.nota }}</span></div></sc-for></div>
-        <section class="borda-cinza-110 raio-16 p-6-16 d-flex eixo-column fundo-branco" style="background:var(--fundo-branco)">
+        <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))"><sc-for list="{{ cartoes }}" as="cartao" hint-placeholder-count="4"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-14 p-12-14 d-flex eixo-column gap-2 fundo-branco"><span class="fs-12 cor-cinza-600 fw-600">{{ cartao.titulo }}</span><b class="fs-22 cor-ciano-850 num-tabular-nums">{{ cartao.valor }}</b><span class="fs-11 cor-cinza-600">{{ cartao.nota }}</span></div></sc-for></div>
+        <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-16 p-6-16 d-flex eixo-column fundo-branco">
           <sc-if value="{{ espelhoVazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600 p-12-0">{{ espelhoVazioTexto }}</span></sc-if>
           <sc-for list="{{ dias }}" as="dia" hint-placeholder-count="3">
             <div class="d-grid colunas-minmax-0-1fr-auto gap-4-12 p-10-0 borda-t-cinza-110">
@@ -82,7 +82,7 @@
               <span class="fs-14 fw-700 cor-ciano-850 num-tabular-nums texto-right">{{ dia.total }}</span>
               <span class="fs-13 cor-cinza-600 num-tabular-nums">{{ dia.horarios }}</span>
               <span class="justifica-si-end fs-12 fw-700 raio-999 p-3-10" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.situacao }}</span>
-              <sc-if value="{{ dia.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600" style="grid-column:1 / -1">{{ dia.observacao }}</span></sc-if>
+              <sc-if value="{{ dia.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600 coluna-inteira">{{ dia.observacao }}</span></sc-if>
             </div>
           </sc-for>
         </section>
@@ -95,7 +95,7 @@
     </sc-if>
 
     <sc-if value="{{ abaAtual.justificativas }}" hint-placeholder-val="{{ false }}">
-      <section class="borda-cinza-110 raio-20 p-18 d-flex eixo-column gap-14 fundo-branco" style="background:var(--fundo-branco)">
+      <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-20 p-18 d-flex eixo-column gap-14 fundo-branco">
         <h1 class="m-0 fs-18 fw-800 cor-ciano-850">Solicitar ajuste de presença</h1>
         <div class="d-flex eixo-column gap-8"><span id="aj-tipo-rot" class="fs-12 cor-cinza-600 fw-600">Tipo de solicitação *</span><div role="radiogroup" aria-labelledby="aj-tipo-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ tiposDeAjuste }}" as="tipo" hint-placeholder-count="5"><button role="radio" aria-checked="{{ tipo.marcado }}" onClick="{{ tipo.escolher }}" class="min-h-40 raio-999 p-6-14 fs-13 fw-600 botao-opcao {{ tipo.classe }}" style="border:1.5px solid {{ tipo.borda }};background:{{ tipo.fundo }};color:{{ tipo.cor }}">{{ tipo.rotulo }}</button></sc-for></div></div>
         <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Data *</span><input type="date" value="{{ ajuste.data }}" max="{{ ajuste.dataMaxima }}" onChange="{{ ajuste.mudarData }}" class="h-44 borda-cinza-160 raio-10 p-0-12 fs-15 fundo-branco cor-ciano-850"></input></label>
@@ -106,17 +106,17 @@
         <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Motivo *</span><textarea value="{{ ajuste.motivo }}" onChange="{{ ajuste.mudarMotivo }}" maxlength="1000" rows="3" class="borda-cinza-160 raio-10 p-10-12 fs-15 fonte-inherit redim-vertical fundo-branco cor-ciano-850"></textarea></label>
         <sc-if value="{{ ajuste.temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 fw-600 cor-vermelho-600">{{ ajuste.erro }}</span></sc-if>
         <sc-if value="{{ ajuste.enviado }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-13 fw-600 cor-verde-760">Solicitação enviada para a direção da escola.</span></sc-if>
-        <button onClick="{{ enviarAjuste }}" disabled="{{ ajuste.enviando }}" class="min-h-48 borda-0 raio-12 cor-branco fs-15 fw-700 fundo-ciano-660" style="background:var(--destaque-ciano-660)">Enviar para aprovação</button>
+        <button style="background:var(--destaque-ciano-660)" onClick="{{ enviarAjuste }}" disabled="{{ ajuste.enviando }}" class="min-h-48 borda-0 raio-12 cor-branco fs-15 fw-700 fundo-ciano-660">Enviar para aprovação</button>
       </section>
-      <section class="borda-cinza-110 raio-20 p-6-18-10 d-flex eixo-column fundo-branco" style="background:var(--fundo-branco)">
+      <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-20 p-6-18-10 d-flex eixo-column fundo-branco">
         <h2 class="m-10-0-4 fs-15 fw-700 cor-ciano-850">Minhas solicitações</h2>
         <sc-if value="{{ semAjustes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600 p-8-0">Nenhuma solicitação enviada.</span></sc-if>
         <sc-for list="{{ ajustes }}" as="item" hint-placeholder-count="2">
           <div class="d-grid colunas-minmax-0-1fr-auto gap-4-12 p-10-0 borda-t-cinza-110">
             <span class="fs-14 fw-700 cor-ciano-850">{{ item.tipo }} · {{ item.data }}</span>
             <span class="justifica-si-end fs-12 fw-700 raio-999 p-3-10" style="background:{{ item.fundo }};color:{{ item.cor }}">{{ item.situacao }}</span>
-            <span class="fs-13 cor-cinza-600" style="grid-column:1 / -1">{{ item.motivo }}</span>
-            <sc-if value="{{ item.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-ciano-850" style="grid-column:1 / -1">Direção: {{ item.observacao }}</span></sc-if>
+            <span class="fs-13 cor-cinza-600 coluna-inteira">{{ item.motivo }}</span>
+            <sc-if value="{{ item.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-ciano-850 coluna-inteira">Direção: {{ item.observacao }}</span></sc-if>
           </div>
         </sc-for>
       </section>

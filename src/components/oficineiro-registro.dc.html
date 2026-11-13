@@ -17,7 +17,7 @@
     </section>
   </sc-if>
   <div class="empilha-celular d-grid colunas-320-minmax-0-1fr gap-20 alinha-start">
-    <section class="aderente borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 pos-sticky topo-84 fundo-branco" style="background:var(--fundo-branco)">
+    <section style="background:var(--fundo-branco)" class="aderente borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 pos-sticky topo-84 fundo-branco">
       <div class="d-flex alinha-center gap-6">
         <button onClick="{{ diaAnterior }}" aria-label="Dia anterior" class="w-38 h-38 flex-none borda-cinza-160 fundo-branco raio-8 fs-18 lh-1 cor-cinza-750 largura-fundo botao-secundario">‹</button>
         <div class="flex-1 texto-center d-flex eixo-column lh-1p3" aria-live="polite"><b class="fs-15">{{ diaNome }}</b><span class="fs-12 cor-cinza-600">{{ diaData }}</span></div>
@@ -43,7 +43,7 @@
 
     <div class="d-flex eixo-column gap-16 min-w-0">
       <sc-if value="{{ nadaEscolhido }}" hint-placeholder-val="{{ false }}">
-        <section class="borda-cinza-110 raio-12 d-flex eixo-column gap-14 alinha-center texto-center cor-cinza-600 fs-14 fundo-branco" style="background:var(--fundo-branco);padding:20px;padding:40px 20px">Escolha uma atividade da lista para registrar.</section>
+        <section class="borda-cinza-110 raio-12 d-flex eixo-column gap-14 alinha-center texto-center cor-cinza-600 fs-14 fundo-branco" style="padding:40px 20px;background:var(--fundo-branco)">Escolha uma atividade da lista para registrar.</section>
       </sc-if>
       <sc-if value="{{ temEscolhida }}" hint-placeholder-val="{{ true }}">
         <section class="espaco-celular fundo-branco raio-12 p-20 d-flex eixo-column gap-14 largura-fundo" style="border:1px solid var(--borda-cinza-110);border-left:4px solid {{ escolhida.cor }}">
@@ -63,7 +63,7 @@
 
         <sc-if value="{{ mostraFormulario }}" hint-placeholder-val="{{ true }}">
           <fieldset disabled="{{ somenteLeitura }}" class="registro-campos borda-0 p-0 m-0 min-w-0 d-flex eixo-column gap-16">
-          <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco" style="background:var(--fundo-branco)">
+          <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco">
             <h3 class="m-0 fs-15">A atividade aconteceu?</h3>
             <div class="d-flex quebra-wrap gap-8" role="group" aria-label="A atividade aconteceu?"><sc-for list="{{ situacoes }}" as="opcao" hint-placeholder-count="2"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="raio-8 p-9-14 fs-14 fw-500 flex-1-1-160 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div>
             <sc-if value="{{ naoRealizada }}" hint-placeholder-val="{{ false }}">
@@ -73,21 +73,21 @@
           </section>
 
           <sc-if value="{{ realizada }}" hint-placeholder-val="{{ true }}">
-            <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco" style="background:var(--fundo-branco)">
+            <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco">
               <label class="d-flex alinha-center gap-10 fs-14 fw-600 cursor-pointer min-h-32"><input type="checkbox" checked="{{ formulario.mudou }}" onChange="{{ mudarMudou }}" class="w-18 h-18 destaque-ciano-660"></input>Houve alguma mudança de última hora?</label>
               <span class="fs-13 cor-cinza-600 mt-n8">Marque se a atividade foi diferente do que está na grade: outro professor na sala, outra solução, horário trocado…</span>
               <sc-if value="{{ formulario.mudou }}" hint-placeholder-val="{{ false }}">
                 <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
                   <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Professor(a) que acompanhou a atividade</span><input value="{{ formulario.professor }}" onChange="{{ mudarProfessor }}" maxlength="120" placeholder="Nome de quem estava com a turma" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
-                  <sc-if value="{{ mudaComponente }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Componente curricular trabalhado</span><select value="{{ formulario.componente }}" onChange="{{ mudarComponente }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-branco" style="background:var(--fundo-branco)"><option value="">Não informado</option><sc-for list="{{ componentes }}" as="opcao" hint-placeholder-count="9"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
-                  <sc-if value="{{ mudaOficina }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Oficina trabalhada</span><select value="{{ formulario.oficina }}" onChange="{{ mudarOficina }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ oficinas }}" as="opcao" hint-placeholder-count="10"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
-                  <sc-if value="{{ mudaSolucao }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Solução usada</span><select value="{{ formulario.solucao }}" onChange="{{ mudarSolucao }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
+                  <sc-if value="{{ mudaComponente }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Componente curricular trabalhado</span><select style="background:var(--fundo-branco)" value="{{ formulario.componente }}" onChange="{{ mudarComponente }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-branco"><option value="">Não informado</option><sc-for list="{{ componentes }}" as="opcao" hint-placeholder-count="9"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
+                  <sc-if value="{{ mudaOficina }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Oficina trabalhada</span><select style="background:var(--fundo-branco)" value="{{ formulario.oficina }}" onChange="{{ mudarOficina }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-branco"><sc-for list="{{ oficinas }}" as="opcao" hint-placeholder-count="10"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
+                  <sc-if value="{{ mudaSolucao }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Solução usada</span><select style="background:var(--fundo-branco)" value="{{ formulario.solucao }}" onChange="{{ mudarSolucao }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-branco"><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
                 </div>
                 <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">O que mudou? *</span><input value="{{ formulario.mudanca }}" onChange="{{ mudarMudanca }}" maxlength="300" placeholder="Exemplo: a professora regente faltou e a coordenação acompanhou a turma" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
               </sc-if>
             </section>
 
-            <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco" style="background:var(--fundo-branco)">
+            <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco">
               <h3 class="m-0 fs-15">Participação</h3>
               <div class="d-grid colunas-repeat-3-minmax-0-1fr gap-12 alinha-end">
                 <sc-if value="{{ matriculadosManual }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Matriculados</span><input type="number" inputmode="numeric" min="0" value="{{ formulario.matriculados }}" onChange="{{ mudarMatriculados }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label></sc-if>
@@ -97,7 +97,7 @@
               </div>
             </section>
 
-            <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco" style="background:var(--fundo-branco)">
+            <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco">
               <h3 class="m-0 fs-15">Desenvolvimento da atividade</h3>
               <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
                 <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Conteúdo / atividade</span><input value="{{ formulario.atividade }}" onChange="{{ mudarAtividade }}" maxlength="200" placeholder="{{ atividadeExemplo }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>

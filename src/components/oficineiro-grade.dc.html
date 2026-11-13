@@ -14,12 +14,12 @@
     <div class="oculto-celular flex-1"></div>
     <div class="largura-total-celular d-flex gap-8 quebra-wrap">
       <button onClick="{{ novaAtividade }}" class="h-40 flex-1-1-auto borda-cinza-160 fundo-branco cor-cinza-750 raio-8 p-0-16 fs-14 fw-600 botao-secundario">+ Nova atividade</button>
-      <sc-if value="{{ podeEnviar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ enviarGrade }}" disabled="{{ enviando }}" class="h-40 flex-1-1-auto borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ enviarTexto }}</button></sc-if>
+      <sc-if value="{{ podeEnviar }}" hint-placeholder-val="{{ true }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ enviarGrade }}" disabled="{{ enviando }}" class="h-40 flex-1-1-auto borda-0 cor-branco raio-8 p-0-18 fs-14 fw-600 fundo-ciano-660">{{ enviarTexto }}</button></sc-if>
     </div>
   </div>
   <sc-if value="{{ devolvida }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-13 cor-vermelho-720 fundo-vermelho-50 raio-10 p-12-14 lh-1p5">{{ devolvidaTexto }}</span></sc-if>
   <span class="fs-13 cor-cinza-600 lh-1p5">{{ ajuda }}</span>
-  <section aria-label="Semanas do ano" class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
+  <section style="background:var(--fundo-branco)" aria-label="Semanas do ano" class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-12 fundo-branco">
     <div class="d-flex quebra-wrap alinha-center gap-10-14">
       <div class="largura-total-celular d-flex gap-4 fundo-cinza-90 p-4 raio-10 segmentado" role="group" aria-label="Como ver a grade">
         <sc-for list="{{ modos }}" as="modo" hint-placeholder-count="2"><button onClick="{{ modo.escolher }}" aria-pressed="{{ modo.marcado }}" class="borda-0 raio-7 p-8-14 fs-14 fw-600 espaco-nowrap {{ modo.classe }}" style="flex:1 1 auto;background:{{ modo.fundo }};color:{{ modo.cor }}">{{ modo.rotulo }}</button></sc-for>
@@ -83,7 +83,7 @@
 
   <div class="so-celular-flex eixo-column gap-12" style="opacity:{{ opacidade }}">
     <sc-for list="{{ dias }}" as="dia" hint-placeholder-count="5">
-      <section class="borda-cinza-110 raio-12 p-14 d-flex eixo-column gap-10 fundo-branco" style="background:var(--fundo-branco)" aria-label="{{ dia.nome }}">
+      <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-14 d-flex eixo-column gap-10 fundo-branco" aria-label="{{ dia.nome }}">
         <div class="d-flex alinha-center gap-8">
           <h3 class="m-0 fs-15" style="color:{{ dia.cor }}">{{ dia.nome }}</h3>
           <span class="flex-1"></span>

@@ -15,7 +15,7 @@
       <div class="d-flex quebra-wrap alinha-center gap-8-16 p-12-0 borda-t-cinza-70">
         <div class="flex-1-1-240 min-w-0 d-flex eixo-column gap-2"><span class="fs-14 fw-600">{{ item.nome }}</span><span class="fs-12 cor-cinza-600 rolagem-hidden reticencias-ellipsis">{{ item.cargo }} · {{ item.email }}</span></div>
         <div class="flex-1-1-220 d-flex eixo-column gap-2"><span class="fs-13">{{ item.escola }}</span><span class="fs-12 cor-cinza-600">OS {{ item.ordem }} · recebido {{ item.recebimento }} · <span style="color:{{ item.emAbertoCor }}">{{ item.emAberto }}</span></span></div>
-        <button onClick="{{ item.darBaixa }}" aria-haspopup="dialog" aria-label="{{ item.rotuloBaixa }}" class="largura-total-celular h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 espaco-nowrap fundo-ciano-660" style="background:var(--destaque-ciano-660)">Dar baixa</button>
+        <button style="background:var(--destaque-ciano-660)" onClick="{{ item.darBaixa }}" aria-haspopup="dialog" aria-label="{{ item.rotuloBaixa }}" class="largura-total-celular h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 espaco-nowrap fundo-ciano-660">Dar baixa</button>
       </div>
     </sc-for>
     <sc-if value="{{ semPendentes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600 p-8-0">Nenhuma pendência de onboarding.</span></sc-if>

@@ -2701,3 +2701,47 @@ select {
 .pagina > .sc-host > .sc-placeholder {
   display: none;
 }
+
+.fonte-inter {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.rodape-gaveta {
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+}
+
+.fs-7p6pt {
+  font-size: 7.6pt;
+}
+
+.fs-7p3pt {
+  font-size: 7.3pt;
+}
+
+.fs-7p8pt {
+  font-size: 7.8pt;
+}
+
+.sublinhado-cinza-160 {
+  text-decoration-color: var(--destaque-cinza-160);
+}
+
+.largura-480 {
+  width: min(480px, 100%);
+}
+
+.largura-520 {
+  width: min(520px, 100%);
+}
+
+.largura-460 {
+  width: min(460px, 100%);
+}
+
+.coluna-inteira {
+  grid-column: 1 / -1;
+}
+
+.max-w-menos-32 {
+  max-width: calc(100% - 32px);
+}

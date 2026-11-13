@@ -8,8 +8,8 @@
 </head>
 <body>
 <x-dc>
-  <section class="espaco-celular borda-cinza-110 raio-12 p-18-20 d-flex eixo-column gap-14 fundo-branco" style="background:var(--fundo-branco)" aria-labelledby="dir-h-fluxo">
-    <div class="d-flex quebra-wrap gap-10 alinha-center"><h3 id="dir-h-fluxo" class="m-0 fs-15 flex-1 min-w-220">Fluxo de aprovação do relatório de atividades · mensal</h3><select aria-label="Mês do relatório" value="{{ ciclo }}" onChange="{{ escolherCiclo }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesCiclo }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></div>
+  <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-18-20 d-flex eixo-column gap-14 fundo-branco" aria-labelledby="dir-h-fluxo">
+    <div class="d-flex quebra-wrap gap-10 alinha-center"><h3 id="dir-h-fluxo" class="m-0 fs-15 flex-1 min-w-220">Fluxo de aprovação do relatório de atividades · mensal</h3><select style="background:var(--fundo-branco)" aria-label="Mês do relatório" value="{{ ciclo }}" onChange="{{ escolherCiclo }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><sc-for list="{{ opcoesCiclo }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></div>
     <ol class="lista-none m-0 p-0 d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
       <sc-for list="{{ etapas }}" as="etapa" hint-placeholder-count="4">
         <li class="raio-10 p-12-14 d-flex eixo-column gap-4" style="background:{{ etapa.fundo }};border:1.5px solid {{ etapa.borda }}">
@@ -29,7 +29,7 @@
           <span role="cell" class="d-flex eixo-column gap-4 alinha-flex-start min-w-0"><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ linha.situacaoCor }};background:{{ linha.situacaoFundo }}">{{ linha.situacao }}</span><sc-if value="{{ linha.temObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-cinza-600 quebra-palavra-anywhere">{{ linha.observacao }}</span></sc-if></span>
           <span role="cell" class="dir-larga dir-acoes d-flex gap-6 justifica-flex-end quebra-wrap">
             <button onClick="{{ linha.ver }}" aria-haspopup="dialog" aria-label="{{ linha.rotuloVer }}" class="h-32 borda-cinza-160 fundo-branco raio-6 p-0-10 fs-12 fw-500 cor-ciano-850 botao-secundario">Ver relatório</button>
-            <sc-if value="{{ linha.podeAprovar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ linha.aprovar }}" disabled="{{ salvando }}" aria-label="{{ linha.rotuloAprovar }}" class="h-32 borda-0 cor-branco raio-6 p-0-12 fs-12 fw-600 fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ linha.aprovarTexto }}</button></sc-if>
+            <sc-if value="{{ linha.podeAprovar }}" hint-placeholder-val="{{ true }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ linha.aprovar }}" disabled="{{ salvando }}" aria-label="{{ linha.rotuloAprovar }}" class="h-32 borda-0 cor-branco raio-6 p-0-12 fs-12 fw-600 fundo-ciano-660">{{ linha.aprovarTexto }}</button></sc-if>
           </span>
         </div>
       </sc-for>

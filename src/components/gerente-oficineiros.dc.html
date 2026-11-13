@@ -10,7 +10,7 @@
 <x-dc>
 <sc-if value="{{ is.oficineirosPresenca }}" hint-placeholder-val="{{ false }}">
   <section aria-label="Resumo dos oficineiros" class="duas-colunas-celular d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));opacity:{{ opacidade }}">
-    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="5"><div class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-2 min-w-0 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><span class="fs-22 fw-600 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-12 cor-cinza-750">{{ indicador.titulo }}</span><span class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for>
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="5"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-2 min-w-0 largura-fundo fundo-branco"><span class="fs-22 fw-600 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-12 cor-cinza-750">{{ indicador.titulo }}</span><span class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for>
   </section>
   <section class="grade-imprimir borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-240">Presença, horas e execução das atividades</h3><span class="fs-12 cor-cinza-600">{{ periodoTexto }}</span></div>

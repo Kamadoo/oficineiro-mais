@@ -9,15 +9,15 @@
 <body>
 <x-dc>
 <sc-if value="{{ carregando }}" hint-placeholder-val="{{ false }}"><p role="status" class="m-0 fs-14 cor-cinza-600">Carregando a base de acessos…</p></sc-if>
-<sc-if value="{{ semBase }}" hint-placeholder-val="{{ false }}"><div class="borda-cinza-110 raio-12 p-24 d-flex eixo-column gap-6 alinha-center texto-center fundo-branco" style="background:var(--fundo-branco)"><b class="fs-15">Base de acessos ainda não carregada</b></div></sc-if>
+<sc-if value="{{ semBase }}" hint-placeholder-val="{{ false }}"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-24 d-flex eixo-column gap-6 alinha-center texto-center fundo-branco"><b class="fs-15">Base de acessos ainda não carregada</b></div></sc-if>
 <sc-if value="{{ pronto }}" hint-placeholder-val="{{ true }}">
   <div class="d-flex quebra-wrap gap-10 alinha-center">
     <div class="d-flex gap-2 fundo-cinza-70 raio-10 p-3 quebra-wrap">
       <sc-for list="{{ abas }}" as="aba" hint-placeholder-count="3"><button onClick="{{ aba.escolher }}" class="borda-0 raio-8 p-8-14 fs-13 fw-600 {{ aba.classe }}" style="background:{{ aba.fundo }};color:{{ aba.cor }}">{{ aba.rotulo }}</button></sc-for>
     </div>
-<sc-if value="{{ porCarteira }}" hint-placeholder-val="{{ false }}"><select aria-label="Carteira" onChange="{{ escolherCarteira }}" value="{{ carteira }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
-    <select aria-label="Perfil" onChange="{{ escolherPerfil }}" value="{{ perfil }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><option value="todos">Todos os perfis</option><option value="A">Alunos</option><option value="P">Professores</option><option value="S">Servidores</option></select>
-    <select aria-label="Lotação" onChange="{{ escolherLotacao }}" value="{{ lotacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><option value="escolas">Escolas e CEIs</option><option value="todas">Todas as lotações</option></select>
+<sc-if value="{{ porCarteira }}" hint-placeholder-val="{{ false }}"><select style="background:var(--fundo-branco)" aria-label="Carteira" onChange="{{ escolherCarteira }}" value="{{ carteira }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
+    <select style="background:var(--fundo-branco)" aria-label="Perfil" onChange="{{ escolherPerfil }}" value="{{ perfil }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todos">Todos os perfis</option><option value="A">Alunos</option><option value="P">Professores</option><option value="S">Servidores</option></select>
+    <select style="background:var(--fundo-branco)" aria-label="Lotação" onChange="{{ escolherLotacao }}" value="{{ lotacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="escolas">Escolas e CEIs</option><option value="todas">Todas as lotações</option></select>
     <span class="ml-auto fs-12 cor-cinza-600">Base de acessos de <b class="cor-ciano-850">{{ dataDaBase }}</b></span>
   </div>
 
@@ -32,23 +32,23 @@
       </sc-for>
     </div>
     <div class="empilha-celular d-grid colunas-minmax-0-1p25fr-minmax-0-1fr gap-16 alinha-start">
-      <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
         <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Escolas que precisam de reforço na adoção</h3><span class="fs-12 cor-cinza-600">{{ textos.ordem }}</span></div>
         <sc-for list="{{ sugestoes }}" as="linha" hint-placeholder-count="5">
           <div class="d-flex quebra-wrap alinha-center gap-8-12 p-12-0 borda-t-cinza-70">
             <span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.prioridadeCor }};background:{{ linha.prioridadeFundo }}">{{ linha.prioridade }}</span>
             <div class="flex-1-1-220 min-w-0 d-flex eixo-column gap-2">
-              <button onClick="{{ linha.abrir }}" class="largura-fundo" style="all:unset;cursor:pointer;font-size:14px;font-weight:600;color:var(--texto-ciano-850)">{{ linha.nome }}</button>
+              <button onClick="{{ linha.abrir }}" class="largura-fundo cursor-pointer fs-14 cor-ciano-850" style="all:unset;font-weight:600">{{ linha.nome }}</button>
               <span class="fs-12 cor-cinza-750 lh-1p45">{{ linha.diagnostico }}</span>
             </div>
             <sc-if value="{{ linha.temVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-verde-700 fundo-verde-80 p-4-10 raio-999 espaco-nowrap">Na agenda · {{ linha.visita }}</span></sc-if>
-            <sc-if value="{{ linha.semVisita }}" hint-placeholder-val="{{ true }}"><button onClick="{{ linha.agendar }}" class="h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ textos.agendar }}</button></sc-if>
+            <sc-if value="{{ linha.semVisita }}" hint-placeholder-val="{{ true }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ linha.agendar }}" class="h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660">{{ textos.agendar }}</button></sc-if>
           </div>
         </sc-for>
         <sc-if value="{{ semSugestoes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma escola com prioridade alta ou média neste filtro.</span></sc-if>
       </section>
       <div class="d-flex eixo-column gap-16">
-        <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
+        <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
           <h3 class="m-0 fs-15">{{ textos.barras }}</h3>
           <sc-for list="{{ barras }}" as="barra" hint-placeholder-count="7">
             <div class="d-grid colunas-44-minmax-0-1fr-48 gap-10 alinha-center fs-12">
@@ -60,7 +60,7 @@
           <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ legenda }}" as="item" hint-placeholder-count="5"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
           <span class="fs-12 cor-cinza-600">Número à direita: % engajados (quente + morno).</span>
         </section>
-        <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco" style="background:var(--fundo-branco)">
+        <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco">
           <h3 class="m-0-0-6 fs-15">Régua de temperatura</h3>
           <sc-for list="{{ regua }}" as="faixa" hint-placeholder-count="5">
             <div class="d-grid colunas-110-minmax-0-1fr gap-10 p-8-0 borda-t-cinza-70 fs-13">
@@ -74,11 +74,11 @@
   </sc-if>
 
   <sc-if value="{{ abaAtiva.mapa }}" hint-placeholder-val="{{ false }}">
-    <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
       <div class="d-flex quebra-wrap alinha-center gap-8-14">
         <div class="flex-1-1-300 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Mapa de calor por escola</h3><span class="fs-12 cor-cinza-600">% das contas em cada faixa · cor mais forte = maior concentração. Clique na escola para ver as turmas.</span></div>
         <input onInput="{{ buscarEscola }}" placeholder="Buscar escola" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
-        <select onChange="{{ escolherOrdem }}" value="{{ ordem }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><option value="prio">Ordenar por prioridade</option><option value="contas">Ordenar por nº de contas</option><option value="eng">Ordenar por engajados</option></select>
+        <select style="background:var(--fundo-branco)" onChange="{{ escolherOrdem }}" value="{{ ordem }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="prio">Ordenar por prioridade</option><option value="contas">Ordenar por nº de contas</option><option value="eng">Ordenar por engajados</option></select>
       </div>
       <div class="rolagem-x-auto m-0-n4">
         <div class="min-w-1080 d-flex eixo-column p-0-4">
@@ -87,7 +87,7 @@
           </div>
           <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="10">
             <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 110px 130px 120px">
-              <button onClick="{{ linha.abrir }}" class="largura-fundo" style="all:unset;cursor:pointer;font-weight:600;color:var(--texto-ciano-850);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ linha.nome }}">{{ linha.nome }}</button>
+              <button onClick="{{ linha.abrir }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset" title="{{ linha.nome }}">{{ linha.nome }}</button>
               <span class="fs-12 cor-cinza-600">{{ linha.carteira }}</span>
               <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
               <sc-for list="{{ linha.celulas }}" as="celula" hint-placeholder-count="5"><span title="{{ celula.titulo }}" class="num-tabular-nums fs-12 texto-center p-8-0 raio-6" style="font-family:'Inter',system-ui,sans-serif;background:{{ celula.fundo }};color:{{ celula.cor }}">{{ celula.valor }}</span></sc-for>
@@ -105,10 +105,10 @@
 
   <sc-if value="{{ abaAtiva.escola }}" hint-placeholder-val="{{ false }}">
     <div class="d-flex quebra-wrap gap-10 alinha-center">
-      <select onChange="{{ escolherEscola }}" value="{{ escolaNome }}" class="h-40 flex-1-1-320 max-w-520 borda-cinza-160 raio-8 p-0-10 fs-14 largura-fundo fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
+      <select style="background:var(--fundo-branco)" onChange="{{ escolherEscola }}" value="{{ escolaNome }}" class="h-40 flex-1-1-320 max-w-520 borda-cinza-160 raio-8 p-0-10 fs-14 largura-fundo fundo-branco"><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
       <span class="fs-11 fw-700 p-4-10 raio-999 segmentado" style="color:{{ escola.prioridadeCor }};background:{{ escola.prioridadeFundo }}">Prioridade {{ escola.prioridade }}</span>
       <sc-if value="{{ escola.temVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-verde-700 fundo-verde-80 p-4-10 raio-999">Na agenda · {{ escola.visita }}</span></sc-if>
-      <sc-if value="{{ escola.semVisita }}" hint-placeholder-val="{{ true }}"><button onClick="{{ escola.agendar }}" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 ml-auto fundo-ciano-660" style="background:var(--destaque-ciano-660)">{{ textos.agendar }}</button></sc-if>
+      <sc-if value="{{ escola.semVisita }}" hint-placeholder-val="{{ true }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ escola.agendar }}" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 ml-auto fundo-ciano-660">{{ textos.agendar }}</button></sc-if>
     </div>
     <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
       <sc-for list="{{ escola.indicadores }}" as="indicador" hint-placeholder-count="6">
@@ -119,7 +119,7 @@
         </div>
       </sc-for>
     </div>
-    <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
       <div class="d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Alunos por ano × atividades dos oficineiros</h3><span class="fs-12 cor-cinza-600">Temperatura de acesso dos alunos de cada ano cruzada com as atividades que os oficineiros da escola deram para esse ano no mês.</span></div>
       <div class="rolagem-x-auto m-0-n4">
         <div class="min-w-900 d-flex eixo-column p-0-4">
@@ -141,11 +141,11 @@
       </div>
       <span class="fs-12 cor-cinza-600">A exportação traz o ano escolar (coluna turma, ex.: 5º ANO) e o responsável pela turma (coluna responsavel_turma). Quando a turma vier detalhada (5º A, 5º B), a tabela passa a agrupar por turma.</span>
     </section>
-    <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco" style="background:var(--fundo-branco)">
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
       <div class="d-flex quebra-wrap alinha-center gap-8-12">
         <div class="flex-1-1-240 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Contas da escola</h3><span class="fs-12 cor-cinza-600">{{ escola.contasTexto }}</span></div>
         <input onInput="{{ buscarConta }}" placeholder="Buscar nome" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
-        <select onChange="{{ escolherTemperatura }}" value="{{ temperatura }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><option value="todas">Todas as temperaturas</option><option value="Q">Quente</option><option value="M">Morno</option><option value="F">Frio</option><option value="S">Sem uso</option><option value="N">Nunca acessou</option></select>
+        <select style="background:var(--fundo-branco)" onChange="{{ escolherTemperatura }}" value="{{ temperatura }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as temperaturas</option><option value="Q">Quente</option><option value="M">Morno</option><option value="F">Frio</option><option value="S">Sem uso</option><option value="N">Nunca acessou</option></select>
       </div>
       <div class="rolagem-x-auto m-0-n4">
         <div class="min-w-900 d-flex eixo-column p-0-4">
