@@ -262,7 +262,7 @@ class Component extends DCLogic {
             ? hora(linha.saida_almoco) + '–' + (linha.retorno_almoco ? hora(linha.retorno_almoco) : '…')
             : '—',
           saida: hora(linha.saida),
-          horas: horasMinutos(Math.min(linha.trabalhado_min, 480)),
+          horas: horasMinutos(Math.min(linha.trabalhado_min, Base.MINUTOS_DO_DIA)),
           situacao: situacao[0],
           fundo: situacao[1],
           cor: situacao[2],

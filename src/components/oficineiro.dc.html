@@ -499,7 +499,7 @@ const minutosDePausa = (inicio, fim, inicioDaPausa, fimDaPausa) => {
 const minutosTrabalhados = (inicio, fim, inicioDaPausa, fimDaPausa) => {
   const bruto = Math.max(0, Math.round((new Date(fim) - new Date(inicio)) / 60000));
   if (inicioDaPausa) return Math.max(0, bruto - minutosDePausa(inicio, fim, inicioDaPausa, fimDaPausa));
-  return bruto > 360 ? bruto - 60 : bruto;
+  return bruto > Base.MINUTOS_SEM_DESCONTO_DE_ALMOCO ? bruto - Base.MINUTOS_DE_ALMOCO : bruto;
 };
 const faixaDaPausa = presenca =>
   presenca && presenca.pausa_inicio
@@ -510,7 +510,6 @@ const faixaDaPausa = presenca =>
         Base.hm(minutosDoInstante(presenca.pausa_fim))
       : ' · pausa desde ' + Base.hm(minutosDoInstante(presenca.pausa_inicio))
     : '';
-const LIMITE_DO_DIA = Base.MINUTOS_DO_DIA;
 const trabalhadoEm = presenca =>
   Base.presencaFechada(presenca)
     ? presenca.trabalhado_min != null
@@ -1599,7 +1598,7 @@ class Component extends DCLogic {
   avisar(texto) {
     this.setState({ aviso: texto });
     clearTimeout(this.avisoTempo);
-    this.avisoTempo = setTimeout(() => this.setState({ aviso: '' }), 3200);
+    this.avisoTempo = setTimeout(() => this.setState({ aviso: '' }), Base.DURACAO_DO_AVISO);
   }
 
   lembretesPendentes() {
@@ -1783,8 +1782,8 @@ class Component extends DCLogic {
             : !fim
               ? 'Pendente · saída não registrada'
               : 'Pendente · volta do almoço não registrada'
-          : minutos > LIMITE_DO_DIA
-            ? 'Acima de 8h · ' + (minutos - LIMITE_DO_DIA) + ' min não contabilizados'
+          : minutos > Base.MINUTOS_DO_DIA
+            ? 'Acima de 8h · ' + (minutos - Base.MINUTOS_DO_DIA) + ' min não contabilizados'
             : 'Regular';
         const cores = /^Pendente/.test(situacao)
           ? ['var(--texto-cinza-750)', 'var(--fundo-cinza-90)']

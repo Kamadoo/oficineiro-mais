@@ -1,5 +1,8 @@
 window.FSM_BASE = (() => {
   const MINUTOS_DO_DIA = 480;
+  const MINUTOS_SEM_DESCONTO_DE_ALMOCO = 360;
+  const MINUTOS_DE_ALMOCO = 60;
+  const DURACAO_DO_AVISO = 3200;
   const MES = [
     'janeiro',
     'fevereiro',
@@ -685,6 +688,9 @@ window.FSM_BASE = (() => {
     segmento,
     escolher,
     MINUTOS_DO_DIA,
+    MINUTOS_SEM_DESCONTO_DE_ALMOCO,
+    MINUTOS_DE_ALMOCO,
+    DURACAO_DO_AVISO,
     dmyIso,
     mesIni,
     cicloIniIso,

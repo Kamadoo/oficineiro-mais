@@ -1798,7 +1798,7 @@ class Component extends DCLogic {
       if (p.trabalhado_min != null) return p.trabalhado_min;
       const b = Math.max(0, minutosDaPresenca(p));
       if (p.pausa_inicio) return Math.max(0, b - pausaDaPresenca(p));
-      return b > 360 ? b - 60 : b;
+      return b > Base.MINUTOS_SEM_DESCONTO_DE_ALMOCO ? b - Base.MINUTOS_DE_ALMOCO : b;
     };
     const presencaFechada = Base.presencaFechada;
     const minutosValidos = p => Base.minutosValidos(p, minutosTrabalhados(p));
@@ -1814,8 +1814,12 @@ class Component extends DCLogic {
               'var(--fundo-cinza-90)'
             ];
       const t = minutosTrabalhados(p);
-      return t > 480
-        ? ['Acima de 8h · ' + (t - 480) + ' min não contabilizados', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)']
+      return t > Base.MINUTOS_DO_DIA
+        ? [
+            'Acima de 8h · ' + (t - Base.MINUTOS_DO_DIA) + ' min não contabilizados',
+            'var(--texto-ambar-745)',
+            'var(--fundo-ambar-80)'
+          ]
         : ['Regular', 'var(--texto-verde-760)', 'var(--fundo-verde-80)'];
     };
     const anoAtual = new Date().getFullYear();

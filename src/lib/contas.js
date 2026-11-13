@@ -1,5 +1,6 @@
 window.FSM_CONTAS = (() => {
   const Base = window.FSM_BASE;
+  const MAXIMO_DO_LOTE = 200;
 
   const CHAVES_DAS_GAVETAS = [
     'baixarModelo',
@@ -48,7 +49,7 @@ window.FSM_CONTAS = (() => {
   function avisar(t) {
     this.setState({ aviso: t });
     clearTimeout(this.temporizadorDoAviso);
-    this.temporizadorDoAviso = setTimeout(() => this.setState({ aviso: '' }), 3200);
+    this.temporizadorDoAviso = setTimeout(() => this.setState({ aviso: '' }), Base.DURACAO_DO_AVISO);
   }
 
   function travarFundo(on) {
@@ -136,7 +137,7 @@ window.FSM_CONTAS = (() => {
       const falta = ['nome', 'email', 'cpf', 'perfil'].filter(k => !C[k]);
       if (falta.length) throw new Error('faltam as colunas ' + falta.join(', ') + '. Use o modelo.');
       if (!P.linhas.length) throw new Error('a planilha não tem pessoas.');
-      if (P.linhas.length > 200) throw new Error('envie no máximo 200 pessoas por vez.');
+      if (P.linhas.length > MAXIMO_DO_LOTE) throw new Error('envie no máximo ' + MAXIMO_DO_LOTE + ' pessoas por vez.');
       const escolas = (this.state.escolasDoSistema || this.state.escolas || []).filter(x => x.ativa !== false),
         carts = this.state.carteiras || [];
       const vistosCpf = {},

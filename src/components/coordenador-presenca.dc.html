@@ -346,7 +346,7 @@ class Component extends DCLogic {
             horaDe(r.saida_almoco),
             horaDe(r.retorno_almoco),
             horaDe(r.saida),
-            horasMinutos(Math.min(r.trabalhado_min, 480)),
+            horasMinutos(Math.min(r.trabalhado_min, Base.MINUTOS_DO_DIA)),
             (SITUACOES[r.situacao] || SITUACOES.sem_registro)[0]
           ])
         ],
@@ -419,7 +419,7 @@ class Component extends DCLogic {
             ? horaDe(r.saida_almoco) + '–' + (r.retorno_almoco ? horaDe(r.retorno_almoco) : '…')
             : '—',
           saida: horaDe(r.saida),
-          horas: horasMinutos(Math.min(r.trabalhado_min, 480)),
+          horas: horasMinutos(Math.min(r.trabalhado_min, Base.MINUTOS_DO_DIA)),
           situacao: st[0],
           fundo: st[1],
           cor: st[2]
@@ -719,7 +719,7 @@ class Component extends DCLogic {
         conf: ps.reduce((x, p) => x + minutosValidos(p), 0),
         ha: minutosDeHoraAula(noCicloDoOficineiro(contexto.registrosDoCiclo, o)),
         pend: ps.filter(diaPendente).length,
-        prev: diasLetivosAte(faixaDoCiclo(o)) * 480
+        prev: diasLetivosAte(faixaDoCiclo(o)) * Base.MINUTOS_DO_DIA
       };
     });
     const percentual = (a, b) => (b ? Math.round((a / b) * 100) + '%' : '—');
