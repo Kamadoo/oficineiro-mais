@@ -1028,8 +1028,26 @@ class Component extends DCLogic {
     window.FSM_PLANILHA.baixar(linhas, nome, aba);
   }
   renderVals() {
-    const s = this.state,
-      hoje = hojeIso(),
+    const s = this.state;
+    const v = {};
+    Object.assign(v, this.valoresDeApoio(s));
+    Object.assign(v, this.valoresDoCiclo(s, v));
+    Object.assign(v, this.valoresDasPendencias(s, v));
+    Object.assign(v, this.valoresDoMenu(s, v));
+    Object.assign(v, this.valoresDoRegistro(s, v));
+    Object.assign(v, this.valoresDasVisitas(s, v));
+    Object.assign(v, this.valoresDasContas(s, v));
+    Object.assign(v, this.valoresDoLote(s, v));
+    Object.assign(v, this.contextoDasTelas(s, v));
+    return {
+      ...this.chavesDoCabecalho(s, v),
+      ...this.chavesDasVisitas(s, v),
+      ...this.chavesDasContas(s, v),
+      ...this.chavesDasTelas(s, v)
+    };
+  }
+  valoresDeApoio(s) {
+    const hoje = hojeIso(),
       agora = agoraMin(),
       A = window.FSM_AUTH,
       logado = !!(A && A.logado && A.logado());
@@ -1056,6 +1074,34 @@ class Component extends DCLogic {
     const ciclo = ultimosCiclos.includes(s.cicloFiltro) ? s.cicloFiltro : cicloDe(hoje, 0),
       cicloAtual = ciclo === cicloDe(hoje, 0),
       fimDoPeriodo = cicloAtual ? hoje : cicloFimIso(ciclo);
+    return {
+      agora,
+      analistasAtivos,
+      analistasDaCarteira,
+      anoAtual,
+      ativosDoPerfil,
+      carteiraDaEscola,
+      carteiraNoFiltro,
+      ciclo,
+      cicloAtual,
+      contaPorId,
+      escolaDe,
+      escolaNoFiltro,
+      escolaPorId,
+      escolasAtivas,
+      fimDoPeriodo,
+      hoje,
+      logado,
+      nomeDaEscola,
+      nomeDaPessoa,
+      oficineirosAtivos,
+      rotuloDaCarteira,
+      siglaDaEscola,
+      ultimosCiclos
+    };
+  }
+  valoresDoCiclo(s, v) {
+    const { agora, anoAtual, ciclo, cicloAtual, escolaNoFiltro, fimDoPeriodo, hoje, oficineirosAtivos } = v;
     const dadosDoCiclo = c => {
       const at = c === cicloDe(hoje, 0) ? hoje : cicloFimIso(c),
         ini = cicloIniIso(c),
@@ -1197,6 +1243,46 @@ class Component extends DCLogic {
       plural(diasLetivos, 'dia letivo', 'dias letivos');
     const carregandoCiclo = !dados.pronto;
     const opacidade = s.carregando || carregandoCiclo ? 0.55 : 1;
+    return {
+      atividades,
+      atividadesDoCiclo,
+      carregandoCiclo,
+      dados,
+      dadosDoCiclo,
+      diasLetivos,
+      diasPresentesDe,
+      escolaAtualDe,
+      horasTexto,
+      larguraDaBarra,
+      minutosValidosTotais,
+      oficineirosFiltrados,
+      opacidade,
+      periodoTexto,
+      presencaMedia,
+      resumir,
+      resumoDosOficineiros,
+      total
+    };
+  }
+  valoresDasPendencias(s, v) {
+    const {
+      analistasDaCarteira,
+      atividades,
+      ativosDoPerfil,
+      carteiraNoFiltro,
+      contaPorId,
+      dados,
+      escolaAtualDe,
+      escolaNoFiltro,
+      escolasAtivas,
+      hoje,
+      nomeDaPessoa,
+      oficineirosAtivos,
+      oficineirosFiltrados,
+      resumir,
+      resumoDosOficineiros,
+      siglaDaEscola
+    } = v;
     const visitasDoPeriodo = dados.visitas.filter(v => escolaNoFiltro(v.escola_id));
     const agendaValida = s.agenda.filter(v => v.status !== 'cancelada');
     const proximaVisitaDa = escId =>
@@ -1332,6 +1418,21 @@ class Component extends DCLogic {
         ofs = oficineirosFiltrados.filter(o => ids.has(escolaAtualDe(o))).length;
       return { c, escs, ids, t, vis, visEsc, ofs };
     });
+    return {
+      agendaValida,
+      cicloDosRelatorios,
+      onboardingsSemAnalista,
+      pendencias,
+      pendenciasRotuladas,
+      proximaVisitaDa,
+      quandoDaVisita,
+      resumoDasCarteiras,
+      semRegistroTotal,
+      visitasDoPeriodo
+    };
+  }
+  valoresDoMenu(s, v) {
+    const { ciclo, logado, onboardingsSemAnalista, pendenciasRotuladas } = v;
     const ABAS = {
       adocao: [
         ['cons', 'Consolidado'],
@@ -1420,6 +1521,22 @@ class Component extends DCLogic {
               : 'real'
             : i.st;
     const turmaDe = i => (i.reg && i.reg.turma ? i.reg.turma : i.g ? turmaTxt(i.g) : '—');
+    return {
+      ABAS,
+      SITUACOES_DA_ATIVIDADE,
+      abasDaTela,
+      is,
+      itemDoMenu,
+      menu,
+      nomeDoArquivo,
+      situacaoDe,
+      tela,
+      temFiltros,
+      turmaDe
+    };
+  }
+  valoresDoRegistro(s, v) {
+    const { SITUACOES_DA_ATIVIDADE, nomeDaEscola, nomeDaPessoa, situacaoDe, turmaDe } = v;
     const registro = s.registroAberto;
     const registroDetalhado = registro
       ? (() => {
@@ -1474,6 +1591,10 @@ class Component extends DCLogic {
           };
         })()
       : {};
+    return { registro, registroDetalhado };
+  }
+  valoresDasVisitas(s, v) {
+    const { analistasAtivos, escolaDe, hoje, is, logado, nomeDaEscola, nomeDaPessoa } = v;
     const segunda = Base.iso(Base.add(dataDe(segDe(hoje)), this.memoria.analistas.semana * 7));
     const diasDaSemana = [0, 1, 2, 3, 4].map(k => Base.iso(Base.add(dataDe(segunda), k)));
     const dadosDaSemana = s.semanas[segunda];
@@ -1608,6 +1729,20 @@ class Component extends DCLogic {
       escolherHora: definirNaVisita('hora'),
       escreverOrientacao: definirNaVisita('orientacao')
     };
+    return {
+      analistaDaVisita,
+      dadosDaSemana,
+      diasDaSemana,
+      itemDaVisita,
+      novaVisita,
+      novaVisitaDetalhada,
+      segunda,
+      visitaDetalhada,
+      visitasDaSemana
+    };
+  }
+  valoresDasContas(s, v) {
+    const { escolaPorId, nomeDaEscola, rotuloDaCarteira } = v;
     const situacaoDaConta = c => (!c.ativo ? 'desativada' : c.primeiro_acesso ? 'primeiro' : 'ativa');
     const atuacaoDaConta = c =>
       c.papel === 'oficineiro' || c.papel === 'direcao'
@@ -1740,6 +1875,24 @@ class Component extends DCLogic {
     const mudanca = s.mudanca || {};
     const definirNaMudanca = k => e => this.setState({ mudanca: { ...this.state.mudanca, [k]: e.target.value } });
     const escolaDaMudanca = escolaPorId[String(mudanca.escola)];
+    return {
+      atuacaoDaConta,
+      contaAberta,
+      contaDetalhada,
+      contasNaSituacao,
+      definirNaConta,
+      definirNaMudanca,
+      escolaDaMudanca,
+      mudanca,
+      novaConta,
+      perfisDaNovaConta,
+      podeAlterarConta,
+      situacaoDaConta,
+      teclaNosPerfis
+    };
+  }
+  valoresDoLote(s, v) {
+    const { pendencias } = v;
     const loteAtual = s.lote;
     const SITUACOES_DO_LOTE = {
       pronta: ['Pronta para criar', 'var(--texto-verde-700)'],
@@ -1804,6 +1957,69 @@ class Component extends DCLogic {
       cor: p.cor,
       temAcao: true
     }));
+    return { avisos, loteAtual, loteDetalhado };
+  }
+  contextoDasTelas(s, v) {
+    const {
+      SITUACOES_DA_ATIVIDADE,
+      agendaValida,
+      agora,
+      analistasAtivos,
+      analistasDaCarteira,
+      anoAtual,
+      atividades,
+      atividadesDoCiclo,
+      atuacaoDaConta,
+      carteiraDaEscola,
+      carteiraNoFiltro,
+      ciclo,
+      cicloAtual,
+      cicloDosRelatorios,
+      contaPorId,
+      contasNaSituacao,
+      dados,
+      dadosDaSemana,
+      dadosDoCiclo,
+      diasDaSemana,
+      diasLetivos,
+      diasPresentesDe,
+      escolaAtualDe,
+      escolaNoFiltro,
+      escolaPorId,
+      escolasAtivas,
+      hoje,
+      horasTexto,
+      is,
+      larguraDaBarra,
+      minutosValidosTotais,
+      nomeDaEscola,
+      nomeDaPessoa,
+      nomeDoArquivo,
+      oficineirosAtivos,
+      oficineirosFiltrados,
+      opacidade,
+      pendenciasRotuladas,
+      periodoTexto,
+      podeAlterarConta,
+      presencaMedia,
+      proximaVisitaDa,
+      quandoDaVisita,
+      resumir,
+      resumoDasCarteiras,
+      resumoDosOficineiros,
+      rotuloDaCarteira,
+      segunda,
+      semRegistroTotal,
+      siglaDaEscola,
+      situacaoDaConta,
+      situacaoDe,
+      tela,
+      total,
+      turmaDe,
+      ultimosCiclos,
+      visitasDaSemana,
+      visitasDoPeriodo
+    } = v;
     const contexto = {
       is,
       cicloAtual,
@@ -1912,9 +2128,35 @@ class Component extends DCLogic {
       cancelarPrevia: (...argumentos) => this.cancelarPrevia(...argumentos),
       registrarExportador: exportador => (this.exportadorDaTela = exportador)
     };
+    return { contexto };
+  }
+  chavesDoCabecalho(s, v) {
+    const {
+      ABAS,
+      abasDaTela,
+      avisos,
+      carregandoCiclo,
+      ciclo,
+      cicloAtual,
+      escolaPorId,
+      escolasAtivas,
+      hoje,
+      is,
+      itemDoMenu,
+      logado,
+      menu,
+      periodoTexto,
+      registro,
+      registroDetalhado,
+      tela,
+      temFiltros,
+      ultimosCiclos
+    } = v;
     return {
       cliente: Base.cliente(),
-      linhaDoPerfil: Base.cliente().cidade ? Base.cliente().cidade + ' · oficineiros e analistas' : 'Oficineiros e analistas',
+      linhaDoPerfil: Base.cliente().cidade
+        ? Base.cliente().cidade + ' · oficineiros e analistas'
+        : 'Oficineiros e analistas',
       ...(() => {
         const N = window.FSM_NOTIF || {
             usuario: () => '',
@@ -2039,7 +2281,21 @@ class Component extends DCLogic {
       registroAberto: !!registro,
       registro: registroDetalhado,
       fecharRegistro: () => this.fecharRegistro(),
-      filtroDeCiclo: !is.analistasAgendas,
+      filtroDeCiclo: !is.analistasAgendas
+    };
+  }
+  chavesDasVisitas(s, v) {
+    const {
+      analistaDaVisita,
+      analistasAtivos,
+      escolasAtivas,
+      hoje,
+      itemDaVisita,
+      novaVisita,
+      novaVisitaDetalhada,
+      visitaDetalhada
+    } = v;
+    return {
       novaVisitaAberta: !!s.novaVisita,
       novaVisita: novaVisitaDetalhada,
       opcoesDeAnalista: analistasAtivos
@@ -2089,7 +2345,27 @@ class Component extends DCLogic {
         cancelar: () => this.cancelarVisita()
       },
       confirmandoCancelamento: !!s.confirmandoCancelamento,
-      fecharVisita: () => this.fecharVisita(),
+      fecharVisita: () => this.fecharVisita()
+    };
+  }
+  chavesDasContas(s, v) {
+    const {
+      contaAberta,
+      contaDetalhada,
+      definirNaConta,
+      definirNaMudanca,
+      escolaDaMudanca,
+      escolasAtivas,
+      hoje,
+      loteAtual,
+      loteDetalhado,
+      mudanca,
+      nomeDaEscola,
+      novaConta,
+      perfisDaNovaConta,
+      teclaNosPerfis
+    } = v;
+    return {
       fecharConta: () => this.fecharGavetaDeConta(),
       novaContaAberta: !!s.novaConta,
       novaConta: {
@@ -2158,7 +2434,12 @@ class Component extends DCLogic {
       baixarModelo: () => this.baixarModelo(),
       lerLote: e => this.lerLote(e),
       criarLote: () => this.criarLote(),
-      aviso: s.aviso,
+      aviso: s.aviso
+    };
+  }
+  chavesDasTelas(s, v) {
+    const { contexto } = v;
+    return {
       contexto,
       memoriaGeral: this.memoria.geral,
       memoriaAdocao: this.memoria.adocao,
