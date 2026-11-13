@@ -14,7 +14,7 @@ Cada tela é um arquivo `.dc.html` com três partes:
 - **estilo** declarado no `<helmet>` do componente;
 - **lógica** numa classe JavaScript que estende `DCLogic` e expõe os valores do modelo em `renderVals`.
 
-Os componentes são compostos com `<dc-import name="...">`. O runtime (`src/runtime/dc-runtime.js`) é de terceiros e foi incluído no projeto com um único ajuste, o diretório dos componentes. Ele carrega cada componente sob demanda a partir de `./components/<nome>.dc.html`, compila o modelo e o renderiza com React 18.
+Os componentes são compostos com `<dc-import name="...">`. O runtime (`vendor/dc-runtime/dc-runtime.js`) é de terceiros; a origem e os ajustes estão em `vendor/README.md`. Ele carrega cada componente sob demanda a partir de `./components/<nome>.dc.html`, compila o modelo e o renderiza com React 18.
 
 Cada perfil é um componente de nível superior (`oficineiro`, `direcao`, `analista`, `coordenador`, `gerente`) que mantém o estado compartilhado, as gavetas, as notificações e as ações que gravam no banco, e entrega a cada tela um objeto `contexto`. As telas (`gerente-contas`, `oficineiro-presenca` etc.) ficam responsáveis apenas pela apresentação e pelos filtros próprios, guardados em memória por tela. O menu lateral e o cabeçalho são componentes comuns a todos os perfis.
 

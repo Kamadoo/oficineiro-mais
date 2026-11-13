@@ -3,7 +3,7 @@ const globals = require('globals');
 
 module.exports = [
   {
-    ignores: ['dist/**', 'node_modules/**', 'vendor/**', 'src/runtime/**', 'src/config.js', 'supabase/functions/**']
+    ignores: ['dist/**', 'node_modules/**', 'vendor/**', 'src/config.js', 'supabase/functions/**']
   },
   js.configs.recommended,
   {

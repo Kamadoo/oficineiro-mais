@@ -107,9 +107,8 @@ src/
   components/          perfis, telas, menu e cabeçalho
   lib/                 autenticação, base comum, planilhas, notificações, aparência
   styles/              folha de estilo comum com tema claro e escuro
-  runtime/             runtime de componentes (terceiros)
 public/                marca, ícones e manifesto
-vendor/                React, Leaflet e fonte Inter, com hash conferido no build
+vendor/                runtime de componentes, React, Leaflet e fonte Inter (terceiros, com hash conferido no build)
 supabase/
   migrations/          esquema, políticas de acesso e funções
   functions/           Edge Functions

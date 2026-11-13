@@ -15,10 +15,11 @@ PUBLIC = RAIZ / "public"
 DIST = RAIZ / "dist"
 ASSETS = DIST / "a"
 ENTRADA = SRC / "index.dc.html"
-RUNTIME = "./runtime/dc-runtime.js"
+RUNTIME = "../vendor/dc-runtime/dc-runtime.js"
 MARCA_PRIVADA = pathlib.Path(os.environ["OFICINEIRO_MARCA"]) if os.environ.get("OFICINEIRO_MARCA") else None
 
 VENDOR_SHA256 = {
+    "vendor/dc-runtime/dc-runtime.js": "3c7416fc787b8e244cbb8b5b9ec1d347237061ad13558875f5ab3a42622421ae",
     "vendor/leaflet/leaflet-1.9.4.js": "85d455b4522415f6badc42a0e7d17c919d100347d6b8958bd0dc738fdecd6d50",
     "vendor/leaflet/leaflet-1.9.4.css": "a7837102824184820dfa198d1ebcd109ff6d0ff9a2672a074b9a1b4d147d04c6",
     "vendor/react/react-18.3.1.production.min.js": "d949f1c3687aedadcedac85261865f29b17cd273997e7f6b2bfc53b2f9d4c4dd",
@@ -91,7 +92,7 @@ class Publicador:
         texto = FONTES_GOOGLE.sub(lambda _: '<link href="%s" rel="stylesheet">' % css_fontes, texto)
 
         def troca(m):
-            if m.group(2) == RUNTIME or m.group(2).startswith("./a/"):
+            if m.group(2).startswith("./a/"):
                 return m.group(0)
             return '%s="%s"' % (m.group(1), self.arquivo(caminho(m.group(2))))
 
@@ -141,7 +142,7 @@ def construir():
 
     react = pub.arquivo(RAIZ / "vendor" / "react" / "react-18.3.1.production.min.js")
     react_dom = pub.arquivo(RAIZ / "vendor" / "react" / "react-dom-18.3.1.production.min.js")
-    runtime = pub.arquivo(SRC / "runtime" / "dc-runtime.js")
+    runtime = pub.arquivo(RAIZ / "vendor" / "dc-runtime" / "dc-runtime.js")
 
     pagina = ENTRADA.read_text(encoding="utf-8")
     if pagina.count('<script src="%s"></script>' % RUNTIME) != 1:
