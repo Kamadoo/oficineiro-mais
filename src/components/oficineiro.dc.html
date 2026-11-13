@@ -1641,6 +1641,14 @@ class Component extends DCLogic {
   }
   relatorio() {
     const s = this.state;
+    const v = {};
+    Object.assign(v, this.ocorrenciasDoRelatorio(s));
+    Object.assign(v, this.linhasDoRelatorio(s, v));
+    Object.assign(v, this.horasDoRelatorio(s, v));
+    Object.assign(v, this.pendenciasDoRelatorio(s, v));
+    return this.resumoDoRelatorio(s, v);
+  }
+  ocorrenciasDoRelatorio(s) {
     const competencia = s.competenciaDoRelatorio || this.competenciaAtual(),
       dataDaCompetencia = dataDe(competencia),
       inicioDoCiclo = Base.cicloIni(dataDaCompetencia),
@@ -1689,6 +1697,20 @@ class Component extends DCLogic {
     const cicloAtual = competencia === this.competenciaAtual(),
       devolvido = !!(s.relatorioDoCiclo && s.relatorioDoCiclo.status === 'devolvido');
     const editavel = cicloAtual || devolvido;
+    return {
+      cicloAtual,
+      competencia,
+      dataDaCompetencia,
+      devolvido,
+      editavel,
+      fimDoCiclo,
+      hoje,
+      inicioDoCiclo,
+      ocorrencias
+    };
+  }
+  linhasDoRelatorio(s, v) {
+    const { ocorrencias } = v;
     const situacaoDe = ocorrencia =>
       ocorrencia.registro
         ? ocorrencia.registro.revisao_status === 'anulado'
@@ -1767,6 +1789,10 @@ class Component extends DCLogic {
       };
     };
     const linhas = ocorrencias.map(linhaDe);
+    return { linhaDe, linhas, situacaoDe };
+  }
+  horasDoRelatorio(s, v) {
+    const { hoje } = v;
     const horas = [...s.presencasDoCiclo]
       .sort((x, y) => (x.data < y.data ? -1 : 1))
       .map(presenca => {
@@ -1815,6 +1841,10 @@ class Component extends DCLogic {
         };
       });
     horas.sort((a, b) => (a.presenca.data < b.presenca.data ? -1 : a.presenca.data > b.presenca.data ? 1 : 0));
+    return { horas };
+  }
+  pendenciasDoRelatorio(s, v) {
+    const { cicloAtual, editavel, horas, ocorrencias, situacaoDe } = v;
     const pendencias = [
       ...ocorrencias
         .filter(
@@ -1876,6 +1906,25 @@ class Component extends DCLogic {
     ];
     const pendenciasComAcao = pendencias.filter(pendencia => pendencia.temAcao).length;
     if (cicloAtual) this.pendenciasDoCicloAtual = { pendencias, relatorioDoCiclo: s.relatorioDoCiclo };
+    return { pendencias, pendenciasComAcao };
+  }
+  resumoDoRelatorio(s, v) {
+    const {
+      cicloAtual,
+      competencia,
+      dataDaCompetencia,
+      devolvido,
+      editavel,
+      fimDoCiclo,
+      hoje,
+      horas,
+      inicioDoCiclo,
+      linhaDe,
+      linhas,
+      ocorrencias,
+      pendencias,
+      pendenciasComAcao
+    } = v;
     return {
       competencia,
       dataDaCompetencia,
@@ -2015,6 +2064,14 @@ class Component extends DCLogic {
   }
   notificacoes(lembretesPendentes) {
     const s = this.state;
+    const v = { lembretesPendentes };
+    Object.assign(v, this.notificacoesDoDia(s, v));
+    Object.assign(v, this.notificacoesDoCiclo(s, v));
+    this.notificacoesDaGrade(s, v);
+    return this.listaDeNotificacoes(s, v);
+  }
+  notificacoesDoDia(s, v) {
+    const { lembretesPendentes } = v;
     const lista = [],
       abrirTela = tela => () => this.irPara(tela);
     const hoje = new Date(),
@@ -2067,6 +2124,10 @@ class Component extends DCLogic {
         cor: 'var(--texto-ambar-660)'
       });
     });
+    return { abrirTela, lista };
+  }
+  notificacoesDoCiclo(s, v) {
+    const { abrirTela, lista } = v;
     const doCiclo = this.pendenciasDoCicloAtual || { pendencias: [], relatorioDoCiclo: null },
       pendencias = doCiclo.pendencias || [];
     const comAcao = (pendencia, titulo) => ({
@@ -2179,6 +2240,10 @@ class Component extends DCLogic {
         go: abrirTela('horas'),
         cor: 'var(--texto-ambar-660)'
       });
+    return { pendencias };
+  }
+  notificacoesDaGrade(s, v) {
+    const { abrirTela, lista, pendencias } = v;
     if (s.carregado && !s.carregandoGrade) {
       const envio = s.envioDaGrade,
         situacao = envio && envio.status;
@@ -2245,6 +2310,10 @@ class Component extends DCLogic {
         cor: 'var(--texto-azul-640)'
       });
     }
+    return {};
+  }
+  listaDeNotificacoes(s, v) {
+    const { lista } = v;
     return lista.map(notificacao => ({ ...notificacao, temAcao: !!(notificacao.acao && notificacao.go) }));
   }
   sino(notificacoes) {
