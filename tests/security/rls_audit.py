@@ -1,15 +1,12 @@
 import json
 import sys
 
-from common import DB, USUARIOS, OUTRO_OFICINEIRO, lista, rodar
+from common import USUARIOS, lista, rodar
 
 tabelas = [t[0] for t in lista("select relname from pg_class where relnamespace='public'::regnamespace and relkind='r' order by 1")]
-funcoes = lista(
-    "select p.proname, pg_get_function_identity_arguments(p.oid) from pg_proc p where p.pronamespace='public'::regnamespace order by 1"
-)
+funcoes = lista("select p.proname, pg_get_function_identity_arguments(p.oid) from pg_proc p where p.pronamespace='public'::regnamespace order by 1")
 colunas = {
-    t: [c[0] for c in lista(f"select column_name from information_schema.columns where table_schema='public' and table_name='{t}'")]
-    for t in tabelas
+    t: [c[0] for c in lista(f"select column_name from information_schema.columns where table_schema='public' and table_name='{t}'")] for t in tabelas
 }
 EXCLUSAO_DA_PROPRIA_LINHA = {("oficineiro", "grade_aulas"): "oficineiro_id"}
 
@@ -66,9 +63,7 @@ for papel in ("oficineiro", "direcao", "analista", "coordenador", "gerente"):
             if not dono:
                 achados.append(f"APAGA DIRETO {papel} apaga {out} linhas de {t}")
                 continue
-            alheias, erro = rodar(
-                f"with x as (delete from public.{t} where {dono} <> '{uid}' returning 1) select count(*) from x", papel, uid
-            )
+            alheias, erro = rodar(f"with x as (delete from public.{t} where {dono} <> '{uid}' returning 1) select count(*) from x", papel, uid)
             if erro or alheias not in ("0", ""):
                 achados.append(f"APAGA DIRETO {papel} apaga {alheias or '?'} linhas de outras pessoas em {t}")
 
@@ -77,21 +72,20 @@ for papel in ("oficineiro", "analista", "direcao", "coordenador", "gerente"):
     out, erro = rodar(f"update public.perfis set papel='administrador' where id='{uid}' returning papel", papel, uid)
     if not erro and out:
         achados.append(f"ESCALADA {papel} virou administrador por UPDATE")
-    out, erro = rodar(f"insert into public.perfis (id, nome, papel) values (gen_random_uuid(), 'X', 'administrador') returning id", papel, uid)
+    out, erro = rodar("insert into public.perfis (id, nome, papel) values (gen_random_uuid(), 'X', 'administrador') returning id", papel, uid)
     if not erro and out:
         achados.append(f"ESCALADA {papel} criou perfil administrador")
 
 for schema in ("privado", "auditoria", "vault", "auth", "cron"):
     for papel in ("oficineiro",):
-        objs = lista(
-            f"select c.relname from pg_class c where c.relnamespace='{schema}'::regnamespace and c.relkind in ('r','v')"
-        )
+        objs = lista(f"select c.relname from pg_class c where c.relnamespace='{schema}'::regnamespace and c.relkind in ('r','v')")
         for (o,) in objs:
             out, erro = rodar(f"select count(*) from {schema}.{o}", papel, USUARIOS[papel])
             if not erro:
                 achados.append(f"ESQUEMA {papel} lê {schema}.{o}: {out}")
 
-json.dump({"visiveis": {f"{p}|{t}": v for (p, t), v in visiveis.items()}, "achados": achados}, open("rls_audit.json", "w"), ensure_ascii=False, indent=1)
+with open("rls_audit.json", "w") as saida:
+    json.dump({"visiveis": {f"{p}|{t}": v for (p, t), v in visiveis.items()}, "achados": achados}, saida, ensure_ascii=False, indent=1)
 print(len(tabelas), "tabelas,", len(funcoes), "funções;", len(achados), "achados")
 for a in achados:
     print(" -", a)

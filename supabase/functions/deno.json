@@ -1,0 +1,12 @@
+{
+  "nodeModulesDir": "none",
+  "fmt": {
+    "lineWidth": 120,
+    "singleQuote": true
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["no-control-regex", "no-import-prefix"]
+    }
+  }
+}

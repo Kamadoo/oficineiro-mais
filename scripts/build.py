@@ -58,9 +58,8 @@ def rel(p):
 def ler_conferido(p):
     dados = p.read_bytes()
     chave = rel(p)
-    if chave.startswith("vendor/") and chave in VENDOR_SHA256:
-        if hashlib.sha256(dados).hexdigest() != VENDOR_SHA256[chave]:
-            raise SystemExit(chave + ": arquivo de terceiros alterado")
+    if chave.startswith("vendor/") and chave in VENDOR_SHA256 and hashlib.sha256(dados).hexdigest() != VENDOR_SHA256[chave]:
+        raise SystemExit(chave + ": arquivo de terceiros alterado")
     if chave == "src/lib/sobre.js":
         dados = dados.replace(b"__FSM_GERADO__", GERADO.encode("ascii"))
     return dados
@@ -111,13 +110,15 @@ def json_seguro(v):
 def icones():
     favicon = re.sub(r"<metadata>.*?</metadata>", "", (PUBLIC / "brand" / "favicon.svg").read_text(encoding="utf-8"), flags=re.S)
     png32 = (PUBLIC / "brand" / "png" / "favicon-32.png").read_bytes()
-    return "\n".join([
-        '<meta name="theme-color" content="#13252C">',
-        '<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,%s">' % base64.b64encode(favicon.encode("utf-8")).decode("ascii"),
-        '<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,%s">' % base64.b64encode(png32).decode("ascii"),
-        '<link rel="apple-touch-icon" href="brand/png/favicon-180.png">',
-        '<link rel="manifest" href="manifest.webmanifest">',
-    ])
+    return "\n".join(
+        [
+            '<meta name="theme-color" content="#13252C">',
+            '<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,%s">' % base64.b64encode(favicon.encode("utf-8")).decode("ascii"),
+            '<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,%s">' % base64.b64encode(png32).decode("ascii"),
+            '<link rel="apple-touch-icon" href="brand/png/favicon-180.png">',
+            '<link rel="manifest" href="manifest.webmanifest">',
+        ]
+    )
 
 
 def construir():
@@ -146,19 +147,23 @@ def construir():
 
     pagina = ENTRADA.read_text(encoding="utf-8")
     if pagina.count('<script src="%s"></script>' % RUNTIME) != 1:
-        raise SystemExit("index.dc.html: esperava um único <script src=\"%s\">" % RUNTIME)
+        raise SystemExit('index.dc.html: esperava um único <script src="%s">' % RUNTIME)
     script_recursos = "window.__resources = %s;" % json_seguro(recursos)
     hash_recursos = base64.b64encode(hashlib.sha256(script_recursos.encode("utf-8")).digest()).decode("ascii")
-    cabeca = "\n".join([
-        "<script>%s</script>" % script_recursos,
-        '<script src="%s" integrity="%s"></script>' % (react, REACT_SRI["vendor/react/react-18.3.1.production.min.js"]),
-        '<script src="%s" integrity="%s"></script>' % (react_dom, REACT_SRI["vendor/react/react-dom-18.3.1.production.min.js"]),
-        '<script src="%s"></script>' % runtime,
-    ])
+    cabeca = "\n".join(
+        [
+            "<script>%s</script>" % script_recursos,
+            '<script src="%s" integrity="%s"></script>' % (react, REACT_SRI["vendor/react/react-18.3.1.production.min.js"]),
+            '<script src="%s" integrity="%s"></script>' % (react_dom, REACT_SRI["vendor/react/react-dom-18.3.1.production.min.js"]),
+            '<script src="%s"></script>' % runtime,
+        ]
+    )
     pagina = pagina.replace('<script src="%s"></script>' % RUNTIME, cabeca, 1)
     pagina = pub.preparar(pagina, css_fontes)
     if 'rel="manifest"' not in pagina:
-        pagina = pagina.replace('<meta name="robots" content="noindex, nofollow">', '<meta name="robots" content="noindex, nofollow">\n' + icones(), 1)
+        pagina = pagina.replace(
+            '<meta name="robots" content="noindex, nofollow">', '<meta name="robots" content="noindex, nofollow">\n' + icones(), 1
+        )
     pub.textos.append(("dist/index.html", pagina))
     exigir_limpo(pub.textos)
     (DIST / "index.html").write_text(pagina, encoding="utf-8", newline="\n")
@@ -175,41 +180,49 @@ def construir():
 def escrever_cabecalhos(hash_recursos):
     config = SRC / "config.js"
     m = re.search(r"https://[a-z0-9-]+\.supabase\.co", config.read_text(encoding="utf-8") if config.exists() else "")
-    csp = "; ".join([
-        "default-src 'self'",
-        "script-src 'self' 'unsafe-eval' 'sha256-%s'" % hash_recursos,
-        "style-src 'self' 'unsafe-inline'",
-        "font-src 'self'",
-        "img-src 'self' data: blob: https://server.arcgisonline.com",
-        ("connect-src 'self' data: blob: " + (m.group(0) if m else "")).strip(),
-        "worker-src 'self' blob:",
-        "frame-src 'self' data: blob:",
-        "object-src 'none'",
-        "base-uri 'none'",
-        "form-action 'none'",
-        "frame-ancestors 'none'",
-    ])
-    (DIST / "_headers").write_text("\n".join([
-        "/*",
-        "  Content-Security-Policy: " + csp,
-        "  Strict-Transport-Security: max-age=31536000",
-        "  Cross-Origin-Opener-Policy: same-origin",
-        "  X-Content-Type-Options: nosniff",
-        "  X-Frame-Options: DENY",
-        "  Referrer-Policy: no-referrer",
-        "  Permissions-Policy: geolocation=(self), camera=(), microphone=()",
-        "  X-Robots-Tag: noindex, nofollow",
-        "",
-        "/",
-        "  Cache-Control: no-cache",
-        "",
-        "/index.html",
-        "  Cache-Control: no-cache",
-        "",
-        "/a/*",
-        "  Cache-Control: public, max-age=31536000, immutable",
-        "",
-    ]), encoding="utf-8", newline="\n")
+    csp = "; ".join(
+        [
+            "default-src 'self'",
+            "script-src 'self' 'unsafe-eval' 'sha256-%s'" % hash_recursos,
+            "style-src 'self' 'unsafe-inline'",
+            "font-src 'self'",
+            "img-src 'self' data: blob: https://server.arcgisonline.com",
+            ("connect-src 'self' data: blob: " + (m.group(0) if m else "")).strip(),
+            "worker-src 'self' blob:",
+            "frame-src 'self' data: blob:",
+            "object-src 'none'",
+            "base-uri 'none'",
+            "form-action 'none'",
+            "frame-ancestors 'none'",
+        ]
+    )
+    (DIST / "_headers").write_text(
+        "\n".join(
+            [
+                "/*",
+                "  Content-Security-Policy: " + csp,
+                "  Strict-Transport-Security: max-age=31536000",
+                "  Cross-Origin-Opener-Policy: same-origin",
+                "  X-Content-Type-Options: nosniff",
+                "  X-Frame-Options: DENY",
+                "  Referrer-Policy: no-referrer",
+                "  Permissions-Policy: geolocation=(self), camera=(), microphone=()",
+                "  X-Robots-Tag: noindex, nofollow",
+                "",
+                "/",
+                "  Cache-Control: no-cache",
+                "",
+                "/index.html",
+                "  Cache-Control: no-cache",
+                "",
+                "/a/*",
+                "  Cache-Control: public, max-age=31536000, immutable",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+        newline="\n",
+    )
 
 
 if __name__ == "__main__":

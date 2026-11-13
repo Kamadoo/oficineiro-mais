@@ -35,7 +35,7 @@ def nomes_de_referencia():
     for p in list(pasta.glob("*.json")) + list(pasta.glob("*.js")):
         texto = p.read_text(encoding="utf-8", errors="ignore")
         try:
-            dados = json.loads(texto[texto.index("{"):texto.rindex("}") + 1])
+            dados = json.loads(texto[texto.index("{") : texto.rindex("}") + 1])
         except ValueError:
             continue
         pilha = [dados]

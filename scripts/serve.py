@@ -3,6 +3,7 @@ import http.server
 import pathlib
 import re
 import sys
+import contextlib
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 DIST = RAIZ / "dist"
@@ -52,7 +53,5 @@ if __name__ == "__main__":
     Servidor.regras = cabecalhos()
     servidor = http.server.ThreadingHTTPServer(("127.0.0.1", PORTA), functools.partial(Servidor, directory=str(DIST)))
     print("http://localhost:%d" % PORTA)
-    try:
+    with contextlib.suppress(KeyboardInterrupt):
         servidor.serve_forever()
-    except KeyboardInterrupt:
-        pass

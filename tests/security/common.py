@@ -35,12 +35,10 @@ def rodar(sql, papel=None, uid=None, aal="aal2", rollback=True):
         ]
     corpo = "\n".join(pre + [sql + ";", "rollback;" if rollback else "commit;"])
     r = subprocess.run(["psql", "-X", "-q", "-A", "-t", "-d", DB], input=corpo, capture_output=True, text=True, env=ENV)
-    erro = next((l for l in r.stderr.splitlines() if "ERROR" in l), "")
+    erro = next((linha for linha in r.stderr.splitlines() if "ERROR" in linha), "")
     return r.stdout.strip(), erro
 
 
 def lista(sql):
     out, _ = rodar(sql)
-    return [l.split("|") for l in out.splitlines() if l]
-
-
+    return [linha.split("|") for linha in out.splitlines() if linha]

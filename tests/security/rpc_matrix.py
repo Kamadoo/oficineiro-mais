@@ -1,6 +1,5 @@
 import json
 import re
-import sys
 
 from common import USUARIOS, OUTRO_OFICINEIRO, lista, rodar
 
@@ -20,9 +19,7 @@ PADRAO = {
     "bigint[]": "'{1}'::bigint[]",
     "date[]": "'{2026-11-10}'::date[]",
 }
-funcoes = lista(
-    "select p.proname, pg_get_function_identity_arguments(p.oid) from pg_proc p where p.pronamespace='public'::regnamespace order by 1"
-)
+funcoes = lista("select p.proname, pg_get_function_identity_arguments(p.oid) from pg_proc p where p.pronamespace='public'::regnamespace order by 1")
 matriz = {}
 for nome, args in funcoes:
     valores = []
@@ -39,7 +36,8 @@ for nome, args in funcoes:
             m = re.search(r"ERROR:\s+(.*)", erro)
             linha[papel] = "ERRO " + (m.group(1)[:90] if m else erro[:90])
     matriz[f"{nome}({args})"] = linha
-json.dump(matriz, open("rpc_matrix.json", "w"), ensure_ascii=False, indent=1)
-for f, l in matriz.items():
-    ok = [p for p, v in l.items() if v.startswith("OK")]
+with open("rpc_matrix.json", "w") as saida:
+    json.dump(matriz, saida, ensure_ascii=False, indent=1)
+for f, resultado in matriz.items():
+    ok = [p for p, v in resultado.items() if v.startswith("OK")]
     print(f.split("(")[0], "→ aceito por:", ",".join(ok) or "ninguém")

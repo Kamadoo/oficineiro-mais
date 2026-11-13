@@ -9,17 +9,19 @@ OF = USUARIOS["oficineiro"]
 
 def como(papel_uid, preparo, chamada):
     claims = json.dumps({"sub": papel_uid, "role": "authenticated", "aal": "aal2"})
-    corpo = "\n".join([
-        "begin;",
-        preparo + ";" if preparo else "",
-        f"select set_config('request.jwt.claims', '{claims}', true) \\g /dev/null",
-        "select set_config('t.hoje', '2026-11-09', true) \\g /dev/null",
-        "set local role authenticated;",
-        chamada + ";",
-        "rollback;",
-    ])
+    corpo = "\n".join(
+        [
+            "begin;",
+            preparo + ";" if preparo else "",
+            f"select set_config('request.jwt.claims', '{claims}', true) \\g /dev/null",
+            "select set_config('t.hoje', '2026-11-09', true) \\g /dev/null",
+            "set local role authenticated;",
+            chamada + ";",
+            "rollback;",
+        ]
+    )
     r = subprocess.run(["psql", "-X", "-q", "-A", "-t", "-d", DB], input=corpo, capture_output=True, text=True, env=ENV)
-    erro = next((l.split("ERROR:", 1)[1].strip() for l in r.stderr.splitlines() if "ERROR" in l), "")
+    erro = next((linha.split("ERROR:", 1)[1].strip() for linha in r.stderr.splitlines() if "ERROR" in linha), "")
     return ("ERRO " + erro) if erro else ("OK " + r.stdout.strip()[:120])
 
 
@@ -58,9 +60,9 @@ casos = {
     "analista lê perfis fora da carteira": (
         USUARIOS["analista"],
         "",
-        f"select count(*) from public.perfis where escola_id is not null and escola_id not in (select id from public.escolas where carteira_id='CS1')",
+        "select count(*) from public.perfis where escola_id is not null and escola_id not in (select id from public.escolas where carteira_id='CS1')",
     ),
-    "oficineiro salva preferências com HTML": (OF, "", "select public.salvar_preferencias('{\"tema\":\"<img src=x onerror=alert(1)>\"}'::jsonb)"),
+    "oficineiro salva preferências com HTML": (OF, "", 'select public.salvar_preferencias(\'{"tema":"<img src=x onerror=alert(1)>"}\'::jsonb)'),
     "oficineiro injeta SQL no tipo de ajuste": (
         OF,
         "",
@@ -72,11 +74,16 @@ casos = {
         "",
         f"select public.admin_alterar_papel('{OF}', 'administrador', null, null, 'motivo de teste suficiente')",
     ),
-    "gerente cancela visita e consulta auditoria completa": (USUARIOS["gerente"], "", "select count(*) from public.admin_auditoria(null, null, null, null, null, 10)"),
+    "gerente cancela visita e consulta auditoria completa": (
+        USUARIOS["gerente"],
+        "",
+        "select count(*) from public.admin_auditoria(null, null, null, null, null, 10)",
+    ),
     "oficineiro marca presença longe da escola": (OF, "", "select public.marcar_presenca('entrada', 10.0, 10.0, 5)"),
     "oficineiro marca presença com precisão falsa (0 m)": (OF, "", "select public.marcar_presenca('entrada', -20.0, -43.9, 0)"),
 }
 res = {k: como(*v) for k, v in casos.items()}
 for k, v in res.items():
     print(f"{k}: {v}")
-json.dump(res, open("scope_audit.json", "w"), ensure_ascii=False, indent=1)
+with open("scope_audit.json", "w") as saida:
+    json.dump(res, saida, ensure_ascii=False, indent=1)

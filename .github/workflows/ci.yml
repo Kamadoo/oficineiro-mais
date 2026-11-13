@@ -22,8 +22,26 @@ jobs:
       - run: npm run lint
       - run: npm run format:check
       - run: npm test
+      - run: pip install ruff
+      - run: ruff check scripts tests
+      - run: ruff format --check scripts tests
       - run: cp src/config.example.js src/config.js
       - run: python scripts/build.py
+
+  edge-functions:
+    name: Funções de borda
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: supabase/functions
+    steps:
+      - uses: actions/checkout@v5
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno fmt --check
+      - run: deno lint
+      - run: deno check acesso/index.ts admin-usuarios/index.ts
 
   database:
     name: Banco de dados
