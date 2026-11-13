@@ -10,7 +10,10 @@
 <x-dc>
   <div class="w-100pc max-w-640 m-0-auto d-flex eixo-column gap-16">
     <div class="d-flex eixo-column gap-6">
-      <div role="tablist" aria-label="Presença na Escola" class="d-flex gap-4 rolagem-x-auto borda-b-cinza-110"><sc-for list="{{ abas }}" as="aba" hint-placeholder-count="3"><button role="tab" onClick="{{ aba.abrir }}" aria-selected="{{ aba.atual }}" class="min-h-44 p-10-8 fundo-transparent fs-14 espaco-nowrap largura-fundo" style="border:0;border-bottom:3px solid {{ aba.borda }};color:{{ aba.cor }};font-weight:{{ aba.peso }}">{{ aba.rotulo }}</button></sc-for></div>
+      <div role="tablist" aria-label="Presença na Escola" class="d-flex gap-4 rolagem-x-auto borda-b-cinza-110"><sc-for
+        list="{{ abas }}" as="aba" hint-placeholder-count="3"><button role="tab" onClick="{{ aba.abrir }}"
+        aria-selected="{{ aba.atual }}" class="min-h-44 p-10-8 fundo-transparent fs-14 espaco-nowrap largura-fundo"
+        style="border:0;border-bottom:3px solid {{ aba.borda }};color:{{ aba.cor }};font-weight:{{ aba.peso }}">{{ aba.rotulo }}</button></sc-for></div>
     </div>
 
     <sc-if value="{{ abaAtual.registrar }}" hint-placeholder-val="{{ true }}">
@@ -26,7 +29,12 @@
           <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--destaque-ciano-660)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-none"><path d="M3 21h18"></path><path d="M5 21V8l7-5 7 5v13"></path><path d="M10 21v-6h4v6"></path></svg>
           <span class="fs-14 fw-700 cor-ciano-850 min-w-0">{{ escola }}</span>
         </div>
-        <sc-if value="{{ selo.tem }}" hint-placeholder-val="{{ true }}"><div role="status" class="d-flex alinha-center gap-6 raio-999 p-6-12 fs-12 fw-700" style="background:{{ selo.fundo }};color:{{ selo.cor }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>{{ selo.texto }}</div></sc-if>
+        <sc-if value="{{ selo.tem }}" hint-placeholder-val="{{ true }}"><div role="status"
+          class="d-flex alinha-center gap-6 raio-999 p-6-12 fs-12 fw-700"
+          style="background:{{ selo.fundo }};color:{{ selo.cor }}"><svg aria-hidden="true" width="14" height="14"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+          stroke-linejoin="round"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"></path><circle cx="12" cy="9"
+          r="2.5"></circle></svg>{{ selo.texto }}</div></sc-if>
       </section>
       <div class="d-flex eixo-column gap-8">
         <button onClick="{{ marcar }}" disabled="{{ botao.desligado }}" aria-busy="{{ botao.ocupado }}" class="h-64 borda-0 raio-16 cor-branco fs-18 fw-800 d-flex alinha-center justifica-center gap-10 {{ botao.classe }}" style="background:{{ botao.fundo }};cursor:pointer">
@@ -73,7 +81,12 @@
           <span class="fs-15 fw-700 cor-ciano-850 texto-center">{{ mesTexto }}</span>
           <button class="espelho-nao-imprimir w-44 h-44 borda-0 fundo-transparent cor-ciano-740 fs-20 fw-700 largura-fundo" onClick="{{ mesSeguinte }}" disabled="{{ semMesSeguinte }}" aria-label="Próximo mês">›</button>
         </div>
-        <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))"><sc-for list="{{ cartoes }}" as="cartao" hint-placeholder-count="4"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-14 p-12-14 d-flex eixo-column gap-2 fundo-branco"><span class="fs-12 cor-cinza-600 fw-600">{{ cartao.titulo }}</span><b class="fs-22 cor-ciano-850 num-tabular-nums">{{ cartao.valor }}</b><span class="fs-11 cor-cinza-600">{{ cartao.nota }}</span></div></sc-for></div>
+        <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))"><sc-for
+          list="{{ cartoes }}" as="cartao" hint-placeholder-count="4"><div style="background:var(--fundo-branco)"
+          class="borda-cinza-110 raio-14 p-12-14 d-flex eixo-column gap-2 fundo-branco"><span
+          class="fs-12 cor-cinza-600 fw-600">{{ cartao.titulo }}</span><b
+          class="fs-22 cor-ciano-850 num-tabular-nums">{{ cartao.valor }}</b><span
+          class="fs-11 cor-cinza-600">{{ cartao.nota }}</span></div></sc-for></div>
         <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-16 p-6-16 d-flex eixo-column fundo-branco">
           <sc-if value="{{ espelhoVazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600 p-12-0">{{ espelhoVazioTexto }}</span></sc-if>
           <sc-for list="{{ dias }}" as="dia" hint-placeholder-count="3">
@@ -97,10 +110,19 @@
     <sc-if value="{{ abaAtual.justificativas }}" hint-placeholder-val="{{ false }}">
       <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-20 p-18 d-flex eixo-column gap-14 fundo-branco">
         <h1 class="m-0 fs-18 fw-800 cor-ciano-850">Solicitar ajuste de presença</h1>
-        <div class="d-flex eixo-column gap-8"><span id="aj-tipo-rot" class="fs-12 cor-cinza-600 fw-600">Tipo de solicitação *</span><div role="radiogroup" aria-labelledby="aj-tipo-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ tiposDeAjuste }}" as="tipo" hint-placeholder-count="5"><button role="radio" aria-checked="{{ tipo.marcado }}" onClick="{{ tipo.escolher }}" class="min-h-40 raio-999 p-6-14 fs-13 fw-600 botao-opcao {{ tipo.classe }}" style="border:1.5px solid {{ tipo.borda }};background:{{ tipo.fundo }};color:{{ tipo.cor }}">{{ tipo.rotulo }}</button></sc-for></div></div>
+        <div class="d-flex eixo-column gap-8"><span id="aj-tipo-rot"
+          class="fs-12 cor-cinza-600 fw-600">Tipo de solicitação *</span><div role="radiogroup" aria-labelledby="aj-tipo-rot"
+          class="d-flex quebra-wrap gap-8"><sc-for list="{{ tiposDeAjuste }}" as="tipo" hint-placeholder-count="5"><button
+          role="radio" aria-checked="{{ tipo.marcado }}" onClick="{{ tipo.escolher }}"
+          class="min-h-40 raio-999 p-6-14 fs-13 fw-600 botao-opcao {{ tipo.classe }}"
+          style="border:1.5px solid {{ tipo.borda }};background:{{ tipo.fundo }};color:{{ tipo.cor }}">{{ tipo.rotulo }}</button></sc-for></div></div>
         <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Data *</span><input type="date" value="{{ ajuste.data }}" max="{{ ajuste.dataMaxima }}" onChange="{{ ajuste.mudarData }}" class="h-44 borda-cinza-160 raio-10 p-0-12 fs-15 fundo-branco cor-ciano-850"></input></label>
         <sc-if value="{{ ajuste.comHorarios }}" hint-placeholder-val="{{ true }}">
-          <div class="d-grid colunas-1fr-1fr gap-10"><sc-for list="{{ horariosDoAjuste }}" as="horario" hint-placeholder-count="4"><label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">{{ horario.rotulo }}</span><input type="time" value="{{ horario.valor }}" onChange="{{ horario.mudar }}" class="h-44 borda-cinza-160 raio-10 p-0-12 fs-15 fundo-branco cor-ciano-850"></input></label></sc-for></div>
+          <div class="d-grid colunas-1fr-1fr gap-10"><sc-for list="{{ horariosDoAjuste }}" as="horario"
+            hint-placeholder-count="4"><label class="d-flex eixo-column gap-6"><span
+            class="fs-12 cor-cinza-600 fw-600">{{ horario.rotulo }}</span><input type="time" value="{{ horario.valor }}"
+            onChange="{{ horario.mudar }}"
+            class="h-44 borda-cinza-160 raio-10 p-0-12 fs-15 fundo-branco cor-ciano-850"></input></label></sc-for></div>
           <span class="fs-12 cor-cinza-600">Horário livre: o total do dia não pode passar de 8h, sem contar o almoço.</span>
         </sc-if>
         <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Motivo *</span><textarea value="{{ ajuste.motivo }}" onChange="{{ ajuste.mudarMotivo }}" maxlength="1000" rows="3" class="borda-cinza-160 raio-10 p-10-12 fs-15 fonte-inherit redim-vertical fundo-branco cor-ciano-850"></textarea></label>

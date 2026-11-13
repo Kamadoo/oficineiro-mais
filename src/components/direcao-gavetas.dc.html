@@ -11,9 +11,18 @@
 <sc-if value="{{ detalheGradeAberto }}" hint-placeholder-val="{{ false }}">
   <div onClick="{{ fecharDetalheGrade }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-20"></div>
   <aside role="dialog" aria-modal="true" aria-labelledby="dir-ag-tit" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-21 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo largura-460">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Detalhes da atividade · somente visualização</span><h3 id="dir-ag-tit" tabindex="-1" class="m-0 fs-17 contorno-none">{{ detalheGrade.titulo }}</h3></div><button onClick="{{ fecharDetalheGrade }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div
+      class="flex-1 d-flex eixo-column min-w-0"><span
+      class="fs-12 cor-cinza-600">Detalhes da atividade · somente visualização</span><h3 id="dir-ag-tit" tabindex="-1"
+      class="m-0 fs-17 contorno-none">{{ detalheGrade.titulo }}</h3></div><button onClick="{{ fecharDetalheGrade }}"
+      aria-label="Fechar"
+      class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
-      <div class="d-flex eixo-column gap-4 raio-10 p-12-14" style="border-left:4px solid {{ detalheGrade.cor }};background:{{ detalheGrade.fundo }}"><b class="fs-15">{{ detalheGrade.quando }}</b><span class="fs-13 fw-600" style="color:{{ detalheGrade.cor }}">{{ detalheGrade.tipo }}</span><sc-if value="{{ detalheGrade.personalizada }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-ambar-745">Alterada nesta semana</span></sc-if></div>
+      <div class="d-flex eixo-column gap-4 raio-10 p-12-14"
+        style="border-left:4px solid {{ detalheGrade.cor }};background:{{ detalheGrade.fundo }}"><b
+        class="fs-15">{{ detalheGrade.quando }}</b><span class="fs-13 fw-600"
+        style="color:{{ detalheGrade.cor }}">{{ detalheGrade.tipo }}</span><sc-if value="{{ detalheGrade.personalizada }}"
+        hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-ambar-745">Alterada nesta semana</span></sc-if></div>
       <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ detalheGrade.itens }}" as="item" hint-placeholder-count="5"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
     </div>
     <div class="borda-t-cinza-110 d-flex justifica-flex-end rodape-gaveta"><button style="background:var(--destaque-ciano-660)" onClick="{{ fecharDetalheGrade }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660">Fechar</button></div>
@@ -23,9 +32,16 @@
 <sc-if value="{{ atividadeAberta }}" hint-placeholder-val="{{ false }}">
   <div onClick="{{ fecharAtividade }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-20"></div>
   <aside role="dialog" aria-modal="true" aria-labelledby="dir-det-tit" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-21 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo largura-480">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">{{ atividade.oficineiro }}</span><h3 id="dir-det-tit" tabindex="-1" class="m-0 fs-17">{{ atividade.titulo }}</h3></div><button onClick="{{ fecharAtividade }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div
+      class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">{{ atividade.oficineiro }}</span><h3
+      id="dir-det-tit" tabindex="-1" class="m-0 fs-17">{{ atividade.titulo }}</h3></div><button
+      onClick="{{ fecharAtividade }}" aria-label="Fechar"
+      class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
-      <div class="d-flex quebra-wrap gap-6"><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ atividade.situacaoCor }};background:{{ atividade.situacaoFundo }}">{{ atividade.situacao }}</span><sc-if value="{{ atividade.temCheck }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 p-3-10 raio-999" style="color:{{ atividade.checkCor }};background:{{ atividade.checkFundo }}">{{ atividade.check }}</span></sc-if></div>
+      <div class="d-flex quebra-wrap gap-6"><span class="fs-12 fw-600 p-3-10 raio-999"
+        style="color:{{ atividade.situacaoCor }};background:{{ atividade.situacaoFundo }}">{{ atividade.situacao }}</span><sc-if
+        value="{{ atividade.temCheck }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 p-3-10 raio-999"
+        style="color:{{ atividade.checkCor }};background:{{ atividade.checkFundo }}">{{ atividade.check }}</span></sc-if></div>
       <sc-if value="{{ atividade.temMotivoCheck }}" hint-placeholder-val="{{ false }}"><div class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-10-12 fs-13 lh-1p5">{{ atividade.motivoCheck }}</div></sc-if>
       <sc-if value="{{ atividade.temHistorico }}" hint-placeholder-val="{{ false }}">
         <section aria-label="Histórico do check" class="d-flex eixo-column gap-0 borda-cinza-110 raio-10 p-12-14">
@@ -59,9 +75,18 @@
 <sc-if value="{{ presencaAberta }}" hint-placeholder-val="{{ false }}">
   <div onClick="{{ fecharPresenca }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-20"></div>
   <aside role="dialog" aria-modal="true" aria-labelledby="dir-pres-tit" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-21 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo largura-480">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Presença na escola</span><h3 id="dir-pres-tit" tabindex="-1" class="m-0 fs-17 contorno-none">{{ presenca.nome }}</h3></div><button onClick="{{ fecharPresenca }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div
+      class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Presença na escola</span><h3
+      id="dir-pres-tit" tabindex="-1" class="m-0 fs-17 contorno-none">{{ presenca.nome }}</h3></div><button
+      onClick="{{ fecharPresenca }}" aria-label="Fechar"
+      class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="p-16-20 d-flex eixo-column gap-12 rolagem-auto flex-1">
-      <div class="d-flex quebra-wrap gap-10 alinha-center"><div role="group" aria-label="Mês" class="d-flex gap-4 fundo-cinza-90 p-4 raio-10 segmentado"><sc-for list="{{ presencaCiclos }}" as="ciclo" hint-placeholder-count="2"><button onClick="{{ ciclo.escolher }}" aria-pressed="{{ ciclo.ativo }}" class="borda-0 raio-7 p-7-12 fs-13 fw-600 espaco-nowrap {{ ciclo.classe }}" style="background:{{ ciclo.fundo }};color:{{ ciclo.cor }}">{{ ciclo.rotulo }}</button></sc-for></div><span role="status" class="fs-13 cor-cinza-750">{{ presenca.resumo }}</span></div>
+      <div class="d-flex quebra-wrap gap-10 alinha-center"><div role="group" aria-label="Mês"
+        class="d-flex gap-4 fundo-cinza-90 p-4 raio-10 segmentado"><sc-for list="{{ presencaCiclos }}" as="ciclo"
+        hint-placeholder-count="2"><button onClick="{{ ciclo.escolher }}" aria-pressed="{{ ciclo.ativo }}"
+        class="borda-0 raio-7 p-7-12 fs-13 fw-600 espaco-nowrap {{ ciclo.classe }}"
+        style="background:{{ ciclo.fundo }};color:{{ ciclo.cor }}">{{ ciclo.rotulo }}</button></sc-for></div><span role="status"
+        class="fs-13 cor-cinza-750">{{ presenca.resumo }}</span></div>
       <sc-if value="{{ presenca.vazio }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-12-0 fs-13 cor-cinza-600">Nenhum dia com presença ou atividade prevista neste mês.</p></sc-if>
       <div role="list" aria-label="Dias do mês" class="d-flex eixo-column">
         <sc-for list="{{ presenca.linhas }}" as="dia" hint-placeholder-count="6">
@@ -80,14 +105,33 @@
 <sc-if value="{{ contestando }}" hint-placeholder-val="{{ false }}">
   <div onClick="{{ fecharContestacao }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-30"></div>
   <aside role="dialog" aria-modal="true" aria-labelledby="dir-cont-tit" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-31 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo largura-460">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Contestar atividade</span><h3 id="dir-cont-tit" class="m-0 fs-17">{{ contestacao.turma }} · {{ contestacao.data }} · {{ contestacao.hora }}</h3></div><button onClick="{{ fecharContestacao }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div
+      class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Contestar atividade</span><h3
+      id="dir-cont-tit"
+      class="m-0 fs-17">{{ contestacao.turma }} · {{ contestacao.data }} · {{ contestacao.hora }}</h3></div><button
+      onClick="{{ fecharContestacao }}" aria-label="Fechar"
+      class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-14 flex-1 rolagem-auto">
       <div class="fs-13 cor-cinza-750">{{ contestacao.oficineiro }} · registrou como <b>{{ contestacao.situacao }}</b></div>
-      <div role="radiogroup" aria-label="Motivo" class="d-flex eixo-column gap-8"><span class="fs-12 cor-cinza-600 fw-600">Motivo *</span><div class="d-flex eixo-column gap-6"><sc-for list="{{ motivosContestacao }}" as="motivo" hint-placeholder-count="4"><button role="radio" aria-checked="{{ motivo.ativo }}" onClick="{{ motivo.escolher }}" class="texto-left raio-8 p-9-12 fs-13 fw-500 botao-opcao {{ motivo.classe }}" style="border:1.5px solid {{ motivo.borda }};background:{{ motivo.fundo }};color:{{ motivo.cor }}">{{ motivo.rotulo }}</button></sc-for></div></div>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Comentário para o oficineiro *</span><textarea id="dir-cont-txt" rows="4" value="{{ contestacaoTexto }}" onChange="{{ escreverContestacao }}" maxlength="400" placeholder="ex.: a turma estava em avaliação neste horário" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea><span class="fs-12 cor-cinza-600">O oficineiro recebe o motivo e o comentário e pode corrigir o registro.</span></label>
+      <div role="radiogroup" aria-label="Motivo" class="d-flex eixo-column gap-8"><span
+        class="fs-12 cor-cinza-600 fw-600">Motivo *</span><div class="d-flex eixo-column gap-6"><sc-for
+        list="{{ motivosContestacao }}" as="motivo" hint-placeholder-count="4"><button role="radio"
+        aria-checked="{{ motivo.ativo }}" onClick="{{ motivo.escolher }}"
+        class="texto-left raio-8 p-9-12 fs-13 fw-500 botao-opcao {{ motivo.classe }}"
+        style="border:1.5px solid {{ motivo.borda }};background:{{ motivo.fundo }};color:{{ motivo.cor }}">{{ motivo.rotulo }}</button></sc-for></div></div>
+      <label class="d-flex eixo-column gap-6"><span
+        class="fs-12 cor-cinza-600 fw-600">Comentário para o oficineiro *</span><textarea id="dir-cont-txt" rows="4"
+        value="{{ contestacaoTexto }}" onChange="{{ escreverContestacao }}" maxlength="400"
+        placeholder="ex.: a turma estava em avaliação neste horário"
+        class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea><span
+        class="fs-12 cor-cinza-600">O oficineiro recebe o motivo e o comentário e pode corrigir o registro.</span></label>
       <sc-if value="{{ temErroContestacao }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroContestacao }}</div></sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 rodape-gaveta"><button onClick="{{ fecharContestacao }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 cor-ciano-850 botao-secundario">Cancelar</button><button onClick="{{ enviarContestacao }}" disabled="{{ salvando }}" class="h-40 borda-0 fundo-vermelho-600 cor-branco raio-8 p-0-16 fs-14 fw-600">Enviar contestação</button></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 rodape-gaveta"><button
+      onClick="{{ fecharContestacao }}"
+      class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 cor-ciano-850 botao-secundario">Cancelar</button><button
+      onClick="{{ enviarContestacao }}" disabled="{{ salvando }}"
+      class="h-40 borda-0 fundo-vermelho-600 cor-branco raio-8 p-0-16 fs-14 fw-600">Enviar contestação</button></div>
   </aside>
 </sc-if>
 
@@ -102,7 +146,14 @@
       </sc-if>
       <button style="background:var(--destaque-ciano-660)" onClick="{{ imprimir }}" class="h-38 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660">Imprimir</button>
     </div>
-    <div role="tablist" aria-label="Documento" class="d-flex gap-4 fundo-branco-a12 p-4 raio-10 w-fit-content m-16-auto-0 quebra-wrap largura-fundo max-w-menos-32"><button role="tab" aria-selected="{{ abaPresenca }}" onClick="{{ verAbaPresenca }}" class="min-h-36 borda-0 raio-8 p-0-14 fs-13 fw-700 botao-texto {{ abaPresencaClasse }}" style="background:{{ abaPresencaFundo }};color:{{ abaPresencaCor }}">Relatório de Presença na Escola</button><button role="tab" aria-selected="{{ abaAtividades }}" onClick="{{ verAbaAtividades }}" class="min-h-36 borda-0 raio-8 p-0-14 fs-13 fw-700 botao-texto {{ abaAtividadesClasse }}" style="background:{{ abaAtividadesFundo }};color:{{ abaAtividadesCor }}">Relatório de Atividades</button></div>
+    <div role="tablist" aria-label="Documento"
+      class="d-flex gap-4 fundo-branco-a12 p-4 raio-10 w-fit-content m-16-auto-0 quebra-wrap largura-fundo max-w-menos-32"><button
+      role="tab" aria-selected="{{ abaPresenca }}" onClick="{{ verAbaPresenca }}"
+      class="min-h-36 borda-0 raio-8 p-0-14 fs-13 fw-700 botao-texto {{ abaPresencaClasse }}"
+      style="background:{{ abaPresencaFundo }};color:{{ abaPresencaCor }}">Relatório de Presença na Escola</button><button
+      role="tab" aria-selected="{{ abaAtividades }}" onClick="{{ verAbaAtividades }}"
+      class="min-h-36 borda-0 raio-8 p-0-14 fs-13 fw-700 botao-texto {{ abaAtividadesClasse }}"
+      style="background:{{ abaAtividadesFundo }};color:{{ abaAtividadesCor }}">Relatório de Atividades</button></div>
     <sc-if value="{{ relatorio.temAviso }}" hint-placeholder-val="{{ false }}">
       <div class="m-16-auto-0 fundo-ambar-80 cor-ambar-740 raio-10 p-12-16 fs-13 lh-1p5 largura-fundo" style="max-width:calc(210mm)">{{ relatorio.aviso }}</div>
     </sc-if>
@@ -119,7 +170,13 @@
       <div class="d-flex alinha-center gap-12 borda-b-2-solid-0b7ea4 pb-8">
         <img src="../public/brand/logo-cliente.png" alt="{{ cliente.orgao }}" class="w-120 h-46 obj-ajuste-contain obj-pos-left-center"></img>
         <div class="flex-1 texto-center d-flex eixo-column gap-2"><b class="ls-0p3" style="font-size:12.5pt">{{ cliente.orgaoTitulo }}</b><b class="fs-10pt cor-ciano-745">{{ documento.titulo }}</b></div>
-        <div class="w-120 h-46 d-flex alinha-center justifica-center gap-7"><svg role="img" aria-label="Oficineiro+" viewBox="0 0 31 31" width="30" height="30"><rect x="0" y="0" width="14" height="14" rx="3" fill="var(--destaque-rosa-500)"></rect><rect x="17" y="0" width="14" height="14" rx="3" fill="var(--destaque-indigo-360)"></rect><rect x="0" y="17" width="14" height="14" rx="3" fill="var(--destaque-ciano-400)"></rect><rect x="17" y="17" width="14" height="14" rx="3" fill="var(--destaque-verde-450)"></rect></svg><span class="fs-13pt fw-800 ls-n0p2 cor-ciano-855">Oficineiro<b class="cor-ciano-665">+</b></span></div>
+        <div class="w-120 h-46 d-flex alinha-center justifica-center gap-7"><svg role="img" aria-label="Oficineiro+"
+          viewBox="0 0 31 31" width="30" height="30"><rect x="0" y="0" width="14" height="14" rx="3"
+          fill="var(--destaque-rosa-500)"></rect><rect x="17" y="0" width="14" height="14" rx="3"
+          fill="var(--destaque-indigo-360)"></rect><rect x="0" y="17" width="14" height="14" rx="3"
+          fill="var(--destaque-ciano-400)"></rect><rect x="17" y="17" width="14" height="14" rx="3"
+          fill="var(--destaque-verde-450)"></rect></svg><span class="fs-13pt fw-800 ls-n0p2 cor-ciano-855">Oficineiro<b
+          class="cor-ciano-665">+</b></span></div>
       </div>
       <div class="d-grid colunas-2fr-1fr borda-1-solid-9fb0b6 mt-8">
         <div class="p-4-6 borda-b-1-solid-dde6e9 borda-d-1-solid-dde6e9"><small class="cor-cinza-605 d-block fs-7pt caixa-uppercase">Oficineiro(a)</small>{{ documento.nome }}</div>
@@ -129,21 +186,60 @@
       </div>
       <sc-if value="{{ abaPresenca }}" hint-placeholder-val="{{ true }}">
         <table class="w-100pc colapso-collapse mt-8">
-          <thead><tr class="fundo-cinza-95"><th class="w-9pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Data</th><th class="w-6pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Dia</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Entrada</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Saída almoço</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Volta almoço</th><th class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Saída</th><th class="w-9pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Total</th><th class="w-30pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Observação</th></tr></thead>
-          <tbody><sc-for list="{{ documento.linhas }}" as="r" hint-placeholder-count="8"><tr class="quebra-dentro-avoid"><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ r.data }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ r.dia }}</td><td colspan="6" rowspan="{{ r.rs }}" class="borda-1-solid-9fb0b6 p-2p4-4 texto-center fundo-cinza-45 cor-cinza-605 fw-bold" style="display:{{ r.mostraM }}">{{ r.offTxt }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ r.mostraN }}">{{ r.c1 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ r.mostraN }}">{{ r.c2 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ r.mostraN }}">{{ r.c3 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ r.mostraN }}">{{ r.c4 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center" style="display:{{ r.mostraN }}">{{ r.total }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-left cor-cinza-730" style="display:{{ r.mostraN }};font-size:7.6pt">{{ r.obs }}</td></tr></sc-for></tbody>
+          <thead><tr class="fundo-cinza-95"><th
+            class="w-9pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Data</th><th
+            class="w-6pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Dia</th><th
+            class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Entrada</th><th
+            class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Saída almoço</th><th
+            class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Volta almoço</th><th
+            class="borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Saída</th><th
+            class="w-9pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Total</th><th
+            class="w-30pc borda-1-solid-9fb0b6 p-2p4-4 caixa-uppercase fs-7p6pt">Observação</th></tr></thead>
+          <tbody><sc-for list="{{ documento.linhas }}" as="r" hint-placeholder-count="8"><tr
+            class="quebra-dentro-avoid"><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ r.data }}</td><td
+            class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ r.dia }}</td><td colspan="6" rowspan="{{ r.rs }}"
+            class="borda-1-solid-9fb0b6 p-2p4-4 texto-center fundo-cinza-45 cor-cinza-605 fw-bold"
+            style="display:{{ r.mostraM }}">{{ r.offTxt }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center"
+            style="display:{{ r.mostraN }}">{{ r.c1 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center"
+            style="display:{{ r.mostraN }}">{{ r.c2 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center"
+            style="display:{{ r.mostraN }}">{{ r.c3 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center"
+            style="display:{{ r.mostraN }}">{{ r.c4 }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center"
+            style="display:{{ r.mostraN }}">{{ r.total }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-left cor-cinza-730"
+            style="display:{{ r.mostraN }};font-size:7.6pt">{{ r.obs }}</td></tr></sc-for></tbody>
           <tfoot><tr class="fundo-cinza-95 fw-bold"><td colspan="6" class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">TOTAL DE HORAS CONTABILIZADAS NO CICLO</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-center">{{ documento.total }}</td><td class="borda-1-solid-9fb0b6 p-2p4-4 texto-left cor-cinza-730 fs-7p6pt">Limite de 8h por dia, sem contar o almoço</td></tr></tfoot>
         </table>
       </sc-if>
       <div class="d-grid colunas-repeat-5-1fr gap-6 mt-8 quebra-dentro-avoid"><sc-for list="{{ documento.resumo }}" as="k" hint-placeholder-count="5"><div class="borda-1-solid-9fb0b6 p-4-6"><small class="d-block cor-cinza-605 fs-7pt caixa-uppercase">{{ k.l }}</small><b class="fs-11pt">{{ k.v }}</b></div></sc-for></div>
       <sc-if value="{{ abaAtividades }}" hint-placeholder-val="{{ false }}">
         <table class="w-100pc colapso-collapse mt-8">
-          <thead><tr class="fundo-cinza-95"><th class="w-7pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Data</th><th class="w-10pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Horário</th><th class="w-8pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Turma</th><th class="w-20pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Atividade agendada</th><th class="w-10pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Situação</th><th class="w-7pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Estud.</th><th class="borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Registro: como foi feita</th></tr></thead>
-          <tbody><sc-for list="{{ documento.atividades }}" as="r" hint-placeholder-count="6"><tr class="quebra-dentro-avoid"><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top fs-7p8pt">{{ r.data }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top espaco-nowrap fs-7p8pt">{{ r.horario }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top texto-center fs-7p8pt">{{ r.turma }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top fs-7p8pt">{{ r.atividade }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top fw-bold espaco-nowrap" style="font-size:7.8pt;color:{{ r.sitCor }}">{{ r.sit }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top texto-center fs-7p8pt">{{ r.estud }}</td><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top fs-7p8pt">{{ r.registro }}</td></tr></sc-for></tbody>
+          <thead><tr class="fundo-cinza-95"><th
+            class="w-7pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Data</th><th
+            class="w-10pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Horário</th><th
+            class="w-8pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Turma</th><th
+            class="w-20pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Atividade agendada</th><th
+            class="w-10pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Situação</th><th
+            class="w-7pc borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Estud.</th><th
+            class="borda-1-solid-9fb0b6 p-3-4 texto-left caixa-uppercase fs-7p3pt">Registro: como foi feita</th></tr></thead>
+          <tbody><sc-for list="{{ documento.atividades }}" as="r" hint-placeholder-count="6"><tr
+            class="quebra-dentro-avoid"><td class="borda-1-solid-9fb0b6 p-3-4 valinha-top fs-7p8pt">{{ r.data }}</td><td
+            class="borda-1-solid-9fb0b6 p-3-4 valinha-top espaco-nowrap fs-7p8pt">{{ r.horario }}</td><td
+            class="borda-1-solid-9fb0b6 p-3-4 valinha-top texto-center fs-7p8pt">{{ r.turma }}</td><td
+            class="borda-1-solid-9fb0b6 p-3-4 valinha-top fs-7p8pt">{{ r.atividade }}</td><td
+            class="borda-1-solid-9fb0b6 p-3-4 valinha-top fw-bold espaco-nowrap"
+            style="font-size:7.8pt;color:{{ r.sitCor }}">{{ r.sit }}</td><td
+            class="borda-1-solid-9fb0b6 p-3-4 valinha-top texto-center fs-7p8pt">{{ r.estud }}</td><td
+            class="borda-1-solid-9fb0b6 p-3-4 valinha-top fs-7p8pt">{{ r.registro }}</td></tr></sc-for></tbody>
         </table>
         <sc-if value="{{ documento.semAtividades }}" hint-placeholder-val="{{ false }}"><span class="mt-6 cor-cinza-605" style="font-size:8.5pt">Nenhuma atividade agendada neste ciclo.</span></sc-if>
       </sc-if>
       <p class="m-8-0-0 fs-8pt cor-cinza-730">{{ declaracao }}</p>
-      <div class="d-grid colunas-repeat-3-1fr gap-14 mt-24 quebra-dentro-avoid"><sc-for list="{{ documento.assinaturas }}" as="a" hint-placeholder-count="3"><div class="texto-center fs-8pt d-flex eixo-column gap-2"><div class="borda-t-1-solid-1a2b34 pt-3 fw-bold">{{ a.papel }}</div><sc-if value="{{ a.temNome }}" hint-placeholder-val="{{ true }}"><span>{{ a.nome }}</span></sc-if><sc-if value="{{ a.temStamp }}" hint-placeholder-val="{{ false }}"><span class="cor-ciano-745" style="font-size:7.2pt">{{ a.stamp }}</span></sc-if></div></sc-for></div>
+      <div class="d-grid colunas-repeat-3-1fr gap-14 mt-24 quebra-dentro-avoid"><sc-for
+        list="{{ documento.assinaturas }}" as="a" hint-placeholder-count="3"><div
+        class="texto-center fs-8pt d-flex eixo-column gap-2"><div
+        class="borda-t-1-solid-1a2b34 pt-3 fw-bold">{{ a.papel }}</div><sc-if value="{{ a.temNome }}"
+        hint-placeholder-val="{{ true }}"><span>{{ a.nome }}</span></sc-if><sc-if value="{{ a.temStamp }}"
+        hint-placeholder-val="{{ false }}"><span class="cor-ciano-745"
+        style="font-size:7.2pt">{{ a.stamp }}</span></sc-if></div></sc-for></div>
       <div class="mt-10 borda-t-1-solid-dde6e9 pt-4 fs-7pt cor-cinza-605 d-flex justifica-space-between gap-12 quebra-wrap"><span>{{ documento.gerado }}</span><span>{{ documento.codigo }}</span></div>
     </div>
   </div>

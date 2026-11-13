@@ -10,8 +10,17 @@
 <x-dc>
   <p class="m-0 fs-13 cor-cinza-600 lh-1p5 max-w-760">Consulte a situação de qualquer pessoa em um ciclo e corrija o que for necessário. Toda correção exige um motivo e fica registrada na auditoria.</p>
   <div role="group" aria-label="Escolha da pessoa e do ciclo" class="d-flex gap-10-12 alinha-flex-end quebra-wrap">
-    <label class="largura-total-celular d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Pessoa</span><select style="background:var(--fundo-branco)" id="adm-cons-pessoa" value="{{ consulta.pessoa }}" onChange="{{ consulta.escolherPessoa }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit max-w-320 largura-fundo fundo-branco"><option value="">Escolha a pessoa</option><sc-for list="{{ consulta.pessoas }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-    <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Ciclo</span><select style="background:var(--fundo-branco)" value="{{ consulta.ciclo }}" onChange="{{ consulta.escolherCiclo }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"><sc-for list="{{ consulta.ciclos }}" as="opcao" hint-placeholder-count="12"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <label class="largura-total-celular d-flex eixo-column gap-6"><span
+      class="fs-12 cor-cinza-600 fw-600">Pessoa</span><select style="background:var(--fundo-branco)" id="adm-cons-pessoa"
+      value="{{ consulta.pessoa }}" onChange="{{ consulta.escolherPessoa }}"
+      class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit max-w-320 largura-fundo fundo-branco"><option
+      value="">Escolha a pessoa</option><sc-for list="{{ consulta.pessoas }}" as="opcao" hint-placeholder-count="6"><option
+      value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Ciclo</span><select
+      style="background:var(--fundo-branco)" value="{{ consulta.ciclo }}" onChange="{{ consulta.escolherCiclo }}"
+      class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"><sc-for list="{{ consulta.ciclos }}"
+      as="opcao" hint-placeholder-count="12"><option
+      value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
     <button style="background:var(--destaque-ciano-660)" onClick="{{ consulta.consultar }}" disabled="{{ consulta.consultando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660">{{ consulta.botao }}</button>
   </div>
   <sc-if value="{{ consulta.temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ consulta.erro }}</div></sc-if>
@@ -23,7 +32,12 @@
       </dl>
       <sc-if value="{{ consulta.naoEhOficineiro }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-13 cor-cinza-600">As correções de presença, grade e registros de atividade valem para contas de oficineiro. Para mudar o perfil, a escola ou a senha desta conta, use Gestão de Contas.</p></sc-if>
       <sc-if value="{{ consulta.ehOficineiro }}" hint-placeholder-val="{{ false }}">
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Motivo das correções desta tela *</span><input id="adm-cons-motivo" value="{{ consulta.motivo }}" onChange="{{ consulta.escreverMotivo }}" maxlength="500" placeholder="Ex.: correção solicitada pela direção da escola" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input><span class="fs-12 cor-cinza-600">Usado ao reabrir o mês, mudar a situação da grade ou de um registro de atividade. Mínimo de 10 caracteres.</span></label>
+        <label class="d-flex eixo-column gap-6"><span
+          class="fs-12 cor-cinza-600 fw-600">Motivo das correções desta tela *</span><input id="adm-cons-motivo"
+          value="{{ consulta.motivo }}" onChange="{{ consulta.escreverMotivo }}" maxlength="500"
+          placeholder="Ex.: correção solicitada pela direção da escola"
+          class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input><span
+          class="fs-12 cor-cinza-600">Usado ao reabrir o mês, mudar a situação da grade ou de um registro de atividade. Mínimo de 10 caracteres.</span></label>
       </sc-if>
     </section>
     <sc-if value="{{ consulta.ehOficineiro }}" hint-placeholder-val="{{ false }}">
@@ -34,7 +48,11 @@
       <section aria-labelledby="adm-h-pres" class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ consulta.opacidade }}">
         <div class="d-flex quebra-wrap alinha-center gap-8-12 p-14-20 borda-b-cinza-110"><h3 id="adm-h-pres" class="m-0 fs-15 flex-1">Presenças do ciclo</h3><button onClick="{{ consulta.lancarPresenca }}" aria-haspopup="dialog" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Lançar presença</button></div>
         <div role="table" aria-labelledby="adm-h-pres" class="min-w-760">
-          <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110" style="grid-template-columns:90px 90px 80px 80px 90px minmax(0,2fr) 100px"><span role="columnheader">Data</span><span role="columnheader">Escola</span><span role="columnheader">Início</span><span role="columnheader">Fim</span><span role="columnheader">Trabalhado</span><span role="columnheader">Situação</span><span role="columnheader"><span class="sr-only">Ação</span></span></div>
+          <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110"
+            style="grid-template-columns:90px 90px 80px 80px 90px minmax(0,2fr) 100px"><span role="columnheader">Data</span><span
+            role="columnheader">Escola</span><span role="columnheader">Início</span><span role="columnheader">Fim</span><span
+            role="columnheader">Trabalhado</span><span role="columnheader">Situação</span><span role="columnheader"><span
+            class="sr-only">Ação</span></span></div>
           <sc-for list="{{ consulta.presencas }}" as="presenca" hint-placeholder-count="6">
             <div role="row" class="d-grid gap-10 p-10-20 fs-13 borda-b-cinza-70 alinha-center" style="grid-template-columns:90px 90px 80px 80px 90px minmax(0,2fr) 100px">
               <span role="cell" class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ presenca.data }}</span>
@@ -55,7 +73,11 @@
         <sc-for list="{{ consulta.grades }}" as="grade" hint-placeholder-count="1">
           <div class="d-flex quebra-wrap alinha-flex-end gap-8-12">
             <div class="flex-1 min-w-200 d-flex eixo-column gap-2"><b class="fs-14">Ano letivo {{ grade.ano }}</b><span class="fs-12 cor-cinza-600">Situação atual: {{ grade.atual }}</span></div>
-            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Nova situação</span><select style="background:var(--fundo-branco)" value="{{ grade.valor }}" onChange="{{ grade.escolher }}" aria-label="{{ grade.aria }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"><sc-for list="{{ consulta.opcoesDeGrade }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Nova situação</span><select
+              style="background:var(--fundo-branco)" value="{{ grade.valor }}" onChange="{{ grade.escolher }}"
+              aria-label="{{ grade.aria }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"><sc-for
+              list="{{ consulta.opcoesDeGrade }}" as="opcao" hint-placeholder-count="4"><option
+              value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
             <button onClick="{{ grade.aplicar }}" disabled="{{ salvando }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Aplicar</button>
           </div>
         </sc-for>
@@ -63,7 +85,11 @@
       <section aria-labelledby="adm-h-regs" class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ consulta.opacidade }}">
         <h3 id="adm-h-regs" class="m-0 fs-15 p-14-20 borda-b-cinza-110">Registros de atividade do ciclo</h3>
         <div role="table" aria-labelledby="adm-h-regs" class="min-w-820">
-          <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110" style="grid-template-columns:90px 70px 70px minmax(0,1.4fr) minmax(0,1fr) 200px 90px"><span role="columnheader">Data</span><span role="columnheader">Início</span><span role="columnheader">Turma</span><span role="columnheader">Componente</span><span role="columnheader">Atividade</span><span role="columnheader">Situação da revisão</span><span role="columnheader"><span class="sr-only">Ação</span></span></div>
+          <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110"
+            style="grid-template-columns:90px 70px 70px minmax(0,1.4fr) minmax(0,1fr) 200px 90px"><span
+            role="columnheader">Data</span><span role="columnheader">Início</span><span role="columnheader">Turma</span><span
+            role="columnheader">Componente</span><span role="columnheader">Atividade</span><span
+            role="columnheader">Situação da revisão</span><span role="columnheader"><span class="sr-only">Ação</span></span></div>
           <sc-for list="{{ consulta.registros }}" as="registro" hint-placeholder-count="6">
             <div role="row" class="d-grid gap-10 p-10-20 fs-13 borda-b-cinza-70 alinha-center" style="grid-template-columns:90px 70px 70px minmax(0,1.4fr) minmax(0,1fr) 200px 90px">
               <span role="cell" class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ registro.data }}</span>
@@ -71,7 +97,11 @@
               <span role="cell">{{ registro.turma }}</span>
               <span role="cell" class="min-w-0 quebra-palavra-anywhere">{{ registro.componente }}</span>
               <span role="cell">{{ registro.situacao }}</span>
-              <span role="cell"><select style="background:var(--fundo-branco)" value="{{ registro.valor }}" onChange="{{ registro.escolher }}" aria-label="{{ registro.aria }}" class="h-36 w-100pc borda-cinza-160 raio-8 p-0-8 fs-13 fonte-inherit largura-fundo fundo-branco"><sc-for list="{{ consulta.opcoesDeRegistro }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></span>
+              <span role="cell"><select style="background:var(--fundo-branco)" value="{{ registro.valor }}"
+                onChange="{{ registro.escolher }}" aria-label="{{ registro.aria }}"
+                class="h-36 w-100pc borda-cinza-160 raio-8 p-0-8 fs-13 fonte-inherit largura-fundo fundo-branco"><sc-for
+                list="{{ consulta.opcoesDeRegistro }}" as="opcao" hint-placeholder-count="5"><option
+                value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></span>
               <span role="cell"><button onClick="{{ registro.aplicar }}" disabled="{{ registro.bloqueado }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-10 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Aplicar</button></span>
             </div>
           </sc-for>

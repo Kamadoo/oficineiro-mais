@@ -24,7 +24,13 @@
         <div class="d-flex justifica-space-between alinha-baseline"><b>{{ dia.nome }}</b><span class="num-tabular-nums fs-12 cor-cinza-600">{{ dia.data }}</span></div>
         <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">{{ dia.vazioTexto }}</span></sc-if>
         <sc-for list="{{ dia.visitas }}" as="visita" hint-placeholder-count="2">
-          <button onClick="{{ visita.abrir }}" aria-haspopup="dialog" aria-label="{{ visita.aria }}" class="raio-8 p-10 d-flex eixo-column gap-2 texto-left cor-ciano-850 w-100pc min-w-0 largura-fundo" style="border:0;border-left:3px solid {{ visita.cor }};background:{{ visita.fundo }};cursor:pointer"><span class="num-tabular-nums fs-12 cor-cinza-600">{{ visita.hora }}</span><span class="fs-13 fw-600 quebra-palavra-anywhere">{{ visita.escola }}</span><span class="fs-12 cor-cinza-750 quebra-palavra-anywhere">{{ visita.tipo }}</span><span class="fs-11 fw-600" style="color:{{ visita.situacaoCor }}">{{ visita.situacao }}</span></button>
+          <button onClick="{{ visita.abrir }}" aria-haspopup="dialog" aria-label="{{ visita.aria }}"
+            class="raio-8 p-10 d-flex eixo-column gap-2 texto-left cor-ciano-850 w-100pc min-w-0 largura-fundo"
+            style="border:0;border-left:3px solid {{ visita.cor }};background:{{ visita.fundo }};cursor:pointer"><span
+            class="num-tabular-nums fs-12 cor-cinza-600">{{ visita.hora }}</span><span
+            class="fs-13 fw-600 quebra-palavra-anywhere">{{ visita.escola }}</span><span
+            class="fs-12 cor-cinza-750 quebra-palavra-anywhere">{{ visita.tipo }}</span><span class="fs-11 fw-600"
+            style="color:{{ visita.situacaoCor }}">{{ visita.situacao }}</span></button>
         </sc-for>
       </section>
     </sc-for>

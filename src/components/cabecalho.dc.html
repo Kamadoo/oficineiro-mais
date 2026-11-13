@@ -19,7 +19,14 @@
     <sc-if value="{{ trilha === undefined }}" hint-placeholder-val="{{ false }}"><span data-fsm-tela="" class="fs-18 fw-600 espaco-nowrap rolagem-hidden reticencias-ellipsis">{{ titulo }}</span></sc-if>
   </div>
   <sc-if value="{{ children }}" hint-placeholder-val="{{ false }}">{{ children }}</sc-if>
-  <sc-if value="{{ temSino !== false }}" hint-placeholder-val="{{ true }}"><button style="background:var(--fundo-branco)" class="sino-celular pos-relative w-40 h-40 flex-none borda-cinza-110 raio-10 cor-ciano-850 p-0 d-flex alinha-center justifica-center largura-fundo fundo-branco" onClick="{{ abrirNotif }}" aria-label="{{ notifAria }}" title="Notificações"><svg class="icone" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg><sc-if value="{{ temNotif }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" class="pos-absolute topo-n6 direita-n6 min-w-20 h-20 raio-10 fundo-rosa-500 cor-branco fs-11 fw-700 d-flex alinha-center justifica-center p-0-5 largura-fundo">{{ notifN }}</span></sc-if></button></sc-if>
+  <sc-if value="{{ temSino !== false }}" hint-placeholder-val="{{ true }}"><button
+    style="background:var(--fundo-branco)"
+    class="sino-celular pos-relative w-40 h-40 flex-none borda-cinza-110 raio-10 cor-ciano-850 p-0 d-flex alinha-center justifica-center largura-fundo fundo-branco"
+    onClick="{{ abrirNotif }}" aria-label="{{ notifAria }}" title="Notificações"><svg class="icone" viewBox="0 0 24 24"
+    width="20" height="20" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"></path><path
+    d="M10 20a2 2 0 0 0 4 0"></path></svg><sc-if value="{{ temNotif }}" hint-placeholder-val="{{ false }}"><span
+    aria-hidden="true"
+    class="pos-absolute topo-n6 direita-n6 min-w-20 h-20 raio-10 fundo-rosa-500 cor-branco fs-11 fw-700 d-flex alinha-center justifica-center p-0-5 largura-fundo">{{ notifN }}</span></sc-if></button></sc-if>
 </header>
 </x-dc>
 <script type="text/x-dc" data-dc-script>

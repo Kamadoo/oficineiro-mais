@@ -10,12 +10,23 @@
 <x-dc>
 <sc-if value="{{ is.oficineirosPresenca }}" hint-placeholder-val="{{ false }}">
   <section aria-label="Resumo dos oficineiros" class="duas-colunas-celular d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));opacity:{{ opacidade }}">
-    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="5"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-2 min-w-0 largura-fundo fundo-branco"><span class="fs-22 fw-600 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-12 cor-cinza-750">{{ indicador.titulo }}</span><span class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for>
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="5"><div
+      style="background:var(--fundo-branco)"
+      class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-2 min-w-0 largura-fundo fundo-branco"><span
+      class="fs-22 fw-600 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span
+      class="fs-12 cor-cinza-750">{{ indicador.titulo }}</span><span
+      class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for>
   </section>
   <section class="grade-imprimir borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-240">Presença, horas e execução das atividades</h3><span class="fs-12 cor-cinza-600">{{ periodoTexto }}</span></div>
     <div role="table" aria-label="Oficineiros" class="min-w-1000">
-      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-cinza-600 borda-t-cinza-110 borda-b-cinza-110" style="grid-template-columns:1.5fr 1.6fr .9fr .8fr .9fr 1.1fr 1fr .7fr 1fr"><span role="columnheader">Oficineiro</span><span role="columnheader">Escola de atuação</span><span role="columnheader">Carteira</span><span role="columnheader">Presença</span><span role="columnheader">Horas válidas</span><span role="columnheader">Acima de 8h</span><span role="columnheader">Execução</span><span role="columnheader">Sem reg.</span><span role="columnheader">Situação</span></div>
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-cinza-600 borda-t-cinza-110 borda-b-cinza-110"
+        style="grid-template-columns:1.5fr 1.6fr .9fr .8fr .9fr 1.1fr 1fr .7fr 1fr"><span
+        role="columnheader">Oficineiro</span><span role="columnheader">Escola de atuação</span><span
+        role="columnheader">Carteira</span><span role="columnheader">Presença</span><span
+        role="columnheader">Horas válidas</span><span role="columnheader">Acima de 8h</span><span
+        role="columnheader">Execução</span><span role="columnheader">Sem reg.</span><span
+        role="columnheader">Situação</span></div>
       <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="4">
         <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-cinza-75 alinha-center" style="grid-template-columns:1.5fr 1.6fr .9fr .8fr .9fr 1.1fr 1fr .7fr 1fr">
           <b role="cell" class="quebra-palavra-anywhere">{{ linha.nome }}</b><span role="cell" class="fs-12 quebra-palavra-anywhere">{{ linha.escola }}</span><span role="cell" class="fs-12">{{ linha.carteira }}</span>
@@ -34,10 +45,18 @@
   <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-240">Escola de atuação e grade de cada oficineiro</h3><span class="fs-12 cor-cinza-600">{{ gradesTexto }}</span></div>
     <div role="table" aria-label="Escolas e grade" class="min-w-960">
-      <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-cinza-600 borda-t-cinza-110 borda-b-cinza-110" style="grid-template-columns:1.5fr 1.8fr .9fr .9fr 1.4fr 130px"><span role="columnheader">Oficineiro</span><span role="columnheader">Escola de atuação</span><span role="columnheader">Carteira</span><span role="columnheader">Horas-aula/sem.</span><span role="columnheader">Situação da grade</span><span role="columnheader"><span class="sr-only">Ações</span></span></div>
+      <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-cinza-600 borda-t-cinza-110 borda-b-cinza-110"
+        style="grid-template-columns:1.5fr 1.8fr .9fr .9fr 1.4fr 130px"><span role="columnheader">Oficineiro</span><span
+        role="columnheader">Escola de atuação</span><span role="columnheader">Carteira</span><span
+        role="columnheader">Horas-aula/sem.</span><span role="columnheader">Situação da grade</span><span
+        role="columnheader"><span class="sr-only">Ações</span></span></div>
       <sc-for list="{{ grades }}" as="grade" hint-placeholder-count="4">
         <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-cinza-75 alinha-center" style="grid-template-columns:1.5fr 1.8fr .9fr .9fr 1.4fr 130px">
-          <span role="cell" class="d-flex eixo-column min-w-0"><b class="quebra-palavra-anywhere">{{ grade.nome }}</b><sc-if value="{{ grade.temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-azul-640">{{ grade.nota }}</span></sc-if></span><span role="cell" class="fs-12 quebra-palavra-anywhere">{{ grade.escola }}</span><span role="cell" class="fs-12">{{ grade.carteira }}</span><span role="cell" class="num-tabular-nums">{{ grade.horasAula }}</span>
+          <span role="cell" class="d-flex eixo-column min-w-0"><b
+            class="quebra-palavra-anywhere">{{ grade.nome }}</b><sc-if value="{{ grade.temNota }}"
+            hint-placeholder-val="{{ false }}"><span class="fs-11 cor-azul-640">{{ grade.nota }}</span></sc-if></span><span
+            role="cell" class="fs-12 quebra-palavra-anywhere">{{ grade.escola }}</span><span role="cell"
+            class="fs-12">{{ grade.carteira }}</span><span role="cell" class="num-tabular-nums">{{ grade.horasAula }}</span>
           <span role="cell" class="justifica-si-start fs-12 fw-600 p-3-10 raio-999" style="color:{{ grade.cor }};background:{{ grade.fundo }}">{{ grade.situacao }}</span>
           <span role="cell"><button onClick="{{ grade.alterar }}" aria-haspopup="dialog" aria-label="{{ grade.aria }}" class="h-32 borda-cinza-160 fundo-branco raio-6 p-0-10 fs-12 fw-600 cor-ciano-850 botao-secundario">Alterar escola</button></span>
         </div>

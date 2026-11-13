@@ -65,9 +65,16 @@
           <fieldset disabled="{{ somenteLeitura }}" class="registro-campos borda-0 p-0 m-0 min-w-0 d-flex eixo-column gap-16">
           <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco">
             <h3 class="m-0 fs-15">A atividade aconteceu?</h3>
-            <div class="d-flex quebra-wrap gap-8" role="group" aria-label="A atividade aconteceu?"><sc-for list="{{ situacoes }}" as="opcao" hint-placeholder-count="2"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="raio-8 p-9-14 fs-14 fw-500 flex-1-1-160 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div>
+            <div class="d-flex quebra-wrap gap-8" role="group" aria-label="A atividade aconteceu?"><sc-for
+              list="{{ situacoes }}" as="opcao" hint-placeholder-count="2"><button onClick="{{ opcao.escolher }}"
+              aria-pressed="{{ opcao.marcada }}" class="raio-8 p-9-14 fs-14 fw-500 flex-1-1-160 botao-opcao {{ opcao.classe }}"
+              style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }}">{{ opcao.rotulo }}</button></sc-for></div>
             <sc-if value="{{ naoRealizada }}" hint-placeholder-val="{{ false }}">
-              <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-cinza-600 fw-600">Motivo *</span><div class="d-flex quebra-wrap gap-8" role="group" aria-label="Motivo"><sc-for list="{{ motivos }}" as="opcao" hint-placeholder-count="6"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="raio-8 fw-500 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }};padding:9px 14px;font-size:14px;font-size:13px;padding:8px 12px">{{ opcao.rotulo }}</button></sc-for></div></div>
+              <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-cinza-600 fw-600">Motivo *</span><div
+                class="d-flex quebra-wrap gap-8" role="group" aria-label="Motivo"><sc-for list="{{ motivos }}" as="opcao"
+                hint-placeholder-count="6"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}"
+                class="raio-8 fw-500 botao-opcao {{ opcao.classe }}"
+                style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }};padding:9px 14px;font-size:14px;font-size:13px;padding:8px 12px">{{ opcao.rotulo }}</button></sc-for></div></div>
               <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Detalhes (opcional)</span><input value="{{ formulario.detalheDoMotivo }}" onChange="{{ mudarDetalheDoMotivo }}" maxlength="150" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
             </sc-if>
           </section>
@@ -78,20 +85,50 @@
               <span class="fs-13 cor-cinza-600 mt-n8">Marque se a atividade foi diferente do que está na grade: outro professor na sala, outra solução, horário trocado…</span>
               <sc-if value="{{ formulario.mudou }}" hint-placeholder-val="{{ false }}">
                 <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
-                  <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Professor(a) que acompanhou a atividade</span><input value="{{ formulario.professor }}" onChange="{{ mudarProfessor }}" maxlength="120" placeholder="Nome de quem estava com a turma" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
-                  <sc-if value="{{ mudaComponente }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Componente curricular trabalhado</span><select style="background:var(--fundo-branco)" value="{{ formulario.componente }}" onChange="{{ mudarComponente }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-branco"><option value="">Não informado</option><sc-for list="{{ componentes }}" as="opcao" hint-placeholder-count="9"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
-                  <sc-if value="{{ mudaOficina }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Oficina trabalhada</span><select style="background:var(--fundo-branco)" value="{{ formulario.oficina }}" onChange="{{ mudarOficina }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-branco"><sc-for list="{{ oficinas }}" as="opcao" hint-placeholder-count="10"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
-                  <sc-if value="{{ mudaSolucao }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Solução usada</span><select style="background:var(--fundo-branco)" value="{{ formulario.solucao }}" onChange="{{ mudarSolucao }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-branco"><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
+                  <label class="d-flex eixo-column gap-6 min-w-0"><span
+                    class="fs-12 cor-cinza-600 fw-600">Professor(a) que acompanhou a atividade</span><input
+                    value="{{ formulario.professor }}" onChange="{{ mudarProfessor }}" maxlength="120"
+                    placeholder="Nome de quem estava com a turma"
+                    class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
+                  <sc-if value="{{ mudaComponente }}" hint-placeholder-val="{{ true }}"><label
+                    class="d-flex eixo-column gap-6 min-w-0"><span
+                    class="fs-12 cor-cinza-600 fw-600">Componente curricular trabalhado</span><select style="background:var(--fundo-branco)"
+                    value="{{ formulario.componente }}" onChange="{{ mudarComponente }}"
+                    class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-branco"><option
+                    value="">Não informado</option><sc-for list="{{ componentes }}" as="opcao" hint-placeholder-count="9"><option
+                    value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
+                  <sc-if value="{{ mudaOficina }}" hint-placeholder-val="{{ false }}"><label
+                    class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Oficina trabalhada</span><select
+                    style="background:var(--fundo-branco)" value="{{ formulario.oficina }}" onChange="{{ mudarOficina }}"
+                    class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-branco"><sc-for
+                    list="{{ oficinas }}" as="opcao" hint-placeholder-count="10"><option
+                    value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
+                  <sc-if value="{{ mudaSolucao }}" hint-placeholder-val="{{ true }}"><label
+                    class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Solução usada</span><select
+                    style="background:var(--fundo-branco)" value="{{ formulario.solucao }}" onChange="{{ mudarSolucao }}"
+                    class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo fundo-branco"><sc-for
+                    list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option
+                    value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label></sc-if>
                 </div>
-                <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">O que mudou? *</span><input value="{{ formulario.mudanca }}" onChange="{{ mudarMudanca }}" maxlength="300" placeholder="Exemplo: a professora regente faltou e a coordenação acompanhou a turma" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
+                <label class="d-flex eixo-column gap-6"><span
+                  class="fs-12 cor-cinza-600 fw-600">O que mudou? *</span><input value="{{ formulario.mudanca }}"
+                  onChange="{{ mudarMudanca }}" maxlength="300"
+                  placeholder="Exemplo: a professora regente faltou e a coordenação acompanhou a turma"
+                  class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
               </sc-if>
             </section>
 
             <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco">
               <h3 class="m-0 fs-15">Participação</h3>
               <div class="d-grid colunas-repeat-3-minmax-0-1fr gap-12 alinha-end">
-                <sc-if value="{{ matriculadosManual }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Matriculados</span><input type="number" inputmode="numeric" min="0" value="{{ formulario.matriculados }}" onChange="{{ mudarMatriculados }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label></sc-if>
-                <sc-if value="{{ matriculadosDoCadastro }}" hint-placeholder-val="{{ false }}"><div class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Matriculados</span><span class="h-40 borda-cinza-110 raio-8 p-0-12 fs-14 fundo-cinza-20 d-flex alinha-center tamanho-border-box num-tabular-nums">{{ matriculadosTexto }}</span><span class="fs-12 cor-cinza-600">Do cadastro da turma</span></div></sc-if>
+                <sc-if value="{{ matriculadosManual }}" hint-placeholder-val="{{ true }}"><label
+                  class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Matriculados</span><input
+                  type="number" inputmode="numeric" min="0" value="{{ formulario.matriculados }}" onChange="{{ mudarMatriculados }}"
+                  class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label></sc-if>
+                <sc-if value="{{ matriculadosDoCadastro }}" hint-placeholder-val="{{ false }}"><div
+                  class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Matriculados</span><span
+                  class="h-40 borda-cinza-110 raio-8 p-0-12 fs-14 fundo-cinza-20 d-flex alinha-center tamanho-border-box num-tabular-nums">{{ matriculadosTexto }}</span><span
+                  class="fs-12 cor-cinza-600">Do cadastro da turma</span></div></sc-if>
                 <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Presentes *</span><input type="number" inputmode="numeric" min="0" value="{{ formulario.presentes }}" onChange="{{ mudarPresentes }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
                 <div class="h-40 raio-8 fundo-ciano-40 d-flex alinha-center justifica-space-between p-0-12"><span class="fs-12 cor-ciano-740">Presença</span><b class="cor-ciano-740 num-tabular-nums">{{ percentual }}</b></div>
               </div>
@@ -101,14 +138,34 @@
               <h3 class="m-0 fs-15">Desenvolvimento da atividade</h3>
               <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
                 <label class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">Conteúdo / atividade</span><input value="{{ formulario.atividade }}" onChange="{{ mudarAtividade }}" maxlength="200" placeholder="{{ atividadeExemplo }}" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
-                <sc-if value="{{ temComponente }}" hint-placeholder-val="{{ true }}"><div class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">{{ componenteRotulo }}</span><span class="min-h-40 borda-cinza-110 raio-8 p-0-12 fs-14 fundo-cinza-20 d-flex alinha-center tamanho-border-box">{{ componenteTexto }}</span><span class="fs-12 cor-cinza-600">{{ componenteNota }}</span></div></sc-if>
+                <sc-if value="{{ temComponente }}" hint-placeholder-val="{{ true }}"><div
+                  class="d-flex eixo-column gap-6 min-w-0"><span class="fs-12 cor-cinza-600 fw-600">{{ componenteRotulo }}</span><span
+                  class="min-h-40 borda-cinza-110 raio-8 p-0-12 fs-14 fundo-cinza-20 d-flex alinha-center tamanho-border-box">{{ componenteTexto }}</span><span
+                  class="fs-12 cor-cinza-600">{{ componenteNota }}</span></div></sc-if>
               </div>
-              <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Como foi a atividade *</span><textarea rows="4" value="{{ formulario.descricao }}" onChange="{{ mudarDescricao }}" maxlength="2000" placeholder="Como a atividade foi conduzida, o que os alunos fizeram e produziram" class="borda-cinza-160 raio-8 p-10-12 fs-14 fonte-inherit redim-vertical lh-1p5"></textarea></label>
+              <label class="d-flex eixo-column gap-6"><span
+                class="fs-12 cor-cinza-600 fw-600">Como foi a atividade *</span><textarea rows="4" value="{{ formulario.descricao }}"
+                onChange="{{ mudarDescricao }}" maxlength="2000"
+                placeholder="Como a atividade foi conduzida, o que os alunos fizeram e produziram"
+                class="borda-cinza-160 raio-8 p-10-12 fs-14 fonte-inherit redim-vertical lh-1p5"></textarea></label>
               <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
-                <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-cinza-600 fw-600">Objetivo atingido?</span><div class="d-flex gap-6" role="group" aria-label="Objetivo atingido?"><sc-for list="{{ objetivos }}" as="opcao" hint-placeholder-count="3"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" class="raio-8 fs-14 fw-500 flex-1 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }};padding:9px 14px;padding:9px 6px">{{ opcao.rotulo }}</button></sc-for></div></div>
-                <div class="d-flex eixo-column gap-8"><span class="fs-12 cor-cinza-600 fw-600">Engajamento da turma · {{ engajamentoTexto }}</span><div class="d-flex gap-6" role="group" aria-label="Engajamento da turma, de 1 a 5"><sc-for list="{{ engajamentos }}" as="opcao" hint-placeholder-count="5"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}" aria-label="{{ opcao.aria }}" class="raio-8 fs-14 fw-500 flex-1 botao-opcao {{ opcao.classe }}" style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }};padding:9px 14px;padding:9px 0">{{ opcao.rotulo }}</button></sc-for></div></div>
+                <div class="d-flex eixo-column gap-8"><span
+                  class="fs-12 cor-cinza-600 fw-600">Objetivo atingido?</span><div class="d-flex gap-6" role="group"
+                  aria-label="Objetivo atingido?"><sc-for list="{{ objetivos }}" as="opcao" hint-placeholder-count="3"><button
+                  onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}"
+                  class="raio-8 fs-14 fw-500 flex-1 botao-opcao {{ opcao.classe }}"
+                  style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }};padding:9px 14px;padding:9px 6px">{{ opcao.rotulo }}</button></sc-for></div></div>
+                <div class="d-flex eixo-column gap-8"><span
+                  class="fs-12 cor-cinza-600 fw-600">Engajamento da turma · {{ engajamentoTexto }}</span><div class="d-flex gap-6"
+                  role="group" aria-label="Engajamento da turma, de 1 a 5"><sc-for list="{{ engajamentos }}" as="opcao"
+                  hint-placeholder-count="5"><button onClick="{{ opcao.escolher }}" aria-pressed="{{ opcao.marcada }}"
+                  aria-label="{{ opcao.aria }}" class="raio-8 fs-14 fw-500 flex-1 botao-opcao {{ opcao.classe }}"
+                  style="border:1.5px solid {{ opcao.borda }};background:{{ opcao.fundo }};color:{{ opcao.cor }};padding:9px 14px;padding:9px 0">{{ opcao.rotulo }}</button></sc-for></div></div>
               </div>
-              <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Próxima atividade (opcional)</span><input value="{{ formulario.proxima }}" onChange="{{ mudarProxima }}" maxlength="300" placeholder="O que fica para continuar com a turma" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
+              <label class="d-flex eixo-column gap-6"><span
+                class="fs-12 cor-cinza-600 fw-600">Próxima atividade (opcional)</span><input value="{{ formulario.proxima }}"
+                onChange="{{ mudarProxima }}" maxlength="300" placeholder="O que fica para continuar com a turma"
+                class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit min-w-0 w-100pc tamanho-border-box largura-fundo"></input></label>
             </section>
           </sc-if>
 

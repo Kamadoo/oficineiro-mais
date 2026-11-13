@@ -24,13 +24,20 @@
 <script src="./lib/contas.js"></script>
 <script src="./lib/mapa.js"></script>
 </helmet>
-<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#13252C"></rect><rect x="27" y="27" width="21" height="21" rx="5" fill="#DD2287"></rect><rect x="52" y="27" width="21" height="21" rx="5" fill="#6C60E6"></rect><rect x="27" y="52" width="21" height="21" rx="5" fill="#3ECDF3"></rect><rect x="52" y="52" width="21" height="21" rx="5" fill="#35E47D"></rect></svg></template>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100"
+  height="100" fill="#13252C"></rect><rect x="27" y="27" width="21" height="21" rx="5" fill="#DD2287"></rect><rect x="52"
+  y="27" width="21" height="21" rx="5" fill="#6C60E6"></rect><rect x="27" y="52" width="21" height="21" rx="5"
+  fill="#3ECDF3"></rect><rect x="52" y="52" width="21" height="21" rx="5" fill="#35E47D"></rect></svg></template>
 
 <sc-if value="{{ naEntrada }}" hint-placeholder-val="{{ true }}">
   <div id="entrada">
     <div id="entrada-card">
       <div class="ent-arte">
-        <div class="ent-marca" role="img" aria-label="Oficineiro+"><svg aria-hidden="true" viewBox="0 0 31 31" width="30" height="30" class="ent-marca-simbolo"><rect x="0" y="0" width="14" height="14" rx="3" fill="#DD2287"></rect><rect x="17" y="0" width="14" height="14" rx="3" fill="#6C60E6"></rect><rect x="0" y="17" width="14" height="14" rx="3" fill="#3ECDF3"></rect><rect x="17" y="17" width="14" height="14" rx="3" fill="#35E47D"></rect></svg><span>Oficineiro<b>+</b></span></div>
+        <div class="ent-marca" role="img" aria-label="Oficineiro+"><svg aria-hidden="true" viewBox="0 0 31 31"
+          width="30" height="30" class="ent-marca-simbolo"><rect x="0" y="0" width="14" height="14" rx="3"
+          fill="#DD2287"></rect><rect x="17" y="0" width="14" height="14" rx="3" fill="#6C60E6"></rect><rect x="0" y="17"
+          width="14" height="14" rx="3" fill="#3ECDF3"></rect><rect x="17" y="17" width="14" height="14" rx="3"
+          fill="#35E47D"></rect></svg><span>Oficineiro<b>+</b></span></div>
         <div class="ent-orbita">
           <img src="../public/brand/entrada-orbita.png" alt="" class="{{ orbitaCls }}"></img>
         </div>
@@ -58,7 +65,12 @@
           <label class="fsm-rotulo" for="fsm-senha">Senha</label>
           <div class="fsm-campo-caixa">
             <input id="fsm-senha" class="fsm-campo fsm-campo-olho" type="{{ tipoSenha }}" autoComplete="current-password" maxLength="128" readOnly="{{ ocupado }}" onKeyDown="{{ enterLogin }}"></input>
-            <button type="button" class="fsm-olho" onClick="{{ alternarSenha }}" aria-label="{{ olhoAria }}" aria-pressed="{{ olhoPressed }}" aria-controls="fsm-senha" title="{{ olhoAria }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle><sc-if value="{{ verSenha }}" hint-placeholder-val="{{ false }}"><path d="M4 4l16 16"></path></sc-if></svg></button>
+            <button type="button" class="fsm-olho" onClick="{{ alternarSenha }}" aria-label="{{ olhoAria }}"
+              aria-pressed="{{ olhoPressed }}" aria-controls="fsm-senha" title="{{ olhoAria }}"><svg viewBox="0 0 24 24" width="22"
+              height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12"
+              r="3"></circle><sc-if value="{{ verSenha }}" hint-placeholder-val="{{ false }}"><path
+              d="M4 4l16 16"></path></sc-if></svg></button>
           </div>
           <label class="fsm-lembrar-op" for="fsm-lembrar">
             <input id="fsm-lembrar" class="fsm-check" type="checkbox" aria-describedby="fsm-lembrar-dica"></input>
@@ -114,13 +126,23 @@
           <label class="fsm-rotulo fsm-rotulo-afastado" for="fsm-nova">Crie sua senha</label>
           <div class="fsm-campo-caixa">
             <input id="fsm-nova" class="fsm-campo fsm-campo-olho" type="{{ tipoNova }}" autoComplete="new-password" maxLength="128" onInput="{{ conferirSenha }}"></input>
-            <button type="button" class="fsm-olho" onClick="{{ alternarNova }}" aria-label="{{ olhoNovaAria }}" aria-pressed="{{ olhoNovaPressed }}" aria-controls="fsm-nova" title="{{ olhoNovaAria }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle><sc-if value="{{ verNova }}" hint-placeholder-val="{{ false }}"><path d="M4 4l16 16"></path></sc-if></svg></button>
+            <button type="button" class="fsm-olho" onClick="{{ alternarNova }}" aria-label="{{ olhoNovaAria }}"
+              aria-pressed="{{ olhoNovaPressed }}" aria-controls="fsm-nova" title="{{ olhoNovaAria }}"><svg viewBox="0 0 24 24"
+              width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle
+              cx="12" cy="12" r="3"></circle><sc-if value="{{ verNova }}" hint-placeholder-val="{{ false }}"><path
+              d="M4 4l16 16"></path></sc-if></svg></button>
           </div>
           <div class="forca {{ forcaClasse }}" aria-hidden="true"><div class="forca-trilho"><div class="forca-barra"></div></div><span class="forca-txt">{{ forcaTxt }}</span></div>
           <label class="fsm-rotulo" for="fsm-confirma">Repita a senha nova</label>
           <div class="fsm-campo-caixa">
             <input id="fsm-confirma" class="fsm-campo fsm-campo-olho" type="{{ tipoConfirma }}" autoComplete="new-password" maxLength="128" onKeyDown="{{ enterSenha }}"></input>
-            <button type="button" class="fsm-olho" onClick="{{ alternarConfirma }}" aria-label="{{ olhoConfirmaAria }}" aria-pressed="{{ olhoConfirmaPressed }}" aria-controls="fsm-confirma" title="{{ olhoConfirmaAria }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle><sc-if value="{{ verConfirma }}" hint-placeholder-val="{{ false }}"><path d="M4 4l16 16"></path></sc-if></svg></button>
+            <button type="button" class="fsm-olho" onClick="{{ alternarConfirma }}" aria-label="{{ olhoConfirmaAria }}"
+              aria-pressed="{{ olhoConfirmaPressed }}" aria-controls="fsm-confirma" title="{{ olhoConfirmaAria }}"><svg
+              viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle
+              cx="12" cy="12" r="3"></circle><sc-if value="{{ verConfirma }}" hint-placeholder-val="{{ false }}"><path
+              d="M4 4l16 16"></path></sc-if></svg></button>
           </div>
           <p class="ent-regra {{ regraClasse }}">{{ regraSenha }}</p>
           <button class="fsm-btn" onClick="{{ salvarSenha }}" disabled="{{ ocupado }}">{{ rotuloSalvar }}</button>

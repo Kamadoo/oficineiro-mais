@@ -11,7 +11,12 @@
   <div class="d-flex quebra-wrap alinha-flex-end justifica-space-between gap-10">
     <div class="d-flex eixo-column gap-2"><h2 class="m-0 fs-20 fw-800">Presença de hoje</h2><span class="fs-13 cor-cinza-600">{{ atualizadoTexto }}</span></div>
   </div>
-  <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))"><sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="4"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-14 p-12-14 d-flex eixo-column gap-4 fundo-branco"><span class="fs-12 cor-cinza-600 fw-600">{{ indicador.titulo }}</span><b class="fs-24 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</b><span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for></div>
+  <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))"><sc-for
+    list="{{ indicadores }}" as="indicador" hint-placeholder-count="4"><div style="background:var(--fundo-branco)"
+    class="borda-cinza-110 raio-14 p-12-14 d-flex eixo-column gap-4 fundo-branco"><span
+    class="fs-12 cor-cinza-600 fw-600">{{ indicador.titulo }}</span><b class="fs-24 num-tabular-nums"
+    style="color:{{ indicador.cor }}">{{ indicador.valor }}</b><span
+    class="fs-12 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for></div>
   <div class="direcao-ponto-grade d-grid colunas-minmax-0-1fr-320 gap-16 alinha-start">
     <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-14 rolagem-hidden fundo-branco">
       <h3 class="m-0 p-14-16 fs-15">Oficineiros da escola</h3>
@@ -19,7 +24,14 @@
         <table class="w-100pc min-w-600 colapso-collapse fs-13">
           <thead><tr class="fundo-cinza-55 cor-cinza-600 texto-left"><th class="p-8-10 fw-600">Oficineiro</th><th class="p-8-10 fw-600">Entrada</th><th class="p-8-10 fw-600">Almoço</th><th class="p-8-10 fw-600">Saída</th><th class="p-8-10 fw-600">Horas hoje</th><th class="p-8-10 fw-600">Situação</th><th class="p-8-10 fw-600">Espelho</th></tr></thead>
           <tbody>
-            <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="3"><tr class="borda-t-cinza-110"><td class="p-10 fw-700">{{ linha.nome }}</td><td class="p-10 num-tabular-nums">{{ linha.entrada }}</td><td class="p-10 num-tabular-nums">{{ linha.almoco }}</td><td class="p-10 num-tabular-nums">{{ linha.saida }}</td><td class="p-10 num-tabular-nums fw-700">{{ linha.horas }}</td><td class="p-10"><span class="fs-12 fw-700 raio-999 p-3-10 espaco-nowrap" style="background:{{ linha.fundo }};color:{{ linha.cor }}">{{ linha.situacao }}</span></td><td class="p-10"><button onClick="{{ linha.verEspelho }}" aria-label="{{ linha.rotuloEspelho }}" class="min-h-36 borda-cinza-160 fundo-branco cor-ciano-740 raio-8 p-0-10 fs-13 fw-600 espaco-nowrap botao-secundario">Espelho</button></td></tr></sc-for>
+            <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="3"><tr class="borda-t-cinza-110"><td
+              class="p-10 fw-700">{{ linha.nome }}</td><td class="p-10 num-tabular-nums">{{ linha.entrada }}</td><td
+              class="p-10 num-tabular-nums">{{ linha.almoco }}</td><td class="p-10 num-tabular-nums">{{ linha.saida }}</td><td
+              class="p-10 num-tabular-nums fw-700">{{ linha.horas }}</td><td class="p-10"><span
+              class="fs-12 fw-700 raio-999 p-3-10 espaco-nowrap"
+              style="background:{{ linha.fundo }};color:{{ linha.cor }}">{{ linha.situacao }}</span></td><td class="p-10"><button
+              onClick="{{ linha.verEspelho }}" aria-label="{{ linha.rotuloEspelho }}"
+              class="min-h-36 borda-cinza-160 fundo-branco cor-ciano-740 raio-8 p-0-10 fs-13 fw-600 espaco-nowrap botao-secundario">Espelho</button></td></tr></sc-for>
           </tbody>
         </table>
       </div>
@@ -38,7 +50,11 @@
           <sc-if value="{{ justificativa.pendente }}" hint-placeholder-val="{{ true }}">
             <input value="{{ justificativa.comentario }}" onInput="{{ justificativa.escreverComentario }}" aria-label="{{ justificativa.rotuloComentario }}" placeholder="Comentário (obrigatório para recusar)" maxlength="500" class="h-38 borda-cinza-160 raio-8 p-0-10 fs-13 fundo-branco"></input>
             <sc-if value="{{ justificativa.temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-12 cor-vermelho-600">{{ justificativa.erro }}</span></sc-if>
-            <div class="d-flex gap-8"><button style="background:var(--destaque-ciano-660)" onClick="{{ justificativa.aprovar }}" disabled="{{ justificativa.ocupado }}" class="flex-1 min-h-40 borda-0 raio-10 cor-branco fs-13 fw-700 fundo-ciano-660">Aprovar</button><button onClick="{{ justificativa.recusar }}" disabled="{{ justificativa.ocupado }}" class="flex-1 min-h-40 borda-cinza-160 raio-10 fundo-branco cor-vermelho-600 fs-13 fw-700 botao-secundario">Recusar</button></div>
+            <div class="d-flex gap-8"><button style="background:var(--destaque-ciano-660)"
+              onClick="{{ justificativa.aprovar }}" disabled="{{ justificativa.ocupado }}"
+              class="flex-1 min-h-40 borda-0 raio-10 cor-branco fs-13 fw-700 fundo-ciano-660">Aprovar</button><button
+              onClick="{{ justificativa.recusar }}" disabled="{{ justificativa.ocupado }}"
+              class="flex-1 min-h-40 borda-cinza-160 raio-10 fundo-branco cor-vermelho-600 fs-13 fw-700 botao-secundario">Recusar</button></div>
           </sc-if>
           <sc-if value="{{ justificativa.decidida }}" hint-placeholder-val="{{ false }}"><span class="alinha-si-flex-start fs-12 fw-700 raio-999 p-3-10" style="background:{{ justificativa.fundo }};color:{{ justificativa.cor }}">{{ justificativa.status }}</span></sc-if>
         </div>
@@ -49,7 +65,13 @@
     <section style="background:var(--fundo-branco)" aria-label="{{ espelho.titulo }}" class="borda-cinza-110 raio-14 p-6-16-12 d-flex eixo-column fundo-branco">
       <div class="d-flex alinha-center justifica-space-between gap-8 quebra-wrap p-10-0">
         <h3 class="m-0 fs-15">{{ espelho.titulo }}</h3>
-        <div class="d-flex alinha-center gap-4"><button onClick="{{ espelho.anterior }}" aria-label="Mês anterior" class="w-40 h-40 borda-0 fundo-transparent cor-ciano-740 fs-18 fw-700 largura-fundo">‹</button><span class="fs-13 fw-700">{{ espelho.mes }}</span><button onClick="{{ espelho.proximo }}" disabled="{{ espelho.semProximo }}" aria-label="Próximo mês" class="w-40 h-40 borda-0 fundo-transparent cor-ciano-740 fs-18 fw-700 largura-fundo">›</button><button onClick="{{ espelho.fechar }}" aria-label="Fechar espelho" class="w-40 h-40 borda-0 fundo-transparent cor-cinza-600 fs-18 largura-fundo">×</button></div>
+        <div class="d-flex alinha-center gap-4"><button onClick="{{ espelho.anterior }}" aria-label="Mês anterior"
+          class="w-40 h-40 borda-0 fundo-transparent cor-ciano-740 fs-18 fw-700 largura-fundo">‹</button><span
+          class="fs-13 fw-700">{{ espelho.mes }}</span><button onClick="{{ espelho.proximo }}" disabled="{{ espelho.semProximo }}"
+          aria-label="Próximo mês"
+          class="w-40 h-40 borda-0 fundo-transparent cor-ciano-740 fs-18 fw-700 largura-fundo">›</button><button
+          onClick="{{ espelho.fechar }}" aria-label="Fechar espelho"
+          class="w-40 h-40 borda-0 fundo-transparent cor-cinza-600 fs-18 largura-fundo">×</button></div>
       </div>
       <span class="fs-13 cor-cinza-600">{{ espelho.resumo }}</span>
       <sc-for list="{{ espelho.dias }}" as="dia" hint-placeholder-count="3">

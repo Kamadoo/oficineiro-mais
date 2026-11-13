@@ -10,12 +10,23 @@
 <x-dc>
   <sc-if value="{{ conectado }}" hint-placeholder-val="{{ false }}">
   <section aria-label="Resumo" class="duas-colunas-celular d-grid colunas-repeat-4-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
-    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="4"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-16-18 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-branco"><span class="fs-13 cor-cinza-600">{{ indicador.titulo }}</span><span class="fs-28 fw-700 num-tabular-nums">{{ indicador.valor }}</span><span class="fs-12 cor-cinza-600 lh-1p4">{{ indicador.nota }}</span></div></sc-for>
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="4"><div
+      style="background:var(--fundo-branco)"
+      class="borda-cinza-110 raio-12 p-16-18 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-branco"><span
+      class="fs-13 cor-cinza-600">{{ indicador.titulo }}</span><span
+      class="fs-28 fw-700 num-tabular-nums">{{ indicador.valor }}</span><span
+      class="fs-12 cor-cinza-600 lh-1p4">{{ indicador.nota }}</span></div></sc-for>
   </section>
   <div class="empilha-celular d-grid colunas-minmax-0-1p3fr-minmax-0-1fr gap-12 alinha-start" style="opacity:{{ opacidade }}">
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-18-20 d-flex eixo-column gap-12 fundo-branco" aria-labelledby="pd-h-dias">
       <div class="d-flex eixo-column gap-2"><h3 id="pd-h-dias" class="m-0 fs-15">Atividades por dia</h3><span class="fs-12 cor-cinza-600">{{ diasTitulo }}</span></div>
-      <div aria-hidden="true" class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-600"><span class="d-inline-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 fundo-verde-700 largura-fundo"></span>Realizadas</span><span class="d-inline-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 fundo-vermelho-600 largura-fundo"></span>Não realizadas</span><span class="d-inline-flex alinha-center gap-6"><span class="w-10 h-10 raio-2 fundo-ambar-370 largura-fundo"></span>Sem registro</span></div>
+      <div aria-hidden="true" class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-600"><span
+        class="d-inline-flex alinha-center gap-6"><span
+        class="w-10 h-10 raio-2 fundo-verde-700 largura-fundo"></span>Realizadas</span><span
+        class="d-inline-flex alinha-center gap-6"><span
+        class="w-10 h-10 raio-2 fundo-vermelho-600 largura-fundo"></span>Não realizadas</span><span
+        class="d-inline-flex alinha-center gap-6"><span
+        class="w-10 h-10 raio-2 fundo-ambar-370 largura-fundo"></span>Sem registro</span></div>
       <ul class="lista-none m-0 p-0 d-flex eixo-column gap-10">
         <sc-for list="{{ dias }}" as="dia" hint-placeholder-count="5">
           <li aria-label="{{ dia.aria }}" class="d-grid colunas-72-minmax-0-1fr-92 gap-10 alinha-center fs-13">
@@ -38,7 +49,11 @@
           </button>
           <sc-if value="{{ faixa.aberta }}" hint-placeholder-val="{{ false }}">
             <ul class="lista-none m-0-0-6 p-8-10 fundo-cinza-20 raio-8 d-flex eixo-column gap-2">
-              <sc-for list="{{ faixa.oficineiros }}" as="oficineiro" hint-placeholder-count="3"><li><button onClick="{{ oficineiro.abrir }}" aria-label="{{ oficineiro.aria }}" class="d-flex justifica-space-between gap-10 w-100pc borda-0 fundo-transparent p-6-4 fonte-inherit fs-13 cor-ciano-850 texto-left largura-fundo cursor-pointer"><span>{{ oficineiro.nome }} <span class="cor-cinza-600">· {{ oficineiro.escola }}</span></span><b class="num-tabular-nums">{{ oficineiro.valor }}</b></button></li></sc-for>
+              <sc-for list="{{ faixa.oficineiros }}" as="oficineiro" hint-placeholder-count="3"><li><button
+                onClick="{{ oficineiro.abrir }}" aria-label="{{ oficineiro.aria }}"
+                class="d-flex justifica-space-between gap-10 w-100pc borda-0 fundo-transparent p-6-4 fonte-inherit fs-13 cor-ciano-850 texto-left largura-fundo cursor-pointer"><span>{{ oficineiro.nome }} <span
+                class="cor-cinza-600">· {{ oficineiro.escola }}</span></span><b
+                class="num-tabular-nums">{{ oficineiro.valor }}</b></button></li></sc-for>
             </ul>
           </sc-if>
         </div>
@@ -55,7 +70,14 @@
     <div role="table" aria-labelledby="pd-h-top">
       <div role="row" class="produtividade-top-linha d-grid colunas-minmax-0-1fr-120-110 gap-10 p-10-20 fs-12 fw-600 cor-cinza-600 borda-b-cinza-70" style="background:var(--fundo-cinza-30)"><span role="columnheader">Oficineiro</span><span role="columnheader" class="texto-right">Dias com presença</span><span role="columnheader" class="texto-right">Horas conferidas</span></div>
       <sc-for list="{{ ranking }}" as="oficineiro" hint-placeholder-count="5">
-        <div role="row" class="produtividade-top-linha d-grid colunas-minmax-0-1fr-120-110 gap-10 p-6-20 fs-14 borda-b-cinza-70 alinha-center"><span role="cell"><button onClick="{{ oficineiro.abrir }}" aria-label="{{ oficineiro.aria }}" class="borda-0 fundo-transparent p-6-0 fonte-inherit fs-14 cor-ciano-850 texto-left sublinha-3 cursor-pointer deco-underline" style="text-decoration-color:var(--destaque-cinza-160)">{{ oficineiro.nome }}</button> <span class="cor-cinza-600 fs-12">· {{ oficineiro.escola }}</span></span><span role="cell" class="texto-right num-tabular-nums">{{ oficineiro.dias }}</span><span role="cell" class="texto-right num-tabular-nums">{{ oficineiro.horas }}</span></div>
+        <div role="row"
+          class="produtividade-top-linha d-grid colunas-minmax-0-1fr-120-110 gap-10 p-6-20 fs-14 borda-b-cinza-70 alinha-center"><span
+          role="cell"><button onClick="{{ oficineiro.abrir }}" aria-label="{{ oficineiro.aria }}"
+          class="borda-0 fundo-transparent p-6-0 fonte-inherit fs-14 cor-ciano-850 texto-left sublinha-3 cursor-pointer deco-underline"
+          style="text-decoration-color:var(--destaque-cinza-160)">{{ oficineiro.nome }}</button> <span
+          class="cor-cinza-600 fs-12">· {{ oficineiro.escola }}</span></span><span role="cell"
+          class="texto-right num-tabular-nums">{{ oficineiro.dias }}</span><span role="cell"
+          class="texto-right num-tabular-nums">{{ oficineiro.horas }}</span></div>
       </sc-for>
       <sc-if value="{{ semRanking }}" hint-placeholder-val="{{ false }}"><div class="p-24-20 texto-center fs-14 cor-cinza-600">Nenhum oficineiro com os filtros escolhidos.</div></sc-if>
     </div>

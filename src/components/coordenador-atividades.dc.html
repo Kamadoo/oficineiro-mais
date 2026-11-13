@@ -13,23 +13,55 @@
   <h2 class="so-impressao m-0 fs-16">{{ tituloDeImpressao }}</h2>
 </sc-if>
 <sc-if value="{{ is.atividadesOficineiros }}" hint-placeholder-val="{{ false }}">
-  <div class="largura-total-celular nao-imprimir d-flex eixo-column gap-6 w-420 max-w-100pc"><label for="selOfic" class="fs-12 fw-600 cor-cinza-600">Oficineiro</label><select style="background:var(--fundo-branco)" id="selOfic" value="{{ oficineiro }}" onChange="{{ escolherOficineiro }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit min-w-0 fw-600 largura-fundo fundo-branco"><sc-for list="{{ opcoesDeOficineiro }}" as="opcao" hint-placeholder-count="10"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></div>
+  <div class="largura-total-celular nao-imprimir d-flex eixo-column gap-6 w-420 max-w-100pc"><label for="selOfic"
+    class="fs-12 fw-600 cor-cinza-600">Oficineiro</label><select style="background:var(--fundo-branco)" id="selOfic"
+    value="{{ oficineiro }}" onChange="{{ escolherOficineiro }}"
+    class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit min-w-0 fw-600 largura-fundo fundo-branco"><sc-for
+    list="{{ opcoesDeOficineiro }}" as="opcao" hint-placeholder-count="10"><option
+    value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></div>
   <div class="duas-colunas-celular d-grid colunas-repeat-5-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
-    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="5"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-10 p-14-16 d-flex eixo-column gap-2 fundo-branco"><span class="fs-22 fw-600 num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-12 cor-cinza-600">{{ indicador.titulo }}</span><span class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for>
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="5"><div
+      style="background:var(--fundo-branco)"
+      class="borda-cinza-110 raio-10 p-14-16 d-flex eixo-column gap-2 fundo-branco"><span
+      class="fs-22 fw-600 num-tabular-nums"
+      style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.cor }}">{{ indicador.valor }}</span><span
+      class="fs-12 cor-cinza-600">{{ indicador.titulo }}</span><span
+      class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for>
   </div>
 </sc-if>
 <sc-if value="{{ mostrarTabela }}" hint-placeholder-val="{{ false }}">
   <section class="au-tabela borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div role="table" aria-label="{{ tabelaAria }}" class="min-w-980">
       <div role="row" class="au-cab d-grid gap-10 p-12-12 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110" style="background:var(--fundo-cinza-30);grid-template-columns:48px minmax(0,1.1fr) 44px minmax(0,1.2fr) minmax(0,.9fr) 84px minmax(0,1fr) 60px 52px minmax(0,1.4fr) 26px 196px">
-        <span role="columnheader">Data</span><span role="columnheader">Oficineiro</span><span role="columnheader">Escola</span><span role="columnheader">Tipo de atividade</span><span role="columnheader">Turma</span><span role="columnheader">Horário</span><span role="columnheader">Solução</span><span role="columnheader">Pres./Matr.</span><span role="columnheader" title="Nível de engajamento da turma, de 1 a 5">Engaj.</span><span role="columnheader">Situação</span><span role="columnheader" title="Evidências (fotos): o registro de atividades ainda não recebe fotos">Ev.</span><span role="columnheader" class="nao-imprimir">Ações</span>
+        <span role="columnheader">Data</span><span role="columnheader">Oficineiro</span><span
+          role="columnheader">Escola</span><span role="columnheader">Tipo de atividade</span><span
+          role="columnheader">Turma</span><span role="columnheader">Horário</span><span role="columnheader">Solução</span><span
+          role="columnheader">Pres./Matr.</span><span role="columnheader"
+          title="Nível de engajamento da turma, de 1 a 5">Engaj.</span><span role="columnheader">Situação</span><span
+          role="columnheader" title="Evidências (fotos): o registro de atividades ainda não recebe fotos">Ev.</span><span
+          role="columnheader" class="nao-imprimir">Ações</span>
       </div>
       <sc-for list="{{ atividades }}" as="atividade" hint-placeholder-count="6">
         <div role="row" class="au-linha d-grid gap-6-10 p-11-12 fs-13 borda-b-cinza-70 alinha-center" style="grid-template-columns:48px minmax(0,1.1fr) 44px minmax(0,1.2fr) minmax(0,.9fr) 84px minmax(0,1fr) 60px 52px minmax(0,1.4fr) 26px 196px">
           <span role="cell" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif"><span class="so-celular cor-cinza-600 fonte-inter">Data </span>{{ atividade.data }}</span><span role="cell" class="au-larga fw-600">{{ atividade.oficineiro }}</span><span role="cell" title="{{ atividade.escolaNome }}">{{ atividade.escola }}</span>
           <span role="cell" class="au-larga d-flex eixo-column gap-2"><span class="alinha-si-flex-start fs-12 fw-600 p-2-8 raio-4" style="color:{{ atividade.tipoCor }};background:{{ atividade.tipoFundo }}">{{ atividade.tipo }}</span><span class="fs-11 cor-cinza-600">{{ atividade.professor }}</span></span>
-          <b role="cell">{{ atividade.turma }}</b><span role="cell" class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ atividade.horario }}</span><span role="cell">{{ atividade.solucao }}</span><span role="cell" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif"><span class="so-celular cor-cinza-600 fonte-inter">Presentes </span>{{ atividade.presentesMatriculados }}</span><span role="cell" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif"><span class="so-celular cor-cinza-600 fonte-inter">Engajamento </span><span title="{{ atividade.engajamentoTitulo }}">{{ atividade.engajamento }}</span></span>
-          <span role="cell" class="au-larga d-flex eixo-column alinha-flex-start gap-4"><span class="fs-12 fw-600 p-3-8 raio-8 espaco-normal lh-1p3" style="color:{{ atividade.situacaoCor }};background:{{ atividade.situacaoFundo }}">{{ atividade.situacao }}</span><sc-if value="{{ atividade.temOcorrencia }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-cinza-600 lh-1p35">{{ atividade.ocorrencia }}</span></sc-if><sc-if value="{{ atividade.temRevisao }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 p-3-8 raio-8 espaco-normal lh-1p3" style="color:{{ atividade.revisaoCor }};background:{{ atividade.revisaoFundo }}">{{ atividade.revisao }}</span></sc-if><sc-if value="{{ atividade.temRevisaoObservacao }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-cinza-600 lh-1p35">{{ atividade.revisaoObservacao }}</span></sc-if></span>
+          <b role="cell">{{ atividade.turma }}</b><span role="cell" class="num-tabular-nums fs-12"
+            style="font-family:'Inter',system-ui,sans-serif">{{ atividade.horario }}</span><span
+            role="cell">{{ atividade.solucao }}</span><span role="cell" class="num-tabular-nums"
+            style="font-family:'Inter',system-ui,sans-serif"><span
+            class="so-celular cor-cinza-600 fonte-inter">Presentes </span>{{ atividade.presentesMatriculados }}</span><span
+            role="cell" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif"><span
+            class="so-celular cor-cinza-600 fonte-inter">Engajamento </span><span
+            title="{{ atividade.engajamentoTitulo }}">{{ atividade.engajamento }}</span></span>
+          <span role="cell" class="au-larga d-flex eixo-column alinha-flex-start gap-4"><span
+            class="fs-12 fw-600 p-3-8 raio-8 espaco-normal lh-1p3"
+            style="color:{{ atividade.situacaoCor }};background:{{ atividade.situacaoFundo }}">{{ atividade.situacao }}</span><sc-if
+            value="{{ atividade.temOcorrencia }}" hint-placeholder-val="{{ false }}"><span
+            class="fs-11 cor-cinza-600 lh-1p35">{{ atividade.ocorrencia }}</span></sc-if><sc-if value="{{ atividade.temRevisao }}"
+            hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 p-3-8 raio-8 espaco-normal lh-1p3"
+            style="color:{{ atividade.revisaoCor }};background:{{ atividade.revisaoFundo }}">{{ atividade.revisao }}</span></sc-if><sc-if
+            value="{{ atividade.temRevisaoObservacao }}" hint-placeholder-val="{{ false }}"><span
+            class="fs-11 cor-cinza-600 lh-1p35">{{ atividade.revisaoObservacao }}</span></sc-if></span>
           <span role="cell" class="oculto-celular num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ atividade.evidencia }}</span>
           <span role="cell" class="nao-imprimir au-larga d-flex gap-4 quebra-wrap">
             <sc-if value="{{ atividade.temAcoes }}" hint-placeholder-val="{{ true }}">
@@ -42,9 +74,16 @@
           <sc-if value="{{ atividade.painelAberto }}" hint-placeholder-val="{{ false }}">
             <div role="group" aria-label="{{ atividade.painelTexto }}" class="nao-imprimir fundo-cinza-20 raio-8 p-12 d-flex eixo-column gap-8 coluna-inteira">
               <span class="fs-13 cor-cinza-750">{{ atividade.painelTexto }}</span>
-              <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Motivo para o oficineiro (obrigatório)</span><input id="{{ atividade.comentarioId }}" value="{{ atividade.comentario }}" onChange="{{ atividade.escreverComentario }}" maxlength="500" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco fonte-inherit min-w-0 max-w-560 largura-fundo"></input></label>
+              <label class="d-flex eixo-column gap-6"><span
+                class="fs-12 cor-cinza-600 fw-600">Motivo para o oficineiro (obrigatório)</span><input id="{{ atividade.comentarioId }}"
+                value="{{ atividade.comentario }}" onChange="{{ atividade.escreverComentario }}" maxlength="500"
+                class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco fonte-inherit min-w-0 max-w-560 largura-fundo"></input></label>
               <sc-if value="{{ atividade.temErro }}" hint-placeholder-val="{{ false }}"><span role="alert" class="fs-13 cor-vermelho-600">{{ atividade.erro }}</span></sc-if>
-              <div class="d-flex gap-8 quebra-wrap"><button onClick="{{ atividade.confirmar }}" disabled="{{ atividade.salvando }}" class="h-36 borda-0 fundo-vermelho-600 cor-branco raio-8 p-0-14 fs-13 fw-600">{{ atividade.painelBotao }}</button><button onClick="{{ atividade.cancelar }}" disabled="{{ atividade.salvando }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 botao-secundario">Cancelar</button></div>
+              <div class="d-flex gap-8 quebra-wrap"><button onClick="{{ atividade.confirmar }}"
+                disabled="{{ atividade.salvando }}"
+                class="h-36 borda-0 fundo-vermelho-600 cor-branco raio-8 p-0-14 fs-13 fw-600">{{ atividade.painelBotao }}</button><button
+                onClick="{{ atividade.cancelar }}" disabled="{{ atividade.salvando }}"
+                class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 botao-secundario">Cancelar</button></div>
             </div>
           </sc-if>
         </div>
@@ -58,7 +97,11 @@
 
 <sc-if value="{{ is.atividadesLinha }}" hint-placeholder-val="{{ false }}">
   <section class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-16 fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
-    <div class="d-flex alinha-center gap-12 quebra-wrap"><select style="background:var(--fundo-branco)" class="largura-total-celular h-38 borda-cinza-160 raio-8 p-0-10 fs-14 max-w-100pc fonte-inherit largura-fundo fundo-branco" value="{{ turma }}" onChange="{{ escolherTurma }}" aria-label="Turma"><sc-for list="{{ opcoesDeTurma }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select><span class="fs-13 cor-cinza-600">{{ resumoDaTurma }}</span></div>
+    <div class="d-flex alinha-center gap-12 quebra-wrap"><select style="background:var(--fundo-branco)"
+      class="largura-total-celular h-38 borda-cinza-160 raio-8 p-0-10 fs-14 max-w-100pc fonte-inherit largura-fundo fundo-branco"
+      value="{{ turma }}" onChange="{{ escolherTurma }}" aria-label="Turma"><sc-for list="{{ opcoesDeTurma }}" as="opcao"
+      hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select><span
+      class="fs-13 cor-cinza-600">{{ resumoDaTurma }}</span></div>
     <ol class="lista-none m-0 p-0">
     <sc-for list="{{ linhaDoTempo }}" as="evento" hint-placeholder-count="4">
       <li class="d-grid colunas-52-20-minmax-0-1fr gap-10">

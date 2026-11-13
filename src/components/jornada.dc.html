@@ -15,7 +15,10 @@
     <div class="d-flex gap-2 fundo-cinza-70 raio-10 p-3 quebra-wrap">
       <sc-for list="{{ abas }}" as="aba" hint-placeholder-count="3"><button onClick="{{ aba.escolher }}" class="borda-0 raio-8 p-8-14 fs-13 fw-600 {{ aba.classe }}" style="background:{{ aba.fundo }};color:{{ aba.cor }}">{{ aba.rotulo }}</button></sc-for>
     </div>
-<sc-if value="{{ porCarteira }}" hint-placeholder-val="{{ false }}"><select style="background:var(--fundo-branco)" aria-label="Carteira" onChange="{{ escolherCarteira }}" value="{{ carteira }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
+<sc-if value="{{ porCarteira }}" hint-placeholder-val="{{ false }}"><select style="background:var(--fundo-branco)"
+  aria-label="Carteira" onChange="{{ escolherCarteira }}" value="{{ carteira }}"
+  class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><sc-for list="{{ opcoesDeCarteira }}" as="opcao"
+  hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
     <select style="background:var(--fundo-branco)" aria-label="Perfil" onChange="{{ escolherPerfil }}" value="{{ perfil }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todos">Todos os perfis</option><option value="A">Alunos</option><option value="P">Professores</option><option value="S">Servidores</option></select>
     <select style="background:var(--fundo-branco)" aria-label="Lotação" onChange="{{ escolherLotacao }}" value="{{ lotacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="escolas">Escolas e CEIs</option><option value="todas">Todas as lotações</option></select>
     <span class="ml-auto fs-12 cor-cinza-600">Base de acessos de <b class="cor-ciano-850">{{ dataDaBase }}</b></span>
@@ -83,7 +86,11 @@
       <div class="rolagem-x-auto m-0-n4">
         <div class="min-w-1080 d-flex eixo-column p-0-4">
           <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 110px 130px 120px">
-            <span>Escola</span><span>CS</span><span class="texto-right">Contas</span><span class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span class="texto-right">Engajados</span><span class="texto-right">Atividades oficineiros</span><span>Agenda</span><span>Prioridade</span>
+            <span>Escola</span><span>CS</span><span class="texto-right">Contas</span><span
+              class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span
+              class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span
+              class="texto-right">Engajados</span><span
+              class="texto-right">Atividades oficineiros</span><span>Agenda</span><span>Prioridade</span>
           </div>
           <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="10">
             <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 110px 130px 120px">
@@ -94,7 +101,11 @@
               <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
               <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.execucaoCor }}">{{ linha.execucao }}</span>
               <span class="fs-12" style="color:{{ linha.agendaCor }}">{{ linha.agenda }}</span>
-              <div class="d-flex alinha-center gap-6"><span class="fs-11 fw-700 p-3-8 raio-999" style="color:{{ linha.prioridadeCor }};background:{{ linha.prioridadeFundo }}">{{ linha.prioridade }}</span><sc-if value="{{ linha.semVisita }}" hint-placeholder-val="{{ false }}"><button onClick="{{ linha.agendar }}" title="Agendar visita" class="h-26 w-26 borda-ciano-150 fundo-ciano-40 cor-ciano-660 raio-6 fs-15 fw-700 lh-1 p-0 largura-fundo">+</button></sc-if></div>
+              <div class="d-flex alinha-center gap-6"><span class="fs-11 fw-700 p-3-8 raio-999"
+                style="color:{{ linha.prioridadeCor }};background:{{ linha.prioridadeFundo }}">{{ linha.prioridade }}</span><sc-if
+                value="{{ linha.semVisita }}" hint-placeholder-val="{{ false }}"><button onClick="{{ linha.agendar }}"
+                title="Agendar visita"
+                class="h-26 w-26 borda-ciano-150 fundo-ciano-40 cor-ciano-660 raio-6 fs-15 fw-700 lh-1 p-0 largura-fundo">+</button></sc-if></div>
             </div>
           </sc-for>
         </div>
@@ -145,7 +156,10 @@
       <div class="d-flex quebra-wrap alinha-center gap-8-12">
         <div class="flex-1-1-240 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Contas da escola</h3><span class="fs-12 cor-cinza-600">{{ escola.contasTexto }}</span></div>
         <input onInput="{{ buscarConta }}" placeholder="Buscar nome" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
-        <select style="background:var(--fundo-branco)" onChange="{{ escolherTemperatura }}" value="{{ temperatura }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as temperaturas</option><option value="Q">Quente</option><option value="M">Morno</option><option value="F">Frio</option><option value="S">Sem uso</option><option value="N">Nunca acessou</option></select>
+        <select style="background:var(--fundo-branco)" onChange="{{ escolherTemperatura }}" value="{{ temperatura }}"
+          class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as temperaturas</option><option
+          value="Q">Quente</option><option value="M">Morno</option><option value="F">Frio</option><option
+          value="S">Sem uso</option><option value="N">Nunca acessou</option></select>
       </div>
       <div class="rolagem-x-auto m-0-n4">
         <div class="min-w-900 d-flex eixo-column p-0-4">

@@ -20,11 +20,21 @@
   <div class="fundo-cinza-35 borda-cinza-110 raio-12 p-12-18 fs-13 cor-cinza-750 lh-1p5">A direção confirma se cada atividade da grade aconteceu como registrado pelo oficineiro. Atividades contestadas voltam para o oficineiro ajustar e ficam fora do relatório mensal até serem resolvidas. Clique em uma atividade para ver o registro completo.</div>
   <section aria-label="Atividades do período" class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div class="dir-tab min-w-1000" role="table" aria-label="Atividades do período">
-      <div class="dir-cab d-grid gap-10 p-12-18 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110" style="grid-template-columns:56px 96px 1.3fr 1.3fr 1fr 84px 1.2fr 1.5fr" role="row"><span role="columnheader">Data</span><span role="columnheader">Horário</span><span role="columnheader">Oficineiro</span><span role="columnheader">Tipo de atividade</span><span role="columnheader">Turma</span><span role="columnheader">Pres./Matr.</span><span role="columnheader">Registro do oficineiro</span><span role="columnheader">Check da direção</span></div>
+      <div class="dir-cab d-grid gap-10 p-12-18 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110"
+        style="grid-template-columns:56px 96px 1.3fr 1.3fr 1fr 84px 1.2fr 1.5fr" role="row"><span
+        role="columnheader">Data</span><span role="columnheader">Horário</span><span role="columnheader">Oficineiro</span><span
+        role="columnheader">Tipo de atividade</span><span role="columnheader">Turma</span><span
+        role="columnheader">Pres./Matr.</span><span role="columnheader">Registro do oficineiro</span><span
+        role="columnheader">Check da direção</span></div>
       <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="8">
         <div class="dir-linha d-grid gap-10 p-11-18 fs-13 borda-b-cinza-75 alinha-center" style="grid-template-columns:56px 96px 1.3fr 1.3fr 1fr 84px 1.2fr 1.5fr;background:{{ linha.linhaFundo }}" role="row">
           <span role="cell" data-r="Data" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ linha.data }}</span><span role="cell" data-r="Horário" class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ linha.horario }}</span>
-          <span role="cell" class="dir-larga min-w-0"><sc-if value="{{ linha.temRegistro }}" hint-placeholder-val="{{ false }}"><button class="dir-foco borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-ciano-850 texto-left fonte-inherit sublinha-3 quebra-palavra-anywhere botao-texto cursor-pointer deco-underline" style="text-decoration-color:var(--destaque-cinza-160)" onClick="{{ linha.ver }}" aria-haspopup="dialog" aria-label="{{ linha.rotuloVer }}">{{ linha.oficineiro }}</button></sc-if><sc-if value="{{ linha.semRegistro }}" hint-placeholder-val="{{ true }}"><b class="quebra-palavra-anywhere">{{ linha.oficineiro }}</b></sc-if></span>
+          <span role="cell" class="dir-larga min-w-0"><sc-if value="{{ linha.temRegistro }}"
+            hint-placeholder-val="{{ false }}"><button
+            class="dir-foco borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-ciano-850 texto-left fonte-inherit sublinha-3 quebra-palavra-anywhere botao-texto cursor-pointer deco-underline"
+            style="text-decoration-color:var(--destaque-cinza-160)" onClick="{{ linha.ver }}" aria-haspopup="dialog"
+            aria-label="{{ linha.rotuloVer }}">{{ linha.oficineiro }}</button></sc-if><sc-if value="{{ linha.semRegistro }}"
+            hint-placeholder-val="{{ true }}"><b class="quebra-palavra-anywhere">{{ linha.oficineiro }}</b></sc-if></span>
           <span role="cell" class="justifica-si-start fs-12 fw-600 p-2-8 raio-4" style="color:{{ linha.tipoCor }};background:{{ linha.tipoFundo }}">{{ linha.tipo }}</span>
           <b role="cell" data-r="Turma" class="quebra-palavra-anywhere">{{ linha.turma }}</b><span role="cell" data-r="Presentes / matriculados" class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ linha.presentes }}</span>
           <span role="cell" class="justifica-si-start fs-12 fw-600 p-3-8 raio-999" style="color:{{ linha.situacaoCor }};background:{{ linha.situacaoFundo }}">{{ linha.situacao }}</span>

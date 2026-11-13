@@ -36,7 +36,11 @@
           <div role="row" class="geral-relatorio d-grid gap-4-12 alinha-center p-9-0 borda-t-cinza-75 fs-13" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1.3fr) auto">
             <span role="cell" class="fw-600 min-w-0 quebra-palavra-anywhere">{{ relatorio.escola }}</span>
             <span role="cell" class="min-w-0 quebra-palavra-anywhere cor-cinza-750">{{ relatorio.oficineiro }}</span>
-            <span role="cell" class="justifica-si-end d-flex eixo-column alinha-flex-end gap-2"><span class="fs-12 fw-600 p-3-10 raio-999 espaco-nowrap" style="color:{{ relatorio.cor }};background:{{ relatorio.fundo }}">{{ relatorio.situacao }}</span><sc-if value="{{ relatorio.temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-11" style="color:{{ relatorio.notaCor }}">{{ relatorio.nota }}</span></sc-if></span>
+            <span role="cell" class="justifica-si-end d-flex eixo-column alinha-flex-end gap-2"><span
+              class="fs-12 fw-600 p-3-10 raio-999 espaco-nowrap"
+              style="color:{{ relatorio.cor }};background:{{ relatorio.fundo }}">{{ relatorio.situacao }}</span><sc-if
+              value="{{ relatorio.temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-11"
+              style="color:{{ relatorio.notaCor }}">{{ relatorio.nota }}</span></sc-if></span>
           </div>
         </sc-for>
       </div>
@@ -46,7 +50,11 @@
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco" aria-labelledby="g-h-of">
       <div class="d-flex alinha-baseline gap-10"><h3 id="g-h-of" class="m-0 fs-15 flex-1">{{ oficineirosTitulo }}</h3><button onClick="{{ verOficineiros }}" class="borda-0 fundo-transparent cor-ciano-660 fs-13 fw-600 p-0 espaco-nowrap botao-texto">Ver oficineiros →</button></div>
       <div aria-hidden="true" class="d-flex h-14 raio-7 rolagem-hidden fundo-cinza-70"><sc-for list="{{ faixas }}" as="faixa" hint-placeholder-count="4"><span class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></span></sc-for></div>
-      <div class="d-flex eixo-column gap-8"><sc-for list="{{ faixas }}" as="faixa" hint-placeholder-count="4"><div class="d-flex alinha-center gap-8 fs-13"><span class="w-10 h-10 raio-2 largura-fundo" style="background:{{ faixa.cor }}"></span><span class="flex-1">{{ faixa.nome }}</span><span class="cor-cinza-600 fs-12">{{ faixa.intervalo }}</span><b class="num-tabular-nums w-28 texto-right">{{ faixa.quantidade }}</b></div></sc-for></div>
+      <div class="d-flex eixo-column gap-8"><sc-for list="{{ faixas }}" as="faixa" hint-placeholder-count="4"><div
+        class="d-flex alinha-center gap-8 fs-13"><span class="w-10 h-10 raio-2 largura-fundo"
+        style="background:{{ faixa.cor }}"></span><span class="flex-1">{{ faixa.nome }}</span><span
+        class="cor-cinza-600 fs-12">{{ faixa.intervalo }}</span><b
+        class="num-tabular-nums w-28 texto-right">{{ faixa.quantidade }}</b></div></sc-for></div>
       <div class="d-grid colunas-repeat-3-minmax-0-1fr gap-10 borda-t-cinza-75 pt-12">
         <sc-for list="{{ resumoDosOficineiros }}" as="item" hint-placeholder-count="3"><div class="d-flex eixo-column"><b class="num-tabular-nums fs-18" style="color:{{ item.cor }}">{{ item.valor }}</b><span class="fs-11 cor-cinza-600">{{ item.rotulo }}</span></div></sc-for>
       </div>

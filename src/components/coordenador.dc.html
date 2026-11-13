@@ -145,8 +145,16 @@
       <sc-if value="{{ temFiltros }}" hint-placeholder-val="{{ false }}">
       <div class="filtros oculto-celular nao-imprimir d-flex quebra-wrap gap-8" role="group" aria-label="Filtros">
         <select style="background:var(--fundo-branco)" value="{{ periodo }}" onChange="{{ escolherPeriodo }}" aria-label="Período" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fonte-inherit max-w-260 largura-fundo fundo-branco"><sc-for list="{{ opcoesDePeriodo }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-        <select style="background:var(--fundo-branco)" value="{{ escola }}" onChange="{{ escolherEscola }}" aria-label="Escola" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fonte-inherit max-w-260 largura-fundo fundo-branco"><option value="">Todas as escolas</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-        <select style="background:var(--fundo-branco)" value="{{ oficineiro }}" onChange="{{ escolherOficineiro }}" aria-label="Oficineiro" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fonte-inherit max-w-260 largura-fundo fundo-branco"><option value="">{{ todosOsOficineiros }}</option><sc-for list="{{ opcoesDeOficineiro }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+        <select style="background:var(--fundo-branco)" value="{{ escola }}" onChange="{{ escolherEscola }}"
+          aria-label="Escola"
+          class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fonte-inherit max-w-260 largura-fundo fundo-branco"><option
+          value="">Todas as escolas</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option
+          value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+        <select style="background:var(--fundo-branco)" value="{{ oficineiro }}" onChange="{{ escolherOficineiro }}"
+          aria-label="Oficineiro"
+          class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fonte-inherit max-w-260 largura-fundo fundo-branco"><option
+          value="">{{ todosOsOficineiros }}</option><sc-for list="{{ opcoesDeOficineiro }}" as="opcao"
+          hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
         <sc-if value="{{ mostrarRelatorios }}" hint-placeholder-val="{{ false }}"><button onClick="{{ exportarRelatorios }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario">Exportar Excel</button></sc-if>
       </div>
       </sc-if>
@@ -157,8 +165,15 @@
     <sc-if value="{{ temFiltros }}" hint-placeholder-val="{{ false }}">
     <div class="filtros so-celular-flex nao-imprimir quebra-wrap gap-8" role="group" aria-label="Filtros">
         <select style="background:var(--fundo-branco)" value="{{ periodo }}" onChange="{{ escolherPeriodo }}" aria-label="Período" class="h-40 borda-cinza-160 raio-8 p-0-8 fonte-inherit min-w-0 largura-fundo fundo-branco"><sc-for list="{{ opcoesDePeriodo }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-        <select style="background:var(--fundo-branco)" value="{{ escola }}" onChange="{{ escolherEscola }}" aria-label="Escola" class="h-40 borda-cinza-160 raio-8 p-0-8 fonte-inherit min-w-0 largura-fundo fundo-branco"><option value="">Todas as escolas</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-        <select style="background:var(--fundo-branco)" value="{{ oficineiro }}" onChange="{{ escolherOficineiro }}" aria-label="Oficineiro" class="h-40 borda-cinza-160 raio-8 p-0-8 fonte-inherit min-w-0 largura-fundo fundo-branco"><option value="">{{ todosOsOficineiros }}</option><sc-for list="{{ opcoesDeOficineiro }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+        <select style="background:var(--fundo-branco)" value="{{ escola }}" onChange="{{ escolherEscola }}"
+          aria-label="Escola" class="h-40 borda-cinza-160 raio-8 p-0-8 fonte-inherit min-w-0 largura-fundo fundo-branco"><option
+          value="">Todas as escolas</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option
+          value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+        <select style="background:var(--fundo-branco)" value="{{ oficineiro }}" onChange="{{ escolherOficineiro }}"
+          aria-label="Oficineiro"
+          class="h-40 borda-cinza-160 raio-8 p-0-8 fonte-inherit min-w-0 largura-fundo fundo-branco"><option
+          value="">{{ todosOsOficineiros }}</option><sc-for list="{{ opcoesDeOficineiro }}" as="opcao"
+          hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
         <sc-if value="{{ mostrarRelatorios }}" hint-placeholder-val="{{ false }}"><button onClick="{{ exportarRelatorios }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-14 fw-600 botao-secundario">Exportar Excel</button></sc-if>
     </div>
     </sc-if>

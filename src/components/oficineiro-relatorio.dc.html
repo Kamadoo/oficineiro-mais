@@ -9,7 +9,12 @@
 <body>
 <x-dc>
   <div class="d-flex quebra-wrap alinha-center gap-10-12">
-    <label class="largura-total-celular d-flex alinha-center gap-8"><span class="oculto-celular fs-12 cor-cinza-600 fw-600">Ciclo</span><select value="{{ ciclo }}" onChange="{{ escolherCiclo }}" aria-label="Ciclo do relatório" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit fw-600 largura-fundo fundo-branco" style="min-width:180px;background:var(--fundo-branco)"><sc-for list="{{ ciclos }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <label class="largura-total-celular d-flex alinha-center gap-8"><span
+      class="oculto-celular fs-12 cor-cinza-600 fw-600">Ciclo</span><select value="{{ ciclo }}" onChange="{{ escolherCiclo }}"
+      aria-label="Ciclo do relatório"
+      class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit fw-600 largura-fundo fundo-branco"
+      style="min-width:180px;background:var(--fundo-branco)"><sc-for list="{{ ciclos }}" as="opcao"
+      hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
     <span class="fs-12 fw-600 p-5-10 raio-999 espaco-nowrap" style="color:{{ situacao.cor }};background:{{ situacao.fundo }}">{{ situacao.texto }}</span>
     <div class="oculto-celular flex-1"></div>
     <div class="largura-total-celular d-flex gap-8 quebra-wrap">
@@ -23,7 +28,11 @@
       <b class="fs-15">Reenviar {{ cicloNome }} para aprovação?</b>
       <span class="fs-14 cor-cinza-750 lh-1p5">Depois de reenviado, os registros e as presenças deste ciclo voltam a ficar travados.</span>
       <sc-if value="{{ temPendencias }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-ambar-745 fundo-ambar-55 raio-8 p-8-10">Atenção: ainda há {{ pendenciasTexto }}.</span></sc-if>
-      <div class="d-flex gap-8 quebra-wrap"><button style="background:var(--destaque-ciano-660)" onClick="{{ confirmarReenvio }}" disabled="{{ ocupado }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660">Confirmar reenvio</button><button onClick="{{ cancelarReenvio }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-cinza-750 botao-secundario">Cancelar</button></div>
+      <div class="d-flex gap-8 quebra-wrap"><button style="background:var(--destaque-ciano-660)"
+        onClick="{{ confirmarReenvio }}" disabled="{{ ocupado }}"
+        class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660">Confirmar reenvio</button><button
+        onClick="{{ cancelarReenvio }}"
+        class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-cinza-750 botao-secundario">Cancelar</button></div>
     </div>
   </sc-if>
 
@@ -55,7 +64,11 @@
       <div class="oculto-celular flex-1"></div>
       <sc-if value="{{ abaAtividades }}" hint-placeholder-val="{{ true }}">
         <div class="largura-total-celular d-flex gap-8 quebra-wrap">
-          <select style="background:var(--fundo-branco)" value="{{ turma }}" onChange="{{ escolherTurma }}" aria-label="Turma" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 flex-1-1-140 largura-fundo fundo-branco"><option value="">Todas as turmas</option><sc-for list="{{ turmas }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
+          <select style="background:var(--fundo-branco)" value="{{ turma }}" onChange="{{ escolherTurma }}"
+            aria-label="Turma"
+            class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 flex-1-1-140 largura-fundo fundo-branco"><option
+            value="">Todas as turmas</option><sc-for list="{{ turmas }}" as="opcao" hint-placeholder-count="3"><option
+            value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
         </div>
       </sc-if>
       <button onClick="{{ exportar }}" class="largura-total-celular borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-cinza-750 botao-secundario h-40">Baixar planilha</button>
@@ -97,7 +110,11 @@
             <span class="num-tabular-nums cor-cinza-750">{{ linha.faixa }}</span>
             <span class="num-tabular-nums">{{ linha.total }}</span>
             <span class="num-tabular-nums fw-600">{{ linha.validas }}</span>
-            <span class="d-flex quebra-wrap alinha-center gap-6"><span class="fs-12 fw-600 p-2-8 raio-999" style="color:{{ linha.situacaoCor }};background:{{ linha.situacaoFundo }}">{{ linha.situacao }}</span><sc-if value="{{ linha.temAcao }}" hint-placeholder-val="{{ false }}"><button onClick="{{ linha.justificar }}" class="h-30 borda-1-solid-0b7ea3 fundo-branco cor-ciano-660 raio-8 p-0-10 fs-12 fw-600">Justificar</button></sc-if><span class="flex-base-100pc fs-12 cor-cinza-600">{{ linha.nota }}</span></span>
+            <span class="d-flex quebra-wrap alinha-center gap-6"><span class="fs-12 fw-600 p-2-8 raio-999"
+              style="color:{{ linha.situacaoCor }};background:{{ linha.situacaoFundo }}">{{ linha.situacao }}</span><sc-if
+              value="{{ linha.temAcao }}" hint-placeholder-val="{{ false }}"><button onClick="{{ linha.justificar }}"
+              class="h-30 borda-1-solid-0b7ea3 fundo-branco cor-ciano-660 raio-8 p-0-10 fs-12 fw-600">Justificar</button></sc-if><span
+              class="flex-base-100pc fs-12 cor-cinza-600">{{ linha.nota }}</span></span>
           </div>
         </sc-for>
         <sc-if value="{{ semHoras }}" hint-placeholder-val="{{ false }}"><div class="p-28-16 texto-center fs-14 cor-cinza-600">Nenhuma presença registrada neste ciclo.</div></sc-if>

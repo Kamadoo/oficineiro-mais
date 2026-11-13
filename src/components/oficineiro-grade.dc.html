@@ -35,7 +35,12 @@
             <button onClick="{{ cicloSeguinte }}" aria-label="Próximo ciclo" class="w-36 h-36 borda-cinza-160 fundo-branco raio-8 fs-16 cor-cinza-750 largura-fundo botao-secundario">›</button>
           </div>
           <div role="group" aria-label="Semanas do ciclo" class="d-flex quebra-wrap gap-6">
-            <sc-for list="{{ semanas }}" as="semana" hint-placeholder-count="5"><button onClick="{{ semana.escolher }}" aria-pressed="{{ semana.marcada }}" aria-label="{{ semana.aria }}" class="min-h-36 raio-8 p-4-10 fs-13 fw-600 d-flex alinha-center gap-6 num-tabular-nums botao-opcao segmentado {{ semana.classe }}" style="border:1.5px solid {{ semana.borda }};background:{{ semana.fundo }};color:{{ semana.cor }}">{{ semana.texto }}<span aria-hidden="true" class="w-7 h-7 raio-4 fundo-ciano-660 largura-fundo" style="display:{{ semana.ponto }}"></span></button></sc-for>
+            <sc-for list="{{ semanas }}" as="semana" hint-placeholder-count="5"><button onClick="{{ semana.escolher }}"
+              aria-pressed="{{ semana.marcada }}" aria-label="{{ semana.aria }}"
+              class="min-h-36 raio-8 p-4-10 fs-13 fw-600 d-flex alinha-center gap-6 num-tabular-nums botao-opcao segmentado {{ semana.classe }}"
+              style="border:1.5px solid {{ semana.borda }};background:{{ semana.fundo }};color:{{ semana.cor }}">{{ semana.texto }}<span
+              aria-hidden="true" class="w-7 h-7 raio-4 fundo-ciano-660 largura-fundo"
+              style="display:{{ semana.ponto }}"></span></button></sc-for>
           </div>
         </div>
         <div class="d-flex quebra-wrap alinha-center gap-8-12 borda-t-cinza-75 pt-12">

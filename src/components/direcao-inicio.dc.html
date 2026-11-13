@@ -16,7 +16,11 @@
   </sc-if>
   <section aria-label="Resumo do mês" class="duas-colunas-celular d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));opacity:{{ opacidade }}">
     <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="5">
-      <div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-branco"><span class="fs-12 cor-cinza-600">{{ indicador.rotulo }}</span><span class="fs-26 fw-600 num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div>
+      <div style="background:var(--fundo-branco)"
+        class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-branco"><span
+        class="fs-12 cor-cinza-600">{{ indicador.rotulo }}</span><span class="fs-26 fw-600 num-tabular-nums"
+        style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.cor }}">{{ indicador.valor }}</span><span
+        class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div>
     </sc-for>
   </section>
   <div class="empilha-celular d-grid gap-20 alinha-start" style="grid-template-columns:repeat(auto-fit,minmax(360px,1fr));opacity:{{ opacidade }}">
@@ -41,7 +45,14 @@
           <span class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ atividade.horario }}</span>
           <div class="d-flex eixo-column gap-2 min-w-0"><b class="quebra-palavra-anywhere">{{ atividade.turma }}</b><span class="fs-12 cor-cinza-600">{{ atividade.tipo }} · {{ atividade.oficineiro }}</span></div>
           <span class="justifica-si-end fs-12 fw-600 p-3-8 raio-999 espaco-nowrap" style="color:{{ atividade.situacaoCor }};background:{{ atividade.situacaoFundo }}">{{ atividade.situacao }}</span>
-          <sc-if value="{{ atividade.podeConferir }}" hint-placeholder-val="{{ false }}"><div class="dir-acao d-flex gap-6 justifica-flex-end quebra-wrap mt-4" style="grid-column:2 / -1"><button onClick="{{ atividade.ver }}" aria-haspopup="dialog" aria-label="{{ atividade.rotuloVer }}" class="h-30 borda-cinza-160 fundo-branco cor-ciano-850 raio-6 p-0-10 fs-12 fw-500 botao-secundario">Ver registro</button><button onClick="{{ atividade.confirmar }}" disabled="{{ salvando }}" aria-label="{{ atividade.rotuloConfirmar }}" class="h-30 borda-1p5-solid-23773a fundo-branco cor-verde-700 raio-6 p-0-10 fs-12 fw-600 botao-opcao">✓ Confirmar</button><button onClick="{{ atividade.contestar }}" disabled="{{ salvando }}" aria-label="{{ atividade.rotuloContestar }}" class="h-30 borda-cinza-160 fundo-branco cor-vermelho-600 raio-6 p-0-10 fs-12 fw-500 botao-secundario">Contestar</button></div></sc-if>
+          <sc-if value="{{ atividade.podeConferir }}" hint-placeholder-val="{{ false }}"><div
+            class="dir-acao d-flex gap-6 justifica-flex-end quebra-wrap mt-4" style="grid-column:2 / -1"><button
+            onClick="{{ atividade.ver }}" aria-haspopup="dialog" aria-label="{{ atividade.rotuloVer }}"
+            class="h-30 borda-cinza-160 fundo-branco cor-ciano-850 raio-6 p-0-10 fs-12 fw-500 botao-secundario">Ver registro</button><button
+            onClick="{{ atividade.confirmar }}" disabled="{{ salvando }}" aria-label="{{ atividade.rotuloConfirmar }}"
+            class="h-30 borda-1p5-solid-23773a fundo-branco cor-verde-700 raio-6 p-0-10 fs-12 fw-600 botao-opcao">✓ Confirmar</button><button
+            onClick="{{ atividade.contestar }}" disabled="{{ salvando }}" aria-label="{{ atividade.rotuloContestar }}"
+            class="h-30 borda-cinza-160 fundo-branco cor-vermelho-600 raio-6 p-0-10 fs-12 fw-500 botao-secundario">Contestar</button></div></sc-if>
         </div>
       </sc-for>
       <sc-if value="{{ temAnteriores }}" hint-placeholder-val="{{ false }}">
@@ -51,7 +62,14 @@
           <span class="num-tabular-nums" style="font-family:'Inter',system-ui,sans-serif">{{ atividade.horario }}</span>
           <div class="d-flex eixo-column gap-2 min-w-0"><b class="quebra-palavra-anywhere">{{ atividade.turma }}</b><span class="fs-12 cor-cinza-600">{{ atividade.tipo }} · {{ atividade.oficineiro }}</span></div>
           <span class="justifica-si-end fs-12 fw-600 p-3-8 raio-999 espaco-nowrap" style="color:{{ atividade.situacaoCor }};background:{{ atividade.situacaoFundo }}">{{ atividade.situacao }}</span>
-          <sc-if value="{{ atividade.podeConferir }}" hint-placeholder-val="{{ false }}"><div class="dir-acao d-flex gap-6 justifica-flex-end quebra-wrap mt-4" style="grid-column:2 / -1"><button onClick="{{ atividade.ver }}" aria-haspopup="dialog" aria-label="{{ atividade.rotuloVer }}" class="h-30 borda-cinza-160 fundo-branco cor-ciano-850 raio-6 p-0-10 fs-12 fw-500 botao-secundario">Ver registro</button><button onClick="{{ atividade.confirmar }}" disabled="{{ salvando }}" aria-label="{{ atividade.rotuloConfirmar }}" class="h-30 borda-1p5-solid-23773a fundo-branco cor-verde-700 raio-6 p-0-10 fs-12 fw-600 botao-opcao">✓ Confirmar</button><button onClick="{{ atividade.contestar }}" disabled="{{ salvando }}" aria-label="{{ atividade.rotuloContestar }}" class="h-30 borda-cinza-160 fundo-branco cor-vermelho-600 raio-6 p-0-10 fs-12 fw-500 botao-secundario">Contestar</button></div></sc-if>
+          <sc-if value="{{ atividade.podeConferir }}" hint-placeholder-val="{{ false }}"><div
+            class="dir-acao d-flex gap-6 justifica-flex-end quebra-wrap mt-4" style="grid-column:2 / -1"><button
+            onClick="{{ atividade.ver }}" aria-haspopup="dialog" aria-label="{{ atividade.rotuloVer }}"
+            class="h-30 borda-cinza-160 fundo-branco cor-ciano-850 raio-6 p-0-10 fs-12 fw-500 botao-secundario">Ver registro</button><button
+            onClick="{{ atividade.confirmar }}" disabled="{{ salvando }}" aria-label="{{ atividade.rotuloConfirmar }}"
+            class="h-30 borda-1p5-solid-23773a fundo-branco cor-verde-700 raio-6 p-0-10 fs-12 fw-600 botao-opcao">✓ Confirmar</button><button
+            onClick="{{ atividade.contestar }}" disabled="{{ salvando }}" aria-label="{{ atividade.rotuloContestar }}"
+            class="h-30 borda-cinza-160 fundo-branco cor-vermelho-600 raio-6 p-0-10 fs-12 fw-500 botao-secundario">Contestar</button></div></sc-if>
         </div>
         </sc-for>
       </sc-if>

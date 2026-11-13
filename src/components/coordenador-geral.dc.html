@@ -28,7 +28,11 @@
     <div class="d-flex alinha-center gap-12 p-16-20 borda-b-cinza-110"><h3 id="adm-h-ultimas" class="m-0 fs-15 flex-1">Últimas alterações no sistema</h3><button onClick="{{ verAuditoria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-ciano-740 fonte-inherit deco-underline botao-texto">Ver auditoria completa</button></div>
     <sc-if value="{{ semAlteracoes }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-16-20 fs-13 cor-cinza-600">Nenhuma alteração registrada ainda.</p></sc-if>
     <sc-for list="{{ alteracoes }}" as="registro" hint-placeholder-count="5">
-      <button onClick="{{ registro.abrir }}" aria-haspopup="dialog" aria-label="{{ registro.aria }}" class="adm-linha d-grid gap-4-12 w-100pc texto-left fundo-branco p-12-20 fs-13 fonte-inherit cor-ciano-850 largura-fundo borda-0 cursor-pointer" style="grid-template-columns:150px minmax(0,1fr) minmax(0,1.2fr);border-bottom:1px solid var(--borda-cinza-70)"><span class="cor-cinza-600">{{ registro.quando }}</span><b class="fw-600">{{ registro.acao }} · {{ registro.onde }}</b><span class="cor-cinza-750 quebra-palavra-anywhere">{{ registro.quem }}</span></button>
+      <button onClick="{{ registro.abrir }}" aria-haspopup="dialog" aria-label="{{ registro.aria }}"
+        class="adm-linha d-grid gap-4-12 w-100pc texto-left fundo-branco p-12-20 fs-13 fonte-inherit cor-ciano-850 largura-fundo borda-0 cursor-pointer"
+        style="grid-template-columns:150px minmax(0,1fr) minmax(0,1.2fr);border-bottom:1px solid var(--borda-cinza-70)"><span
+        class="cor-cinza-600">{{ registro.quando }}</span><b class="fw-600">{{ registro.acao }} · {{ registro.onde }}</b><span
+        class="cor-cinza-750 quebra-palavra-anywhere">{{ registro.quem }}</span></button>
     </sc-for>
   </section>
 </x-dc>

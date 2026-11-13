@@ -9,7 +9,13 @@
 <body>
 <x-dc>
   <div class="d-flex quebra-wrap gap-10-12 alinha-center">
-    <label class="largura-total-celular d-flex alinha-center gap-8 flex-1-1-320 max-w-520"><span class="oculto-celular fs-12 cor-cinza-600 fw-600">Oficineiro</span><select style="background:var(--fundo-branco)" value="{{ oficineiroSelecionado }}" onChange="{{ escolherOficineiro }}" disabled="{{ semOficineiros }}" aria-label="Oficineiro" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 flex-1 fw-600 largura-fundo fundo-branco"><sc-for list="{{ opcoesOficineiro }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+    <label class="largura-total-celular d-flex alinha-center gap-8 flex-1-1-320 max-w-520"><span
+      class="oculto-celular fs-12 cor-cinza-600 fw-600">Oficineiro</span><select style="background:var(--fundo-branco)"
+      value="{{ oficineiroSelecionado }}" onChange="{{ escolherOficineiro }}" disabled="{{ semOficineiros }}"
+      aria-label="Oficineiro"
+      class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-0 flex-1 fw-600 largura-fundo fundo-branco"><sc-for
+      list="{{ opcoesOficineiro }}" as="opcao" hint-placeholder-count="3"><option
+      value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
     <sc-for list="{{ situacoesGrade }}" as="situacao" hint-placeholder-count="1"><span class="fs-12 fw-600 p-4-10 raio-999 espaco-nowrap segmentado" style="color:{{ situacao.cor }};background:{{ situacao.fundo }}">{{ situacao.texto }}</span></sc-for>
   </div>
   <sc-if value="{{ validacao.aberta }}" hint-placeholder-val="{{ false }}">
@@ -25,7 +31,12 @@
     </section>
   </sc-if>
   <div class="duas-colunas-celular d-grid colunas-repeat-3-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
-    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="3"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-16 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-branco"><span class="fs-13 cor-cinza-600">{{ indicador.rotulo }}</span><span class="fs-24 fw-700 num-tabular-nums">{{ indicador.valor }}</span><span class="fs-12 cor-cinza-600 rolagem-hidden reticencias-ellipsis espaco-nowrap quebra-celular">{{ indicador.nota }}</span></div></sc-for>
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="3"><div
+      style="background:var(--fundo-branco)"
+      class="borda-cinza-110 raio-12 p-16 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-branco"><span
+      class="fs-13 cor-cinza-600">{{ indicador.rotulo }}</span><span
+      class="fs-24 fw-700 num-tabular-nums">{{ indicador.valor }}</span><span
+      class="fs-12 cor-cinza-600 rolagem-hidden reticencias-ellipsis espaco-nowrap quebra-celular">{{ indicador.nota }}</span></div></sc-for>
   </div>
   <div class="d-flex alinha-center gap-10-12 quebra-wrap">
     <span class="fs-13 cor-cinza-600">Das 07:00 às 17:00</span>
@@ -43,7 +54,12 @@
     <div class="d-grid colunas-72-repeat-5-minmax-0-1fr" style="grid-template-rows:{{ gradeLinhas }}">
       <sc-for list="{{ gradeCelulas }}" as="celula" hint-placeholder-count="12">
         <sc-if value="{{ celula.ehHora }}" hint-placeholder-val="{{ false }}"><div class="col-1 p-4-0-0-16 fs-13 cor-cinza-600 num-tabular-nums borda-t-cinza-75" style="grid-row:{{ celula.linha }};font-weight:{{ celula.peso }}">{{ celula.texto }}</div></sc-if>
-        <sc-if value="{{ celula.ehDia }}" hint-placeholder-val="{{ false }}"><div class="lin-1 p-14-8-10 d-flex eixo-column gap-2" style="grid-column:{{ celula.coluna }}"><span class="fs-13 fw-600" style="color:{{ celula.cor }}">{{ celula.texto }}</span><span class="fs-11 cor-cinza-600 num-tabular-nums">{{ celula.data }}</span><sc-if value="{{ celula.temFeriado }}" hint-placeholder-val="{{ false }}"><span class="fs-11 fw-600 cor-ambar-660">{{ celula.feriado }}</span></sc-if></div></sc-if>
+        <sc-if value="{{ celula.ehDia }}" hint-placeholder-val="{{ false }}"><div
+          class="lin-1 p-14-8-10 d-flex eixo-column gap-2" style="grid-column:{{ celula.coluna }}"><span class="fs-13 fw-600"
+          style="color:{{ celula.cor }}">{{ celula.texto }}</span><span
+          class="fs-11 cor-cinza-600 num-tabular-nums">{{ celula.data }}</span><sc-if value="{{ celula.temFeriado }}"
+          hint-placeholder-val="{{ false }}"><span
+          class="fs-11 fw-600 cor-ambar-660">{{ celula.feriado }}</span></sc-if></div></sc-if>
         <sc-if value="{{ celula.ehVazia }}" hint-placeholder-val="{{ true }}"><div class="borda-t-cinza-75" style="grid-row:{{ celula.linha }};grid-column:{{ celula.coluna }};background:{{ celula.fundo }}"></div></sc-if>
         <sc-if value="{{ celula.ehAtividade }}" hint-placeholder-val="{{ false }}">
           <div class="p-2-4 d-flex eixo-column gap-4 pos-relative z-1 min-h-0" style="grid-row:{{ celula.linha }};grid-column:{{ celula.coluna }}">
@@ -65,7 +81,15 @@
     <sc-for list="{{ diasEmLista }}" as="dia" hint-placeholder-count="5">
       <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-14 d-flex eixo-column gap-8 fundo-branco" aria-label="{{ dia.nome }}">
         <h3 class="m-0 fs-15">{{ dia.nome }}</h3>
-        <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="2"><button onClick="{{ atividade.abrir }}" aria-haspopup="dialog" aria-label="{{ atividade.rotuloVer }}" class="d-grid colunas-52-minmax-0-1fr gap-2-12 raio-8 p-10-12 texto-left cor-ciano-850 w-100pc largura-fundo" style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }};cursor:pointer;font:inherit"><span class="fw-600 num-tabular-nums" style="grid-row:1 / span 4">{{ atividade.hora }}</span><span class="fs-12 fw-600 cor-cinza-680 num-tabular-nums">{{ atividade.horario }}</span><b class="fs-14">{{ atividade.turma }}</b><span class="fs-12 fw-600" style="color:{{ atividade.cor }}">{{ atividade.tipo }}</span><span class="fs-12 cor-cinza-680">{{ atividade.solucaoOficineiro }}</span></button></sc-for>
+        <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="2"><button
+          onClick="{{ atividade.abrir }}" aria-haspopup="dialog" aria-label="{{ atividade.rotuloVer }}"
+          class="d-grid colunas-52-minmax-0-1fr gap-2-12 raio-8 p-10-12 texto-left cor-ciano-850 w-100pc largura-fundo"
+          style="border:0;border-left:4px solid {{ atividade.cor }};background:{{ atividade.fundo }};cursor:pointer;font:inherit"><span
+          class="fw-600 num-tabular-nums" style="grid-row:1 / span 4">{{ atividade.hora }}</span><span
+          class="fs-12 fw-600 cor-cinza-680 num-tabular-nums">{{ atividade.horario }}</span><b
+          class="fs-14">{{ atividade.turma }}</b><span class="fs-12 fw-600"
+          style="color:{{ atividade.cor }}">{{ atividade.tipo }}</span><span
+          class="fs-12 cor-cinza-680">{{ atividade.solucaoOficineiro }}</span></button></sc-for>
         <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-470">{{ dia.vazioTexto }}</span></sc-if>
       </section>
     </sc-for>

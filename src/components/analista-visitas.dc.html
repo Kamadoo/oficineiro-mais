@@ -9,7 +9,11 @@
 <body>
 <x-dc>
   <div class="d-flex quebra-wrap gap-10-12 alinha-center">
-    <div role="tablist" aria-label="Visitas" class="largura-total-celular d-flex gap-4 fundo-cinza-90 p-4 raio-10 rolagem-x-auto segmentado"><sc-for list="{{ abas }}" as="aba" hint-placeholder-count="2"><button role="tab" aria-selected="{{ aba.marcado }}" onClick="{{ aba.escolher }}" class="borda-0 raio-7 p-8-14 fs-14 fw-600 espaco-nowrap {{ aba.classe }}" style="background:{{ aba.fundo }};color:{{ aba.cor }}">{{ aba.rotulo }}</button></sc-for></div>
+    <div role="tablist" aria-label="Visitas"
+      class="largura-total-celular d-flex gap-4 fundo-cinza-90 p-4 raio-10 rolagem-x-auto segmentado"><sc-for
+      list="{{ abas }}" as="aba" hint-placeholder-count="2"><button role="tab" aria-selected="{{ aba.marcado }}"
+      onClick="{{ aba.escolher }}" class="borda-0 raio-7 p-8-14 fs-14 fw-600 espaco-nowrap {{ aba.classe }}"
+      style="background:{{ aba.fundo }};color:{{ aba.cor }}">{{ aba.rotulo }}</button></sc-for></div>
     <div class="oculto-celular flex-1"></div>
     <sc-if value="{{ abaHistorico }}" hint-placeholder-val="{{ false }}"><button onClick="{{ exportar }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-ciano-850 botao-secundario">Exportar Excel</button></sc-if>
   </div>
@@ -17,38 +21,100 @@
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-22 d-flex eixo-column gap-18 max-w-900 largura-fundo fundo-branco" aria-labelledby="an-h-reg">
       <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 id="an-h-reg" class="m-0 fs-16 flex-1">{{ registro.titulo }}</h3><sc-if value="{{ registro.editando }}" hint-placeholder-val="{{ false }}"><button onClick="{{ cancelarCorrecao }}" class="borda-0 fundo-transparent p-0 fs-13 fw-600 cor-ciano-740 deco-underline botao-texto">Cancelar correção</button></sc-if></div>
       <sc-if value="{{ registro.temVinculo }}" hint-placeholder-val="{{ false }}"><div class="fundo-ciano-40 raio-10 p-12-14 fs-13 cor-ciano-740 lh-1p5">{{ registro.vinculo }}</div></sc-if>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Visita da agenda</span><select style="background:var(--fundo-branco)" id="rg-agenda" value="{{ registro.agenda }}" onChange="{{ registro.escolherAgenda }}" disabled="{{ registro.travaAgenda }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Visita sem agendamento</option><sc-for list="{{ visitasDaAgenda }}" as="opcao" hint-placeholder-count="3"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select><span class="fs-12 cor-cinza-600">{{ registro.agendaNota }}</span></label>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Visita da agenda</span><select
+        style="background:var(--fundo-branco)" id="rg-agenda" value="{{ registro.agenda }}"
+        onChange="{{ registro.escolherAgenda }}" disabled="{{ registro.travaAgenda }}"
+        class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Visita sem agendamento</option><sc-for
+        list="{{ visitasDaAgenda }}" as="opcao" hint-placeholder-count="3"><option
+        value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select><span
+        class="fs-12 cor-cinza-600">{{ registro.agendaNota }}</span></label>
       <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Escola *</span><select style="background:var(--fundo-branco)" id="rg-escola" value="{{ registro.escola }}" onChange="{{ registro.escolherEscola }}" disabled="{{ registro.travaEscola }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Escola *</span><select
+          style="background:var(--fundo-branco)" id="rg-escola" value="{{ registro.escola }}"
+          onChange="{{ registro.escolherEscola }}" disabled="{{ registro.travaEscola }}"
+          class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Escolha a escola</option><sc-for
+          list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option
+          value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
         <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Data *</span><input id="rg-data" type="date" value="{{ registro.data }}" min="{{ registro.dataMinima }}" max="{{ registro.dataMaxima }}" onChange="{{ registro.escolherData }}" disabled="{{ registro.travaData }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
       </div>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Participantes · separe os nomes com ponto e vírgula (;)</span><input value="{{ registro.participantes }}" onChange="{{ registro.escreverParticipantes }}" maxlength="500" placeholder="ex.: Prof.ª Ana (5º ano); Diretora Bia; 6 professores do turno da manhã" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14"></input><sc-if value="{{ registro.temNomes }}" hint-placeholder-val="{{ false }}"><span class="d-flex quebra-wrap gap-6"><sc-for list="{{ registro.nomes }}" as="nome" hint-placeholder-count="2"><span class="fs-12 fw-600 cor-ciano-740 fundo-ciano-60 p-3-10 raio-999">{{ nome }}</span></sc-for></span></sc-if></label>
+      <label class="d-flex eixo-column gap-6"><span
+        class="fs-12 cor-cinza-600 fw-600">Participantes · separe os nomes com ponto e vírgula (;)</span><input
+        value="{{ registro.participantes }}" onChange="{{ registro.escreverParticipantes }}" maxlength="500"
+        placeholder="ex.: Prof.ª Ana (5º ano); Diretora Bia; 6 professores do turno da manhã"
+        class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14"></input><sc-if value="{{ registro.temNomes }}"
+        hint-placeholder-val="{{ false }}"><span class="d-flex quebra-wrap gap-6"><sc-for list="{{ registro.nomes }}" as="nome"
+        hint-placeholder-count="2"><span
+        class="fs-12 fw-600 cor-ciano-740 fundo-ciano-60 p-3-10 raio-999">{{ nome }}</span></sc-for></span></sc-if></label>
       <div class="d-flex eixo-column gap-8"><span id="rg-tipo-rot" class="fs-12 cor-cinza-600 fw-600">Tipo de atendimento *</span>
-        <div role="radiogroup" aria-labelledby="rg-tipo-rot" class="d-flex quebra-wrap gap-4 fundo-cinza-90 p-4 raio-10 alinha-si-flex-start segmentado"><sc-for list="{{ tipos }}" as="tipo" hint-placeholder-count="4"><button role="radio" aria-checked="{{ tipo.marcado }}" onClick="{{ tipo.escolher }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 {{ tipo.classe }}" style="background:{{ tipo.fundo }};color:{{ tipo.cor }}">{{ tipo.rotulo }}</button></sc-for></div>
-        <div role="radiogroup" aria-label="Detalhe do atendimento" class="d-flex quebra-wrap gap-8"><sc-for list="{{ subtipos }}" as="subtipo" hint-placeholder-count="4"><button role="radio" aria-checked="{{ subtipo.marcado }}" onClick="{{ subtipo.escolher }}" class="raio-999 p-6-12 fs-13 fw-500 botao-opcao {{ subtipo.classe }}" style="border:1.5px solid {{ subtipo.borda }};background:{{ subtipo.fundo }};color:{{ subtipo.cor }}">{{ subtipo.rotulo }}</button></sc-for></div>
+        <div role="radiogroup" aria-labelledby="rg-tipo-rot"
+          class="d-flex quebra-wrap gap-4 fundo-cinza-90 p-4 raio-10 alinha-si-flex-start segmentado"><sc-for list="{{ tipos }}"
+          as="tipo" hint-placeholder-count="4"><button role="radio" aria-checked="{{ tipo.marcado }}"
+          onClick="{{ tipo.escolher }}" class="borda-0 raio-7 p-7-14 fs-13 fw-600 {{ tipo.classe }}"
+          style="background:{{ tipo.fundo }};color:{{ tipo.cor }}">{{ tipo.rotulo }}</button></sc-for></div>
+        <div role="radiogroup" aria-label="Detalhe do atendimento" class="d-flex quebra-wrap gap-8"><sc-for
+          list="{{ subtipos }}" as="subtipo" hint-placeholder-count="4"><button role="radio" aria-checked="{{ subtipo.marcado }}"
+          onClick="{{ subtipo.escolher }}" class="raio-999 p-6-12 fs-13 fw-500 botao-opcao {{ subtipo.classe }}"
+          style="border:1.5px solid {{ subtipo.borda }};background:{{ subtipo.fundo }};color:{{ subtipo.cor }}">{{ subtipo.rotulo }}</button></sc-for></div>
       </div>
       <sc-if value="{{ comAlunos }}" hint-placeholder-val="{{ false }}">
         <div class="d-flex eixo-column gap-6">
           <div class="empilha-celular d-grid gap-12" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr)">
-            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Oficineiro *</span><select style="background:var(--fundo-branco)" id="rg-ofic" value="{{ registro.oficineiro }}" onChange="{{ registro.escolherOficineiro }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Escolha o oficineiro</option><sc-for list="{{ oficineiros }}" as="opcao" hint-placeholder-count="2"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Ano *</span><select style="background:var(--fundo-branco)" id="rg-ano" value="{{ registro.ano }}" onChange="{{ registro.escolherAno }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Escolha o ano</option><sc-for list="{{ anos }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Turma *</span><select style="background:var(--fundo-branco)" id="rg-turma" value="{{ registro.turma }}" onChange="{{ registro.escolherTurma }}" disabled="{{ semAno }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Escolha a turma</option><sc-for list="{{ turmas }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label>
+            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Oficineiro *</span><select
+              style="background:var(--fundo-branco)" id="rg-ofic" value="{{ registro.oficineiro }}"
+              onChange="{{ registro.escolherOficineiro }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option
+              value="">Escolha o oficineiro</option><sc-for list="{{ oficineiros }}" as="opcao" hint-placeholder-count="2"><option
+              value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Ano *</span><select
+              style="background:var(--fundo-branco)" id="rg-ano" value="{{ registro.ano }}" onChange="{{ registro.escolherAno }}"
+              class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Escolha o ano</option><sc-for
+              list="{{ anos }}" as="opcao" hint-placeholder-count="5"><option
+              value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Turma *</span><select
+              style="background:var(--fundo-branco)" id="rg-turma" value="{{ registro.turma }}"
+              onChange="{{ registro.escolherTurma }}" disabled="{{ semAno }}"
+              class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Escolha a turma</option><sc-for
+              list="{{ turmas }}" as="opcao" hint-placeholder-count="4"><option
+              value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label>
           </div>
           <span class="fs-12 cor-cinza-600">{{ turmaNota }}</span>
         </div>
       </sc-if>
-      <label class="d-flex eixo-column gap-6 max-w-420"><span class="fs-12 cor-cinza-600 fw-600">Solução trabalhada</span><select style="background:var(--fundo-branco)" value="{{ registro.solucao }}" onChange="{{ registro.escolherSolucao }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Nenhuma em especial</option><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label>
+      <label class="d-flex eixo-column gap-6 max-w-420"><span
+        class="fs-12 cor-cinza-600 fw-600">Solução trabalhada</span><select style="background:var(--fundo-branco)"
+        value="{{ registro.solucao }}" onChange="{{ registro.escolherSolucao }}"
+        class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Nenhuma em especial</option><sc-for
+        list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option
+        value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label>
       <div class="d-flex eixo-column gap-16 borda-t-cinza-70 pt-18">
-        <label class="d-flex eixo-column gap-6"><span class="fs-16 fw-600 cor-ciano-850">Desenvolvimento da visita *</span><textarea id="rg-obs" rows="4" value="{{ registro.observacao }}" onChange="{{ registro.escreverObservacao }}" maxlength="2000" placeholder="Como a visita foi conduzida, o que foi feito com professores e gestão, e o que foi combinado" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+        <label class="d-flex eixo-column gap-6"><span
+          class="fs-16 fw-600 cor-ciano-850">Desenvolvimento da visita *</span><textarea id="rg-obs" rows="4"
+          value="{{ registro.observacao }}" onChange="{{ registro.escreverObservacao }}" maxlength="2000"
+          placeholder="Como a visita foi conduzida, o que foi feito com professores e gestão, e o que foi combinado"
+          class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
         <div class="empilha-celular d-grid gap-16" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
-          <div class="d-flex eixo-column gap-8"><span id="rg-obj-rot" class="fs-12 cor-cinza-600 fw-600">Objetivo da visita atingido?</span><div role="radiogroup" aria-labelledby="rg-obj-rot" class="d-flex gap-8 quebra-wrap"><sc-for list="{{ objetivos }}" as="objetivo" hint-placeholder-count="3"><button role="radio" aria-checked="{{ objetivo.marcado }}" onClick="{{ objetivo.escolher }}" class="raio-8 p-9-14 fs-14 fw-500 botao-opcao {{ objetivo.classe }}" style="border:1.5px solid {{ objetivo.borda }};background:{{ objetivo.fundo }};color:{{ objetivo.cor }}">{{ objetivo.rotulo }}</button></sc-for></div></div>
-          <div class="d-flex eixo-column gap-8"><span id="rg-eng-rot" class="fs-12 cor-cinza-600 fw-600">Engajamento do público atendido · {{ engajamentoTexto }}</span><div role="radiogroup" aria-labelledby="rg-eng-rot" class="d-flex gap-6"><sc-for list="{{ engajamentos }}" as="nota" hint-placeholder-count="5"><button role="radio" aria-checked="{{ nota.marcado }}" aria-label="{{ nota.aria }}" onClick="{{ nota.escolher }}" class="w-44 h-40 raio-8 fs-14 fw-600 largura-fundo botao-opcao {{ nota.classe }}" style="border:1.5px solid {{ nota.borda }};background:{{ nota.fundo }};color:{{ nota.cor }}">{{ nota.rotulo }}</button></sc-for></div></div>
+          <div class="d-flex eixo-column gap-8"><span id="rg-obj-rot"
+            class="fs-12 cor-cinza-600 fw-600">Objetivo da visita atingido?</span><div role="radiogroup"
+            aria-labelledby="rg-obj-rot" class="d-flex gap-8 quebra-wrap"><sc-for list="{{ objetivos }}" as="objetivo"
+            hint-placeholder-count="3"><button role="radio" aria-checked="{{ objetivo.marcado }}" onClick="{{ objetivo.escolher }}"
+            class="raio-8 p-9-14 fs-14 fw-500 botao-opcao {{ objetivo.classe }}"
+            style="border:1.5px solid {{ objetivo.borda }};background:{{ objetivo.fundo }};color:{{ objetivo.cor }}">{{ objetivo.rotulo }}</button></sc-for></div></div>
+          <div class="d-flex eixo-column gap-8"><span id="rg-eng-rot"
+            class="fs-12 cor-cinza-600 fw-600">Engajamento do público atendido · {{ engajamentoTexto }}</span><div role="radiogroup"
+            aria-labelledby="rg-eng-rot" class="d-flex gap-6"><sc-for list="{{ engajamentos }}" as="nota"
+            hint-placeholder-count="5"><button role="radio" aria-checked="{{ nota.marcado }}" aria-label="{{ nota.aria }}"
+            onClick="{{ nota.escolher }}" class="w-44 h-40 raio-8 fs-14 fw-600 largura-fundo botao-opcao {{ nota.classe }}"
+            style="border:1.5px solid {{ nota.borda }};background:{{ nota.fundo }};color:{{ nota.cor }}">{{ nota.rotulo }}</button></sc-for></div></div>
         </div>
         <div class="empilha-celular d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
           <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Boas práticas identificadas</span><textarea rows="2" value="{{ registro.boasPraticas }}" onChange="{{ registro.escreverBoasPraticas }}" maxlength="1000" placeholder="Usos das soluções pelos professores, iniciativas da escola" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
           <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Dúvidas e dificuldades relatadas</span><textarea rows="2" value="{{ registro.dificuldades }}" onChange="{{ registro.escreverDificuldades }}" maxlength="1000" placeholder="Pedagógicas, de uso da ferramenta ou de acesso" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
         </div>
-        <div class="d-flex eixo-column gap-8"><span id="rg-oc-rot" class="fs-12 cor-cinza-600 fw-600">Ocorrências técnicas</span><div role="group" aria-labelledby="rg-oc-rot" class="d-flex quebra-wrap gap-8"><sc-for list="{{ ocorrencias }}" as="ocorrencia" hint-placeholder-count="6"><button aria-pressed="{{ ocorrencia.marcado }}" onClick="{{ ocorrencia.escolher }}" class="raio-999 p-7-14 fs-13 fw-500 botao-opcao {{ ocorrencia.classe }}" style="border:1.5px solid {{ ocorrencia.borda }};background:{{ ocorrencia.fundo }};color:{{ ocorrencia.cor }}">{{ ocorrencia.rotulo }}</button></sc-for></div></div>
+        <div class="d-flex eixo-column gap-8"><span id="rg-oc-rot"
+          class="fs-12 cor-cinza-600 fw-600">Ocorrências técnicas</span><div role="group" aria-labelledby="rg-oc-rot"
+          class="d-flex quebra-wrap gap-8"><sc-for list="{{ ocorrencias }}" as="ocorrencia" hint-placeholder-count="6"><button
+          aria-pressed="{{ ocorrencia.marcado }}" onClick="{{ ocorrencia.escolher }}"
+          class="raio-999 p-7-14 fs-13 fw-500 botao-opcao {{ ocorrencia.classe }}"
+          style="border:1.5px solid {{ ocorrencia.borda }};background:{{ ocorrencia.fundo }};color:{{ ocorrencia.cor }}">{{ ocorrencia.rotulo }}</button></sc-for></div></div>
         <sc-if value="{{ temOcorrencia }}" hint-placeholder-val="{{ false }}"><input value="{{ registro.ocorrenciaObs }}" onChange="{{ registro.escreverOcorrenciaObs }}" maxlength="1000" aria-label="Descreva a ocorrência e o encaminhamento dado" placeholder="Descreva a ocorrência e o encaminhamento dado" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14"></input></sc-if>
       </div>
       <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erro }}</div></sc-if>
@@ -58,16 +124,29 @@
   <sc-if value="{{ abaHistorico }}" hint-placeholder-val="{{ false }}">
     <div class="filtros d-flex quebra-wrap gap-8 alinha-center">
       <select style="background:var(--fundo-branco)" aria-label="Mês" value="{{ mes }}" onChange="{{ escolherMes }}" class="h-38 borda-cinza-160 raio-8 p-0-10 fs-13 fw-600 fundo-branco"><sc-for list="{{ meses }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-      <select style="background:var(--fundo-branco)" aria-label="Escola" value="{{ escola }}" onChange="{{ escolherEscola }}" class="h-38 borda-cinza-160 raio-8 p-0-10 fs-13 max-w-300 largura-fundo fundo-branco"><option value="">Todas as escolas da carteira</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+      <select style="background:var(--fundo-branco)" aria-label="Escola" value="{{ escola }}"
+        onChange="{{ escolherEscola }}"
+        class="h-38 borda-cinza-160 raio-8 p-0-10 fs-13 max-w-300 largura-fundo fundo-branco"><option
+        value="">Todas as escolas da carteira</option><sc-for list="{{ opcoesDeEscola }}" as="opcao"
+        hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
       <span role="status" aria-live="polite" class="fs-12 cor-cinza-600">{{ resumo }}</span>
     </div>
     <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
       <div role="table" aria-label="Visitas realizadas" class="min-w-900">
-        <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110" style="grid-template-columns:60px 1.5fr 1.4fr 1.3fr 1fr .9fr .5fr 1fr"><span role="columnheader">Data</span><span role="columnheader">Escola</span><span role="columnheader">Tipo de atendimento</span><span role="columnheader">Participantes</span><span role="columnheader">Solução</span><span role="columnheader">Objetivo</span><span role="columnheader">Eng.</span><span role="columnheader">Ocorrências</span></div>
+        <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110"
+          style="grid-template-columns:60px 1.5fr 1.4fr 1.3fr 1fr .9fr .5fr 1fr"><span role="columnheader">Data</span><span
+          role="columnheader">Escola</span><span role="columnheader">Tipo de atendimento</span><span
+          role="columnheader">Participantes</span><span role="columnheader">Solução</span><span
+          role="columnheader">Objetivo</span><span role="columnheader">Eng.</span><span
+          role="columnheader">Ocorrências</span></div>
         <sc-for list="{{ visitas }}" as="visita" hint-placeholder-count="6">
           <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-cinza-70 alinha-center" style="grid-template-columns:60px 1.5fr 1.4fr 1.3fr 1fr .9fr .5fr 1fr">
             <span role="cell" class="num-tabular-nums">{{ visita.data }}</span>
-            <span role="cell" class="d-flex eixo-column alinha-flex-start min-w-0"><button onClick="{{ visita.abrir }}" aria-haspopup="dialog" aria-label="{{ visita.aria }}" class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-ciano-850 texto-left sublinha-3 quebra-palavra-anywhere botao-texto cursor-pointer deco-underline" style="text-decoration-color:var(--destaque-cinza-160)">{{ visita.escola }}</button><sc-if value="{{ visita.temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-cinza-600">{{ visita.nota }}</span></sc-if></span>
+            <span role="cell" class="d-flex eixo-column alinha-flex-start min-w-0"><button onClick="{{ visita.abrir }}"
+              aria-haspopup="dialog" aria-label="{{ visita.aria }}"
+              class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-ciano-850 texto-left sublinha-3 quebra-palavra-anywhere botao-texto cursor-pointer deco-underline"
+              style="text-decoration-color:var(--destaque-cinza-160)">{{ visita.escola }}</button><sc-if value="{{ visita.temNota }}"
+              hint-placeholder-val="{{ false }}"><span class="fs-11 cor-cinza-600">{{ visita.nota }}</span></sc-if></span>
             <span role="cell" class="quebra-palavra-anywhere">{{ visita.tipo }}</span><span role="cell" class="fs-12 quebra-palavra-anywhere">{{ visita.participantes }}</span><span role="cell" class="quebra-palavra-anywhere">{{ visita.solucao }}</span>
             <span role="cell" class="justifica-si-start fs-12 fw-600 p-2-8 raio-999" style="color:{{ visita.objetivoCor }};background:{{ visita.objetivoFundo }}">{{ visita.objetivo }}</span>
             <span role="cell" class="num-tabular-nums">{{ visita.engajamento }}</span><span role="cell" class="fs-12 quebra-palavra-anywhere" style="color:{{ visita.ocorrenciasCor }}">{{ visita.ocorrencias }}</span>

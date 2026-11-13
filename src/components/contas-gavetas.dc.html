@@ -11,7 +11,11 @@
 <sc-if value="{{ loteAberto }}" hint-placeholder-val="{{ false }}">
   <div onClick="{{ fecharLote }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
   <aside role="dialog" aria-modal="true" aria-labelledby="lt-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo" style="width:min(820px,100%)">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Gestão de Contas</span><h3 id="lt-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">Criar contas em lote</h3></div><button onClick="{{ fecharLote }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div
+      class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Gestão de Contas</span><h3 id="lt-titulo"
+      tabindex="-1" class="m-0 fs-17 contorno-none">Criar contas em lote</h3></div><button onClick="{{ fecharLote }}"
+      aria-label="Fechar"
+      class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-14 rolagem-auto flex-1">
       <ol class="m-0 pl-20 fs-13 lh-1p6 cor-cinza-750">
         <li>Baixe o modelo e preencha uma pessoa por linha: nome, e-mail, CPF ou CNPJ, perfil (oficineiro, analista, direção, coordenador ou gerente), escola pela sigla para oficineiro e direção, carteira para analista, e a coluna Horário pode ficar em branco (a jornada do oficineiro é flexível: 8 horas entre 07:00 e 17:00). Para oficineiro, a última coluna recebe o CNPJ ou o CPF da contratada (opcional).</li>
@@ -27,10 +31,19 @@
         <div role="status" aria-live="polite" class="fs-13 fw-600 cor-ciano-850">{{ lote.resumo }}</div>
         <div class="rolagem-auto borda-cinza-110 raio-10">
           <div role="table" aria-label="Prévia das contas" class="min-w-760">
-            <div role="row" class="d-grid gap-8 p-10-12 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em borda-b-cinza-110" style="grid-template-columns:44px minmax(0,1.5fr) minmax(0,1.4fr) 120px minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.4fr)"><span role="columnheader">Linha</span><span role="columnheader">Nome</span><span role="columnheader">E-mail</span><span role="columnheader">CPF</span><span role="columnheader">Perfil</span><span role="columnheader">Escola / carteira</span><span role="columnheader">Situação</span></div>
+            <div role="row"
+              class="d-grid gap-8 p-10-12 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em borda-b-cinza-110"
+              style="grid-template-columns:44px minmax(0,1.5fr) minmax(0,1.4fr) 120px minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.4fr)"><span
+              role="columnheader">Linha</span><span role="columnheader">Nome</span><span role="columnheader">E-mail</span><span
+              role="columnheader">CPF</span><span role="columnheader">Perfil</span><span
+              role="columnheader">Escola / carteira</span><span role="columnheader">Situação</span></div>
             <sc-for list="{{ lote.linhas }}" as="linha" hint-placeholder-count="4">
               <div role="row" class="d-grid gap-8 p-9-12 fs-12 borda-b-cinza-75 alinha-center" style="grid-template-columns:44px minmax(0,1.5fr) minmax(0,1.4fr) 120px minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.4fr)">
-                <span role="cell" class="num-tabular-nums cor-cinza-600">{{ linha.numero }}</span><b role="cell" class="quebra-palavra-anywhere">{{ linha.nome }}</b><span role="cell" class="quebra-palavra-anywhere">{{ linha.email }}</span><span role="cell" class="num-tabular-nums">{{ linha.documento }}</span><span role="cell">{{ linha.perfil }}</span><span role="cell" class="quebra-palavra-anywhere">{{ linha.vinculo }}</span>
+                <span role="cell" class="num-tabular-nums cor-cinza-600">{{ linha.numero }}</span><b role="cell"
+                  class="quebra-palavra-anywhere">{{ linha.nome }}</b><span role="cell"
+                  class="quebra-palavra-anywhere">{{ linha.email }}</span><span role="cell"
+                  class="num-tabular-nums">{{ linha.documento }}</span><span role="cell">{{ linha.perfil }}</span><span role="cell"
+                  class="quebra-palavra-anywhere">{{ linha.vinculo }}</span>
                 <span role="cell" class="fs-12 fw-600 quebra-palavra-anywhere" style="color:{{ linha.cor }}">{{ linha.situacao }}</span>
               </div>
             </sc-for>
@@ -39,7 +52,12 @@
         <span class="fs-12 cor-cinza-600 lh-1p5">Os CPFs e CNPJs ficam só nesta tela até a criação e são apagados ao fechar. Linhas com problema são ignoradas; corrija na planilha e envie de novo.</span>
       </sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap rodape-gaveta"><button onClick="{{ fecharLote }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">{{ lote.fecharTexto }}</button><sc-if value="{{ lote.podeCriar }}" hint-placeholder-val="{{ false }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ criarLote }}" disabled="{{ lote.criando }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660">{{ lote.botao }}</button></sc-if></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap rodape-gaveta"><button
+      onClick="{{ fecharLote }}"
+      class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 cor-ciano-850 botao-secundario">{{ lote.fecharTexto }}</button><sc-if
+      value="{{ lote.podeCriar }}" hint-placeholder-val="{{ false }}"><button style="background:var(--destaque-ciano-660)"
+      onClick="{{ criarLote }}" disabled="{{ lote.criando }}"
+      class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fundo-ciano-660">{{ lote.botao }}</button></sc-if></div>
   </aside>
 </sc-if>
 
@@ -52,43 +70,110 @@
       <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
         <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Telefone</span><input id="ct-nv-tel" value="{{ novaConta.telefone }}" onChange="{{ novaConta.escreverTelefone }}" placeholder="(31) 99999-9999" inputmode="tel" maxlength="16" autocomplete="off" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input></label>
       </div>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">E-mail *</span><input id="ct-nv-email" type="email" value="{{ novaConta.email }}" onChange="{{ novaConta.escreverEmail }}" inputmode="email" maxlength="160" autocomplete="off" autocapitalize="none" spellcheck="false" required="" aria-describedby="ct-nv-email-dica" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input><span id="ct-nv-email-dica" class="fs-12 cor-cinza-600 lh-1p45">O código para ativar a conta é enviado para este e-mail.</span></label>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">CPF ou CNPJ *</span><input id="ct-nv-cpf" value="{{ novaConta.cpf }}" onChange="{{ novaConta.escreverCpf }}" inputmode="numeric" maxlength="18" autocomplete="off" required="" aria-describedby="ct-nv-cpf-dica" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input><span id="ct-nv-cpf-dica" class="fs-12 cor-cinza-600 lh-1p45">Usado só para a pessoa ativar a conta. Fica protegido e não aparece no sistema.</span></label>
-      <div class="d-flex eixo-column gap-8"><span id="ct-nv-perfil-rot" class="fs-12 cor-cinza-600 fw-600">Perfil *</span><div role="radiogroup" aria-labelledby="ct-nv-perfil-rot" onKeyDown="{{ teclaNosPerfis }}" class="d-flex quebra-wrap gap-8"><sc-for list="{{ perfisDaNovaConta }}" as="perfil" hint-placeholder-count="4"><button id="{{ perfil.id }}" role="radio" aria-checked="{{ perfil.marcado }}" disabled="{{ perfil.desligado }}" tabindex="{{ perfil.tabulacao }}" onClick="{{ perfil.escolher }}" class="raio-8 p-8-12 fs-13 fw-500 fonte-inherit botao-opcao {{ perfil.classe }}" style="border:1.5px solid {{ perfil.borda }};background:{{ perfil.fundo }};color:{{ perfil.cor }}">{{ perfil.rotulo }}</button></sc-for></div><span class="fs-12 cor-cinza-600 lh-1p45">{{ dicaDePerfil }}</span></div>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">E-mail *</span><input
+        id="ct-nv-email" type="email" value="{{ novaConta.email }}" onChange="{{ novaConta.escreverEmail }}" inputmode="email"
+        maxlength="160" autocomplete="off" autocapitalize="none" spellcheck="false" required=""
+        aria-describedby="ct-nv-email-dica" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input><span
+        id="ct-nv-email-dica"
+        class="fs-12 cor-cinza-600 lh-1p45">O código para ativar a conta é enviado para este e-mail.</span></label>
+      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">CPF ou CNPJ *</span><input
+        id="ct-nv-cpf" value="{{ novaConta.cpf }}" onChange="{{ novaConta.escreverCpf }}" inputmode="numeric" maxlength="18"
+        autocomplete="off" required="" aria-describedby="ct-nv-cpf-dica"
+        class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit"></input><span id="ct-nv-cpf-dica"
+        class="fs-12 cor-cinza-600 lh-1p45">Usado só para a pessoa ativar a conta. Fica protegido e não aparece no sistema.</span></label>
+      <div class="d-flex eixo-column gap-8"><span id="ct-nv-perfil-rot"
+        class="fs-12 cor-cinza-600 fw-600">Perfil *</span><div role="radiogroup" aria-labelledby="ct-nv-perfil-rot"
+        onKeyDown="{{ teclaNosPerfis }}" class="d-flex quebra-wrap gap-8"><sc-for list="{{ perfisDaNovaConta }}" as="perfil"
+        hint-placeholder-count="4"><button id="{{ perfil.id }}" role="radio" aria-checked="{{ perfil.marcado }}"
+        disabled="{{ perfil.desligado }}" tabindex="{{ perfil.tabulacao }}" onClick="{{ perfil.escolher }}"
+        class="raio-8 p-8-12 fs-13 fw-500 fonte-inherit botao-opcao {{ perfil.classe }}"
+        style="border:1.5px solid {{ perfil.borda }};background:{{ perfil.fundo }};color:{{ perfil.cor }}">{{ perfil.rotulo }}</button></sc-for></div><span
+        class="fs-12 cor-cinza-600 lh-1p45">{{ dicaDePerfil }}</span></div>
       <sc-if value="{{ pedeEscola }}" hint-placeholder-val="{{ true }}">
-        <label class="d-flex eixo-column gap-6 fundo-ciano-40 raio-10 p-14"><span class="fs-12 cor-ciano-740 fw-600">Escola de atuação * <span class="fw-400">(base da Presença e da Grade)</span></span><select style="background:var(--fundo-branco)" id="ct-nv-escola" value="{{ novaConta.escola }}" onChange="{{ novaConta.escolherEscola }}" required="" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscolaDaConta }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+        <label class="d-flex eixo-column gap-6 fundo-ciano-40 raio-10 p-14"><span
+          class="fs-12 cor-ciano-740 fw-600">Escola de atuação * <span
+          class="fw-400">(base da Presença e da Grade)</span></span><select style="background:var(--fundo-branco)"
+          id="ct-nv-escola" value="{{ novaConta.escola }}" onChange="{{ novaConta.escolherEscola }}" required=""
+          class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"><option
+          value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscolaDaConta }}" as="opcao"
+          hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
       </sc-if>
       <sc-if value="{{ ehOficineiro }}" hint-placeholder-val="{{ true }}">
         <div id="ct-nv-jornada" class="d-flex eixo-column gap-6 fundo-ciano-40 raio-10 p-14"><span class="fs-12 cor-ciano-740 fw-600">Jornada de trabalho</span><span class="fs-14 cor-ciano-850">Horário livre, até 8 horas trabalhadas por dia</span><span class="fs-12 cor-cinza-600 lh-1p45">O almoço não conta. A presença é confirmada pela localização, dentro do raio da escola.</span></div>
-        <label class="d-flex eixo-column gap-6 fundo-ciano-40 raio-10 p-14"><span class="fs-12 cor-ciano-740 fw-600">CNPJ ou CPF da contratada <span class="fw-400">(pode ser preenchido depois)</span></span><input id="ct-nv-contratada" value="{{ novaConta.contratada }}" onChange="{{ novaConta.escreverContratada }}" inputmode="numeric" maxlength="18" autocomplete="off" placeholder="00.000.000/0000-00" class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit"></input><span class="fs-12 cor-cinza-600 lh-1p45">Pessoa jurídica (CNPJ) ou física (CPF) contratada para o serviço. Sai no relatório de presença e atividades.</span></label>
+        <label class="d-flex eixo-column gap-6 fundo-ciano-40 raio-10 p-14"><span
+          class="fs-12 cor-ciano-740 fw-600">CNPJ ou CPF da contratada <span
+          class="fw-400">(pode ser preenchido depois)</span></span><input id="ct-nv-contratada" value="{{ novaConta.contratada }}"
+          onChange="{{ novaConta.escreverContratada }}" inputmode="numeric" maxlength="18" autocomplete="off"
+          placeholder="00.000.000/0000-00"
+          class="h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fundo-branco fonte-inherit"></input><span
+          class="fs-12 cor-cinza-600 lh-1p45">Pessoa jurídica (CNPJ) ou física (CPF) contratada para o serviço. Sai no relatório de presença e atividades.</span></label>
       </sc-if>
       <sc-if value="{{ ehAnalista }}" hint-placeholder-val="{{ false }}">
-        <label class="d-flex eixo-column gap-6 fundo-ciano-40 raio-10 p-14"><span class="fs-12 cor-ciano-740 fw-600">Carteira *</span><select style="background:var(--fundo-branco)" id="ct-nv-carteira" value="{{ novaConta.carteira }}" onChange="{{ novaConta.escolherCarteira }}" required="" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"><option value="">Escolha a carteira</option><sc-for list="{{ opcoesDeCarteiraDaConta }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+        <label class="d-flex eixo-column gap-6 fundo-ciano-40 raio-10 p-14"><span
+          class="fs-12 cor-ciano-740 fw-600">Carteira *</span><select style="background:var(--fundo-branco)" id="ct-nv-carteira"
+          value="{{ novaConta.carteira }}" onChange="{{ novaConta.escolherCarteira }}" required=""
+          class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"><option
+          value="">Escolha a carteira</option><sc-for list="{{ opcoesDeCarteiraDaConta }}" as="opcao"
+          hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
       </sc-if>
-      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-4-12 fs-13 fundo-cinza-20 raio-10 p-12-14"><dt class="cor-cinza-600">Projeto</dt><dd class="m-0">{{ cliente.projeto }}</dd><dt class="cor-cinza-600">Cidade</dt><dd class="m-0">{{ cliente.cidade }}</dd><dt class="cor-cinza-600">Coordenador</dt><dd class="m-0">Coordenador do núcleo</dd><dt class="cor-cinza-600">Gerente</dt><dd class="m-0">Gerente do projeto</dd></dl>
+      <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-4-12 fs-13 fundo-cinza-20 raio-10 p-12-14"><dt
+        class="cor-cinza-600">Projeto</dt><dd class="m-0">{{ cliente.projeto }}</dd><dt class="cor-cinza-600">Cidade</dt><dd
+        class="m-0">{{ cliente.cidade }}</dd><dt class="cor-cinza-600">Coordenador</dt><dd
+        class="m-0">Coordenador do núcleo</dd><dt class="cor-cinza-600">Gerente</dt><dd class="m-0">Gerente do projeto</dd></dl>
       <p class="m-0 fs-12 cor-cinza-600 lh-1p45">A pessoa ativa a conta em “Primeiro acesso”, na página de entrada, com o CPF ou CNPJ e o código enviado ao e-mail, e cria a própria senha.</p>
       <sc-if value="{{ temErroNovaConta }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroNovaConta }}</div></sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap rodape-gaveta"><button onClick="{{ fecharConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button><button style="background:var(--destaque-ciano-660)" onClick="{{ criarConta }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660">{{ novaContaBotao }}</button></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap rodape-gaveta"><button
+      onClick="{{ fecharConta }}"
+      class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button><button
+      style="background:var(--destaque-ciano-660)" onClick="{{ criarConta }}" disabled="{{ salvandoConta }}"
+      class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660">{{ novaContaBotao }}</button></div>
   </aside>
 </sc-if>
 
 <sc-if value="{{ mudancaAberta }}" hint-placeholder-val="{{ false }}">
   <div onClick="{{ fecharConta }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
   <aside role="dialog" aria-modal="true" aria-labelledby="ct-mu-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo largura-480">
-    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Alterar escola de atuação</span><h3 id="ct-mu-titulo" class="m-0 fs-17">{{ mudanca.nome }}</h3></div><button onClick="{{ fecharConta }}" aria-label="Fechar" class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div
+      class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">Alterar escola de atuação</span><h3
+      id="ct-mu-titulo" class="m-0 fs-17">{{ mudanca.nome }}</h3></div><button onClick="{{ fecharConta }}" aria-label="Fechar"
+      class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
       <div class="d-flex eixo-column gap-4"><span class="fs-12 cor-cinza-600 fw-600">Escola atual</span><span class="fs-14">{{ mudanca.atual }}</span></div>
-      <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Nova escola de atuação *</span><select style="background:var(--fundo-branco)" id="ct-mu-escola" value="{{ mudanca.escola }}" onChange="{{ mudanca.escolherEscola }}" required="" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"><option value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscolaDaMudanca }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select><sc-if value="{{ temEnderecoDaMudanca }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600 lh-1p45">{{ enderecoDaMudanca }}</span></sc-if></label>
-      <sc-if value="{{ ehAdmin }}" hint-placeholder-val="{{ false }}"><label class="d-flex alinha-flex-start gap-10 fundo-cinza-20 raio-10 p-12-14 cursor-pointer"><input id="ct-mu-agora" type="checkbox" checked="{{ mudanca.agora }}" onChange="{{ mudanca.marcarAgora }}" class="w-18 h-18 m-2-0-0 destaque-ciano-660 flex-none"></input><span class="d-flex eixo-column gap-2"><span class="fs-14 fw-600 cor-ciano-850">Aplicar agora</span><span class="fs-12 cor-cinza-600 lh-1p45">A escola muda na hora, sem esperar o próximo dia. Só o Administrador pode fazer isso.</span></span></label></sc-if>
+      <label class="d-flex eixo-column gap-6"><span
+        class="fs-12 cor-cinza-600 fw-600">Nova escola de atuação *</span><select style="background:var(--fundo-branco)"
+        id="ct-mu-escola" value="{{ mudanca.escola }}" onChange="{{ mudanca.escolherEscola }}" required=""
+        class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"><option
+        value="">Escolha a escola</option><sc-for list="{{ opcoesDeEscolaDaMudanca }}" as="opcao"
+        hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select><sc-if
+        value="{{ temEnderecoDaMudanca }}" hint-placeholder-val="{{ false }}"><span
+        class="fs-12 cor-cinza-600 lh-1p45">{{ enderecoDaMudanca }}</span></sc-if></label>
+      <sc-if value="{{ ehAdmin }}" hint-placeholder-val="{{ false }}"><label
+        class="d-flex alinha-flex-start gap-10 fundo-cinza-20 raio-10 p-12-14 cursor-pointer"><input id="ct-mu-agora"
+        type="checkbox" checked="{{ mudanca.agora }}" onChange="{{ mudanca.marcarAgora }}"
+        class="w-18 h-18 m-2-0-0 destaque-ciano-660 flex-none"></input><span class="d-flex eixo-column gap-2"><span
+        class="fs-14 fw-600 cor-ciano-850">Aplicar agora</span><span
+        class="fs-12 cor-cinza-600 lh-1p45">A escola muda na hora, sem esperar o próximo dia. Só o Administrador pode fazer isso.</span></span></label></sc-if>
       <div class="empilha-celular d-grid colunas-1fr-1fr gap-12">
-        <sc-if value="{{ mudanca.comData }}" hint-placeholder-val="{{ true }}"><label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Vale a partir de *</span><input id="ct-mu-vale" type="date" value="{{ mudanca.vale }}" min="{{ mudancaMinima }}" max="{{ mudancaMaxima }}" onChange="{{ mudanca.escolherData }}" required="" class="h-40 borda-cinza-160 raio-8 fs-14 fonte-inherit p-0-10"></input></label></sc-if>
-        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Motivo *</span><select style="background:var(--fundo-branco)" id="ct-mu-motivo" value="{{ mudanca.motivo }}" onChange="{{ mudanca.escreverMotivo }}" required="" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"><option value="">Escolha o motivo</option><option>Remanejamento do núcleo</option><option>Solicitação da SEMED</option><option>Ampliação de atendimento</option><option>Outro</option></select></label>
+        <sc-if value="{{ mudanca.comData }}" hint-placeholder-val="{{ true }}"><label
+          class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Vale a partir de *</span><input
+          id="ct-mu-vale" type="date" value="{{ mudanca.vale }}" min="{{ mudancaMinima }}" max="{{ mudancaMaxima }}"
+          onChange="{{ mudanca.escolherData }}" required=""
+          class="h-40 borda-cinza-160 raio-8 fs-14 fonte-inherit p-0-10"></input></label></sc-if>
+        <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Motivo *</span><select
+          style="background:var(--fundo-branco)" id="ct-mu-motivo" value="{{ mudanca.motivo }}"
+          onChange="{{ mudanca.escreverMotivo }}" required=""
+          class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit fundo-branco"><option
+          value="">Escolha o motivo</option><option>Remanejamento do núcleo</option><option>Solicitação da SEMED</option><option>Ampliação de atendimento</option><option>Outro</option></select></label>
       </div>
       <div class="fundo-cinza-20 raio-10 p-12-14 fs-12 cor-cinza-750 lh-1p55">Presenças, grades e registros anteriores são preservados. A grade da nova escola começa sem atividades e precisa ser montada pelo oficineiro e validada. O oficineiro é avisado da alteração.</div>
       <sc-if value="{{ temErroMudanca }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroMudanca }}</div></sc-if>
     </div>
-    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap rodape-gaveta"><button onClick="{{ fecharConta }}" class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button><button style="background:var(--destaque-ciano-660)" onClick="{{ salvarMudanca }}" disabled="{{ salvandoConta }}" class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660">{{ mudancaBotao }}</button></div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap rodape-gaveta"><button
+      onClick="{{ fecharConta }}"
+      class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button><button
+      style="background:var(--destaque-ciano-660)" onClick="{{ salvarMudanca }}" disabled="{{ salvandoConta }}"
+      class="h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660">{{ mudancaBotao }}</button></div>
   </aside>
 </sc-if>
 </x-dc>

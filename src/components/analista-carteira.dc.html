@@ -10,7 +10,10 @@
 <x-dc>
   <div class="filtros d-flex quebra-wrap gap-8 alinha-center">
     <select style="background:var(--fundo-branco)" aria-label="Período" value="{{ periodo }}" onChange="{{ escolherPeriodo }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fw-600 fundo-branco flex-1-1-140"><sc-for list="{{ periodos }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-    <select style="background:var(--fundo-branco)" aria-label="Escola" value="{{ escola }}" onChange="{{ escolherEscola }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco flex-1-1-140"><option value="">Todas as escolas da carteira</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select style="background:var(--fundo-branco)" aria-label="Escola" value="{{ escola }}"
+      onChange="{{ escolherEscola }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco flex-1-1-140"><option
+      value="">Todas as escolas da carteira</option><sc-for list="{{ opcoesDeEscola }}" as="opcao"
+      hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
     <select style="background:var(--fundo-branco)" aria-label="Solução" value="{{ solucao }}" onChange="{{ escolherSolucao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco flex-1-1-140"><option value="">Todas as soluções</option><sc-for list="{{ solucoes }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
     <select style="background:var(--fundo-branco)" aria-label="Tipo de atividade" value="{{ tipo }}" onChange="{{ escolherTipo }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco flex-1-1-140"><option value="">Todos os tipos de aula</option><option value="R">Aula regular</option><option value="P">Projeto tempo integral</option><option value="F">Formação de professores</option></select>
     <div class="oculto-celular flex-1"></div>
@@ -18,17 +21,33 @@
     <button onClick="{{ exportar }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-ciano-850 botao-secundario">Exportar Excel</button>
   </div>
   <div class="duas-colunas-celular d-grid colunas-repeat-3-minmax-0-1fr gap-12" style="opacity:{{ opacidade }}">
-    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="6"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-10 p-14-16 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-branco"><span class="fs-12 cor-cinza-600">{{ indicador.titulo }}</span><span class="fs-26 fw-600 num-tabular-nums" style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for>
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="6"><div
+      style="background:var(--fundo-branco)"
+      class="borda-cinza-110 raio-10 p-14-16 d-flex eixo-column gap-4 min-w-0 largura-fundo fundo-branco"><span
+      class="fs-12 cor-cinza-600">{{ indicador.titulo }}</span><span class="fs-26 fw-600 num-tabular-nums"
+      style="color:{{ indicador.cor }}">{{ indicador.valor }}</span><span
+      class="fs-11 cor-cinza-600">{{ indicador.nota }}</span></div></sc-for>
   </div>
   <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div class="p-16-20 d-flex alinha-baseline gap-4-10 quebra-wrap"><h3 class="m-0 fs-15 flex-1-1-200">Execução e adoção por escola</h3><span class="fs-12 cor-cinza-600">Execução = realizadas ÷ previstas líquidas · extras fora da taxa</span></div>
     <div role="table" aria-label="Execução e adoção por escola" class="min-w-1180">
-      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-cinza-600 borda-t-cinza-110 borda-b-cinza-110" style="grid-template-columns:1.6fr 1.1fr .7fr .7fr 1.2fr .7fr .7fr .5fr 1fr .5fr .9fr"><span role="columnheader">Escola</span><span role="columnheader">Oficineiro(s)</span><span role="columnheader">Prev. líquidas</span><span role="columnheader">Realizadas</span><span role="columnheader">Execução</span><span role="columnheader">Estudantes</span><span role="columnheader">Presença</span><span role="columnheader">Eng.</span><span role="columnheader">Solução principal</span><span role="columnheader">Não real.</span><span role="columnheader">Visitas</span></div>
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-cinza-600 borda-t-cinza-110 borda-b-cinza-110"
+        style="grid-template-columns:1.6fr 1.1fr .7fr .7fr 1.2fr .7fr .7fr .5fr 1fr .5fr .9fr"><span
+        role="columnheader">Escola</span><span role="columnheader">Oficineiro(s)</span><span
+        role="columnheader">Prev. líquidas</span><span role="columnheader">Realizadas</span><span
+        role="columnheader">Execução</span><span role="columnheader">Estudantes</span><span
+        role="columnheader">Presença</span><span role="columnheader">Eng.</span><span
+        role="columnheader">Solução principal</span><span role="columnheader">Não real.</span><span
+        role="columnheader">Visitas</span></div>
       <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="5">
         <div role="row" class="d-grid gap-10 p-12-20 fs-13 borda-b-cinza-70 alinha-center" style="grid-template-columns:1.6fr 1.1fr .7fr .7fr 1.2fr .7fr .7fr .5fr 1fr .5fr .9fr;background:{{ linha.fundo }};font-weight:{{ linha.peso }}">
           <span role="cell" class="quebra-palavra-anywhere">{{ linha.escola }}</span><span role="cell" class="fs-12 cor-cinza-750 quebra-palavra-anywhere">{{ linha.oficineiros }}</span><span role="cell" class="num-tabular-nums">{{ linha.previstas }}</span><span role="cell" class="num-tabular-nums">{{ linha.realizadas }}</span>
           <span role="cell" class="d-flex alinha-center gap-8"><b class="w-38 num-tabular-nums">{{ linha.execucao }}</b><span class="flex-1 h-6 fundo-cinza-70 raio-3"><span class="d-block h-6 raio-3 largura-fundo" style="width:{{ linha.execucaoLargura }};background:{{ linha.execucaoCor }}"></span></span></span>
-          <span role="cell" class="num-tabular-nums">{{ linha.estudantes }}</span><span role="cell" class="num-tabular-nums">{{ linha.presenca }}</span><span role="cell" class="num-tabular-nums">{{ linha.engajamento }}</span><span role="cell" class="quebra-palavra-anywhere">{{ linha.solucao }}</span><span role="cell" class="num-tabular-nums" style="color:{{ linha.naoRealizadasCor }}">{{ linha.naoRealizadas }}</span>
+          <span role="cell" class="num-tabular-nums">{{ linha.estudantes }}</span><span role="cell"
+            class="num-tabular-nums">{{ linha.presenca }}</span><span role="cell"
+            class="num-tabular-nums">{{ linha.engajamento }}</span><span role="cell"
+            class="quebra-palavra-anywhere">{{ linha.solucao }}</span><span role="cell" class="num-tabular-nums"
+            style="color:{{ linha.naoRealizadasCor }}">{{ linha.naoRealizadas }}</span>
           <span role="cell" class="d-flex eixo-column fs-11 cor-cinza-750 fw-400"><span>{{ linha.ultimaVisita }}</span><span style="color:{{ linha.proximaVisitaCor }}">{{ linha.proximaVisita }}</span></span>
         </div>
       </sc-for>
@@ -39,7 +58,12 @@
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco">
       <h3 class="m-0 fs-15">Uso por solução</h3>
       <sc-for list="{{ usoPorSolucao }}" as="item" hint-placeholder-count="4">
-        <div class="d-flex eixo-column gap-6"><div class="d-flex quebra-wrap justifica-space-between gap-2-8 fs-13"><b>{{ item.nome }}</b><span class="cor-cinza-600">{{ item.detalhe }}</span></div><div class="d-flex alinha-center gap-10"><span class="flex-1 h-8 fundo-cinza-70 raio-4"><span class="d-block h-8 raio-4 largura-fundo" style="width:{{ item.parcela }};background:{{ item.cor }}"></span></span><b class="num-tabular-nums fs-13 w-40 texto-right">{{ item.parcela }}</b></div></div>
+        <div class="d-flex eixo-column gap-6"><div
+          class="d-flex quebra-wrap justifica-space-between gap-2-8 fs-13"><b>{{ item.nome }}</b><span
+          class="cor-cinza-600">{{ item.detalhe }}</span></div><div class="d-flex alinha-center gap-10"><span
+          class="flex-1 h-8 fundo-cinza-70 raio-4"><span class="d-block h-8 raio-4 largura-fundo"
+          style="width:{{ item.parcela }};background:{{ item.cor }}"></span></span><b
+          class="num-tabular-nums fs-13 w-40 texto-right">{{ item.parcela }}</b></div></div>
       </sc-for>
     </section>
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-14 fundo-branco">

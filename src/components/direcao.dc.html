@@ -147,7 +147,10 @@ html[data-tema="escuro"] .dir-h {
 <dc-import name="notificacoes" gavetas="{{ gavetaDeNotificacoes }}"></dc-import>
 
     <div class="pagina p-28 d-flex eixo-column gap-20 max-w-1280 w-100pc">
-<sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13 d-flex quebra-wrap alinha-center gap-8-14"><span class="flex-1 min-w-200">{{ erro }}</span><button onClick="{{ tentarDeNovo }}" class="h-34 borda-1-solid-b42318 fundo-branco cor-vermelho-600 raio-8 p-0-12 fs-13 fw-600">Tentar de novo</button></div></sc-if>
+<sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert"
+  class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13 d-flex quebra-wrap alinha-center gap-8-14"><span
+  class="flex-1 min-w-200">{{ erro }}</span><button onClick="{{ tentarDeNovo }}"
+  class="h-34 borda-1-solid-b42318 fundo-branco cor-vermelho-600 raio-8 p-0-12 fs-13 fw-600">Tentar de novo</button></div></sc-if>
 
 <sc-if value="{{ semLogin }}" hint-placeholder-val="{{ false }}"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-24 texto-center cor-cinza-600 fs-14 lh-1p5 fundo-branco">Entre com a conta da direção da escola para ver os oficineiros, as atividades e os relatórios.</div></sc-if>
 <sc-if value="{{ is.inicio }}" hint-placeholder-val="{{ true }}"><dc-import name="direcao-inicio" contexto="{{ contexto }}"></dc-import></sc-if>
