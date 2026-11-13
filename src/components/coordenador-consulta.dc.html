@@ -150,7 +150,7 @@ class Component extends DCLogic {
       devolvido: 'Aberto para correção pelo oficineiro'
     };
     const opts = opcoes => opcoes.map(([v, l]) => ({ valor: v, rotulo: l }));
-    const rot = (opcoes, v) => (opcoes.find(x => x[0] === (v || '')) || [, v || '—'])[1];
+    const rot = (opcoes, v) => (opcoes.find(x => x[0] === (v || '')) || [undefined, v || '—'])[1];
     const hmSP = v =>
       v
         ? new Date(v).toLocaleTimeString('pt-BR', {

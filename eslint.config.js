@@ -20,7 +20,16 @@ module.exports = [
     }
   },
   {
-    files: ['eslint.config.js'],
+    files: ['src/components/*.dc.js'],
+    languageOptions: {
+      globals: { DCLogic: 'readonly' }
+    },
+    rules: {
+      'no-unused-vars': ['error', { caughtErrors: 'none', varsIgnorePattern: '^Component$' }]
+    }
+  },
+  {
+    files: ['eslint.config.js', 'scripts/*.js'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'commonjs',
