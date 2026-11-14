@@ -55,6 +55,7 @@ jobs:
       - run: supabase db start
       - run: supabase db reset --no-seed
       - run: supabase test db
+      - run: supabase db reset --no-seed
       - name: Auditoria de RLS
         env:
           PGHOST: 127.0.0.1
