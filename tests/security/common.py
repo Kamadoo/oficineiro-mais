@@ -5,14 +5,22 @@ import sys
 from pathlib import Path
 
 DB = sys.argv[1] if len(sys.argv) > 1 else os.environ.get("PGDATABASE", "postgres")
-ENV = {
+BASE = {
     **os.environ,
     "PGHOST": os.environ.get("PGHOST", "127.0.0.1"),
     "PGPORT": os.environ.get("PGPORT", "54322"),
     "PGUSER": os.environ.get("PGUSER", "postgres"),
     "PGPASSWORD": os.environ.get("PGPASSWORD", "postgres"),
-    "PGOPTIONS": " ".join(filter(None, [os.environ.get("PGOPTIONS", ""), "-c lc_messages=C"])),
 }
+
+
+def ambiente():
+    ingles = {**BASE, "PGOPTIONS": " ".join(filter(None, [os.environ.get("PGOPTIONS", ""), "-c lc_messages=C"]))}
+    r = subprocess.run(["psql", "-X", "-q", "-A", "-t", "-d", DB, "-c", "select 1"], capture_output=True, text=True, errors="replace", env=ingles)
+    return ingles if r.returncode == 0 else BASE
+
+
+ENV = ambiente()
 USUARIOS = {
     "gerente": "00000000-0000-0000-0000-00000000a001",
     "coordenador": "00000000-0000-0000-0000-00000000a002",
