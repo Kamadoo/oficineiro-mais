@@ -69,3 +69,9 @@ test('textos, números e plural', () => {
 test('escolher copia só as chaves pedidas', () => {
   assert.deepEqual({ ...Base.escolher({ a: 1, b: 2, c: 3 }, ['a', 'c', 'd']) }, { a: 1, c: 3, d: undefined });
 });
+
+test('texto das marcações feitas sem internet', () => {
+  assert.equal(Base.textoSemInternet('entrada', 5100), 'Entrada feita sem internet, recebida 1h25 depois');
+  assert.equal(Base.textoSemInternet('saida', 2400), 'Saída feita sem internet, recebida 40 min depois');
+  assert.equal(Base.textoSemInternet('outro', null), 'Marcação feita sem internet, recebida 0 min depois');
+});

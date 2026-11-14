@@ -1,5 +1,27 @@
 # Histórico de mudanças
 
+## Não publicado
+
+### Presença
+
+- Direção (espelho do oficineiro) e Coordenação (Presença na Escola › Por oficineiro) mostram as marcações feitas sem internet e quanto tempo depois chegaram.
+- No Relatório Geral do Oficineiro, "Justificar" e "Solicitar ajuste" abrem a tela Presença com o pedido de ajuste já preenchido.
+
+### Documentos
+
+- Cada relatório mensal recebe um código de verificação, impresso no rodapé dos relatórios de presença e de atividades. Qualquer pessoa confere o documento na entrada do sistema ("Conferir um documento" ou `#verificar`), sem login; a consulta mostra a situação, o mês, a escola e o nome abreviado.
+
+### Segurança e dados
+
+- Sessão única por conta: um login novo encerra as outras sessões, e o banco recusa as funções chamadas por uma sessão encerrada.
+- Justificativas, tentativas de presença e assinaturas do espelho passam a exigir o segundo fator também na leitura das próprias linhas.
+- Retenção automática: todo 15 de fevereiro, os registros anteriores a 1º de janeiro de cinco anos atrás são apagados, sem cópia na auditoria; o prazo fica em `configuracoes.retencao_anos` (mínimo 5).
+
+### Testes
+
+- Dados de teste com onboarding, justificativas, marcações sem internet, presença do analista, históricos de visita e de conferência, mudança de escola agendada e espelho assinado.
+- Matriz de permissões cobre as funções do onboarding e a conferência pública.
+
 ## 1.1.0 · 14/11/2026
 
 ### Presença

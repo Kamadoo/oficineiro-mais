@@ -81,7 +81,22 @@
           </label>
           <button class="fsm-btn fsm-btn-afastado" onClick="{{ entrar }}" disabled="{{ ocupado }}">{{ rotuloEntrar }}</button>
           <button class="fsm-link" onClick="{{ irPrimeiroAcesso }}">Primeiro acesso? Ative sua conta aqui</button>
+          <button class="fsm-link" onClick="{{ irVerificar }}">Conferir um documento emitido pelo Oficineiro+</button>
           <p class="fsm-rodape"><a href="ajuda.html">Guia rápido</a><span aria-hidden="true"> · </span><a href="privacidade.html">Aviso de privacidade</a></p>
+        </sc-if>
+
+        <sc-if value="{{ eh.verificar }}" hint-placeholder-val="{{ false }}">
+          <label class="fsm-rotulo fsm-rotulo-afastado" for="fsm-verificacao">Código de verificação</label>
+          <input id="fsm-verificacao" class="fsm-campo" type="text" autoComplete="off" autoCapitalize="characters" spellCheck="false" maxLength="16" placeholder="XXXX-XXXX-XXXX" onKeyDown="{{ enterVerificar }}"></input>
+          <button class="fsm-btn fsm-btn-afastado" onClick="{{ verificarDocumento }}" disabled="{{ ocupado }}">{{ rotuloVerificar }}</button>
+          <sc-if value="{{ temConferencia }}" hint-placeholder-val="{{ false }}">
+            <div role="status" class="ent-usuario">
+              <span class="ent-usuario-titulo">{{ conferencia.titulo }}</span>
+              <b class="ent-usuario-valor">{{ conferencia.situacao }}</b>
+              <span class="ent-usuario-texto">{{ conferencia.texto }}</span>
+            </div>
+          </sc-if>
+          <button class="fsm-link" onClick="{{ voltarLogin }}">Voltar para o acesso</button>
         </sc-if>
 
         <sc-if value="{{ eh.primeiroCpf }}" hint-placeholder-val="{{ false }}">
@@ -614,6 +629,10 @@ class Component extends DCLogic {
                 : ''
       });
     });
+    if (/^#verificar/.test(window.location.hash || '')) {
+      this.setState({ etapa: 'verificar', erro: '', aviso: '' });
+      return;
+    }
     const link = A.sessaoDoLink();
     if (link === 'outro') {
       this.setState({
@@ -630,6 +649,7 @@ class Component extends DCLogic {
       return;
     }
     if (link === true) {
+      this.loginNovo = true;
       this.avancar().catch(e =>
         this.setState({ etapa: 'login', erro: (e && e.message) || 'Não foi possível continuar.' })
       );
@@ -647,6 +667,39 @@ class Component extends DCLogic {
           })
         );
     } else this.setState({ etapa: 'login' });
+  }
+
+  conferirDocumento() {
+    const codigo = this.ler('fsm-verificacao');
+    this.setState({ conferencia: null });
+    return this.executa(async () => {
+      const r = await window.FSM_AUTH.verificarDocumento(codigo);
+      if (!r || !r.encontrado) throw new Error('Nenhum documento encontrado com este código. Confira as letras e os números.');
+      const competencia = new Date(String(r.competencia).slice(0, 10) + 'T12:00:00');
+      const data = valor => (valor ? new Date(valor).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }) : '');
+      const situacao = {
+        fechado: 'Enviado pelo oficineiro, aguardando a direção da escola',
+        aprovado_direcao: 'Aprovado pela direção da escola em ' + data(r.direcao_em),
+        aprovado_coordenacao: 'Aprovado pela coordenação em ' + data(r.coordenacao_em),
+        devolvido: 'Devolvido para correção; esta versão não vale mais'
+      }[r.status];
+      this.setState({
+        conferencia: {
+          titulo: 'Documento autêntico',
+          situacao: situacao || r.status,
+          texto:
+            'Relatório de ' +
+            competencia.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }) +
+            ' de ' +
+            r.pessoa +
+            ', ' +
+            r.escola +
+            '. Enviado em ' +
+            data(r.fechado_em) +
+            '.'
+        }
+      });
+    });
   }
 
   ler(id, limpar) {
@@ -737,6 +790,10 @@ class Component extends DCLogic {
       this.setState({ etapa: 'login', erro: 'O acesso desta conta não foi liberado.' });
       return;
     }
+    if (this.loginNovo) {
+      this.loginNovo = false;
+      await A.encerrarOutrasSessoes().catch(() => null);
+    }
     await gerais;
     this.setState({ etapa: 'dentro', acesso: ac, mfa: null, erro: '', aviso: '' });
     this.carregarPreferencias();
@@ -763,6 +820,10 @@ class Component extends DCLogic {
     const TIT = {
       carregando: ['Boas-vindas', 'Presença na escola, grade e registro das atividades.'],
       login: ['Acesse sua conta', ''],
+      verificar: [
+        'Conferir documento',
+        'Digite o código impresso no rodapé do relatório para confirmar que ele foi emitido pelo Oficineiro+.'
+      ],
       primeiroCpf: [
         'Primeiro acesso',
         'Digite o CPF ou o CNPJ da sua conta. Vamos enviar um código para o seu e-mail institucional.'
@@ -789,6 +850,7 @@ class Component extends DCLogic {
         const cx = document.getElementById('fsm-lembrar');
         try {
           await A.entrar(usuario, senha, !!(cx && cx.checked));
+          this.loginNovo = true;
         } finally {
           this.ler('fsm-senha', true);
         }
@@ -811,6 +873,7 @@ class Component extends DCLogic {
         const codigo = this.ler('fsm-codigo-email', true);
         await A.confirmarPrimeiroAcesso(this.cpf || '', codigo);
         this.cpf = null;
+        this.loginNovo = true;
         await this.avancar();
       });
     const salvarSenha = () =>
@@ -997,6 +1060,7 @@ class Component extends DCLogic {
       eh: {
         carregando: s.etapa === 'carregando',
         login: s.etapa === 'login',
+        verificar: s.etapa === 'verificar',
         primeiroCpf: s.etapa === 'primeiroCpf',
         primeiroCodigo: s.etapa === 'primeiroCodigo',
         mfaCadastro: s.etapa === 'mfaCadastro',
@@ -1007,9 +1071,19 @@ class Component extends DCLogic {
       usuarioGerado: (s.acesso && s.acesso.usuario) || '',
       rotuloEnviar: s.ocupado ? 'Enviando…' : 'Enviar código',
       irPrimeiroAcesso: () => this.setState({ etapa: 'primeiroCpf', erro: '', aviso: '' }),
+      irVerificar: () => this.setState({ etapa: 'verificar', conferencia: null, erro: '', aviso: '' }),
+      rotuloVerificar: s.ocupado ? 'Conferindo…' : 'Conferir',
+      verificarDocumento: () => this.conferirDocumento(),
+      enterVerificar: e => {
+        if (e.key === 'Enter') this.conferirDocumento();
+      },
+      temConferencia: !!s.conferencia,
+      conferencia: s.conferencia || { titulo: '', situacao: '', texto: '' },
       voltarLogin: () => {
         this.cpf = null;
-        this.setState({ etapa: 'login', erro: '', aviso: '' });
+        if (/^#verificar/.test(window.location.hash || ''))
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        this.setState({ etapa: 'login', conferencia: null, erro: '', aviso: '' });
       },
       formatarCpf: e => {
         const d = (e.target.value || '').replace(/\D/g, '').slice(0, 14);

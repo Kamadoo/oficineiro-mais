@@ -620,6 +620,18 @@ window.FSM_BASE = (() => {
     const p = String(h || '').split(':');
     return Number(p[0]) * 60 + Number(p[1] || 0);
   }
+  const MARCACOES = {
+    entrada: 'Entrada',
+    saida_almoco: 'Saída para o almoço',
+    retorno_almoco: 'Volta do almoço',
+    saida: 'Saída'
+  };
+  function textoSemInternet(tipo, atrasoSegundos) {
+    const minutos = Math.max(0, Math.round(Number(atrasoSegundos || 0) / 60));
+    const espera =
+      minutos >= 60 ? Math.floor(minutos / 60) + 'h' + String(minutos % 60).padStart(2, '0') : minutos + ' min';
+    return (MARCACOES[tipo] || 'Marcação') + ' feita sem internet, recebida ' + espera + ' depois';
+  }
   const PRAZO_UTEIS = 5;
   function prazoDe(comp) {
     let d = add(dataDe(cicloFimIso(comp)), 1),
@@ -712,6 +724,7 @@ window.FSM_BASE = (() => {
     hmTs,
     turmaTxt,
     minDeHora,
+    textoSemInternet,
     PRAZO_UTEIS,
     prazoDe,
     p2,

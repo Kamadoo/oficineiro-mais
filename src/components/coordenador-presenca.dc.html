@@ -697,7 +697,10 @@ class Component extends DCLogic {
           situacao: st[0],
           cor: st[1],
           fundo: st[2],
-          nota: ''
+          nota: (contexto.semInternetDoCiclo || [])
+            .filter(marcacao => marcacao.presenca_id === p.id)
+            .map(marcacao => Base.textoSemInternet(marcacao.tipo, marcacao.diferenca_relogio_s))
+            .join(' · ')
         };
       });
     const horasAulaDoOficineiro = minutosDeHoraAula(registrosDoOficineiro);
@@ -785,8 +788,9 @@ class Component extends DCLogic {
       ciclo: contexto.cicloDaPresenca || (opcoesDeCiclo[0] ? opcoesDeCiclo[0].valor : ''),
       opcoesDeCiclo,
       escolherCiclo: e =>
-        contexto.setState({ cicloDaPresenca: e.target.value, presencasDoCiclo: [], registrosDoCiclo: [] }, () =>
-          contexto.carregarPresencasDoCiclo()
+        contexto.setState(
+          { cicloDaPresenca: e.target.value, presencasDoCiclo: [], registrosDoCiclo: [], semInternetDoCiclo: [] },
+          () => contexto.carregarPresencasDoCiclo()
         ),
       conectado: contexto.conectado,
       escolas: escolasComRaio,

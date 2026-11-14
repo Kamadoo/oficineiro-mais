@@ -740,7 +740,7 @@ window.FSM_AUTH =
       async relatorioDoMes(competencia) {
         if (!/^\d{4}-\d{2}-01$/.test(String(competencia))) throw new Error('Mês inválido.');
         const r = await chamar(
-          '/rest/v1/relatorios_mensais?select=id,competencia,status,fechado_em,direcao_em,coordenacao_em,motivo_devolucao,devolvido_papel&competencia=eq.' +
+          '/rest/v1/relatorios_mensais?select=id,competencia,status,fechado_em,direcao_em,coordenacao_em,motivo_devolucao,devolvido_papel,codigo_verificacao&competencia=eq.' +
             competencia,
           { token: token() }
         );
@@ -752,6 +752,13 @@ window.FSM_AUTH =
           token: token(),
           corpo: { p_competencia: competencia }
         });
+      },
+      verificarDocumento(codigo) {
+        const limpo = String(codigo || '')
+          .replace(/[^A-Za-z0-9]/g, '')
+          .toUpperCase();
+        if (limpo.length !== 12) return Promise.reject(new Error('O código tem 12 letras e números.'));
+        return chamar('/rest/v1/rpc/verificar_documento', { metodo: 'POST', corpo: { p_codigo: limpo } });
       },
       relatoriosEscola(competencia) {
         if (!/^\d{4}-\d{2}-01$/.test(String(competencia))) return Promise.reject(new Error('Mês inválido.'));
@@ -1011,6 +1018,18 @@ window.FSM_AUTH =
       escolas() {
         return chamar(
           '/rest/v1/escolas?select=id,sigla,nome,latitude,longitude,raio_m,endereco,carteira_id,ativa&order=sigla',
+          { token: token() }
+        );
+      },
+      marcacoesSemInternet(ini, fim) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(String(ini)) || !/^\d{4}-\d{2}-\d{2}$/.test(String(fim)))
+          return Promise.reject(new Error('Período inválido.'));
+        return chamarTudo(
+          '/rest/v1/presenca_marcacoes?select=presenca_id,tipo,diferenca_relogio_s&sem_internet=is.true&order=registrado_em&registrado_em=gte.' +
+            ini +
+            'T00:00:00-03:00&registrado_em=lte.' +
+            fim +
+            'T23:59:59-03:00',
           { token: token() }
         );
       },
@@ -1472,6 +1491,10 @@ window.FSM_AUTH =
           }
         });
       },
+      encerrarOutrasSessoes() {
+        return chamar('/auth/v1/logout?scope=others', { metodo: 'POST', token: token() });
+      },
+
       async sairDeTodos() {
         await chamar('/auth/v1/logout?scope=global', { metodo: 'POST', token: token() });
         limpa();

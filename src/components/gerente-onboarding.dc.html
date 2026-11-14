@@ -106,7 +106,7 @@ class Component extends DCLogic {
     const F = memoria.filtro || { ordem: '', carteira: '', situacao: 'pendente' };
     const pend = itens.filter(i => i.status === 'pendente');
     const ST = {
-      pendente: ['Pendente', 'var(--texto-ambar-660)', 'var(--fundo-ambar-80)'],
+      pendente: ['Pendente', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)'],
       concluido: ['Concluído', 'var(--texto-verde-700)', 'var(--fundo-verde-80)']
     };
     const diasDesde = iso => (iso ? Math.max(0, Math.round((dataDe(hoje) - dataDe(iso)) / 864e5)) : 0);
