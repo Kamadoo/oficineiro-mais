@@ -178,7 +178,7 @@
     <svg class="icone flex-none cor-ambar-660 mt-1" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M2 2l20 20"></path><path d="M8.5 16.4a5 5 0 0 1 7 0"></path><path d="M5 12.6a10 10 0 0 1 4.6-2.4"></path><path d="M19 12.6a10 10 0 0 0-2.3-1.6"></path><path d="M12 20h.01"></path></svg>
     <div class="d-flex eixo-column gap-6 flex-1 min-w-0">
       <b class="cor-ambar-745 fs-14">Sem internet</b>
-      <span class="fs-13 lh-1p5 texto-quebra-pretty">A presença e os registros de atividade precisam de conexão. A grade e as turmas mostradas são as da última sincronização ({{ sincronizadoTexto }}).</span>
+      <span class="fs-13 lh-1p5 texto-quebra-pretty">A presença pode ser marcada: ela fica guardada neste aparelho, com a hora e a localização do momento, e é enviada quando a conexão voltar (até 8 horas depois). Os registros de atividade precisam de conexão. A grade e as turmas mostradas são as da última sincronização ({{ sincronizadoTexto }}).</span>
     </div>
   </div>
 </sc-if>
@@ -368,6 +368,13 @@ const ROTULO_DA_MARCACAO = {
   retorno_almoco: 'Volta do almoço',
   saida: 'Saída'
 };
+const PROXIMA_MARCACAO = {
+  entrada: 'saida_almoco',
+  saida_almoco: 'retorno_almoco',
+  retorno_almoco: 'saida',
+  saida: null
+};
+const CHAVE_DA_FILA_DE_PRESENCA = 'fsm_presenca_pendente';
 const ajusteVazio = () => ({
   tipo: '',
   data: '',
@@ -602,8 +609,11 @@ class Component extends DCLogic {
       if (navigator.onLine !== this.state.semInternet) return;
       this.setState({ semInternet: !navigator.onLine, sincronizadoAs: Base.hm(Base.nowMin()) });
       this.avisar(
-        navigator.onLine ? 'Conexão restabelecida' : 'Sem internet · reconecte para registrar presença e atividades'
+        navigator.onLine
+          ? 'Conexão restabelecida'
+          : 'Sem internet · a presença fica guardada no aparelho; as atividades precisam de conexão'
       );
+      if (navigator.onLine) this.enviarFilaDePresenca();
     };
     window.addEventListener('online', this.aoMudarRede);
     this.aoSair = evento => {
@@ -1360,7 +1370,7 @@ class Component extends DCLogic {
         raio: daEscola.raio_m
       };
       this.setState({ carregado: true, escola, nomeDoUsuario: (acesso && acesso.nome) || '' }, () => {
-        this.carregarPresencaDeHoje();
+        this.carregarPresencaDeHoje().then(() => this.enviarFilaDePresenca());
         this.carregarEspelho();
         this.carregarAjustes();
         this.carregarTurmas();
@@ -1374,9 +1384,125 @@ class Component extends DCLogic {
       this.avisar((x && x.message) || 'Não foi possível carregar os dados da escola');
     }
   }
+  filaDePresenca() {
+    const eu = window.FSM_AUTH.meuId();
+    try {
+      const lista = JSON.parse(localStorage.getItem(CHAVE_DA_FILA_DE_PRESENCA) || '[]');
+      return Array.isArray(lista) ? lista.filter(item => item && item.usuario === eu && eu) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  gravarFilaDePresenca(minha) {
+    const eu = window.FSM_AUTH.meuId();
+    let outras = [];
+    try {
+      outras = JSON.parse(localStorage.getItem(CHAVE_DA_FILA_DE_PRESENCA) || '[]').filter(
+        item => item && item.usuario !== eu
+      );
+    } catch (e) {
+      outras = [];
+    }
+    const todas = outras.concat(minha);
+    try {
+      if (todas.length) localStorage.setItem(CHAVE_DA_FILA_DE_PRESENCA, JSON.stringify(todas));
+      else localStorage.removeItem(CHAVE_DA_FILA_DE_PRESENCA);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  comFilaDePresenca(presenca) {
+    const fila = this.filaDePresenca();
+    if (!presenca || !fila.length) return presenca;
+    let proxima = presenca.proxima;
+    const marcacoes = (presenca.marcacoes || []).slice();
+    fila.forEach(item => {
+      if (item.tipo !== proxima && !(item.tipo === 'saida' && proxima === 'saida_almoco')) return;
+      marcacoes.push({ tipo: item.tipo, em: item.quando, pendente: true });
+      proxima = PROXIMA_MARCACAO[item.tipo];
+    });
+    return { ...presenca, marcacoes, proxima };
+  }
+  guardarPresencaSemInternet(tipo, coordenadas) {
+    const eu = window.FSM_AUTH.meuId();
+    const quando = new Date(Date.now() + (this.state.desvioDoRelogio || 0)).toISOString();
+    const item = {
+      usuario: eu,
+      tipo,
+      lat: coordenadas.latitude,
+      lng: coordenadas.longitude,
+      precisao: coordenadas.accuracy,
+      quando
+    };
+    if (!eu || !this.gravarFilaDePresenca(this.filaDePresenca().concat([item]))) {
+      this.setState({
+        erroDaPresenca: {
+          titulo: 'Registro não enviado',
+          texto: 'Sem internet e sem espaço para guardar a marcação neste aparelho. Tente de novo com conexão.',
+          justificar: true
+        }
+      });
+      return;
+    }
+    this.setState(s => ({
+      presencaDeHoje: this.comFilaDePresenca({
+        ...s.presencaDeHoje,
+        marcacoes: (s.presencaDeHoje.marcacoes || []).filter(m => !m.pendente)
+      })
+    }));
+    this.avisar(
+      ROTULO_DA_MARCACAO[tipo] + ' guardada às ' + horaDeBrasilia(quando) + ' · será enviada quando a conexão voltar'
+    );
+  }
+  async enviarFilaDePresenca() {
+    if (this.enviandoFila || !navigator.onLine) return;
+    const fila = this.filaDePresenca();
+    if (!fila.length) return;
+    this.enviandoFila = true;
+    const mensagens = [];
+    let restantes = fila.slice();
+    try {
+      for (const item of fila) {
+        try {
+          const resposta = await window.FSM_AUTH.marcarPresenca(
+            item.tipo,
+            item.lat,
+            item.lng,
+            item.precisao,
+            item.quando
+          );
+          mensagens.push(
+            resposta && resposta.aceita
+              ? ROTULO_DA_MARCACAO[item.tipo] + ' de ' + horaDeBrasilia(item.quando) + ' enviada'
+              : ROTULO_DA_MARCACAO[item.tipo] +
+                  ' de ' +
+                  horaDeBrasilia(item.quando) +
+                  ' não aceita: ' +
+                  String((resposta && resposta.motivo) || '').toLowerCase()
+          );
+        } catch (x) {
+          if (!navigator.onLine || /Sem conexão/.test((x && x.message) || '')) break;
+          mensagens.push(
+            ROTULO_DA_MARCACAO[item.tipo] +
+              ' de ' +
+              horaDeBrasilia(item.quando) +
+              ' não aceita: ' +
+              ((x && x.message) || 'erro')
+          );
+        }
+        restantes = restantes.slice(1);
+        this.gravarFilaDePresenca(restantes);
+      }
+    } finally {
+      this.enviandoFila = false;
+    }
+    if (mensagens.length) this.avisar(mensagens.join(' · '));
+    await this.carregarPresencaDeHoje();
+  }
   async carregarPresencaDeHoje() {
     try {
-      const presenca = await window.FSM_AUTH.minhaPresencaHoje();
+      const presenca = this.comFilaDePresenca(await window.FSM_AUTH.minhaPresencaHoje());
       this.setState({ presencaDeHoje: presenca, desvioDoRelogio: Date.parse(presenca.agora) - Date.now() });
       if (presenca.proxima) this.conferirRaio();
     } catch (x) {
@@ -1452,6 +1578,11 @@ class Component extends DCLogic {
       });
       return;
     }
+    if (!navigator.onLine) {
+      this.guardarPresencaSemInternet(tipo, posicao.coords);
+      this.setState({ marcandoPresenca: false });
+      return;
+    }
     try {
       const coordenadas = posicao.coords;
       const resposta = await window.FSM_AUTH.marcarPresenca(
@@ -1482,6 +1613,10 @@ class Component extends DCLogic {
       } else this.avisar(ROTULO_DA_MARCACAO[tipo] + ' registrada às ' + horaDeBrasilia(resposta.em));
       await this.carregarPresencaDeHoje();
     } catch (x) {
+      if (/Sem conexão/.test((x && x.message) || '')) {
+        this.guardarPresencaSemInternet(tipo, posicao.coords);
+        return;
+      }
       this.setState({
         erroDaPresenca: {
           titulo: 'Registro não enviado',

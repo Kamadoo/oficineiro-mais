@@ -473,7 +473,16 @@ window.FSM_AUTH =
         const r = await chamar('/rest/v1/rpc/minha_escola', { metodo: 'POST', token: token(), corpo: {} });
         return (r && r[0]) || null;
       },
-      marcarPresenca(tipo, lat, lng, precisao) {
+      meuId() {
+        try {
+          const parte = String((sessao && sessao.access_token) || '').split('.')[1] || '';
+          const dados = JSON.parse(atob(parte.replace(/-/g, '+').replace(/_/g, '/')));
+          return typeof dados.sub === 'string' ? dados.sub : '';
+        } catch (e) {
+          return '';
+        }
+      },
+      marcarPresenca(tipo, lat, lng, precisao, quando) {
         const rotulo = {
           entrada: 'Entrada',
           saida_almoco: 'Saída para almoço',
@@ -488,7 +497,8 @@ window.FSM_AUTH =
               p_tipo: tipo,
               p_lat: lat == null ? null : Number(lat),
               p_lng: lng == null ? null : Number(lng),
-              p_precisao: precisao == null ? null : Math.round(precisao)
+              p_precisao: precisao == null ? null : Math.round(precisao),
+              p_quando: quando || null
             }
           }),
           { evento: rotulo[tipo] || 'Presença' }

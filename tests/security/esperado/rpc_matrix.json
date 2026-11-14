@@ -423,7 +423,7 @@
   "gerente": "recusado",
   "oficineiro": "recusado"
  },
- "marcar_presenca(p_tipo text, p_lat double precision, p_lng double precision, p_precisao integer)": {
+ "marcar_presenca(p_tipo text, p_lat double precision, p_lng double precision, p_precisao integer, p_quando timestamp with time zone)": {
   "administrador": "recusado",
   "analista": "recusado",
   "coordenador": "recusado",
