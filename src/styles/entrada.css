@@ -377,6 +377,9 @@ html[data-tema="escuro"] .fsm-link:hover {
   align-items: center;
   justify-content: center;
 }
+.ent-orbita picture {
+  display: contents;
+}
 .ent-orbita img {
   width: 100%;
   max-width: 480px;

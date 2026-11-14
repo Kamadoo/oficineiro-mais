@@ -50,7 +50,7 @@ def conferir(nome, atual):
     arquivo = Path(__file__).with_name("esperado") / f"{nome}.json"
     if os.environ.get("GRAVAR_ESPERADO") == "1":
         arquivo.parent.mkdir(exist_ok=True)
-        arquivo.write_text(json.dumps(atual, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        arquivo.write_text(json.dumps(atual, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
         print("esperado gravado em", arquivo.name)
         return 0
     esperado = json.loads(arquivo.read_text(encoding="utf-8"))

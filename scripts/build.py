@@ -24,16 +24,16 @@ VENDOR_SHA256 = {
     "vendor/leaflet/leaflet-1.9.4.css": "a7837102824184820dfa198d1ebcd109ff6d0ff9a2672a074b9a1b4d147d04c6",
     "vendor/react/react-18.3.1.production.min.js": "d949f1c3687aedadcedac85261865f29b17cd273997e7f6b2bfc53b2f9d4c4dd",
     "vendor/react/react-dom-18.3.1.production.min.js": "35f4f974f4b2bcd44da73963347f8952e341f83909e4498227d4e26b98f66f0d",
-    "vendor/fonts/inter/inter.css": "2f8420c6a955fa71964ab93229bb7f8f227c755c7e28025f78dffcc07ad1763b",
+    "vendor/fonts/inter/inter.css": "d9a04c401dd8048a1398665a1039833c3f5027572503e7e55e8dc13d957a2e17",
 }
 REACT_SRI = {
     "vendor/react/react-18.3.1.production.min.js": "sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z",
     "vendor/react/react-dom-18.3.1.production.min.js": "sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1",
 }
-FONTE_INTER = re.compile(r'url\("\./(inter-[0-9a-f]{12}\.woff)"\)')
+FONTE_INTER = re.compile(r'url\("\./(inter-[0-9a-f]{12}\.woff2?)"\)')
 FONTES_GOOGLE = re.compile(r'<link href="https://fonts\.googleapis\.com/css2[^"]*" rel="stylesheet">')
 PRECONEXAO = re.compile(r'<link rel="preconnect" href="https://fonts\.googleapis\.com">\n?')
-REFERENCIA = re.compile(r'(src|href)="(\.{1,2}/[^"]+)"')
+REFERENCIA = re.compile(r'(src|href|srcset)="(\.{1,2}/[^"]+)"')
 REFERENCIA_JS = re.compile(r"""(['"])(\.\./vendor/[^'"]+)\1""")
 
 try:
@@ -42,6 +42,7 @@ try:
     GERADO = datetime.datetime.now(zoneinfo.ZoneInfo("America/Sao_Paulo")).strftime("%d/%m/%Y %H:%M")
 except Exception:
     GERADO = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
+VERSAO = json.loads((RAIZ / "package.json").read_text(encoding="utf-8"))["version"]
 
 
 def caminho(ref):
@@ -61,7 +62,7 @@ def ler_conferido(p):
     if chave.startswith("vendor/") and chave in VENDOR_SHA256 and hashlib.sha256(dados).hexdigest() != VENDOR_SHA256[chave]:
         raise SystemExit(chave + ": arquivo de terceiros alterado")
     if chave == "src/lib/sobre.js":
-        dados = dados.replace(b"__FSM_GERADO__", GERADO.encode("ascii"))
+        dados = dados.replace(b"__FSM_GERADO__", GERADO.encode("ascii")).replace(b"__FSM_VERSAO__", VERSAO.encode("ascii"))
     return dados
 
 
@@ -74,7 +75,7 @@ class Publicador:
         partes = nome.rsplit(".", 2) if nome.endswith(".dc.html") else nome.rsplit(".", 1)
         final = "%s.%s.%s" % (partes[0], hashlib.sha256(dados).hexdigest()[:12], ".".join(partes[1:]))
         (ASSETS / final).write_bytes(dados)
-        if not final.endswith((".woff", ".woff2", ".png")):
+        if not final.endswith((".woff", ".woff2", ".png", ".webp")):
             self.textos.append(("dist/a/" + final, dados.decode("utf-8")))
         return "./a/" + final
 

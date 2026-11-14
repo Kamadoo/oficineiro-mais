@@ -39,6 +39,14 @@
   "gerente": "recusado",
   "oficineiro": "recusado"
  },
+ "admin_erros_navegador(p_limite integer)": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
  "admin_exigir_troca_senha(p_usuario uuid, p_motivo text)": {
   "administrador": "recusado",
   "analista": "recusado",
@@ -550,6 +558,14 @@
   "direcao": "recusado",
   "gerente": "recusado",
   "oficineiro": "recusado"
+ },
+ "registrar_erro_navegador(p_mensagem text, p_pagina text, p_origem text, p_linha integer, p_coluna integer, p_navegador text, p_versao text)": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
  },
  "registrar_visita(p jsonb)": {
   "administrador": "recusado",

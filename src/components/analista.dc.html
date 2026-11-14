@@ -189,7 +189,6 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 const Base = window.FSM_BASE;
-const DURACAO_DO_AVISO = 3600;
 const CHAVES_DAS_GAVETAS = [
   'dataMaxima',
   'dataMinima',
@@ -378,7 +377,7 @@ class Component extends DCLogic {
   avisar(texto) {
     this.setState({ aviso: texto });
     clearTimeout(this.avisoTempo);
-    this.avisoTempo = setTimeout(() => this.setState({ aviso: '' }), DURACAO_DO_AVISO);
+    this.avisoTempo = setTimeout(() => this.setState({ aviso: '' }), Base.DURACAO_DO_AVISO);
   }
   usuario() {
     const A = window.FSM_AUTH;

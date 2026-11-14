@@ -119,10 +119,10 @@ window.FSM_AUTH =
           body: opcoes.corpo === undefined ? undefined : JSON.stringify(opcoes.corpo)
         });
       } catch (e) {
-        throw new Error('Sem conexão com o servidor. Verifique a internet.');
+        throw new Error('Sem conexão com o servidor. Verifique a internet.', { cause: e });
       }
       const txt = await r.text();
-      let corpo = null;
+      let corpo;
       try {
         corpo = txt ? JSON.parse(txt) : null;
       } catch (e) {
@@ -308,6 +308,49 @@ window.FSM_AUTH =
       }
       return '';
     }
+
+    const errosEnviados = new Set();
+    function registrarErro(mensagem, origem, linha, coluna) {
+      try {
+        if (!configurado() || !sessao || !sessao.access_token) return;
+        const texto = String(mensagem || '').slice(0, 500);
+        if (!texto || texto === 'Script error.' || errosEnviados.size >= 10 || errosEnviados.has(texto)) return;
+        errosEnviados.add(texto);
+        chamar('/rest/v1/rpc/registrar_erro_navegador', {
+          metodo: 'POST',
+          token: sessao.access_token,
+          corpo: {
+            p_mensagem: texto,
+            p_pagina: (telaAtual() || location.pathname).slice(0, 200),
+            p_origem: String(origem || '').slice(0, 300),
+            p_linha: Number.isInteger(linha) ? linha : null,
+            p_coluna: Number.isInteger(coluna) ? coluna : null,
+            p_navegador: String(navigator.userAgent || '').slice(0, 200),
+            p_versao: String((window.FSM_SOBRE && window.FSM_SOBRE.versao) || '').slice(0, 20)
+          }
+        }).catch(() => {});
+      } catch (e) {
+        return;
+      }
+    }
+    window.addEventListener('error', evento => {
+      if (evento.filename && !evento.filename.startsWith(location.origin)) return;
+      registrarErro(
+        evento.message || (evento.error && evento.error.message),
+        evento.filename,
+        evento.lineno,
+        evento.colno
+      );
+    });
+    window.addEventListener('unhandledrejection', evento => {
+      const motivo = evento.reason;
+      registrarErro(
+        'Promessa recusada: ' + (motivo && motivo.message ? motivo.message : String(motivo)),
+        '',
+        null,
+        null
+      );
+    });
 
     function registrar(tipo, detalhes) {
       try {
@@ -1354,6 +1397,13 @@ window.FSM_AUTH =
             p_categoria: f.categoria || null,
             p_limite: f.limite || 500
           }
+        });
+      },
+      adminErrosNavegador(limite) {
+        return chamar('/rest/v1/rpc/admin_erros_navegador', {
+          metodo: 'POST',
+          token: token(),
+          corpo: { p_limite: limite || 200 }
         });
       },
       adminAuditoria(f) {

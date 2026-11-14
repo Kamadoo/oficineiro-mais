@@ -39,7 +39,7 @@
           width="14" height="14" rx="3" fill="#3ECDF3"></rect><rect x="17" y="17" width="14" height="14" rx="3"
           fill="#35E47D"></rect></svg><span>Oficineiro<b>+</b></span></div>
         <div class="ent-orbita">
-          <img src="../public/brand/entrada-orbita.png" alt="" class="{{ orbitaCls }}"></img>
+          <picture><source srcset="../public/brand/entrada-orbita.webp" type="image/webp"></source><img src="../public/brand/entrada-orbita.png" alt="" class="{{ orbitaCls }}"></img></picture>
         </div>
         <div class="ent-lema">
           <p class="ent-lema-t">Cada oficina, <span>uma nova forma de aprender.</span></p>
@@ -944,7 +944,7 @@ class Component extends DCLogic {
           ['Suporte', sup.nome || 'Oficineiro+ Suporte Online'],
           ['Contato', contato || '~'],
           ['Atendimento', sup.horario || '~'],
-          ['Versão do sistema', 'Oficineiro+ ' + (SO.versao || '1.0') + (SO.fase ? ' · ' + SO.fase : '') + gerado]
+          ['Versão do sistema', 'Oficineiro+ ' + (SO.versao || '') + (SO.fase ? ' · ' + SO.fase : '') + gerado]
         ].map(([r, v]) => ({ r, v }))
       };
     }
