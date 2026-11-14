@@ -202,6 +202,10 @@ class Component extends DCLogic {
         else if (dia.situacao === 'pendente')
           observacao = !dia.saida ? 'Saída não registrada' : 'Volta do almoço não registrada';
         if (dia.ajuste) observacao = (observacao ? observacao + ' · ' : '') + SITUACOES_JUSTIFICATIVA[dia.ajuste];
+        const semInternet = (dia.sem_internet || []).map(marcacao =>
+          Base.textoSemInternet(marcacao.tipo, marcacao.atraso_s)
+        );
+        if (semInternet.length) observacao = (observacao ? observacao + ' · ' : '') + semInternet.join(' · ');
         return {
           data: Base.WDL[data.getDay()] + ', ' + Base.dmy(data),
           horarios: horarios || '—',

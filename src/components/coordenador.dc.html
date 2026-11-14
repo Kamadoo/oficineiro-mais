@@ -243,6 +243,7 @@ const ESTADO_DAS_TELAS = [
   'oficineiroDaPresenca',
   'presencasDoCiclo',
   'registrosDoCiclo',
+  'semInternetDoCiclo',
   'escolas',
   'raiosEditados',
   'carregandoPresenca',
@@ -517,6 +518,7 @@ class Component extends DCLogic {
       contratadaEditada: null,
       salvandoContratada: false,
       presencasDoCiclo: [],
+      semInternetDoCiclo: [],
       registrosDoCiclo: [],
       raiosEditados: {},
       oficineiroDaPresenca: '',
@@ -810,10 +812,15 @@ class Component extends DCLogic {
     this.setState({ carregandoPresenca: true });
     try {
       const A = window.FSM_AUTH;
-      const [r, g] = await Promise.all([A.presencasRede(ini, fim), A.registrosRede(ini, fim).catch(() => [])]);
+      const [r, g, semInternet] = await Promise.all([
+        A.presencasRede(ini, fim),
+        A.registrosRede(ini, fim).catch(() => []),
+        A.marcacoesSemInternet(ini, fim).catch(() => [])
+      ]);
       this.setState({
         presencasDoCiclo: r || [],
         registrosDoCiclo: g || [],
+        semInternetDoCiclo: semInternet || [],
         carregandoPresenca: false
       });
     } catch (x) {

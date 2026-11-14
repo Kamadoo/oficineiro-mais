@@ -107,5 +107,115 @@ select e.id, 'Pessoa ' || e.sigla || ' ' || n, case when n % 4 = 0 then 'P' else
 from public.escolas e, generate_series(1, 45) n
 where e.sigla in ('Ema', 'Ecl', 'Erv');
 
+select set_config('request.jwt.claims', '{"role":"service_role"}', false);
+
+select public.importar_os(jsonb_build_object(
+  'numero', o.numero, 'secretaria', o.secretaria, 'arquivo', o.arquivo, 'recebida_em', o.recebida_em,
+  'linhas', (
+    select jsonb_agg(jsonb_build_object(
+      'seq', n, 'nome', o.prefixo || ' ' || n, 'email', lower(o.secretaria) || '.servidor' || n || '@exemplo.test',
+      'cpf', c.cpf, 'matricula', lpad((o.base + n)::text, 6, '0'),
+      'cargo', case when n % 3 = 0 then 'Coordenador pedagógico' else 'Professor' end,
+      'tipo', case when n % 4 = 0 then 'Contratado' else 'Efetivo' end,
+      'lotacao', 'Escola ' || e.sigla, 'escola_sigla', e.sigla, 'carteira_id', e.carteira_id) order by n)
+    from generate_series(1, o.quantidade) n
+    cross join lateral (
+      select e.sigla, e.carteira_id from public.escolas e where e.carteira_id is not null
+      order by e.id offset (n % 6) limit 1) e
+    cross join lateral (select lpad((o.base * 1000 + n * 7919)::text, 9, '0') as b) b
+    cross join lateral (
+      select ((sum(substr(b.b, i, 1)::int * (11 - i)) * 10) % 11) % 10 as d1 from generate_series(1, 9) i) d1
+    cross join lateral (
+      select b.b || d1.d1 || ((sum(substr(b.b || d1.d1, i, 1)::int * (12 - i)) * 10) % 11) % 10 as cpf
+      from generate_series(1, 10) i) c)))
+from (values
+  ('101', 'SEMED', 'os_semed_101_2026.xlsx', '2026-10-20', 'Servidora Exemplo', 18, 310),
+  ('007', 'SEMAD', 'os_semad_007_2026.xlsx', '2026-11-04', 'Servidor Exemplo', 8, 420)
+) o(numero, secretaria, arquivo, recebida_em, prefixo, quantidade, base);
+
+select set_config('request.jwt.claims', '', false);
+
+update public.onboarding_os set importada_por = '00000000-0000-0000-0000-00000000a001',
+  importada_em = (recebida_em + time '10:00') at time zone 'America/Sao_Paulo';
+
+update public.onboarding_itens i
+   set status = 'concluido', baixa_data = date '2026-10-28', baixa_forma = 'Acesso criado na plataforma',
+       baixa_obs = 'Primeiro acesso acompanhado pela analista', baixa_por = '00000000-0000-0000-0000-00000000a001'
+ where i.os_id = 'SEMED-101' and i.id % 2 = 0;
+
+insert into public.presenca_marcacoes (presenca_id, oficineiro_id, tipo, registrado_em, recebido_em, sem_internet,
+                                       diferenca_relogio_s, precisao_m, distancia_m, dentro_raio, aparelho)
+select p.id, p.oficineiro_id, m.tipo, m.quando, m.quando + make_interval(secs => m.atraso), m.atraso > 0, m.atraso,
+       12, case m.tipo when 'entrada' then p.distancia_inicio_m else p.distancia_fim_m end, true, 'aparelho-exemplo-01'
+from public.presencas p
+cross join lateral (values
+  ('entrada', p.inicio,
+   case when (p.oficineiro_id = '00000000-0000-0000-0000-00000000a006' and p.data = date '2026-11-04')
+          or (p.oficineiro_id = '00000000-0000-0000-0000-00000000a007' and p.data = date '2026-10-29') then 5100 else 0 end),
+  ('saida', p.fim,
+   case when p.oficineiro_id = '00000000-0000-0000-0000-00000000a007' and p.data = date '2026-11-05' then 2400 else 0 end)
+) m(tipo, quando, atraso)
+where p.oficineiro_id in ('00000000-0000-0000-0000-00000000a006', '00000000-0000-0000-0000-00000000a007')
+  and p.data >= date '2026-10-27';
+
+insert into public.presenca_ajustes (oficineiro_id, escola_id, data, tipo, entrada, saida, motivo, status, pedido_em,
+                                     analisado_por, analisado_em, analise_obs)
+select o.id, o.escola_id, a.data, a.tipo, a.entrada, a.saida, a.motivo, a.status, a.pedido, a.por, a.em, a.obs
+from public.perfis o
+join (values
+  ('00000000-0000-0000-0000-00000000a006'::uuid, date '2026-11-05', 'esquecimento', time '07:05', time '15:02',
+   'Esqueci de registrar a entrada e a saída por causa da reunião com a direção.', 'em_analise',
+   timestamptz '2026-11-05 16:10-03', null::uuid, null::timestamptz, null),
+  ('00000000-0000-0000-0000-00000000a006'::uuid, date '2026-10-15', 'falta', null::time, null::time,
+   'Consulta médica no período da manhã, com atestado entregue à secretaria.', 'aprovada',
+   timestamptz '2026-10-15 18:00-03', '00000000-0000-0000-0000-00000000a005'::uuid, timestamptz '2026-10-16 09:30-03',
+   'Atestado conferido.'),
+  ('00000000-0000-0000-0000-00000000a007'::uuid, date '2026-10-22', 'fora_raio', time '13:00', time '19:00',
+   'A localização do celular indicou fora da escola, mas eu estava no laboratório.', 'recusada',
+   timestamptz '2026-10-22 19:30-03', '00000000-0000-0000-0000-00000000a002'::uuid, timestamptz '2026-10-23 11:00-03',
+   'Sem confirmação da direção para o horário informado.')
+) a(id, data, tipo, entrada, saida, motivo, status, pedido, por, em, obs) on a.id = o.id;
+
+insert into public.presencas_analista (analista_id, escola_id, data, inicio, fim, distancia_inicio_m, distancia_fim_m, observacao)
+select v.analista_id, v.escola_id, v.data, (v.data + time '09:00') at time zone 'America/Sao_Paulo',
+       (v.data + time '11:15') at time zone 'America/Sao_Paulo', 25, 30, 'Visita registrada na escola'
+from public.visitas v
+where v.analista_id = '00000000-0000-0000-0000-00000000a004' and v.data < date '2026-11-09';
+
+insert into public.visitas_historico (visita_id, antes, por, em)
+select v.id, to_jsonb(v) || jsonb_build_object('observacao', 'Visita de rotina, texto antes da correção', 'engajamento', 3),
+       v.analista_id, (v.data + time '17:00') at time zone 'America/Sao_Paulo'
+from public.visitas v
+where v.analista_id = '00000000-0000-0000-0000-00000000a004'
+order by v.data
+limit 2;
+
+insert into public.check_historico (aula_id, oficineiro_id, escola_id, evento, texto, por, em)
+select a.id, a.oficineiro_id, a.escola_id, h.evento, h.texto, h.por, (a.data + h.hora) at time zone 'America/Sao_Paulo'
+from (
+  select r.* from public.aulas_registro r
+  where r.oficineiro_id = '00000000-0000-0000-0000-00000000a006' and r.situacao = 'Realizada'
+  order by r.data desc, r.horario, r.id limit 3
+) a
+cross join lateral (values
+  ('confirmada', null, '00000000-0000-0000-0000-00000000a005'::uuid, time '16:00'),
+  ('contestada', 'A turma estava em avaliação neste horário.', '00000000-0000-0000-0000-00000000a005'::uuid, time '16:05'),
+  ('corrigida', 'Horário ajustado para o segundo tempo.', '00000000-0000-0000-0000-00000000a006'::uuid, time '17:30')
+) h(evento, texto, por, hora)
+where h.evento = 'confirmada' or a.id = (
+  select r.id from public.aulas_registro r
+  where r.oficineiro_id = '00000000-0000-0000-0000-00000000a006' and r.situacao = 'Realizada'
+  order by r.data desc, r.horario, r.id limit 1);
+
+insert into public.mudancas_escola (usuario_id, escola_anterior, escola_nova, vale_a_partir, motivo, criado_por, criado_em)
+select o.id, o.escola_id,
+       (select e.id from public.escolas e where e.id <> o.escola_id and e.carteira_id is not null order by e.id limit 1),
+       date '2026-11-16', 'Ampliação de atendimento', '00000000-0000-0000-0000-00000000a002', timestamptz '2026-11-06 14:00-03'
+from public.perfis o
+where o.id = '00000000-0000-0000-0000-0000000b0001';
+
+insert into public.espelho_assinaturas (oficineiro_id, competencia, assinado_em) values
+  ('00000000-0000-0000-0000-00000000a006', date '2026-10-01', timestamptz '2026-11-03 10:00-03');
+
 create or replace function privado.hoje() returns date language sql stable set search_path = ''
   as $$ select coalesce(nullif(current_setting('t.hoje', true), '')::date, (now() at time zone 'America/Sao_Paulo')::date) $$;

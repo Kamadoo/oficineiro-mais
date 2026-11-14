@@ -50,8 +50,9 @@ select is((select count(*)::int from information_schema.role_table_grants
             where grantee = 'anon' and table_schema = 'public'), 0,
           'anon não tem nenhuma permissão em tabela');
 select is((select count(*)::int from information_schema.role_routine_grants
-            where grantee in ('anon', 'PUBLIC') and routine_schema in ('public', 'privado', 'auditoria')), 0,
-          'anon/PUBLIC não executam nenhuma função do FSM');
+            where grantee in ('anon', 'PUBLIC') and routine_schema in ('public', 'privado', 'auditoria')
+              and not (grantee = 'anon' and routine_schema = 'public' and routine_name = 'verificar_documento')), 0,
+          'anon/PUBLIC não executam nenhuma função do FSM além da conferência de documentos');
 
 set local role anon;
 select throws_ok('select * from public.jornada_pessoas', '42501', null, 'anon: jornada negada');

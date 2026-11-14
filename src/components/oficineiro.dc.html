@@ -1947,7 +1947,11 @@ class Component extends DCLogic {
           situacaoCor: cores[0],
           situacaoFundo: cores[1],
           temAcao: acoes.length > 0,
-          justificar: () => acoes.length && this.abrirAjuste('esquecimento', presenca.data)
+          justificar: () => {
+            if (!acoes.length) return;
+            this.abrirAjuste('esquecimento', presenca.data);
+            this.irPara('presenca');
+          }
         };
       });
     horas.sort((a, b) => (a.presenca.data < b.presenca.data ? -1 : a.presenca.data > b.presenca.data ? 1 : 0));
@@ -2094,6 +2098,9 @@ class Component extends DCLogic {
       const situacao = s.relatorioDoCiclo || {};
       const nome = s.nomeDoUsuario || '—';
       const referencia = situacao.id ? '-' + String(situacao.id).padStart(5, '0') : '';
+      const verificacao = situacao.codigo_verificacao
+        ? ' · Código de verificação ' + situacao.codigo_verificacao + ' (oficineiromais.com.br/#verificar)'
+        : '';
       const agora = new Date();
       const base = {
         nome: nome.toUpperCase(),
@@ -2124,7 +2131,7 @@ class Component extends DCLogic {
           linhas: docDePresenca.linhas,
           total: docDePresenca.total,
           resumo: docDePresenca.resumo,
-          codigo: 'Documento PRE-' + competencia.slice(0, 7) + referencia
+          codigo: 'Documento PRE-' + competencia.slice(0, 7) + referencia + verificacao
         },
         atividades: {
           ...base,
@@ -2132,7 +2139,7 @@ class Component extends DCLogic {
           atividades: docDeAtividades.linhas,
           semAtividades: !docDeAtividades.linhas.length,
           resumo: docDeAtividades.resumo,
-          codigo: 'Documento ATV-' + competencia.slice(0, 7) + referencia
+          codigo: 'Documento ATV-' + competencia.slice(0, 7) + referencia + verificacao
         }
       };
     })();
