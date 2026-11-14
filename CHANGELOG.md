@@ -1,5 +1,35 @@
 # Histórico de mudanças
 
+## 1.1.0 · 14/11/2026
+
+### Presença
+
+- O Oficineiro pode marcar a presença sem internet: a marcação fica guardada no aparelho, com a hora e a localização do momento, e é enviada quando a conexão volta (até 8 horas depois). O banco recusa hora no futuro, anterior à marcação anterior ou com mais de 8 horas, e identifica a marcação como feita sem internet.
+
+### Administração
+
+- Auditoria › Erros do navegador: erros de JavaScript das sessões ficam registrados (com limite por pessoa e sem repetição) e são apagados depois de 90 dias.
+- Versão numerada (1.1.0) lida do `package.json` no build e mostrada em Configurações.
+
+### Interface
+
+- Avisos temporários com a mesma duração em todos os perfis.
+- Agendas do Gerente com linhas de tabela e nomes acessíveis corretos; tabela de horas do Oficineiro com células identificadas.
+- Esc fecha a gaveta de contas em lote do Coordenador; a gaveta de nova carteira tem título.
+- Imagem da entrada em WebP e fontes em WOFF2: cerca de 36% menos bytes por tela e entrada cerca de 1,4 s mais rápida em celular com 3G.
+- Guia rápido por perfil e aviso de privacidade (rascunho para revisão jurídica), ligados na entrada e em Configurações.
+
+### Correções
+
+- Onboarding: a regra do NTE não confunde mais escolas com "nte" no nome (por exemplo, "Horizonte").
+- Código ajustado às regras novas do ESLint 10.
+
+### Testes e documentação
+
+- Dados de teste com escolas de baixa adoção, mais contas e aulas recentes; varredura das telas também nas abas, gavetas e no celular.
+- Testes unitários de geração e leitura de planilhas; testes das funções de borda com `deno test`; matriz de permissões das RPC e testes de escopo comparados com o resultado esperado no CI.
+- `docs/operacao.md`: publicação, migrações, funções, tarefas agendadas, cópia de segurança, restauração e troca de chaves.
+
 ## 13/11/2026 (tarde)
 
 ### Agendas do Gerente

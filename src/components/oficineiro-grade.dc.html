@@ -162,16 +162,18 @@ class Component extends DCLogic {
         horario,
         alterada: !!atividade.personalizada,
         aria:
+          String(atividade.inicio).slice(0, 5) +
+          ', ' +
           horario +
           ', ' +
           turma +
-          (linha ? ', ' + linha : '') +
           ', ' +
           tipo.curto +
           (detalhe ? ', ' + detalhe : '') +
+          (atividade.personalizada ? ', Só nesta semana' : '') +
+          (linha ? ', ' + linha : '') +
           ', ' +
           DIAS[atividade.dia_semana] +
-          (atividade.personalizada ? ', alterada só nesta semana' : '') +
           (porSemana ? '. Abrir para mudar só nesta semana.' : '. Abrir para editar.'),
         abrir: () => (porSemana ? contexto.abrirAtividadeDaSemana(daGrade) : contexto.abrirAtividade(daGrade))
       };

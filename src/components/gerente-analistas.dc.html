@@ -70,23 +70,23 @@
   <sc-if value="{{ temErroDaSemana }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroDaSemana }}</div></sc-if>
   <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div role="table" aria-label="Agenda da semana" class="d-grid colunas-150-repeat-5-minmax-150-1fr min-w-900">
-      <div role="columnheader" class="p-12-14 fs-12 cor-cinza-600 fw-600 borda-b-cinza-110">Analista</div>
-      <sc-for list="{{ diasDaSemana }}" as="dia" hint-placeholder-count="5"><div role="columnheader" class="p-12-14 fs-13 fw-600 borda-b-cinza-110 borda-e-cinza-75" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</div></sc-for>
-      <sc-for list="{{ agendaDosAnalistas }}" as="analista" hint-placeholder-count="3">
+      <div role="row" class="d-contents"><div role="columnheader" class="p-12-14 fs-12 cor-cinza-600 fw-600 borda-b-cinza-110">Analista</div>
+      <sc-for list="{{ diasDaSemana }}" as="dia" hint-placeholder-count="5"><div role="columnheader" class="p-12-14 fs-13 fw-600 borda-b-cinza-110 borda-e-cinza-75" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</div></sc-for></div>
+      <sc-for list="{{ agendaDosAnalistas }}" as="analista" hint-placeholder-count="3"><div role="row" class="d-contents">
         <div role="rowheader" class="p-12-14 borda-b-cinza-75 fw-600 fs-14 quebra-palavra-anywhere">{{ analista.nome }}</div>
         <sc-for list="{{ analista.dias }}" as="dia" hint-placeholder-count="5">
           <div role="cell" class="borda-b-cinza-75 borda-e-cinza-75 p-6 d-flex eixo-column gap-6 min-h-84">
             <sc-for list="{{ dia.visitas }}" as="visita" hint-placeholder-count="1">
-              <button onClick="{{ visita.abrir }}" aria-haspopup="dialog" aria-label="{{ visita.aria }}"
+              <button onClick="{{ visita.abrir }}" aria-haspopup="dialog"
                 class="borda-0 raio-8 p-8-10 d-flex eixo-column gap-2 texto-left cor-ciano-850 w-100pc largura-fundo"
-                style="background:{{ visita.fundo }};cursor:pointer"><span
+                style="background:{{ visita.fundo }};cursor:pointer"><span class="sr-only">{{ visita.aria }}</span><span
                 class="fs-11 num-tabular-nums cor-cinza-750">{{ visita.hora }}</span><span
                 class="fs-12 fw-600">{{ visita.escola }}</span><span class="fs-11"
                 style="color:{{ visita.cor }}">{{ visita.rotulo }}</span></button>
             </sc-for>
           </div>
         </sc-for>
-      </sc-for>
+      </div></sc-for>
     </div>
     <sc-if value="{{ semAgendaDosAnalistas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhum analista ativo com carteira.</p></sc-if>
     <sc-if value="{{ semanaSemVisitas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhuma visita agendada ou registrada nesta semana.</p></sc-if>
@@ -248,7 +248,7 @@ class Component extends DCLogic {
                 rotulo: feita ? 'Realizada · ' + o[0] : o[0],
                 fundo: feita ? 'var(--fundo-verde-80)' : o[2],
                 cor: feita ? 'var(--texto-verde-760)' : o[3],
-                aria: 'Ver visita de ' + c.nome + ' em ' + nomeDaEscola(v.escola_id) + ', ' + dmIso(d),
+                aria: 'Ver visita de ' + c.nome + ' em ' + dmIso(d) + ':',
                 abrir: () => contexto.abrirVisita({ t: 'a', id: v.id })
               };
             });
@@ -261,7 +261,7 @@ class Component extends DCLogic {
               rotulo: v.tipo || 'Visita registrada',
               fundo: 'var(--fundo-verde-80)',
               cor: 'var(--texto-verde-760)',
-              aria: 'Ver visita registrada por ' + c.nome + ' em ' + nomeDaEscola(v.escola_id) + ', ' + dmIso(d),
+              aria: 'Ver visita registrada por ' + c.nome + ' em ' + dmIso(d) + ':',
               abrir: () => contexto.abrirVisita({ t: 'v', id: v.id })
             }));
           return { visitas: ag.concat(reg) };

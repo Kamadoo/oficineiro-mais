@@ -1,7 +1,8 @@
 import json
 import subprocess
+import sys
 
-from common import ENV, DB, USUARIOS, OUTRO_OFICINEIRO
+from common import ENV, DB, USUARIOS, OUTRO_OFICINEIRO, conferir
 
 DIR = USUARIOS["direcao"]
 OF = USUARIOS["oficineiro"]
@@ -87,3 +88,4 @@ for k, v in res.items():
     print(f"{k}: {v}")
 with open("scope_audit.json", "w") as saida:
     json.dump(res, saida, ensure_ascii=False, indent=1)
+sys.exit(conferir("scope_audit", res))

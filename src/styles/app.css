@@ -2692,6 +2692,9 @@ select {
 .w-max-content {
   width: max-content;
 }
+.d-contents {
+  display: contents;
+}
 .sc-host[data-sc-name="menu"],
 .sc-host[data-sc-name="cabecalho"],
 .pagina > .sc-host {

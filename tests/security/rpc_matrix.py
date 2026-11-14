@@ -1,7 +1,8 @@
 import json
 import re
+import sys
 
-from common import USUARIOS, OUTRO_OFICINEIRO, lista, rodar
+from common import USUARIOS, OUTRO_OFICINEIRO, conferir, lista, rodar
 
 ESCOLA_OUTRA = lista("select id from public.escolas where sigla='Ejp'")[0][0]
 PADRAO = {
@@ -41,3 +42,5 @@ with open("rpc_matrix.json", "w") as saida:
 for f, resultado in matriz.items():
     ok = [p for p, v in resultado.items() if v.startswith("OK")]
     print(f.split("(")[0], "→ aceito por:", ",".join(ok) or "ninguém")
+aceitos = {f: {p: ("aceito" if v.startswith("OK") else "recusado") for p, v in r.items()} for f, r in matriz.items()}
+sys.exit(conferir("rpc_matrix", aceitos))

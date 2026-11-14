@@ -189,7 +189,7 @@ window.FSM_APARENCIA =
       return { ...PADRAO, ...atual };
     };
 
-    let guardado = {};
+    let guardado;
     try {
       guardado = JSON.parse(localStorage.getItem(CHAVE) || '{}') || {};
     } catch (e) {

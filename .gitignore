@@ -8,8 +8,8 @@ supabase/.branches/
 __pycache__/
 *.xlsx
 *.csv
-rls_audit.json
-rpc_matrix.json
-scope_audit.json
+/rls_audit.json
+/rpc_matrix.json
+/scope_audit.json
 .DS_Store
 Thumbs.db
