@@ -260,11 +260,17 @@ html[data-tema="escuro"] body:has(#entrada) {
 }
 .fsm-rodape {
   align-self: center;
-  margin: 4px 0 0;
-  font-size: 13px;
+  margin: 28px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
   color: var(--ent-sec);
 }
-.fsm-rodape a,
+.fsm-rodape a {
+  color: inherit;
+  font-weight: 500;
+  text-underline-offset: 2px;
+}
 .cfg-links a {
   color: var(--ent-link);
   font-weight: 600;

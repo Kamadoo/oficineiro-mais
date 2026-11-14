@@ -9,13 +9,18 @@
 
 ### Documentos
 
-- Cada relatório mensal recebe um código de verificação, impresso no rodapé dos relatórios de presença e de atividades. Qualquer pessoa confere o documento na entrada do sistema ("Conferir um documento" ou `#verificar`), sem login; a consulta mostra a situação, o mês, a escola e o nome abreviado.
+- Cada relatório mensal recebe um código de verificação, impresso no rodapé dos relatórios de presença e de atividades. Qualquer pessoa confere o documento pelo endereço impresso (`#verificar`), sem login; a consulta mostra a situação, o mês, a escola e o nome abreviado.
 
 ### Segurança e dados
 
 - Sessão única por conta: um login novo encerra as outras sessões, e o banco recusa as funções chamadas por uma sessão encerrada.
 - Justificativas, tentativas de presença e assinaturas do espelho passam a exigir o segundo fator também na leitura das próprias linhas.
 - Retenção automática: todo 15 de fevereiro, os registros anteriores a 1º de janeiro de cinco anos atrás são apagados, sem cópia na auditoria; o prazo fica em `configuracoes.retencao_anos` (mínimo 5).
+
+### Entrada
+
+- A tela de entrada mostra só o acesso e o primeiro acesso; o aviso de privacidade virou uma nota discreta no pé do formulário, e o guia rápido fica em Configurações.
+- A página declara o idioma português, para leitores de tela.
 
 ### Testes
 
