@@ -108,11 +108,11 @@
         </div>
         <sc-for list="{{ horas }}" as="linha" hint-placeholder-count="6">
           <div role="row" class="relatorio-linha-horas d-grid gap-4-12 alinha-center borda-t-cinza-75 p-12-16 fs-14" style="grid-template-columns:96px minmax(0,1fr) 80px 80px minmax(0,1.4fr)">
-            <span class="num-tabular-nums fw-600">{{ linha.data }}</span>
-            <span class="num-tabular-nums cor-cinza-750">{{ linha.faixa }}</span>
-            <span class="num-tabular-nums">{{ linha.total }}</span>
-            <span class="num-tabular-nums fw-600">{{ linha.validas }}</span>
-            <span class="d-flex quebra-wrap alinha-center gap-6"><span class="fs-12 fw-600 p-2-8 raio-999"
+            <span role="cell" class="num-tabular-nums fw-600">{{ linha.data }}</span>
+            <span role="cell" class="num-tabular-nums cor-cinza-750">{{ linha.faixa }}</span>
+            <span role="cell" class="num-tabular-nums">{{ linha.total }}</span>
+            <span role="cell" class="num-tabular-nums fw-600">{{ linha.validas }}</span>
+            <span role="cell" class="d-flex quebra-wrap alinha-center gap-6"><span class="fs-12 fw-600 p-2-8 raio-999"
               style="color:{{ linha.situacaoCor }};background:{{ linha.situacaoFundo }}">{{ linha.situacao }}</span><sc-if
               value="{{ linha.temAcao }}" hint-placeholder-val="{{ false }}"><button onClick="{{ linha.justificar }}"
               class="h-30 borda-1-solid-0b7ea3 fundo-branco cor-ciano-660 raio-8 p-0-10 fs-12 fw-600">Justificar</button></sc-if><span

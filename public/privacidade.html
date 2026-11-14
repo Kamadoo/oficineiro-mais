@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Oficineiro+ · Aviso de privacidade</title>
+<link rel="icon" href="brand/favicon.svg" type="image/svg+xml">
+<style>
+  :root { color-scheme: light dark; --texto: #17191c; --suave: #5f6368; --fundo: #f6f7f9; --cartao: #fff; --borda: #e2e5ea; --destaque: #0b7ea3; }
+  @media (prefers-color-scheme: dark) { :root { --texto: #e8eaed; --suave: #a8adb5; --fundo: #121417; --cartao: #1b1e22; --borda: #2c3036; --destaque: #5cc8ea; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--texto); background: var(--fundo); }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 20px 56px; }
+  article { background: var(--cartao); border: 1px solid var(--borda); border-radius: 14px; padding: 28px clamp(18px, 4vw, 40px); }
+  h1 { font-size: 1.7rem; line-height: 1.2; margin: 0 0 6px; }
+  h2 { font-size: 1.15rem; margin: 28px 0 8px; }
+  p, li { margin: 0 0 10px; }
+  ul { padding-left: 22px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.95rem; margin: 8px 0 12px; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--borda); }
+  th { color: var(--suave); font-weight: 600; }
+  .nota { color: var(--suave); font-size: 0.9rem; }
+  .rascunho { border-left: 4px solid #b26b00; background: rgba(178, 107, 0, 0.1); padding: 10px 14px; border-radius: 6px; margin: 14px 0 20px; }
+  a { color: var(--destaque); }
+  .voltar { display: inline-block; margin-bottom: 16px; font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <a class="voltar" href="./">← Voltar ao Oficineiro+</a>
+  <article>
+    <h1>Aviso de privacidade</h1>
+    <p class="nota">Versão 1.1.0 · novembro de 2026</p>
+    <p class="rascunho"><strong>Rascunho para revisão jurídica.</strong> Os trechos marcados com [a preencher] dependem do contrato entre a prestadora do serviço e a rede municipal de ensino.</p>
+
+    <h2>Quem trata os dados</h2>
+    <p>O Oficineiro+ organiza as oficinas nas escolas da rede municipal: presença dos oficineiros, grade, registro das atividades, relatórios mensais e visitas de acompanhamento. O controlador dos dados é [a preencher: órgão responsável da rede municipal] e o operador é [a preencher: empresa prestadora do serviço]. O encarregado pelo tratamento de dados pessoais pode ser contatado em [a preencher: e-mail do encarregado].</p>
+
+    <h2>Quais dados usamos e para quê</h2>
+    <table>
+      <thead><tr><th scope="col">Dado</th><th scope="col">Para quê</th></tr></thead>
+      <tbody>
+        <tr><td>Nome, perfil, escola ou carteira, login, e-mail institucional e telefone</td><td>Identificar a conta, liberar só as telas do perfil e enviar o código de primeiro acesso.</td></tr>
+        <tr><td>CPF ou CNPJ</td><td>Confirmar o primeiro acesso. O sistema guarda só um resumo criptográfico e uma versão mascarada; o número completo não fica salvo.</td></tr>
+        <tr><td>Localização no momento de registrar a presença</td><td>Conferir se a pessoa está na escola. A posição é usada só na hora do registro; o sistema guarda a distância até a escola e a precisão informada pelo aparelho, não as coordenadas. Sem internet, a marcação fica guardada só no próprio aparelho até ser enviada, no máximo por 8 horas.</td></tr>
+        <tr><td>Presenças, justificativas, grade, registros de atividades, relatórios e visitas</td><td>Executar e comprovar o serviço contratado, aprovar relatórios e calcular horas.</td></tr>
+        <tr><td>Contas da plataforma educacional (Jornada do Usuário)</td><td>Acompanhar a adoção da plataforma por escola: nome, perfil, ano escolar e dias sem acesso.</td></tr>
+        <tr><td>Registro de uso e auditoria</td><td>Segurança: quem fez cada alteração e quando, consultas a dados de outras pessoas e exportações.</td></tr>
+        <tr><td>Erros técnicos do navegador</td><td>Corrigir falhas do site: mensagem do erro, tela, versão e navegador.</td></tr>
+      </tbody>
+    </table>
+    <p>A base legal é a execução de políticas públicas e do contrato de prestação do serviço (art. 7º, incisos III e V, e art. 23 da Lei 13.709/2018), além do cumprimento de obrigação legal de guarda de registros (art. 7º, inciso II). [a preencher: confirmar com a área jurídica]</p>
+
+    <h2>Quem vê os dados</h2>
+    <ul>
+      <li>Cada pessoa vê os próprios registros.</li>
+      <li>A direção da escola vê os oficineiros e os registros da sua escola.</li>
+      <li>Analistas veem as escolas da própria carteira; gerência e coordenação veem a rede.</li>
+      <li>O CPF completo nunca aparece no site; as consultas a dados de outras pessoas ficam registradas na auditoria.</li>
+      <li>Os dados ficam no Supabase, na região de São Paulo (Brasil), e não são vendidos nem usados para publicidade.</li>
+    </ul>
+
+    <h2>Por quanto tempo guardamos</h2>
+    <table>
+      <thead><tr><th scope="col">Dado</th><th scope="col">Prazo</th></tr></thead>
+      <tbody>
+        <tr><td>Presenças, justificativas, grade, registros de atividades, relatórios e visitas</td><td>5 anos depois do fim do ano letivo, para prestação de contas. Depois disso são apagados ou anonimizados.</td></tr>
+        <tr><td>Auditoria e registro de uso</td><td>5 anos.</td></tr>
+        <tr><td>Erros técnicos do navegador</td><td>90 dias, com exclusão automática.</td></tr>
+        <tr><td>Conta desativada</td><td>Removida 30 dias depois da desativação. Se houver registros ligados a ela, o nome e os dados de contato são apagados e os registros ficam anônimos.</td></tr>
+        <tr><td>Tentativas de acesso (em resumo criptográfico)</td><td>Até 1 dia, apenas para limitar tentativas repetidas.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Seus direitos</h2>
+    <p>Você pode pedir confirmação do tratamento, acesso, correção, anonimização ou eliminação de dados desnecessários, e informações sobre compartilhamento (art. 18 da Lei 13.709/2018). Correções de cadastro podem ser pedidas à coordenação do núcleo; os demais pedidos, ao encarregado, pelo contato acima.</p>
+
+    <h2>Segurança</h2>
+    <p>Acesso com senha e código do autenticador (MFA), regras de acesso por perfil aplicadas no próprio banco de dados, conexão cifrada, limite de tentativas e registro de auditoria. Detalhes técnicos estão em <a href="https://github.com/Kamadoo/oficineiro-mais/blob/main/docs/seguranca.md">docs/seguranca.md</a>.</p>
+  </article>
+</main>
+</body>
+</html>

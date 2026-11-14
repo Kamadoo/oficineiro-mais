@@ -176,7 +176,6 @@ html[data-tema="escuro"] .dir-h {
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 const Base = window.FSM_BASE;
-const DURACAO_DO_AVISO = 2600;
 const CHAVES_DAS_GAVETAS = [
   'abaAtividades',
   'abaAtividadesClasse',
@@ -412,7 +411,7 @@ class Component extends DCLogic {
   avisar(texto) {
     this.setState({ aviso: texto });
     clearTimeout(this.avisoTempo);
-    this.avisoTempo = setTimeout(() => this.setState({ aviso: '' }), DURACAO_DO_AVISO);
+    this.avisoTempo = setTimeout(() => this.setState({ aviso: '' }), Base.DURACAO_DO_AVISO);
   }
   daEscola(escolaId) {
     return registro => escolaId == null || registro.escola_id == null || registro.escola_id === escolaId;

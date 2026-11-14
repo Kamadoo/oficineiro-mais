@@ -55,7 +55,7 @@ window.FSM_ONB = (() => {
         best = l;
       }
     });
-    if (!best && /nte|nucleo de tecnologia/.test(norm(raw))) best = L.filter(l => l.sig === 'NTE')[0];
+    if (!best && /\bnte\b|nucleo de tecnologia/.test(norm(raw))) best = L.filter(l => l.sig === 'NTE')[0];
     return best ? { sig: best.sig, n: best.n, cs: best.cs, conf: 'nome' } : null;
   }
 

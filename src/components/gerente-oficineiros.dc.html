@@ -78,23 +78,23 @@
   <sc-if value="{{ temErroDaSemana }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroDaSemana }}</div></sc-if>
   <section class="borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}">
     <div role="table" aria-label="Agenda dos oficineiros na semana" class="d-grid colunas-170-repeat-5-minmax-140-1fr min-w-900">
-      <div role="columnheader" class="p-12-14 fs-12 cor-cinza-600 fw-600 borda-b-cinza-110">Oficineiro</div>
-      <sc-for list="{{ diasDaSemana }}" as="dia" hint-placeholder-count="5"><div role="columnheader" class="p-12-14 fs-13 fw-600 borda-b-cinza-110 borda-e-cinza-75" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</div></sc-for>
-      <sc-for list="{{ agendaDosOficineiros }}" as="oficineiro" hint-placeholder-count="3">
+      <div role="row" class="d-contents"><div role="columnheader" class="p-12-14 fs-12 cor-cinza-600 fw-600 borda-b-cinza-110">Oficineiro</div>
+      <sc-for list="{{ diasDaSemana }}" as="dia" hint-placeholder-count="5"><div role="columnheader" class="p-12-14 fs-13 fw-600 borda-b-cinza-110 borda-e-cinza-75" style="background:{{ dia.fundo }};color:{{ dia.cor }}">{{ dia.rotulo }}</div></sc-for></div>
+      <sc-for list="{{ agendaDosOficineiros }}" as="oficineiro" hint-placeholder-count="3"><div role="row" class="d-contents">
         <div role="rowheader" class="p-12-14 borda-b-cinza-75 d-flex eixo-column gap-2 min-w-0"><b class="fs-14 quebra-palavra-anywhere">{{ oficineiro.nome }}</b><span class="fs-12 cor-cinza-600">{{ oficineiro.escola }}</span></div>
         <sc-for list="{{ oficineiro.dias }}" as="dia" hint-placeholder-count="5">
           <div role="cell" class="borda-b-cinza-75 borda-e-cinza-75 p-6 d-flex eixo-column gap-6 min-h-70">
             <sc-for list="{{ dia.atividades }}" as="atividade" hint-placeholder-count="1">
-              <button onClick="{{ atividade.abrir }}" aria-haspopup="dialog" aria-label="{{ atividade.aria }}"
+              <button onClick="{{ atividade.abrir }}" aria-haspopup="dialog"
                 class="borda-0 raio-8 p-7-10 d-flex eixo-column gap-1 texto-left cor-ciano-850 w-100pc largura-fundo"
-                style="background:{{ atividade.fundo }};cursor:pointer"><span
+                style="background:{{ atividade.fundo }};cursor:pointer"><span class="sr-only">{{ atividade.aria }}</span><span
                 class="fs-11 num-tabular-nums cor-cinza-750">{{ atividade.horario }}</span><b
                 class="fs-13">{{ atividade.turma }}</b><span class="fs-12 cor-cinza-750">{{ atividade.solucao }}</span><span class="fs-12"
                 style="color:{{ atividade.cor }}">{{ atividade.situacao }}</span></button>
             </sc-for>
           </div>
         </sc-for>
-      </sc-for>
+      </div></sc-for>
     </div>
     <sc-if value="{{ semAgendaDosOficineiros }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhum oficineiro ativo com esses filtros.</p></sc-if>
     <sc-if value="{{ semanaSemAtividades }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-20 fs-13 cor-cinza-600 texto-center">Nenhuma atividade na grade desta semana para os oficineiros filtrados.</p></sc-if>
@@ -191,24 +191,17 @@ class Component extends DCLogic {
             .sort((a, b) => String(a.g.inicio).localeCompare(String(b.g.inicio)))
             .map(i => {
               const st = SITUACOES_DA_ATIVIDADE[situacaoDe(i)] || SITUACOES_DA_ATIVIDADE.sreg;
+              const horario = hmDe(i.g.inicio) + ' – ' + hmDe(i.g.fim),
+                turma = turmaDe(i),
+                solucao = [(Base.TIPOS[i.g.tipo] || Base.TIPOS.R)[0], Base.detTipo(i.g)].filter(Boolean).join(' · ');
               return {
-                horario: hmDe(i.g.inicio) + ' – ' + hmDe(i.g.fim),
-                turma: turmaDe(i),
-                solucao: [(Base.TIPOS[i.g.tipo] || Base.TIPOS.R)[0], Base.detTipo(i.g)].filter(Boolean).join(' · '),
+                horario,
+                turma,
+                solucao,
                 situacao: st[0],
                 cor: st[1],
                 fundo: st[2],
-                aria:
-                  'Ver a atividade de ' +
-                  c.nome +
-                  ' em ' +
-                  dmIso(d) +
-                  ', ' +
-                  turmaDe(i) +
-                  ', ' +
-                  Base.detTipo(i.g) +
-                  ', ' +
-                  st[0],
+                aria: 'Ver a atividade de ' + c.nome + ' em ' + dmIso(d) + ':',
                 abrir: () => contexto.abrirRegistro(i)
               };
             })

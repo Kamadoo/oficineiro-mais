@@ -452,7 +452,11 @@ class Component extends DCLogic {
       registros: marcacoes.map(m => ({
         tipo: rotuloDaMarcacao[m.tipo],
         hora: horaDeBrasilia(m.em),
-        local: m.distancia_m != null ? 'No raio · ' + m.distancia_m + ' m' : 'No raio',
+        local: m.pendente
+          ? 'Sem internet · aguardando envio'
+          : m.distancia_m != null
+            ? 'No raio · ' + m.distancia_m + ' m'
+            : 'No raio',
         cor: m.tipo === 'saida_almoco' || m.tipo === 'saida' ? 'var(--texto-ciano-850)' : 'var(--texto-ciano-660)'
       })),
 

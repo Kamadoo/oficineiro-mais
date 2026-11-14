@@ -1,0 +1,666 @@
+{
+ "admin_alterar_papel(p_usuario uuid, p_papel text, p_escola smallint, p_carteira text, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_atividades(p_desde date, p_ate date, p_usuario uuid, p_categoria text, p_limite integer)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_auditoria(p_desde date, p_ate date, p_usuario uuid, p_acao text, p_tabela text, p_limite integer)": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_consulta(p_usuario uuid, p_competencia date)": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_corrigir_presenca(p_id bigint, p_inicio timestamp with time zone, p_fim timestamp with time zone, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_erros_navegador(p_limite integer)": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_exigir_troca_senha(p_usuario uuid, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_lancar_presenca(p_oficineiro uuid, p_inicio timestamp with time zone, p_fim timestamp with time zone, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_reabrir_mes(p_oficineiro uuid, p_competencia date, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_remover_feriado(p_data date)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_remover_turma(p_id integer)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_salvar_carteira(p_id text, p_rotulo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_salvar_configuracoes(p_email text, p_telefone text, p_horario text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_salvar_escola(p_id smallint, p_sigla text, p_nome text, p_endereco text, p_telefone text, p_carteira text, p_latitude double precision, p_longitude double precision, p_raio smallint, p_ativa boolean)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_salvar_feriado(p_data date, p_nome text, p_tipo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_salvar_turma(p_escola smallint, p_ano smallint, p_turma text, p_matriculados smallint)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_situacao_grade(p_oficineiro uuid, p_ano smallint, p_status text, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "admin_situacao_registro(p_id bigint, p_status text, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "agendar_minha_visita(p_escola smallint, p_data date, p_hora time without time zone, p_origem text, p_tipo text, p_foco text, p_orientacao text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "agendar_visita(p_analista uuid, p_escola smallint, p_data date, p_hora time without time zone, p_origem text, p_tipo text, p_foco text, p_orientacao text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "ajustes_presenca(p_status text)": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
+ },
+ "alterar_escola(p_usuario uuid, p_escola smallint, p_vale date, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "aprovar_relatorio(p_id bigint)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "aceito",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "assinar_espelho(p_competencia date)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "aceito"
+ },
+ "atribuir_onboarding(p_id bigint, p_carteira text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "auditoria_recente(p_limite integer)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "aceito",
+  "oficineiro": "recusado"
+ },
+ "cancelar_minha_visita(p_id bigint, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "aceito",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "cancelar_mudanca_escola(p_usuario uuid)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "cancelar_visita_agenda(p_id bigint)": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "aceito",
+  "direcao": "recusado",
+  "gerente": "aceito",
+  "oficineiro": "recusado"
+ },
+ "conferir_aula(p_id bigint, p_confirmar boolean, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "aceito",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "conferir_aulas(p_ids bigint[])": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "aceito",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "contas_gestao()": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "aceito",
+  "direcao": "recusado",
+  "gerente": "aceito",
+  "oficineiro": "recusado"
+ },
+ "contratadas_escola()": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "recusado"
+ },
+ "contratadas_gestao()": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "aceito",
+  "direcao": "recusado",
+  "gerente": "aceito",
+  "oficineiro": "recusado"
+ },
+ "copiar_semana_grade(p_origem date, p_destinos date[])": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "dar_baixa_onboarding(p_id bigint, p_data date, p_forma text, p_obs text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "decidir_ajuste(p_id bigint, p_aprovar boolean, p_obs text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "definir_contratada(p_usuario uuid, p_documento text)": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "aceito",
+  "direcao": "recusado",
+  "gerente": "aceito",
+  "oficineiro": "recusado"
+ },
+ "definir_raio_escola(p_escola smallint, p_raio smallint)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "devolver_relatorio(p_id bigint, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "aceito",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "editar_visita(p_id bigint, p jsonb)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "enviar_grade(p_ano smallint)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "enviar_lembrete(p_grade_aula_id bigint, p_data date)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "espelho_oficineiro(p_oficineiro uuid, p_competencia date)": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "aceito",
+  "direcao": "recusado",
+  "gerente": "aceito",
+  "oficineiro": "recusado"
+ },
+ "fechar_relatorio(p_competencia date)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "fsm_conta_por_cpf(p_cpf text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "fsm_conta_por_usuario(p_usuario text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "fsm_definir_cpf(p_user uuid, p_cpf text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "fsm_registrar_login(p_user uuid)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "fsm_tentativa(p_chave text, p_max integer, p_janela_s integer)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "fsm_tentativa_zerar(p_chave text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "gerar_meu_usuario()": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
+ },
+ "importar_os(p_os jsonb)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "marcar_presenca(p_tipo text, p_lat double precision, p_lng double precision, p_precisao integer, p_quando timestamp with time zone)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "meu_acesso()": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
+ },
+ "meu_ciclo()": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
+ },
+ "meu_espelho(p_competencia date)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "aceito"
+ },
+ "meus_lembretes()": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "aceito"
+ },
+ "minha_conta()": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
+ },
+ "minha_contratada()": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "aceito"
+ },
+ "minha_escola()": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
+ },
+ "minha_mudanca_escola()": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "aceito"
+ },
+ "minha_presenca_hoje()": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "aceito"
+ },
+ "minhas_preferencias()": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
+ },
+ "nomes_da_escola()": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "aceito",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "painel_presenca()": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "recusado"
+ },
+ "presenca_analista(p_evento text, p_escola smallint, p_lat double precision, p_lng double precision, p_agenda bigint, p_obs text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "reabrir_onboarding(p_id bigint)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "registrar_acao_admin(p_ator uuid, p_acao text, p_registro text, p_detalhes jsonb)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "registrar_atividade(p_tipo text, p_detalhes jsonb)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "registrar_erro_navegador(p_mensagem text, p_pagina text, p_origem text, p_linha integer, p_coluna integer, p_navegador text, p_versao text)": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
+ },
+ "registrar_visita(p jsonb)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "relatorio_justificativas(p_status text, p_de date, p_ate date)": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "recusado"
+ },
+ "relatorios_escola(p_competencia date)": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "recusado"
+ },
+ "remarcar_visita_agenda(p_id bigint, p_data date, p_hora time without time zone, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "remover_conta(p_ator uuid, p_id uuid, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "revelar_cpf(p_id bigint)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "revisar_aula(p_id bigint, p_acao text, p_comentario text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "salvar_preferencias(p_preferencias jsonb)": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
+ },
+ "salvar_semana_grade(p_semana date, p_itens jsonb)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "sinalizar_ajuste(p_id bigint, p_mensagem text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "solicitar_ajuste(p_tipo text, p_data date, p_entrada time without time zone, p_saida_almoco time without time zone, p_retorno_almoco time without time zone, p_saida time without time zone, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "validar_grade(p_oficineiro uuid, p_ano smallint, p_validar boolean, p_comentario text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ }
+}

@@ -305,6 +305,10 @@ const ESTADO_DAS_TELAS = [
   'carregandoAtividadesDoSistema',
   'atividadesDoSistemaCarregadas',
   'erroAtividadesDoSistema',
+  'errosDoNavegador',
+  'carregandoErrosDoNavegador',
+  'errosDoNavegadorCarregados',
+  'erroErrosDoNavegador',
   'consulta',
   'carregandoConsulta',
   'erroConsulta',
@@ -588,6 +592,10 @@ class Component extends DCLogic {
       },
       carregandoAtividadesDoSistema: false,
       atividadesDoSistemaCarregadas: false,
+      errosDoNavegador: [],
+      carregandoErrosDoNavegador: false,
+      errosDoNavegadorCarregados: false,
+      erroErrosDoNavegador: '',
       erroAtividadesDoSistema: '',
       escolaEditada: null,
       carteiraEditada: null,
@@ -648,6 +656,11 @@ class Component extends DCLogic {
       ) {
         e.preventDefault();
         this.fecharGavetaDeAdmin();
+        return;
+      }
+      if (e.key === 'Escape' && this.state.lote) {
+        e.preventDefault();
+        this.fecharLote();
         return;
       }
       if (e.key === 'Escape' && (this.state.novaConta || this.state.contaAberta || this.state.mudanca)) {
@@ -1165,6 +1178,24 @@ class Component extends DCLogic {
       this.setState({
         carregandoAuditoria: false,
         erroAuditoria: this.mensagemDoErro(x, 'Não foi possível carregar a auditoria.')
+      });
+    }
+  }
+  async carregarErrosDoNavegador() {
+    const A = window.FSM_AUTH;
+    if (!A || !A.adminErrosNavegador) return;
+    this.setState({ carregandoErrosDoNavegador: true, erroErrosDoNavegador: '' });
+    try {
+      const r = await A.adminErrosNavegador(300);
+      this.setState({
+        errosDoNavegador: Array.isArray(r) ? r : [],
+        carregandoErrosDoNavegador: false,
+        errosDoNavegadorCarregados: true
+      });
+    } catch (x) {
+      this.setState({
+        carregandoErrosDoNavegador: false,
+        erroErrosDoNavegador: this.mensagemDoErro(x, 'Não foi possível carregar os erros do navegador.')
       });
     }
   }
@@ -3117,6 +3148,7 @@ class Component extends DCLogic {
       abrirLote: (...argumentos) => this.abrirLote(...argumentos),
       carregarContas: (...argumentos) => this.carregarContas(...argumentos),
       carregarAtividadesDoSistema: (...argumentos) => this.carregarAtividadesDoSistema(...argumentos),
+      carregarErrosDoNavegador: (...argumentos) => this.carregarErrosDoNavegador(...argumentos),
       abrirGavetaDeAdmin: (...argumentos) => this.abrirGavetaDeAdmin(...argumentos),
       carregarAuditoria: (...argumentos) => this.carregarAuditoria(...argumentos),
       corrigirComoAdmin: (...argumentos) => this.corrigirComoAdmin(...argumentos),
@@ -3241,7 +3273,12 @@ class Component extends DCLogic {
             carteiraAberta: !!cart,
             carteiraNova: !!(cart && cart.nova),
             carteiraEditada: cart
-              ? { ...cart, escreverCodigo: definirNaCarteira('id'), escreverRotulo: definirNaCarteira('rotulo') }
+              ? {
+                  ...cart,
+                  titulo: cart.rotulo || cart.id || 'Nova carteira',
+                  escreverCodigo: definirNaCarteira('id'),
+                  escreverRotulo: definirNaCarteira('rotulo')
+                }
               : {},
             salvarCarteira: () => this.salvarCarteira(),
             carteiraBotao: s.salvandoSistema
