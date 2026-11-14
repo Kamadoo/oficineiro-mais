@@ -1395,7 +1395,7 @@ class Component extends DCLogic {
   }
   gravarFilaDePresenca(minha) {
     const eu = window.FSM_AUTH.meuId();
-    let outras = [];
+    let outras;
     try {
       outras = JSON.parse(localStorage.getItem(CHAVE_DA_FILA_DE_PRESENCA) || '[]').filter(
         item => item && item.usuario !== eu
@@ -1556,7 +1556,7 @@ class Component extends DCLogic {
   async marcarPresenca(tipo) {
     if (this.state.marcandoPresenca) return;
     this.setState({ marcandoPresenca: true, erroDaPresenca: null });
-    let posicao = null;
+    let posicao;
     try {
       posicao = await this.localizar();
     } catch (falha) {
