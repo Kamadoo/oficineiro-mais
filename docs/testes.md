@@ -4,7 +4,7 @@ O projeto tem seis grupos de verificação. Todos rodam no GitHub Actions a cada
 
 | Grupo | Onde | O que cobre |
 | --- | --- | --- |
-| Banco | `supabase/tests/database` | 680 asserções pgTAP: regras de negócio, permissões e fluxos de cada perfil |
+| Banco | `supabase/tests/database` | 692 asserções pgTAP: regras de negócio, permissões e fluxos de cada perfil |
 | Segurança | `tests/security` | auditoria de RLS, matriz de execução das RPC por perfil e tentativas de sair do próprio escopo, comparadas com o resultado esperado versionado |
 | Unitários | `tests/unit` | regras puras das bibliotecas de `src/lib` (datas, ciclos, presença, documentos, lote de contas, notificações, geração de planilhas, leitura de planilhas e da OS) |
 | Funções de borda | `supabase/functions/tests` | portões de origem, método, sessão, MFA e perfil, validações, respostas que não revelam contas, limite de tentativas e tempo mínimo de resposta |
