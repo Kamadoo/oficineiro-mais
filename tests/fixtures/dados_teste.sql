@@ -15,7 +15,7 @@ insert into auth.users (id, email) values
 
 insert into auth.users (id, email)
 select ('00000000-0000-0000-0000-0000000b' || lpad(n::text, 4, '0'))::uuid, 'extra' || n || '@exemplo.test'
-from generate_series(1, 48) n;
+from generate_series(1, 49) n;
 
 insert into public.perfis (id, nome, papel, escola_id, carteira_id, turno, trocar_senha) values
   ('00000000-0000-0000-0000-00000000a001', 'Gerente Teste', 'gerente', null, null, 'integral', false),
@@ -30,7 +30,7 @@ insert into public.perfis (id, nome, papel, escola_id, carteira_id, turno, troca
 select ('00000000-0000-0000-0000-0000000b' || lpad(n::text, 4, '0'))::uuid, 'Oficineiro Extra ' || n, 'oficineiro',
        (array(select id from public.escolas where sigla not in ('Ebv', 'Ejp') order by id))[(n - 1) % 9 + 1], null,
        case when n % 2 = 0 then 'tarde' else 'manha' end, false
-from generate_series(1, 8) n;
+from generate_series(1, 9) n;
 
 update public.escolas set latitude = -20.0 + id * 0.01, longitude = -43.9 + id * 0.01, raio_m = 200, telefone = '3135410000';
 
@@ -57,7 +57,7 @@ select ('00000000-0000-0000-0000-0000000b' || lpad(n::text, 4, '0'))::uuid,
        case when n % 4 = 0 then 'Direção Extra ' else 'Oficineiro Novo ' end || n,
        (case when n % 4 = 0 then 'direcao' else 'oficineiro' end)::public.papel,
        (array(select id from public.escolas where sigla <> 'Ebv' order by id))[(n - 1) % 10 + 1], null, 'integral', true
-from generate_series(9, 48) n;
+from generate_series(10, 49) n;
 
 insert into public.grade_envios (oficineiro_id, escola_id, ano_letivo, status, enviado_em)
 select id, escola_id, 2026, 'validada', '2026-10-01 10:00-03' from public.perfis where papel = 'oficineiro' and not trocar_senha;
