@@ -28,7 +28,7 @@ Cada perfil vê apenas o que lhe cabe. As regras de acesso ficam no banco de dad
 
 Oficineiro+ is a management system for the technology workshops that run in a city's public schools. Workshop instructors check in at school with location verification, keep a weekly timetable, log every class and sign a monthly report; school principals validate timetables and reports; field analysts plan and record school visits; managers and coordinators follow adoption, attendance and accounts across the network.
 
-It is a static site backed by PostgreSQL on Supabase, with no application server: business and access rules live in the database as Row Level Security policies and SQL functions (57 migrations, 664 pgTAP assertions), and two Deno Edge Functions handle sign-in and account administration. The interface is written in declarative components rendered with React 18, served under a strict Content Security Policy. Continuous integration runs the database tests, an RLS audit, unit tests, a Playwright sweep of every screen with axe-core accessibility checks, and linting for JavaScript, Python and TypeScript. The code and documentation are in Portuguese, the language of the users.
+It is a static site backed by PostgreSQL on Supabase, with no application server: business and access rules live in the database as Row Level Security policies and SQL functions (58 migrations, 680 pgTAP assertions), and two Deno Edge Functions handle sign-in and account administration. The interface is written in declarative components rendered with React 18, served under a strict Content Security Policy. Continuous integration runs the database tests, an RLS audit, unit tests, a Playwright sweep of every screen with axe-core accessibility checks, and linting for JavaScript, Python and TypeScript. The code and documentation are in Portuguese, the language of the users.
 
 ## Perfis
 
@@ -100,14 +100,14 @@ Detalhes em [docs/seguranca.md](docs/seguranca.md).
 
 ## Qualidade
 
-- 664 asserções pgTAP cobrindo regras de negócio, permissões e fluxos de cada perfil (`supabase/tests`).
-- Auditoria automática de RLS, matriz de permissões das RPC e testes de escopo (`tests/security`).
-- Testes unitários das bibliotecas com `node:test` (`tests/unit`).
-- Varredura de todas as telas nos temas claro e escuro com Playwright e checagem de acessibilidade com axe-core (`tests/ui`).
+- 680 asserções pgTAP cobrindo regras de negócio, permissões e fluxos de cada perfil (`supabase/tests`).
+- Auditoria automática de RLS, matriz de permissões das RPC e testes de escopo, comparadas com o resultado esperado (`tests/security`).
+- Testes unitários das bibliotecas com `node:test` (`tests/unit`) e das funções de borda com `deno test` (`supabase/functions/tests`).
+- Varredura de todas as telas, abas e gavetas nos temas claro e escuro e no celular com Playwright e checagem de acessibilidade com axe-core (`tests/ui`).
 - ESLint e Prettier em todo o JavaScript, inclusive o script de cada componente; Ruff nos scripts Python; `deno fmt`, `deno lint` e `deno check` nas funções de borda.
 - Integração contínua no GitHub Actions com ações fixadas pelo commit e Dependabot.
 
-Como rodar cada grupo em [docs/testes.md](docs/testes.md).
+Como rodar cada grupo em [docs/testes.md](docs/testes.md). Publicação, cópias de segurança e troca de chaves em [docs/operacao.md](docs/operacao.md).
 
 ## Estrutura
 
@@ -117,7 +117,7 @@ src/
   components/          perfis, telas, menu e cabeçalho
   lib/                 autenticação, base comum, planilhas, notificações, aparência
   styles/              estilo comum com tema claro e escuro e estilo da página de entrada
-public/                marca, ícones e manifesto
+public/                marca, ícones, manifesto, guia rápido e aviso de privacidade
 vendor/                runtime de componentes, React, Leaflet e fonte Inter (terceiros, com hash conferido no build)
 supabase/
   migrations/          esquema, políticas de acesso e funções
@@ -130,7 +130,7 @@ tests/
   unit/                testes unitários das bibliotecas
   ui/                  varredura das telas e acessibilidade
   fixtures/            dados fictícios para os testes
-docs/                  arquitetura, segurança e testes
+docs/                  arquitetura, segurança, testes e operação
 ```
 
 ## Executando localmente

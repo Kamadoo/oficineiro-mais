@@ -258,6 +258,25 @@ html[data-tema="escuro"] body:has(#entrada) {
 .fsm-link:hover {
   color: var(--ent-acento-h);
 }
+.fsm-rodape {
+  align-self: center;
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--ent-sec);
+}
+.fsm-rodape a,
+.cfg-links a {
+  color: var(--ent-link);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+.cfg-links {
+  margin: 14px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 14px;
+}
 html[data-tema="escuro"] .fsm-link:hover {
   color: #A8E6F7;
 }

@@ -1,13 +1,14 @@
 # Testes
 
-O projeto tem cinco grupos de verificação. Todos rodam no GitHub Actions a cada push (`.github/workflows/ci.yml`) e podem ser repetidos localmente.
+O projeto tem seis grupos de verificação. Todos rodam no GitHub Actions a cada push (`.github/workflows/ci.yml`) e podem ser repetidos localmente.
 
 | Grupo | Onde | O que cobre |
 | --- | --- | --- |
-| Banco | `supabase/tests/database` | 664 asserções pgTAP: regras de negócio, permissões e fluxos de cada perfil |
-| Segurança | `tests/security` | auditoria de RLS, matriz de execução das RPC por perfil e tentativas de sair do próprio escopo |
-| Unitários | `tests/unit` | regras puras das bibliotecas de `src/lib` (datas, ciclos, presença, documentos, lote de contas, notificações) |
-| Interface | `tests/ui` | as telas de todos os perfis nos temas claro e escuro, com checagem automática de acessibilidade |
+| Banco | `supabase/tests/database` | 680 asserções pgTAP: regras de negócio, permissões e fluxos de cada perfil |
+| Segurança | `tests/security` | auditoria de RLS, matriz de execução das RPC por perfil e tentativas de sair do próprio escopo, comparadas com o resultado esperado versionado |
+| Unitários | `tests/unit` | regras puras das bibliotecas de `src/lib` (datas, ciclos, presença, documentos, lote de contas, notificações, geração de planilhas, leitura de planilhas e da OS) |
+| Funções de borda | `supabase/functions/tests` | portões de origem, método, sessão, MFA e perfil, validações, respostas que não revelam contas, limite de tentativas e tempo mínimo de resposta |
+| Interface | `tests/ui` | as telas, abas e gavetas de todos os perfis nos temas claro e escuro e no celular, com checagem automática de acessibilidade |
 | Estático | `eslint.config.js`, `.prettierrc`, `ruff.toml`, `supabase/functions/deno.json` | lint e formatação do JavaScript (bibliotecas e componentes), do Python e das funções de borda |
 
 ## Preparação
@@ -46,7 +47,7 @@ python tests/security/rpc_matrix.py
 python tests/security/scope_audit.py
 ```
 
-`rls_audit.py` falha se algum perfil lê, altera ou apaga o que não deveria. `rpc_matrix.py` lista, para cada função exposta, os perfis que conseguem executá-la, e `scope_audit.py` tenta acessar outra escola ou carteira, injetar SQL e escalar privilégios; ambos gravam o resultado em JSON para comparação entre versões.
+`rls_audit.py` falha se algum perfil lê, altera ou apaga o que não deveria. `rpc_matrix.py` lista, para cada função exposta, os perfis que conseguem executá-la, e `scope_audit.py` tenta acessar outra escola ou carteira, injetar SQL e escalar privilégios. Os dois comparam o resultado com `tests/security/esperado/` e falham em qualquer diferença: uma função nova, ou um perfil que passou a ser aceito ou recusado. Quando a mudança for intencional, regrave o esperado com `GRAVAR_ESPERADO=1` e revise o diff no commit. As mensagens do PostgreSQL são forçadas em inglês (`lc_messages=C`) para que a classificação não dependa do idioma do servidor.
 
 ## Unitários
 
@@ -69,7 +70,9 @@ npm run build
 npm run test:ui
 ```
 
-Use `TEMAS=claro` para varrer só um tema.
+Em cada tela, a varredura também abre as abas (`main [role=tab]`) e a primeira gaveta (`button[aria-haspopup="dialog"]`), confere o diálogo com o axe-core e fecha com Esc; depois repete o menu em 390 px, no primeiro tema, reprovando rolagem horizontal. Use `TEMAS=claro` para varrer só um tema, `SO=gerente,oficineiro` para alguns perfis, `ABAS=0` para pular abas e gavetas e `CELULAR=0` para pular o celular.
+
+Os dados fictícios incluem escolas com baixa adoção e sem visita agendada, mais de 40 contas por escola na Jornada do Usuário, mais de 50 contas em Gestão de Contas e aulas registradas até o dia fixado no relógio dos testes (09/11/2026, 10h), para que listas paginadas, sugestões e agendas apareçam.
 
 ## Estático
 
@@ -80,5 +83,13 @@ ruff check scripts tests
 ruff format --check scripts tests
 cd supabase/functions && deno fmt --check && deno lint && deno check acesso/index.ts admin-usuarios/index.ts
 ```
+
+## Funções de borda
+
+```bash
+cd supabase/functions && deno test --allow-env --allow-read tests/
+```
+
+Os testes carregam cada função com `Deno.serve` e `fetch` substituídos (`tests/apoio.ts`): nenhuma chamada sai para a rede e o Supabase é simulado por rota.
 
 `npm run lint` inclui `scripts/lint_components.js`, que extrai o script de cada `.dc.html` e o passa pelo ESLint e pelo Prettier; `npm run format:components` formata esses scripts.

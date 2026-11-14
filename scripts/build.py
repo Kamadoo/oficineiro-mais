@@ -16,6 +16,7 @@ DIST = RAIZ / "dist"
 ASSETS = DIST / "a"
 ENTRADA = SRC / "index.dc.html"
 RUNTIME = "../vendor/dc-runtime/dc-runtime.js"
+PAGINAS_PUBLICAS = ("ajuda.html", "privacidade.html")
 MARCA_PRIVADA = pathlib.Path(os.environ["OFICINEIRO_MARCA"]) if os.environ.get("OFICINEIRO_MARCA") else None
 
 VENDOR_SHA256 = {
@@ -173,6 +174,10 @@ def construir():
     for nome in ("favicon.svg", "png/favicon-32.png", "png/favicon-180.png", "png/favicon-192.png", "png/favicon-512.png"):
         shutil.copy2(PUBLIC / "brand" / nome, DIST / "brand" / nome)
     shutil.copy2(PUBLIC / "manifest.webmanifest", DIST / "manifest.webmanifest")
+    for nome in PAGINAS_PUBLICAS:
+        texto = (PUBLIC / nome).read_text(encoding="utf-8")
+        exigir_limpo([("dist/" + nome, texto)])
+        (DIST / nome).write_text(texto, encoding="utf-8", newline="\n")
     (DIST / "robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8", newline="\n")
     escrever_cabecalhos(hash_recursos)
     print("dist/ gerado: %d componentes, %d arquivos publicados" % (len(recursos), len(list(ASSETS.iterdir()))))

@@ -78,6 +78,7 @@
           </label>
           <button class="fsm-btn fsm-btn-afastado" onClick="{{ entrar }}" disabled="{{ ocupado }}">{{ rotuloEntrar }}</button>
           <button class="fsm-link" onClick="{{ irPrimeiroAcesso }}">Primeiro acesso? Ative sua conta aqui</button>
+          <p class="fsm-rodape"><a href="ajuda.html">Guia rápido</a><span aria-hidden="true"> · </span><a href="privacidade.html">Aviso de privacidade</a></p>
         </sc-if>
 
         <sc-if value="{{ eh.primeiroCpf }}" hint-placeholder-val="{{ false }}">
@@ -278,6 +279,7 @@
         <dl class="cfg-dl">
           <sc-for list="{{ cfg.suporte }}" as="d" hint-placeholder-count="3"><dt>{{ d.r }}</dt><dd>{{ d.v }}</dd></sc-for>
         </dl>
+        <p class="cfg-links"><a href="ajuda.html" target="_blank" rel="noopener">Guia rápido do seu perfil</a><a href="privacidade.html" target="_blank" rel="noopener">Aviso de privacidade</a></p>
       </section>
     </div>
   </div>
