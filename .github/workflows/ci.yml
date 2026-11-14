@@ -10,12 +10,12 @@ jobs:
     name: Front-end
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
           node-version: 22
           cache: npm
-      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
         with:
           python-version: "3.12"
       - run: npm ci
@@ -35,7 +35,7 @@ jobs:
       run:
         working-directory: supabase/functions
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed
         with:
           deno-version: 2.9.6
@@ -48,13 +48,14 @@ jobs:
     name: Banco de dados
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-      - uses: supabase/setup-cli@1dedf2c611547ede7232d26866dd3c56ab903bbb
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: supabase/setup-cli@689adcfb80d947100a1eab127289b97d1fb07b13
         with:
           version: 3.1.0
       - run: supabase db start
       - run: supabase db reset --no-seed
       - run: supabase test db
+      - run: supabase db reset --no-seed
       - name: Auditoria de RLS
         env:
           PGHOST: 127.0.0.1
@@ -67,7 +68,7 @@ jobs:
           python3 tests/security/rls_audit.py
           python3 tests/security/rpc_matrix.py
           python3 tests/security/scope_audit.py
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
           node-version: 22
           cache: npm
