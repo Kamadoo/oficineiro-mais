@@ -1682,6 +1682,10 @@ html[data-tema="escuro"] #area-logada select:not([multiple]):not([size]) {
 html[data-tema="escuro"] #area-logada main button.botao-limpo:focus-visible {
   outline-color: #5FCDEE !important;
 }
+#area-logada main .fsm-rola:focus-visible {
+  outline: 2px solid var(--destaque-ciano-660);
+  outline-offset: 2px;
+}
 @media screen {
   #area-logada main .fsm-rola {
     background-image:
