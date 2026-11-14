@@ -42,6 +42,7 @@ jobs:
       - run: deno fmt --check
       - run: deno lint
       - run: deno check acesso/index.ts admin-usuarios/index.ts
+      - run: deno test --allow-env --allow-read tests/
 
   database:
     name: Banco de dados
@@ -64,6 +65,8 @@ jobs:
           psql -d postgres -v ON_ERROR_STOP=1 -q -f supabase/seed.sql
           psql -d postgres -v ON_ERROR_STOP=1 -q -f tests/fixtures/dados_teste.sql
           python3 tests/security/rls_audit.py
+          python3 tests/security/rpc_matrix.py
+          python3 tests/security/scope_audit.py
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
         with:
           node-version: 22

@@ -1,0 +1,19 @@
+{
+ "analista agenda visita fora da carteira": "ERRO esta escola não é da sua carteira",
+ "analista lê perfis fora da carteira": "OK 0",
+ "coordenador altera papel para administrador": "ERRO sem permissão para esta operação",
+ "direção aprova relatório de outra escola": "ERRO este relatório não está na sua etapa de aprovação",
+ "direção confere aula de outra escola": "ERRO sem permissão para esta operação",
+ "direção devolve relatório de outra escola": "ERRO este relatório não está na sua etapa de aprovação",
+ "direção lê espelho de oficineiro de outra escola": "ERRO oficineiro não encontrado",
+ "direção revela CPF": "ERRO sem permissão para esta operação",
+ "direção valida grade de outra escola": "ERRO sem permissão para esta operação",
+ "gerente cancela visita e consulta auditoria completa": "ERRO sem permissão para esta operação",
+ "oficineiro injeta SQL em registrar_atividade": "ERRO tipo de atividade inválido",
+ "oficineiro injeta SQL no tipo de ajuste": "ERRO tipo de solicitação inválido",
+ "oficineiro lê espelho de outro oficineiro": "ERRO sem permissão para esta operação",
+ "oficineiro marca presença com precisão falsa (0 m)": "OK {\"aceita\": false, \"motivo\": \"Fora do raio da escola\", \"raio_m\": 200, \"precisao_m\": 0, \"distancia_m\": 1526}",
+ "oficineiro marca presença longe da escola": "OK {\"aceita\": false, \"motivo\": \"Fora do raio da escola\", \"raio_m\": 200, \"precisao_m\": 5, \"distancia_m\": 6773819}",
+ "oficineiro revela CPF": "ERRO sem permissão para esta operação",
+ "oficineiro salva preferências com HTML": "ERRO preferência inválida"
+}
