@@ -552,6 +552,13 @@ class Component extends DCLogic {
           .forEach(el => {
             const rola = el.scrollWidth > el.clientWidth + 4;
             if (rola !== el.classList.contains('fsm-rola')) el.classList.toggle('fsm-rola', rola);
+            if (rola && !el.hasAttribute('tabindex')) {
+              el.setAttribute('tabindex', '0');
+              el.dataset.fsmRolaFoco = '1';
+            } else if (!rola && el.dataset.fsmRolaFoco) {
+              el.removeAttribute('tabindex');
+              delete el.dataset.fsmRolaFoco;
+            }
           });
       };
       const agendar = () => {
