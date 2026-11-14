@@ -33,6 +33,7 @@ As bibliotecas são scripts clássicos que publicam um objeto global (`window.FS
 | `lib/aparencia.js` | tema claro e escuro e preferências de exibição |
 | `lib/onboarding.js` | leitura das planilhas de onboarding e associação dos registros às escolas |
 | `lib/contas.js` | criação de contas, lote de contas, mudança de escola e máscara de documentos, comuns ao Coordenador e ao Gerente |
+| `lib/administracao.js` | valores e chaves das telas de administração do sistema do Coordenador e do Administrador |
 | `lib/mapa.js` | carregamento do Leaflet sob demanda |
 | `lib/sobre.js` | versão, data de geração e contato de suporte exibidos em Configurações |
 
