@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -81,8 +81,7 @@
           </label>
           <button class="fsm-btn fsm-btn-afastado" onClick="{{ entrar }}" disabled="{{ ocupado }}">{{ rotuloEntrar }}</button>
           <button class="fsm-link" onClick="{{ irPrimeiroAcesso }}">Primeiro acesso? Ative sua conta aqui</button>
-          <button class="fsm-link" onClick="{{ irVerificar }}">Conferir um documento emitido pelo Oficineiro+</button>
-          <p class="fsm-rodape"><a href="ajuda.html">Guia rápido</a><span aria-hidden="true"> · </span><a href="privacidade.html">Aviso de privacidade</a></p>
+          <p class="fsm-rodape">Seus dados são tratados conforme o <a href="privacidade.html">aviso de privacidade</a>.</p>
         </sc-if>
 
         <sc-if value="{{ eh.verificar }}" hint-placeholder-val="{{ false }}">
@@ -1071,7 +1070,6 @@ class Component extends DCLogic {
       usuarioGerado: (s.acesso && s.acesso.usuario) || '',
       rotuloEnviar: s.ocupado ? 'Enviando…' : 'Enviar código',
       irPrimeiroAcesso: () => this.setState({ etapa: 'primeiroCpf', erro: '', aviso: '' }),
-      irVerificar: () => this.setState({ etapa: 'verificar', conferencia: null, erro: '', aviso: '' }),
       rotuloVerificar: s.ocupado ? 'Conferindo…' : 'Conferir',
       verificarDocumento: () => this.conferirDocumento(),
       enterVerificar: e => {
