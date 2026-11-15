@@ -19,10 +19,10 @@
 
 ### Entrada
 
-- A tela de entrada mostra só o acesso e o primeiro acesso; o guia rápido e o aviso de privacidade ficam em Configurações.
+- A tela de entrada mostra só o acesso e o primeiro acesso; o guia rápido fica em Configurações.
 - A página declara o idioma português, para leitores de tela.
-- Aviso de privacidade enxuto: só quem trata os dados, quais dados e para quê, quem vê, prazo de guarda e direitos, sem detalhes técnicos do sistema.
-- Links das páginas de ajuda e de privacidade com contraste suficiente sobre o fundo claro.
+- O aviso de privacidade saiu do site até a revisão jurídica preencher os dados do controlador e do encarregado; o rascunho enxuto fica em `public/privacidade.html`.
+- Link de volta do guia rápido com contraste suficiente sobre o fundo claro.
 
 ### Testes
 

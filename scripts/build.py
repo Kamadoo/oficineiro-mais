@@ -16,7 +16,7 @@ DIST = RAIZ / "dist"
 ASSETS = DIST / "a"
 ENTRADA = SRC / "index.dc.html"
 RUNTIME = "../vendor/dc-runtime/dc-runtime.js"
-PAGINAS_PUBLICAS = ("ajuda.html", "privacidade.html")
+PAGINAS_PUBLICAS = ("ajuda.html",)
 MARCA_PRIVADA = pathlib.Path(os.environ["OFICINEIRO_MARCA"]) if os.environ.get("OFICINEIRO_MARCA") else None
 
 VENDOR_SHA256 = {
