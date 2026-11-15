@@ -19,7 +19,7 @@
 
 ### Entrada
 
-- A tela de entrada mostra só o acesso e o primeiro acesso; o aviso de privacidade virou uma nota discreta no pé do formulário, e o guia rápido fica em Configurações.
+- A tela de entrada mostra só o acesso e o primeiro acesso; o guia rápido e o aviso de privacidade ficam em Configurações.
 - A página declara o idioma português, para leitores de tela.
 
 ### Testes
