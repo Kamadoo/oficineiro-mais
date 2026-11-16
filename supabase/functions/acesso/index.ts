@@ -163,11 +163,17 @@ async function atender(req: Request): Promise<Response> {
       const { data } = await admin.rpc('fsm_conta_por_cpf', { p_cpf: cpf });
       const conta = Array.isArray(data) ? data[0] : null;
       if (conta && conta.ativo && conta.email && (conta.primeiro_acesso || recuperar)) {
-        const envio = auth('/otp', { email: conta.email, create_user: false })
+        const envio = (recuperar
+          ? auth('/recover', { email: conta.email })
+          : auth('/otp', { email: conta.email, create_user: false }))
           .then((r) => {
-            if (!r.ok) console.error('acesso/codigo: envio falhou', r.status);
+            if (!r.ok) {
+              console.error('acesso/codigo: envio falhou', r.status);
+            }
           })
-          .catch(() => console.error('acesso/codigo: envio falhou'));
+          .catch(() =>
+            console.error('acesso/codigo: envio falhou')
+          );
         const runtime = (globalThis as { EdgeRuntime?: { waitUntil(p: Promise<unknown>): void } }).EdgeRuntime;
         if (runtime) runtime.waitUntil(envio);
         else await envio;
@@ -190,7 +196,7 @@ async function atender(req: Request): Promise<Response> {
       if (!conta || !conta.ativo || !conta.email || !(conta.primeiro_acesso || recuperar)) {
         throw new ErroPublico(400, MSG_CONFIRMAR);
       }
-      const r = await auth('/verify', { type: 'email', email: conta.email, token: codigo });
+      const r = await auth('/verify', { type: recuperar ? 'recovery' : 'email', email: conta.email, token: codigo });
       if (!r.ok) {
         if (r.status !== 400 && r.status !== 403) console.error('acesso/confirmar: falhou', r.status);
         throw new ErroPublico(400, MSG_CONFIRMAR);
