@@ -24,6 +24,8 @@ const admin = createClient(URL_SUPABASE, CHAVE_SERVICO, { auth: { persistSession
 const JANELA_S = 15 * 60;
 const MSG_CODIGO =
   'Se este CPF ou CNPJ tiver um primeiro acesso pendente, enviamos um código para o e-mail institucional cadastrado. Ele vale por 1 hora.';
+const MSG_RECUPERAR =
+  'Se este CPF ou CNPJ estiver cadastrado em uma conta ativa, enviamos um código para o e-mail institucional cadastrado. Ele vale por 1 hora.';
 const MSG_CONFIRMAR = 'Documento ou código inválido. Confira e tente de novo.';
 const MSG_ENTRAR = 'Usuário ou senha incorretos.';
 
@@ -64,7 +66,7 @@ async function auth(
 ): Promise<{ ok: boolean; status: number; dados: Record<string, unknown> | null }> {
   const r = await fetch(`${URL_SUPABASE}/auth/v1${caminho}`, {
     method: 'POST',
-    headers: { 'apikey': CHAVE_PUBLICA, 'Content-Type': 'application/json' },
+    headers: { apikey: CHAVE_PUBLICA, 'Content-Type': 'application/json' },
     body: JSON.stringify(corpo),
   });
   let dados: Record<string, unknown> | null = null;
@@ -96,7 +98,7 @@ async function authComo(
 ): Promise<{ ok: boolean; status: number; dados: Record<string, unknown> | null }> {
   const r = await fetch(`${URL_SUPABASE}${caminho}`, {
     method: metodo,
-    headers: { 'apikey': CHAVE_PUBLICA, 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    headers: { apikey: CHAVE_PUBLICA, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: corpo === undefined ? undefined : JSON.stringify(corpo),
   });
   let dados: Record<string, unknown> | null = null;
@@ -116,6 +118,15 @@ function faltaNaSenha(s: string): string[] {
   if (!/[0-9]/.test(s)) falta.push('um número');
   if (!/[^A-Za-z0-9]/.test(s)) falta.push('um símbolo');
   return falta;
+}
+
+async function exigirSenhaNova(id: unknown) {
+  if (typeof id !== 'string') throw new ErroPublico(500, MSG_CONFIRMAR);
+  const { error } = await admin.from('perfis').update({ trocar_senha: true }).eq('id', id);
+  if (error) {
+    console.error('acesso/confirmar: marcação de senha nova falhou');
+    throw new ErroPublico(503, 'Não foi possível concluir agora. Aguarde alguns minutos e tente de novo.');
+  }
 }
 
 async function registrarLogin(id: unknown) {
@@ -141,6 +152,7 @@ async function atender(req: Request): Promise<Response> {
     }
 
     if (corpo.acao === 'codigo') {
+      const recuperar = corpo.recuperar === true;
       const cpf = soDigitos(corpo.cpf);
       if (cpf.length < 10 || (cpf.length > 11 && cpf.length !== 14)) {
         throw new ErroPublico(400, 'Digite o CPF ou o CNPJ completo.');
@@ -150,7 +162,7 @@ async function atender(req: Request): Promise<Response> {
       }
       const { data } = await admin.rpc('fsm_conta_por_cpf', { p_cpf: cpf });
       const conta = Array.isArray(data) ? data[0] : null;
-      if (conta && conta.ativo && conta.primeiro_acesso && conta.email) {
+      if (conta && conta.ativo && conta.email && (conta.primeiro_acesso || recuperar)) {
         const envio = auth('/otp', { email: conta.email, create_user: false })
           .then((r) => {
             if (!r.ok) console.error('acesso/codigo: envio falhou', r.status);
@@ -160,10 +172,11 @@ async function atender(req: Request): Promise<Response> {
         if (runtime) runtime.waitUntil(envio);
         else await envio;
       }
-      return resposta(req, 200, { ok: true, mensagem: MSG_CODIGO });
+      return resposta(req, 200, { ok: true, mensagem: recuperar ? MSG_RECUPERAR : MSG_CODIGO });
     }
 
     if (corpo.acao === 'confirmar') {
+      const recuperar = corpo.recuperar === true;
       const cpf = soDigitos(corpo.cpf);
       const codigo = soDigitos(corpo.codigo);
       if (cpf.length < 10 || (cpf.length > 11 && cpf.length !== 14) || codigo.length < 6 || codigo.length > 10) {
@@ -174,12 +187,15 @@ async function atender(req: Request): Promise<Response> {
       }
       const { data } = await admin.rpc('fsm_conta_por_cpf', { p_cpf: cpf });
       const conta = Array.isArray(data) ? data[0] : null;
-      if (!conta || !conta.ativo || !conta.primeiro_acesso || !conta.email) throw new ErroPublico(400, MSG_CONFIRMAR);
+      if (!conta || !conta.ativo || !conta.email || !(conta.primeiro_acesso || recuperar)) {
+        throw new ErroPublico(400, MSG_CONFIRMAR);
+      }
       const r = await auth('/verify', { type: 'email', email: conta.email, token: codigo });
       if (!r.ok) {
         if (r.status !== 400 && r.status !== 403) console.error('acesso/confirmar: falhou', r.status);
         throw new ErroPublico(400, MSG_CONFIRMAR);
       }
+      if (!conta.primeiro_acesso) await exigirSenhaNova(conta.user_id);
       await registrarLogin(conta.user_id);
       return resposta(req, 200, { ok: true, sessao: sessao(r.dados) });
     }
