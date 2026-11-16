@@ -2710,10 +2710,6 @@ class Component extends DCLogic {
   edicaoDaAtividade() {
     const s = this.state;
     const edicao = s.edicao || {};
-    const anosDaEscola = [...new Set((s.turmas || []).map(turma => Number(turma.ano)))]
-      .filter(ano => ANOS.includes(ano))
-      .sort((x, y) => x - y);
-    const anos = anosDaEscola.length ? anosDaEscola : ANOS;
     const turmasDoAno =
       edicao.ano === '' || edicao.ano == null
         ? []
@@ -2721,7 +2717,11 @@ class Component extends DCLogic {
             .filter(turma => String(turma.ano) === String(edicao.ano) && turma.turma)
             .map(turma => turma.turma);
     const turmasDaEdicao =
-      edicao.ano === '' || edicao.ano == null ? [] : turmasDoAno.length ? turmasDoAno : TURMAS_PADRAO;
+      edicao.ano === '' || edicao.ano == null
+        ? []
+        : [...new Set([...turmasDoAno, ...TURMAS_PADRAO])].sort((x, y) =>
+            x.localeCompare(y, 'pt-BR', { numeric: true })
+          );
     const inicioDaEdicao = horaValida(edicao.hora) ? minDeHora(edicao.hora) : null;
     const fimDaEdicao = inicioDaEdicao == null ? null : inicioDaEdicao + 50 * (edicao.tempos || 1);
     return {
@@ -2778,7 +2778,7 @@ class Component extends DCLogic {
       oficinas: [...OFICINAS, 'Outro'].map(item => ({ valor: item, rotulo: item })),
       temOutraOficina: edicao.tipo === 'P' && edicao.oficina === 'Outro',
       mudarOutraOficina: evento => this.preencherEdicao({ outraOficina: evento.target.value }),
-      anos: anos.map(ano => ({ valor: String(ano), rotulo: anoTexto(ano) })),
+      anos: ANOS.map(ano => ({ valor: String(ano), rotulo: anoTexto(ano) })),
       mudarTurma: evento => this.preencherEdicao({ turma: evento.target.value }),
       turmasDoAno: turmasDaEdicao,
       semAno: edicao.ano === '' || edicao.ano == null,
