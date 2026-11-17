@@ -13,7 +13,11 @@ function padrao(opcoes: { limite?: boolean; conta?: unknown; senhaCerta?: boolea
       return json(opcoes.conta ? [opcoes.conta] : []);
     }
     if (nome) return json(null);
-    if (p.caminho === '/auth/v1/otp') return json({});
+    if (p.caminho === '/auth/v1/otp' || p.caminho === '/auth/v1/recover') return json({});
+    if (p.caminho === '/auth/v1/verify') {
+      return json({ access_token: 'a.b.c', refresh_token: 'r', expires_in: 3600, expires_at: 1 });
+    }
+    if (p.caminho === '/rest/v1/perfis' && p.metodo === 'PATCH') return new Response(null, { status: 204 });
     if (p.caminho === '/auth/v1/token') {
       return opcoes.senhaCerta
         ? json({ access_token: 'a.b.c', refresh_token: 'r', expires_in: 3600, expires_at: 1 })
@@ -61,6 +65,45 @@ Deno.test('pedido de código não revela se o documento existe', async () => {
   padrao({ conta: { ...CONTA, primeiro_acesso: false } });
   await atender(pedir({ acao: 'codigo', cpf: '529.982.247-25' }));
   assertEquals(chamadas('/auth/v1/otp').length, 0);
+});
+
+Deno.test('recuperação envia código para conta ativa sem revelar se o documento existe', async () => {
+  const ativa = { ...CONTA, primeiro_acesso: false };
+  padrao({ conta: ativa });
+  const comConta = await (await atender(pedir({ acao: 'codigo', cpf: '529.982.247-25', recuperar: true }))).json();
+  assertEquals(chamadas('/auth/v1/recover').length, 1);
+  assertEquals(chamadas('/auth/v1/otp').length, 0);
+  padrao();
+  const semConta = await (await atender(pedir({ acao: 'codigo', cpf: '111.444.777-35', recuperar: true }))).json();
+  assertEquals(chamadas('/auth/v1/recover').length, 0);
+  assertEquals(comConta, semConta);
+  padrao({ conta: { ...ativa, ativo: false } });
+  await atender(pedir({ acao: 'codigo', cpf: '529.982.247-25', recuperar: true }));
+  assertEquals(chamadas('/auth/v1/recover').length, 0);
+});
+
+Deno.test('confirmar recuperação exige senha nova; sem o pedido de recuperação a conta ativa é recusada', async () => {
+  const ativa = { ...CONTA, primeiro_acesso: false };
+  padrao({ conta: ativa });
+  const recusada = await atender(pedir({ acao: 'confirmar', cpf: '52998224725', codigo: '123456' }));
+  assertEquals(recusada.status, 400);
+  assertEquals(chamadas('/auth/v1/verify').length, 0);
+  padrao({ conta: ativa });
+  const r = await atender(pedir({ acao: 'confirmar', cpf: '52998224725', codigo: '123456', recuperar: true }));
+  assertEquals(r.status, 200);
+  assertEquals((chamadas('/auth/v1/verify')[0].corpo as { type: string }).type, 'recovery');
+  const marca = chamadas('/rest/v1/perfis');
+  assertEquals(marca.length, 1);
+  assertEquals(marca[0].corpo, { trocar_senha: true });
+  assertEquals(marca[0].busca.get('id'), 'eq.u1');
+  assert((await r.json()).sessao);
+});
+
+Deno.test('primeiro acesso confirmado não altera a marcação de senha', async () => {
+  padrao({ conta: CONTA });
+  const r = await atender(pedir({ acao: 'confirmar', cpf: '52998224725', codigo: '123456' }));
+  assertEquals(r.status, 200);
+  assertEquals(chamadas('/rest/v1/perfis').length, 0);
 });
 
 Deno.test('documento incompleto é recusado sem consultar contas', async () => {
