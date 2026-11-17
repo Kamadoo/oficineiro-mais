@@ -567,6 +567,22 @@
   "gerente": "aceito",
   "oficineiro": "aceito"
  },
+ "registrar_status_carteira(p_carteira text, p_status text, p_resumo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "registrar_status_escola(p_escola smallint, p_status text, p_acao text, p_proximo_passo text, p_prazo date)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
  "registrar_visita(p jsonb)": {
   "administrador": "recusado",
   "analista": "recusado",
