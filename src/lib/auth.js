@@ -970,6 +970,38 @@ window.FSM_AUTH =
           { token: token() }
         );
       },
+      jornadaStatusEscolas() {
+        return chamarTudo(
+          '/rest/v1/jornada_escola_status?select=id,escola_id,status,acao,proximo_passo,prazo,autor_nome,criado_em&order=criado_em.desc,id.desc',
+          { token: token() }
+        );
+      },
+      jornadaStatusCarteiras() {
+        return chamarTudo(
+          '/rest/v1/jornada_carteira_status?select=id,carteira_id,status,resumo,autor_nome,criado_em&order=criado_em.desc,id.desc',
+          { token: token() }
+        );
+      },
+      registrarStatusEscola(escola, status, acao, proximoPasso, prazo) {
+        return chamar('/rest/v1/rpc/registrar_status_escola', {
+          metodo: 'POST',
+          token: token(),
+          corpo: {
+            p_escola: Number(escola),
+            p_status: String(status || ''),
+            p_acao: acao ? String(acao) : null,
+            p_proximo_passo: proximoPasso ? String(proximoPasso) : null,
+            p_prazo: prazo || null
+          }
+        });
+      },
+      registrarStatusCarteira(carteira, status, resumo) {
+        return chamar('/rest/v1/rpc/registrar_status_carteira', {
+          metodo: 'POST',
+          token: token(),
+          corpo: { p_carteira: String(carteira || ''), p_status: String(status || ''), p_resumo: String(resumo || '') }
+        });
+      },
       ordensServico() {
         return chamarTudo(
           '/rest/v1/onboarding_os?select=id,numero,secretaria,arquivo,recebida_em,importada_em&order=recebida_em,id',
