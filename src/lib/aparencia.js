@@ -189,6 +189,30 @@ window.FSM_APARENCIA =
       return { ...PADRAO, ...atual };
     };
 
+    const ESPACO_DO_MENU = 300;
+    const TECLAS_QUE_ABREM = ['ArrowDown', 'ArrowUp', 'Enter', ' '];
+    const rolavelDe = elemento => {
+      let atualEl = elemento.parentElement;
+      while (atualEl && atualEl !== document.body) {
+        const estilo = getComputedStyle(atualEl).overflowY;
+        if ((estilo === 'auto' || estilo === 'scroll') && atualEl.scrollHeight > atualEl.clientHeight) return atualEl;
+        atualEl = atualEl.parentElement;
+      }
+      return document.scrollingElement;
+    };
+    const darEspacoAoMenu = evento => {
+      const campo = evento.target;
+      if (!(campo instanceof HTMLSelectElement) || campo.multiple || campo.size > 1) return;
+      if (!campo.closest('#area-logada')) return;
+      if (evento.type === 'keydown' && !TECLAS_QUE_ABREM.includes(evento.key)) return;
+      const falta = campo.getBoundingClientRect().bottom + ESPACO_DO_MENU - window.innerHeight;
+      if (falta <= 0) return;
+      const rolavel = rolavelDe(campo);
+      if (rolavel) rolavel.scrollTop += falta;
+    };
+    document.addEventListener('pointerdown', darEspacoAoMenu, true);
+    document.addEventListener('keydown', darEspacoAoMenu, true);
+
     let guardado;
     try {
       guardado = JSON.parse(localStorage.getItem(CHAVE) || '{}') || {};
