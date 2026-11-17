@@ -21,6 +21,9 @@
   hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
     <select style="background:var(--fundo-branco)" aria-label="Perfil" onChange="{{ escolherPerfil }}" value="{{ perfil }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todos">Todos os perfis</option><option value="A">Alunos</option><option value="P">Professores</option><option value="S">Servidores</option></select>
     <select style="background:var(--fundo-branco)" aria-label="Lotação" onChange="{{ escolherLotacao }}" value="{{ lotacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="escolas">Escolas e CEIs</option><option value="todas">Todas as lotações</option></select>
+    <select style="background:var(--fundo-branco)" aria-label="Escola ou unidade" onChange="{{ escolherFiltroEscola }}" value="{{ filtroEscola }}" class="h-36 max-w-320 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as escolas e unidades</option><sc-for list="{{ opcoesDoFiltroEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select style="background:var(--fundo-branco)" aria-label="Turma" onChange="{{ escolherFiltroAno }}" value="{{ filtroAno }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todos">Todas as turmas</option><sc-for list="{{ opcoesDoFiltroAno }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <sc-if value="{{ temFiltro }}" hint-placeholder-val="{{ false }}"><button onClick="{{ limparFiltros }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario">Limpar filtros</button></sc-if>
     <span class="ml-auto fs-12 cor-cinza-600">Base de acessos de <b class="cor-ciano-850">{{ dataDaBase }}</b></span>
   </div>
 
@@ -74,21 +77,57 @@
         </div>
       </section>
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Sugestões de visita</h3><span class="fs-12 cor-cinza-600">Escolas de maior prioridade, sem visita na agenda.</span></div>
-        <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="d-flex quebra-wrap alinha-center gap-8-12">
+          <div class="flex-1-1-240 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">{{ agendaDaSemana.titulo }}</h3><span class="fs-12 cor-cinza-600">Visitas da agenda em destaque; horários sugeridos pela Jornada em tracejado.</span></div>
+          <div role="group" aria-label="Semana da agenda" class="d-flex alinha-center gap-6">
+            <button onClick="{{ agendaDaSemana.anterior }}" aria-label="Semana anterior" class="w-36 h-36 borda-cinza-160 fundo-branco raio-8 cor-ciano-850 fs-16 p-0 largura-fundo botao-secundario">‹</button>
+            <span class="fs-13 fw-600 min-w-170 texto-center">{{ agendaDaSemana.texto }}</span>
+            <button onClick="{{ agendaDaSemana.seguinte }}" aria-label="Próxima semana" class="w-36 h-36 borda-cinza-160 fundo-branco raio-8 cor-ciano-850 fs-16 p-0 largura-fundo botao-secundario">›</button>
+            <sc-if value="{{ agendaDaSemana.foraDaAtual }}" hint-placeholder-val="{{ false }}"><button onClick="{{ agendaDaSemana.atual }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-ciano-850 botao-secundario">Esta semana</button></sc-if>
+          </div>
+        </div>
+        <div class="empilha-celular d-grid colunas-repeat-5-minmax-0-1fr gap-10">
+          <sc-for list="{{ agendaDaSemana.dias }}" as="dia" hint-placeholder-count="5">
+            <div class="raio-10 p-10 d-flex eixo-column gap-8 min-w-0 largura-fundo" style="background:{{ dia.fundo }};border:1px solid {{ dia.borda }}" aria-label="{{ dia.aria }}">
+              <div class="d-flex justifica-space-between alinha-baseline"><b class="fs-13">{{ dia.nome }}</b><span class="num-tabular-nums fs-12 cor-cinza-600">{{ dia.data }}</span></div>
+              <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">{{ dia.vazioTexto }}</span></sc-if>
+              <sc-for list="{{ dia.eventos }}" as="evento" hint-placeholder-count="2">
+                <div class="raio-8 p-10 d-flex eixo-column gap-2 min-w-0" style="border-left:3px {{ evento.traco }} {{ evento.cor }};background:{{ evento.fundo }}"><span class="num-tabular-nums fs-12 cor-cinza-600">{{ evento.hora }}</span><span class="fs-13 fw-600 cor-ciano-850 quebra-palavra-anywhere">{{ evento.escola }}</span><span class="fs-12 cor-cinza-750 quebra-palavra-anywhere">{{ evento.tipo }}</span><span class="fs-11 fw-600" style="color:{{ evento.situacaoCor }}">{{ evento.situacao }}</span></div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Sugestões de visita</h3><span class="fs-12 cor-cinza-600">Escolas de maior prioridade sem visita nos próximos 7 dias, com horário livre na agenda (2 h, dias úteis, próximos 10 dias).</span></div>
+        <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
           <sc-for list="{{ sugestoesDeVisita }}" as="sugestao" hint-placeholder-count="3">
             <div class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-6">
               <div class="d-flex alinha-center gap-8"><button onClick="{{ sugestao.abrir }}" class="largura-fundo cursor-pointer fs-14 cor-ciano-850" style="all:unset;font-weight:600">{{ sugestao.nome }}</button><span class="ml-auto fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ sugestao.semaforoCor }};background:{{ sugestao.semaforoFundo }}">{{ sugestao.semaforo }}</span></div>
               <span class="fs-12 cor-cinza-600">Prioridade <b class="cor-ciano-850">{{ sugestao.prioridade }}</b> de 100</span>
+              <span class="fs-13 fw-600 cor-ciano-850 p-6-10 raio-8 fundo-ciano-40 alinha-si-flex-start">{{ sugestao.horario }}</span>
               <sc-for list="{{ sugestao.motivos }}" as="motivo" hint-placeholder-count="3"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ motivo }}</span></sc-for>
-              <button style="background:var(--destaque-ciano-660)" onClick="{{ sugestao.agendar }}" class="alinha-si-flex-start h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660">{{ textos.agendar }}</button>
+              <sc-if value="{{ sugestao.podeAgir }}" hint-placeholder-val="{{ false }}">
+                <div class="d-flex quebra-wrap gap-6">
+                  <button style="background:var(--destaque-ciano-660)" onClick="{{ sugestao.aceitar }}" disabled="{{ sugestao.ocupado }}" class="h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660">Aceitar e agendar</button>
+                  <button onClick="{{ sugestao.outroHorario }}" aria-haspopup="dialog" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap botao-secundario">Agendar em outro horário</button>
+                  <button onClick="{{ sugestao.alternarDescarte }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap botao-secundario">{{ sugestao.textoDescartar }}</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ sugestao.descartando }}" hint-placeholder-val="{{ false }}">
+                <div class="d-flex eixo-column gap-8 p-12 raio-10 fundo-cinza-20">
+                  <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Motivo do descarte *<select style="background:var(--fundo-branco)" onChange="{{ escolherMotivoDoDescarte }}" value="{{ descarte.motivo }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="">Escolha o motivo</option><sc-for list="{{ motivosDeDescarte }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+                  <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">{{ descarte.rotuloDoDetalhe }}<textarea rows="2" value="{{ descarte.detalhe }}" onChange="{{ escreverDetalheDoDescarte }}" maxlength="500" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+                  <button style="background:var(--destaque-ciano-660)" onClick="{{ confirmarDescarte }}" disabled="{{ descarte.incompleto }}" class="alinha-si-flex-start h-34 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fundo-ciano-660">Descartar sugestão</button>
+                </div>
+              </sc-if>
             </div>
           </sc-for>
         </div>
         <sc-if value="{{ semSugestoesDeVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma escola pendente de visita nesta carteira.</span></sc-if>
       </section>
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Escolas da carteira</h3><span class="fs-12 cor-cinza-600">Ordenadas pela prioridade de visita. Clique para ver a escola e registrar a ação.</span></div>
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Escolas da carteira</h3><span class="fs-12 cor-cinza-600">Ordenadas pela prioridade de visita. Clique na escola para ver o detalhe e registrar a ação.</span></div>
         <div class="rolagem-x-auto m-0-n4">
           <div class="min-w-900 d-flex eixo-column p-0-4">
             <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,2fr) 100px 80px 80px 90px 80px 150px 130px">
@@ -96,7 +135,7 @@
             </div>
             <sc-for list="{{ escolasDaCarteira }}" as="linha" hint-placeholder-count="6">
               <div class="d-grid gap-4 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,2fr) 100px 80px 80px 90px 80px 150px 130px">
-                <button onClick="{{ linha.abrir }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset" title="{{ linha.nome }}">{{ linha.nome }}</button>
+                <button onClick="{{ linha.detalhar }}" aria-expanded="{{ linha.expandida }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset" title="{{ linha.nome }}">{{ linha.nome }}</button>
                 <span><span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.semaforoCor }};background:{{ linha.semaforoFundo }}">{{ linha.semaforo }}</span></span>
                 <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.utilizacao }}</span>
                 <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
@@ -105,6 +144,7 @@
                 <span class="fs-12 cor-cinza-750">{{ linha.status }}</span>
                 <span class="fs-12" style="color:{{ linha.agendaCor }}">{{ linha.agenda }}</span>
               </div>
+              <sc-if value="{{ linha.aberta }}" hint-placeholder-val="{{ false }}"><dc-import name="jornada-escola" detalhe="{{ detalhe }}"></dc-import></sc-if>
             </sc-for>
           </div>
         </div>
@@ -135,6 +175,25 @@
       <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
         <sc-for list="{{ cartoesPorPerfil }}" as="cartao" hint-placeholder-count="3"><button onClick="{{ cartao.escolher }}" class="borda-cinza-110 raio-10 p-12-14 d-flex eixo-column gap-6 cursor-pointer texto-left largura-fundo" style="background:{{ cartao.fundo }}"><b class="fs-13 cor-ciano-850">{{ cartao.rotulo }} <span class="fw-400 fs-12 cor-cinza-600">{{ cartao.total }}</span></b><div class="d-flex h-10 raio-4 rolagem-hidden fundo-cinza-90"><sc-for list="{{ cartao.faixas }}" as="faixa" hint-placeholder-count="6"><div title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></div></sc-for></div><span class="fs-12 cor-cinza-750">{{ cartao.numeros }}</span></button></sc-for>
       </div>
+    </section>
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Evolução mensal</h3><span class="fs-12 cor-cinza-600">{{ evolucao.nota }}</span></div>
+      <sc-if value="{{ evolucao.temMeses }}" hint-placeholder-val="{{ false }}">
+        <div class="rolagem-x-auto m-0-n4">
+          <div class="d-flex alinha-end gap-12 p-0-4" style="min-height:190px">
+            <sc-for list="{{ evolucao.meses }}" as="mes" hint-placeholder-count="6">
+              <div class="d-flex eixo-column alinha-center gap-6" style="min-width:76px;flex:1 1 0">
+                <div class="d-flex alinha-end gap-3" style="height:150px">
+                  <sc-for list="{{ mes.barras }}" as="barra" hint-placeholder-count="3"><div title="{{ barra.titulo }}" class="raio-3" style="width:16px;height:{{ barra.altura }};background:{{ barra.cor }}"></div></sc-for>
+                </div>
+                <span class="fs-12 fw-600 cor-cinza-750 espaco-nowrap">{{ mes.rotulo }}</span>
+                <span class="num-tabular-nums fs-11 cor-cinza-600 espaco-nowrap" style="font-family:'Inter',system-ui,sans-serif">{{ mes.numeros }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ evolucao.legenda }}" as="item" hint-placeholder-count="3"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
+      </sc-if>
     </section>
     <div class="empilha-celular d-grid colunas-minmax-0-1p25fr-minmax-0-1fr gap-16 alinha-start">
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
@@ -192,6 +251,42 @@
   </sc-if>
 
   <sc-if value="{{ abaAtiva.escolas }}" hint-placeholder-val="{{ false }}">
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-center gap-8-14">
+        <div class="flex-1-1-300 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Escolas</h3><span class="fs-12 cor-cinza-600">{{ listaDeEscolas.nota }}</span></div>
+        <div role="tablist" aria-label="Barra da escola" class="d-flex gap-2 fundo-cinza-70 raio-10 p-3 quebra-wrap">
+          <sc-for list="{{ listaDeEscolas.visoes }}" as="visao" hint-placeholder-count="3"><button role="tab" aria-selected="{{ visao.atual }}" onClick="{{ visao.escolher }}" class="borda-0 raio-8 p-6-12 fs-13 fw-600 {{ visao.classe }}" style="background:{{ visao.fundo }};color:{{ visao.cor }}">{{ visao.rotulo }}</button></sc-for>
+        </div>
+        <sc-if value="{{ porCarteira }}" hint-placeholder-val="{{ false }}"><label class="d-flex alinha-center gap-6 fs-13 fw-600 cor-cinza-750"><input type="checkbox" checked="{{ listaDeEscolas.agrupada }}" onChange="{{ listaDeEscolas.alternarGrupo }}"></input>Por carteira</label></sc-if>
+        <select style="background:var(--fundo-branco)" aria-label="Ordenar escolas" onChange="{{ listaDeEscolas.escolherOrdem }}" value="{{ listaDeEscolas.ordem }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="prio">Maior prioridade</option><option value="base">Maior base</option><option value="uso">Menor utilização</option><option value="eng">Menor engajamento</option></select>
+      </div>
+      <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ listaDeEscolas.legenda }}" as="item" hint-placeholder-count="5"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
+      <div class="rolagem-x-auto m-0-n4">
+        <div class="min-w-900 d-flex eixo-column p-0-4">
+          <div class="d-grid gap-8 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,1.6fr) minmax(220px,2fr) 70px 80px 80px 70px 100px">
+            <span>Escola</span><span>{{ listaDeEscolas.tituloDaBarra }}</span><span class="texto-right">Contas</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Prioridade</span><span>Semáforo</span>
+          </div>
+          <sc-for list="{{ listaDeEscolas.grupos }}" as="grupo" hint-placeholder-count="1">
+            <sc-if value="{{ grupo.temTitulo }}" hint-placeholder-val="{{ false }}"><div class="d-flex alinha-baseline gap-8 p-12-0 borda-t-cinza-75"><b class="fs-13 cor-ciano-850">{{ grupo.titulo }}</b><span class="fs-12 cor-cinza-600">{{ grupo.numeros }}</span></div></sc-if>
+            <sc-for list="{{ grupo.linhas }}" as="linha" hint-placeholder-count="6">
+              <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,1.6fr) minmax(220px,2fr) 70px 80px 80px 70px 100px">
+                <button onClick="{{ linha.detalhar }}" aria-expanded="{{ linha.expandida }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset" title="{{ linha.nome }}">{{ linha.nome }}</button>
+                <div class="d-flex alinha-end h-14 {{ linha.barraClasse }}">
+                  <sc-for list="{{ linha.faixas }}" as="faixa" hint-placeholder-count="5"><div title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};height:{{ faixa.altura }};background:{{ faixa.cor }};border-radius:{{ faixa.raio }}"></div></sc-for>
+                </div>
+                <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
+                <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.utilizacao }}</span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.pontos }}</span>
+                <span><span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.semaforoCor }};background:{{ linha.semaforoFundo }}">{{ linha.semaforo }}</span></span>
+              </div>
+              <sc-if value="{{ linha.aberta }}" hint-placeholder-val="{{ false }}"><dc-import name="jornada-escola" detalhe="{{ detalhe }}"></dc-import></sc-if>
+            </sc-for>
+          </sc-for>
+        </div>
+      </div>
+      <sc-if value="{{ listaDeEscolas.temMais }}" hint-placeholder-val="{{ false }}"><button onClick="{{ listaDeEscolas.mostrarMais }}" class="alinha-si-flex-start h-34 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">Mostrar mais</button></sc-if>
+    </section>
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
       <div class="d-flex quebra-wrap alinha-center gap-8-14">
         <div class="flex-1-1-300 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Mapa de calor por escola</h3><span class="fs-12 cor-cinza-600">% das contas em cada faixa · cor mais forte = maior concentração. Clique na escola para ver as turmas.</span></div>
@@ -364,7 +459,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 const Base = window.FSM_BASE;
-const { dataDe, dmyIso, exC, numero, plural, normTxt } = Base;
+const { dataDe, dmyIso, dmIso, exC, hmDe, numero, plural, normTxt, WDL: DIAS } = Base;
 const TEMPERATURAS = {
   Q: [
     'Quente',
@@ -436,13 +531,31 @@ const META_SEMANAL = { A: 0.75, P: 3, S: 3 };
 const MINIMO_PARA_SEMAFORO = 10;
 const DIAS_DE_STATUS_CONCLUIDO = 14;
 const VISITAS_SUGERIDAS = 3;
+const DIAS_DE_DESCARTE = 14;
+const DIAS_SEM_VISITA_PROXIMA = 7;
+const DIAS_PARA_SUGERIR = 10;
+const INICIOS_DE_VISITA = ['08:00', '08:30', '09:00', '09:30', '13:00', '13:30', '14:00', '14:30'];
+const MOTIVOS_DE_DESCARTE = {
+  visita_recente: 'Visitei recentemente',
+  acao_a_distancia: 'Vou agir à distância',
+  escola_fechada: 'Escola fechada',
+  outro: 'Outro'
+};
+const DESCARTE_VAZIO = { escola: '', motivo: '', detalhe: '' };
+const VISOES_DA_LISTA = {
+  jornada: ['Jornada', 'Estágio da jornada'],
+  temperatura: ['Temperatura', 'Temperatura de acesso'],
+  mes: ['Mês da leitura', 'Utilização por mês da leitura']
+};
+const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 const REGRAS = [
   'Implementados: já acessaram ao menos uma vez. Utilização: acessaram nos últimos 30 dias.',
   'Ritmo semanal = dias de acesso no período do arquivo (6 meses) ÷ 26 semanas.',
   'Engajado: ritmo ≥ meta (alunos 0,75 dia por semana; professores e servidores 3). Em evolução: ritmo ≥ meta ÷ 3. Baixo uso: abaixo disso.',
   'Em uso, sem contagem de dias: acessou nos últimos 30 dias, mas o arquivo não trouxe os dias de acesso.',
   'Semáforo: Crítico com utilização abaixo de 40% ou risco (sem uso +30 dias + nunca acessou) a partir de 50%; Atenção com utilização abaixo de 60%, risco a partir de 30% ou menos de 60% dos anos com aula em 7 dias; unidades com menos de 10 usuários ficam como base pequena.',
-  'Prioridade de visita (0 a 100) = 40 × (1 − utilização) + 25 × risco + 15 × (1 − engajados ÷ medidos) + 10 sem registro de visita recente; metade para unidades com menos de 10 usuários.'
+  'Prioridade de visita (0 a 100) = 40 × (1 − utilização) + 25 × risco + 15 × (1 − engajados ÷ medidos) + 10 × dias desde a última visita registrada ÷ 30 (até 1; sem registro conta 1) + 10 × queda da utilização em 7 dias ÷ 10 pontos (até 1); metade para unidades com menos de 10 usuários.',
+  'Sugestões de visita: escolas de maior prioridade sem visita nos próximos 7 dias e sem status Concluída ou descarte há menos de 14 dias, com horário de 2 h em dia útil dos próximos 10 dias (08:00 às 11:30 ou 13:00 às 16:30), no máximo uma por dia e sem conflito com a agenda.'
 ];
 const TEXTOS = {
   analista: {
@@ -480,7 +593,17 @@ const PADRAO = {
   usuEscola: 'todas',
   usuEstagio: 'todos',
   usuTemperatura: 'todas',
-  usuLimite: 100
+  usuLimite: 100,
+  filtroEscola: 'todas',
+  filtroAno: 'todos',
+  escolaAberta: '',
+  visaoLista: 'jornada',
+  agrupada: false,
+  ordemLista: 'prio',
+  limiteLista: 60,
+  semanaAgenda: 0,
+  descarte: DESCARTE_VAZIO,
+  agendando: ''
 };
 const faixaDe = dias => (dias < 0 ? 'N' : dias <= 5 ? 'Q' : dias <= 10 ? 'M' : dias <= 30 ? 'F' : 'S');
 const estagioDe = conta => {
@@ -527,23 +650,51 @@ const semaforoDe = (total, turmas, comAula) => {
   if (total.uso < 60 || total.risco >= 30 || aula < 60) return 'atencao';
   return 'em_dia';
 };
-const prioridadeDe = total => {
+const prioridadeDe = (total, diasSemVisita, queda) => {
   if (!total.n) return 0;
   const medidos = total.en + total.ev + total.bx,
-    engajamento = medidos ? total.en / medidos : 0.5;
+    engajamento = medidos ? total.en / medidos : 0.5,
+    visita = diasSemVisita == null ? 1 : Math.min(1, diasSemVisita / 30);
   let pontos =
-    40 * (1 - total.utilizacao / total.n) + 25 * ((total.sr + total.nv) / total.n) + 15 * (1 - engajamento) + 10;
+    40 * (1 - total.utilizacao / total.n) +
+    25 * ((total.sr + total.nv) / total.n) +
+    15 * (1 - engajamento) +
+    10 * visita +
+    10 * Math.min(1, (queda || 0) / 10);
   if (total.n < MINIMO_PARA_SEMAFORO) pontos *= 0.5;
   return Math.round(pontos * 10) / 10;
 };
-const motivosDe = (total, turmas, comAula) => {
+const motivosDe = (total, turmas, comAula, extras) => {
   const motivos = [];
+  if (extras && extras.queda >= 5)
+    motivos.push('utilização caiu ' + extras.queda + ' pontos desde ' + dmyIso(extras.dataAnterior));
   if (total.nv) motivos.push(plural(total.nv, 'usuário nunca acessou', 'usuários nunca acessaram'));
   if (total.sr) motivos.push(numero(total.sr) + ' sem uso há mais de 30 dias');
   if (turmas && comAula < turmas) motivos.push(turmas - comAula + ' de ' + turmas + ' anos sem aula na última semana');
   if (total.bx) motivos.push(numero(total.bx) + ' com baixo uso');
-  return motivos.slice(0, 3);
+  const lista = motivos.slice(0, 3);
+  if (extras && extras.diasSemVisita == null) lista.push('nenhuma visita registrada');
+  else if (extras && extras.diasSemVisita > 30)
+    lista.push('última visita registrada há ' + extras.diasSemVisita + ' dias');
+  return lista;
 };
+const minutosDe = hora => (hora ? Number(String(hora).slice(0, 2)) * 60 + Number(String(hora).slice(3, 5)) : null);
+const horaDe = minutos =>
+  String(Math.floor(minutos / 60)).padStart(2, '0') + ':' + String(minutos % 60).padStart(2, '0');
+const conflita = (visita, data, hora) =>
+  visita.status === 'agendada' &&
+  visita.data === data &&
+  (minutosDe(visita.hora) == null || Math.abs(minutosDe(visita.hora) - minutosDe(hora)) < 120);
+const rotuloDoMes = data => MESES[Number(data.slice(5, 7)) - 1] + '/' + data.slice(2, 4);
+const textoDoHistorico = (registro, textoDoStatus) =>
+  dataDoRegistro(registro.criado_em) +
+  ' · ' +
+  textoDoStatus(registro) +
+  (registro.acao ? ' · ' + registro.acao : '') +
+  (registro.proximo_passo ? ' · próximo passo: ' + registro.proximo_passo : '') +
+  (registro.prazo ? ' · prazo ' + dmyIso(registro.prazo) : '') +
+  ' · ' +
+  registro.autor_nome;
 const pilula = codigo => ({
   semaforo: SEMAFOROS[codigo][0],
   semaforoCor: SEMAFOROS[codigo][1],
@@ -581,29 +732,18 @@ class Component extends DCLogic {
     Object.assign(this.props.memoria, mudanca);
     this.forceUpdate();
   }
-  renderVals() {
-    const contexto = this.props.contexto,
-      jornada = contexto.jornada,
-      porCarteira = this.props.perfil === 'gerente',
-      textos = TEXTOS[this.props.perfil] || TEXTOS.analista,
-      memoria = { ...PADRAO, ...this.props.memoria },
-      acessos = contexto.acessos;
-    if (!Array.isArray(acessos) || !acessos.length)
-      return {
-        carregando: contexto.carregandoAcessos || acessos == null,
-        semBase: !contexto.carregandoAcessos && Array.isArray(acessos) && acessos.length === 0,
-        pronto: false,
-        abaAtiva: {},
-        escola: {},
-        minhaCarteira: {},
-        usuarios: {}
-      };
-    const porEscola = {};
-    let dataDaBase = '';
+  preparar(acessos, escolaDe) {
+    if (this.preparo && this.preparo.acessos === acessos) return this.preparo;
+    const porBase = {};
+    let incompleto = false;
     acessos.forEach(p => {
-      const escola = jornada.escolaDe(p.escola_id);
-      if (!escola) return;
-      const local = (porEscola[escola.id] = porEscola[escola.id] || {
+      const escola = escolaDe(p.escola_id);
+      if (!escola) {
+        incompleto = true;
+        return;
+      }
+      const daBase = (porBase[p.base_ref] = porBase[p.base_ref] || {});
+      const local = (daBase[escola.id] = daBase[escola.id] || {
         id: escola.id,
         nome: escola.nome,
         sigla: escola.sigla,
@@ -620,8 +760,51 @@ class Component extends DCLogic {
       };
       conta.estagio = estagioDe(conta);
       local.contas.push(conta);
-      if (p.base_ref > dataDaBase) dataDaBase = p.base_ref;
     });
+    const datas = Object.keys(porBase).sort(),
+      dataDaBase = datas[datas.length - 1] || '',
+      limite = dataDaBase ? Base.iso(Base.add(dataDe(dataDaBase), -7)) : '',
+      dataAnterior = datas.filter(data => data <= limite).pop() || '',
+      ultimaDoMes = {};
+    datas.forEach(data => (ultimaDoMes[data.slice(0, 7)] = data));
+    const preparo = {
+      acessos,
+      porBase,
+      dataDaBase,
+      dataAnterior,
+      porEscola: porBase[dataDaBase] || {},
+      anterior: dataAnterior ? porBase[dataAnterior] : null,
+      meses: Object.keys(ultimaDoMes)
+        .sort()
+        .slice(-12)
+        .map(mes => ultimaDoMes[mes])
+    };
+    this.preparo = incompleto ? null : preparo;
+    return preparo;
+  }
+  renderVals() {
+    const contexto = this.props.contexto,
+      jornada = contexto.jornada,
+      porCarteira = this.props.perfil !== 'analista',
+      textos = TEXTOS[porCarteira ? 'gerente' : 'analista'],
+      memoria = { ...PADRAO, ...this.props.memoria },
+      acessos = contexto.acessos;
+    if (!Array.isArray(acessos) || !acessos.length)
+      return {
+        carregando: contexto.carregandoAcessos || acessos == null,
+        semBase: !contexto.carregandoAcessos && Array.isArray(acessos) && acessos.length === 0,
+        pronto: false,
+        abaAtiva: {},
+        escola: {},
+        minhaCarteira: {},
+        usuarios: {},
+        agendaDaSemana: {},
+        listaDeEscolas: {},
+        evolucao: {},
+        descarte: {},
+        detalhe: {}
+      };
+    const { porEscola, porBase, dataDaBase, dataAnterior, anterior, meses } = this.preparar(acessos, jornada.escolaDe);
     const statusPorEscola = {},
       historicoPorEscola = {};
     (jornada.statusEscolas || []).forEach(registro => {
@@ -634,10 +817,22 @@ class Component extends DCLogic {
     );
     const referencia = dataDaBase ? dataDe(dataDaBase) : new Date();
     const hoje = dataDe(Base.hojeIso());
+    const hojeIso = Base.iso(hoje);
+    const podeGravar = typeof jornada.registrarStatusEscola === 'function',
+      podeAgendar = typeof jornada.agendarVisita === 'function',
+      podeDescartar = typeof jornada.descartarSugestao === 'function';
     const todosOsLocais = Object.values(porEscola);
-    const locais = todosOsLocais.filter(local => memoria.lotacao === 'todas' || ehEscola(local.nome));
+    const naLotacao = local => memoria.lotacao === 'todas' || ehEscola(local.nome);
+    const noFiltro = local =>
+      naLotacao(local) && (memoria.filtroEscola === 'todas' || String(local.id) === memoria.filtroEscola);
+    const locais = todosOsLocais.filter(noFiltro);
     const contasDe = local =>
-      memoria.perfil === 'todos' ? local.contas : local.contas.filter(c => c.perfil === memoria.perfil);
+      memoria.filtroAno !== 'todos'
+        ? local.contas.filter(c => c.perfil === 'A' && String(c.ano) === memoria.filtroAno)
+        : memoria.perfil === 'todos'
+          ? local.contas
+          : local.contas.filter(c => c.perfil === memoria.perfil);
+    const diasDesde = data => (data ? Math.max(0, Math.round((hoje - dataDe(data)) / 86400000)) : null);
     const aulasDoCiclo = jornada.aulas(),
       execucaoDe = id => jornada.execucao(aulasDoCiclo.filter(aula => aula.esc === id));
     const oficineirosDe = jornada.oficineirosDaEscola;
@@ -666,9 +861,9 @@ class Component extends DCLogic {
             : ' · escola sem oficineiro')
       );
     };
-    const agendar = (local, total, execucao) => () => {
+    const pedidoDe = (local, total, execucao) => {
       const onboarding = total.N > total.S;
-      jornada.agendarVisita({
+      return {
         escola: String(local.id),
         carteira: local.carteira,
         origem: 'mapa_calor',
@@ -676,10 +871,18 @@ class Component extends DCLogic {
         focos: onboarding ? ['Alunos', 'Professores'] : ['Professores'],
         orientacao: 'Diagnóstico da Jornada do Usuário: ' + diagnostico(local, total, execucao) + '.',
         diagnostico: local.nome + ' · ' + diagnostico(local, total, execucao)
-      });
+      };
+    };
+    const agendar = (local, total, execucao) => () => {
+      if (podeAgendar) jornada.agendarVisita(pedidoDe(local, total, execucao));
     };
     const abrir = local => () =>
       this.lembrar({ aba: 'escola', escola: local.nome, limite: 40, formEscola: FORM_ESCOLA_VAZIO });
+    const detalhar = local => () =>
+      this.lembrar({
+        escolaAberta: memoria.escolaAberta === String(local.id) ? '' : String(local.id),
+        formEscola: FORM_ESCOLA_VAZIO
+      });
     const turmasDe = local => {
       const anos = alunosPorAno(local.contas),
         chaves = Object.keys(anos);
@@ -689,16 +892,22 @@ class Component extends DCLogic {
       .map(local => {
         const total = contar(contasDe(local)),
           execucao = execucaoDe(local.id),
-          { turmas, comAula } = turmasDe(local);
+          { turmas, comAula } = turmasDe(local),
+          diasSemVisita = diasDesde(jornada.ultimaVisitaDaEscola ? jornada.ultimaVisitaDaEscola(local.id) : ''),
+          antes = anterior && anterior[local.id] ? contar(contasDe(anterior[local.id])) : null,
+          queda = antes && antes.n ? Math.max(0, antes.uso - total.uso) : 0,
+          extras = { diasSemVisita, queda, dataAnterior };
         return {
           local,
           total,
           execucao,
           turmas,
           comAula,
+          diasSemVisita,
+          queda,
           semaforo: semaforoDe(total, turmas, comAula),
-          pontos: prioridadeDe(total),
-          motivos: motivosDe(total, turmas, comAula),
+          pontos: prioridadeDe(total, diasSemVisita, queda),
+          motivos: motivosDe(total, turmas, comAula, extras),
           status: statusPorEscola[local.id] || null,
           visita: jornada.visitaDaEscola(local.id)
         };
@@ -737,9 +946,12 @@ class Component extends DCLogic {
       ...pilula(u.semaforo),
       pontos: String(u.pontos).replace('.', ','),
       status: textoDoStatus(u.status),
-      semVisita: !u.visita,
+      semVisita: !u.visita && podeAgendar,
       temVisita: !!u.visita,
       visita: u.visita,
+      aberta: memoria.escolaAberta === String(u.local.id),
+      expandida: memoria.escolaAberta === String(u.local.id) ? 'true' : 'false',
+      detalhar: detalhar(u.local),
       abrir: abrir(u.local),
       agendar: agendar(u.local, u.total, u.execucao),
       diagnostico: diagnostico(u.local, u.total, u.execucao)
@@ -776,7 +988,8 @@ class Component extends DCLogic {
     });
     let minhaCarteira = {},
       escolasDaCarteira = [],
-      sugestoesDeVisita = [];
+      sugestoesDeVisita = [],
+      agendaDaSemana = { dias: [] };
     if (carteiraAberta) {
       const resumo = resumoDaCarteira(carteiraAberta),
         total = resumo.total,
@@ -854,17 +1067,142 @@ class Component extends DCLogic {
         u.status &&
         u.status.status === 'concluida' &&
         (hoje - dataDe(String(u.status.criado_em).slice(0, 10))) / 86400000 < DIAS_DE_STATUS_CONCLUIDO;
-      sugestoesDeVisita = ordenadasDaCarteira
-        .filter(u => ehEscola(u.local.nome) && !u.visita && !recemConcluida(u))
-        .slice(0, VISITAS_SUGERIDAS)
-        .map(u => ({
+      const agenda = (jornada.agendaDoAnalista ? jornada.agendaDoAnalista(carteiraAberta) : []) || [];
+      const limiteDaProxima = Base.iso(Base.add(hoje, DIAS_SEM_VISITA_PROXIMA));
+      const visitaProxima = id =>
+        agenda.some(
+          v => v.escola_id === id && v.status === 'agendada' && v.data >= hojeIso && v.data <= limiteDaProxima
+        );
+      const descartadaHaPouco = id =>
+        (jornada.descartes || []).some(
+          d => d.escola_id === id && diasDesde(String(d.criado_em).slice(0, 10)) < DIAS_DE_DESCARTE
+        );
+      const candidatas = ordenadasDaCarteira
+        .filter(
+          u =>
+            ehEscola(u.local.nome) && !visitaProxima(u.local.id) && !recemConcluida(u) && !descartadaHaPouco(u.local.id)
+        )
+        .slice(0, VISITAS_SUGERIDAS);
+      const horarios = [];
+      for (let k = 1; k <= DIAS_PARA_SUGERIR && horarios.length < candidatas.length; k++) {
+        const dia = Base.add(hoje, k);
+        if (!Base.letivo(dia)) continue;
+        const data = Base.iso(dia),
+          hora = INICIOS_DE_VISITA.find(inicio => !agenda.some(v => conflita(v, data, inicio)));
+        if (hora) horarios.push({ data, hora });
+      }
+      const descarte = memoria.descarte;
+      sugestoesDeVisita = candidatas.map((u, i) => {
+        const horario = horarios[i],
+          id = String(u.local.id),
+          descartando = podeDescartar && descarte.escola === id,
+          pedido = pedidoDe(u.local, u.total, u.execucao);
+        return {
           nome: u.local.nome,
           ...pilula(u.semaforo),
           prioridade: String(u.pontos).replace('.', ','),
           motivos: u.motivos,
-          abrir: abrir(u.local),
-          agendar: agendar(u.local, u.total, u.execucao)
-        }));
+          horario: horario
+            ? 'Sugerido: ' +
+              DIAS[dataDe(horario.data).getDay()] +
+              ' ' +
+              dmIso(horario.data) +
+              ' · ' +
+              horario.hora +
+              ' às ' +
+              horaDe(minutosDe(horario.hora) + 120)
+            : 'Sem horário livre nos próximos ' + DIAS_PARA_SUGERIR + ' dias',
+          podeAgir: podeAgendar,
+          ocupado: !horario || !!memoria.agendando || typeof jornada.agendarSugestao !== 'function',
+          descartando,
+          textoDescartar: descartando ? 'Cancelar descarte' : 'Descartar',
+          abrir: detalhar(u.local),
+          aceitar: () => {
+            if (!horario || memoria.agendando) return;
+            this.lembrar({ agendando: id });
+            Promise.resolve(
+              jornada.agendarSugestao({
+                ...pedido,
+                data: horario.data,
+                hora: horario.hora,
+                orientacao: 'Sugestão da Jornada do Usuário: ' + u.motivos.join('; ') + '.'
+              })
+            ).then(() => this.lembrar({ agendando: '' }));
+          },
+          outroHorario: () =>
+            jornada.agendarVisita({
+              ...pedido,
+              ...(horario ? { data: horario.data, hora: horario.hora } : {}),
+              conferirConflito: true
+            }),
+          alternarDescarte: () =>
+            this.lembrar({ descarte: descartando ? DESCARTE_VAZIO : { ...DESCARTE_VAZIO, escola: id } })
+        };
+      });
+      const segunda = Base.iso(Base.add(dataDe(Base.segDe(hojeIso)), memoria.semanaAgenda * 7));
+      const nomeDaEscola = id => {
+        const escola = jornada.escolaDe(id);
+        return escola ? escola.nome : 'Escola';
+      };
+      agendaDaSemana = {
+        titulo: porCarteira ? 'Agenda da semana do analista' : 'Agenda da semana',
+        texto: 'Semana de ' + dmIso(segunda) + ' a ' + dmIso(Base.iso(Base.add(dataDe(segunda), 4))),
+        anterior: () => this.lembrar({ semanaAgenda: memoria.semanaAgenda - 1 }),
+        seguinte: () => this.lembrar({ semanaAgenda: memoria.semanaAgenda + 1 }),
+        atual: () => this.lembrar({ semanaAgenda: 0 }),
+        foraDaAtual: memoria.semanaAgenda !== 0,
+        dias: [0, 1, 2, 3, 4].map(k => {
+          const dia = Base.iso(Base.add(dataDe(segunda), k)),
+            feriado = Base.feriado(dataDe(dia)),
+            ehHoje = dia === hojeIso;
+          const visitas = agenda
+            .filter(v => v.data === dia && v.status !== 'cancelada')
+            .sort((a, b) => String(a.hora || '').localeCompare(String(b.hora || '')))
+            .map(v => {
+              const realizada = v.status === 'realizada',
+                semRegistro = !realizada && v.data < hojeIso,
+                origem = (Base.ORIGEM_VISITA || {})[v.origem];
+              return {
+                hora: v.hora ? hmDe(v.hora) : 'sem horário',
+                escola: nomeDaEscola(v.escola_id),
+                tipo: v.tipo || 'Visita',
+                situacao: realizada ? 'Realizada' : semRegistro ? 'Sem registro' : 'Agendada',
+                situacaoCor: realizada
+                  ? 'var(--texto-verde-700)'
+                  : semRegistro
+                    ? 'var(--texto-vermelho-600)'
+                    : 'var(--texto-cinza-600)',
+                traco: 'solid',
+                cor: origem ? origem[1] : 'var(--destaque-ciano-660)',
+                fundo: realizada ? 'var(--fundo-verde-80)' : 'var(--fundo-ciano-40)'
+              };
+            });
+          const sugeridas = candidatas
+            .map((u, i) => ({ u, horario: horarios[i] }))
+            .filter(item => item.horario && item.horario.data === dia)
+            .map(item => ({
+              hora: item.horario.hora,
+              escola: item.u.local.nome,
+              tipo: 'Sugestão da Jornada',
+              situacao: 'Sugerida',
+              situacaoCor: 'var(--texto-cinza-600)',
+              traco: 'dashed',
+              cor: 'var(--borda-cinza-160)',
+              fundo: 'var(--fundo-cinza-20)'
+            }));
+          const eventos = visitas.concat(sugeridas);
+          return {
+            nome: DIAS[dataDe(dia).getDay()],
+            data: dmIso(dia),
+            aria: DIAS[dataDe(dia).getDay()] + ', ' + dmIso(dia),
+            eventos,
+            vazio: !eventos.length,
+            vazioTexto: feriado ? 'Feriado · ' + feriado : 'Sem visitas',
+            fundo: ehHoje ? 'var(--fundo-ciano-40)' : 'var(--fundo-branco)',
+            borda: ehHoje ? 'var(--borda-ciano-120)' : 'var(--borda-cinza-110)'
+          };
+        })
+      };
     }
     const barra = (rotulo, cor, doGrupo) => {
       const total = contar([].concat(...doGrupo.map(u => contasDe(u.local))));
@@ -1007,26 +1345,18 @@ class Component extends DCLogic {
       escola = {
         id: local.id,
         ...pilula(semaforo),
-        pontos: String(prioridadeDe(total)).replace('.', ','),
+        pontos: String(prioridadeDe(total, escolhida.diasSemVisita, escolhida.queda)).replace('.', ','),
         temVisita: !!visita,
-        semVisita: !visita,
+        semVisita: !visita && podeAgendar,
         visita,
         agendar: agendar(local, total, execucao),
         statusAtual: textoDoStatus(historico[0]),
-        motivos: motivosDe(total, escolhida.turmas, escolhida.comAula),
-        historico: historico
-          .slice(0, 6)
-          .map(
-            registro =>
-              dataDoRegistro(registro.criado_em) +
-              ' · ' +
-              textoDoStatus(registro) +
-              (registro.acao ? ' · ' + registro.acao : '') +
-              (registro.proximo_passo ? ' · próximo passo: ' + registro.proximo_passo : '') +
-              (registro.prazo ? ' · prazo ' + dmyIso(registro.prazo) : '') +
-              ' · ' +
-              registro.autor_nome
-          ),
+        motivos: motivosDe(total, escolhida.turmas, escolhida.comAula, {
+          diasSemVisita: escolhida.diasSemVisita,
+          queda: escolhida.queda,
+          dataAnterior
+        }),
+        historico: historico.slice(0, 6).map(registro => textoDoHistorico(registro, textoDoStatus)),
         semHistorico: !historico.length,
         indicadores: [
           {
@@ -1251,11 +1581,251 @@ class Component extends DCLogic {
           ])
         )
       );
-    const podeGravar = typeof jornada.registrarStatusEscola === 'function';
     const formEscola = memoria.formEscola,
       formCarteira = memoria.formCarteira;
     const mudarFormEscola = campo => e =>
       this.lembrar({ formEscola: { ...memoria.formEscola, [campo]: e.target.value } });
+    const salvarStatusDa = id => () => {
+      if (!formEscola.status || memoria.salvando || !id) return;
+      this.lembrar({ salvando: true });
+      Promise.resolve(
+        jornada.registrarStatusEscola(id, formEscola.status, formEscola.acao, formEscola.passo, formEscola.prazo)
+      ).then(ok => this.lembrar({ salvando: false, ...(ok ? { formEscola: FORM_ESCOLA_VAZIO } : {}) }));
+    };
+    const opcoesDeStatus = Object.keys(STATUS_DA_ESCOLA).map(valor => ({ valor, rotulo: STATUS_DA_ESCOLA[valor] }));
+    const unidadeAberta = todasAsUnidades.find(u => String(u.local.id) === memoria.escolaAberta);
+    let detalhe = {};
+    if (unidadeAberta) {
+      const u = unidadeAberta,
+        local = u.local,
+        total = u.total,
+        historico = historicoPorEscola[local.id] || [];
+      const ultimaVisita = jornada.ultimaVisitaDaEscola ? jornada.ultimaVisitaDaEscola(local.id) : '';
+      detalhe = {
+        aria: 'Detalhe de ' + local.nome,
+        nome: local.nome,
+        ...pilula(u.semaforo),
+        prioridade: String(u.pontos).replace('.', ','),
+        statusAtual: textoDoStatus(u.status),
+        temVisita: !!u.visita,
+        visita: u.visita,
+        podeAgendar: podeAgendar && !u.visita,
+        textoAgendar: textos.agendar,
+        agendar: agendar(local, total, u.execucao),
+        verTurmas: () => this.lembrar({ aba: 'escola', escola: local.nome, limite: 40, formEscola: FORM_ESCOLA_VAZIO }),
+        verUsuarios: () => this.lembrar({ aba: 'usuarios', usuEscola: String(local.id), usuLimite: 100 }),
+        fechar: () => this.lembrar({ escolaAberta: '' }),
+        indicadores: [
+          [
+            'Contas',
+            numero(total.n),
+            plural(u.turmas, 'ano com alunos', 'anos com alunos'),
+            'var(--destaque-ciano-880)'
+          ],
+          [
+            'Utilização',
+            total.uso + '%',
+            numero(total.utilizacao) + ' nos últimos 30 dias',
+            'var(--destaque-azul-500)'
+          ],
+          ['Engajados', total.engajados + '%', numero(total.en) + ' usuários', corDosEngajados(total.engajados)],
+          [
+            'Sem uso ou nunca',
+            total.risco + '%',
+            numero(total.sr) + ' sem uso · ' + numero(total.nv) + ' nunca',
+            'var(--destaque-cinza-540)'
+          ],
+          [
+            'Última visita',
+            ultimaVisita ? dmyIso(ultimaVisita) : '—',
+            ultimaVisita ? 'há ' + plural(u.diasSemVisita, 'dia', 'dias') : 'nenhuma registrada',
+            'var(--texto-ciano-660)'
+          ]
+        ].map(([titulo, valor, nota, cor]) => ({ titulo, valor, nota, cor })),
+        motivos: u.motivos,
+        semMotivos: !u.motivos.length,
+        perfis: ['A', 'P', 'S']
+          .map(codigo => {
+            const doPerfil = contar(local.contas.filter(c => c.perfil === codigo));
+            return doPerfil.n
+              ? {
+                  rotulo: PERFIS[codigo],
+                  total: numero(doPerfil.n),
+                  uso: doPerfil.uso + '%',
+                  engajados: doPerfil.engajados + '%',
+                  engajadosCor: corDosEngajados(doPerfil.engajados),
+                  nunca: parcela(doPerfil.nv, doPerfil.n) + '%'
+                }
+              : null;
+          })
+          .filter(Boolean),
+        podeRegistrar: podeGravar,
+        form: formEscola,
+        opcoesDeStatus,
+        escolherStatus: mudarFormEscola('status'),
+        escolherPrazo: mudarFormEscola('prazo'),
+        escreverAcao: mudarFormEscola('acao'),
+        escreverPasso: mudarFormEscola('passo'),
+        statusIncompleto: !formEscola.status || memoria.salvando,
+        salvarStatus: salvarStatusDa(local.id),
+        historico: historico.slice(0, 6).map(registro => textoDoHistorico(registro, textoDoStatus)),
+        semHistorico: !historico.length
+      };
+    }
+    const visao = VISOES_DA_LISTA[memoria.visaoLista] ? memoria.visaoLista : 'jornada';
+    const mesesDaLista = meses.slice(-6);
+    const faixasDaLinha = u => {
+      if (visao === 'mes')
+        return mesesDaLista.map(data => {
+          const daBase = porBase[data][u.local.id],
+            doMes = daBase ? contar(contasDe(daBase)) : null;
+          return {
+            largura: Math.floor(100 / mesesDaLista.length) + '%',
+            altura: doMes && doMes.n ? Math.max(8, doMes.uso) + '%' : '8%',
+            cor: doMes && doMes.n ? 'var(--destaque-azul-500)' : 'var(--fundo-cinza-90)',
+            raio: '2px',
+            titulo: rotuloDoMes(data) + ': ' + (doMes && doMes.n ? 'utilização ' + doMes.uso + '%' : 'sem leitura')
+          };
+        });
+      const codigos = visao === 'jornada' ? ORDEM_DOS_ESTAGIOS : FAIXAS;
+      return codigos.map(codigo => {
+        const rotulo = visao === 'jornada' ? ESTAGIOS[codigo][0] : TEMPERATURAS[codigo][0],
+          p = parcela(u.total[codigo], u.total.n);
+        return {
+          largura: p + '%',
+          altura: '100%',
+          cor: visao === 'jornada' ? ESTAGIOS[codigo][1] : TEMPERATURAS[codigo][1],
+          raio: '0',
+          titulo: rotulo + ' ' + p + '%'
+        };
+      });
+    };
+    const ordemDaLista = (a, b) =>
+      memoria.ordemLista === 'base'
+        ? b.total.n - a.total.n
+        : memoria.ordemLista === 'uso'
+          ? a.total.uso - b.total.uso || porPrioridade(a, b)
+          : memoria.ordemLista === 'eng'
+            ? a.total.engajados - b.total.engajados || porPrioridade(a, b)
+            : porPrioridade(a, b);
+    const ordenadasDaLista = unidades.slice().sort(ordemDaLista),
+      visiveis = ordenadasDaLista.slice(0, memoria.limiteLista),
+      agrupada = porCarteira && memoria.agrupada;
+    const linhaDaLista = u => ({
+      ...linha(u),
+      faixas: faixasDaLinha(u),
+      barraClasse: visao === 'mes' ? 'gap-2' : 'raio-4 rolagem-hidden fundo-cinza-90'
+    });
+    const grupos = agrupada
+      ? Array.from(new Set(visiveis.map(u => u.local.carteira || '—')))
+          .sort()
+          .map(carteira => {
+            const dela = visiveis.filter(u => (u.local.carteira || '—') === carteira),
+              total = contar([].concat(...dela.map(u => contasDe(u.local))));
+            return {
+              temTitulo: true,
+              titulo: carteira,
+              numeros:
+                plural(dela.length, 'escola', 'escolas') +
+                ' · utilização ' +
+                total.uso +
+                '% · engajados ' +
+                total.engajados +
+                '%',
+              linhas: dela.map(linhaDaLista)
+            };
+          })
+      : [{ temTitulo: false, titulo: '', numeros: '', linhas: visiveis.map(linhaDaLista) }];
+    const listaDeEscolas = {
+      nota:
+        'Mostrando ' +
+        visiveis.length +
+        ' de ' +
+        numero(ordenadasDaLista.length) +
+        ' · clique na escola para ver o detalhe, os números por perfil e registrar a ação.',
+      visoes: Object.keys(VISOES_DA_LISTA).map(chave => ({
+        rotulo: VISOES_DA_LISTA[chave][0],
+        atual: visao === chave ? 'true' : 'false',
+        escolher: () => this.lembrar({ visaoLista: chave }),
+        ...Base.segmento(visao === chave)
+      })),
+      tituloDaBarra: VISOES_DA_LISTA[visao][1],
+      legenda:
+        visao === 'mes'
+          ? [
+              {
+                rotulo:
+                  'Utilização em ' +
+                  (mesesDaLista.length ? mesesDaLista.map(rotuloDoMes).join(', ') : 'nenhum mês') +
+                  ' (altura da barra)',
+                cor: 'var(--destaque-azul-500)'
+              }
+            ]
+          : visao === 'jornada'
+            ? ORDEM_DOS_ESTAGIOS.map(codigo => ({ rotulo: ESTAGIOS[codigo][0], cor: ESTAGIOS[codigo][1] }))
+            : FAIXAS.map(faixa => ({ rotulo: TEMPERATURAS[faixa][0], cor: TEMPERATURAS[faixa][1] })),
+      agrupada: !!agrupada,
+      alternarGrupo: () => this.lembrar({ agrupada: !memoria.agrupada }),
+      ordem: memoria.ordemLista,
+      escolherOrdem: e => this.lembrar({ ordemLista: e.target.value }),
+      grupos,
+      temMais: ordenadasDaLista.length > memoria.limiteLista,
+      mostrarMais: () => this.lembrar({ limiteLista: memoria.limiteLista + 100 })
+    };
+    const totaisDoMes = meses.map(data => ({
+      data,
+      total: contar(
+        [].concat(
+          ...Object.values(porBase[data])
+            .filter(local => noFiltro(local) && (memoria.carteira === 'todos' || local.carteira === memoria.carteira))
+            .map(contasDe)
+        )
+      )
+    }));
+    const maiorDoMes = Math.max(1, ...totaisDoMes.map(item => item.total.n));
+    const barraDoMes = (valor, cor, rotulo) => ({
+      altura: Math.max(2, Math.round((valor / maiorDoMes) * 100)) + '%',
+      cor,
+      titulo: rotulo + ': ' + numero(valor)
+    });
+    const evolucao = {
+      temMeses: totaisDoMes.length > 0,
+      nota:
+        totaisDoMes.length > 1
+          ? 'Usuários por mês da base de acessos (última leitura de cada mês), na mesma escala.'
+          : 'A evolução aparece a partir da segunda base mensal carregada; as bases anteriores ficam guardadas.',
+      meses: totaisDoMes.map(({ data, total }) => ({
+        rotulo: rotuloDoMes(data),
+        numeros: 'uso ' + total.uso + '% · eng. ' + total.engajados + '%',
+        barras: [
+          barraDoMes(total.n, 'var(--destaque-ciano-880)', 'Criados'),
+          barraDoMes(total.utilizacao, 'var(--destaque-azul-500)', 'Utilização'),
+          barraDoMes(total.en, 'var(--texto-verde-700)', 'Engajados')
+        ]
+      })),
+      legenda: [
+        { rotulo: 'Criados', cor: 'var(--destaque-ciano-880)' },
+        { rotulo: 'Utilização (últimos 30 dias)', cor: 'var(--destaque-azul-500)' },
+        { rotulo: 'Engajados', cor: 'var(--texto-verde-700)' }
+      ]
+    };
+    const opcoesDoFiltroEscola = todosOsLocais
+      .filter(naLotacao)
+      .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+      .map(local => ({ valor: String(local.id), rotulo: local.nome }));
+    const anosComAlunos = Array.from(
+      new Set(
+        [].concat(...todosOsLocais.map(local => local.contas.filter(c => c.perfil === 'A' && c.ano).map(c => c.ano)))
+      )
+    ).sort((a, b) => a - b);
+    const descarte = memoria.descarte;
+    const filtrosPadrao = {
+      carteira: 'todos',
+      perfil: 'todos',
+      lotacao: 'escolas',
+      filtroEscola: 'todas',
+      filtroAno: 'todos'
+    };
     const mudarFormCarteira = campo => e =>
       this.lembrar({ formCarteira: { ...memoria.formCarteira, [campo]: e.target.value } });
     return {
@@ -1270,6 +1840,34 @@ class Component extends DCLogic {
         carteiras.map(carteira => ({ valor: carteira, rotulo: carteira }))
       ),
       escolherCarteira: e => this.lembrar({ carteira: e.target.value }),
+      filtroEscola: memoria.filtroEscola,
+      filtroAno: memoria.filtroAno,
+      opcoesDoFiltroEscola,
+      opcoesDoFiltroAno: anosComAlunos.map(ano => ({ valor: String(ano), rotulo: ano + 'º ano' })),
+      escolherFiltroEscola: e => this.lembrar({ filtroEscola: e.target.value, escolaAberta: '', limiteLista: 60 }),
+      escolherFiltroAno: e => this.lembrar({ filtroAno: e.target.value, limiteLista: 60 }),
+      temFiltro: Object.keys(filtrosPadrao).some(chave => memoria[chave] !== filtrosPadrao[chave]),
+      limparFiltros: () => this.lembrar({ ...filtrosPadrao, escolaAberta: '', limiteLista: 60 }),
+      agendaDaSemana,
+      detalhe,
+      listaDeEscolas,
+      evolucao,
+      motivosDeDescarte: Object.keys(MOTIVOS_DE_DESCARTE).map(valor => ({ valor, rotulo: MOTIVOS_DE_DESCARTE[valor] })),
+      descarte: {
+        motivo: descarte.motivo,
+        detalhe: descarte.detalhe,
+        rotuloDoDetalhe: descarte.motivo === 'outro' ? 'Detalhe *' : 'Detalhe (opcional)',
+        incompleto: !descarte.motivo || (descarte.motivo === 'outro' && !descarte.detalhe.trim()) || memoria.salvando
+      },
+      escolherMotivoDoDescarte: e => this.lembrar({ descarte: { ...descarte, motivo: e.target.value } }),
+      escreverDetalheDoDescarte: e => this.lembrar({ descarte: { ...descarte, detalhe: e.target.value } }),
+      confirmarDescarte: () => {
+        if (!descarte.escola || !descarte.motivo || memoria.salvando) return;
+        this.lembrar({ salvando: true });
+        Promise.resolve(jornada.descartarSugestao(descarte.escola, descarte.motivo, descarte.detalhe.trim())).then(ok =>
+          this.lembrar({ salvando: false, ...(ok ? { descarte: DESCARTE_VAZIO } : {}) })
+        );
+      },
       perfil: memoria.perfil,
       lotacao: memoria.lotacao,
       ordem: memoria.ordem,
@@ -1329,26 +1927,14 @@ class Component extends DCLogic {
       escolherTemperatura: e => this.lembrar({ temperatura: e.target.value, limite: 40 }),
       mostrarMais: () => this.lembrar({ limite: memoria.limite + 60 }),
       podeRegistrarStatus: podeGravar && !!escola.id,
-      opcoesDeStatus: Object.keys(STATUS_DA_ESCOLA).map(valor => ({ valor, rotulo: STATUS_DA_ESCOLA[valor] })),
+      opcoesDeStatus,
       formEscola,
       escolherStatus: mudarFormEscola('status'),
       escolherPrazo: mudarFormEscola('prazo'),
       escreverAcao: mudarFormEscola('acao'),
       escreverPasso: mudarFormEscola('passo'),
       statusIncompleto: !formEscola.status || memoria.salvando,
-      salvarStatus: () => {
-        if (!formEscola.status || memoria.salvando || !escola.id) return;
-        this.lembrar({ salvando: true });
-        Promise.resolve(
-          jornada.registrarStatusEscola(
-            escola.id,
-            formEscola.status,
-            formEscola.acao,
-            formEscola.passo,
-            formEscola.prazo
-          )
-        ).then(ok => this.lembrar({ salvando: false, ...(ok ? { formEscola: FORM_ESCOLA_VAZIO } : {}) }));
-      },
+      salvarStatus: salvarStatusDa(escola.id),
       indicadores: [
         ['Criados', numero(geral.n), plural(unidades.length, 'unidade', 'unidades'), 'var(--destaque-ciano-880)'],
         [

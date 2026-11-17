@@ -995,6 +995,23 @@ window.FSM_AUTH =
           }
         });
       },
+      jornadaDescartes() {
+        return chamarTudo(
+          '/rest/v1/jornada_sugestao_descarte?select=id,escola_id,motivo,detalhe,autor_nome,criado_em&order=criado_em.desc,id.desc',
+          { token: token() }
+        );
+      },
+      descartarSugestaoVisita(escola, motivo, detalhe) {
+        return chamar('/rest/v1/rpc/descartar_sugestao_visita', {
+          metodo: 'POST',
+          token: token(),
+          corpo: {
+            p_escola: Number(escola),
+            p_motivo: String(motivo || ''),
+            p_detalhe: detalhe ? String(detalhe) : null
+          }
+        });
+      },
       registrarStatusCarteira(carteira, status, resumo) {
         return chamar('/rest/v1/rpc/registrar_status_carteira', {
           metodo: 'POST',
