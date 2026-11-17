@@ -337,6 +337,8 @@ class Component extends DCLogic {
     onboardings: null,
     acessos: null,
     carregandoAcessos: false,
+    statusEscolas: [],
+    statusCarteiras: [],
     presencaSalvando: false,
     visitaDaAgenda: null,
     alteracao: SEM_ALTERACAO,
@@ -562,6 +564,7 @@ class Component extends DCLogic {
     const A = window.FSM_AUTH;
     if (this.state.acessos || this.state.carregandoAcessos || !A.jornadaPessoas) return;
     this.setState({ carregandoAcessos: true });
+    this.carregarStatusJornada();
     try {
       const acessos = await A.jornadaPessoas();
       this.setState({ acessos: acessos || [], carregandoAcessos: false });
@@ -571,6 +574,28 @@ class Component extends DCLogic {
         carregandoAcessos: false,
         erro: msgErro(x, 'Não foi possível carregar a base de acessos.')
       });
+    }
+  }
+  async carregarStatusJornada() {
+    const A = window.FSM_AUTH;
+    if (!A.jornadaStatusEscolas) return;
+    const [escolas, carteiras] = await Promise.all([
+      A.jornadaStatusEscolas().catch(() => []),
+      A.jornadaStatusCarteiras().catch(() => [])
+    ]);
+    this.setState({ statusEscolas: escolas || [], statusCarteiras: carteiras || [] });
+  }
+  async gravarStatusJornada(tipo, argumentos) {
+    const A = window.FSM_AUTH;
+    try {
+      if (tipo === 'escola') await A.registrarStatusEscola(...argumentos);
+      else await A.registrarStatusCarteira(...argumentos);
+      await this.carregarStatusJornada();
+      this.avisar(tipo === 'escola' ? 'Status da escola registrado' : 'Avaliação da carteira registrada');
+      return true;
+    } catch (x) {
+      this.avisar(msgErro(x, 'Não foi possível registrar o status.'));
+      return false;
     }
   }
   irPara(tela, memoria) {
@@ -1139,6 +1164,11 @@ class Component extends DCLogic {
       abrirVisita: id => this.abrirVisita(id),
       agendarVisita: preenchida => this.agendarVisita(preenchida),
       jornada: {
+        statusEscolas: this.state.statusEscolas,
+        statusCarteiras: this.state.statusCarteiras,
+        registrarStatusEscola: (...argumentos) => this.gravarStatusJornada('escola', argumentos),
+        registrarStatusCarteira: (...argumentos) => this.gravarStatusJornada('carteira', argumentos),
+        carteiraPropria: (s.acesso || {}).carteira_id || '',
         escolaDe,
         aulas: () => aulasDoCicloAtual,
         execucao: aulas => resumir(aulas).execucao,
