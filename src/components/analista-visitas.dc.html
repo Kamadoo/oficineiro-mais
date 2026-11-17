@@ -57,26 +57,31 @@
           style="border:1.5px solid {{ subtipo.borda }};background:{{ subtipo.fundo }};color:{{ subtipo.cor }}">{{ subtipo.rotulo }}</button></sc-for></div>
       </div>
       <sc-if value="{{ comAlunos }}" hint-placeholder-val="{{ false }}">
-        <div class="d-flex eixo-column gap-6">
-          <div class="empilha-celular d-grid gap-12" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr)">
+        <div class="d-flex eixo-column gap-10">
+          <div class="empilha-celular d-grid gap-12" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)">
             <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Oficineiro *</span><select
               style="background:var(--fundo-branco)" id="rg-ofic" value="{{ registro.oficineiro }}"
               onChange="{{ registro.escolherOficineiro }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option
               value="">Escolha o oficineiro</option><sc-for list="{{ oficineiros }}" as="opcao" hint-placeholder-count="2"><option
               value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Ano *</span><select
+            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Ano</span><select
               style="background:var(--fundo-branco)" id="rg-ano" value="{{ registro.ano }}" onChange="{{ registro.escolherAno }}"
               class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Escolha o ano</option><sc-for
               list="{{ anos }}" as="opcao" hint-placeholder-count="5"><option
               value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Turma *</span><select
-              style="background:var(--fundo-branco)" id="rg-turma" value="{{ registro.turma }}"
-              onChange="{{ registro.escolherTurma }}" disabled="{{ semAno }}"
-              class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fundo-branco"><option value="">Escolha a turma</option><sc-for
-              list="{{ turmas }}" as="opcao" hint-placeholder-count="4"><option
-              value="{{ opcao }}">{{ opcao }}</option></sc-for></select></label>
           </div>
-          <span class="fs-12 cor-cinza-600">{{ turmaNota }}</span>
+          <div class="d-flex eixo-column gap-8"><span id="rg-turma-rot" class="fs-12 cor-cinza-600 fw-600">Turmas atendidas *</span><div
+            role="group" aria-labelledby="rg-turma-rot" id="rg-turma" tabindex="-1" class="d-flex quebra-wrap gap-8"><sc-for
+            list="{{ turmas }}" as="turma" hint-placeholder-count="4"><button aria-pressed="{{ turma.marcado }}"
+            onClick="{{ turma.escolher }}" aria-label="{{ turma.aria }}" class="raio-999 p-7-14 fs-13 fw-500 botao-opcao {{ turma.classe }}"
+            style="border:1.5px solid {{ turma.borda }};background:{{ turma.fundo }};color:{{ turma.cor }}">{{ turma.rotulo }}</button></sc-for></div>
+            <sc-if value="{{ temTurmas }}" hint-placeholder-val="{{ false }}"><div class="d-flex quebra-wrap gap-6 alinha-center"><span
+              class="fs-12 cor-cinza-600">{{ turmasResumo }}</span><sc-for list="{{ turmasEscolhidas }}" as="escolhida"
+              hint-placeholder-count="2"><button onClick="{{ escolhida.remover }}" aria-label="{{ escolhida.aria }}"
+              class="raio-999 p-6-12 fs-13 fw-500 botao-opcao {{ escolhida.classe }}"
+              style="border:1.5px solid {{ escolhida.borda }};background:{{ escolhida.fundo }};color:{{ escolhida.cor }}">{{ escolhida.rotulo }} ×</button></sc-for></div></sc-if>
+          </div>
+          <span class="fs-12 cor-cinza-600">{{ turmaNota }} {{ turmaAjuda }}</span>
         </div>
       </sc-if>
       <label class="d-flex eixo-column gap-6 max-w-420"><span
@@ -242,10 +247,31 @@ class Component extends DCLogic {
       ...new Set(turmasDaEscola.filter(t => String(t.ano) === String(registro.ano)).map(t => String(t.turma)))
     ].sort();
     const turmasBase = turmasDoAno.length ? turmasDoAno : TURMAS_PADRAO;
+    const turmaCompleta = turma => anoTxt(Number(registro.ano)) + ' · Turma ' + turma;
+    const alternarTurma = texto => {
+      const atuais = this.props.memoria.registro.turmas;
+      mudar({ turmas: atuais.includes(texto) ? atuais.filter(x => x !== texto) : atuais.concat(texto) });
+    };
     const turmas =
       registro.ano === ''
         ? []
-        : turmasBase.concat(registro.turma && !turmasBase.includes(registro.turma) ? [registro.turma] : []);
+        : turmasBase.map(turma => {
+            const texto = turmaCompleta(turma),
+              marcada = registro.turmas.includes(texto);
+            return {
+              rotulo: 'Turma ' + turma,
+              aria: 'Turma ' + turma + ' do ' + anoTxt(Number(registro.ano)),
+              marcado: marcada ? 'true' : 'false',
+              ...opcao(marcada),
+              escolher: () => alternarTurma(texto)
+            };
+          });
+    const turmasEscolhidas = registro.turmas.map(texto => ({
+      rotulo: texto,
+      aria: 'Remover ' + texto,
+      ...opcao(true),
+      remover: () => alternarTurma(texto)
+    }));
     const presenca = registro.presenca ? contexto.presencas.find(p => p.id === registro.presenca) : null;
     const visitasDaAgenda = agendaValida
       .filter(
@@ -302,7 +328,10 @@ class Component extends DCLogic {
         ]
           .filter(Boolean)
           .join(' · '),
-        tipo: visita.tipo + (visita.subtipo ? ' · ' + visita.subtipo : '') + (visita.turma ? ' · ' + visita.turma : ''),
+        tipo:
+          visita.tipo +
+          (visita.subtipo ? ' · ' + visita.subtipo : '') +
+          (contexto.turmasDaVisita(visita) ? ' · ' + contexto.turmasDaVisita(visita) : ''),
         participantes: visita.participantes || '—',
         solucao: visita.solucao || '—',
         objetivo: objetivo[0],
@@ -366,10 +395,8 @@ class Component extends DCLogic {
         },
         oficineiro: registro.oficineiro,
         ano: registro.ano,
-        turma: registro.turma,
         escolherOficineiro: escrever('oficineiro'),
-        escolherAno: e => mudar({ ano: e.target.value, turma: '' }),
-        escolherTurma: escrever('turma'),
+        escolherAno: e => mudar({ ano: e.target.value }),
         solucao: registro.solucao,
         observacao: registro.observacao,
         boasPraticas: registro.boasPraticas,
@@ -405,14 +432,18 @@ class Component extends DCLogic {
       oficineiros,
       anos,
       turmas,
-      semAno: registro.ano === '',
+      turmasEscolhidas,
+      temTurmas: turmasEscolhidas.length > 0,
+      turmasResumo:
+        turmasEscolhidas.length === 1 ? '1 turma escolhida:' : turmasEscolhidas.length + ' turmas escolhidas:',
       turmaNota: !registro.escola
         ? 'Escolha a escola para ver os oficineiros e as turmas.'
         : !oficineiros.length
           ? 'Nenhum oficineiro ativo nesta escola.'
           : oficineiros.length === 1
             ? 'Oficineiro da escola preenchido automaticamente.'
-            : 'Escolha o oficineiro que atende a turma.',
+            : 'Escolha o oficineiro que atende as turmas.',
+      turmaAjuda: 'Escolha o ano e marque as turmas atendidas; dá para somar turmas de anos diferentes.',
       objetivos: ['Sim', 'Não'].map(objetivo => ({
         rotulo: objetivo,
         marcado: registro.objetivo === objetivo ? 'true' : 'false',
@@ -487,7 +518,7 @@ class Component extends DCLogic {
               visita.tipo,
               visita.subtipo || '',
               visita.participantes || '',
-              visita.turma || '',
+              contexto.turmasDaVisita(visita),
               visita.oficineiro_id ? contexto.nomeDaPessoa(visita.oficineiro_id) : '',
               visita.solucao || '',
               visita.objetivo || '',
