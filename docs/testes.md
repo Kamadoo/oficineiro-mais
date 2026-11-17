@@ -70,7 +70,7 @@ npm run build
 npm run test:ui
 ```
 
-Em cada tela, a varredura também abre as abas (`main [role=tab]`) e a primeira gaveta (`button[aria-haspopup="dialog"]`), confere o diálogo com o axe-core e fecha com Esc; depois repete o menu em 390 px, no primeiro tema, reprovando rolagem horizontal. Use `TEMAS=claro` para varrer só um tema, `SO=gerente,oficineiro` para alguns perfis, `ABAS=0` para pular abas e gavetas e `CELULAR=0` para pular o celular.
+Em cada tela, a varredura também abre as abas (`main [role=tab]`) e a primeira gaveta (`button[aria-haspopup="dialog"]`), confere o diálogo com o axe-core e fecha com Esc; depois repete o menu em 390 px, no primeiro tema, reprovando rolagem horizontal. Use `TEMAS=claro` para varrer só um tema, `SO=gerente,oficineiro` para alguns perfis, `ABAS=0` para pular abas e gavetas e `CELULAR=0` para pular o celular. No CI, os pull requests varrem só o tema claro, sem o celular, para o retorno ser rápido; a varredura completa (claro, escuro e celular) roda em cada envio para a main.
 
 Os dados fictícios incluem escolas com baixa adoção e sem visita agendada, mais de 40 contas por escola na Jornada do Usuário, mais de 50 contas em Gestão de Contas e aulas registradas até o dia fixado no relógio dos testes (09/11/2026, 10h), para que listas paginadas, sugestões e agendas apareçam.
 
