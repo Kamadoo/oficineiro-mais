@@ -192,6 +192,7 @@
     </sc-if>
 
 <sc-if value="{{ is.produtividade }}" hint-placeholder-val="{{ true }}"><dc-import name="coordenador-produtividade" contexto="{{ contexto }}"></dc-import></sc-if>
+<sc-if value="{{ is.jornada }}" hint-placeholder-val="{{ false }}"><dc-import name="jornada" perfil="coordenador" contexto="{{ contextoDaJornada }}" memoria="{{ memoriaJornada }}"></dc-import></sc-if>
 <sc-if value="{{ is.presenca }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-presenca" contexto="{{ contexto }}"></dc-import></sc-if>
 <sc-if value="{{ is.agendas }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-agendas" contexto="{{ contexto }}"></dc-import></sc-if>
 <sc-if value="{{ is.atividades }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-atividades" contexto="{{ contexto }}"></dc-import></sc-if>
@@ -534,6 +535,9 @@ class Component extends DCLogic {
       carregandoJustificativas: false,
       justificativasCarregadas: false,
       erroJustificativas: '',
+      acessos: null,
+      carregandoAcessos: false,
+      jornadaDados: { statusEscolas: [], statusCarteiras: [], descartes: [], agenda: [], visitas: [] },
       tela: 'presenca',
       menuAberto: false,
       abas: { presenca: 'agora', agendas: 'ofic', aulas: 'ofic' },
@@ -694,6 +698,78 @@ class Component extends DCLogic {
     } catch (x) {
       this.avisar((x && x.message) || 'Não foi possível carregar os dados');
     }
+  }
+  async carregarJornada() {
+    const A = window.FSM_AUTH;
+    if (this.state.acessos || this.state.carregandoAcessos || !A.jornadaPessoas) return;
+    this.setState({ carregandoAcessos: true });
+    const hoje = this.hojeIso(),
+      dia = n => Base.iso(Base.add(Base.dataDe(hoje), n));
+    const [statusEscolas, statusCarteiras, descartes, agenda, visitas] = await Promise.all([
+      A.jornadaStatusEscolas().catch(() => []),
+      A.jornadaStatusCarteiras().catch(() => []),
+      A.jornadaDescartes().catch(() => []),
+      A.agendaVisitas(dia(-60), dia(60)).catch(() => []),
+      A.visitasPeriodo(dia(-365), hoje).catch(() => [])
+    ]);
+    this.setState({
+      jornadaDados: {
+        statusEscolas: statusEscolas || [],
+        statusCarteiras: statusCarteiras || [],
+        descartes: descartes || [],
+        agenda: (agenda || []).filter(v => v.status !== 'cancelada'),
+        visitas: visitas || []
+      }
+    });
+    try {
+      const acessos = await A.jornadaPessoas();
+      this.setState({ acessos: acessos || [], carregandoAcessos: false });
+    } catch (x) {
+      this.setState({ acessos: [], carregandoAcessos: false });
+      this.avisar((x && x.message) || 'Não foi possível carregar a base de acessos.');
+    }
+  }
+  contextoDaJornada(s) {
+    const dados = s.jornadaDados,
+      hoje = this.hojeIso(),
+      escolaPorId = {};
+    s.escolas.forEach(e => (escolaPorId[e.id] = e));
+    const carteiraDa = id => (escolaPorId[id] || {}).carteira_id || '';
+    const proxima = id =>
+      dados.agenda
+        .filter(v => v.escola_id === id && v.status === 'agendada' && v.data >= hoje)
+        .sort((a, b) => (a.data + (a.hora || '')).localeCompare(b.data + (b.hora || '')))[0];
+    return {
+      acessos: s.acessos,
+      carregandoAcessos: s.carregandoAcessos,
+      exportar: (nome, aba, linhas) =>
+        window.FSM_PLANILHA ? window.FSM_PLANILHA.baixar(linhas, nome, aba) : this.avisar('Exportação indisponível'),
+      jornada: {
+        statusEscolas: dados.statusEscolas,
+        statusCarteiras: dados.statusCarteiras,
+        descartes: dados.descartes,
+        carteiraPropria: '',
+        escolaDe: id => escolaPorId[id],
+        aulas: () => [],
+        execucao: () => null,
+        oficineirosDaEscola: id => s.oficineiros.filter(o => o.escola_id === id),
+        visitaDaEscola: id => {
+          const v = proxima(id);
+          return v
+            ? Base.WDL[Base.dataDe(v.data).getDay()].slice(0, 3) +
+                ' ' +
+                Base.dmIso(v.data) +
+                (v.hora ? ' · ' + Base.hmDe(v.hora) : '')
+            : '';
+        },
+        agendaDoAnalista: carteira => dados.agenda.filter(v => carteiraDa(v.escola_id) === carteira),
+        ultimaVisitaDaEscola: id =>
+          dados.visitas
+            .concat(dados.agenda.filter(v => v.status === 'realizada' && v.data <= hoje))
+            .filter(v => v.escola_id === id)
+            .reduce((maior, v) => (v.data > maior ? v.data : maior), '')
+      }
+    };
   }
   cicloBaseDosRelatorios() {
     const h = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' });
@@ -2071,6 +2147,7 @@ class Component extends DCLogic {
         s.ehAdmin ? 0 : (s.relatoriosDoCicloBase || []).filter(r => r.status === 'aprovado_direcao').length
       ],
       ['prod', 'Produtividade', 0],
+      ...(s.ehAdmin ? [] : [['jornada', 'Jornada do Usuário', 0]]),
       ['contas', 'Gestão de Contas', 0],
       ...(s.ehAdmin
         ? [
@@ -2093,6 +2170,7 @@ class Component extends DCLogic {
         go: () =>
           this.setState({ tela: k, menuAberto: false }, () => {
             if (k === 'contas' && this.state.conectado) this.carregarContas();
+            if (k === 'jornada' && this.state.conectado) this.carregarJornada();
             if (k === 'rel' && this.state.conectado) this.carregarRelatoriosDoCiclo();
             if ((k === 'adm' || k === 'escolas' || k === 'carteiras') && this.state.ehAdmin) this.carregarAdminDados();
             if ((k === 'adm' || k === 'auditoria') && this.state.ehAdmin) this.carregarAuditoria();
@@ -2114,6 +2192,7 @@ class Component extends DCLogic {
       aulas: 'Atividades dos oficineiros',
       rel: 'Relatórios',
       prod: 'Produtividade',
+      jornada: 'Jornada do Usuário',
       contas: 'Gestão de Contas',
       adm: 'Visão geral do sistema',
       consulta: 'Consulta e correções',
@@ -2216,6 +2295,7 @@ class Component extends DCLogic {
     const { naAba } = valores;
     const is = {
       produtividade: s.tela === 'prod',
+      jornada: !s.ehAdmin && s.tela === 'jornada',
       presencaAgora: naAba('presenca', 'agora'),
       presencaOficineiros: naAba('presenca', 'ofic'),
       presencaMedicao: naAba('presenca', 'med'),
@@ -2366,6 +2446,8 @@ class Component extends DCLogic {
       abrirMenu: () => this.setState({ menuAberto: true }),
       fecharMenu: () => this.setState({ menuAberto: false }),
       is,
+      contextoDaJornada: s.tela === 'jornada' ? this.contextoDaJornada(s) : {},
+      memoriaJornada: this.memoriaJornada || (this.memoriaJornada = {}),
       exportarRelatorios: () => this.exportadorDaTela && this.exportadorDaTela(),
       mostrarRelatorios: s.tela === 'rel' && s.conectado
     };
