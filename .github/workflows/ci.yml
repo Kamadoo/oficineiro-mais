@@ -83,4 +83,6 @@ jobs:
           PGUSER: postgres
           PGPASSWORD: postgres
           PGDATABASE: postgres
+          TEMAS: ${{ github.event_name == 'pull_request' && 'claro' || 'claro,escuro' }}
+          CELULAR: ${{ github.event_name == 'pull_request' && '0' || '1' }}
         run: npm run test:ui
