@@ -33,11 +33,13 @@
         <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Carteiras</h3><span class="fs-12 cor-cinza-600">Semáforo calculado e avaliação do analista. Clique para ver a carteira como o analista vê.</span></div>
         <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr))">
           <sc-for list="{{ cartoesDeCarteira }}" as="cartao" hint-placeholder-count="4">
-            <button onClick="{{ cartao.abrir }}" class="fundo-branco borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-6 cursor-pointer texto-left largura-fundo" style="background:var(--fundo-branco)">
-              <span class="d-flex alinha-center gap-8"><b class="fs-14 cor-ciano-850">{{ cartao.rotulo }}</b><span class="ml-auto fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ cartao.semaforoCor }};background:{{ cartao.semaforoFundo }}">{{ cartao.semaforo }}</span></span>
-              <span class="fs-12 cor-cinza-750">{{ cartao.numeros }}</span>
-              <span class="fs-12 cor-cinza-600">{{ cartao.escolas }}</span>
-              <span class="fs-12" style="color:{{ cartao.avaliacaoCor }}">{{ cartao.avaliacao }}</span>
+            <button onClick="{{ cartao.abrir }}" class="fundo-branco borda-cinza-110 raio-12 p-16 d-flex eixo-column gap-8 cursor-pointer texto-left largura-fundo" style="background:var(--fundo-branco)">
+              <span class="d-flex alinha-center gap-8"><b class="fs-16 cor-ciano-850">{{ cartao.rotulo }}</b><span class="ml-auto fs-12 fw-700 p-3-10 raio-999 espaco-nowrap" style="color:{{ cartao.semaforoCor }};background:{{ cartao.semaforoFundo }}"><span aria-hidden="true">{{ cartao.semaforoIcone }} </span>{{ cartao.semaforo }}</span></span>
+              <span class="fs-13 cor-cinza-600">{{ cartao.base }}</span>
+              <span class="fs-14 cor-cinza-750">Utilização <b class="num-tabular-nums fs-17 cor-ciano-850">{{ cartao.utilizacao }}</b> · Engajados <b class="num-tabular-nums fs-17" style="color:{{ cartao.engajadosCor }}">{{ cartao.engajados }}</b></span>
+              <sc-if value="{{ cartao.temEscolas }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">{{ cartao.escolas }}</span></sc-if>
+              <span class="fs-13 cor-cinza-600 lh-1p45">Avaliação do analista: <b style="color:{{ cartao.avaliacaoCor }}">{{ cartao.avaliacao }}</b></span>
+              <sc-if value="{{ cartao.temResumo }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-750 lh-1p45 linhas-2">{{ cartao.avaliacaoResumo }}</span></sc-if>
             </button>
           </sc-for>
         </div>
@@ -153,28 +155,43 @@
   </sc-if>
 
   <sc-if value="{{ abaAtiva.geral }}" hint-placeholder-val="{{ true }}">
-    <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
-      <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="6">
-        <div class="fundo-branco raio-12 p-14-16 d-flex eixo-column gap-4 largura-fundo cartao-indicador" style="border-width:3px 1px 1px;border-style:solid;border-color:{{ indicador.cor }} var(--borda-cinza-110) var(--borda-cinza-110)">
-          <span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span>
-          <span class="num-tabular-nums fs-24 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.valorCor }}">{{ indicador.valor }}</span>
-          <span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span>
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12 p-0-0-8"><h3 class="m-0 fs-15">Jornada do usuário</h3><span class="fs-12 cor-cinza-600">Da criação ao engajamento, no recorte dos filtros.</span></div>
+      <sc-for list="{{ funil }}" as="etapa" hint-placeholder-count="4">
+        <div class="empilha-celular d-grid gap-8-12 alinha-center p-10-0 borda-t-cinza-70" style="grid-template-columns:minmax(170px,1fr) minmax(170px,1fr) minmax(0,2.4fr)">
+          <div class="d-flex eixo-column gap-2"><b class="fs-14">{{ etapa.titulo }}</b><span class="fs-12 cor-cinza-600">{{ etapa.descricao }}</span></div>
+          <div class="d-flex eixo-column gap-2"><span class="num-tabular-nums fs-24 fw-600 cor-ciano-850" style="font-family:'Inter',system-ui,sans-serif">{{ etapa.valor }}</span><span class="fs-12 cor-cinza-600">{{ etapa.nota }}</span></div>
+          <div role="img" aria-label="{{ etapa.aria }}" class="d-flex h-36 raio-8 rolagem-hidden fundo-cinza-70"><div class="raio-8 largura-fundo" style="width:{{ etapa.largura }};background:{{ etapa.cor }}"></div></div>
         </div>
       </sc-for>
-    </div>
+    </section>
     <sc-if value="{{ porCarteira }}" hint-placeholder-val="{{ false }}">
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
         <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Por carteira de CS</h3><span class="fs-12 cor-cinza-600">Clique para filtrar.</span></div>
-        <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
-          <sc-for list="{{ cartoesPorCarteira }}" as="cartao" hint-placeholder-count="4"><button onClick="{{ cartao.escolher }}" class="borda-cinza-110 raio-10 p-12-14 d-flex eixo-column gap-6 cursor-pointer texto-left largura-fundo" style="background:{{ cartao.fundo }}"><b class="fs-13 cor-ciano-850">{{ cartao.rotulo }} <span class="fw-400 fs-12 cor-cinza-600">{{ cartao.total }}</span></b><div class="d-flex h-10 raio-4 rolagem-hidden fundo-cinza-90"><sc-for list="{{ cartao.faixas }}" as="faixa" hint-placeholder-count="6"><div title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></div></sc-for></div><span class="fs-12 cor-cinza-750">{{ cartao.numeros }}</span></button></sc-for>
+        <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+          <sc-for list="{{ cartoesPorCarteira }}" as="cartao" hint-placeholder-count="3">
+            <button onClick="{{ cartao.escolher }}" aria-pressed="{{ cartao.marcado }}" class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-10 cursor-pointer texto-left largura-fundo" style="background:{{ cartao.fundo }}">
+              <span class="d-flex quebra-wrap alinha-baseline gap-8"><b class="fs-15 cor-ciano-850">{{ cartao.rotulo }}</b><span class="fs-12 cor-cinza-600">{{ cartao.total }}</span></span>
+              <span class="d-flex h-10 raio-4 rolagem-hidden fundo-cinza-90"><sc-for list="{{ cartao.faixas }}" as="faixa" hint-placeholder-count="6"><span title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></span></sc-for></span>
+              <sc-for list="{{ cartao.linhas }}" as="item" hint-placeholder-count="4"><span class="d-grid gap-8 alinha-baseline fs-13" style="grid-template-columns:minmax(0,1fr) auto 40px"><span class="cor-cinza-750">{{ item.titulo }}</span><b class="num-tabular-nums texto-right fs-14" style="font-family:'Inter',system-ui,sans-serif">{{ item.valor }}</b><span class="num-tabular-nums texto-right fs-12 cor-cinza-600">{{ item.parte }}</span></span></sc-for>
+            </button>
+          </sc-for>
         </div>
+        <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ legendaDosEstagios }}" as="item" hint-placeholder-count="6"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
       </section>
     </sc-if>
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
       <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Por perfil</h3><span class="fs-12 cor-cinza-600">Clique para filtrar.</span></div>
-      <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
-        <sc-for list="{{ cartoesPorPerfil }}" as="cartao" hint-placeholder-count="3"><button onClick="{{ cartao.escolher }}" class="borda-cinza-110 raio-10 p-12-14 d-flex eixo-column gap-6 cursor-pointer texto-left largura-fundo" style="background:{{ cartao.fundo }}"><b class="fs-13 cor-ciano-850">{{ cartao.rotulo }} <span class="fw-400 fs-12 cor-cinza-600">{{ cartao.total }}</span></b><div class="d-flex h-10 raio-4 rolagem-hidden fundo-cinza-90"><sc-for list="{{ cartao.faixas }}" as="faixa" hint-placeholder-count="6"><div title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></div></sc-for></div><span class="fs-12 cor-cinza-750">{{ cartao.numeros }}</span></button></sc-for>
+      <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <sc-for list="{{ cartoesPorPerfil }}" as="cartao" hint-placeholder-count="3">
+            <button onClick="{{ cartao.escolher }}" aria-pressed="{{ cartao.marcado }}" class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-10 cursor-pointer texto-left largura-fundo" style="background:{{ cartao.fundo }}">
+              <span class="d-flex quebra-wrap alinha-baseline gap-8"><b class="fs-15 cor-ciano-850">{{ cartao.rotulo }}</b><span class="fs-12 cor-cinza-600">{{ cartao.total }}</span></span>
+              <span class="d-flex h-10 raio-4 rolagem-hidden fundo-cinza-90"><sc-for list="{{ cartao.faixas }}" as="faixa" hint-placeholder-count="6"><span title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></span></sc-for></span>
+              <sc-for list="{{ cartao.linhas }}" as="item" hint-placeholder-count="4"><span class="d-grid gap-8 alinha-baseline fs-13" style="grid-template-columns:minmax(0,1fr) auto 40px"><span class="cor-cinza-750">{{ item.titulo }}</span><b class="num-tabular-nums texto-right fs-14" style="font-family:'Inter',system-ui,sans-serif">{{ item.valor }}</b><span class="num-tabular-nums texto-right fs-12 cor-cinza-600">{{ item.parte }}</span></span></sc-for>
+            </button>
+          </sc-for>
       </div>
+      <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ legendaDosEstagios }}" as="item" hint-placeholder-count="6"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
     </section>
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
       <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Evolução mensal</h3><span class="fs-12 cor-cinza-600">{{ evolucao.nota }}</span></div>
@@ -195,6 +212,39 @@
         <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ evolucao.legenda }}" as="item" hint-placeholder-count="3"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
       </sc-if>
     </section>
+    <div class="empilha-celular d-grid colunas-1fr-1fr gap-16 alinha-start">
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Estágio da jornada</h3><span class="fs-12 cor-cinza-600">Cada usuário em um único estágio.</span></div>
+        <sc-for list="{{ estagios }}" as="estagio" hint-placeholder-count="6">
+          <div class="d-grid gap-10 alinha-center fs-12" style="grid-template-columns:minmax(120px,170px) minmax(0,1fr) auto">
+            <span class="d-flex alinha-center gap-6 fs-13 fw-600"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ estagio.cor }}"></span>{{ estagio.rotulo }}</span>
+            <div class="d-flex h-14 raio-4 rolagem-hidden fundo-cinza-90"><div class="largura-fundo" style="width:{{ estagio.largura }};background:{{ estagio.cor }}"></div></div>
+            <span class="num-tabular-nums espaco-nowrap texto-right" style="font-family:'Inter',system-ui,sans-serif"><b class="fs-13">{{ estagio.valor }}</b> <span class="cor-cinza-600">{{ estagio.parcela }}</span></span>
+          </div>
+        </sc-for>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Temperatura de engajamento</h3><span class="fs-12 cor-cinza-600">Há quanto tempo foi o último acesso. Não é quantidade de acessos.</span></div>
+        <sc-for list="{{ temperaturas }}" as="faixa" hint-placeholder-count="5">
+          <div class="d-grid gap-10 alinha-center fs-12" style="grid-template-columns:minmax(120px,150px) minmax(0,1fr) auto">
+            <div class="d-flex eixo-column gap-2"><span class="d-flex alinha-center gap-6 fs-13 fw-600"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ faixa.cor }}"></span>{{ faixa.rotulo }}</span><span class="cor-cinza-600">{{ faixa.intervalo }}</span></div>
+            <div class="d-flex h-14 raio-4 rolagem-hidden fundo-cinza-90"><div class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></div></div>
+            <span class="num-tabular-nums espaco-nowrap texto-right" style="font-family:'Inter',system-ui,sans-serif"><b class="fs-13">{{ faixa.valor }}</b> <span class="cor-cinza-600">{{ faixa.parcela }}</span></span>
+          </div>
+        </sc-for>
+        <div class="d-flex eixo-column gap-10 p-12-0 borda-t-cinza-70">
+          <b class="fs-13">{{ textos.barras }}</b>
+          <sc-for list="{{ barras }}" as="barra" hint-placeholder-count="7">
+            <div class="d-grid colunas-44-minmax-0-1fr-48 gap-10 alinha-center fs-12">
+              <span class="fw-600" style="color:{{ barra.cor }}">{{ barra.sigla }}</span>
+              <div class="d-flex h-14 raio-4 rolagem-hidden fundo-cinza-90"><sc-for list="{{ barra.faixas }}" as="faixa" hint-placeholder-count="5"><div title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></div></sc-for></div>
+              <span class="num-tabular-nums texto-right cor-cinza-600" style="font-family:'Inter',system-ui,sans-serif">{{ barra.engajados }}</span>
+            </div>
+          </sc-for>
+          <span class="fs-12 cor-cinza-600">Mesmas cores da lista acima. Número à direita: % engajados.</span>
+        </div>
+      </section>
+    </div>
     <div class="empilha-celular d-grid colunas-minmax-0-1p25fr-minmax-0-1fr gap-16 alinha-start">
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
         <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Escolas que precisam de reforço na adoção</h3><span class="fs-12 cor-cinza-600">{{ textos.ordem }}</span></div>
@@ -211,38 +261,15 @@
         </sc-for>
         <sc-if value="{{ semSugestoes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma escola em atenção ou crítica neste filtro.</span></sc-if>
       </section>
-      <div class="d-flex eixo-column gap-16">
-        <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-8 fundo-branco">
-          <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Estágio da jornada</h3><span class="fs-12 cor-cinza-600">Cada usuário em um único estágio.</span></div>
-          <sc-for list="{{ estagios }}" as="estagio" hint-placeholder-count="6">
-            <div class="d-grid colunas-120-minmax-0-1fr gap-10 alinha-center fs-12">
-              <span class="fw-600" style="color:{{ estagio.cor }}">{{ estagio.rotulo }}</span>
-              <div class="d-flex alinha-center gap-8"><div class="flex-1-1-220 d-flex h-14 raio-4 rolagem-hidden fundo-cinza-90"><div class="largura-fundo" style="width:{{ estagio.largura }};background:{{ estagio.cor }}"></div></div><span class="num-tabular-nums cor-cinza-600 espaco-nowrap" style="font-family:'Inter',system-ui,sans-serif">{{ estagio.valor }}</span></div>
-            </div>
-          </sc-for>
-        </section>
-        <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-          <h3 class="m-0 fs-15">{{ textos.barras }}</h3>
-          <sc-for list="{{ barras }}" as="barra" hint-placeholder-count="7">
-            <div class="d-grid colunas-44-minmax-0-1fr-48 gap-10 alinha-center fs-12">
-              <span class="fw-600" style="color:{{ barra.cor }}">{{ barra.sigla }}</span>
-              <div class="d-flex h-14 raio-4 rolagem-hidden fundo-cinza-90"><sc-for list="{{ barra.faixas }}" as="faixa" hint-placeholder-count="5"><div title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></div></sc-for></div>
-              <span class="num-tabular-nums texto-right cor-cinza-600" style="font-family:'Inter',system-ui,sans-serif">{{ barra.engajados }}</span>
-            </div>
-          </sc-for>
-          <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ legenda }}" as="item" hint-placeholder-count="5"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
-          <span class="fs-12 cor-cinza-600">Temperatura = há quanto tempo foi o último acesso. Número à direita: % engajados.</span>
-        </section>
-        <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco">
-          <h3 class="m-0-0-6 fs-15">Régua de temperatura</h3>
-          <sc-for list="{{ regua }}" as="faixa" hint-placeholder-count="5">
-            <div class="d-grid colunas-110-minmax-0-1fr gap-10 p-8-0 borda-t-cinza-70 fs-13">
-              <div class="d-flex eixo-column gap-2"><span class="d-flex alinha-center gap-6 fw-600"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ faixa.cor }}"></span>{{ faixa.rotulo }}</span><span class="fs-12 cor-cinza-600">{{ faixa.intervalo }}</span></div>
-              <span class="cor-cinza-750 lh-1p45">{{ faixa.acao }}</span>
-            </div>
-          </sc-for>
-        </section>
-      </div>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco">
+        <h3 class="m-0-0-6 fs-15">Régua de temperatura</h3>
+        <sc-for list="{{ regua }}" as="faixa" hint-placeholder-count="5">
+          <div class="d-grid colunas-110-minmax-0-1fr gap-10 p-8-0 borda-t-cinza-70 fs-13">
+            <div class="d-flex eixo-column gap-2"><span class="d-flex alinha-center gap-6 fw-600"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ faixa.cor }}"></span>{{ faixa.rotulo }}</span><span class="fs-12 cor-cinza-600">{{ faixa.intervalo }}</span></div>
+            <span class="cor-cinza-750 lh-1p45">{{ faixa.acao }}</span>
+          </div>
+        </sc-for>
+      </section>
     </div>
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-6 fundo-branco">
       <h3 class="m-0-0-6 fs-15">Como a Jornada classifica</h3>
@@ -326,102 +353,158 @@
 
   <sc-if value="{{ abaAtiva.escola }}" hint-placeholder-val="{{ false }}">
     <div class="d-flex quebra-wrap gap-10 alinha-center">
-      <select style="background:var(--fundo-branco)" aria-label="Escola" onChange="{{ escolherEscola }}" value="{{ escolaNome }}" class="h-40 flex-1-1-320 max-w-520 borda-cinza-160 raio-8 p-0-10 fs-14 largura-fundo fundo-branco"><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
+      <select style="background:var(--fundo-branco)" aria-label="Escola" onChange="{{ escolherEscola }}" value="{{ escolaNome }}" class="h-40 flex-1-1-320 max-w-520 borda-cinza-160 raio-8 p-0-10 fs-14 largura-fundo fundo-branco"><option value="">Toda a rede · por ano</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
+      <sc-if value="{{ temEscola }}" hint-placeholder-val="{{ true }}">
       <span class="fs-11 fw-700 p-4-10 raio-999 segmentado" style="color:{{ escola.semaforoCor }};background:{{ escola.semaforoFundo }}">{{ escola.semaforo }} · prioridade {{ escola.pontos }}</span>
       <sc-if value="{{ escola.temVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-verde-700 fundo-verde-80 p-4-10 raio-999">Na agenda · {{ escola.visita }}</span></sc-if>
       <sc-if value="{{ escola.semVisita }}" hint-placeholder-val="{{ true }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ escola.agendar }}" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 ml-auto fundo-ciano-660">{{ textos.agendar }}</button></sc-if>
-    </div>
-    <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
-      <sc-for list="{{ escola.indicadores }}" as="indicador" hint-placeholder-count="6">
-        <div class="fundo-branco raio-12 p-14-16 d-flex eixo-column gap-4 largura-fundo cartao-indicador" style="border-width:3px 1px 1px;border-style:solid;border-color:{{ indicador.cor }} var(--borda-cinza-110) var(--borda-cinza-110)">
-          <span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span>
-          <span class="num-tabular-nums fs-22 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.valorCor }}">{{ indicador.valor }}</span>
-          <span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span>
-        </div>
-      </sc-for>
-    </div>
-    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-10 fundo-branco">
-      <div class="d-flex quebra-wrap alinha-center gap-8-12"><h3 class="m-0 fs-15">Status e ação</h3><span class="fs-12 fw-600 p-3-8 raio-999 fundo-cinza-70 cor-cinza-750">{{ escola.statusAtual }}</span></div>
-      <sc-for list="{{ escola.motivos }}" as="motivo" hint-placeholder-count="3"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ motivo }}</span></sc-for>
-      <sc-if value="{{ podeRegistrarStatus }}" hint-placeholder-val="{{ false }}">
-        <div class="d-grid gap-10 p-14 raio-10 fundo-ciano-40" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
-          <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Status<select style="background:var(--fundo-branco)" onChange="{{ escolherStatus }}" value="{{ formEscola.status }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="">Escolha o status</option><sc-for list="{{ opcoesDeStatus }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
-          <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Prazo<input type="date" value="{{ formEscola.prazo }}" onChange="{{ escolherPrazo }}" class="h-36 borda-cinza-160 raio-8 p-0-10 fs-13"></label>
-          <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Ação<textarea rows="2" value="{{ formEscola.acao }}" onChange="{{ escreverAcao }}" maxlength="1000" placeholder="O que será ou foi feito" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
-          <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Próximo passo<textarea rows="2" value="{{ formEscola.passo }}" onChange="{{ escreverPasso }}" maxlength="500" placeholder="Próxima etapa combinada" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
-          <button style="background:var(--destaque-ciano-660)" onClick="{{ salvarStatus }}" disabled="{{ statusIncompleto }}" class="alinha-si-flex-start h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fundo-ciano-660">Registrar status</button>
-        </div>
       </sc-if>
-      <sc-for list="{{ escola.historico }}" as="item" hint-placeholder-count="2"><span class="fs-12 cor-cinza-600 lh-1p45 p-6-0 borda-t-cinza-70">{{ item }}</span></sc-for>
-      <sc-if value="{{ escola.semHistorico }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-cinza-600">Nenhum status registrado para esta escola.</span></sc-if>
-    </section>
-    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-      <div class="d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Alunos por ano × atividades dos oficineiros</h3><span class="fs-12 cor-cinza-600">Temperatura de acesso dos alunos de cada ano cruzada com as atividades que os oficineiros da escola deram para esse ano no mês. Aula em 7 dias: ao menos 25% dos alunos (e no mínimo 2) acessaram na última semana.</span></div>
-      <div class="rolagem-x-auto m-0-n4">
-        <div class="min-w-1000 d-flex eixo-column p-0-4">
-          <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:70px 60px repeat(5,68px) 80px 90px 110px minmax(200px,1fr)">
-            <span>Ano</span><span class="texto-right">Alunos</span><span class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span class="texto-right">Engajados</span><span class="texto-center">Aula em 7 dias</span><span class="texto-right">Atividades no mês</span><span class="pl-10">Leitura</span>
+    </div>
+    <sc-if value="{{ emRede }}" hint-placeholder-val="{{ false }}">
+      <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <sc-for list="{{ rede.indicadores }}" as="indicador" hint-placeholder-count="4">
+          <div class="fundo-branco raio-12 p-14-16 d-flex eixo-column gap-4 largura-fundo cartao-indicador" style="border-width:3px 1px 1px;border-style:solid;border-color:{{ indicador.cor }} var(--borda-cinza-110) var(--borda-cinza-110)">
+            <span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span>
+            <span class="num-tabular-nums fs-24 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.valorCor }}">{{ indicador.valor }}</span>
+            <span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span>
           </div>
-          <sc-for list="{{ escola.anos }}" as="linha" hint-placeholder-count="4">
-            <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:70px 60px repeat(5,68px) 80px 90px 110px minmax(200px,1fr)">
-              <span class="fw-600">{{ linha.ano }}</span>
-              <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
-              <sc-for list="{{ linha.celulas }}" as="celula" hint-placeholder-count="5"><span title="{{ celula.titulo }}" class="num-tabular-nums fs-12 texto-center p-8-0 raio-6" style="font-family:'Inter',system-ui,sans-serif;background:{{ celula.fundo }};color:{{ celula.cor }}">{{ celula.valor }}</span></sc-for>
-              <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
-              <span class="fs-12 texto-center fw-600" style="color:{{ linha.aulaCor }}">{{ linha.aula7d }}</span>
-              <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ linha.aulas }}</span>
-              <span class="fs-12 pl-10 lh-1p4" style="color:{{ linha.leituraCor }}">{{ linha.leitura }}</span>
+        </sc-for>
+      </div>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15 flex-1-1-240">Por ano, em toda a rede</h3><span class="fs-12 cor-cinza-600">Escolha uma escola no seletor acima para ver turma por turma.</span></div>
+        <div class="rolagem-x-auto m-0-n4">
+          <div class="min-w-900 d-flex eixo-column p-0-4">
+            <div class="d-grid gap-8 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(150px,1fr) minmax(220px,2.2fr) 84px 84px 90px 32px">
+              <span>Ano</span><span>Estágio da jornada</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Turmas com aula</span><span></span>
             </div>
-          </sc-for>
-          <sc-if value="{{ escola.semAnos }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600 p-10-0">Nenhum aluno com ano escolar informado nesta unidade.</span></sc-if>
-        </div>
-      </div>
-      <span class="fs-12 cor-cinza-600">A exportação traz o ano escolar (coluna turma, ex.: 5º ANO) e o responsável pela turma (coluna responsavel_turma). Quando a turma vier detalhada (5º A, 5º B), a tabela passa a agrupar por turma.</span>
-    </section>
-    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-      <div class="d-flex quebra-wrap alinha-center gap-8-12">
-        <div class="flex-1-1-240 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Contas da escola</h3><span class="fs-12 cor-cinza-600">{{ escola.contasTexto }}</span></div>
-        <input onInput="{{ buscarConta }}" aria-label="Buscar nome" placeholder="Buscar nome" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
-        <select style="background:var(--fundo-branco)" aria-label="Temperatura" onChange="{{ escolherTemperatura }}" value="{{ temperatura }}"
-          class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as temperaturas</option><option
-          value="Q">Quente</option><option value="M">Morno</option><option value="F">Frio</option><option
-          value="S">Sem uso</option><option value="N">Nunca acessou</option></select>
-      </div>
-      <div class="rolagem-x-auto m-0-n4">
-        <div class="min-w-900 d-flex eixo-column p-0-4">
-          <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,2fr) 90px 70px minmax(150px,1.2fr) 100px 90px 80px 120px">
-            <span>Nome</span><span>Perfil</span><span>Ano</span><span>Responsável pela turma</span><span>Último acesso</span><span class="texto-right">Dias sem acesso</span><span class="texto-right">Dias de uso</span><span>Temperatura</span>
+            <sc-for list="{{ rede.anos }}" as="linha" hint-placeholder-count="5">
+              <div class="d-grid gap-8 alinha-center fs-13 p-10-0 borda-t-cinza-75" style="grid-template-columns:minmax(150px,1fr) minmax(220px,2.2fr) 84px 84px 90px 32px">
+                <span class="d-flex eixo-column gap-2"><button onClick="{{ linha.alternar }}" aria-expanded="{{ linha.expandido }}" class="largura-fundo cursor-pointer fs-14 cor-ciano-850" style="all:unset;font-weight:700;color:var(--texto-ciano-850)">{{ linha.ano }}</button><span class="fs-12 cor-cinza-600">{{ linha.numeros }}</span></span>
+                <span class="d-flex h-14 raio-4 rolagem-hidden fundo-cinza-90"><sc-for list="{{ linha.faixas }}" as="faixa" hint-placeholder-count="6"><span title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></span></sc-for></span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.utilizacao }}</span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif" title="{{ linha.comAulaTitulo }}">{{ linha.comAula }}</span>
+                <button onClick="{{ linha.alternar }}" aria-expanded="{{ linha.expandido }}" aria-label="{{ linha.rotuloDoBotao }}" class="w-26 h-26 borda-cinza-160 fundo-branco raio-6 cor-ciano-850 fs-15 p-0 largura-fundo botao-secundario">{{ linha.seta }}</button>
+              </div>
+              <sc-if value="{{ linha.aberto }}" hint-placeholder-val="{{ false }}">
+                <div class="d-flex eixo-column raio-10 fundo-cinza-20 p-10 m-0-0-8">
+                  <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,2fr) 70px 84px 84px 110px"><span>Escola</span><span class="texto-right">Alunos</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-center">Aula em 7 dias</span></div>
+                  <sc-for list="{{ linha.escolas }}" as="item" hint-placeholder-count="3">
+                    <div class="d-grid gap-8 alinha-center fs-13 p-6-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,2fr) 70px 84px 84px 110px">
+                      <button onClick="{{ item.abrir }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset;font-weight:600;color:var(--texto-ciano-850)" title="{{ item.nome }}">{{ item.nome }}</button>
+                      <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ item.alunos }}</span>
+                      <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ item.utilizacao }}</span>
+                      <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ item.engajadosCor }}">{{ item.engajados }}</span>
+                      <span class="fs-12 texto-center fw-600" style="color:{{ item.aulaCor }}">{{ item.aula }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </sc-for>
+            <sc-if value="{{ semAnosNaRede }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600 p-10-0">Nenhum aluno com ano escolar informado neste recorte.</span></sc-if>
           </div>
-          <sc-for list="{{ escola.contas }}" as="conta" hint-placeholder-count="8">
-            <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,2fr) 90px 70px minmax(150px,1.2fr) 100px 90px 80px 120px">
-              <span class="rolagem-hidden reticencias-ellipsis espaco-nowrap">{{ conta.nome }}</span><span class="cor-cinza-750">{{ conta.perfil }}</span><span class="cor-cinza-750">{{ conta.ano }}</span><span class="fs-12 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="color:{{ conta.responsavelCor }}">{{ conta.responsavel }}</span>
-              <span class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ conta.ultimoAcesso }}</span><span class="num-tabular-nums fs-12 texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ conta.diasSemAcesso }}</span><span class="num-tabular-nums fs-12 texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ conta.diasDeUso }}</span>
-              <span class="d-flex alinha-center gap-6 fs-12 fw-600" style="color:{{ conta.cor }}"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ conta.marcaCor }}"></span>{{ conta.temperatura }}</span>
-            </div>
-          </sc-for>
         </div>
+        <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ legendaDosEstagios }}" as="item" hint-placeholder-count="6"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
+        <span class="fs-12 cor-cinza-600">Turma = ano escolar em cada escola (a base de acessos não traz a letra da turma). Aula em 7 dias: ao menos 25% dos alunos da turma (e no mínimo 2) acessaram na última semana.</span>
+      </section>
+    </sc-if>
+    <sc-if value="{{ temEscola }}" hint-placeholder-val="{{ true }}">
+      <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+        <sc-for list="{{ escola.indicadores }}" as="indicador" hint-placeholder-count="6">
+          <div class="fundo-branco raio-12 p-14-16 d-flex eixo-column gap-4 largura-fundo cartao-indicador" style="border-width:3px 1px 1px;border-style:solid;border-color:{{ indicador.cor }} var(--borda-cinza-110) var(--borda-cinza-110)">
+            <span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span>
+            <span class="num-tabular-nums fs-22 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.valorCor }}">{{ indicador.valor }}</span>
+            <span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span>
+          </div>
+        </sc-for>
       </div>
-      <sc-if value="{{ escola.temMais }}" hint-placeholder-val="{{ false }}"><button onClick="{{ mostrarMais }}" class="alinha-si-flex-start h-34 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">Mostrar mais</button></sc-if>
-    </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-10 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-center gap-8-12"><h3 class="m-0 fs-15">Status e ação</h3><span class="fs-12 fw-600 p-3-8 raio-999 fundo-cinza-70 cor-cinza-750">{{ escola.statusAtual }}</span></div>
+        <sc-for list="{{ escola.motivos }}" as="motivo" hint-placeholder-count="3"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ motivo }}</span></sc-for>
+        <sc-if value="{{ podeRegistrarStatus }}" hint-placeholder-val="{{ false }}">
+          <div class="d-grid gap-10 p-14 raio-10 fundo-ciano-40" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+            <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Status<select style="background:var(--fundo-branco)" onChange="{{ escolherStatus }}" value="{{ formEscola.status }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="">Escolha o status</option><sc-for list="{{ opcoesDeStatus }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+            <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Prazo<input type="date" value="{{ formEscola.prazo }}" onChange="{{ escolherPrazo }}" class="h-36 borda-cinza-160 raio-8 p-0-10 fs-13"></label>
+            <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Ação<textarea rows="2" value="{{ formEscola.acao }}" onChange="{{ escreverAcao }}" maxlength="1000" placeholder="O que será ou foi feito" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+            <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Próximo passo<textarea rows="2" value="{{ formEscola.passo }}" onChange="{{ escreverPasso }}" maxlength="500" placeholder="Próxima etapa combinada" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+            <button style="background:var(--destaque-ciano-660)" onClick="{{ salvarStatus }}" disabled="{{ statusIncompleto }}" class="alinha-si-flex-start h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fundo-ciano-660">Registrar status</button>
+          </div>
+        </sc-if>
+        <sc-for list="{{ escola.historico }}" as="item" hint-placeholder-count="2"><span class="fs-12 cor-cinza-600 lh-1p45 p-6-0 borda-t-cinza-70">{{ item }}</span></sc-for>
+        <sc-if value="{{ escola.semHistorico }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-cinza-600">Nenhum status registrado para esta escola.</span></sc-if>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Alunos por ano × atividades dos oficineiros</h3><span class="fs-12 cor-cinza-600">Temperatura de acesso dos alunos de cada ano cruzada com as atividades que os oficineiros da escola deram para esse ano no mês. Aula em 7 dias: ao menos 25% dos alunos (e no mínimo 2) acessaram na última semana.</span></div>
+        <div class="rolagem-x-auto m-0-n4">
+          <div class="min-w-1000 d-flex eixo-column p-0-4">
+            <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:70px 60px repeat(5,68px) 80px 90px 110px minmax(200px,1fr)">
+              <span>Ano</span><span class="texto-right">Alunos</span><span class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span class="texto-right">Engajados</span><span class="texto-center">Aula em 7 dias</span><span class="texto-right">Atividades no mês</span><span class="pl-10">Leitura</span>
+            </div>
+            <sc-for list="{{ escola.anos }}" as="linha" hint-placeholder-count="4">
+              <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:70px 60px repeat(5,68px) 80px 90px 110px minmax(200px,1fr)">
+                <span class="fw-600">{{ linha.ano }}</span>
+                <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
+                <sc-for list="{{ linha.celulas }}" as="celula" hint-placeholder-count="5"><span title="{{ celula.titulo }}" class="num-tabular-nums fs-12 texto-center p-8-0 raio-6" style="font-family:'Inter',system-ui,sans-serif;background:{{ celula.fundo }};color:{{ celula.cor }}">{{ celula.valor }}</span></sc-for>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
+                <span class="fs-12 texto-center fw-600" style="color:{{ linha.aulaCor }}">{{ linha.aula7d }}</span>
+                <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ linha.aulas }}</span>
+                <span class="fs-12 pl-10 lh-1p4" style="color:{{ linha.leituraCor }}">{{ linha.leitura }}</span>
+              </div>
+            </sc-for>
+            <sc-if value="{{ escola.semAnos }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600 p-10-0">Nenhum aluno com ano escolar informado nesta unidade.</span></sc-if>
+          </div>
+        </div>
+        <span class="fs-12 cor-cinza-600">A exportação traz o ano escolar (coluna turma, ex.: 5º ANO) e o responsável pela turma (coluna responsavel_turma). Quando a turma vier detalhada (5º A, 5º B), a tabela passa a agrupar por turma.</span>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-center gap-8-12">
+          <div class="flex-1-1-240 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Contas da escola</h3><span class="fs-12 cor-cinza-600">{{ escola.contasTexto }}</span></div>
+          <input onInput="{{ buscarConta }}" aria-label="Buscar nome" placeholder="Buscar nome" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
+          <select style="background:var(--fundo-branco)" aria-label="Temperatura" onChange="{{ escolherTemperatura }}" value="{{ temperatura }}"
+            class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as temperaturas</option><option
+            value="Q">Quente</option><option value="M">Morno</option><option value="F">Frio</option><option
+            value="S">Sem uso</option><option value="N">Nunca acessou</option></select>
+        </div>
+        <div class="rolagem-x-auto m-0-n4">
+          <div class="min-w-900 d-flex eixo-column p-0-4">
+            <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,2fr) 90px 70px minmax(150px,1.2fr) 100px 90px 80px 120px">
+              <span>Nome</span><span>Perfil</span><span>Ano</span><span>Responsável pela turma</span><span>Último acesso</span><span class="texto-right">Dias sem acesso</span><span class="texto-right">Dias de uso</span><span>Temperatura</span>
+            </div>
+            <sc-for list="{{ escola.contas }}" as="conta" hint-placeholder-count="8">
+              <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,2fr) 90px 70px minmax(150px,1.2fr) 100px 90px 80px 120px">
+                <span class="rolagem-hidden reticencias-ellipsis espaco-nowrap">{{ conta.nome }}</span><span class="cor-cinza-750">{{ conta.perfil }}</span><span class="cor-cinza-750">{{ conta.ano }}</span><span class="fs-12 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="color:{{ conta.responsavelCor }}">{{ conta.responsavel }}</span>
+                <span class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ conta.ultimoAcesso }}</span><span class="num-tabular-nums fs-12 texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ conta.diasSemAcesso }}</span><span class="num-tabular-nums fs-12 texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ conta.diasDeUso }}</span>
+                <span class="d-flex alinha-center gap-6 fs-12 fw-600" style="color:{{ conta.cor }}"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ conta.marcaCor }}"></span>{{ conta.temperatura }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <sc-if value="{{ escola.temMais }}" hint-placeholder-val="{{ false }}"><button onClick="{{ mostrarMais }}" class="alinha-si-flex-start h-34 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">Mostrar mais</button></sc-if>
+      </section>
+
+    </sc-if>
   </sc-if>
 
   <sc-if value="{{ abaAtiva.oficineiros }}" hint-placeholder-val="{{ false }}">
     <div class="empilha-celular d-grid colunas-1fr-1fr gap-16 alinha-start">
       <sc-for list="{{ rankings }}" as="ranking" hint-placeholder-count="2">
-        <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-8 fundo-branco">
-          <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">{{ ranking.titulo }}</h3><span class="fs-12 cor-cinza-600">{{ ranking.nota }}</span></div>
-          <sc-for list="{{ ranking.linhas }}" as="linha" hint-placeholder-count="5">
-            <div class="d-grid colunas-40-minmax-0-1fr-auto gap-10 alinha-center p-8-0 borda-t-cinza-70">
-              <span class="num-tabular-nums fs-13 fw-700 cor-cinza-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.posicao }}º</span>
-              <div class="min-w-0 d-flex eixo-column gap-2"><b class="fs-13 rolagem-hidden reticencias-ellipsis espaco-nowrap">{{ linha.nome }}</b><span class="fs-12 cor-cinza-600">{{ linha.detalhe }}</span></div>
-              <div class="d-flex eixo-column alinha-end gap-2"><span class="num-tabular-nums fs-14 fw-700" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span><span class="fs-11 cor-cinza-600 espaco-nowrap">uso {{ linha.utilizacao }}</span></div>
-            </div>
-          </sc-for>
+        <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-10 fundo-branco">
+          <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15 flex-1-1-240">{{ ranking.titulo }}</h3><span class="fs-12 cor-cinza-600">{{ ranking.nota }}</span></div>
+          <ol class="m-0 p-0 d-flex eixo-column gap-8" style="list-style:none">
+            <sc-for list="{{ ranking.linhas }}" as="linha" hint-placeholder-count="5">
+              <li class="d-grid colunas-40-minmax-0-1fr-auto gap-10 alinha-center borda-cinza-110 raio-10 p-12-14">
+                <span class="num-tabular-nums fs-16 fw-700 cor-cinza-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.posicao }}º</span>
+                <div class="min-w-0 d-flex eixo-column gap-2"><b class="fs-14 rolagem-hidden reticencias-ellipsis espaco-nowrap" title="{{ linha.nome }}">{{ linha.nome }}</b><span class="fs-12 cor-cinza-600 lh-1p45">{{ linha.detalhe }}</span></div>
+                <div class="d-flex eixo-column alinha-end gap-2 texto-right"><span class="num-tabular-nums fs-20 fw-700" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.execucaoCor }}">{{ linha.execucao }}</span><span class="fs-12 cor-cinza-600 espaco-nowrap">{{ linha.realizadas }}</span></div>
+              </li>
+            </sc-for>
+          </ol>
         </section>
       </sc-for>
     </div>
-    <sc-if value="{{ semRanking }}" hint-placeholder-val="{{ false }}"><section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-20 fundo-branco"><span class="fs-13 cor-cinza-600">Nenhum oficineiro com alunos na base de acessos neste filtro.</span></section></sc-if>
-    <span class="fs-12 cor-cinza-600">Ranking pelo % de alunos engajados nos anos em que cada oficineiro deu atividades no ciclo (desempate: % em uso). Sem atividades no ciclo, contam todos os alunos da escola do oficineiro.</span>
+    <sc-if value="{{ semRanking }}" hint-placeholder-val="{{ false }}"><section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-20 fundo-branco"><span class="fs-13 cor-cinza-600">Nenhum oficineiro com atividades previstas no ciclo neste filtro.</span></section></sc-if>
+    <sc-if value="{{ temSemPrevistas }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-750 lh-1p45">{{ semPrevistas }}</span></sc-if>
+    <span class="fs-12 cor-cinza-600 lh-1p45">Ranking pela execução das atividades no ciclo: atividades realizadas ÷ atividades previstas na grade (feriados e recessos fora da conta; atividades fora da grade aparecem à parte e não entram no cálculo). Desempate: % de alunos engajados nos anos atendidos.</span>
   </sc-if>
 
   <sc-if value="{{ abaAtiva.usuarios }}" hint-placeholder-val="{{ false }}">
@@ -597,6 +680,7 @@ const PADRAO = {
   filtroEscola: 'todas',
   filtroAno: 'todos',
   escolaAberta: '',
+  anoAberto: '',
   visaoLista: 'jornada',
   agrupada: false,
   ordemLista: 'prio',
@@ -695,7 +779,10 @@ const textoDoHistorico = (registro, textoDoStatus) =>
   (registro.prazo ? ' · prazo ' + dmyIso(registro.prazo) : '') +
   ' · ' +
   registro.autor_nome;
+const ICONES_DO_SEMAFORO = { critico: '▲', atencao: '●', em_dia: '✓', sem_base: '–' };
+const decimal = (parte, todo) => (todo ? (Math.round((parte * 1000) / todo) / 10).toLocaleString('pt-BR') + '%' : '0%');
 const pilula = codigo => ({
+  semaforoIcone: ICONES_DO_SEMAFORO[codigo],
   semaforo: SEMAFOROS[codigo][0],
   semaforoCor: SEMAFOROS[codigo][1],
   semaforoFundo: SEMAFOROS[codigo][2]
@@ -719,14 +806,6 @@ const faixasDeEstagio = total =>
     cor: ESTAGIOS[codigo][1],
     titulo: ESTAGIOS[codigo][0] + ' ' + parcela(total[codigo], total.n) + '%'
   }));
-const numerosDoFunil = total =>
-  'Implementados ' +
-  parcela(total.implementados, total.n) +
-  '% · Uso ' +
-  total.uso +
-  '% · Engajados ' +
-  total.engajados +
-  '%';
 class Component extends DCLogic {
   lembrar(mudanca) {
     Object.assign(this.props.memoria, mudanca);
@@ -971,18 +1050,26 @@ class Component extends DCLogic {
         avaliacao = (avaliacoesPorCarteira[carteira] || [])[0],
         contagem = {};
       resumo.unidades.forEach(u => (contagem[u.semaforo] = (contagem[u.semaforo] || 0) + 1));
+      const escolas = ['critico', 'atencao', 'em_dia']
+        .filter(codigo => contagem[codigo])
+        .map(codigo => SEMAFOROS[codigo][0].toLowerCase() + ' ' + contagem[codigo])
+        .join(' · ');
       return {
         rotulo: carteira,
         ...pilula(resumo.semaforo),
-        numeros: 'Utilização ' + resumo.total.uso + '% · engajados ' + resumo.total.engajados + '%',
-        escolas: ['critico', 'atencao', 'em_dia']
-          .filter(codigo => contagem[codigo])
-          .map(codigo => SEMAFOROS[codigo][0] + ' ' + contagem[codigo])
-          .join(' · '),
+        base:
+          plural(resumo.unidades.length, 'unidade', 'unidades') + ' · ' + plural(resumo.total.n, 'usuário', 'usuários'),
+        utilizacao: resumo.total.uso + '%',
+        engajados: resumo.total.engajados + '%',
+        engajadosCor: corDosEngajados(resumo.total.engajados),
+        escolas: escolas ? 'Escolas por semáforo: ' + escolas : '',
+        temEscolas: !!escolas,
         avaliacao: avaliacao
-          ? 'Analista: ' + SEMAFOROS[avaliacao.status][0] + ' em ' + dataDoRegistro(avaliacao.criado_em)
-          : 'Sem avaliação do analista',
+          ? SEMAFOROS[avaliacao.status][0] + ' em ' + dataDoRegistro(avaliacao.criado_em)
+          : 'ainda não registrada',
         avaliacaoCor: avaliacao ? SEMAFOROS[avaliacao.status][1] : 'var(--texto-cinza-600)',
+        avaliacaoResumo: avaliacao && avaliacao.resumo ? avaliacao.resumo : '',
+        temResumo: !!(avaliacao && avaliacao.resumo),
         abrir: () => this.lembrar({ carteiraVista: carteira, formCarteira: PADRAO.formCarteira })
       };
     });
@@ -1237,13 +1324,19 @@ class Component extends DCLogic {
               unidades.filter(u => u.local.sigla === sigla)
             )
           );
-    const cartaoDeGrupo = (rotulo, contas, marcado, escolher) => {
+    const cartaoDeGrupo = (rotulo, contas, marcado, escolher, subtitulo) => {
       const total = contar(contas);
       return {
         rotulo,
-        total: plural(total.n, 'usuário', 'usuários'),
+        total: subtitulo || plural(total.n, 'usuário', 'usuários'),
+        marcado: marcado ? 'true' : 'false',
         faixas: faixasDeEstagio(total),
-        numeros: numerosDoFunil(total),
+        linhas: [
+          ['Criados', total.n, ''],
+          ['Implementados', total.implementados, parcela(total.implementados, total.n) + '%'],
+          ['Utilização (30 dias)', total.utilizacao, total.uso + '%'],
+          ['Engajados', total.en, total.engajados + '%']
+        ].map(([titulo, valor, parte]) => ({ titulo, valor: numero(valor), parte })),
         fundo: marcado ? 'var(--fundo-ciano-40)' : 'var(--fundo-branco)',
         escolher
       };
@@ -1254,7 +1347,8 @@ class Component extends DCLogic {
             carteira,
             [].concat(...todasAsUnidades.filter(u => u.local.carteira === carteira).map(u => contasDe(u.local))),
             memoria.carteira === carteira,
-            () => this.lembrar({ carteira: memoria.carteira === carteira ? 'todos' : carteira })
+            () => this.lembrar({ carteira: memoria.carteira === carteira ? 'todos' : carteira }),
+            plural(todasAsUnidades.filter(u => u.local.carteira === carteira).length, 'unidade', 'unidades')
           )
         )
       : [];
@@ -1270,8 +1364,102 @@ class Component extends DCLogic {
       )
       .filter(cartao => cartao.total !== plural(0, 'usuário', 'usuários'));
     const porNome = todasAsUnidades.slice().sort((a, b) => a.local.nome.localeCompare(b.local.nome, 'pt-BR'));
+    const doFiltroDeEscola =
+      memoria.filtroEscola !== 'todas' ? porNome.find(u => String(u.local.id) === memoria.filtroEscola) : null;
     const escolhida =
-      porNome.find(u => u.local.nome === memoria.escola) || ordenadas.slice().sort(porPrioridade)[0] || porNome[0];
+      porNome.find(u => u.local.nome === memoria.escola) || (!memoria.escola && doFiltroDeEscola) || null;
+    const rede = { anos: [], indicadores: [] };
+    if (!escolhida) {
+      const porAno = {};
+      unidades.forEach(u => {
+        const anos = alunosPorAno(u.local.contas);
+        Object.keys(anos)
+          .filter(ano => memoria.filtroAno === 'todos' || ano === memoria.filtroAno)
+          .forEach(ano => {
+            const total = contar(anos[ano]);
+            (porAno[ano] = porAno[ano] || []).push({ u, total, aula: teveAula(total) });
+          });
+      });
+      const turmasDaRede = [].concat(...Object.values(porAno)),
+        alunosDaRede = turmasDaRede.reduce((soma, turma) => soma + turma.total.n, 0),
+        comAulaNaRede = turmasDaRede.filter(turma => turma.aula).length,
+        semAcessoNaRede = turmasDaRede.filter(turma => !turma.total.utilizacao).length,
+        idsDaRede = new Set(unidades.map(u => u.local.id)),
+        inicioDaSemana = Base.iso(Base.add(hoje, -6)),
+        daSemana = aulasDoCiclo.filter(
+          aula => idsDaRede.has(aula.esc) && aula.iso >= inicioDaSemana && aula.iso <= hojeIso && aula.st !== 'canc'
+        ),
+        previstasNaSemana = daSemana.filter(aula => !aula.extra).length,
+        realizadasNaSemana = daSemana.filter(aula => aula.st === 'real' || aula.extra).length;
+      rede.indicadores = [
+        {
+          titulo: 'Turmas com alunos criados',
+          valor: numero(turmasDaRede.length),
+          nota: plural(alunosDaRede, 'aluno', 'alunos'),
+          cor: 'var(--destaque-ciano-880)',
+          valorCor: 'var(--texto-ciano-850)'
+        },
+        {
+          titulo: 'Atividades previstas em 7 dias',
+          valor: previstasNaSemana ? numero(previstasNaSemana) : '—',
+          nota: previstasNaSemana
+            ? plural(realizadasNaSemana, 'realizada', 'realizadas') + ' pelos oficineiros'
+            : 'nenhuma atividade prevista na grade',
+          cor: 'var(--destaque-ciano-400)',
+          valorCor: 'var(--texto-ciano-850)'
+        },
+        {
+          titulo: 'Turmas com aula nos últimos 7 dias',
+          valor: numero(comAulaNaRede),
+          nota: parcela(comAulaNaRede, turmasDaRede.length) + '% das turmas',
+          cor: 'var(--destaque-azul-500)',
+          valorCor: 'var(--texto-ciano-850)'
+        },
+        {
+          titulo: 'Turmas sem nenhum acesso em 30 dias',
+          valor: numero(semAcessoNaRede),
+          nota: parcela(semAcessoNaRede, turmasDaRede.length) + '% das turmas',
+          cor: semAcessoNaRede ? 'var(--destaque-vermelho-600)' : 'var(--destaque-cinza-300)',
+          valorCor: semAcessoNaRede ? 'var(--texto-vermelho-600)' : 'var(--texto-ciano-850)'
+        }
+      ];
+      rede.anos = Object.keys(porAno)
+        .sort((a, b) => Number(a) - Number(b))
+        .map(ano => {
+          const turmas = porAno[ano],
+            total = contar([].concat(...turmas.map(turma => alunosPorAno(turma.u.local.contas)[ano]))),
+            comAula = turmas.filter(turma => turma.aula).length,
+            aberto = memoria.anoAberto === ano;
+          return {
+            ano: ano + 'º ano',
+            numeros: plural(turmas.length, 'turma', 'turmas') + ' · ' + plural(total.n, 'aluno', 'alunos'),
+            faixas: faixasDeEstagio(total),
+            utilizacao: total.uso + '%',
+            engajados: total.engajados + '%',
+            engajadosCor: corDosEngajados(total.engajados),
+            comAula: comAula + '/' + turmas.length,
+            comAulaTitulo: comAula + ' de ' + turmas.length + ' turmas com aula nos últimos 7 dias',
+            aberto,
+            expandido: aberto ? 'true' : 'false',
+            seta: aberto ? '▾' : '▸',
+            rotuloDoBotao: (aberto ? 'Fechar' : 'Ver') + ' as escolas do ' + ano + 'º ano',
+            alternar: () => this.lembrar({ anoAberto: aberto ? '' : ano }),
+            escolas: turmas
+              .slice()
+              .sort((a, b) => a.total.engajados - b.total.engajados || b.total.n - a.total.n)
+              .map(turma => ({
+                nome: turma.u.local.nome,
+                abrir: abrir(turma.u.local),
+                alunos: numero(turma.total.n),
+                utilizacao: turma.total.uso + '%',
+                engajados: turma.total.engajados + '%',
+                engajadosCor: corDosEngajados(turma.total.engajados),
+                aula: turma.aula ? 'Sim' : 'Não',
+                aulaCor: turma.aula ? 'var(--texto-verde-700)' : 'var(--texto-vermelho-600)'
+              }))
+          };
+        });
+    }
     let escola = {};
     if (escolhida) {
       const local = escolhida.local,
@@ -1439,16 +1627,27 @@ class Component extends DCLogic {
         temMais: contas.length > limite
       };
     }
-    const ranking = [];
+    const ranking = [],
+      semPrevistas = [];
     const vistos = new Set();
     unidades.forEach(u =>
       oficineirosDe(u.local.id).forEach(oficineiro => {
         if (vistos.has(oficineiro.id)) return;
         vistos.add(oficineiro.id);
-        const escolasDele = unidades.filter(outra => oficineirosDe(outra.local.id).some(o => o.id === oficineiro.id));
+        const escolasDele = unidades.filter(outra => oficineirosDe(outra.local.id).some(o => o.id === oficineiro.id)),
+          idsDele = new Set(escolasDele.map(outra => outra.local.id)),
+          aulasDele = aulasDoCiclo.filter(aula => aula.of === oficineiro.id && idsDele.has(aula.esc)),
+          previstas = aulasDele.filter(aula => !aula.extra && aula.st !== 'canc').length,
+          realizadas = aulasDele.filter(aula => !aula.extra && aula.st === 'real').length,
+          foraDaGrade = aulasDele.filter(aula => aula.extra).length,
+          nome = oficineiro.nome || 'Oficineiro';
+        if (!previstas) {
+          semPrevistas.push(nome);
+          return;
+        }
         const anosDele = new Set(
-          aulasDoCiclo
-            .filter(aula => aula.of === oficineiro.id && aula.st !== 'canc')
+          aulasDele
+            .filter(aula => aula.st !== 'canc')
             .map(anoDaAula)
             .filter(Boolean)
         );
@@ -1465,41 +1664,53 @@ class Component extends DCLogic {
               alunos = alunos.concat(anos[ano]);
             });
         });
-        if (!alunos.length) return;
         const total = contar(alunos);
         ranking.push({
-          nome: oficineiro.nome || 'Oficineiro',
-          total,
+          nome,
+          previstas,
+          realizadas,
+          foraDaGrade,
+          execucao: parcela(realizadas, previstas),
+          engajados: total.n ? total.engajados : -1,
           detalhe:
-            escolasDele.map(outra => outra.local.sigla).join(', ') +
+            escolasDele.map(outra => outra.local.nome).join(', ') +
+            ' · ' +
+            plural(turmas, 'turma', 'turmas') +
             ' · ' +
             plural(total.n, 'aluno', 'alunos') +
-            ' · aula em 7 dias em ' +
-            comAula +
-            ' de ' +
-            plural(turmas, 'ano', 'anos')
+            (total.n ? ' · ' + total.engajados + '% engajados · aula em 7 dias em ' + comAula + ' de ' + turmas : '')
         });
       })
     );
-    ranking.sort((a, b) => b.total.engajados - a.total.engajados || b.total.uso - a.total.uso);
+    ranking.sort((a, b) => b.execucao - a.execucao || b.engajados - a.engajados || b.previstas - a.previstas);
     const linhaDoRanking = (item, posicao) => ({
       posicao,
       nome: item.nome,
       detalhe: item.detalhe,
-      engajados: item.total.engajados + '%',
-      engajadosCor: corDosEngajados(item.total.engajados),
-      utilizacao: item.total.uso + '%'
+      execucao: item.execucao + '%',
+      execucaoCor: exC(item.execucao),
+      realizadas:
+        item.realizadas +
+        ' de ' +
+        plural(item.previstas, 'prevista', 'previstas') +
+        (item.foraDaGrade ? ' · +' + item.foraDaGrade + ' fora da grade' : '')
     });
     const mais = ranking.slice(0, 5).map((item, i) => linhaDoRanking(item, i + 1));
     const menos = ranking
       .slice(Math.max(5, ranking.length - 5))
       .map((item, i, lista) => linhaDoRanking(item, ranking.length - lista.length + i + 1))
       .reverse();
+    const tituloDoRanking = (quantos, ponta) =>
+      quantos === 1 ? 'O oficineiro com ' + ponta + ' execução' : 'Os ' + quantos + ' com ' + ponta + ' execução';
     const rankings = [
-      { titulo: 'Os ' + mais.length + ' mais engajados', nota: '% de alunos engajados', linhas: mais }
+      {
+        titulo: tituloDoRanking(mais.length, 'maior'),
+        nota: 'Atividades realizadas ÷ previstas no ciclo.',
+        linhas: mais
+      }
     ].concat(
       menos.length
-        ? [{ titulo: 'Os ' + menos.length + ' menos engajados', nota: 'do último para cima', linhas: menos }]
+        ? [{ titulo: tituloDoRanking(menos.length, 'menor'), nota: 'Do último para cima.', linhas: menos }]
         : []
     );
     const buscaDeUsuario = normTxt(memoria.usuBusca);
@@ -1922,7 +2133,8 @@ class Component extends DCLogic {
       escolherLotacao: e => this.lembrar({ lotacao: e.target.value }),
       escolherOrdem: e => this.lembrar({ ordem: e.target.value }),
       buscarEscola: e => this.lembrar({ busca: e.target.value }),
-      escolherEscola: e => this.lembrar({ escola: e.target.value, limite: 40, formEscola: FORM_ESCOLA_VAZIO }),
+      escolherEscola: e =>
+        this.lembrar({ escola: e.target.value, anoAberto: '', limite: 40, formEscola: FORM_ESCOLA_VAZIO }),
       buscarConta: e => this.lembrar({ buscaConta: e.target.value, limite: 40 }),
       escolherTemperatura: e => this.lembrar({ temperatura: e.target.value, limite: 40 }),
       mostrarMais: () => this.lembrar({ limite: memoria.limite + 60 }),
@@ -1935,31 +2147,39 @@ class Component extends DCLogic {
       escreverPasso: mudarFormEscola('passo'),
       statusIncompleto: !formEscola.status || memoria.salvando,
       salvarStatus: salvarStatusDa(escola.id),
-      indicadores: [
-        ['Criados', numero(geral.n), plural(unidades.length, 'unidade', 'unidades'), 'var(--destaque-ciano-880)'],
-        [
-          'Implementados',
-          numero(geral.implementados),
-          parcela(geral.implementados, geral.n) + '% já acessaram',
-          'var(--texto-ciano-660)'
-        ],
-        ['Utilização', numero(geral.utilizacao), geral.uso + '% nos últimos 30 dias', 'var(--destaque-azul-500)'],
-        ['Engajados', numero(geral.en), geral.engajados + '% dos criados', 'var(--texto-verde-700)'],
-        [
-          'Sem uso +30 dias',
-          numero(geral.sr),
-          parcela(geral.sr, geral.n) + '% dos criados',
-          'var(--destaque-cinza-540)'
-        ],
-        ['Nunca acessou', numero(geral.nv), parcela(geral.nv, geral.n) + '% dos criados', 'var(--texto-indigo-360)']
-      ].map(([titulo, valor, nota, cor]) => ({ titulo, valor, nota, cor, valorCor: 'var(--texto-ciano-850)' })),
+      funil: [
+        ['Criados', 'Usuários com conta criada', geral.n, 'var(--destaque-cinza-300)'],
+        ['Implementados', 'Acessaram pelo menos uma vez', geral.implementados, 'var(--destaque-ciano-400)'],
+        ['Utilização', 'Acessaram nos últimos 30 dias', geral.utilizacao, 'var(--destaque-ciano-660)'],
+        ['Engajados', 'Atingem o padrão de uso semanal', geral.en, 'var(--destaque-ciano-880)']
+      ].map(([titulo, descricao, valor, cor], i, etapas) => ({
+        titulo: i + 1 + '. ' + titulo,
+        descricao,
+        valor: numero(valor),
+        nota: i
+          ? decimal(valor, geral.n) + ' dos criados · ' + decimal(valor, etapas[i - 1][2]) + ' da etapa anterior'
+          : 'base do recorte · ' + plural(unidades.length, 'unidade', 'unidades'),
+        largura: parcela(valor, geral.n) + '%',
+        cor,
+        aria: titulo + ': ' + numero(valor) + (i ? ', ' + decimal(valor, geral.n) + ' dos criados' : '')
+      })),
+      temperaturas: FAIXAS.map(faixa => ({
+        rotulo: TEMPERATURAS[faixa][0],
+        intervalo: TEMPERATURAS[faixa][2],
+        cor: TEMPERATURAS[faixa][1],
+        largura: parcela(geral[faixa], geral.n) + '%',
+        valor: numero(geral[faixa]),
+        parcela: decimal(geral[faixa], geral.n)
+      })),
+      legendaDosEstagios: ORDEM_DOS_ESTAGIOS.map(codigo => ({ rotulo: ESTAGIOS[codigo][0], cor: ESTAGIOS[codigo][1] })),
       cartoesPorCarteira,
       cartoesPorPerfil,
       estagios: ORDEM_DOS_ESTAGIOS.map(codigo => ({
         rotulo: ESTAGIOS[codigo][0],
         cor: ESTAGIOS[codigo][1],
         largura: parcela(geral[codigo], geral.n) + '%',
-        valor: numero(geral[codigo]) + ' · ' + parcela(geral[codigo], geral.n) + '%'
+        valor: numero(geral[codigo]),
+        parcela: decimal(geral[codigo], geral.n)
       })),
       regras: REGRAS,
       sugestoes: ordenadas
@@ -1970,7 +2190,6 @@ class Component extends DCLogic {
         .map(linha),
       semSugestoes: !ordenadas.some(u => (u.semaforo === 'critico' || u.semaforo === 'atencao') && u.total.n >= 20),
       barras,
-      legenda: FAIXAS.map(faixa => ({ rotulo: TEMPERATURAS[faixa][0], cor: TEMPERATURAS[faixa][1] })),
       regua: FAIXAS.map(faixa => ({
         rotulo: TEMPERATURAS[faixa][0],
         intervalo: TEMPERATURAS[faixa][2],
@@ -1980,8 +2199,14 @@ class Component extends DCLogic {
       linhas: ordenadas.filter(u => !busca || normTxt(u.local.nome).includes(busca)).map(linha),
       opcoesDeEscola: porNome.map(u => u.local.nome),
       escola,
+      temEscola: !!escolhida,
+      emRede: !escolhida,
+      rede,
+      semAnosNaRede: !rede.anos.length,
       rankings: ranking.length ? rankings : [],
       semRanking: !ranking.length,
+      temSemPrevistas: semPrevistas.length > 0 && aulasDoCiclo.length > 0,
+      semPrevistas: 'Sem atividades previstas no ciclo (fora do ranking): ' + semPrevistas.join(', ') + '.',
       opcoesDeEstagio: ORDEM_DOS_ESTAGIOS.map(valor => ({ valor, rotulo: ESTAGIOS[valor][0] })),
       usuarios,
       buscarUsuario: e => this.lembrar({ usuBusca: e.target.value, usuLimite: 100 }),
