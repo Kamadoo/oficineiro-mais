@@ -1031,7 +1031,7 @@ html[data-tema="escuro"] #area-logada select:not([multiple]):not([size]) {
     white-space: nowrap;
   }
   #area-logada select:not([multiple]):not([size])::picker(select) {
-    position-try-order: normal;
+    position-try-fallbacks: none;
     border: 1px solid #DDE6E8;
     border-radius: 12px;
     padding: 6px;
@@ -1039,7 +1039,7 @@ html[data-tema="escuro"] #area-logada select:not([multiple]):not([size]) {
     background: #fff;
     color: #1A2B33;
     box-shadow: 0 14px 36px rgba(19, 37, 44, 0.16);
-    max-height: min(360px, 60vh);
+    max-height: min(360px, calc(100% - 8px));
     font-family: "Inter", system-ui, sans-serif;
   }
   #area-logada select:not([multiple]):not([size]) option {
