@@ -49,6 +49,10 @@ python tests/security/scope_audit.py
 
 `rls_audit.py` falha se algum perfil lê, altera ou apaga o que não deveria. `rpc_matrix.py` lista, para cada função exposta, os perfis que conseguem executá-la, e `scope_audit.py` tenta acessar outra escola ou carteira, injetar SQL e escalar privilégios. Os dois comparam o resultado com `tests/security/esperado/` e falham em qualquer diferença: uma função nova, ou um perfil que passou a ser aceito ou recusado. Quando a mudança for intencional, regrave o esperado com `GRAVAR_ESPERADO=1` e revise o diff no commit. As mensagens do PostgreSQL são forçadas em inglês (`lc_messages=C`) para que a classificação não dependa do idioma do servidor.
 
+## Checagem rápida
+
+`npm run checar` roda, em sequência, o lint, a formatação, os unitários e, nas funções de borda, `deno fmt --check`, `deno lint` e `deno test`, mostrando uma linha por etapa e só as linhas relevantes das falhas. Usa o `deno` instalado ou, na falta dele, `npx -y deno@2`. Não substitui o banco de dados nem a varredura de telas.
+
 ## Unitários
 
 Usam o executor nativo do Node (`node:test`), sem dependências:
