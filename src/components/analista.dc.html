@@ -339,6 +339,7 @@ class Component extends DCLogic {
     carregandoAcessos: false,
     statusEscolas: [],
     statusCarteiras: [],
+    descartesJornada: [],
     presencaSalvando: false,
     visitaDaAgenda: null,
     alteracao: SEM_ALTERACAO,
@@ -579,19 +580,31 @@ class Component extends DCLogic {
   async carregarStatusJornada() {
     const A = window.FSM_AUTH;
     if (!A.jornadaStatusEscolas) return;
-    const [escolas, carteiras] = await Promise.all([
+    const [escolas, carteiras, descartes] = await Promise.all([
       A.jornadaStatusEscolas().catch(() => []),
-      A.jornadaStatusCarteiras().catch(() => [])
+      A.jornadaStatusCarteiras().catch(() => []),
+      A.jornadaDescartes ? A.jornadaDescartes().catch(() => []) : Promise.resolve([])
     ]);
-    this.setState({ statusEscolas: escolas || [], statusCarteiras: carteiras || [] });
+    this.setState({
+      statusEscolas: escolas || [],
+      statusCarteiras: carteiras || [],
+      descartesJornada: descartes || []
+    });
   }
   async gravarStatusJornada(tipo, argumentos) {
     const A = window.FSM_AUTH;
     try {
       if (tipo === 'escola') await A.registrarStatusEscola(...argumentos);
+      else if (tipo === 'descarte') await A.descartarSugestaoVisita(...argumentos);
       else await A.registrarStatusCarteira(...argumentos);
       await this.carregarStatusJornada();
-      this.avisar(tipo === 'escola' ? 'Status da escola registrado' : 'Avaliação da carteira registrada');
+      this.avisar(
+        tipo === 'escola'
+          ? 'Status da escola registrado'
+          : tipo === 'descarte'
+            ? 'Sugestão descartada'
+            : 'Avaliação da carteira registrada'
+      );
       return true;
     } catch (x) {
       this.avisar(msgErro(x, 'Não foi possível registrar o status.'));
@@ -880,6 +893,9 @@ class Component extends DCLogic {
     } else if (!Base.letivo(dataDe(visita.data))) {
       erro = 'Escolha um dia útil: a data cai em fim de semana ou feriado.';
       campo = 'nv-data';
+    } else if (visita.conferirConflito) {
+      erro = this.conflitoNaAgenda(this.usuario(), visita.data, visita.hora);
+      campo = 'nv-data';
     }
     if (erro) return this.setState({ erroNovaVisita: erro }, () => focar(campo));
     this.setState({ salvando: true, erroNovaVisita: '' });
@@ -909,6 +925,64 @@ class Component extends DCLogic {
       });
     } catch (x) {
       this.setState({ salvando: false, erroNovaVisita: msgErro(x, 'Não foi possível agendar a visita.') });
+    }
+  }
+  conflitoNaAgenda(analista, data, hora) {
+    const minutos = valor =>
+      valor ? Number(String(valor).slice(0, 2)) * 60 + Number(String(valor).slice(3, 5)) : null;
+    const novo = minutos(hora);
+    const choque = this.state.agenda.find(
+      v =>
+        v.analista_id === analista &&
+        v.status === 'agendada' &&
+        v.data === data &&
+        (novo == null || minutos(v.hora) == null || Math.abs(minutos(v.hora) - novo) < 120)
+    );
+    if (!choque) return '';
+    const escola = this.state.escolas.find(e => e.id === choque.escola_id);
+    return (
+      'Conflito na agenda: já há visita' +
+      (escola ? ' em ' + escola.sigla : '') +
+      (choque.hora ? ' às ' + String(choque.hora).slice(0, 5) : '') +
+      ' neste dia. Escolha outro horário.'
+    );
+  }
+  async agendarSugestao(pedido) {
+    const A = window.FSM_AUTH,
+      analista = pedido.analista || this.usuario(),
+      conflito = this.conflitoNaAgenda(analista, pedido.data, pedido.hora);
+    if (conflito) {
+      this.avisar(conflito);
+      return false;
+    }
+    const dados = {
+      analista,
+      escola: pedido.escola,
+      data: pedido.data,
+      hora: pedido.hora,
+      origem: pedido.origem,
+      tipo: pedido.tipo,
+      foco: (pedido.focos || []).join(', '),
+      orientacao: pedido.orientacao || ''
+    };
+    try {
+      await (pedido.analista ? A.agendarVisita(dados) : A.agendarMinhaVisita(dados));
+      await this.carregarAgenda();
+      await A.registrarStatusEscola(
+        pedido.escola,
+        'acao_planejada',
+        'Visita agendada para ' + dmIso(pedido.data) + ' às ' + pedido.hora,
+        null,
+        pedido.data
+      ).catch(() => null);
+      await this.carregarStatusJornada();
+      this.avisar(
+        'Visita agendada · ' + DIAS[dataDe(pedido.data).getDay()] + ' ' + dmIso(pedido.data) + ' · ' + pedido.hora
+      );
+      return true;
+    } catch (x) {
+      this.avisar(msgErro(x, 'Não foi possível agendar a visita.'));
+      return false;
     }
   }
   abrirVisita(id) {
@@ -1166,6 +1240,8 @@ class Component extends DCLogic {
       jornada: {
         statusEscolas: this.state.statusEscolas,
         statusCarteiras: this.state.statusCarteiras,
+        descartes: this.state.descartesJornada,
+        descartarSugestao: (...argumentos) => this.gravarStatusJornada('descarte', argumentos),
         registrarStatusEscola: (...argumentos) => this.gravarStatusJornada('escola', argumentos),
         registrarStatusCarteira: (...argumentos) => this.gravarStatusJornada('carteira', argumentos),
         carteiraPropria: (s.acesso || {}).carteira_id || '',
@@ -1181,6 +1257,12 @@ class Component extends DCLogic {
           const preenchida = { ...pedido };
           delete preenchida.carteira;
           this.agendarVisita(preenchida);
+        },
+        agendarSugestao: pedido => this.agendarSugestao({ ...pedido, analista: '' }),
+        agendaDoAnalista: () => agendaValida.filter(v => v.analista_id === usuario),
+        ultimaVisitaDaEscola: id => {
+          const ultima = ultimaVisita(id);
+          return ultima ? ultima.data : '';
         }
       },
       carregarPeriodo: periodo => this.carregarPeriodo(periodo),

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Jornada do Usuário · Escola</title>
+<script src="../vendor/dc-runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<div role="region" aria-label="{{ aria }}" class="d-flex eixo-column gap-12 p-14-16 raio-12 fundo-ciano-40 m-0-0-8">
+  <div class="d-flex quebra-wrap alinha-center gap-8-12">
+    <b class="fs-14 cor-ciano-850">{{ nome }}</b>
+    <span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ semaforoCor }};background:{{ semaforoFundo }}">{{ semaforo }} · prioridade {{ prioridade }}</span>
+    <span class="fs-12 fw-600 p-3-8 raio-999 fundo-branco cor-cinza-750">{{ statusAtual }}</span>
+    <sc-if value="{{ temVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-verde-700 fundo-verde-80 p-3-8 raio-999 espaco-nowrap">Na agenda · {{ visita }}</span></sc-if>
+    <span class="ml-auto d-flex quebra-wrap gap-6">
+      <button onClick="{{ verTurmas }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario">Ver turmas</button>
+      <button onClick="{{ verUsuarios }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario">Ver usuários</button>
+      <sc-if value="{{ podeAgendar }}" hint-placeholder-val="{{ false }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ agendar }}" class="h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660">{{ textoAgendar }}</button></sc-if>
+      <button onClick="{{ fechar }}" aria-label="Fechar detalhe da escola" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario">Fechar</button>
+    </span>
+  </div>
+  <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">
+    <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="5">
+      <div class="fundo-branco raio-10 p-10-12 d-flex eixo-column gap-2 largura-fundo cartao-indicador" style="border-width:3px 1px 1px;border-style:solid;border-color:{{ indicador.cor }} var(--borda-cinza-110) var(--borda-cinza-110)">
+        <span class="fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span>
+        <span class="num-tabular-nums fs-18 fw-600 cor-ciano-850" style="font-family:'Inter',system-ui,sans-serif">{{ indicador.valor }}</span>
+        <span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span>
+      </div>
+    </sc-for>
+  </div>
+  <div class="empilha-celular d-grid colunas-1fr-1fr gap-12 alinha-start">
+    <div class="d-flex eixo-column gap-6">
+      <b class="fs-13">Por que está nesta posição</b>
+      <sc-for list="{{ motivos }}" as="motivo" hint-placeholder-count="3"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ motivo }}</span></sc-for>
+      <sc-if value="{{ semMotivos }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">Nenhum ponto de atenção nesta base.</span></sc-if>
+    </div>
+    <div class="d-flex eixo-column gap-6">
+      <b class="fs-13">Por perfil</b>
+      <div class="d-grid gap-4 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em" style="grid-template-columns:minmax(90px,1fr) 60px 70px 80px 70px">
+        <span>Perfil</span><span class="texto-right">Contas</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Nunca</span>
+      </div>
+      <sc-for list="{{ perfis }}" as="perfil" hint-placeholder-count="3">
+        <div class="d-grid gap-4 fs-13 p-6-0 borda-t-cinza-75" style="grid-template-columns:minmax(90px,1fr) 60px 70px 80px 70px">
+          <span class="fw-600">{{ perfil.rotulo }}</span>
+          <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ perfil.total }}</span>
+          <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ perfil.uso }}</span>
+          <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ perfil.engajadosCor }}">{{ perfil.engajados }}</span>
+          <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ perfil.nunca }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  <div class="d-flex eixo-column gap-8">
+    <b class="fs-13">Status e ação</b>
+    <sc-if value="{{ podeRegistrar }}" hint-placeholder-val="{{ false }}">
+      <div class="d-grid gap-10 p-12 raio-10 fundo-branco borda-cinza-110" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Status<select style="background:var(--fundo-branco)" onChange="{{ escolherStatus }}" value="{{ form.status }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="">Escolha o status</option><sc-for list="{{ opcoesDeStatus }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+        <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Prazo<input type="date" value="{{ form.prazo }}" onChange="{{ escolherPrazo }}" class="h-36 borda-cinza-160 raio-8 p-0-10 fs-13"></label>
+        <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Ação<textarea rows="2" value="{{ form.acao }}" onChange="{{ escreverAcao }}" maxlength="1000" placeholder="O que será ou foi feito" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+        <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Próximo passo<textarea rows="2" value="{{ form.passo }}" onChange="{{ escreverPasso }}" maxlength="500" placeholder="Próxima etapa combinada" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+        <button style="background:var(--destaque-ciano-660)" onClick="{{ salvarStatus }}" disabled="{{ statusIncompleto }}" class="alinha-si-flex-start h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fundo-ciano-660">Registrar status</button>
+      </div>
+    </sc-if>
+    <sc-for list="{{ historico }}" as="item" hint-placeholder-count="2"><span class="fs-12 cor-cinza-600 lh-1p45 p-6-0 borda-t-cinza-70">{{ item }}</span></sc-for>
+    <sc-if value="{{ semHistorico }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-cinza-600">Nenhum status registrado para esta escola.</span></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const detalhe = this.props.detalhe || {};
+    return {
+      indicadores: [],
+      motivos: [],
+      perfis: [],
+      historico: [],
+      opcoesDeStatus: [],
+      form: {},
+      ...detalhe
+    };
+  }
+}
+</script>
+</body>
+</html>
