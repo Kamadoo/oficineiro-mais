@@ -855,7 +855,7 @@ window.FSM_AUTH =
         if (!/^\d{4}-\d{2}-\d{2}$/.test(String(ini)) || !/^\d{4}-\d{2}-\d{2}$/.test(String(fim)))
           return Promise.reject(new Error('Período inválido.'));
         return chamarTudo(
-          '/rest/v1/visitas?select=id,analista_id,escola_id,data,tipo,subtipo,participantes,solucao,observacao,objetivo,engajamento,boas_praticas,dificuldades,ocorrencias,ocorrencia_obs,agenda_id,presenca_id,turma,oficineiro_id,criado_em,editado_em&order=data.desc,id.desc&data=gte.' +
+          '/rest/v1/visitas?select=id,analista_id,escola_id,data,tipo,subtipo,participantes,solucao,observacao,objetivo,engajamento,boas_praticas,dificuldades,ocorrencias,ocorrencia_obs,agenda_id,presenca_id,turma,turmas,oficineiro_id,criado_em,editado_em&order=data.desc,id.desc&data=gte.' +
             ini +
             '&data=lte.' +
             fim,

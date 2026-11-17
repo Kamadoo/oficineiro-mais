@@ -50,7 +50,31 @@ async function esperarCarregar(pagina) {
 
 const limpo = texto => texto.replace(/\s+/g, ' ').trim();
 
+async function animacoesTerminadas(pagina) {
+  await pagina
+    .waitForFunction(
+      () =>
+        ![...globalThis.document.querySelectorAll('[role=status]')].some(e => /^Carregando/.test(e.textContent.trim())),
+      null,
+      {
+        timeout: 8000
+      }
+    )
+    .catch(() => {});
+  await pagina
+    .waitForFunction(
+      () =>
+        globalThis.document
+          .getAnimations()
+          .every(a => a.playState !== 'running' || a.effect.getComputedTiming().iterations === Infinity),
+      null,
+      { timeout: 3000 }
+    )
+    .catch(() => {});
+}
+
 async function acessibilidade(pagina, alvo = '#area-logada') {
+  await animacoesTerminadas(pagina);
   const resultado = await new AxeBuilder({ page: pagina }).include(alvo).analyze();
   const descrever = v => v.id + ' (' + v.nodes.length + '): ' + limpo(v.nodes[0].html).slice(0, 220);
   return resultado.violations.filter(v => IMPACTOS_GRAVES.includes(v.impact)).map(descrever);
