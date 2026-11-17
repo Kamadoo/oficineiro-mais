@@ -262,6 +262,8 @@ const turmaDoTexto = texto => {
   const ano = partes ? ANOS.find(x => anoTxt(x) === partes[1]) : undefined;
   return ano === undefined ? { ano: '', turma: '' } : { ano: String(ano), turma: partes[2] };
 };
+const turmasDaVisita = visita =>
+  (visita.turmas && visita.turmas.length ? visita.turmas : visita.turma ? [visita.turma] : []).join(', ');
 const nomesDosParticipantes = texto =>
   String(texto || '')
     .split(';')
@@ -292,7 +294,7 @@ const registroVazio = () => ({
   ocorrenciaObs: '',
   oficineiro: '',
   ano: '',
-  turma: ''
+  turmas: []
 });
 const focar = id =>
   setTimeout(() => {
@@ -687,7 +689,7 @@ class Component extends DCLogic {
   }
   turmaPara(escolaId) {
     const oficineiros = escolaId ? this.oficineirosDaEscola(escolaId) : [];
-    return { oficineiro: oficineiros.length === 1 ? oficineiros[0].id : '', ano: '', turma: '' };
+    return { oficineiro: oficineiros.length === 1 ? oficineiros[0].id : '', ano: '', turmas: [] };
   }
   abrirRegistro(origem) {
     const hoje = hojeIso(),
@@ -731,7 +733,8 @@ class Component extends DCLogic {
         solucao: visita.solucao || '',
         observacao: visita.observacao || '',
         objetivo: visita.objetivo === 'Sim' || visita.objetivo === 'Não' ? visita.objetivo : '',
-        ...turmaDoTexto(visita.turma),
+        ano: turmaDoTexto((visita.turmas && visita.turmas[0]) || visita.turma).ano,
+        turmas: visita.turmas && visita.turmas.length ? visita.turmas.slice() : visita.turma ? [visita.turma] : [],
         oficineiro: visita.oficineiro_id || '',
         engajamento: visita.engajamento || null,
         boasPraticas: visita.boas_praticas || '',
@@ -756,8 +759,8 @@ class Component extends DCLogic {
     } else if (!DATA_ISO.test(registro.data) || registro.data > hoje || registro.data < dataMinima) {
       erro = registro.id ? 'A data deve estar nos últimos 7 dias.' : 'A data deve ser de hoje ou dos últimos 30 dias.';
       campo = 'rg-data';
-    } else if (comAlunos && (!registro.oficineiro || registro.ano === '' || !registro.turma)) {
-      erro = 'Escolha o oficineiro, o ano e a turma atendidos.';
+    } else if (comAlunos && (!registro.oficineiro || !registro.turmas.length)) {
+      erro = 'Escolha o oficineiro e ao menos uma turma atendida.';
       campo = !registro.oficineiro ? 'rg-ofic' : registro.ano === '' ? 'rg-ano' : 'rg-turma';
     } else if (registro.observacao.trim().length < 10) {
       erro = 'Descreva como foi a visita.';
@@ -775,7 +778,7 @@ class Component extends DCLogic {
       subtipo: registro.subtipo,
       participantes: nomesDosParticipantes(registro.participantes).join('; '),
       solucao: registro.solucao,
-      turma: comAlunos ? anoTxt(registro.ano) + ' · Turma ' + registro.turma : '',
+      turmas: comAlunos ? registro.turmas : [],
       oficineiro: comAlunos ? registro.oficineiro : '',
       observacao: registro.observacao.trim(),
       objetivo: registro.objetivo || '',
@@ -1230,6 +1233,7 @@ class Component extends DCLogic {
       segmento,
       oficineirosDaEscola: escolaId => this.oficineirosDaEscola(escolaId),
       turmaPara: escolaId => this.turmaPara(escolaId),
+      turmasDaVisita,
       irPara: (tela, memoria) => this.irPara(tela, memoria),
       alternarPresenca: (visitaDaAgenda, comPosicao) => this.alternarPresenca(visitaDaAgenda, comPosicao),
       abrirRegistro: origem => this.abrirRegistro(origem),
@@ -1548,7 +1552,9 @@ class Component extends DCLogic {
         ['Data', DIAS[dataDe(visita.data).getDay()] + ', ' + dmyIso(visita.data)],
         ['Tipo de atendimento', visita.tipo + (visita.subtipo ? ' · ' + visita.subtipo : '')],
         ['Participantes', visita.participantes || '—'],
-        visita.turma ? ['Turma atendida', visita.turma] : ['', ''],
+        turmasDaVisita(visita)
+          ? [visita.turmas && visita.turmas.length > 1 ? 'Turmas atendidas' : 'Turma atendida', turmasDaVisita(visita)]
+          : ['', ''],
         visita.oficineiro_id ? ['Oficineiro', contexto.nomeDaPessoa(visita.oficineiro_id)] : ['', ''],
         ['Solução', visita.solucao || '—'],
         ['Objetivo atingido', visita.objetivo || '—'],
