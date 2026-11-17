@@ -245,39 +245,6 @@
         </div>
       </section>
     </div>
-    <div class="empilha-celular d-grid colunas-minmax-0-1p25fr-minmax-0-1fr gap-16 alinha-start">
-      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Escolas que precisam de reforço na adoção</h3><span class="fs-12 cor-cinza-600">{{ textos.ordem }}</span></div>
-        <sc-for list="{{ sugestoes }}" as="linha" hint-placeholder-count="5">
-          <div class="d-flex quebra-wrap alinha-center gap-8-12 p-12-0 borda-t-cinza-70">
-            <span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.semaforoCor }};background:{{ linha.semaforoFundo }}">{{ linha.semaforo }}</span>
-            <div class="flex-1-1-220 min-w-0 d-flex eixo-column gap-2">
-              <button onClick="{{ linha.abrir }}" class="largura-fundo cursor-pointer fs-14 cor-ciano-850" style="all:unset;font-weight:600">{{ linha.nome }}</button>
-              <span class="fs-12 cor-cinza-750 lh-1p45">{{ linha.diagnostico }}</span>
-            </div>
-            <sc-if value="{{ linha.temVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-verde-700 fundo-verde-80 p-4-10 raio-999 espaco-nowrap">Na agenda · {{ linha.visita }}</span></sc-if>
-            <sc-if value="{{ linha.semVisita }}" hint-placeholder-val="{{ true }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ linha.agendar }}" class="h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660">{{ textos.agendar }}</button></sc-if>
-          </div>
-        </sc-for>
-        <sc-if value="{{ semSugestoes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma escola em atenção ou crítica neste filtro.</span></sc-if>
-      </section>
-      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco">
-        <h3 class="m-0-0-6 fs-15">Régua de temperatura</h3>
-        <sc-for list="{{ regua }}" as="faixa" hint-placeholder-count="5">
-          <div class="d-grid colunas-110-minmax-0-1fr gap-10 p-8-0 borda-t-cinza-70 fs-13">
-            <div class="d-flex eixo-column gap-2"><span class="d-flex alinha-center gap-6 fw-600"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ faixa.cor }}"></span>{{ faixa.rotulo }}</span><span class="fs-12 cor-cinza-600">{{ faixa.intervalo }}</span></div>
-            <span class="cor-cinza-750 lh-1p45">{{ faixa.acao }}</span>
-          </div>
-        </sc-for>
-      </section>
-    </div>
-    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-6 fundo-branco">
-      <h3 class="m-0-0-6 fs-15">Como a Jornada classifica</h3>
-      <sc-for list="{{ regras }}" as="regra" hint-placeholder-count="6"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ regra }}</span></sc-for>
-    </section>
-  </sc-if>
-
-  <sc-if value="{{ abaAtiva.escolas }}" hint-placeholder-val="{{ false }}">
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
       <div class="d-flex quebra-wrap alinha-center gap-8-14">
         <div class="flex-1-1-300 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Escolas</h3><span class="fs-12 cor-cinza-600">{{ listaDeEscolas.nota }}</span></div>
@@ -314,41 +281,21 @@
       </div>
       <sc-if value="{{ listaDeEscolas.temMais }}" hint-placeholder-val="{{ false }}"><button onClick="{{ listaDeEscolas.mostrarMais }}" class="alinha-si-flex-start h-34 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">Mostrar mais</button></sc-if>
     </section>
-    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-      <div class="d-flex quebra-wrap alinha-center gap-8-14">
-        <div class="flex-1-1-300 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Mapa de calor por escola</h3><span class="fs-12 cor-cinza-600">% das contas em cada faixa · cor mais forte = maior concentração. Clique na escola para ver as turmas.</span></div>
-        <input onInput="{{ buscarEscola }}" aria-label="Buscar escola" placeholder="Buscar escola" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
-        <select style="background:var(--fundo-branco)" aria-label="Ordenar" onChange="{{ escolherOrdem }}" value="{{ ordem }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="prio">Ordenar por prioridade</option><option value="contas">Ordenar por nº de contas</option><option value="eng">Ordenar por engajados</option><option value="uso">Ordenar por utilização</option></select>
-      </div>
-      <div class="rolagem-x-auto m-0-n4">
-        <div class="min-w-1180 d-flex eixo-column p-0-4">
-          <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 110px 130px 100px 90px">
-            <span>Escola</span><span>CS</span><span class="texto-right">Contas</span><span
-              class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span
-              class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span
-              class="texto-right">Engajados</span><span
-              class="texto-right">Atividades oficineiros</span><span>Agenda</span><span>Semáforo</span><span>Prioridade</span>
+    <div class="empilha-celular d-grid colunas-1fr-1fr gap-16 alinha-start">
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco">
+        <h3 class="m-0-0-6 fs-15">Régua de temperatura</h3>
+        <sc-for list="{{ regua }}" as="faixa" hint-placeholder-count="5">
+          <div class="d-grid colunas-110-minmax-0-1fr gap-10 p-8-0 borda-t-cinza-70 fs-13">
+            <div class="d-flex eixo-column gap-2"><span class="d-flex alinha-center gap-6 fw-600"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ faixa.cor }}"></span>{{ faixa.rotulo }}</span><span class="fs-12 cor-cinza-600">{{ faixa.intervalo }}</span></div>
+            <span class="cor-cinza-750 lh-1p45">{{ faixa.acao }}</span>
           </div>
-          <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="10">
-            <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 110px 130px 100px 90px">
-              <button onClick="{{ linha.abrir }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset" title="{{ linha.nome }}">{{ linha.nome }}</button>
-              <span class="fs-12 cor-cinza-600">{{ linha.carteira }}</span>
-              <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
-              <sc-for list="{{ linha.celulas }}" as="celula" hint-placeholder-count="5"><span title="{{ celula.titulo }}" class="num-tabular-nums fs-12 texto-center p-8-0 raio-6" style="font-family:'Inter',system-ui,sans-serif;background:{{ celula.fundo }};color:{{ celula.cor }}">{{ celula.valor }}</span></sc-for>
-              <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
-              <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.execucaoCor }}">{{ linha.execucao }}</span>
-              <span class="fs-12" style="color:{{ linha.agendaCor }}">{{ linha.agenda }}</span>
-              <span><span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.semaforoCor }};background:{{ linha.semaforoFundo }}">{{ linha.semaforo }}</span></span>
-              <div class="d-flex alinha-center gap-6"><span class="num-tabular-nums fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.pontos }}</span><sc-if
-                value="{{ linha.semVisita }}" hint-placeholder-val="{{ false }}"><button onClick="{{ linha.agendar }}"
-                title="Agendar visita"
-                class="h-26 w-26 borda-ciano-150 fundo-ciano-40 cor-ciano-660 raio-6 fs-15 fw-700 lh-1 p-0 largura-fundo">+</button></sc-if></div>
-            </div>
-          </sc-for>
-        </div>
-      </div>
-      <span class="fs-12 cor-cinza-600">{{ textos.nota }}</span>
-    </section>
+        </sc-for>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-6 fundo-branco">
+        <h3 class="m-0-0-6 fs-15">Como a Jornada classifica</h3>
+        <sc-for list="{{ regras }}" as="regra" hint-placeholder-count="6"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ regra }}</span></sc-for>
+      </section>
+    </div>
   </sc-if>
 
   <sc-if value="{{ abaAtiva.escola }}" hint-placeholder-val="{{ false }}">
@@ -406,6 +353,41 @@
         </div>
         <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ legendaDosEstagios }}" as="item" hint-placeholder-count="6"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
         <span class="fs-12 cor-cinza-600">Turma = ano escolar em cada escola (a base de acessos não traz a letra da turma). Aula em 7 dias: ao menos 25% dos alunos da turma (e no mínimo 2) acessaram na última semana.</span>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-center gap-8-14">
+          <div class="flex-1-1-300 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Mapa de calor por escola</h3><span class="fs-12 cor-cinza-600">% das contas em cada faixa · cor mais forte = maior concentração. Clique na escola para ver as turmas.</span></div>
+          <input onInput="{{ buscarEscola }}" aria-label="Buscar escola" placeholder="Buscar escola" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
+          <select style="background:var(--fundo-branco)" aria-label="Ordenar" onChange="{{ escolherOrdem }}" value="{{ ordem }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="prio">Ordenar por prioridade</option><option value="contas">Ordenar por nº de contas</option><option value="eng">Ordenar por engajados</option><option value="uso">Ordenar por utilização</option></select>
+        </div>
+        <div class="rolagem-x-auto m-0-n4">
+          <div class="min-w-1180 d-flex eixo-column p-0-4">
+            <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 110px 130px 100px 90px">
+              <span>Escola</span><span>CS</span><span class="texto-right">Contas</span><span
+                class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span
+                class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span
+                class="texto-right">Engajados</span><span
+                class="texto-right">Atividades oficineiros</span><span>Agenda</span><span>Semáforo</span><span>Prioridade</span>
+            </div>
+            <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="10">
+              <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 110px 130px 100px 90px">
+                <button onClick="{{ linha.abrir }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset" title="{{ linha.nome }}">{{ linha.nome }}</button>
+                <span class="fs-12 cor-cinza-600">{{ linha.carteira }}</span>
+                <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
+                <sc-for list="{{ linha.celulas }}" as="celula" hint-placeholder-count="5"><span title="{{ celula.titulo }}" class="num-tabular-nums fs-12 texto-center p-8-0 raio-6" style="font-family:'Inter',system-ui,sans-serif;background:{{ celula.fundo }};color:{{ celula.cor }}">{{ celula.valor }}</span></sc-for>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
+                <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.execucaoCor }}">{{ linha.execucao }}</span>
+                <span class="fs-12" style="color:{{ linha.agendaCor }}">{{ linha.agenda }}</span>
+                <span><span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.semaforoCor }};background:{{ linha.semaforoFundo }}">{{ linha.semaforo }}</span></span>
+                <div class="d-flex alinha-center gap-6"><span class="num-tabular-nums fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.pontos }}</span><sc-if
+                  value="{{ linha.semVisita }}" hint-placeholder-val="{{ false }}"><button onClick="{{ linha.agendar }}"
+                  title="Agendar visita"
+                  class="h-26 w-26 borda-ciano-150 fundo-ciano-40 cor-ciano-660 raio-6 fs-15 fw-700 lh-1 p-0 largura-fundo">+</button></sc-if></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <span class="fs-12 cor-cinza-600">{{ textos.nota }}</span>
       </section>
     </sc-if>
     <sc-if value="{{ temEscola }}" hint-placeholder-val="{{ true }}">
@@ -643,14 +625,12 @@ const REGRAS = [
 const TEXTOS = {
   analista: {
     aba: 'Minha carteira',
-    ordem: 'ordenadas pela prioridade de visita · cruzadas com a sua agenda',
     agendar: 'Agendar visita',
     barras: 'Temperatura por escola',
     nota: 'Atividades oficineiros = execução das atividades no mês (realizadas ÷ previstas). Semáforo e prioridade de visita seguem as regras da Visão geral.'
   },
   gerente: {
     aba: 'Carteiras',
-    ordem: 'ordenadas pela prioridade de visita · cruzadas com a agenda dos analistas',
     agendar: 'Vincular visita',
     barras: 'Temperatura por grupo CS',
     nota: 'Atividades oficineiros = execução das atividades no ciclo de cada oficineiro (realizadas ÷ previstas). Semáforo e prioridade de visita seguem as regras da Visão geral.'
@@ -868,6 +848,7 @@ class Component extends DCLogic {
       textos = TEXTOS[porCarteira ? 'gerente' : 'analista'],
       memoria = { ...PADRAO, ...this.props.memoria },
       acessos = contexto.acessos;
+    if (memoria.aba === 'escolas') memoria.aba = 'geral';
     if (!Array.isArray(acessos) || !acessos.length)
       return {
         carregando: contexto.carregandoAcessos || acessos == null,
@@ -2087,7 +2068,6 @@ class Component extends DCLogic {
       abaAtiva: {
         carteira: memoria.aba === 'carteira',
         geral: memoria.aba === 'geral',
-        escolas: memoria.aba === 'escolas',
         escola: memoria.aba === 'escola',
         oficineiros: memoria.aba === 'oficineiros',
         usuarios: memoria.aba === 'usuarios'
@@ -2095,7 +2075,6 @@ class Component extends DCLogic {
       abas: [
         ['carteira', textos.aba],
         ['geral', 'Visão geral'],
-        ['escolas', 'Escolas'],
         ['escola', 'Escola e turmas'],
         ['oficineiros', 'Oficineiros'],
         ['usuarios', 'Usuários']
@@ -2182,13 +2161,6 @@ class Component extends DCLogic {
         parcela: decimal(geral[codigo], geral.n)
       })),
       regras: REGRAS,
-      sugestoes: ordenadas
-        .slice()
-        .sort(porPrioridade)
-        .filter(u => (u.semaforo === 'critico' || u.semaforo === 'atencao') && u.total.n >= 20)
-        .slice(0, 6)
-        .map(linha),
-      semSugestoes: !ordenadas.some(u => (u.semaforo === 'critico' || u.semaforo === 'atencao') && u.total.n >= 20),
       barras,
       regua: FAIXAS.map(faixa => ({
         rotulo: TEMPERATURAS[faixa][0],
