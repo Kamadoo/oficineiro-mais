@@ -117,7 +117,7 @@ src/
   components/          perfis, telas, menu e cabeçalho
   lib/                 autenticação, base comum, planilhas, notificações, aparência
   styles/              estilo comum com tema claro e escuro e estilo da página de entrada
-public/                marca, ícones, manifesto, guia rápido e rascunho do aviso de privacidade (fora do site até a revisão jurídica)
+public/                marca, ícones, manifesto, guia rápido, aviso de privacidade e termos de uso
 vendor/                runtime de componentes, React, Leaflet e fonte Inter (terceiros, com hash conferido no build)
 supabase/
   migrations/          esquema, políticas de acesso e funções
