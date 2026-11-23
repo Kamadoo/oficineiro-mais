@@ -7,7 +7,7 @@ Rotinas para publicar, manter e recuperar o Oficineiro+. Os comandos supõem a r
 1. Atualize `version` no `package.json` (versionamento semântico: correção no terceiro número, funcionalidade no segundo, mudança que quebra compatibilidade no primeiro) e registre as mudanças no `CHANGELOG.md`.
 2. Rode as verificações: `npm run lint`, `npm run format:check`, `npm test`, `ruff check scripts tests`; para mudanças no banco, os testes pgTAP e a auditoria (ver [testes.md](testes.md)).
 3. Gere o site: `python scripts/build.py`. O build lê a versão do `package.json`, mostra-a em Configurações e interrompe a geração se encontrar dado pessoal ou referência não publicada.
-4. Crie a tag no commit publicado: `git tag -a v1.1.0 -m "Oficineiro+ 1.1.0"` e `git push origin v1.1.0`.
+4. Crie a tag no commit publicado: `git tag -a v2.0.0 -m "Oficineiro+ 2.0.0"` e `git push origin v2.0.0`.
 
 ## Publicar o site
 

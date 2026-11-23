@@ -1,6 +1,14 @@
 # Histórico de mudanças
 
-## Não publicado
+## 2.0.0 · 23/11/2026
+
+Versão oficial de lançamento: o projeto do Supabase passa a ser o de produção.
+
+### Convites de primeiro acesso
+
+- Nova aba do Administrador lista as contas que aguardam o primeiro acesso, com filtros por cargo, escola, carteira, situação do convite, data de criação e busca por nome ou e-mail, e envia por e-mail o convite que apresenta o sistema e pede o primeiro acesso.
+- Seleção uma a uma, das filtradas ou de todas; reenvio só com confirmação; cada envio fica registrado (quem enviou e quando) e na auditoria.
+- A criação de contas, individual ou em lote, continua sem enviar e-mail.
 
 ### Presença
 
