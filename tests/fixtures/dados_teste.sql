@@ -107,6 +107,11 @@ select e.id, 'Pessoa ' || e.sigla || ' ' || n, case when n % 4 = 0 then 'P' else
 from public.escolas e, generate_series(1, 45) n
 where e.sigla in ('Ema', 'Ecl', 'Erv');
 
+insert into public.jornada_pessoas (escola_id, nome, tipo, ano_escolar, dias_sem_acesso, dias_acesso, responsavel_turma, base_ref)
+select e.id, 'Pessoa ' || e.sigla || ' ' || n, case when n % 3 = 0 then 'P' else 'A' end, (n % 9) + 1, n % 40 + 2, n, null, date '2026-10-25'
+from public.escolas e, generate_series(1, 55) n
+where e.sigla = 'Ebv';
+
 select set_config('request.jwt.claims', '{"role":"service_role"}', false);
 
 select public.importar_os(jsonb_build_object(

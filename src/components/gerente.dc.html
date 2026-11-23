@@ -151,6 +151,7 @@ const ESTADO_DAS_TELAS = [
   'mudancasDeEscola',
   'carregandoAcessos',
   'acessos',
+  'baseJornada',
   'onboardings',
   'ordensServico',
   'previaDaOs',
@@ -348,6 +349,8 @@ class Component extends DCLogic {
     confirmandoCancelamento: false,
     acessos: null,
     carregandoAcessos: false,
+    baseJornada: null,
+    comparacaoJornada: '',
     statusEscolas: [],
     statusCarteiras: [],
     descartesJornada: [],
@@ -576,8 +579,8 @@ class Component extends DCLogic {
     this.setState({ carregandoAcessos: true });
     this.carregarStatusJornada();
     try {
-      const p = await A.jornadaPessoas();
-      this.setState({ acessos: p || [], carregandoAcessos: false });
+      const base = await A.jornadaBase(this.state.comparacaoJornada);
+      this.setState({ acessos: base.acessos, baseJornada: base, carregandoAcessos: false });
     } catch (x) {
       this.setState({
         acessos: [],
@@ -585,6 +588,9 @@ class Component extends DCLogic {
         erro: msgErro(x, 'Não foi possível carregar a base de acessos.')
       });
     }
+  }
+  trocarComparacaoJornada(data) {
+    this.setState({ acessos: null, comparacaoJornada: data || '' }, () => this.carregarAcessos());
   }
   async carregarStatusJornada() {
     const A = window.FSM_AUTH;
@@ -1994,6 +2000,7 @@ class Component extends DCLogic {
       SITUACOES_DE_CONTA,
       NOMES_DE_PERFIL,
       lembrar: (tela, mudanca) => this.lembrar(tela, mudanca),
+      trocarComparacao: data => this.trocarComparacaoJornada(data),
       jornada: {
         statusEscolas: this.state.statusEscolas,
         statusCarteiras: this.state.statusCarteiras,

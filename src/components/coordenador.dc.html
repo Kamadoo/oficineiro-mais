@@ -136,6 +136,7 @@
 }
 </style>
 <script src="./lib/onboarding.js"></script>
+<script src="./lib/base-acessos.js"></script>
 </helmet>
 <div class="estrutura d-grid colunas-236-minmax-0-1fr min-h-100vh">
   <dc-import name="menu" navCls="{{ menuClasse }}" closeNav="{{ fecharMenu }}" perfilTitulo="{{ perfilTitulo }}" menu="{{ menu }}" temSino="{{ temSino }}" abrirNotif="{{ abrirNotif }}" notifAria="{{ notifAria }}" temNotif="{{ temNotif }}" notifN="{{ notifN }}" temConfig="{{ temConfig }}" abrirConfig="{{ abrirConfig }}" temSair="{{ temSair }}" sairConta="{{ sairConta }}"></dc-import>
@@ -204,6 +205,7 @@
 <sc-if value="{{ is.auditoria }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-auditoria" contexto="{{ contexto }}"></dc-import></sc-if>
 <sc-if value="{{ is.consulta }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-consulta" contexto="{{ contexto }}"></dc-import></sc-if>
 <sc-if value="{{ is.convites }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-convites" contexto="{{ contexto }}"></dc-import></sc-if>
+<sc-if value="{{ is.baseAcessos }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-base-acessos" contexto="{{ contexto }}"></dc-import></sc-if>
 <sc-if value="{{ is.feriados }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-feriados" contexto="{{ contexto }}"></dc-import></sc-if>
 <sc-if value="{{ is.sistema }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-sistema" contexto="{{ contexto }}"></dc-import></sc-if>
 
@@ -323,7 +325,8 @@ const ESTADO_DAS_TELAS = [
   'feriados',
   'feriadoARemover',
   'configuracoes',
-  'convites'
+  'convites',
+  'baseAcessos'
 ];
 const VALORES_DAS_TELAS = [
   'is',
@@ -539,6 +542,8 @@ class Component extends DCLogic {
       erroJustificativas: '',
       acessos: null,
       carregandoAcessos: false,
+      baseJornada: null,
+      comparacaoJornada: '',
       jornadaDados: { statusEscolas: [], statusCarteiras: [], descartes: [], agenda: [], visitas: [] },
       tela: 'presenca',
       menuAberto: false,
@@ -618,6 +623,7 @@ class Component extends DCLogic {
       novoFeriado: { data: '', nome: '', tipo: 'feriado' },
       feriadoARemover: null,
       convites: {},
+      baseAcessos: {},
       configuracoes: { email: '', telefone: '', horario: '' },
       cicloDosRelatorios: '',
       relatoriosDoCiclo: [],
@@ -725,12 +731,15 @@ class Component extends DCLogic {
       }
     });
     try {
-      const acessos = await A.jornadaPessoas();
-      this.setState({ acessos: acessos || [], carregandoAcessos: false });
+      const base = await A.jornadaBase(this.state.comparacaoJornada);
+      this.setState({ acessos: base.acessos, baseJornada: base, carregandoAcessos: false });
     } catch (x) {
       this.setState({ acessos: [], carregandoAcessos: false });
       this.avisar((x && x.message) || 'Não foi possível carregar a base de acessos.');
     }
+  }
+  trocarComparacaoJornada(data) {
+    this.setState({ acessos: null, comparacaoJornada: data || '' }, () => this.carregarJornada());
   }
   contextoDaJornada(s) {
     const dados = s.jornadaDados,
@@ -745,6 +754,8 @@ class Component extends DCLogic {
     return {
       acessos: s.acessos,
       carregandoAcessos: s.carregandoAcessos,
+      baseJornada: s.baseJornada,
+      trocarComparacao: data => this.trocarComparacaoJornada(data),
       exportar: (nome, aba, linhas) =>
         window.FSM_PLANILHA ? window.FSM_PLANILHA.baixar(linhas, nome, aba) : this.avisar('Exportação indisponível'),
       jornada: {
@@ -2155,6 +2166,7 @@ class Component extends DCLogic {
       ...(s.ehAdmin
         ? [
             ['convites', 'Convites de primeiro acesso', 0],
+            ['baseAcessos', 'Base de acessos do B.I.', 0],
             ['adm', 'Visão geral do sistema', 0],
             ['consulta', 'Consulta e correções', 0],
             ['escolas', 'Escolas e turmas', 0],
@@ -2184,6 +2196,8 @@ class Component extends DCLogic {
             if (k === 'consulta' && this.state.ehAdmin) this.carregarAdminDados();
             if (k === 'convites' && this.state.ehAdmin)
               this.setState({ convites: { ...this.state.convites, carregado: false, resultado: '' } });
+            if (k === 'baseAcessos' && this.state.ehAdmin)
+              this.setState({ baseAcessos: { ...this.state.baseAcessos, carregado: false } });
           }),
         classe: ativo ? 'fundo-branco-a9' : 'fundo-transparent',
         bg: ativo ? 'rgba(255,255,255,.09)' : 'transparent',
@@ -2206,6 +2220,7 @@ class Component extends DCLogic {
       carteiras: 'Carteiras',
       feriados: 'Feriados e recessos',
       convites: 'Convites de primeiro acesso',
+      baseAcessos: 'Base de acessos do B.I.',
       sistema: 'Configurações do sistema',
       auditoria: 'Auditoria'
     };
@@ -2324,6 +2339,7 @@ class Component extends DCLogic {
       consulta: s.ehAdmin && s.tela === 'consulta',
       feriados: s.ehAdmin && s.tela === 'feriados',
       convites: s.ehAdmin && s.tela === 'convites',
+      baseAcessos: s.ehAdmin && s.tela === 'baseAcessos',
       sistema: s.ehAdmin && s.tela === 'sistema',
       presenca: s.tela === 'presenca',
       agendas: s.tela === 'agendas',

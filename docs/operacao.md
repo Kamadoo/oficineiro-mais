@@ -108,6 +108,10 @@ Troque as chaves quando alguém com acesso sair da equipe, quando houver suspeit
 
 Depois de qualquer troca, entre com uma conta de cada perfil e confira a Auditoria › Erros do navegador.
 
+## Base de acessos diária
+
+O Administrador carrega a base de acessos em Base de acessos do B.I., enviando as planilhas exportadas do B.I. sem alterá-las (a aba `Export` de cada arquivo; o rodapé de filtros é ignorado). O site reconhece cada planilha pelo cabeçalho, cruza as pessoas pelo login no navegador e mostra a prévia; ao confirmar, grava um retrato da data escolhida (`public.jornada_retratos`), substituindo o do mesmo dia quando já existir. O login chega ao banco como resumo SHA-256 e é guardado com HMAC (chave `fsm_jornada_hmac` no Vault). Os retratos seguem a retenção de cinco anos.
+
 ## Painéis de acompanhamento
 
 Os painéis SQL de acompanhamento (contagens, pendências, conferências) são mantidos fora do repositório público. Rode-os no SQL Editor, sempre em modo de leitura, e nunca copie resultados com dados pessoais para fora do Supabase.

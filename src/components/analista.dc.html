@@ -339,6 +339,8 @@ class Component extends DCLogic {
     onboardings: null,
     acessos: null,
     carregandoAcessos: false,
+    baseJornada: null,
+    comparacaoJornada: '',
     statusEscolas: [],
     statusCarteiras: [],
     descartesJornada: [],
@@ -569,8 +571,8 @@ class Component extends DCLogic {
     this.setState({ carregandoAcessos: true });
     this.carregarStatusJornada();
     try {
-      const acessos = await A.jornadaPessoas();
-      this.setState({ acessos: acessos || [], carregandoAcessos: false });
+      const base = await A.jornadaBase(this.state.comparacaoJornada);
+      this.setState({ acessos: base.acessos, baseJornada: base, carregandoAcessos: false });
     } catch (x) {
       this.setState({
         acessos: [],
@@ -578,6 +580,9 @@ class Component extends DCLogic {
         erro: msgErro(x, 'Não foi possível carregar a base de acessos.')
       });
     }
+  }
+  trocarComparacaoJornada(data) {
+    this.setState({ acessos: null, comparacaoJornada: data || '' }, () => this.carregarAcessos());
   }
   async carregarStatusJornada() {
     const A = window.FSM_AUTH;
@@ -1224,6 +1229,8 @@ class Component extends DCLogic {
       },
       acessos: s.acessos,
       carregandoAcessos: s.carregandoAcessos,
+      baseJornada: s.baseJornada,
+      trocarComparacao: data => this.trocarComparacaoJornada(data),
       registroVazio,
       tipoDaAgenda,
       nomesDosParticipantes,

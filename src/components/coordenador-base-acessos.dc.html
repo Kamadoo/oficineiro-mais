@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Administrador · Base de acessos</title>
+<script src="../vendor/dc-runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <p class="m-0 fs-13 cor-cinza-600 lh-1p5 max-w-760">Envie as planilhas do B.I. do dia como vieram: usuários criados, implementados, dias de acesso e sem acesso (30, 60, 90 e 120 dias). A leitura e a conferência acontecem neste navegador; nada é gravado antes da confirmação. O banco guarda nome, perfil, unidade, carteira, turma, responsável, datas e dias de acesso; o login é guardado apenas como resumo cifrado, e e-mail, matrícula e demais colunas não saem do computador.</p>
+  <div class="filtros d-flex gap-8-10 alinha-end quebra-wrap">
+    <label class="h-40 d-inline-flex alinha-center gap-8 borda-0 fundo-ciano-660 cor-branco raio-8 p-0-16 fs-14 fw-600 cursor-pointer" style="background:var(--destaque-ciano-660)">{{ rotuloArquivos }}<input type="file" accept=".xlsx" multiple="{{ true }}" onChange="{{ lerArquivos }}" disabled="{{ ocupado }}" aria-label="Selecionar as planilhas do B.I." class="pos-absolute w-1 h-1 opac-0"></input></label>
+    <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Data da base</span><input type="date" value="{{ data }}" max="{{ hoje }}" onChange="{{ escolherData }}" disabled="{{ ocupado }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
+    <button onClick="{{ limpar }}" disabled="{{ semArquivos }}" class="largura-total-celular h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Limpar</button>
+  </div>
+  <div role="status" aria-live="polite" class="fs-13 cor-cinza-600 min-h-20">{{ situacao }}</div>
+  <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erro }}</div></sc-if>
+  <sc-if value="{{ temResultado }}" hint-placeholder-val="{{ false }}"><div role="status" class="fundo-ciano-40 cor-ciano-850 raio-10 p-12-14 fs-13">{{ resultado }}</div></sc-if>
+  <sc-if value="{{ temArquivos }}" hint-placeholder-val="{{ false }}">
+    <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-16-20 d-flex eixo-column gap-10 fundo-branco" aria-labelledby="ba-h-arquivos">
+      <h3 id="ba-h-arquivos" class="m-0 fs-15">Planilhas reconhecidas</h3>
+      <ul class="m-0 p-0 d-flex quebra-wrap gap-8" style="list-style:none">
+        <sc-for list="{{ arquivos }}" as="arquivo" hint-placeholder-count="7"><li class="fs-12 fw-600 p-3-10 raio-999 fundo-ciano-40 cor-ciano-850">{{ arquivo.rotulo }}</li></sc-for>
+      </ul>
+    </section>
+  </sc-if>
+  <sc-if value="{{ temPrevia }}" hint-placeholder-val="{{ false }}">
+    <section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-16-20 d-flex eixo-column gap-12 fundo-branco" aria-labelledby="ba-h-previa">
+      <h3 id="ba-h-previa" class="m-0 fs-15">Prévia da base de {{ dataTexto }}</h3>
+      <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+        <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="6">
+          <div class="fundo-branco raio-12 p-14-16 d-flex eixo-column gap-4 borda-cinza-110" style="background:var(--fundo-branco)">
+            <span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span>
+            <span class="num-tabular-nums fs-22 fw-600 cor-ciano-850" style="font-family:'Inter',system-ui,sans-serif">{{ indicador.valor }}</span>
+            <span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <p class="m-0 fs-13 cor-cinza-750">{{ porCarteira }}</p>
+      <sc-for list="{{ listas }}" as="lista" hint-placeholder-count="2">
+        <div class="d-flex eixo-column gap-6">
+          <h4 class="m-0 fs-14 cor-ciano-850">{{ lista.titulo }}</h4>
+          <span class="fs-12 cor-cinza-600">{{ lista.nota }}</span>
+          <ul style="padding-left:18px" class="m-0 d-flex eixo-column gap-2 fs-13 cor-cinza-750">
+            <sc-for list="{{ lista.itens }}" as="item" hint-placeholder-count="3"><li class="quebra-palavra-anywhere">{{ item }}</li></sc-for>
+          </ul>
+        </div>
+      </sc-for>
+      <sc-if value="{{ temAvisos }}" hint-placeholder-val="{{ false }}">
+        <ul style="padding:10px 12px 10px 30px" class="m-0 d-flex eixo-column gap-2 fs-13 fundo-ambar-80 cor-ambar-745 raio-8">
+          <sc-for list="{{ avisos }}" as="aviso" hint-placeholder-count="2"><li>{{ aviso }}</li></sc-for>
+        </ul>
+      </sc-if>
+      <sc-if value="{{ temBloqueio }}" hint-placeholder-val="{{ false }}"><p role="alert" class="m-0 fs-13 fundo-vermelho-50 cor-vermelho-720 raio-8 p-10-12">{{ bloqueio }}</p></sc-if>
+      <sc-if value="{{ substitui }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-13 lh-1p5 fundo-ambar-80 cor-ambar-745 raio-8 p-10-12">{{ textoSubstituicao }}</p></sc-if>
+      <div class="d-flex gap-8-10 quebra-wrap">
+        <button style="background:var(--destaque-ciano-660)" onClick="{{ pedirGravacao }}" disabled="{{ gravacaoBloqueada }}" aria-expanded="{{ confirmando }}" aria-controls="ba-conf" class="largura-total-celular h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660">{{ rotuloGravar }}</button>
+      </div>
+      <sc-if value="{{ confirmando }}" hint-placeholder-val="{{ false }}">
+        <div id="ba-conf" role="region" aria-labelledby="ba-conf-t" aria-describedby="ba-conf-d" class="borda-1-solid-0b7ea3 fundo-branco raio-12 p-16-20 d-flex eixo-column gap-10" style="background:var(--fundo-branco)">
+          <h4 id="ba-conf-t" class="m-0 fs-15 fw-700 cor-ciano-850">Confirmar a gravação da base</h4>
+          <p id="ba-conf-d" class="m-0 fs-13 lh-1p5 cor-cinza-750">{{ textoConfirmacao }}</p>
+          <div class="d-flex gap-8-10 quebra-wrap">
+            <button style="background:var(--destaque-ciano-660)" onClick="{{ gravar }}" class="largura-total-celular h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660">Confirmar e gravar</button>
+            <button onClick="{{ cancelar }}" class="largura-total-celular h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button>
+          </div>
+        </div>
+      </sc-if>
+    </section>
+  </sc-if>
+  <section class="au-tabela borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco)" aria-labelledby="ba-h-historico">
+    <h3 id="ba-h-historico" style="padding:14px 20px 6px" class="m-0 fs-15">Bases carregadas</h3>
+    <div role="table" aria-labelledby="ba-h-historico" class="min-w-640">
+      <div role="row" class="d-grid gap-10 p-10-20 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110" style="grid-template-columns:110px 90px minmax(0,1fr) minmax(0,1.4fr)"><span role="columnheader">Data da base</span><span role="columnheader">Pessoas</span><span role="columnheader">Origem</span><span role="columnheader">Carregada</span></div>
+      <sc-for list="{{ historico }}" as="linha" hint-placeholder-count="4">
+        <div role="row" class="d-grid gap-10 p-10-20 fs-13 borda-b-cinza-70" style="grid-template-columns:110px 90px minmax(0,1fr) minmax(0,1.4fr)"><span role="cell" class="num-tabular-nums">{{ linha.data }}</span><span role="cell" class="num-tabular-nums">{{ linha.pessoas }}</span><span role="cell">{{ linha.origem }}</span><span role="cell" class="cor-cinza-600 quebra-palavra-anywhere">{{ linha.carregada }}</span></div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semHistorico }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-18-20 fs-13 cor-cinza-600">{{ vazio }}</p></sc-if>
+  </section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const contexto = this.props.contexto;
+    const B = window.FSM_BASE_ACESSOS;
+    const c = contexto.baseAcessos || {};
+    const atual = () => contexto.estado().baseAcessos || {};
+    const mudar = parte => contexto.setState({ baseAcessos: { ...atual(), ...parte } });
+    const hoje = contexto.hojeIso();
+    const data = c.data || hoje;
+    const numero = n => Number(n || 0).toLocaleString('pt-BR');
+    const dmy = iso => (iso ? iso.slice(8, 10) + '/' + iso.slice(5, 7) + '/' + iso.slice(0, 4) : '—');
+    const plural = (n, um, varios) => numero(n) + ' ' + (n === 1 ? um : varios);
+    const mensagem = (x, padrao) => (x && x.message) || padrao;
+    const carregarCadastros = async () => {
+      mudar({ carregando: true, erro: '' });
+      try {
+        const A = window.FSM_AUTH;
+        const [escolas, carteiras, retratos] = await Promise.all([
+          A.escolasAdmin(),
+          A.carteiras(),
+          A.jornadaRetratos()
+        ]);
+        mudar({
+          escolas: escolas || [],
+          carteiras: carteiras || [],
+          retratos: retratos || [],
+          carregando: false,
+          carregado: true
+        });
+        return true;
+      } catch (x) {
+        mudar({ carregando: false, carregado: true, erro: mensagem(x, 'Não foi possível carregar as escolas.') });
+        return false;
+      }
+    };
+    if (!c.carregado && !c.carregando && contexto.conectado) Promise.resolve().then(carregarCadastros);
+    const conferir = async (lidos, dataDaBase) => {
+      const e = atual();
+      if (!lidos || !lidos.length) return;
+      mudar({ conferindo: true, erro: '', resultado: '', confirmando: false });
+      try {
+        const consolidado = await B.consolidar(lidos, {
+          escolas: e.escolas || [],
+          carteiras: e.carteiras || [],
+          baseRef: dataDaBase
+        });
+        mudar({ consolidado, conferindo: false });
+      } catch (x) {
+        mudar({ consolidado: null, conferindo: false, erro: mensagem(x, 'Não foi possível conferir as planilhas.') });
+      }
+    };
+    const lerArquivos = async evento => {
+      const arquivos = Array.from((evento.target && evento.target.files) || []);
+      if (evento.target) evento.target.value = '';
+      if (!arquivos.length) return;
+      mudar({ lendo: true, erro: '', resultado: '', consolidado: null, lidos: null, confirmando: false });
+      try {
+        const lidos = await B.ler(arquivos);
+        mudar({ lidos, lendo: false });
+        await conferir(lidos, atual().data || hoje);
+      } catch (x) {
+        mudar({ lendo: false, erro: mensagem(x, 'Não foi possível ler as planilhas.') });
+      }
+    };
+    const consolidado = c.consolidado;
+    const resumo = consolidado ? consolidado.resumo : null;
+    const retratos = Array.isArray(c.retratos) ? c.retratos : [];
+    const existente = retratos.find(r => r.base_ref === data);
+    const ocupado = !!(c.lendo || c.conferindo || c.gravando || c.carregando);
+    let bloqueio = '';
+    if (consolidado) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(data) || data > hoje) bloqueio = 'Escolha uma data da base até hoje.';
+      else if (consolidado.depoisDaBase)
+        bloqueio =
+          plural(consolidado.depoisDaBase, 'pessoa tem', 'pessoas têm') +
+          ' acesso depois de ' +
+          dmy(data) +
+          '. Escolha uma data a partir de ' +
+          dmy(resumo.ultimoAcesso) +
+          '.';
+      else if (!resumo.pessoas) bloqueio = 'Nenhuma pessoa com unidade e carteira reconhecidas.';
+    }
+    const gravar = async () => {
+      const e = atual();
+      if (!e.consolidado || e.gravando) return;
+      mudar({ gravando: true, confirmando: false, erro: '', resultado: 'Preparando o envio…' });
+      try {
+        const envio = await B.montarEnvio(e.consolidado);
+        const dataDaBase = e.data || hoje;
+        const substituir = (e.retratos || []).some(r => r.base_ref === dataDaBase);
+        const r = await window.FSM_AUTH.carregarBaseAcessos(
+          dataDaBase,
+          envio.unidades,
+          envio.pessoas,
+          substituir,
+          e.consolidado.resumo
+        );
+        const partes = ['Base de ' + dmy(dataDaBase) + ' gravada: ' + plural(r.pessoas, 'pessoa', 'pessoas')];
+        if (r.substituidas) partes.push('substituiu a base anterior do mesmo dia');
+        if (r.unidades_novas) partes.push(plural(r.unidades_novas, 'unidade nova', 'unidades novas'));
+        if (r.unidades_com_carteira)
+          partes.push(plural(r.unidades_com_carteira, 'unidade recebeu carteira', 'unidades receberam carteira'));
+        mudar({ gravando: false, lidos: null, consolidado: null, resultado: partes.join(' · ') + '.' });
+        await carregarCadastros();
+      } catch (x) {
+        mudar({ gravando: false, resultado: '', erro: mensagem(x, 'Não foi possível gravar a base.') });
+      }
+    };
+    const NOMES = { criados: 'Usuários criados', implementados: 'Implementados', dias: 'Dias de acesso' };
+    const rotuloDoArquivo = l =>
+      (l.mapa.tipo === 'semAcesso' ? 'Sem acesso ' + (l.mapa.faixa || '?') : NOMES[l.mapa.tipo]) +
+      ' · ' +
+      plural(l.total, 'linha', 'linhas');
+    const listas = [];
+    if (consolidado) {
+      if (consolidado.novas.length)
+        listas.push({
+          titulo: plural(consolidado.novas.length, 'unidade nova', 'unidades novas'),
+          nota: 'Serão cadastradas com a carteira da planilha, para que ninguém fique de fora.',
+          itens: consolidado.novas.map(
+            u => u.nome + ' · carteira ' + u.carteira + ' · ' + plural(u.pessoas, 'pessoa', 'pessoas')
+          )
+        });
+      if (consolidado.ganhamCarteira.length)
+        listas.push({
+          titulo: plural(consolidado.ganhamCarteira.length, 'unidade sem carteira', 'unidades sem carteira'),
+          nota: 'Já cadastradas no site; recebem a carteira da planilha.',
+          itens: consolidado.ganhamCarteira.map(u => u.nome + ' · carteira ' + u.carteira)
+        });
+      if (consolidado.aproximadas.length)
+        listas.push({
+          titulo: plural(consolidado.aproximadas.length, 'unidade reconhecida', 'unidades reconhecidas') + ' pelo nome',
+          nota: 'O nome da planilha difere do cadastro; confira a correspondência.',
+          itens: consolidado.aproximadas.map(u => u.nome + ' → ' + u.escola)
+        });
+      if (consolidado.divergentes.length)
+        listas.push({
+          titulo: plural(consolidado.divergentes.length, 'carteira diferente', 'carteiras diferentes') + ' do site',
+          nota: 'A carteira do site é mantida; a da planilha fica registrada em cada pessoa.',
+          itens: consolidado.divergentes.map(u => u.nome + ' · site ' + u.site + ' · planilha ' + u.planilha)
+        });
+      const conferencias = consolidado.conferencias.filter(x => x.tipo === 'semAcesso' || x.foraDaBase);
+      if (conferencias.length)
+        listas.push({
+          titulo: 'Conferência entre as planilhas',
+          nota: 'As faixas sem acesso são recalculadas pela data do último acesso.',
+          itens: conferencias.map(
+            x =>
+              (x.tipo === 'semAcesso' ? 'Sem acesso ' + x.faixa : NOMES[x.tipo]) +
+              ': ' +
+              plural(x.linhas, 'linha', 'linhas') +
+              (x.tipo === 'semAcesso' ? ' · ' + numero(x.conferem) + ' conferem com a data da base' : '') +
+              (x.foraDaBase ? ' · ' + numero(x.foraDaBase) + ' fora dos usuários criados' : '')
+          )
+        });
+    }
+    const podeGravar = !!consolidado && !bloqueio && !ocupado;
+    return {
+      rotuloArquivos: c.lidos ? 'Trocar planilhas' : 'Selecionar planilhas',
+      lerArquivos,
+      data,
+      hoje,
+      ocupado,
+      escolherData: e => {
+        const valor = e.target.value;
+        mudar({ data: valor, confirmando: false, resultado: '' });
+        if (atual().lidos) conferir(atual().lidos, valor);
+      },
+      semArquivos: ocupado || !c.lidos,
+      limpar: () => mudar({ lidos: null, consolidado: null, confirmando: false, erro: '', resultado: '' }),
+      situacao: c.lendo
+        ? 'Lendo as planilhas…'
+        : c.conferindo
+          ? 'Conferindo…'
+          : c.gravando
+            ? 'Gravando a base…'
+            : c.carregando
+              ? 'Carregando…'
+              : c.lidos
+                ? plural(c.lidos.length, 'planilha lida', 'planilhas lidas')
+                : 'Nenhuma planilha selecionada.',
+      temErro: !!c.erro,
+      erro: c.erro || '',
+      temResultado: !!c.resultado,
+      resultado: c.resultado || '',
+      temArquivos: !!(c.lidos && c.lidos.length),
+      arquivos: (c.lidos || []).map(l => ({ rotulo: rotuloDoArquivo(l) })),
+      temPrevia: !!consolidado,
+      dataTexto: dmy(data),
+      indicadores: resumo
+        ? [
+            { titulo: 'Pessoas', valor: numero(resumo.pessoas), nota: 'na base do dia' },
+            {
+              titulo: 'Perfis',
+              valor: numero(resumo.alunos),
+              nota: 'alunos · ' + numero(resumo.professores) + ' prof. · ' + numero(resumo.servidores) + ' serv.'
+            },
+            { titulo: 'Já acessaram', valor: numero(resumo.comAcesso), nota: 'com data de último acesso' },
+            { titulo: 'Dias de acesso', valor: numero(resumo.comDias), nota: 'pessoas com a contagem' },
+            { titulo: 'Com turma', valor: numero(resumo.comTurma), nota: 'alunos com turma informada' },
+            { titulo: 'Último acesso', valor: dmy(resumo.ultimoAcesso), nota: 'mais recente nas planilhas' }
+          ]
+        : [],
+      porCarteira: resumo
+        ? 'Por carteira: ' +
+          Object.keys(resumo.porCarteira)
+            .sort()
+            .map(k => k + ' ' + numero(resumo.porCarteira[k]))
+            .join(' · ')
+        : '',
+      listas,
+      temAvisos: !!(consolidado && consolidado.avisos.length),
+      avisos: consolidado ? consolidado.avisos : [],
+      temBloqueio: !!bloqueio,
+      bloqueio,
+      substitui: !!(consolidado && existente),
+      textoSubstituicao: existente
+        ? 'Já existe base de ' +
+          dmy(data) +
+          ' com ' +
+          plural(existente.pessoas, 'pessoa', 'pessoas') +
+          '. A gravação substitui esse retrato do dia.'
+        : '',
+      gravacaoBloqueada: !podeGravar,
+      rotuloGravar: c.gravando ? 'Gravando…' : 'Gravar base de ' + dmy(data),
+      pedirGravacao: () => mudar({ confirmando: true, resultado: '' }),
+      confirmando: !!c.confirmando && podeGravar,
+      textoConfirmacao: resumo
+        ? 'Serão gravadas ' +
+          plural(resumo.pessoas, 'pessoa', 'pessoas') +
+          ' na base de ' +
+          dmy(data) +
+          (resumo.unidadesNovas ? ', com ' + plural(resumo.unidadesNovas, 'unidade nova', 'unidades novas') : '') +
+          '. A Jornada do Usuário passa a mostrar esta base se ela for a mais recente; as bases anteriores continuam guardadas para comparação.'
+        : '',
+      gravar,
+      cancelar: () => mudar({ confirmando: false }),
+      historico: retratos.slice(0, 15).map(r => ({
+        data: dmy(r.base_ref),
+        pessoas: numero(r.pessoas),
+        origem: r.origem === 'site' ? 'Planilhas do B.I. pelo site' : 'Importação anterior',
+        carregada:
+          (r.carregado_em
+            ? new Date(r.carregado_em).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })
+            : '') + (r.autor_nome ? ' · ' + r.autor_nome : '')
+      })),
+      semHistorico: !retratos.length,
+      vazio: c.carregando ? 'Carregando…' : 'Nenhuma base carregada ainda.'
+    };
+  }
+}
+</script>
+</body>
+</html>
