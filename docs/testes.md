@@ -81,7 +81,7 @@ npm run lint
 npm run format:check
 ruff check scripts tests
 ruff format --check scripts tests
-cd supabase/functions && deno fmt --check && deno lint && deno check acesso/index.ts admin-usuarios/index.ts
+cd supabase/functions && deno fmt --check && deno lint && deno check acesso/index.ts admin-usuarios/index.ts convites/index.ts
 ```
 
 ## Funções de borda

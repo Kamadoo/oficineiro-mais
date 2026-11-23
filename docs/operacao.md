@@ -7,7 +7,7 @@ Rotinas para publicar, manter e recuperar o Oficineiro+. Os comandos supõem a r
 1. Atualize `version` no `package.json` (versionamento semântico: correção no terceiro número, funcionalidade no segundo, mudança que quebra compatibilidade no primeiro) e registre as mudanças no `CHANGELOG.md`.
 2. Rode as verificações: `npm run lint`, `npm run format:check`, `npm test`, `ruff check scripts tests`; para mudanças no banco, os testes pgTAP e a auditoria (ver [testes.md](testes.md)).
 3. Gere o site: `python scripts/build.py`. O build lê a versão do `package.json`, mostra-a em Configurações e interrompe a geração se encontrar dado pessoal ou referência não publicada.
-4. Crie a tag no commit publicado: `git tag -a v1.1.0 -m "Oficineiro+ 1.1.0"` e `git push origin v1.1.0`.
+4. Crie a tag no commit publicado: `git tag -a v2.0.0 -m "Oficineiro+ 2.0.0"` e `git push origin v2.0.0`.
 
 ## Publicar o site
 
@@ -39,15 +39,26 @@ Nunca edite uma migração já aplicada: crie outra com data posterior.
 ```bash
 supabase functions deploy acesso
 supabase functions deploy admin-usuarios
+supabase functions deploy convites
 ```
 
-As duas funções usam `verify_jwt = false` (a própria função confere a sessão) e precisam do segredo `FSM_ORIGEM_PERMITIDA` com o endereço do site, sem barra no final. Mais de uma origem separada por vírgula:
+As três funções usam `verify_jwt = false` (a própria função confere a sessão) e precisam do segredo `FSM_ORIGEM_PERMITIDA` com o endereço do site, sem barra no final. Mais de uma origem separada por vírgula:
 
 ```bash
 supabase secrets set FSM_ORIGEM_PERMITIDA=https://oficineiromais.com.br
 ```
 
-Pelo painel, em Edge Functions, cole o código de cada `index.ts`; como o painel não resolve importações relativas, o conteúdo de `_shared/seguranca.ts` precisa ir junto no mesmo arquivo.
+Pelo painel, em Edge Functions, cole o código de cada `index.ts`; como o painel não resolve importações relativas, o conteúdo de `_shared/seguranca.ts` (e, na função `convites`, o de `convites/modelo.ts`) precisa ir junto no mesmo arquivo.
+
+A função `convites` envia pela API do Resend e precisa também de:
+
+```bash
+supabase secrets set RESEND_API_KEY=<chave da API do Resend com permissão de envio>
+supabase secrets set FSM_CONVITE_REMETENTE="Oficineiro+ <nao-responda@seu-dominio>"
+supabase secrets set FSM_SITE_URL=https://oficineiromais.com.br
+```
+
+O remetente deve usar um domínio verificado no Resend. Sem esses segredos a função responde que o envio não foi configurado e nada é registrado. A criação de contas, individual ou em lote, não envia e-mail: o convite sai apenas da aba Convites de primeiro acesso do Administrador.
 
 ## Tarefas agendadas
 
