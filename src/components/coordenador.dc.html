@@ -203,6 +203,7 @@
 <sc-if value="{{ is.carteiras }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-carteiras" contexto="{{ contexto }}"></dc-import></sc-if>
 <sc-if value="{{ is.auditoria }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-auditoria" contexto="{{ contexto }}"></dc-import></sc-if>
 <sc-if value="{{ is.consulta }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-consulta" contexto="{{ contexto }}"></dc-import></sc-if>
+<sc-if value="{{ is.convites }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-convites" contexto="{{ contexto }}"></dc-import></sc-if>
 <sc-if value="{{ is.feriados }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-feriados" contexto="{{ contexto }}"></dc-import></sc-if>
 <sc-if value="{{ is.sistema }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-sistema" contexto="{{ contexto }}"></dc-import></sc-if>
 
@@ -321,7 +322,8 @@ const ESTADO_DAS_TELAS = [
   'novoFeriado',
   'feriados',
   'feriadoARemover',
-  'configuracoes'
+  'configuracoes',
+  'convites'
 ];
 const VALORES_DAS_TELAS = [
   'is',
@@ -615,6 +617,7 @@ class Component extends DCLogic {
       feriados: [],
       novoFeriado: { data: '', nome: '', tipo: 'feriado' },
       feriadoARemover: null,
+      convites: {},
       configuracoes: { email: '', telefone: '', horario: '' },
       cicloDosRelatorios: '',
       relatoriosDoCiclo: [],
@@ -2151,6 +2154,7 @@ class Component extends DCLogic {
       ['contas', 'Gestão de Contas', 0],
       ...(s.ehAdmin
         ? [
+            ['convites', 'Convites de primeiro acesso', 0],
             ['adm', 'Visão geral do sistema', 0],
             ['consulta', 'Consulta e correções', 0],
             ['escolas', 'Escolas e turmas', 0],
@@ -2178,6 +2182,8 @@ class Component extends DCLogic {
             if (k === 'adm' && this.state.conectado) this.carregarContas();
             if ((k === 'feriados' || k === 'sistema') && this.state.ehAdmin) this.carregarAdminExtras();
             if (k === 'consulta' && this.state.ehAdmin) this.carregarAdminDados();
+            if (k === 'convites' && this.state.ehAdmin)
+              this.setState({ convites: { ...this.state.convites, carregado: false, resultado: '' } });
           }),
         classe: ativo ? 'fundo-branco-a9' : 'fundo-transparent',
         bg: ativo ? 'rgba(255,255,255,.09)' : 'transparent',
@@ -2199,6 +2205,7 @@ class Component extends DCLogic {
       escolas: 'Escolas e turmas',
       carteiras: 'Carteiras',
       feriados: 'Feriados e recessos',
+      convites: 'Convites de primeiro acesso',
       sistema: 'Configurações do sistema',
       auditoria: 'Auditoria'
     };
@@ -2316,6 +2323,7 @@ class Component extends DCLogic {
       auditoria: s.ehAdmin && s.tela === 'auditoria',
       consulta: s.ehAdmin && s.tela === 'consulta',
       feriados: s.ehAdmin && s.tela === 'feriados',
+      convites: s.ehAdmin && s.tela === 'convites',
       sistema: s.ehAdmin && s.tela === 'sistema',
       presenca: s.tela === 'presenca',
       agendas: s.tela === 'agendas',

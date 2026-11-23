@@ -75,3 +75,7 @@ verify_jwt = false
 [functions.acesso]
 enabled = true
 verify_jwt = false
+
+[functions.convites]
+enabled = true
+verify_jwt = false

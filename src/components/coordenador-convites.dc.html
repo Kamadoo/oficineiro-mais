@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Administrador · Convites de primeiro acesso</title>
+<script src="../vendor/dc-runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+  <p class="m-0 fs-13 cor-cinza-600 lh-1p5 max-w-760">Contas criadas que ainda não fizeram o primeiro acesso. Marque as pessoas do grupo que será liberado e envie o convite: o e-mail apresenta o Oficineiro+ e explica como ativar a conta com o CPF. A criação de contas não envia e-mail; o convite sai apenas daqui.</p>
+  <div class="filtros d-flex gap-8-10 alinha-center quebra-wrap" role="search" aria-label="Filtrar contas sem primeiro acesso">
+    <input type="search" class="largura-total-celular h-40 borda-cinza-160 raio-8 p-0-12 fs-14 fonte-inherit min-w-260 max-w-360 flex-1-1-260" value="{{ filtros.busca }}" onChange="{{ filtros.buscar }}" placeholder="Buscar por nome ou e-mail" aria-label="Buscar por nome ou e-mail" autocomplete="off"></input>
+    <select style="background:var(--fundo-branco)" value="{{ filtros.papel }}" onChange="{{ filtros.escolherPapel }}"
+      aria-label="Cargo"
+      class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit max-w-240 largura-fundo fundo-branco"><option
+      value="">Todos os cargos</option><sc-for list="{{ opcoesDePapel }}" as="opcao" hint-placeholder-count="4"><option
+      value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select style="background:var(--fundo-branco)" value="{{ filtros.escola }}" onChange="{{ filtros.escolherEscola }}"
+      aria-label="Escola"
+      class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit max-w-240 largura-fundo fundo-branco"><option
+      value="">Todas as escolas</option><option value="-">Sem escola</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="4"><option
+      value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select style="background:var(--fundo-branco)" value="{{ filtros.carteira }}" onChange="{{ filtros.escolherCarteira }}"
+      aria-label="Carteira"
+      class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit max-w-220 largura-fundo fundo-branco"><option
+      value="">Todas as carteiras</option><option value="-">Sem carteira</option><sc-for list="{{ opcoesDeCarteira }}" as="opcao" hint-placeholder-count="4"><option
+      value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select style="background:var(--fundo-branco)" value="{{ filtros.situacao }}" onChange="{{ filtros.escolherSituacao }}"
+      aria-label="Situação do convite"
+      class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit max-w-240 largura-fundo fundo-branco"><option
+      value="">Todos os convites</option><option value="nunca">Nunca enviado</option><option
+      value="enviado">Já enviado</option><option value="antigo">Enviado há mais de 7 dias</option><option
+      value="falhou">Falha no último envio</option></select>
+    <select style="background:var(--fundo-branco)" value="{{ filtros.cadastro }}" onChange="{{ filtros.escolherCadastro }}"
+      aria-label="Data de criação da conta"
+      class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 fonte-inherit max-w-240 largura-fundo fundo-branco"><option
+      value="">Criadas em qualquer data</option><option value="7">Criadas nos últimos 7 dias</option><option
+      value="30">Criadas nos últimos 30 dias</option><option value="antigas">Criadas há mais de 30 dias</option></select>
+    <button onClick="{{ recarregar }}" disabled="{{ ocupado }}" class="largura-total-celular h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Atualizar</button>
+  </div>
+  <div role="status" aria-live="polite" class="d-flex quebra-wrap alinha-center gap-4-12 fs-13 cor-cinza-600 min-h-20"><span>{{ resumo }}</span><sc-if
+    value="{{ temFiltro }}" hint-placeholder-val="{{ false }}"><button onClick="{{ limparFiltros }}"
+    class="borda-0 fundo-transparent p-0 min-h-0 fs-13 fw-600 cor-ciano-740 deco-underline fonte-inherit botao-texto cursor-pointer">Limpar filtros</button></sc-if></div>
+  <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erro }}</div></sc-if>
+  <sc-if value="{{ temResultado }}" hint-placeholder-val="{{ false }}"><div role="status" class="fundo-ciano-40 cor-ciano-850 raio-10 p-12-14 fs-13">{{ resultado }}</div></sc-if>
+  <div role="group" aria-label="Seleção e envio" class="d-flex gap-8-10 alinha-center quebra-wrap">
+    <button onClick="{{ marcarFiltradas }}" disabled="{{ semFiltradas }}" class="largura-total-celular h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">{{ rotuloFiltradas }}</button>
+    <button onClick="{{ marcarTodas }}" disabled="{{ semContas }}" class="largura-total-celular h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">{{ rotuloTodas }}</button>
+    <button onClick="{{ desmarcar }}" disabled="{{ semSelecao }}" class="largura-total-celular h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Desmarcar todas</button>
+    <div class="oculto-celular flex-1"></div>
+    <span class="fs-13 fw-600 cor-cinza-750">{{ rotuloSelecao }}</span>
+    <button style="background:var(--destaque-ciano-660)" onClick="{{ pedirEnvio }}" disabled="{{ envioBloqueado }}" aria-expanded="{{ confirmando }}" aria-controls="cv-conf" class="largura-total-celular h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660">{{ rotuloEnviar }}</button>
+  </div>
+  <sc-if value="{{ confirmando }}" hint-placeholder-val="{{ false }}">
+    <div id="cv-conf" role="region" aria-labelledby="cv-conf-t" aria-describedby="cv-conf-d" class="borda-1-solid-0b7ea3 fundo-branco raio-12 p-16-20 d-flex eixo-column gap-10" style="background:var(--fundo-branco)">
+      <h3 id="cv-conf-t" class="m-0 fs-15 fw-700 cor-ciano-850">Confirmar o envio dos convites</h3>
+      <p id="cv-conf-d" class="m-0 fs-13 lh-1p5 cor-cinza-750">{{ textoConfirmacao }}</p>
+      <sc-if value="{{ temReenvios }}" hint-placeholder-val="{{ false }}"><p class="m-0 fs-13 lh-1p5 fundo-ambar-80 cor-ambar-745 raio-8 p-10-12">{{ textoReenvio }}</p></sc-if>
+      <div class="d-flex gap-8-10 quebra-wrap">
+        <sc-if value="{{ temNovos }}" hint-placeholder-val="{{ false }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ enviarNovos }}" class="largura-total-celular h-40 borda-0 cor-branco raio-8 p-0-16 fs-14 fw-600 fonte-inherit fundo-ciano-660">{{ rotuloNovos }}</button></sc-if>
+        <sc-if value="{{ temReenvios }}" hint-placeholder-val="{{ false }}"><button onClick="{{ enviarComReenvio }}" class="largura-total-celular h-40 borda-1-solid-0b7ea3 fundo-branco cor-ciano-740 raio-8 p-0-14 fs-14 fw-600 fonte-inherit">{{ rotuloReenvio }}</button></sc-if>
+        <button onClick="{{ cancelarEnvio }}" class="largura-total-celular h-40 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-14 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Cancelar</button>
+      </div>
+    </div>
+  </sc-if>
+  <section class="au-tabela borda-cinza-110 raio-12 rolagem-auto fundo-branco" style="background:var(--fundo-branco);opacity:{{ opacidade }}" aria-labelledby="cv-h-lista">
+    <h3 id="cv-h-lista" class="sr-only">Contas que aguardam o primeiro acesso</h3>
+    <div role="table" aria-labelledby="cv-h-lista" class="min-w-900">
+      <div role="row" class="d-grid gap-10 p-12-20 fs-12 fw-600 cor-cinza-600 borda-b-cinza-110 alinha-center"
+        style="grid-template-columns:32px minmax(0,1.7fr) minmax(0,1.1fr) minmax(0,1.5fr) minmax(0,1.5fr) 110px"><span
+        role="columnheader"><input type="checkbox" checked="{{ todasFiltradasMarcadas }}" onChange="{{ alternarFiltradas }}" disabled="{{ semFiltradas }}" aria-label="Marcar ou desmarcar todas as contas filtradas" class="w-18 h-18 destaque-ciano-660"></input></span><span
+        role="columnheader">Nome e e-mail</span><span role="columnheader">Cargo</span><span
+        role="columnheader">Escola e carteira</span><span role="columnheader">Convite</span><span role="columnheader">Conta criada</span></div>
+      <sc-for list="{{ contas }}" as="conta" hint-placeholder-count="6">
+        <div role="row" class="d-grid gap-10 p-10-20 fs-13 borda-b-cinza-70 alinha-center" style="grid-template-columns:32px minmax(0,1.7fr) minmax(0,1.1fr) minmax(0,1.5fr) minmax(0,1.5fr) 110px">
+          <span role="cell"><input type="checkbox" checked="{{ conta.marcada }}" onChange="{{ conta.alternar }}" aria-label="{{ conta.aria }}" class="w-18 h-18 destaque-ciano-660"></input></span>
+          <span role="cell" class="d-flex eixo-column gap-2 min-w-0"><span class="fw-600 cor-ciano-850 quebra-palavra-anywhere">{{ conta.nome }}</span><span class="fs-12 cor-cinza-600 quebra-palavra-anywhere">{{ conta.email }}</span></span>
+          <span role="cell">{{ conta.papel }}</span>
+          <span role="cell" class="d-flex eixo-column gap-2 min-w-0 fs-12"><span class="quebra-palavra-anywhere">{{ conta.escola }}</span><span class="cor-cinza-600">{{ conta.carteira }}</span></span>
+          <span role="cell" class="d-flex eixo-column alinha-flex-start gap-2 min-w-0"><span class="d-inline-block fs-12 fw-600 p-2-8 raio-999" style="color:{{ conta.situacaoCor }};background:{{ conta.situacaoFundo }}">{{ conta.situacao }}</span><sc-if value="{{ conta.temDetalhe }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">{{ conta.detalhe }}</span></sc-if></span>
+          <span role="cell" class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ conta.criada }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ semLinhas }}" hint-placeholder-val="{{ false }}"><p class="m-0 p-18-20 fs-13 cor-cinza-600">{{ vazio }}</p></sc-if>
+  </section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const contexto = this.props.contexto;
+    const PAPEIS = {
+      oficineiro: 'Oficineiro de Inclusão Digital',
+      analista: 'Analista',
+      direcao: 'Direção da escola',
+      coordenador: 'Coordenador',
+      gerente: 'Gerente de Projetos'
+    };
+    const SITUACOES = {
+      nunca: ['Nunca enviado', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)'],
+      enviado: ['Enviado', 'var(--texto-verde-700)', 'var(--fundo-verde-80)'],
+      enviando: ['Enviando', 'var(--texto-ciano-850)', 'var(--fundo-ciano-40)'],
+      falhou: ['Falha no envio', 'var(--texto-vermelho-720)', 'var(--fundo-vermelho-50)']
+    };
+    const DIA = 86400000;
+    const padrao = { busca: '', papel: '', escola: '', carteira: '', situacao: '', cadastro: '' };
+    const c = contexto.convites || {};
+    const filtros = { ...padrao, ...(c.filtros || {}) };
+    const lista = Array.isArray(c.lista) ? c.lista : [];
+    const marcadas = c.marcadas || {};
+    const atual = () => contexto.estado().convites || {};
+    const mudar = parte => contexto.setState({ convites: { ...atual(), ...parte } });
+    const dataHora = v => {
+      const d = v ? new Date(v) : null;
+      return d && !isNaN(d) ? d.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : '';
+    };
+    const dataCurta = v => {
+      const d = v ? new Date(v) : null;
+      return d && !isNaN(d) ? d.toLocaleDateString('pt-BR') : '';
+    };
+    const agora = Date.now();
+    const semAcento = v =>
+      String(v || '')
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .toLowerCase();
+    const termo = semAcento(filtros.busca).trim();
+    const filtradas = lista.filter(x => {
+      if (filtros.papel && x.papel !== filtros.papel) return false;
+      if (filtros.escola && (filtros.escola === '-' ? x.escola_id != null : String(x.escola_id) !== filtros.escola))
+        return false;
+      if (filtros.carteira && (filtros.carteira === '-' ? !!x.carteira_id : x.carteira_id !== filtros.carteira))
+        return false;
+      if (filtros.situacao === 'nunca' && x.envios > 0) return false;
+      if (filtros.situacao === 'enviado' && !(x.envios > 0)) return false;
+      if (filtros.situacao === 'antigo' && !(x.ultimo_envio && agora - new Date(x.ultimo_envio) > 7 * DIA))
+        return false;
+      if (filtros.situacao === 'falhou' && x.situacao !== 'falhou') return false;
+      const idade = x.criado_em ? agora - new Date(x.criado_em) : 0;
+      if (filtros.cadastro === '7' && idade > 7 * DIA) return false;
+      if (filtros.cadastro === '30' && idade > 30 * DIA) return false;
+      if (filtros.cadastro === 'antigas' && idade <= 30 * DIA) return false;
+      if (termo && !semAcento(x.nome + ' ' + x.email).includes(termo)) return false;
+      return true;
+    });
+    const unicos = (pares, ordenar) =>
+      Array.from(new Map(pares.filter(p => p[0]).map(p => [String(p[0]), p[1]])).entries())
+        .map(([valor, rotulo]) => ({ valor, rotulo }))
+        .sort(ordenar || ((a, b) => a.rotulo.localeCompare(b.rotulo, 'pt-BR')));
+    const selecionadas = lista.filter(x => marcadas[x.id]);
+    const reenvios = selecionadas.filter(x => x.envios > 0);
+    const novos = selecionadas.length - reenvios.length;
+    const ocupado = !!(c.carregando || c.enviando);
+    const plural = (n, um, varios) => n + ' ' + (n === 1 ? um : varios);
+    const definirFiltro = k => e =>
+      mudar({ filtros: { ...padrao, ...(atual().filtros || {}), [k]: e.target.value }, confirmando: false });
+    const marcar = (contas, valor) => {
+      const m = { ...(atual().marcadas || {}) };
+      contas.forEach(x => {
+        if (valor) m[x.id] = true;
+        else delete m[x.id];
+      });
+      mudar({ marcadas: m, confirmando: false, resultado: '' });
+    };
+    const carregar = async () => {
+      mudar({ carregando: true, erro: '' });
+      try {
+        const r = await window.FSM_AUTH.convitesPendentes();
+        const novaLista = Array.isArray(r) ? r : [];
+        const ids = new Set(novaLista.map(x => x.id));
+        const m = {};
+        Object.keys(atual().marcadas || {}).forEach(id => {
+          if (ids.has(id)) m[id] = true;
+        });
+        mudar({ lista: novaLista, marcadas: m, carregando: false, carregado: true });
+      } catch (x) {
+        mudar({ carregando: false, carregado: true, erro: (x && x.message) || 'Não foi possível carregar as contas.' });
+      }
+    };
+    if (!c.carregado && !c.carregando && contexto.conectado) Promise.resolve().then(carregar);
+    const enviar = async reenviar => {
+      const e = atual();
+      if (e.enviando) return;
+      const alvo = (e.lista || [])
+        .filter(x => (e.marcadas || {})[x.id] && (reenviar || !(x.envios > 0)))
+        .map(x => x.id);
+      if (!alvo.length) return;
+      const soma = { enviados: 0, falhas: 0, ja_enviados: 0, em_envio: 0, indisponiveis: 0 };
+      mudar({ enviando: true, confirmando: false, erro: '', resultado: 'Enviando 0 de ' + alvo.length + '…' });
+      let erro = '';
+      for (let i = 0; i < alvo.length; i += 50) {
+        try {
+          const r = await window.FSM_AUTH.enviarConvites(alvo.slice(i, i + 50), reenviar);
+          Object.keys(soma).forEach(k => (soma[k] += Number((r && r[k]) || 0)));
+          mudar({ resultado: 'Enviando ' + Math.min(i + 50, alvo.length) + ' de ' + alvo.length + '…' });
+        } catch (x) {
+          erro = (x && x.message) || 'Não foi possível enviar os convites.';
+          break;
+        }
+      }
+      const partes = [plural(soma.enviados, 'convite enviado', 'convites enviados')];
+      if (soma.falhas) partes.push(plural(soma.falhas, 'falha no envio', 'falhas no envio'));
+      if (soma.ja_enviados) partes.push(plural(soma.ja_enviados, 'já tinha convite', 'já tinham convite'));
+      if (soma.em_envio) partes.push(plural(soma.em_envio, 'já estava em envio', 'já estavam em envio'));
+      if (soma.indisponiveis)
+        partes.push(
+          plural(soma.indisponiveis, 'não aguarda mais o primeiro acesso', 'não aguardam mais o primeiro acesso')
+        );
+      mudar({ enviando: false, marcadas: {}, erro, resultado: partes.join(' · ') + '.' });
+      await carregar();
+    };
+    return {
+      filtros: {
+        ...filtros,
+        buscar: definirFiltro('busca'),
+        escolherPapel: definirFiltro('papel'),
+        escolherEscola: definirFiltro('escola'),
+        escolherCarteira: definirFiltro('carteira'),
+        escolherSituacao: definirFiltro('situacao'),
+        escolherCadastro: definirFiltro('cadastro')
+      },
+      opcoesDePapel: unicos(lista.map(x => [x.papel, PAPEIS[x.papel] || x.papel])),
+      opcoesDeEscola: unicos(lista.map(x => [x.escola_id, x.escola || ''])),
+      opcoesDeCarteira: unicos(lista.map(x => [x.carteira_id, x.carteira_id])),
+      temFiltro: Object.keys(padrao).some(k => filtros[k]),
+      limparFiltros: () => mudar({ filtros: { ...padrao } }),
+      recarregar: carregar,
+      ocupado,
+      resumo: c.carregando
+        ? 'Carregando…'
+        : plural(lista.length, 'conta aguarda', 'contas aguardam') +
+          ' o primeiro acesso · ' +
+          plural(lista.filter(x => !(x.envios > 0)).length, 'sem convite', 'sem convite') +
+          (filtradas.length !== lista.length ? ' · ' + plural(filtradas.length, 'na busca', 'na busca') : ''),
+      temErro: !!c.erro,
+      erro: c.erro || '',
+      temResultado: !!c.resultado,
+      resultado: c.resultado || '',
+      semFiltradas: ocupado || !filtradas.length,
+      semContas: ocupado || !lista.length,
+      semSelecao: ocupado || !selecionadas.length,
+      rotuloFiltradas: 'Marcar as filtradas (' + filtradas.length + ')',
+      rotuloTodas: 'Marcar todas (' + lista.length + ')',
+      rotuloSelecao: plural(selecionadas.length, 'selecionada', 'selecionadas'),
+      marcarFiltradas: () => marcar(filtradas, true),
+      marcarTodas: () => marcar(lista, true),
+      desmarcar: () => mudar({ marcadas: {}, confirmando: false }),
+      todasFiltradasMarcadas: !!filtradas.length && filtradas.every(x => marcadas[x.id]),
+      alternarFiltradas: () => marcar(filtradas, !filtradas.every(x => marcadas[x.id])),
+      envioBloqueado: ocupado || !selecionadas.length,
+      rotuloEnviar: c.enviando ? 'Enviando…' : 'Enviar convites (' + selecionadas.length + ')',
+      pedirEnvio: () => mudar({ confirmando: true, resultado: '' }),
+      confirmando: !!c.confirmando && !!selecionadas.length && !ocupado,
+      textoConfirmacao:
+        'Cada pessoa receberá um e-mail automático com a apresentação do Oficineiro+ e o pedido de primeiro acesso. ' +
+        plural(selecionadas.length, 'conta selecionada.', 'contas selecionadas.'),
+      temNovos: novos > 0,
+      temReenvios: reenvios.length > 0,
+      textoReenvio:
+        plural(reenvios.length, 'conta já recebeu', 'contas já receberam') +
+        ' o convite antes. Reenvie apenas se a pessoa não encontrou o e-mail.',
+      rotuloNovos: 'Enviar para ' + plural(novos, 'conta sem convite', 'contas sem convite'),
+      rotuloReenvio: novos > 0 ? 'Enviar para todas, inclusive reenvios' : 'Reenviar para ' + reenvios.length,
+      enviarNovos: () => enviar(false),
+      enviarComReenvio: () => enviar(true),
+      cancelarEnvio: () => mudar({ confirmando: false }),
+      opacidade: ocupado ? '.6' : '1',
+      contas: filtradas.map(x => {
+        const st = SITUACOES[x.situacao] || SITUACOES.nunca;
+        const partes = [];
+        if (x.envios > 0) partes.push(plural(x.envios, 'envio', 'envios') + ', último em ' + dataHora(x.ultimo_envio));
+        if (x.situacao === 'falhou' && x.ultima_tentativa) partes.push('tentativa em ' + dataHora(x.ultima_tentativa));
+        if (x.ultimo_por) partes.push('por ' + x.ultimo_por);
+        return {
+          nome: x.nome,
+          email: x.email || '',
+          papel: PAPEIS[x.papel] || x.papel,
+          escola: x.escola || 'Sem escola',
+          carteira: x.carteira_id ? 'Carteira ' + x.carteira_id : 'Sem carteira',
+          situacao: st[0],
+          situacaoCor: st[1],
+          situacaoFundo: st[2],
+          temDetalhe: !!partes.length,
+          detalhe: partes.join(' · '),
+          criada: dataCurta(x.criado_em),
+          marcada: !!marcadas[x.id],
+          aria: 'Selecionar ' + x.nome,
+          alternar: () => marcar([x], !marcadas[x.id])
+        };
+      }),
+      semLinhas: !filtradas.length,
+      vazio: c.carregando
+        ? 'Carregando…'
+        : lista.length
+          ? 'Nenhuma conta com esses filtros.'
+          : 'Nenhuma conta aguarda o primeiro acesso.'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1384,6 +1384,16 @@ window.FSM_AUTH =
       feriados() {
         return chamar('/rest/v1/feriados?select=data,nome,tipo&order=data', { token: token() });
       },
+      convitesPendentes() {
+        return chamar('/rest/v1/rpc/convites_pendentes', { metodo: 'POST', token: token(), corpo: {} });
+      },
+      enviarConvites(ids, reenviar) {
+        return chamar('/functions/v1/convites', {
+          metodo: 'POST',
+          token: token(),
+          corpo: { acao: 'enviar', ids: (ids || []).map(String), reenviar: reenviar === true }
+        });
+      },
       adminSalvarConfiguracoes(c) {
         c = c || {};
         return chamar('/rest/v1/rpc/admin_salvar_configuracoes', {

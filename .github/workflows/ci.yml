@@ -41,7 +41,7 @@ jobs:
           deno-version: 2.9.6
       - run: deno fmt --check
       - run: deno lint
-      - run: deno check acesso/index.ts admin-usuarios/index.ts
+      - run: deno check acesso/index.ts admin-usuarios/index.ts convites/index.ts
       - run: deno test --allow-env --allow-read tests/
 
   database:
