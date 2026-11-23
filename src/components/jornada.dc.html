@@ -25,7 +25,9 @@
     <select style="background:var(--fundo-branco)" aria-label="Turma" onChange="{{ escolherFiltroAno }}" value="{{ filtroAno }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todos">Todas as turmas</option><sc-for list="{{ opcoesDoFiltroAno }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
     <sc-if value="{{ temFiltro }}" hint-placeholder-val="{{ false }}"><button onClick="{{ limparFiltros }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario">Limpar filtros</button></sc-if>
     <span class="ml-auto fs-12 cor-cinza-600">Base de acessos de <b class="cor-ciano-850">{{ dataDaBase }}</b></span>
+    <sc-if value="{{ temComparacao }}" hint-placeholder-val="{{ false }}"><select style="background:var(--fundo-branco)" aria-label="Comparar com a base de acessos de" onChange="{{ escolherComparacao }}" value="{{ comparacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><sc-for list="{{ opcoesDeComparacao }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
   </div>
+  <sc-if value="{{ temResumoDaComparacao }}" hint-placeholder-val="{{ false }}"><p role="status" class="m-0 fs-12 cor-cinza-600">{{ resumoDaComparacao }}</p></sc-if>
 
   <sc-if value="{{ abaAtiva.carteira }}" hint-placeholder-val="{{ false }}">
     <sc-if value="{{ listaDeCarteiras }}" hint-placeholder-val="{{ false }}">
@@ -352,7 +354,7 @@
           </div>
         </div>
         <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ legendaDosEstagios }}" as="item" hint-placeholder-count="6"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
-        <span class="fs-12 cor-cinza-600">Turma = ano escolar em cada escola (a base de acessos não traz a letra da turma). Aula em 7 dias: ao menos 25% dos alunos da turma (e no mínimo 2) acessaram na última semana.</span>
+        <span class="fs-12 cor-cinza-600">Turma = ano escolar em cada escola (as turmas do mesmo ano, como 9º A e 9º B, somam-se). Aula em 7 dias: ao menos 25% dos alunos da turma (e no mínimo 2) acessaram na última semana.</span>
       </section>
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
         <div class="d-flex quebra-wrap alinha-center gap-8-14">
@@ -436,7 +438,7 @@
             <sc-if value="{{ escola.semAnos }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600 p-10-0">Nenhum aluno com ano escolar informado nesta unidade.</span></sc-if>
           </div>
         </div>
-        <span class="fs-12 cor-cinza-600">A exportação traz o ano escolar (coluna turma, ex.: 5º ANO) e o responsável pela turma (coluna responsavel_turma). Quando a turma vier detalhada (5º A, 5º B), a tabela passa a agrupar por turma.</span>
+        <span class="fs-12 cor-cinza-600">A exportação traz a turma (ex.: 9º A), o responsável pela turma e as datas do primeiro e do último acesso.</span>
       </section>
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
         <div class="d-flex quebra-wrap alinha-center gap-8-12">
@@ -694,6 +696,21 @@ const contar = contas => {
   total.risco = parcela(total.sr + total.nv, total.n);
   return total;
 };
+const contarGrupos = grupos => {
+  const total = { n: 0, nv: 0, sr: 0, en: 0 };
+  grupos.forEach(grupo => {
+    total.n += grupo.n;
+    total.nv += grupo.nv;
+    total.sr += grupo.sr;
+    total.en += grupo.en;
+  });
+  total.utilizacao = total.n - total.nv - total.sr;
+  total.uso = parcela(total.utilizacao, total.n);
+  total.engajados = parcela(total.en, total.n);
+  return total;
+};
+const variacao = (valor, sufixo) =>
+  (valor > 0 ? '+' : valor < 0 ? '−' : '±') + Math.abs(valor).toLocaleString('pt-BR') + sufixo;
 const celula = (total, faixa) => {
   const p = parcela(total[faixa], total.n),
     alfa = total.n ? 0.06 + (p / 100) * 0.5 : 0;
@@ -791,8 +808,8 @@ class Component extends DCLogic {
     Object.assign(this.props.memoria, mudanca);
     this.forceUpdate();
   }
-  preparar(acessos, escolaDe) {
-    if (this.preparo && this.preparo.acessos === acessos) return this.preparo;
+  preparar(acessos, escolaDe, base) {
+    if (this.preparo && this.preparo.acessos === acessos && this.preparo.base === base) return this.preparo;
     const porBase = {};
     let incompleto = false;
     acessos.forEach(p => {
@@ -814,8 +831,10 @@ class Component extends DCLogic {
         perfil: p.tipo,
         ano: p.ano_escolar || 0,
         diasSemAcesso: p.dias_sem_acesso,
-        diasDeUso: p.dias_acesso,
-        responsavel: p.responsavel_turma || ''
+        diasDeUso: p.dias_acesso || 0,
+        responsavel: p.responsavel_turma || '',
+        turma: p.turma || '',
+        primeiroAcesso: p.primeiro_acesso || ''
       };
       conta.estagio = estagioDe(conta);
       local.contas.push(conta);
@@ -823,12 +842,56 @@ class Component extends DCLogic {
     const datas = Object.keys(porBase).sort(),
       dataDaBase = datas[datas.length - 1] || '',
       limite = dataDaBase ? Base.iso(Base.add(dataDe(dataDaBase), -7)) : '',
-      dataAnterior = datas.filter(data => data <= limite).pop() || '',
-      ultimaDoMes = {};
-    datas.forEach(data => (ultimaDoMes[data.slice(0, 7)] = data));
+      escolhida =
+        base && base.comparacao && porBase[base.comparacao] && base.comparacao < dataDaBase ? base.comparacao : '',
+      dataAnterior = escolhida || datas.filter(data => data <= limite).pop() || '';
+    const porMes = {};
+    const localDoMes = (data, escola) => {
+      const daData = (porMes[data] = porMes[data] || {});
+      return (daData[escola.id] = daData[escola.id] || {
+        id: escola.id,
+        nome: escola.nome,
+        carteira: escola.carteira_id || '',
+        grupos: []
+      });
+    };
+    const resumos = (base && base.meses) || [];
+    if (resumos.length)
+      resumos.forEach(linha => {
+        const escola = escolaDe(linha.escola_id);
+        if (escola)
+          localDoMes(linha.base_ref, escola).grupos.push({
+            perfil: linha.tipo,
+            ano: linha.ano_escolar || 0,
+            n: linha.n,
+            nv: linha.nv,
+            sr: linha.sr,
+            en: linha.en
+          });
+      });
+    else
+      datas.forEach(data =>
+        Object.values(porBase[data]).forEach(local =>
+          local.contas.forEach(conta =>
+            localDoMes(data, escolaDe(local.id)).grupos.push({
+              perfil: conta.perfil,
+              ano: conta.ano,
+              n: 1,
+              nv: conta.estagio === 'nv' ? 1 : 0,
+              sr: conta.estagio === 'sr' ? 1 : 0,
+              en: conta.estagio === 'en' ? 1 : 0
+            })
+          )
+        )
+      );
+    const ultimaDoMes = {};
+    Object.keys(porMes)
+      .sort()
+      .forEach(data => (ultimaDoMes[data.slice(0, 7)] = data));
     const preparo = {
       acessos,
-      porBase,
+      base,
+      porMes,
       dataDaBase,
       dataAnterior,
       porEscola: porBase[dataDaBase] || {},
@@ -864,7 +927,11 @@ class Component extends DCLogic {
         descarte: {},
         detalhe: {}
       };
-    const { porEscola, porBase, dataDaBase, dataAnterior, anterior, meses } = this.preparar(acessos, jornada.escolaDe);
+    const { porEscola, porMes, dataDaBase, dataAnterior, anterior, meses } = this.preparar(
+      acessos,
+      jornada.escolaDe,
+      contexto.baseJornada
+    );
     const statusPorEscola = {},
       historicoPorEscola = {};
     (jornada.statusEscolas || []).forEach(registro => {
@@ -892,6 +959,12 @@ class Component extends DCLogic {
         : memoria.perfil === 'todos'
           ? local.contas
           : local.contas.filter(c => c.perfil === memoria.perfil);
+    const gruposDe = local =>
+      memoria.filtroAno !== 'todos'
+        ? local.grupos.filter(g => g.perfil === 'A' && String(g.ano) === memoria.filtroAno)
+        : memoria.perfil === 'todos'
+          ? local.grupos
+          : local.grupos.filter(g => g.perfil === memoria.perfil);
     const diasDesde = data => (data ? Math.max(0, Math.round((hoje - dataDe(data)) / 86400000)) : null);
     const aulasDoCiclo = jornada.aulas(),
       execucaoDe = id => jornada.execucao(aulasDoCiclo.filter(aula => aula.esc === id));
@@ -987,6 +1060,10 @@ class Component extends DCLogic {
               : porPrioridade(a, b)
       );
     const geral = contar([].concat(...unidades.map(u => contasDe(u.local))));
+    const geralAnterior = anterior
+      ? contar([].concat(...unidades.filter(u => anterior[u.local.id]).map(u => contasDe(anterior[u.local.id]))))
+      : null;
+    const retratos = ((contexto.baseJornada || {}).retratos || []).filter(r => r.base_ref < dataDaBase).slice(0, 90);
     const busca = normTxt(memoria.busca);
     const textoDoStatus = registro => (registro ? STATUS_DA_ESCOLA[registro.status] || registro.status : 'Sem ação');
     const linha = u => ({
@@ -1594,7 +1671,7 @@ class Component extends DCLogic {
           return {
             nome: c.nome,
             perfil: PERFIS[c.perfil],
-            ano: c.ano ? c.ano + 'º ano' : '—',
+            ano: c.turma || (c.ano ? c.ano + 'º ano' : '—'),
             responsavel: c.responsavel || (c.perfil === 'A' ? 'não informado' : '—'),
             responsavelCor: c.responsavel ? 'var(--texto-cinza-750)' : 'var(--texto-cinza-600)',
             ultimoAcesso: c.diasSemAcesso < 0 ? '—' : Base.dmy(ultimoAcesso),
@@ -1730,7 +1807,7 @@ class Component extends DCLogic {
           nome: c.nome,
           perfil: PERFIS[c.perfil],
           escola: c.escola,
-          ano: c.ano ? c.ano + 'º ano' : '—',
+          ano: c.turma || (c.ano ? c.ano + 'º ano' : '—'),
           ultimoAcesso: ultimoAcessoDe(c),
           diasSemAcesso: c.diasSemAcesso < 0 ? '—' : String(c.diasSemAcesso),
           diasDeUso: String(c.diasDeUso),
@@ -1753,6 +1830,9 @@ class Component extends DCLogic {
             'Perfil',
             'Escola',
             'Ano',
+            'Turma',
+            'Responsável pela turma',
+            'Primeiro acesso',
             'Último acesso',
             'Dias sem acesso',
             'Dias de uso',
@@ -1765,6 +1845,9 @@ class Component extends DCLogic {
             PERFIS[c.perfil],
             c.escola,
             c.ano ? c.ano + 'º ano' : '',
+            c.turma,
+            c.responsavel,
+            c.primeiroAcesso ? dmyIso(c.primeiroAcesso) : '',
             ultimoAcessoDe(c),
             c.diasSemAcesso < 0 ? '' : c.diasSemAcesso,
             c.diasDeUso,
@@ -1869,8 +1952,8 @@ class Component extends DCLogic {
     const faixasDaLinha = u => {
       if (visao === 'mes')
         return mesesDaLista.map(data => {
-          const daBase = porBase[data][u.local.id],
-            doMes = daBase ? contar(contasDe(daBase)) : null;
+          const daBase = porMes[data][u.local.id],
+            doMes = daBase ? contarGrupos(gruposDe(daBase)) : null;
           return {
             largura: Math.floor(100 / mesesDaLista.length) + '%',
             altura: doMes && doMes.n ? Math.max(8, doMes.uso) + '%' : '8%',
@@ -1966,11 +2049,11 @@ class Component extends DCLogic {
     };
     const totaisDoMes = meses.map(data => ({
       data,
-      total: contar(
+      total: contarGrupos(
         [].concat(
-          ...Object.values(porBase[data])
+          ...Object.values(porMes[data])
             .filter(local => noFiltro(local) && (memoria.carteira === 'todos' || local.carteira === memoria.carteira))
-            .map(contasDe)
+            .map(gruposDe)
         )
       )
     }));
@@ -2025,6 +2108,35 @@ class Component extends DCLogic {
       semBase: false,
       pronto: true,
       dataDaBase: dataDaBase ? dmyIso(dataDaBase) : '—',
+      temComparacao: retratos.length > 0 && typeof contexto.trocarComparacao === 'function',
+      comparacao: dataAnterior,
+      opcoesDeComparacao: (dataAnterior ? [] : [{ valor: '', rotulo: 'Sem comparação' }]).concat(
+        retratos.map(r => ({ valor: r.base_ref, rotulo: 'Comparar com ' + dmyIso(r.base_ref) }))
+      ),
+      escolherComparacao: e => contexto.trocarComparacao(e.target.value),
+      temResumoDaComparacao: !!(geralAnterior && geralAnterior.n),
+      resumoDaComparacao:
+        geralAnterior && geralAnterior.n
+          ? 'Em relação a ' +
+            dmyIso(dataAnterior) +
+            ': contas ' +
+            numero(geral.n) +
+            ' (' +
+            variacao(geral.n - geralAnterior.n, '') +
+            ') · utilização ' +
+            geral.uso +
+            '% (' +
+            variacao(geral.uso - geralAnterior.uso, ' p.p.') +
+            ') · engajados ' +
+            geral.engajados +
+            '% (' +
+            variacao(geral.engajados - geralAnterior.engajados, ' p.p.') +
+            ') · nunca acessaram ' +
+            numero(geral.nv) +
+            ' (' +
+            variacao(geral.nv - geralAnterior.nv, '') +
+            ')'
+          : '',
       textos,
       porCarteira,
       carteira: memoria.carteira,

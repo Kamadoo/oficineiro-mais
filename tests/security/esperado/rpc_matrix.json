@@ -231,6 +231,14 @@
   "gerente": "aceito",
   "oficineiro": "recusado"
  },
+ "carregar_base_acessos(p_base_ref date, p_unidades jsonb, p_pessoas jsonb, p_substituir boolean, p_resumo jsonb)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
  "conferir_aula(p_id bigint, p_confirmar boolean, p_motivo text)": {
   "administrador": "recusado",
   "analista": "recusado",
@@ -454,6 +462,14 @@
   "direcao": "recusado",
   "gerente": "recusado",
   "oficineiro": "recusado"
+ },
+ "jornada_resumo_mensal()": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
  },
  "marcar_presenca(p_tipo text, p_lat double precision, p_lng double precision, p_precisao integer, p_quando timestamp with time zone)": {
   "administrador": "recusado",

@@ -963,11 +963,49 @@ window.FSM_AUTH =
           corpo: { p_id: Number(id) }
         });
       },
-      jornadaPessoas() {
+      jornadaPessoas(datas) {
+        const validas = (Array.isArray(datas) ? datas : []).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(String(d)));
         return chamarTudo(
-          '/rest/v1/jornada_pessoas?select=escola_id,nome,tipo,ano_escolar,dias_sem_acesso,dias_acesso,responsavel_turma,base_ref&order=escola_id,id',
+          '/rest/v1/jornada_pessoas?select=escola_id,nome,tipo,ano_escolar,dias_sem_acesso,dias_acesso,responsavel_turma,base_ref,carteira_id,turma,primeiro_acesso,ultimo_acesso' +
+            (validas.length ? '&base_ref=in.(' + validas.join(',') + ')' : '') +
+            '&order=base_ref,escola_id,id',
           { token: token() }
         );
+      },
+      jornadaRetratos() {
+        return chamarTudo(
+          '/rest/v1/jornada_retratos?select=base_ref,pessoas,origem,autor_nome,carregado_em&order=base_ref.desc',
+          { token: token() }
+        );
+      },
+      jornadaResumoMensal() {
+        return chamarTudo('/rest/v1/rpc/jornada_resumo_mensal', { metodo: 'POST', token: token(), corpo: {} });
+      },
+      async jornadaBase(comparacao) {
+        const retratos = (await this.jornadaRetratos()) || [];
+        if (!retratos.length) return { acessos: [], retratos: [], comparacao: '', meses: [] };
+        const atual = retratos[0].base_ref;
+        const limite = new Date(Date.parse(atual) - 7 * 86400000).toISOString().slice(0, 10);
+        const escolhida = retratos.some(r => r.base_ref === comparacao && r.base_ref < atual) ? comparacao : '';
+        const anterior = escolhida || (retratos.find(r => r.base_ref <= limite) || {}).base_ref || '';
+        const [acessos, meses] = await Promise.all([
+          this.jornadaPessoas(anterior ? [atual, anterior] : [atual]),
+          this.jornadaResumoMensal().catch(() => [])
+        ]);
+        return { acessos: acessos || [], retratos, comparacao: anterior, meses: meses || [] };
+      },
+      carregarBaseAcessos(baseRef, unidades, pessoas, substituir, resumo) {
+        return chamar('/rest/v1/rpc/carregar_base_acessos', {
+          metodo: 'POST',
+          token: token(),
+          corpo: {
+            p_base_ref: String(baseRef || ''),
+            p_unidades: Array.isArray(unidades) ? unidades : [],
+            p_pessoas: Array.isArray(pessoas) ? pessoas : [],
+            p_substituir: !!substituir,
+            p_resumo: resumo || null
+          }
+        });
       },
       jornadaStatusEscolas() {
         return chamarTudo(

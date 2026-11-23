@@ -21,7 +21,8 @@ function carregar(arquivos, extras = {}) {
     Blob,
     TextEncoder,
     TextDecoder,
-    DecompressionStream
+    DecompressionStream,
+    crypto: globalThis.crypto
   });
   for (const arquivo of arquivos) {
     vm.runInContext(fs.readFileSync(path.join(LIB, arquivo), 'utf8'), contexto, { filename: arquivo });

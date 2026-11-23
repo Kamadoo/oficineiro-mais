@@ -1,5 +1,14 @@
 # Histórico de mudanças
 
+## Próxima versão
+
+### Base de acessos diária
+
+- Nova aba do Administrador recebe as planilhas do B.I. como vêm (usuários criados, implementados, dias de acesso e sem acesso por 30, 60, 90 e 120 dias), lê e confere tudo no navegador e mostra a prévia com contagens, unidades novas e conferência entre as planilhas antes de gravar.
+- Unidades administrativas sem cadastro entram como unidades da carteira da planilha (AT1), para que ninguém fique de fora; unidades já cadastradas sem carteira recebem a da planilha.
+- O banco guarda só nome, perfil, unidade, carteira, turma, responsável, datas e dias de acesso; o login fica apenas como resumo com chave, e e-mail, matrícula e demais colunas não saem do navegador.
+- Um retrato por dia: a Jornada do Usuário mostra o mais recente, permite escolher o dia de comparação e monta a evolução mensal pelo último retrato de cada mês; a gravação é só do Administrador com verificação em duas etapas e fica na auditoria.
+
 ## 2.0.0 · 23/11/2026
 
 Versão oficial de lançamento: o projeto do Supabase passa a ser o de produção.
