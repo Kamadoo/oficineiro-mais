@@ -173,8 +173,10 @@ window.FSM_BASE_ACESSOS = (() => {
     ordem.forEach(tipo =>
       porTipo(tipo).forEach(l => {
         let foraDaBase = 0;
+        const vistos = new Set();
         l.linhas.forEach(linha => {
           const id = limpo(linha[l.mapa.login]).toLowerCase();
+          vistos.add(id);
           if (tipo !== 'criados' && !pessoas.has(id)) foraDaBase++;
           const p = pessoaDe(linha, l.mapa);
           if (tipo === 'dias') {
@@ -183,7 +185,14 @@ window.FSM_BASE_ACESSOS = (() => {
           }
           if (tipo === 'semAcesso') (p.faixas = p.faixas || []).push(l.mapa.faixa);
         });
-        conferencias.push({ arquivo: l.arquivo, tipo, faixa: l.mapa.faixa || 0, linhas: l.total, foraDaBase });
+        conferencias.push({
+          arquivo: l.arquivo,
+          tipo,
+          faixa: l.mapa.faixa || 0,
+          linhas: l.total,
+          pessoas: vistos.size,
+          foraDaBase
+        });
       })
     );
 

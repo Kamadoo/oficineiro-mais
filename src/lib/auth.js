@@ -963,14 +963,19 @@ window.FSM_AUTH =
           corpo: { p_id: Number(id) }
         });
       },
-      jornadaPessoas(datas) {
+      async jornadaPessoas(datas) {
         const validas = (Array.isArray(datas) ? datas : []).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(String(d)));
-        return chamarTudo(
-          '/rest/v1/jornada_pessoas?select=escola_id,nome,tipo,ano_escolar,dias_sem_acesso,dias_acesso,responsavel_turma,base_ref,carteira_id,turma,primeiro_acesso,ultimo_acesso' +
-            (validas.length ? '&base_ref=in.(' + validas.join(',') + ')' : '') +
-            '&order=base_ref,escola_id,id',
-          { token: token() }
+        const caminho =
+          '/rest/v1/jornada_pessoas?select=escola_id,nome,tipo,ano_escolar,dias_sem_acesso,dias_acesso,responsavel_turma,base_ref,carteira_id,turma,primeiro_acesso,ultimo_acesso';
+        if (!validas.length) return chamarTudo(caminho + '&order=base_ref,escola_id,id', { token: token() });
+        const partes = await Promise.all(
+          validas
+            .slice()
+            .sort()
+            .map(d => chamarTudo(caminho + '&base_ref=eq.' + d + '&order=escola_id,id', { token: token() }))
         );
+        const falha = partes.find(p => !Array.isArray(p));
+        return falha !== undefined ? falha : [].concat(...partes);
       },
       jornadaRetratos() {
         return chamarTudo(
