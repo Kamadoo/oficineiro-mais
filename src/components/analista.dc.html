@@ -979,13 +979,17 @@ class Component extends DCLogic {
       await A.registrarStatusEscola(
         pedido.escola,
         'acao_planejada',
-        'Visita agendada para ' + dmIso(pedido.data) + ' às ' + pedido.hora,
+        'Visita agendada para ' + dmIso(pedido.data) + (pedido.hora ? ' às ' + pedido.hora : ''),
         null,
         pedido.data
       ).catch(() => null);
       await this.carregarStatusJornada();
       this.avisar(
-        'Visita agendada · ' + DIAS[dataDe(pedido.data).getDay()] + ' ' + dmIso(pedido.data) + ' · ' + pedido.hora
+        'Visita agendada · ' +
+          DIAS[dataDe(pedido.data).getDay()] +
+          ' ' +
+          dmIso(pedido.data) +
+          (pedido.hora ? ' · ' + pedido.hora : '')
       );
       return true;
     } catch (x) {

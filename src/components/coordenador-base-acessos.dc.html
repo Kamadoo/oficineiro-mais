@@ -222,7 +222,9 @@ class Component extends DCLogic {
           nota: 'A carteira do site é mantida; a da planilha fica registrada em cada pessoa.',
           itens: consolidado.divergentes.map(u => u.nome + ' · site ' + u.site + ' · planilha ' + u.planilha)
         });
-      const conferencias = consolidado.conferencias.filter(x => x.tipo === 'semAcesso' || x.foraDaBase);
+      const conferencias = consolidado.conferencias.filter(
+        x => x.tipo === 'semAcesso' || x.foraDaBase || x.pessoas < x.linhas
+      );
       if (conferencias.length)
         listas.push({
           titulo: 'Conferência entre as planilhas',
@@ -232,6 +234,7 @@ class Component extends DCLogic {
               (x.tipo === 'semAcesso' ? 'Sem acesso ' + x.faixa : NOMES[x.tipo]) +
               ': ' +
               plural(x.linhas, 'linha', 'linhas') +
+              (x.pessoas < x.linhas ? ' · ' + plural(x.pessoas, 'pessoa distinta', 'pessoas distintas') : '') +
               (x.tipo === 'semAcesso' ? ' · ' + numero(x.conferem) + ' conferem com a data da base' : '') +
               (x.foraDaBase ? ' · ' + numero(x.foraDaBase) + ' fora dos usuários criados' : '')
           )

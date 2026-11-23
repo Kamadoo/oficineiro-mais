@@ -20,7 +20,7 @@
   class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><sc-for list="{{ opcoesDeCarteira }}" as="opcao"
   hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
     <select style="background:var(--fundo-branco)" aria-label="Perfil" onChange="{{ escolherPerfil }}" value="{{ perfil }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todos">Todos os perfis</option><option value="A">Alunos</option><option value="P">Professores</option><option value="S">Servidores</option></select>
-    <select style="background:var(--fundo-branco)" aria-label="Lotação" onChange="{{ escolherLotacao }}" value="{{ lotacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="escolas">Escolas e CEIs</option><option value="todas">Todas as lotações</option></select>
+    <select style="background:var(--fundo-branco)" aria-label="Lotação" onChange="{{ escolherLotacao }}" value="{{ lotacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as lotações</option><option value="escolas">Escolas e CEIs</option></select>
     <select style="background:var(--fundo-branco)" aria-label="Escola ou unidade" onChange="{{ escolherFiltroEscola }}" value="{{ filtroEscola }}" class="h-36 max-w-320 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as escolas e unidades</option><sc-for list="{{ opcoesDoFiltroEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
     <select style="background:var(--fundo-branco)" aria-label="Turma" onChange="{{ escolherFiltroAno }}" value="{{ filtroAno }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todos">Todas as turmas</option><sc-for list="{{ opcoesDoFiltroAno }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
     <sc-if value="{{ temFiltro }}" hint-placeholder-val="{{ false }}"><button onClick="{{ limparFiltros }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario">Limpar filtros</button></sc-if>
@@ -103,7 +103,7 @@
         </div>
       </section>
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Sugestões de visita</h3><span class="fs-12 cor-cinza-600">Escolas de maior prioridade sem visita nos próximos 7 dias, com horário livre na agenda (2 h, dias úteis, próximos 10 dias).</span></div>
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Sugestões de visita</h3><span class="fs-12 cor-cinza-600">Escolas de maior prioridade sem visita nos próximos 7 dias, em dia útil livre na agenda nos próximos 10 dias (a visita ocupa o dia).</span></div>
         <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
           <sc-for list="{{ sugestoesDeVisita }}" as="sugestao" hint-placeholder-count="3">
             <div class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-6">
@@ -114,7 +114,7 @@
               <sc-if value="{{ sugestao.podeAgir }}" hint-placeholder-val="{{ false }}">
                 <div class="d-flex quebra-wrap gap-6">
                   <button style="background:var(--destaque-ciano-660)" onClick="{{ sugestao.aceitar }}" disabled="{{ sugestao.ocupado }}" class="h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660">Aceitar e agendar</button>
-                  <button onClick="{{ sugestao.outroHorario }}" aria-haspopup="dialog" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap botao-secundario">Agendar em outro horário</button>
+                  <button onClick="{{ sugestao.outroHorario }}" aria-haspopup="dialog" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap botao-secundario">Agendar em outro dia</button>
                   <button onClick="{{ sugestao.alternarDescarte }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap botao-secundario">{{ sugestao.textoDescartar }}</button>
                 </div>
               </sc-if>
@@ -601,7 +601,6 @@ const VISITAS_SUGERIDAS = 3;
 const DIAS_DE_DESCARTE = 14;
 const DIAS_SEM_VISITA_PROXIMA = 7;
 const DIAS_PARA_SUGERIR = 10;
-const INICIOS_DE_VISITA = ['08:00', '08:30', '09:00', '09:30', '13:00', '13:30', '14:00', '14:30'];
 const MOTIVOS_DE_DESCARTE = {
   visita_recente: 'Visitei recentemente',
   acao_a_distancia: 'Vou agir à distância',
@@ -622,7 +621,7 @@ const REGRAS = [
   'Em uso, sem contagem de dias: acessou nos últimos 30 dias, mas o arquivo não trouxe os dias de acesso.',
   'Semáforo: Crítico com utilização abaixo de 40% ou risco (sem uso +30 dias + nunca acessou) a partir de 50%; Atenção com utilização abaixo de 60%, risco a partir de 30% ou menos de 60% dos anos com aula em 7 dias; unidades com menos de 10 usuários ficam como base pequena.',
   'Prioridade de visita (0 a 100) = 40 × (1 − utilização) + 25 × risco + 15 × (1 − engajados ÷ medidos) + 10 × dias desde a última visita registrada ÷ 30 (até 1; sem registro conta 1) + 10 × queda da utilização em 7 dias ÷ 10 pontos (até 1); metade para unidades com menos de 10 usuários.',
-  'Sugestões de visita: escolas de maior prioridade sem visita nos próximos 7 dias e sem status Concluída ou descarte há menos de 14 dias, com horário de 2 h em dia útil dos próximos 10 dias (08:00 às 11:30 ou 13:00 às 16:30), no máximo uma por dia e sem conflito com a agenda.'
+  'Sugestões de visita: escolas de maior prioridade sem visita nos próximos 7 dias e sem status Concluída ou descarte há menos de 14 dias, em dia útil dos próximos 10 dias sem outra visita agendada (a visita ocupa o dia inteiro), no máximo uma por dia.'
 ];
 const TEXTOS = {
   analista: {
@@ -644,7 +643,7 @@ const PADRAO = {
   carteira: 'todos',
   carteiraVista: '',
   perfil: 'todos',
-  lotacao: 'escolas',
+  lotacao: 'todas',
   ordem: 'prio',
   busca: '',
   escola: '',
@@ -759,13 +758,6 @@ const motivosDe = (total, turmas, comAula, extras) => {
     lista.push('última visita registrada há ' + extras.diasSemVisita + ' dias');
   return lista;
 };
-const minutosDe = hora => (hora ? Number(String(hora).slice(0, 2)) * 60 + Number(String(hora).slice(3, 5)) : null);
-const horaDe = minutos =>
-  String(Math.floor(minutos / 60)).padStart(2, '0') + ':' + String(minutos % 60).padStart(2, '0');
-const conflita = (visita, data, hora) =>
-  visita.status === 'agendada' &&
-  visita.data === data &&
-  (minutosDe(visita.hora) == null || Math.abs(minutosDe(visita.hora) - minutosDe(hora)) < 120);
 const rotuloDoMes = data => MESES[Number(data.slice(5, 7)) - 1] + '/' + data.slice(2, 4);
 const textoDoHistorico = (registro, textoDoStatus) =>
   dataDoRegistro(registro.criado_em) +
@@ -784,7 +776,8 @@ const pilula = codigo => ({
   semaforoCor: SEMAFOROS[codigo][1],
   semaforoFundo: SEMAFOROS[codigo][2]
 });
-const ehEscola = nome => /E\. ?M\.|CEI|Cei|Creche|Escola|EMEI|Centro de Educação/i.test(nome);
+const ehEscola = nome =>
+  /\bE\.? ?M\.?(?=\s|$)|\bCEI\b|\bCei\b|\bEMEI\b/.test(nome) || /creche|escola|centro de educa/i.test(nome);
 const alunosPorAno = contas => {
   const anos = {};
   contas.filter(c => c.perfil === 'A' && c.ano).forEach(c => (anos[c.ano] = anos[c.ano] || []).push(c));
@@ -1232,9 +1225,8 @@ class Component extends DCLogic {
       for (let k = 1; k <= DIAS_PARA_SUGERIR && horarios.length < candidatas.length; k++) {
         const dia = Base.add(hoje, k);
         if (!Base.letivo(dia)) continue;
-        const data = Base.iso(dia),
-          hora = INICIOS_DE_VISITA.find(inicio => !agenda.some(v => conflita(v, data, inicio)));
-        if (hora) horarios.push({ data, hora });
+        const data = Base.iso(dia);
+        if (!agenda.some(v => v.status === 'agendada' && v.data === data)) horarios.push({ data });
       }
       const descarte = memoria.descarte;
       sugestoesDeVisita = candidatas.map((u, i) => {
@@ -1248,15 +1240,8 @@ class Component extends DCLogic {
           prioridade: String(u.pontos).replace('.', ','),
           motivos: u.motivos,
           horario: horario
-            ? 'Sugerido: ' +
-              DIAS[dataDe(horario.data).getDay()] +
-              ' ' +
-              dmIso(horario.data) +
-              ' · ' +
-              horario.hora +
-              ' às ' +
-              horaDe(minutosDe(horario.hora) + 120)
-            : 'Sem horário livre nos próximos ' + DIAS_PARA_SUGERIR + ' dias',
+            ? 'Sugerido: ' + DIAS[dataDe(horario.data).getDay()] + ' ' + dmIso(horario.data)
+            : 'Sem dia livre nos próximos ' + DIAS_PARA_SUGERIR + ' dias',
           podeAgir: podeAgendar,
           ocupado: !horario || !!memoria.agendando || typeof jornada.agendarSugestao !== 'function',
           descartando,
@@ -1269,7 +1254,7 @@ class Component extends DCLogic {
               jornada.agendarSugestao({
                 ...pedido,
                 data: horario.data,
-                hora: horario.hora,
+                hora: null,
                 orientacao: 'Sugestão da Jornada do Usuário: ' + u.motivos.join('; ') + '.'
               })
             ).then(() => this.lembrar({ agendando: '' }));
@@ -1277,7 +1262,7 @@ class Component extends DCLogic {
           outroHorario: () =>
             jornada.agendarVisita({
               ...pedido,
-              ...(horario ? { data: horario.data, hora: horario.hora } : {}),
+              ...(horario ? { data: horario.data } : {}),
               conferirConflito: true
             }),
           alternarDescarte: () =>
@@ -2097,7 +2082,7 @@ class Component extends DCLogic {
     const filtrosPadrao = {
       carteira: 'todos',
       perfil: 'todos',
-      lotacao: 'escolas',
+      lotacao: 'todas',
       filtroEscola: 'todas',
       filtroAno: 'todos'
     };
