@@ -93,8 +93,7 @@ window.FSM_AUTH =
         return 'Código do autenticador inválido ou vencido.';
       if (c === 'same_password' || /different from the old/i.test(m))
         return 'A senha nova precisa ser diferente da atual.';
-      if (c === 'weak_password' || /weak|pwned|leaked/i.test(m))
-        return 'Senha fraca ou já vazada na internet. Escolha outra.';
+      if (c === 'weak_password' || /weak|pwned|leaked/i.test(m)) return 'Senha fraca. Escolha outra.';
       if (c === 'reauthentication_needed' || /reauthenticat/i.test(m))
         return 'Por segurança, entre de novo antes de trocar a senha.';
       if (corpo && corpo.code === '22023' && m) return m.charAt(0).toUpperCase() + m.slice(1) + '.';
