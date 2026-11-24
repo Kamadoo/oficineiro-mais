@@ -1263,6 +1263,16 @@ class Component extends DCLogic {
         escolaDe,
         aulas: () => aulasDoCicloAtual,
         execucao: aulas => resumir(aulas).execucao,
+        aulasDoMes: data => {
+          const ano = Number(String(data).slice(0, 4)),
+            grade =
+              ano === anoAtual
+                ? s.grade
+                : s.gradeAnterior.length && Number(s.gradeAnterior[0].ano_letivo) === ano
+                  ? s.gradeAnterior
+                  : [];
+          return Base.aulasDaJornada(grade, s.aulasRede, data, [], hoje, agora).filter(a => idsDaCarteira.has(a.esc));
+        },
         oficineirosDaEscola: id => oficineiros.filter(o => o.escola_id === id),
         visitaDaEscola: id => {
           const proxima = proximaVisita(id);

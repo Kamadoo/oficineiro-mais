@@ -135,7 +135,7 @@
         <div class="rolagem-x-auto m-0-n4">
           <div class="min-w-900 d-flex eixo-column p-0-4">
             <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,2fr) 100px 80px 80px 90px 80px 150px 130px">
-              <span>Escola</span><span>Semáforo</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Turmas com aula</span><span class="texto-right">Prioridade</span><span>Status</span><span>Próxima visita</span>
+              <span>Escola</span><span>Semáforo</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Aulas realizadas</span><span class="texto-right">Prioridade</span><span>Status</span><span>Próxima visita</span>
             </div>
             <sc-for list="{{ escolasDaCarteira }}" as="linha" hint-placeholder-count="6">
               <div class="d-grid gap-4 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,2fr) 100px 80px 80px 90px 80px 150px 130px">
@@ -143,7 +143,7 @@
                 <span><span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.semaforoCor }};background:{{ linha.semaforoFundo }}">{{ linha.semaforo }}</span></span>
                 <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.utilizacao }}</span>
                 <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
-                <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ linha.turmasComAula }}</span>
+                <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.aulasCor }}" title="{{ linha.aulasTitulo }}">{{ linha.aulasRealizadas }}</span>
                 <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.pontos }}</span>
                 <span class="fs-12 cor-cinza-750">{{ linha.status }}</span>
                 <span class="fs-12" style="color:{{ linha.agendaCor }}">{{ linha.agenda }}</span>
@@ -323,28 +323,30 @@
         <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15 flex-1-1-240">Por ano, em toda a rede</h3><span class="fs-12 cor-cinza-600">Escolha uma escola no seletor acima para ver turma por turma.</span></div>
         <div class="rolagem-x-auto m-0-n4">
           <div class="min-w-900 d-flex eixo-column p-0-4">
-            <div class="d-grid gap-8 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(150px,1fr) minmax(220px,2.2fr) 84px 84px 90px 32px">
-              <span>Ano</span><span>Estágio da jornada</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Turmas com aula</span><span></span>
+            <div class="d-grid gap-8 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(150px,1fr) minmax(220px,2.2fr) 84px 84px 100px 90px 32px">
+              <span>Ano</span><span>Estágio da jornada</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Aulas realizadas</span><span class="texto-right">Presença na máquina</span><span></span>
             </div>
             <sc-for list="{{ rede.anos }}" as="linha" hint-placeholder-count="5">
-              <div class="d-grid gap-8 alinha-center fs-13 p-10-0 borda-t-cinza-75" style="grid-template-columns:minmax(150px,1fr) minmax(220px,2.2fr) 84px 84px 90px 32px">
+              <div class="d-grid gap-8 alinha-center fs-13 p-10-0 borda-t-cinza-75" style="grid-template-columns:minmax(150px,1fr) minmax(220px,2.2fr) 84px 84px 100px 90px 32px">
                 <span class="d-flex eixo-column gap-2"><button onClick="{{ linha.alternar }}" aria-expanded="{{ linha.expandido }}" class="largura-fundo cursor-pointer fs-14 cor-ciano-850" style="all:unset;font-weight:700;color:var(--texto-ciano-850)">{{ linha.ano }}</button><span class="fs-12 cor-cinza-600">{{ linha.numeros }}</span></span>
                 <span class="d-flex h-14 raio-4 rolagem-hidden fundo-cinza-90"><sc-for list="{{ linha.faixas }}" as="faixa" hint-placeholder-count="6"><span title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></span></sc-for></span>
                 <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.utilizacao }}</span>
                 <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
-                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif" title="{{ linha.comAulaTitulo }}">{{ linha.comAula }}</span>
+                <span class="num-tabular-nums texto-right fs-12 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.aulasCor }}" title="{{ linha.aulasTitulo }}">{{ linha.aulas }}</span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.presencaCor }}">{{ linha.presenca }}</span>
                 <button onClick="{{ linha.alternar }}" aria-expanded="{{ linha.expandido }}" aria-label="{{ linha.rotuloDoBotao }}" class="w-26 h-26 borda-cinza-160 fundo-branco raio-6 cor-ciano-850 fs-15 p-0 largura-fundo botao-secundario">{{ linha.seta }}</button>
               </div>
               <sc-if value="{{ linha.aberto }}" hint-placeholder-val="{{ false }}">
                 <div class="d-flex eixo-column raio-10 fundo-cinza-20 p-10 m-0-0-8">
-                  <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,2fr) 70px 84px 84px 110px"><span>Escola</span><span class="texto-right">Alunos</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-center">Aula em 7 dias</span></div>
+                  <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,2fr) 70px 84px 84px 100px 90px"><span>Escola</span><span class="texto-right">Alunos</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Aulas realizadas</span><span class="texto-right">Presença na máquina</span></div>
                   <sc-for list="{{ linha.escolas }}" as="item" hint-placeholder-count="3">
-                    <div class="d-grid gap-8 alinha-center fs-13 p-6-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,2fr) 70px 84px 84px 110px">
+                    <div class="d-grid gap-8 alinha-center fs-13 p-6-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,2fr) 70px 84px 84px 100px 90px">
                       <button onClick="{{ item.abrir }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset;font-weight:600;color:var(--texto-ciano-850)" title="{{ item.nome }}">{{ item.nome }}</button>
                       <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ item.alunos }}</span>
                       <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ item.utilizacao }}</span>
                       <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ item.engajadosCor }}">{{ item.engajados }}</span>
-                      <span class="fs-12 texto-center fw-600" style="color:{{ item.aulaCor }}">{{ item.aula }}</span>
+                      <span class="num-tabular-nums fs-12 texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ item.aulasCor }}">{{ item.aulas }}</span>
+                      <span class="num-tabular-nums fs-12 texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ item.presencaCor }}">{{ item.presenca }}</span>
                     </div>
                   </sc-for>
                 </div>
@@ -354,31 +356,32 @@
           </div>
         </div>
         <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ legendaDosEstagios }}" as="item" hint-placeholder-count="6"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
-        <span class="fs-12 cor-cinza-600">Turma = ano escolar em cada escola (as turmas do mesmo ano, como 9º A e 9º B, somam-se). Aula em 7 dias: ao menos 25% dos alunos da turma (e no mínimo 2) acessaram na última semana.</span>
+        <span class="fs-12 cor-cinza-600">Só alunos. As turmas do mesmo ano (como 9º A e 9º B) somam-se na linha do ano. Aulas realizadas: registradas pelos oficineiros, de previstas na agenda até a data da leitura (vermelho abaixo de 60%, verde a partir de 80%; "sem agenda" quando a turma não tem aula lançada no mês). Presença na máquina: acessos dos alunos no mês, no máximo um por aula realizada, ÷ (alunos × aulas realizadas) (vermelho abaixo de 50%, verde a partir de 75%).</span>
       </section>
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
         <div class="d-flex quebra-wrap alinha-center gap-8-14">
-          <div class="flex-1-1-300 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Mapa de calor por escola</h3><span class="fs-12 cor-cinza-600">% das contas em cada faixa · cor mais forte = maior concentração. Clique na escola para ver as turmas.</span></div>
+          <div class="flex-1-1-300 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Mapa de calor por escola</h3><span class="fs-12 cor-cinza-600">Só alunos · % em cada faixa de temperatura · cor mais forte = maior concentração. Clique na escola para ver as turmas.</span></div>
           <input onInput="{{ buscarEscola }}" aria-label="Buscar escola" placeholder="Buscar escola" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
           <select style="background:var(--fundo-branco)" aria-label="Ordenar" onChange="{{ escolherOrdem }}" value="{{ ordem }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="prio">Ordenar por prioridade</option><option value="contas">Ordenar por nº de contas</option><option value="eng">Ordenar por engajados</option><option value="uso">Ordenar por utilização</option></select>
         </div>
         <div class="rolagem-x-auto m-0-n4">
-          <div class="min-w-1180 d-flex eixo-column p-0-4">
-            <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 110px 130px 100px 90px">
+          <div class="d-flex eixo-column p-0-4" style="min-width:1360px">
+            <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 100px 90px 130px 100px 90px">
               <span>Escola</span><span>CS</span><span class="texto-right">Contas</span><span
                 class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span
                 class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span
                 class="texto-right">Engajados</span><span
-                class="texto-right">Atividades oficineiros</span><span>Agenda</span><span>Semáforo</span><span>Prioridade</span>
+                class="texto-right">Aulas realizadas</span><span class="texto-right">Presença na máquina</span><span>Agenda</span><span>Semáforo</span><span>Prioridade</span>
             </div>
             <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="10">
-              <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 110px 130px 100px 90px">
+              <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 100px 90px 130px 100px 90px">
                 <button onClick="{{ linha.abrir }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset" title="{{ linha.nome }}">{{ linha.nome }}</button>
                 <span class="fs-12 cor-cinza-600">{{ linha.carteira }}</span>
                 <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
                 <sc-for list="{{ linha.celulas }}" as="celula" hint-placeholder-count="5"><span title="{{ celula.titulo }}" class="num-tabular-nums fs-12 texto-center p-8-0 raio-6" style="font-family:'Inter',system-ui,sans-serif;background:{{ celula.fundo }};color:{{ celula.cor }}">{{ celula.valor }}</span></sc-for>
                 <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
-                <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.execucaoCor }}">{{ linha.execucao }}</span>
+                <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.aulasCor }}" title="{{ linha.aulasTitulo }}">{{ linha.aulasRealizadas }}</span>
+                <span class="num-tabular-nums texto-right fs-12 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.presencaCor }}">{{ linha.presenca }}</span>
                 <span class="fs-12" style="color:{{ linha.agendaCor }}">{{ linha.agenda }}</span>
                 <span><span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.semaforoCor }};background:{{ linha.semaforoFundo }}">{{ linha.semaforo }}</span></span>
                 <div class="d-flex alinha-center gap-6"><span class="num-tabular-nums fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.pontos }}</span><sc-if
@@ -418,20 +421,20 @@
         <sc-if value="{{ escola.semHistorico }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-cinza-600">Nenhum status registrado para esta escola.</span></sc-if>
       </section>
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-        <div class="d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Alunos por ano × atividades dos oficineiros</h3><span class="fs-12 cor-cinza-600">Temperatura de acesso dos alunos de cada ano cruzada com as atividades que os oficineiros da escola deram para esse ano no mês. Aula em 7 dias: ao menos 25% dos alunos (e no mínimo 2) acessaram na última semana.</span></div>
+        <div class="d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Alunos por ano × aulas dos oficineiros</h3><span class="fs-12 cor-cinza-600">Temperatura de acesso dos alunos de cada ano cruzada com as aulas que os oficineiros lançaram na agenda para esse ano no mês da leitura. Aulas realizadas de previstas até a data da leitura; presença na máquina = acessos dos alunos, no máximo um por aula realizada, ÷ (alunos × aulas realizadas).</span></div>
         <div class="rolagem-x-auto m-0-n4">
           <div class="min-w-1000 d-flex eixo-column p-0-4">
-            <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:70px 60px repeat(5,68px) 80px 90px 110px minmax(200px,1fr)">
-              <span>Ano</span><span class="texto-right">Alunos</span><span class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span class="texto-right">Engajados</span><span class="texto-center">Aula em 7 dias</span><span class="texto-right">Atividades no mês</span><span class="pl-10">Leitura</span>
+            <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:90px 60px repeat(5,68px) 80px 100px 90px minmax(200px,1fr)">
+              <span>Ano</span><span class="texto-right">Alunos</span><span class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span class="texto-right">Engajados</span><span class="texto-right">Aulas realizadas</span><span class="texto-right">Presença na máquina</span><span class="pl-10">Leitura</span>
             </div>
             <sc-for list="{{ escola.anos }}" as="linha" hint-placeholder-count="4">
-              <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:70px 60px repeat(5,68px) 80px 90px 110px minmax(200px,1fr)">
+              <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:90px 60px repeat(5,68px) 80px 100px 90px minmax(200px,1fr)">
                 <span class="fw-600">{{ linha.ano }}</span>
                 <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
                 <sc-for list="{{ linha.celulas }}" as="celula" hint-placeholder-count="5"><span title="{{ celula.titulo }}" class="num-tabular-nums fs-12 texto-center p-8-0 raio-6" style="font-family:'Inter',system-ui,sans-serif;background:{{ celula.fundo }};color:{{ celula.cor }}">{{ celula.valor }}</span></sc-for>
                 <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
-                <span class="fs-12 texto-center fw-600" style="color:{{ linha.aulaCor }}">{{ linha.aula7d }}</span>
-                <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ linha.aulas }}</span>
+                <span class="num-tabular-nums texto-right fs-12 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.aulasCor }}" title="{{ linha.aulasTitulo }}">{{ linha.aulas }}</span>
+                <span class="num-tabular-nums texto-right fs-12 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.presencaCor }}">{{ linha.presenca }}</span>
                 <span class="fs-12 pl-10 lh-1p4" style="color:{{ linha.leituraCor }}">{{ linha.leitura }}</span>
               </div>
             </sc-for>
@@ -442,7 +445,7 @@
       </section>
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
         <div class="d-flex quebra-wrap alinha-center gap-8-12">
-          <div class="flex-1-1-240 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Contas da escola</h3><span class="fs-12 cor-cinza-600">{{ escola.contasTexto }}</span></div>
+          <div class="flex-1-1-240 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Alunos da escola</h3><span class="fs-12 cor-cinza-600">{{ escola.contasTexto }}</span></div>
           <input onInput="{{ buscarConta }}" aria-label="Buscar nome" placeholder="Buscar nome" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
           <select style="background:var(--fundo-branco)" aria-label="Temperatura" onChange="{{ escolherTemperatura }}" value="{{ temperatura }}"
             class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as temperaturas</option><option
@@ -573,15 +576,14 @@ const ESTAGIOS = {
   ev: ['Em evolução', 'var(--texto-ciano-660)'],
   bx: ['Baixo uso', 'var(--texto-ambar-660)'],
   sm: ['Em uso, sem contagem de dias', 'var(--texto-azul-640)'],
-  sr: ['Sem uso há +30 dias', 'var(--texto-cinza-600)'],
+  sr: ['Sem uso no mês', 'var(--texto-cinza-600)'],
   nv: ['Não implementado', 'var(--texto-indigo-360)']
 };
 const ORDEM_DOS_ESTAGIOS = ['en', 'ev', 'bx', 'sm', 'sr', 'nv'];
 const SEMAFOROS = {
   critico: ['Crítico', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)'],
   atencao: ['Atenção', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)'],
-  em_dia: ['Em dia', 'var(--texto-verde-700)', 'var(--fundo-verde-80)'],
-  sem_base: ['Base pequena', 'var(--texto-cinza-600)', 'var(--fundo-cinza-70)']
+  em_dia: ['Em dia', 'var(--texto-verde-700)', 'var(--fundo-verde-80)']
 };
 const STATUS_DA_ESCOLA = {
   sem_acao: 'Sem ação',
@@ -594,7 +596,9 @@ const STATUS_DA_ESCOLA = {
 const PERFIS = { A: 'Aluno', P: 'Professor', S: 'Servidor' };
 const PERFIS_NO_PLURAL = { A: 'Alunos', P: 'Professores', S: 'Servidores' };
 const SEMANAS_DO_PERIODO = 26;
-const META_SEMANAL = { A: 0.75, P: 3, S: 3 };
+const META_SEMANAL = { A: 1, P: 3, S: 3 };
+const SEMANAS_NO_MES = 4;
+const DIAS_DA_JANELA = 182;
 const MINIMO_PARA_SEMAFORO = 10;
 const DIAS_DE_STATUS_CONCLUIDO = 14;
 const VISITAS_SUGERIDAS = 3;
@@ -615,12 +619,13 @@ const VISOES_DA_LISTA = {
 };
 const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 const REGRAS = [
-  'Implementados: já acessaram ao menos uma vez. Utilização: acessaram nos últimos 30 dias.',
-  'Ritmo semanal = dias de acesso no período do arquivo (6 meses) ÷ 26 semanas.',
-  'Engajado: ritmo ≥ meta (alunos 0,75 dia por semana; professores e servidores 3). Em evolução: ritmo ≥ meta ÷ 3. Baixo uso: abaixo disso.',
-  'Em uso, sem contagem de dias: acessou nos últimos 30 dias, mas o arquivo não trouxe os dias de acesso.',
-  'Semáforo: Crítico com utilização abaixo de 40% ou risco (sem uso +30 dias + nunca acessou) a partir de 50%; Atenção com utilização abaixo de 60%, risco a partir de 30% ou menos de 60% dos anos com aula em 7 dias; unidades com menos de 10 usuários ficam como base pequena.',
-  'Prioridade de visita (0 a 100) = 40 × (1 − utilização) + 25 × risco + 15 × (1 − engajados ÷ medidos) + 10 × dias desde a última visita registrada ÷ 30 (até 1; sem registro conta 1) + 10 × queda da utilização em 7 dias ÷ 10 pontos (até 1); metade para unidades com menos de 10 usuários.',
+  'Período de análise: o mês da data da leitura, do dia 1º ao último dia (30 ou 31). O mês conta como 4 semanas; com o mês em andamento, as metas são proporcionais aos dias já passados, arredondadas para cima.',
+  'Implementados: já acessaram ao menos uma vez. Utilização: acessaram pelo menos 1 vez no mês. Sem uso no mês: implementados que não acessaram no mês.',
+  'Engajado: aluno com 1 acesso por semana (4 no mês fechado); professor e servidor com 3 dias por semana (12 no mês fechado). Em evolução: acessou no mês com pelo menos 1/3 da meta. Baixo uso: abaixo de 1/3 da meta. % de engajados sobre os implementados.',
+  'Acessos no mês: exatos quando o primeiro acesso foi no mês; senão, estimados pelo ritmo dos dias de acesso no período do arquivo (até 6 meses). Em uso, sem contagem: acessou no mês, mas o arquivo não trouxe os dias de acesso.',
+  'Aulas da turma: previstas = aulas lançadas na agenda dos oficineiros para a turma no mês; realizadas = registradas como realizadas. Execução = realizadas ÷ previstas até a data da leitura. Presença na máquina = acessos dos alunos no mês (no máximo um por aula realizada) ÷ (alunos × aulas realizadas).',
+  'Semáforo (todos os perfis, no mês): Crítico com utilização abaixo de 40% ou sem uso (sem uso no mês + nunca acessou) a partir de 50% dos criados; Atenção com utilização abaixo de 60%, sem uso a partir de 30% ou execução das aulas abaixo de 60%; os demais, Em dia.',
+  'Prioridade de visita (0 a 100) = 40 × (1 − utilização) + 25 × sem uso + 15 × (1 − engajados ÷ medidos) + 10 × queda da utilização em 7 dias ÷ 10 pontos (até 1) + 10 × dias desde a última visita registrada ÷ 30 (até 1; sem registro conta 1); metade para unidades com menos de 10 usuários.',
   'Sugestões de visita: escolas de maior prioridade sem visita nos próximos 7 dias e sem status Concluída ou descarte há menos de 14 dias, em dia útil dos próximos 10 dias sem outra visita agendada (a visita ocupa o dia inteiro), no máximo uma por dia.'
 ];
 const TEXTOS = {
@@ -628,13 +633,13 @@ const TEXTOS = {
     aba: 'Minha carteira',
     agendar: 'Agendar visita',
     barras: 'Temperatura por escola',
-    nota: 'Atividades oficineiros = execução das atividades no mês (realizadas ÷ previstas). Semáforo e prioridade de visita seguem as regras da Visão geral.'
+    nota: 'Aulas realizadas e presença na máquina: agenda dos oficineiros no mês da leitura. Semáforo e prioridade de visita seguem as regras da Visão geral (todos os perfis da escola).'
   },
   gerente: {
     aba: 'Carteiras',
     agendar: 'Vincular visita',
     barras: 'Temperatura por grupo CS',
-    nota: 'Atividades oficineiros = execução das atividades no ciclo de cada oficineiro (realizadas ÷ previstas). Semáforo e prioridade de visita seguem as regras da Visão geral.'
+    nota: 'Aulas realizadas e presença na máquina: agenda dos oficineiros no mês da leitura. Semáforo e prioridade de visita seguem as regras da Visão geral (todos os perfis da escola).'
   }
 };
 const FORM_ESCOLA_VAZIO = { status: '', acao: '', passo: '', prazo: '' };
@@ -671,27 +676,39 @@ const PADRAO = {
   agendando: ''
 };
 const faixaDe = dias => (dias < 0 ? 'N' : dias <= 5 ? 'Q' : dias <= 10 ? 'M' : dias <= 30 ? 'F' : 'S');
-const estagioDe = conta => {
-  const dias = conta.diasSemAcesso;
-  if (dias < 0) return 'nv';
-  if (dias > 30) return 'sr';
+const diaDoMes = data => Number(data.slice(8, 10));
+const diasNoMes = data => new Date(Number(data.slice(0, 4)), Number(data.slice(5, 7)), 0).getDate();
+const semanasDoMes = data => SEMANAS_NO_MES * Math.min(1, diaDoMes(data) / diasNoMes(data));
+const metaDoMes = (perfil, data) => Math.ceil((META_SEMANAL[perfil] || 3) * semanasDoMes(data) - 1e-9);
+const acessouNoMes = (conta, data) => conta.diasSemAcesso >= 0 && conta.diasSemAcesso < diaDoMes(data);
+const usosNoMes = (conta, data) => {
+  if (!acessouNoMes(conta, data) || !conta.diasDeUso) return 0;
+  const inicio = data.slice(0, 8) + '01';
+  if (conta.primeiroAcesso && conta.primeiroAcesso >= inicio) return conta.diasDeUso;
+  const janela = Base.iso(Base.add(dataDe(data), -DIAS_DA_JANELA)),
+    desde = conta.primeiroAcesso && conta.primeiroAcesso > janela ? conta.primeiroAcesso : janela,
+    semanas = Math.min(SEMANAS_DO_PERIODO, Math.max(1, (dataDe(data) - dataDe(desde)) / 604800000));
+  return Math.max(1, Math.min(conta.diasDeUso, Math.round(((conta.diasDeUso / semanas) * diaDoMes(data)) / 7)));
+};
+const estagioDe = (conta, data) => {
+  if (conta.diasSemAcesso < 0) return 'nv';
+  if (!acessouNoMes(conta, data)) return 'sr';
   if (!conta.diasDeUso) return 'sm';
-  const ritmo = conta.diasDeUso / SEMANAS_DO_PERIODO,
-    meta = META_SEMANAL[conta.perfil] || 3;
-  return ritmo >= meta ? 'en' : ritmo >= meta / 3 ? 'ev' : 'bx';
+  const meta = metaDoMes(conta.perfil, data);
+  return conta.usos >= meta ? 'en' : conta.usos * 3 >= meta ? 'ev' : 'bx';
 };
 const parcela = (parte, todo) => (todo ? Math.round((parte / todo) * 100) : 0);
 const contar = contas => {
-  const total = { Q: 0, M: 0, F: 0, S: 0, N: 0, en: 0, ev: 0, bx: 0, sm: 0, sr: 0, nv: 0, semana: 0, n: contas.length };
+  const total = { Q: 0, M: 0, F: 0, S: 0, N: 0, en: 0, ev: 0, bx: 0, sm: 0, sr: 0, nv: 0, n: contas.length };
   contas.forEach(conta => {
     total[faixaDe(conta.diasSemAcesso)]++;
     total[conta.estagio]++;
-    if (conta.diasSemAcesso >= 0 && conta.diasSemAcesso < 7) total.semana++;
   });
   total.implementados = total.n - total.nv;
   total.utilizacao = total.n - total.nv - total.sr;
-  total.engajados = parcela(total.en, total.n);
+  total.engajados = parcela(total.en, total.implementados);
   total.uso = parcela(total.utilizacao, total.n);
+  total.usoDosImplementados = parcela(total.utilizacao, total.implementados);
   total.risco = parcela(total.sr + total.nv, total.n);
   return total;
 };
@@ -703,11 +720,80 @@ const contarGrupos = grupos => {
     total.sr += grupo.sr;
     total.en += grupo.en;
   });
+  total.implementados = total.n - total.nv;
   total.utilizacao = total.n - total.nv - total.sr;
   total.uso = parcela(total.utilizacao, total.n);
-  total.engajados = parcela(total.en, total.n);
+  total.usoDosImplementados = parcela(total.utilizacao, total.implementados);
+  total.engajados = parcela(total.en, total.implementados);
   return total;
 };
+const AULAS_VAZIAS = { pm: 0, pa: 0, re: 0, sem: 0, turmas: 0, acessos: 0, base: 0 };
+const letraDaTurma = texto => {
+  const achado = /(?:^|[\s\dº°ª-])([A-Za-z])$/.exec(String(texto || '').trim());
+  return achado ? achado[1].toUpperCase() : '';
+};
+const somarAulas = lista =>
+  lista.reduce(
+    (soma, a) => ({
+      pm: soma.pm + a.pm,
+      pa: soma.pa + a.pa,
+      re: soma.re + a.re,
+      sem: soma.sem + a.sem,
+      turmas: soma.turmas + a.turmas,
+      acessos: soma.acessos + a.acessos,
+      base: soma.base + a.base
+    }),
+    AULAS_VAZIAS
+  );
+const aulasDoAno = (alunos, aulas) => {
+  const turmas = {},
+    letrasDasAulas = new Set(aulas.map(a => a.letra)),
+    porLetra = alunos.some(c => letrasDasAulas.has(letraDaTurma(c.turma)));
+  const daTurma = letra => (turmas[letra] = turmas[letra] || { alunos: [], aulas: [] });
+  alunos.forEach(c => daTurma(porLetra ? letraDaTurma(c.turma) : '').alunos.push(c));
+  aulas.forEach(a => daTurma(porLetra ? a.letra : '').aulas.push(a));
+  return somarAulas(
+    Object.values(turmas).map(t => {
+      const pm = t.aulas.length,
+        pa = t.aulas.filter(a => a.ateLeitura).length,
+        re = t.aulas.filter(a => a.realizada).length;
+      return {
+        pm,
+        pa,
+        re,
+        sem: t.alunos.length && !pm ? 1 : 0,
+        turmas: t.alunos.length ? 1 : 0,
+        acessos: re ? t.alunos.reduce((soma, c) => soma + Math.min(c.usos, re), 0) : 0,
+        base: t.alunos.length * re
+      };
+    })
+  );
+};
+const execucaoDasAulas = a => (a && a.pa ? Math.round((a.re * 100) / a.pa) : null);
+const textoDasAulas = a => (!a ? '—' : !a.pm ? 'sem agenda' : numero(a.re) + ' de ' + numero(a.pa));
+const corDasAulas = a =>
+  !a ? 'var(--texto-cinza-600)' : !a.pm ? 'var(--texto-vermelho-600)' : corDaExecucao(execucaoDasAulas(a));
+const textoDaPresenca = a => {
+  const p = presencaDasAulas(a);
+  return p == null ? '—' : p + '%';
+};
+const presencaDasAulas = a => (a && a.base ? Math.round((a.acessos * 100) / a.base) : null);
+const corDaExecucao = p =>
+  p == null
+    ? 'var(--texto-cinza-600)'
+    : p < 60
+      ? 'var(--texto-vermelho-600)'
+      : p >= 80
+        ? 'var(--texto-verde-700)'
+        : 'var(--texto-cinza-750)';
+const corDaPresenca = p =>
+  p == null
+    ? 'var(--texto-cinza-600)'
+    : p < 50
+      ? 'var(--texto-vermelho-600)'
+      : p >= 75
+        ? 'var(--texto-verde-700)'
+        : 'var(--texto-cinza-750)';
 const variacao = (valor, sufixo) =>
   (valor > 0 ? '+' : valor < 0 ? '−' : '±') + Math.abs(valor).toLocaleString('pt-BR') + sufixo;
 const celula = (total, faixa) => {
@@ -722,12 +808,12 @@ const celula = (total, faixa) => {
 };
 const corDosEngajados = engajados =>
   engajados >= 30 ? 'var(--texto-verde-700)' : engajados >= 15 ? 'var(--texto-ambar-660)' : 'var(--texto-vermelho-600)';
-const teveAula = total => total.n > 0 && total.semana >= 2 && (total.semana * 100) / total.n >= 25;
-const semaforoDe = (total, turmas, comAula) => {
-  if (total.n < MINIMO_PARA_SEMAFORO) return 'sem_base';
-  if (total.uso < 40 || total.risco >= 50) return 'critico';
-  const aula = turmas ? (comAula * 100) / turmas : 100;
-  if (total.uso < 60 || total.risco >= 30 || aula < 60) return 'atencao';
+const semaforoDe = (total, aulas) => {
+  const uso = total.n ? (total.utilizacao * 100) / total.n : 0,
+    risco = total.n ? ((total.sr + total.nv) * 100) / total.n : 0;
+  if (uso < 40 || risco >= 50) return 'critico';
+  const execucao = aulas && aulas.pa ? (aulas.re * 100) / aulas.pa : null;
+  if (uso < 60 || risco >= 30 || (execucao != null && execucao < 60)) return 'atencao';
   return 'em_dia';
 };
 const prioridadeDe = (total, diasSemVisita, queda) => {
@@ -744,19 +830,21 @@ const prioridadeDe = (total, diasSemVisita, queda) => {
   if (total.n < MINIMO_PARA_SEMAFORO) pontos *= 0.5;
   return Math.round(pontos * 10) / 10;
 };
-const motivosDe = (total, turmas, comAula, extras) => {
-  const motivos = [];
-  if (extras && extras.queda >= 5)
-    motivos.push('utilização caiu ' + extras.queda + ' pontos desde ' + dmyIso(extras.dataAnterior));
+const motivosDe = (total, aulas) => {
+  const motivos = [],
+    execucao = aulas && aulas.pa ? (aulas.re * 100) / aulas.pa : null;
   if (total.nv) motivos.push(plural(total.nv, 'usuário nunca acessou', 'usuários nunca acessaram'));
-  if (total.sr) motivos.push(numero(total.sr) + ' sem uso há mais de 30 dias');
-  if (turmas && comAula < turmas) motivos.push(turmas - comAula + ' de ' + turmas + ' anos sem aula na última semana');
+  if (total.sr) motivos.push(plural(total.sr, 'implementado sem uso no mês', 'implementados sem uso no mês'));
+  if (execucao != null && execucao < 60)
+    motivos.push(
+      'oficineiros realizaram ' +
+        numero(aulas.re) +
+        ' de ' +
+        plural(aulas.pa, 'aula prevista', 'aulas previstas') +
+        ' até hoje'
+    );
   if (total.bx) motivos.push(numero(total.bx) + ' com baixo uso');
-  const lista = motivos.slice(0, 3);
-  if (extras && extras.diasSemVisita == null) lista.push('nenhuma visita registrada');
-  else if (extras && extras.diasSemVisita > 30)
-    lista.push('última visita registrada há ' + extras.diasSemVisita + ' dias');
-  return lista;
+  return motivos.slice(0, 3);
 };
 const rotuloDoMes = data => MESES[Number(data.slice(5, 7)) - 1] + '/' + data.slice(2, 4);
 const textoDoHistorico = (registro, textoDoStatus) =>
@@ -768,7 +856,7 @@ const textoDoHistorico = (registro, textoDoStatus) =>
   (registro.prazo ? ' · prazo ' + dmyIso(registro.prazo) : '') +
   ' · ' +
   registro.autor_nome;
-const ICONES_DO_SEMAFORO = { critico: '▲', atencao: '●', em_dia: '✓', sem_base: '–' };
+const ICONES_DO_SEMAFORO = { critico: '▲', atencao: '!', em_dia: '✓' };
 const decimal = (parte, todo) => (todo ? (Math.round((parte * 1000) / todo) / 10).toLocaleString('pt-BR') + '%' : '0%');
 const pilula = codigo => ({
   semaforoIcone: ICONES_DO_SEMAFORO[codigo],
@@ -829,7 +917,8 @@ class Component extends DCLogic {
         turma: p.turma || '',
         primeiroAcesso: p.primeiro_acesso || ''
       };
-      conta.estagio = estagioDe(conta);
+      conta.usos = usosNoMes(conta, p.base_ref);
+      conta.estagio = estagioDe(conta, p.base_ref);
       local.contas.push(conta);
     });
     const datas = Object.keys(porBase).sort(),
@@ -963,7 +1052,8 @@ class Component extends DCLogic {
       execucaoDe = id => jornada.execucao(aulasDoCiclo.filter(aula => aula.esc === id));
     const oficineirosDe = jornada.oficineirosDaEscola;
     const diagnostico = (local, total, execucao) => {
-      const anos = alunosPorAno(local.contas);
+      const anos = alunosPorAno(local.contas),
+        aulas = aulasDe(local);
       let pior = null;
       Object.keys(anos).forEach(ano => {
         const doAno = contar(anos[ano]);
@@ -977,14 +1067,24 @@ class Component extends DCLogic {
         '% · ' +
         parcela(total.N, total.n) +
         '% nunca acessaram · ' +
-        parcela(total.S, total.n) +
-        '% sem uso há mais de 30 dias' +
+        parcela(total.sr, total.n) +
+        '% sem uso no mês' +
         (pior ? ' · ' + pior.ano + 'º ano com ' + pior.engajados + '% de alunos engajados' : '') +
-        (execucao != null
-          ? ' · execução das atividades dos oficineiros ' + execucao + '%'
-          : oficineirosDe(local.id).length
-            ? ' · sem atividades previstas no mês'
-            : ' · escola sem oficineiro')
+        (aulas && aulas.pa
+          ? ' · oficineiros realizaram ' +
+            aulas.re +
+            ' de ' +
+            aulas.pa +
+            ' aulas previstas até ' +
+            dmyIso(dataDaBase) +
+            (presencaDasAulas(aulas) != null ? ' · presença na máquina ' + presencaDasAulas(aulas) + '%' : '')
+          : aulas
+            ? ' · sem aulas na agenda dos oficineiros no mês'
+            : execucao != null
+              ? ' · execução das atividades dos oficineiros ' + execucao + '%'
+              : oficineirosDe(local.id).length
+                ? ' · sem atividades previstas no mês'
+                : ' · escola sem oficineiro')
       );
     };
     const pedidoDe = (local, total, execucao) => {
@@ -1009,31 +1109,54 @@ class Component extends DCLogic {
         escolaAberta: memoria.escolaAberta === String(local.id) ? '' : String(local.id),
         formEscola: FORM_ESCOLA_VAZIO
       });
-    const turmasDe = local => {
+    const aulasDaAgenda =
+      dataDaBase && typeof jornada.aulasDoMes === 'function' ? jornada.aulasDoMes(dataDaBase) : null;
+    const aulasPorEscola = {};
+    (aulasDaAgenda || []).forEach(a => {
+      const daEscola = (aulasPorEscola[a.esc] = aulasPorEscola[a.esc] || {});
+      (daEscola[a.ano] = daEscola[a.ano] || []).push({
+        letra: a.letra || '',
+        ateLeitura: a.iso <= dataDaBase,
+        realizada: !!a.realizada
+      });
+    });
+    const aulasPorAnoDe = local => {
+      if (!aulasDaAgenda) return null;
       const anos = alunosPorAno(local.contas),
-        chaves = Object.keys(anos);
-      return { turmas: chaves.length, comAula: chaves.filter(ano => teveAula(contar(anos[ano]))).length };
+        daEscola = aulasPorEscola[local.id] || {},
+        porAno = {};
+      Array.from(new Set(Object.keys(anos).concat(Object.keys(daEscola)))).forEach(
+        ano => (porAno[ano] = aulasDoAno(anos[ano] || [], daEscola[ano] || []))
+      );
+      return porAno;
+    };
+    const aulasDe = (local, ano) => {
+      const porAno = aulasPorAnoDe(local);
+      if (!porAno) return null;
+      return ano ? porAno[ano] || AULAS_VAZIAS : somarAulas(Object.values(porAno));
     };
     const todasAsUnidades = locais
       .map(local => {
         const total = contar(contasDe(local)),
           execucao = execucaoDe(local.id),
-          { turmas, comAula } = turmasDe(local),
+          todosOsPerfis = memoria.perfil === 'todos' && memoria.filtroAno === 'todos' ? total : contar(local.contas),
+          aulasDaEscola = aulasDe(local),
+          aulas = memoria.filtroAno !== 'todos' ? aulasDe(local, memoria.filtroAno) : aulasDaEscola,
           diasSemVisita = diasDesde(jornada.ultimaVisitaDaEscola ? jornada.ultimaVisitaDaEscola(local.id) : ''),
           antes = anterior && anterior[local.id] ? contar(contasDe(anterior[local.id])) : null,
-          queda = antes && antes.n ? Math.max(0, antes.uso - total.uso) : 0,
-          extras = { diasSemVisita, queda, dataAnterior };
+          queda = antes && antes.n ? Math.max(0, antes.uso - total.uso) : 0;
         return {
           local,
           total,
           execucao,
-          turmas,
-          comAula,
+          aulas,
+          aulasDaEscola,
+          anosComAlunos: Object.keys(alunosPorAno(local.contas)).length,
           diasSemVisita,
           queda,
-          semaforo: semaforoDe(total, turmas, comAula),
+          semaforo: semaforoDe(todosOsPerfis, aulasDaEscola),
           pontos: prioridadeDe(total, diasSemVisita, queda),
-          motivos: motivosDe(total, turmas, comAula, extras),
+          motivos: motivosDe(todosOsPerfis, aulasDaEscola),
           status: statusPorEscola[local.id] || null,
           visita: jornada.visitaDaEscola(local.id)
         };
@@ -1067,10 +1190,13 @@ class Component extends DCLogic {
       engajados: u.total.engajados + '%',
       engajadosCor: corDosEngajados(u.total.engajados),
       utilizacao: u.total.uso + '%',
-      turmasComAula: u.turmas ? u.comAula + ' de ' + u.turmas : '—',
-      execucao:
-        u.execucao == null ? (oficineirosDe(u.local.id).length ? 'sem previstas' : 'sem oficineiro') : u.execucao + '%',
-      execucaoCor: u.execucao == null ? 'var(--texto-cinza-600)' : exC(u.execucao),
+      aulasRealizadas: textoDasAulas(u.aulas),
+      aulasCor: corDasAulas(u.aulas),
+      aulasTitulo: u.aulas
+        ? 'Aulas realizadas de previstas até ' + dmyIso(dataDaBase) + ' · ' + numero(u.aulas.pm) + ' previstas no mês'
+        : 'Sem agenda dos oficineiros neste perfil',
+      presenca: textoDaPresenca(u.aulas),
+      presencaCor: corDaPresenca(presencaDasAulas(u.aulas)),
       agenda: u.visita || 'sem visita',
       agendaCor: u.visita ? 'var(--texto-verde-700)' : 'var(--texto-cinza-600)',
       ...pilula(u.semaforo),
@@ -1090,9 +1216,8 @@ class Component extends DCLogic {
     const resumoDaCarteira = carteira => {
       const dela = todasAsUnidades.filter(u => u.local.carteira === carteira),
         total = contar([].concat(...dela.map(u => contasDe(u.local)))),
-        turmas = dela.reduce((soma, u) => soma + u.turmas, 0),
-        comAula = dela.reduce((soma, u) => soma + u.comAula, 0);
-      return { unidades: dela, total, semaforo: semaforoDe(total, turmas, comAula) };
+        aulas = aulasDaAgenda ? somarAulas(dela.map(u => u.aulasDaEscola)) : null;
+      return { unidades: dela, total, aulas, semaforo: semaforoDe(total, aulas) };
     };
     const carteiraAberta = porCarteira ? memoria.carteiraVista : jornada.carteiraPropria || carteiras[0] || '';
     const listaDeCarteiras = porCarteira && !carteiraAberta;
@@ -1156,21 +1281,40 @@ class Component extends DCLogic {
             numero(total.implementados) + ' já acessaram',
             'var(--texto-ciano-660)'
           ],
+          ['Utilização', total.uso + '%', numero(total.utilizacao) + ' acessaram no mês', 'var(--destaque-azul-500)'],
           [
-            'Utilização',
-            total.uso + '%',
-            numero(total.utilizacao) + ' nos últimos 30 dias',
-            'var(--destaque-azul-500)'
+            'Engajados',
+            total.engajados + '%',
+            numero(total.en) + ' dos implementados',
+            corDosEngajados(total.engajados)
           ],
-          ['Engajados', total.engajados + '%', numero(total.en) + ' usuários', corDosEngajados(total.engajados)],
           [
             'Sem uso ou nunca',
             total.risco + '%',
-            numero(total.sr) + ' sem uso · ' + numero(total.nv) + ' nunca',
+            numero(total.sr) + ' sem uso no mês · ' + numero(total.nv) + ' nunca',
             'var(--destaque-cinza-540)'
           ]
-        ].map(([titulo, valor, nota, cor]) => ({ titulo, valor, nota, cor, valorCor: 'var(--texto-ciano-850)' })),
-        porSemaforo: ['critico', 'atencao', 'em_dia', 'sem_base']
+        ]
+          .concat(
+            resumo.aulas
+              ? [
+                  [
+                    'Aulas realizadas',
+                    execucaoDasAulas(resumo.aulas) == null ? '—' : execucaoDasAulas(resumo.aulas) + '%',
+                    numero(resumo.aulas.re) + ' de ' + numero(resumo.aulas.pa) + ' previstas até ' + dmyIso(dataDaBase),
+                    corDaExecucao(execucaoDasAulas(resumo.aulas))
+                  ],
+                  [
+                    'Presença na máquina',
+                    textoDaPresenca(resumo.aulas),
+                    'dos alunos nas aulas realizadas',
+                    corDaPresenca(presencaDasAulas(resumo.aulas))
+                  ]
+                ]
+              : []
+          )
+          .map(([titulo, valor, nota, cor]) => ({ titulo, valor, nota, cor, valorCor: 'var(--texto-ciano-850)' })),
+        porSemaforo: ['critico', 'atencao', 'em_dia']
           .filter(codigo => contagemSemaforo[codigo])
           .map(codigo => ({
             rotulo: SEMAFOROS[codigo][0],
@@ -1311,7 +1455,7 @@ class Component extends DCLogic {
             .map((u, i) => ({ u, horario: horarios[i] }))
             .filter(item => item.horario && item.horario.data === dia)
             .map(item => ({
-              hora: item.horario.hora,
+              hora: 'dia inteiro',
               escola: item.u.local.nome,
               tipo: 'Sugestão da Jornada',
               situacao: 'Sugerida',
@@ -1377,7 +1521,7 @@ class Component extends DCLogic {
         linhas: [
           ['Criados', total.n, ''],
           ['Implementados', total.implementados, parcela(total.implementados, total.n) + '%'],
-          ['Utilização (30 dias)', total.utilizacao, total.uso + '%'],
+          ['Utilização no mês', total.utilizacao, total.uso + '%'],
           ['Engajados', total.en, total.engajados + '%']
         ].map(([titulo, valor, parte]) => ({ titulo, valor: numero(valor), parte })),
         fundo: marcado ? 'var(--fundo-ciano-40)' : 'var(--fundo-branco)',
@@ -1415,73 +1559,108 @@ class Component extends DCLogic {
     if (!escolhida) {
       const porAno = {};
       unidades.forEach(u => {
-        const anos = alunosPorAno(u.local.contas);
+        const anos = alunosPorAno(u.local.contas),
+          aulasDosAnos = aulasPorAnoDe(u.local);
         Object.keys(anos)
           .filter(ano => memoria.filtroAno === 'todos' || ano === memoria.filtroAno)
-          .forEach(ano => {
-            const total = contar(anos[ano]);
-            (porAno[ano] = porAno[ano] || []).push({ u, total, aula: teveAula(total) });
-          });
+          .forEach(ano =>
+            (porAno[ano] = porAno[ano] || []).push({
+              u,
+              total: contar(anos[ano]),
+              aulas: aulasDosAnos ? aulasDosAnos[ano] || AULAS_VAZIAS : null
+            })
+          );
       });
       const turmasDaRede = [].concat(...Object.values(porAno)),
         alunosDaRede = turmasDaRede.reduce((soma, turma) => soma + turma.total.n, 0),
-        comAulaNaRede = turmasDaRede.filter(turma => turma.aula).length,
         semAcessoNaRede = turmasDaRede.filter(turma => !turma.total.utilizacao).length,
-        idsDaRede = new Set(unidades.map(u => u.local.id)),
-        inicioDaSemana = Base.iso(Base.add(hoje, -6)),
-        daSemana = aulasDoCiclo.filter(
-          aula => idsDaRede.has(aula.esc) && aula.iso >= inicioDaSemana && aula.iso <= hojeIso && aula.st !== 'canc'
-        ),
-        previstasNaSemana = daSemana.filter(aula => !aula.extra).length,
-        realizadasNaSemana = daSemana.filter(aula => aula.st === 'real' || aula.extra).length;
-      rede.indicadores = [
-        {
-          titulo: 'Turmas com alunos criados',
-          valor: numero(turmasDaRede.length),
-          nota: plural(alunosDaRede, 'aluno', 'alunos'),
-          cor: 'var(--destaque-ciano-880)',
-          valorCor: 'var(--texto-ciano-850)'
-        },
-        {
-          titulo: 'Atividades previstas em 7 dias',
-          valor: previstasNaSemana ? numero(previstasNaSemana) : '—',
-          nota: previstasNaSemana
-            ? plural(realizadasNaSemana, 'realizada', 'realizadas') + ' pelos oficineiros'
-            : 'nenhuma atividade prevista na grade',
-          cor: 'var(--destaque-ciano-400)',
-          valorCor: 'var(--texto-ciano-850)'
-        },
-        {
-          titulo: 'Turmas com aula nos últimos 7 dias',
-          valor: numero(comAulaNaRede),
-          nota: parcela(comAulaNaRede, turmasDaRede.length) + '% das turmas',
-          cor: 'var(--destaque-azul-500)',
-          valorCor: 'var(--texto-ciano-850)'
-        },
-        {
-          titulo: 'Turmas sem nenhum acesso em 30 dias',
-          valor: numero(semAcessoNaRede),
-          nota: parcela(semAcessoNaRede, turmasDaRede.length) + '% das turmas',
-          cor: semAcessoNaRede ? 'var(--destaque-vermelho-600)' : 'var(--destaque-cinza-300)',
-          valorCor: semAcessoNaRede ? 'var(--texto-vermelho-600)' : 'var(--texto-ciano-850)'
-        }
-      ];
+        aulasDaRede = aulasDaAgenda ? somarAulas(turmasDaRede.map(turma => turma.aulas)) : null,
+        execucaoDaRede = execucaoDasAulas(aulasDaRede),
+        presencaDaRede = presencaDasAulas(aulasDaRede);
+      rede.indicadores = aulasDaRede
+        ? [
+            {
+              titulo: 'Alunos previstos',
+              valor: numero(alunosDaRede),
+              nota: plural(aulasDaRede.turmas, 'turma', 'turmas') + ' com alunos criados',
+              cor: 'var(--destaque-ciano-880)',
+              valorCor: 'var(--texto-ciano-850)'
+            },
+            {
+              titulo: 'Aulas previstas no mês',
+              valor: numero(aulasDaRede.pm),
+              nota:
+                'lançadas na agenda · ' +
+                numero(aulasDaRede.pa) +
+                ' até ' +
+                dmyIso(dataDaBase) +
+                (aulasDaRede.sem ? ' · ' + plural(aulasDaRede.sem, 'turma sem agenda', 'turmas sem agenda') : ''),
+              cor: aulasDaRede.sem ? 'var(--destaque-vermelho-600)' : 'var(--destaque-ciano-400)',
+              valorCor: 'var(--texto-ciano-850)'
+            },
+            {
+              titulo: 'Aulas realizadas',
+              valor: numero(aulasDaRede.re),
+              nota: (execucaoDaRede == null ? '—' : execucaoDaRede + '%') + ' das previstas até hoje',
+              cor: corDaExecucao(execucaoDaRede),
+              valorCor: 'var(--texto-ciano-850)'
+            },
+            {
+              titulo: 'Presença na máquina',
+              valor: presencaDaRede == null ? '—' : presencaDaRede + '%',
+              nota: 'dos alunos nas aulas realizadas',
+              cor: corDaPresenca(presencaDaRede),
+              valorCor: 'var(--texto-ciano-850)'
+            }
+          ]
+        : [
+            {
+              titulo: 'Alunos criados',
+              valor: numero(alunosDaRede),
+              nota: plural(turmasDaRede.length, 'ano com alunos', 'anos com alunos') + ' nas escolas',
+              cor: 'var(--destaque-ciano-880)',
+              valorCor: 'var(--texto-ciano-850)'
+            },
+            {
+              titulo: 'Anos sem nenhum acesso no mês',
+              valor: numero(semAcessoNaRede),
+              nota: parcela(semAcessoNaRede, turmasDaRede.length) + '% dos anos nas escolas',
+              cor: semAcessoNaRede ? 'var(--destaque-vermelho-600)' : 'var(--destaque-cinza-300)',
+              valorCor: semAcessoNaRede ? 'var(--texto-vermelho-600)' : 'var(--texto-ciano-850)'
+            }
+          ];
       rede.anos = Object.keys(porAno)
         .sort((a, b) => Number(a) - Number(b))
         .map(ano => {
           const turmas = porAno[ano],
             total = contar([].concat(...turmas.map(turma => alunosPorAno(turma.u.local.contas)[ano]))),
-            comAula = turmas.filter(turma => turma.aula).length,
+            aulas = aulasDaAgenda ? somarAulas(turmas.map(turma => turma.aulas)) : null,
             aberto = memoria.anoAberto === ano;
           return {
             ano: ano + 'º ano',
-            numeros: plural(turmas.length, 'turma', 'turmas') + ' · ' + plural(total.n, 'aluno', 'alunos'),
+            numeros:
+              plural(turmas.length, 'escola', 'escolas') +
+              (aulas ? ' · ' + plural(aulas.turmas, 'turma', 'turmas') : '') +
+              ' · ' +
+              plural(total.n, 'aluno', 'alunos'),
             faixas: faixasDeEstagio(total),
             utilizacao: total.uso + '%',
             engajados: total.engajados + '%',
             engajadosCor: corDosEngajados(total.engajados),
-            comAula: comAula + '/' + turmas.length,
-            comAulaTitulo: comAula + ' de ' + turmas.length + ' turmas com aula nos últimos 7 dias',
+            aulas: textoDasAulas(aulas),
+            aulasCor: corDasAulas(aulas),
+            aulasTitulo: aulas
+              ? numero(aulas.re) +
+                ' realizadas de ' +
+                numero(aulas.pa) +
+                ' previstas até ' +
+                dmyIso(dataDaBase) +
+                ' · ' +
+                numero(aulas.pm) +
+                ' no mês'
+              : '',
+            presenca: textoDaPresenca(aulas),
+            presencaCor: corDaPresenca(presencaDasAulas(aulas)),
             aberto,
             expandido: aberto ? 'true' : 'false',
             seta: aberto ? '▾' : '▸',
@@ -1497,8 +1676,10 @@ class Component extends DCLogic {
                 utilizacao: turma.total.uso + '%',
                 engajados: turma.total.engajados + '%',
                 engajadosCor: corDosEngajados(turma.total.engajados),
-                aula: turma.aula ? 'Sim' : 'Não',
-                aulaCor: turma.aula ? 'var(--texto-verde-700)' : 'var(--texto-vermelho-600)'
+                aulas: textoDasAulas(turma.aulas),
+                aulasCor: corDasAulas(turma.aulas),
+                presenca: textoDaPresenca(turma.aulas),
+                presencaCor: corDaPresenca(presencaDasAulas(turma.aulas))
               }))
           };
         });
@@ -1506,37 +1687,35 @@ class Component extends DCLogic {
     let escola = {};
     if (escolhida) {
       const local = escolhida.local,
-        total = contar(local.contas),
-        oficineiros = oficineirosDe(local.id);
-      const anos = alunosPorAno(local.contas);
-      const aulasPorAno = {};
-      aulasDoCiclo
-        .filter(aula => aula.esc === local.id && aula.st !== 'canc')
-        .forEach(aula => {
-          const ano = anoDaAula(aula);
-          if (!ano) return;
-          const doAno = (aulasPorAno[ano] = aulasPorAno[ano] || { realizadas: 0, previstas: 0 });
-          if (!aula.extra) doAno.previstas++;
-          if (aula.st === 'real' || aula.extra) doAno.realizadas++;
-        });
-      const linhasDosAnos = Array.from(new Set(Object.keys(anos).concat(Object.keys(aulasPorAno))))
-        .sort()
+        alunos = local.contas.filter(c => c.perfil === 'A'),
+        total = contar(alunos),
+        anos = alunosPorAno(alunos),
+        aulasDosAnos = aulasPorAnoDe(local),
+        aulasDaEscola = aulasDosAnos ? somarAulas(Object.values(aulasDosAnos)) : null,
+        execucaoDaEscola = execucaoDasAulas(aulasDaEscola),
+        presencaDaEscola = presencaDasAulas(aulasDaEscola);
+      const linhasDosAnos = Array.from(new Set(Object.keys(anos).concat(Object.keys(aulasDosAnos || {}))))
+        .filter(ano => ano !== '0' || (anos[ano] || []).length)
+        .sort((a, b) => Number(a) - Number(b))
         .map(ano => {
           const doAno = contar(anos[ano] || []),
-            aulas = aulasPorAno[ano],
-            aula = teveAula(doAno);
+            aulas = aulasDosAnos ? aulasDosAnos[ano] || AULAS_VAZIAS : null,
+            presenca = presencaDasAulas(aulas);
           let leitura, leituraCor;
           if (!doAno.n) {
-            leitura = 'Atividades sem alunos deste ano na base de acessos — conferir cadastro.';
+            leitura = 'Aulas sem alunos deste ano na base de acessos — conferir cadastro.';
             leituraCor = 'var(--texto-ambar-660)';
-          } else if (aulas && aulas.realizadas && doAno.engajados < 15) {
-            leitura = 'Há atividades, mas o uso não continua fora delas. Reforçar com professores.';
+          } else if (aulas && !aulas.pm) {
+            leitura = 'Sem aulas na agenda dos oficineiros no mês. Combinar a grade deste ano.';
             leituraCor = 'var(--texto-vermelho-600)';
-          } else if (!aulas && doAno.engajados < 15) {
-            leitura = 'Sem atividades dos oficineiros e uso baixo. Sugerir este ano na grade.';
+          } else if (presenca != null && presenca < 50) {
+            leitura = 'Há aulas, mas poucos alunos acessam a máquina nelas. Conferir senhas e presença.';
+            leituraCor = 'var(--texto-vermelho-600)';
+          } else if (aulas && aulas.re && doAno.engajados < 15) {
+            leitura = 'Há aulas, mas o uso não continua fora delas. Reforçar com professores.';
             leituraCor = 'var(--texto-vermelho-600)';
           } else if (parcela(doAno.N, doAno.n) >= 30) {
-            leitura = 'Muitos alunos sem primeiro acesso. Ativação assistida em atividade.';
+            leitura = 'Muitos alunos sem primeiro acesso. Ativação assistida em aula.';
             leituraCor = 'var(--texto-indigo-360)';
           } else if (doAno.engajados >= 30) {
             leitura = 'Uso saudável. Manter.';
@@ -1546,21 +1725,33 @@ class Component extends DCLogic {
             leituraCor = 'var(--texto-cinza-750)';
           }
           return {
-            ano: ano + 'º ano',
+            ano: ano === '0' ? 'Ed. infantil' : ano + 'º ano',
             total: numero(doAno.n),
             celulas: FAIXAS.map(faixa => celula(doAno, faixa)),
             engajados: doAno.n ? doAno.engajados + '%' : '—',
             engajadosCor: corDosEngajados(doAno.engajados),
-            aula7d: doAno.n ? (aula ? 'Sim' : 'Não') : '—',
-            aulaCor: aula ? 'var(--texto-verde-700)' : 'var(--texto-vermelho-600)',
-            aulas: aulas ? aulas.realizadas + ' de ' + aulas.previstas : '—',
+            aulas: textoDasAulas(aulas),
+            aulasCor: corDasAulas(aulas),
+            aulasTitulo: aulas
+              ? numero(aulas.re) +
+                ' realizadas de ' +
+                numero(aulas.pa) +
+                ' previstas até ' +
+                dmyIso(dataDaBase) +
+                ' · ' +
+                numero(aulas.pm) +
+                ' no mês' +
+                (aulas.sem ? ' · ' + plural(aulas.sem, 'turma sem agenda', 'turmas sem agenda') : '')
+              : '',
+            presenca: textoDaPresenca(aulas),
+            presencaCor: corDaPresenca(presenca),
             leitura,
             leituraCor
           };
         });
       const buscaConta = normTxt(memoria.buscaConta);
       const semAcesso = conta => (conta.diasSemAcesso < 0 ? 9999 : conta.diasSemAcesso);
-      const contas = local.contas
+      const contas = alunos
         .filter(
           c =>
             (memoria.temperatura === 'todas' || faixaDe(c.diasSemAcesso) === memoria.temperatura) &&
@@ -1568,80 +1759,82 @@ class Component extends DCLogic {
         )
         .sort((a, b) => semAcesso(b) - semAcesso(a));
       const limite = memoria.limite;
-      const execucao = escolhida.execucao,
-        visita = escolhida.visita,
-        semaforo = semaforoDe(total, escolhida.turmas, escolhida.comAula);
-      const doPerfil = perfil => numero(local.contas.filter(c => c.perfil === perfil).length);
+      const visita = escolhida.visita;
       const historico = historicoPorEscola[local.id] || [];
       escola = {
         id: local.id,
-        ...pilula(semaforo),
-        pontos: String(prioridadeDe(total, escolhida.diasSemVisita, escolhida.queda)).replace('.', ','),
+        ...pilula(escolhida.semaforo),
+        pontos: String(escolhida.pontos).replace('.', ','),
         temVisita: !!visita,
         semVisita: !visita && podeAgendar,
         visita,
-        agendar: agendar(local, total, execucao),
+        agendar: agendar(local, escolhida.total, escolhida.execucao),
         statusAtual: textoDoStatus(historico[0]),
-        motivos: motivosDe(total, escolhida.turmas, escolhida.comAula, {
-          diasSemVisita: escolhida.diasSemVisita,
-          queda: escolhida.queda,
-          dataAnterior
-        }),
+        motivos: escolhida.motivos,
         historico: historico.slice(0, 6).map(registro => textoDoHistorico(registro, textoDoStatus)),
         semHistorico: !historico.length,
         indicadores: [
           {
-            titulo: 'Contas',
+            titulo: 'Alunos',
             valor: numero(total.n),
-            nota: 'A ' + doPerfil('A') + ' · P ' + doPerfil('P') + ' · S ' + doPerfil('S'),
+            nota: aulasDaEscola
+              ? plural(aulasDaEscola.turmas, 'turma', 'turmas') + ' com alunos criados'
+              : plural(Object.keys(anos).length, 'ano com alunos', 'anos com alunos'),
             cor: 'var(--destaque-ciano-880)',
             valorCor: 'var(--texto-ciano-850)'
           },
           {
             titulo: 'Utilização',
             valor: total.uso + '%',
-            nota: numero(total.utilizacao) + ' nos últimos 30 dias',
+            nota: numero(total.utilizacao) + ' acessaram no mês',
             cor: 'var(--destaque-azul-500)',
             valorCor: 'var(--texto-ciano-850)'
           },
           {
             titulo: 'Engajados',
             valor: total.engajados + '%',
-            nota: numero(total.en) + ' usuários',
+            nota: numero(total.en) + ' dos implementados',
             cor: corDosEngajados(total.engajados),
             valorCor: corDosEngajados(total.engajados)
           },
           {
-            titulo: 'Frio',
-            valor: parcela(total.F, total.n) + '%',
-            nota: numero(total.F) + ' contas · 11 a 30 dias',
-            cor: 'var(--destaque-azul-500)',
-            valorCor: 'var(--texto-ciano-850)'
-          },
-          {
-            titulo: 'Sem uso',
-            valor: parcela(total.S, total.n) + '%',
-            nota: numero(total.S) + ' contas · +30 dias',
+            titulo: 'Sem uso no mês',
+            valor: parcela(total.sr, total.n) + '%',
+            nota: plural(total.sr, 'implementado', 'implementados'),
             cor: 'var(--destaque-cinza-540)',
             valorCor: 'var(--texto-ciano-850)'
           },
           {
             titulo: 'Nunca acessou',
             valor: parcela(total.N, total.n) + '%',
-            nota: numero(total.N) + ' contas',
+            nota: plural(total.N, 'aluno', 'alunos'),
             cor: 'var(--texto-indigo-360)',
             valorCor: 'var(--texto-ciano-850)'
-          },
-          {
-            titulo: 'Atividades dos oficineiros',
-            valor: execucao == null ? '—' : execucao + '%',
-            nota: oficineiros.length
-              ? plural(oficineiros.length, 'oficineiro', 'oficineiros') + ' · execução no mês'
-              : 'escola sem oficineiro',
-            cor: execucao == null ? 'var(--borda-cinza-160)' : exC(execucao),
-            valorCor: 'var(--texto-ciano-850)'
           }
-        ],
+        ].concat(
+          aulasDaEscola
+            ? [
+                {
+                  titulo: 'Aulas realizadas',
+                  valor: textoDasAulas(aulasDaEscola),
+                  nota:
+                    (execucaoDaEscola == null ? '—' : execucaoDaEscola + '%') +
+                    ' das previstas até hoje · ' +
+                    numero(aulasDaEscola.pm) +
+                    ' no mês',
+                  cor: corDasAulas(aulasDaEscola),
+                  valorCor: 'var(--texto-ciano-850)'
+                },
+                {
+                  titulo: 'Presença na máquina',
+                  valor: presencaDaEscola == null ? '—' : presencaDaEscola + '%',
+                  nota: 'dos alunos nas aulas realizadas',
+                  cor: corDaPresenca(presencaDaEscola),
+                  valorCor: 'var(--texto-ciano-850)'
+                }
+              ]
+            : []
+        ),
         anos: linhasDosAnos,
         semAnos: linhasDosAnos.length === 0,
         contasTexto:
@@ -1657,7 +1850,7 @@ class Component extends DCLogic {
             nome: c.nome,
             perfil: PERFIS[c.perfil],
             ano: c.turma || (c.ano ? c.ano + 'º ano' : '—'),
-            responsavel: c.responsavel || (c.perfil === 'A' ? 'não informado' : '—'),
+            responsavel: c.responsavel || 'não informado',
             responsavelCor: c.responsavel ? 'var(--texto-cinza-750)' : 'var(--texto-cinza-600)',
             ultimoAcesso: c.diasSemAcesso < 0 ? '—' : Base.dmy(ultimoAcesso),
             diasSemAcesso: c.diasSemAcesso < 0 ? '—' : String(c.diasSemAcesso),
@@ -1695,19 +1888,21 @@ class Component extends DCLogic {
             .filter(Boolean)
         );
         let turmas = 0,
-          comAula = 0,
           alunos = [];
+        const aulasDosAnosDele = [];
         escolasDele.forEach(outra => {
-          const anos = alunosPorAno(outra.local.contas);
+          const anos = alunosPorAno(outra.local.contas),
+            aulasDosAnos = aulasPorAnoDe(outra.local);
           Object.keys(anos)
             .filter(ano => !anosDele.size || anosDele.has(ano))
             .forEach(ano => {
               turmas++;
-              if (teveAula(contar(anos[ano]))) comAula++;
+              if (aulasDosAnos && aulasDosAnos[ano]) aulasDosAnosDele.push(aulasDosAnos[ano]);
               alunos = alunos.concat(anos[ano]);
             });
         });
-        const total = contar(alunos);
+        const total = contar(alunos),
+          presencaDele = presencaDasAulas(somarAulas(aulasDosAnosDele));
         ranking.push({
           nome,
           previstas,
@@ -1721,7 +1916,8 @@ class Component extends DCLogic {
             plural(turmas, 'turma', 'turmas') +
             ' · ' +
             plural(total.n, 'aluno', 'alunos') +
-            (total.n ? ' · ' + total.engajados + '% engajados · aula em 7 dias em ' + comAula + ' de ' + turmas : '')
+            (total.n ? ' · ' + total.engajados + '% engajados' : '') +
+            (presencaDele != null ? ' · presença na máquina ' + presencaDele + '%' : '')
         });
       })
     );
@@ -1879,21 +2075,31 @@ class Component extends DCLogic {
           [
             'Contas',
             numero(total.n),
-            plural(u.turmas, 'ano com alunos', 'anos com alunos'),
+            plural(u.anosComAlunos, 'ano com alunos', 'anos com alunos'),
             'var(--destaque-ciano-880)'
           ],
+          ['Utilização', total.uso + '%', numero(total.utilizacao) + ' acessaram no mês', 'var(--destaque-azul-500)'],
           [
-            'Utilização',
-            total.uso + '%',
-            numero(total.utilizacao) + ' nos últimos 30 dias',
-            'var(--destaque-azul-500)'
+            'Engajados',
+            total.engajados + '%',
+            numero(total.en) + ' dos implementados',
+            corDosEngajados(total.engajados)
           ],
-          ['Engajados', total.engajados + '%', numero(total.en) + ' usuários', corDosEngajados(total.engajados)],
           [
             'Sem uso ou nunca',
             total.risco + '%',
-            numero(total.sr) + ' sem uso · ' + numero(total.nv) + ' nunca',
+            numero(total.sr) + ' sem uso no mês · ' + numero(total.nv) + ' nunca',
             'var(--destaque-cinza-540)'
+          ],
+          [
+            'Aulas realizadas',
+            textoDasAulas(u.aulasDaEscola),
+            u.aulasDaEscola
+              ? (execucaoDasAulas(u.aulasDaEscola) == null ? '—' : execucaoDasAulas(u.aulasDaEscola) + '%') +
+                ' das previstas · presença na máquina ' +
+                textoDaPresenca(u.aulasDaEscola)
+              : 'sem agenda dos oficineiros',
+            corDasAulas(u.aulasDaEscola)
           ],
           [
             'Última visita',
@@ -1941,10 +2147,13 @@ class Component extends DCLogic {
             doMes = daBase ? contarGrupos(gruposDe(daBase)) : null;
           return {
             largura: Math.floor(100 / mesesDaLista.length) + '%',
-            altura: doMes && doMes.n ? Math.max(8, doMes.uso) + '%' : '8%',
+            altura: doMes && doMes.n ? Math.max(8, doMes.usoDosImplementados) + '%' : '8%',
             cor: doMes && doMes.n ? 'var(--destaque-azul-500)' : 'var(--fundo-cinza-90)',
             raio: '2px',
-            titulo: rotuloDoMes(data) + ': ' + (doMes && doMes.n ? 'utilização ' + doMes.uso + '%' : 'sem leitura')
+            titulo:
+              rotuloDoMes(data) +
+              ': ' +
+              (doMes && doMes.n ? 'utilização ' + doMes.usoDosImplementados + '% dos implementados' : 'sem leitura')
           };
         });
       const codigos = visao === 'jornada' ? ORDEM_DOS_ESTAGIOS : FAIXAS;
@@ -2017,7 +2226,7 @@ class Component extends DCLogic {
                 rotulo:
                   'Utilização em ' +
                   (mesesDaLista.length ? mesesDaLista.map(rotuloDoMes).join(', ') : 'nenhum mês') +
-                  ' (altura da barra)',
+                  ' (altura da barra, % dos implementados)',
                 cor: 'var(--destaque-azul-500)'
               }
             ]
@@ -2052,11 +2261,11 @@ class Component extends DCLogic {
       temMeses: totaisDoMes.length > 0,
       nota:
         totaisDoMes.length > 1
-          ? 'Usuários por mês da base de acessos (última leitura de cada mês), na mesma escala.'
+          ? 'Usuários por mês, só nos meses com leitura salva (última leitura de cada mês), na mesma escala. Percentuais sobre os implementados.'
           : 'A evolução aparece a partir da segunda base mensal carregada; as bases anteriores ficam guardadas.',
       meses: totaisDoMes.map(({ data, total }) => ({
         rotulo: rotuloDoMes(data),
-        numeros: 'uso ' + total.uso + '% · eng. ' + total.engajados + '%',
+        numeros: 'uso ' + total.usoDosImplementados + '% · eng. ' + total.engajados + '%',
         barras: [
           barraDoMes(total.n, 'var(--destaque-ciano-880)', 'Criados'),
           barraDoMes(total.utilizacao, 'var(--destaque-azul-500)', 'Utilização'),
@@ -2065,7 +2274,7 @@ class Component extends DCLogic {
       })),
       legenda: [
         { rotulo: 'Criados', cor: 'var(--destaque-ciano-880)' },
-        { rotulo: 'Utilização (últimos 30 dias)', cor: 'var(--destaque-azul-500)' },
+        { rotulo: 'Utilização (acessaram no mês)', cor: 'var(--destaque-azul-500)' },
         { rotulo: 'Engajados', cor: 'var(--texto-verde-700)' }
       ]
     };
@@ -2172,7 +2381,7 @@ class Component extends DCLogic {
       abas: [
         ['carteira', textos.aba],
         ['geral', 'Visão geral'],
-        ['escola', 'Escola e turmas'],
+        ['escola', 'Turmas'],
         ['oficineiros', 'Oficineiros'],
         ['usuarios', 'Usuários']
       ].map(([aba, rotulo]) => ({
@@ -2226,19 +2435,23 @@ class Component extends DCLogic {
       funil: [
         ['Criados', 'Usuários com conta criada', geral.n, 'var(--destaque-cinza-300)'],
         ['Implementados', 'Acessaram pelo menos uma vez', geral.implementados, 'var(--destaque-ciano-400)'],
-        ['Utilização', 'Acessaram nos últimos 30 dias', geral.utilizacao, 'var(--destaque-ciano-660)'],
-        ['Engajados', 'Atingem o padrão de uso semanal', geral.en, 'var(--destaque-ciano-880)']
-      ].map(([titulo, descricao, valor, cor], i, etapas) => ({
-        titulo: i + 1 + '. ' + titulo,
-        descricao,
-        valor: numero(valor),
-        nota: i
-          ? decimal(valor, geral.n) + ' dos criados · ' + decimal(valor, etapas[i - 1][2]) + ' da etapa anterior'
-          : 'base do recorte · ' + plural(unidades.length, 'unidade', 'unidades'),
-        largura: parcela(valor, geral.n) + '%',
-        cor,
-        aria: titulo + ': ' + numero(valor) + (i ? ', ' + decimal(valor, geral.n) + ' dos criados' : '')
-      })),
+        ['Utilização', 'Acessaram pelo menos 1 vez no mês da leitura', geral.utilizacao, 'var(--destaque-ciano-660)'],
+        ['Engajados', 'Atingem a meta do perfil no mês', geral.en, 'var(--destaque-ciano-880)']
+      ].map(([titulo, descricao, valor, cor], i) => {
+        const base = i > 1 ? geral.implementados : geral.n,
+          rotuloDaBase = i > 1 ? ' dos implementados' : ' dos criados';
+        return {
+          titulo: i + 1 + '. ' + titulo,
+          descricao,
+          valor: numero(valor),
+          nota: i
+            ? decimal(valor, base) + rotuloDaBase
+            : 'base do recorte · ' + plural(unidades.length, 'unidade', 'unidades'),
+          largura: parcela(valor, geral.n) + '%',
+          cor,
+          aria: titulo + ': ' + numero(valor) + (i ? ', ' + decimal(valor, base) + rotuloDaBase : '')
+        };
+      }),
       temperaturas: FAIXAS.map(faixa => ({
         rotulo: TEMPERATURAS[faixa][0],
         intervalo: TEMPERATURAS[faixa][2],
@@ -2265,8 +2478,19 @@ class Component extends DCLogic {
         acao: TEMPERATURAS[faixa][3],
         cor: TEMPERATURAS[faixa][1]
       })),
-      linhas: ordenadas.filter(u => !busca || normTxt(u.local.nome).includes(busca)).map(linha),
-      opcoesDeEscola: porNome.map(u => u.local.nome),
+      linhas: ordenadas
+        .filter(u => !busca || normTxt(u.local.nome).includes(busca))
+        .map(u => ({
+          ...u,
+          total: contar(
+            u.local.contas.filter(
+              c => c.perfil === 'A' && (memoria.filtroAno === 'todos' || String(c.ano) === memoria.filtroAno)
+            )
+          )
+        }))
+        .filter(u => u.total.n > 0)
+        .map(linha),
+      opcoesDeEscola: porNome.filter(u => u.local.contas.some(c => c.perfil === 'A')).map(u => u.local.nome),
       escola,
       temEscola: !!escolhida,
       emRede: !escolhida,

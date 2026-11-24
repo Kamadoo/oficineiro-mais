@@ -2,6 +2,14 @@
 
 ## Próxima versão
 
+### Jornada do Usuário no mês da leitura
+
+- Todos os percentuais usam o mês da data da leitura (dia 1º ao último dia, 4 semanas), com metas proporcionais aos dias já passados enquanto o mês está em andamento.
+- Utilização passa a ser "acessou pelo menos 1 vez no mês"; "Sem uso no mês" substitui "sem uso há mais de 30 dias"; engajado é o aluno com 1 acesso por semana (4 no mês) e o professor ou servidor com 3 dias por semana (12 no mês), com o % de engajados sobre os implementados.
+- As aulas das turmas vêm da agenda dos oficineiros: aulas previstas no mês, realizadas, execução até a data da leitura e presença na máquina (cada aluno conta no máximo uma vez por aula realizada); turma sem aula lançada aparece como "sem agenda". Substitui o "Aula em 7 dias".
+- Semáforo sem "Base pequena": toda escola é Crítico, Atenção ou Em dia, com a execução das aulas abaixo de 60% levando a Atenção; motivos exibidos na ordem das novas regras.
+- A aba "Escola e turmas" passa a se chamar "Turmas" e mostra só alunos; a evolução mensal mostra a utilização em % dos implementados, só nos meses com leitura salva.
+
 ### Base de acessos diária
 
 - Nova aba do Administrador recebe as planilhas do B.I. como vêm (usuários criados, implementados, dias de acesso e sem acesso por 30, 60, 90 e 120 dias), lê e confere tudo no navegador e mostra a prévia com contagens, unidades novas e conferência entre as planilhas antes de gravar.
