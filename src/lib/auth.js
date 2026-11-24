@@ -93,7 +93,7 @@ window.FSM_AUTH =
       if (c === 'mfa_verification_failed' || /invalid totp|invalid code/i.test(m))
         return 'Código do autenticador inválido ou vencido.';
       if (c === 'same_password' || /different from the old/i.test(m))
-        return 'A senha nova precisa ser diferente da atual.';
+        return 'Esta senha não pode ser usada. Escolha outra.';
       if (c === 'weak_password' || /weak|pwned|leaked/i.test(m)) return 'Senha fraca. Escolha outra.';
       if (c === 'reauthentication_needed' || /reauthenticat/i.test(m))
         return 'Por segurança, entre de novo antes de trocar a senha.';
@@ -135,6 +135,7 @@ window.FSM_AUTH =
             : traduz(r.status, corpo);
         const err = new Error(termos(msg));
         err.status = r.status;
+        err.codigo = String((corpo && (corpo.error_code || corpo.code)) || '');
         throw err;
       }
       return corpo;
@@ -1690,7 +1691,11 @@ window.FSM_AUTH =
         const falta = this.regraSenha(nova);
         if (falta.length) throw new Error('A senha precisa ter: ' + falta.join(', ') + '.');
         if (nova !== confirma) throw new Error('As duas senhas não são iguais.');
-        await chamar('/auth/v1/user', { metodo: 'PUT', token: token(), corpo: { password: String(nova) } });
+        try {
+          await chamar('/auth/v1/user', { metodo: 'PUT', token: token(), corpo: { password: String(nova) } });
+        } catch (e) {
+          if (!(e && e.codigo === 'same_password' && this.recuperandoSenha())) throw e;
+        }
         this.encerrarRecuperacao();
       }
     };

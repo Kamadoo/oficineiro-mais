@@ -120,15 +120,6 @@ function faltaNaSenha(s: string): string[] {
   return falta;
 }
 
-async function exigirSenhaNova(id: unknown) {
-  if (typeof id !== 'string') throw new ErroPublico(500, MSG_CONFIRMAR);
-  const { error } = await admin.from('perfis').update({ trocar_senha: true }).eq('id', id);
-  if (error) {
-    console.error('acesso/confirmar: marcação de senha nova falhou');
-    throw new ErroPublico(503, 'Não foi possível concluir agora. Aguarde alguns minutos e tente de novo.');
-  }
-}
-
 async function registrarLogin(id: unknown) {
   if (typeof id !== 'string') return;
   try {
@@ -201,7 +192,6 @@ async function atender(req: Request): Promise<Response> {
         if (r.status !== 400 && r.status !== 403) console.error('acesso/confirmar: falhou', r.status);
         throw new ErroPublico(400, MSG_CONFIRMAR);
       }
-      if (!conta.primeiro_acesso) await exigirSenhaNova(conta.user_id);
       await registrarLogin(conta.user_id);
       return resposta(req, 200, { ok: true, sessao: sessao(r.dados) });
     }
