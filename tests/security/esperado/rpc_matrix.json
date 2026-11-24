@@ -343,6 +343,14 @@
   "gerente": "recusado",
   "oficineiro": "recusado"
  },
+ "definir_carteira_da_unidade(p_escola smallint, p_carteira text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
  "definir_contratada(p_usuario uuid, p_documento text)": {
   "administrador": "aceito",
   "analista": "recusado",
@@ -477,6 +485,14 @@
   "coordenador": "recusado",
   "direcao": "recusado",
   "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "jornada_ajustes_lotacao()": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "aceito",
   "oficineiro": "recusado"
  },
  "jornada_resumo_mensal()": {
@@ -696,6 +712,14 @@
   "oficineiro": "recusado"
  },
  "revisar_aula(p_id bigint, p_acao text, p_comentario text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "salvar_parametros_jornada(p_aulas smallint, p_dias smallint, p_periodo text)": {
   "administrador": "recusado",
   "analista": "recusado",
   "coordenador": "recusado",

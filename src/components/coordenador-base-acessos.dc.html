@@ -8,7 +8,7 @@
 </head>
 <body>
 <x-dc>
-  <p class="m-0 fs-13 cor-cinza-600 lh-1p5 max-w-760">Envie as planilhas do B.I. do dia como vieram: usuários criados, implementados, dias de acesso e sem acesso (30, 60, 90 e 120 dias). A leitura e a conferência acontecem neste navegador; nada é gravado antes da confirmação. O banco guarda nome, perfil, unidade, carteira, turma, responsável, datas e dias de acesso; o login é guardado apenas como resumo cifrado, e e-mail, matrícula e demais colunas não saem do computador.</p>
+  <p class="m-0 fs-13 cor-cinza-600 lh-1p5 max-w-760">Envie as planilhas do B.I. do dia como vieram: usuários criados, implementados, dias de acesso e sem acesso (30, 60, 90 e 120 dias). A leitura e a conferência acontecem neste navegador; nada é gravado antes da confirmação. O banco guarda nome, perfil, unidade, carteira, turma ou função, responsável, matrícula, e-mail institucional, datas e dias de acesso; o login é guardado apenas como resumo cifrado, e as demais colunas não saem do computador.</p>
   <div class="filtros d-flex gap-8-10 alinha-end quebra-wrap">
     <label class="h-40 d-inline-flex alinha-center gap-8 borda-0 fundo-ciano-660 cor-branco raio-8 p-0-16 fs-14 fw-600 cursor-pointer" style="background:var(--destaque-ciano-660)">{{ rotuloArquivos }}<input type="file" accept=".xlsx" multiple="{{ true }}" onChange="{{ lerArquivos }}" disabled="{{ ocupado }}" aria-label="Selecionar as planilhas do B.I." class="pos-absolute w-1 h-1 opac-0"></input></label>
     <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Data da base</span><input type="date" value="{{ data }}" max="{{ hoje }}" onChange="{{ escolherData }}" disabled="{{ ocupado }}" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14"></input></label>
@@ -184,6 +184,7 @@ class Component extends DCLogic {
         if (r.unidades_com_carteira)
           partes.push(plural(r.unidades_com_carteira, 'unidade recebeu carteira', 'unidades receberam carteira'));
         mudar({ gravando: false, lidos: null, consolidado: null, resultado: partes.join(' · ') + '.' });
+        if (contexto.aposGravar) contexto.aposGravar();
         await carregarCadastros();
       } catch (x) {
         mudar({ gravando: false, resultado: '', erro: mensagem(x, 'Não foi possível gravar a base.') });

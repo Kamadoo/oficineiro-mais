@@ -2,6 +2,18 @@
 
 ## Próxima versão
 
+### Abas da Jornada conforme o documento de parâmetros
+
+- Abas na ordem do documento: Minha carteira (ou Carteiras), Visão geral, Escolas, Turmas, Mediadores, Usuários e, só para o gerente, Tratativas, Parâmetros e Carga diária.
+- Escolas volta a ser aba própria, para todos os perfis, com a lista de escolas e, ao abrir cada uma, os números e os "Usuários para tratar"; o aviso de usuários recebidos aparece em Minha carteira e em Escolas.
+- Mediadores (antes Oficineiros) ordena pelos 5 mais e 5 menos engajados, mostra "realizou X de Y aulas previstas" e traz o ranking completo com turmas, alunos, implementados, utilização, engajados, aulas realizadas e presença na máquina.
+- Parâmetros: o gerente edita as aulas por semana (meta do aluno), os dias de uso por semana (professor e servidor), o período do arquivo Dias de Acesso (automático, mês, 30 dias ou 6 meses) e a carteira de cada unidade; a aba mostra os ajustes de lotação, as constantes de regra e o texto das regras.
+- Carga diária também na Jornada do gerente, com a mesma verificação em duas etapas do administrador.
+- Ajustes de lotação ficam no banco (preenchidos por painel privado, sem nomes no código) e valem a cada nova carga do B.I.
+- A lista de usuários para tratar ganha a coluna CPF ("não consta" até o cadastro de usuários do portal ser ligado); a evolução mensal mostra os implementados em % dos criados.
+- Pessoas com perfil em branco no arquivo Criados ficam fora da Jornada (antes contavam como servidor); com a base de 21/11/2026 os números batem com a tabela de conferência do documento.
+- Filtros escondidos nas abas Tratativas, Parâmetros e Carga diária; lista de mediadores sem aulas previstas recolhida.
+
 ### Tratativas de usuários na Jornada
 
 - O detalhe de cada escola mostra "Usuários para tratar", com filtros de não implementados, sem uso no mês e não engajados (respeitando o filtro de perfil), matrícula e e-mail institucional que se copiam com um clique e botões para copiar os e-mails e as matrículas da lista.

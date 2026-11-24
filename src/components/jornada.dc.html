@@ -15,7 +15,7 @@
     <div role="tablist" aria-label="Jornada do Usuário" class="d-flex gap-2 fundo-cinza-70 raio-10 p-3 quebra-wrap">
       <sc-for list="{{ abas }}" as="aba" hint-placeholder-count="6"><button role="tab" aria-selected="{{ aba.atual }}" onClick="{{ aba.escolher }}" class="borda-0 raio-8 p-8-14 fs-13 fw-600 {{ aba.classe }}" style="background:{{ aba.fundo }};color:{{ aba.cor }}">{{ aba.rotulo }}</button></sc-for>
     </div>
-<sc-if value="{{ porCarteira }}" hint-placeholder-val="{{ false }}"><select style="background:var(--fundo-branco)"
+<sc-if value="{{ mostrarFiltros }}" hint-placeholder-val="{{ true }}"><sc-if value="{{ porCarteira }}" hint-placeholder-val="{{ false }}"><select style="background:var(--fundo-branco)"
   aria-label="Carteira" onChange="{{ escolherCarteira }}" value="{{ carteira }}"
   class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><sc-for list="{{ opcoesDeCarteira }}" as="opcao"
   hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
@@ -23,11 +23,11 @@
     <select style="background:var(--fundo-branco)" aria-label="Lotação" onChange="{{ escolherLotacao }}" value="{{ lotacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as lotações</option><option value="escolas">Escolas e CEIs</option></select>
     <select style="background:var(--fundo-branco)" aria-label="Escola ou unidade" onChange="{{ escolherFiltroEscola }}" value="{{ filtroEscola }}" class="h-36 max-w-320 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as escolas e unidades</option><sc-for list="{{ opcoesDoFiltroEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
     <select style="background:var(--fundo-branco)" aria-label="Turma" onChange="{{ escolherFiltroAno }}" value="{{ filtroAno }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todos">Todas as turmas</option><sc-for list="{{ opcoesDoFiltroAno }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-    <sc-if value="{{ temFiltro }}" hint-placeholder-val="{{ false }}"><button onClick="{{ limparFiltros }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario">Limpar filtros</button></sc-if>
+    <sc-if value="{{ temFiltro }}" hint-placeholder-val="{{ false }}"><button onClick="{{ limparFiltros }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario">Limpar filtros</button></sc-if></sc-if>
     <span class="ml-auto fs-12 cor-cinza-600">Base de acessos de <b class="cor-ciano-850">{{ dataDaBase }}</b></span>
-    <sc-if value="{{ temComparacao }}" hint-placeholder-val="{{ false }}"><select style="background:var(--fundo-branco)" aria-label="Comparar com a base de acessos de" onChange="{{ escolherComparacao }}" value="{{ comparacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><sc-for list="{{ opcoesDeComparacao }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
+    <sc-if value="{{ temComparacaoVisivel }}" hint-placeholder-val="{{ false }}"><select style="background:var(--fundo-branco)" aria-label="Comparar com a base de acessos de" onChange="{{ escolherComparacao }}" value="{{ comparacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><sc-for list="{{ opcoesDeComparacao }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
   </div>
-  <sc-if value="{{ temResumoDaComparacao }}" hint-placeholder-val="{{ false }}"><p role="status" class="m-0 fs-12 cor-cinza-600">{{ resumoDaComparacao }}</p></sc-if>
+  <sc-if value="{{ temResumoVisivel }}" hint-placeholder-val="{{ false }}"><p role="status" class="m-0 fs-12 cor-cinza-600">{{ resumoDaComparacao }}</p></sc-if>
 
   <sc-if value="{{ avisoRecebidos.visivel }}" hint-placeholder-val="{{ false }}">
     <section role="status" style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-8 fundo-branco">
@@ -254,6 +254,24 @@
         </div>
       </section>
     </div>
+    <div class="empilha-celular d-grid colunas-1fr-1fr gap-16 alinha-start">
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco">
+        <h3 class="m-0-0-6 fs-15">Régua de temperatura</h3>
+        <sc-for list="{{ regua }}" as="faixa" hint-placeholder-count="5">
+          <div class="d-grid colunas-110-minmax-0-1fr gap-10 p-8-0 borda-t-cinza-70 fs-13">
+            <div class="d-flex eixo-column gap-2"><span class="d-flex alinha-center gap-6 fw-600"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ faixa.cor }}"></span>{{ faixa.rotulo }}</span><span class="fs-12 cor-cinza-600">{{ faixa.intervalo }}</span></div>
+            <span class="cor-cinza-750 lh-1p45">{{ faixa.acao }}</span>
+          </div>
+        </sc-for>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-6 fundo-branco">
+        <h3 class="m-0-0-6 fs-15">Como a Jornada classifica</h3>
+        <sc-for list="{{ regras }}" as="regra" hint-placeholder-count="6"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ regra }}</span></sc-for>
+      </section>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ abaAtiva.escolas }}" hint-placeholder-val="{{ false }}">
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
       <div class="d-flex quebra-wrap alinha-center gap-8-14">
         <div class="flex-1-1-300 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Escolas</h3><span class="fs-12 cor-cinza-600">{{ listaDeEscolas.nota }}</span></div>
@@ -290,21 +308,6 @@
       </div>
       <sc-if value="{{ listaDeEscolas.temMais }}" hint-placeholder-val="{{ false }}"><button onClick="{{ listaDeEscolas.mostrarMais }}" class="alinha-si-flex-start h-34 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">Mostrar mais</button></sc-if>
     </section>
-    <div class="empilha-celular d-grid colunas-1fr-1fr gap-16 alinha-start">
-      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco">
-        <h3 class="m-0-0-6 fs-15">Régua de temperatura</h3>
-        <sc-for list="{{ regua }}" as="faixa" hint-placeholder-count="5">
-          <div class="d-grid colunas-110-minmax-0-1fr gap-10 p-8-0 borda-t-cinza-70 fs-13">
-            <div class="d-flex eixo-column gap-2"><span class="d-flex alinha-center gap-6 fw-600"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ faixa.cor }}"></span>{{ faixa.rotulo }}</span><span class="fs-12 cor-cinza-600">{{ faixa.intervalo }}</span></div>
-            <span class="cor-cinza-750 lh-1p45">{{ faixa.acao }}</span>
-          </div>
-        </sc-for>
-      </section>
-      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-6 fundo-branco">
-        <h3 class="m-0-0-6 fs-15">Como a Jornada classifica</h3>
-        <sc-for list="{{ regras }}" as="regra" hint-placeholder-count="6"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ regra }}</span></sc-for>
-      </section>
-    </div>
   </sc-if>
 
   <sc-if value="{{ abaAtiva.escola }}" hint-placeholder-val="{{ false }}">
@@ -496,9 +499,26 @@
         </section>
       </sc-for>
     </div>
-    <sc-if value="{{ semRanking }}" hint-placeholder-val="{{ false }}"><section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-20 fundo-branco"><span class="fs-13 cor-cinza-600">Nenhum oficineiro com atividades previstas no ciclo neste filtro.</span></section></sc-if>
-    <sc-if value="{{ temSemPrevistas }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-750 lh-1p45">{{ semPrevistas }}</span></sc-if>
-    <span class="fs-12 cor-cinza-600 lh-1p45">Ranking pela execução das atividades no ciclo: atividades realizadas ÷ atividades previstas na grade (feriados e recessos fora da conta; atividades fora da grade aparecem à parte e não entram no cálculo). Desempate: % de alunos engajados nos anos atendidos.</span>
+    <sc-if value="{{ semRanking }}" hint-placeholder-val="{{ false }}"><section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-20 fundo-branco"><span class="fs-13 cor-cinza-600">Nenhum mediador com aulas previstas no ciclo neste filtro.</span></section></sc-if>
+    <sc-if value="{{ temSemPrevistas }}" hint-placeholder-val="{{ false }}"><details class="fs-12 cor-cinza-750 lh-1p45"><summary class="cursor-pointer fw-600">{{ tituloSemPrevistas }}</summary><span>{{ semPrevistas }}</span></details></sc-if>
+    <sc-if value="{{ temTabelaDeMediadores }}" hint-placeholder-val="{{ true }}">
+      <details style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <summary class="fs-15 fw-600 cursor-pointer">{{ tituloDaTabelaDeMediadores }}</summary>
+        <div class="rolagem-x-auto m-0-n4 mt-10">
+          <div class="min-w-1000 d-flex eixo-column p-0-4">
+            <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:32px minmax(150px,1.2fr) minmax(170px,1.5fr) 60px 70px 100px 86px 86px 120px 90px">
+              <span>#</span><span>Mediador</span><span>Escola</span><span class="texto-right">Turmas</span><span class="texto-right">Alunos</span><span class="texto-right">Implementados</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Aulas realizadas</span><span class="texto-right">Presença</span>
+            </div>
+            <sc-for list="{{ tabelaDeMediadores }}" as="linha" hint-placeholder-count="5">
+              <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75 num-tabular-nums" style="grid-template-columns:32px minmax(150px,1.2fr) minmax(170px,1.5fr) 60px 70px 100px 86px 86px 120px 90px">
+                <span class="cor-cinza-600">{{ linha.posicao }}</span><span class="fw-600">{{ linha.nome }}</span><span class="fs-12 cor-cinza-750 lh-1p45">{{ linha.escolas }}</span><span class="texto-right">{{ linha.turmas }}</span><span class="texto-right">{{ linha.alunos }}</span><span class="texto-right">{{ linha.implementados }}</span><span class="texto-right">{{ linha.utilizacao }}</span><span class="texto-right fw-600" style="color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span><span class="texto-right" style="color:{{ linha.aulasCor }}">{{ linha.aulas }}</span><span class="texto-right">{{ linha.presenca }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </details>
+    </sc-if>
+    <span class="fs-12 cor-cinza-600 lh-1p45">Ranking pelo % de alunos engajados nas turmas do mediador (sobre os implementados); desempate pela execução das aulas: realizadas ÷ previstas na grade (feriados e recessos fora da conta; aulas fora da grade aparecem à parte e não entram no cálculo).</span>
   </sc-if>
 
   <sc-if value="{{ abaAtiva.usuarios }}" hint-placeholder-val="{{ false }}">
@@ -627,6 +647,59 @@
     </details>
   </sc-if>
 
+  <sc-if value="{{ abaAtiva.parametros }}" hint-placeholder-val="{{ false }}">
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Parâmetros de engajamento</h3><span class="fs-12 cor-cinza-600">{{ parametros.nota }}</span></div>
+      <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Aulas por turma na semana (meta do aluno)<input type="number" min="1" max="5" step="1" value="{{ parametros.form.aulas }}" onChange="{{ parametros.escreverAulas }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"></input><span class="fs-12 fw-400 cor-cinza-600 lh-1p45">{{ parametros.ajudaAulas }}</span></label>
+        <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Dias de uso por semana (professor e servidor)<input type="number" min="1" max="5" step="1" value="{{ parametros.form.dias }}" onChange="{{ parametros.escreverDias }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"></input><span class="fs-12 fw-400 cor-cinza-600 lh-1p45">{{ parametros.ajudaDias }}</span></label>
+        <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Período do arquivo Dias de Acesso<select value="{{ parametros.form.periodo }}" onChange="{{ parametros.escolherPeriodo }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ parametros.periodos }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select><span class="fs-12 fw-400 cor-cinza-600 lh-1p45">{{ parametros.ajudaPeriodo }}</span></label>
+      </div>
+      <div class="d-flex quebra-wrap alinha-center gap-8-12">
+        <button style="background:var(--destaque-ciano-660)" onClick="{{ parametros.salvar }}" disabled="{{ parametros.semMudanca }}" class="h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fundo-ciano-660">Salvar parâmetros</button>
+        <sc-if value="{{ parametros.temMudanca }}" hint-placeholder-val="{{ false }}"><button onClick="{{ parametros.descartar }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">Descartar</button></sc-if>
+        <span class="fs-12 cor-cinza-600">{{ parametros.autoria }}</span>
+      </div>
+    </section>
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Ajustes de lotação</h3><span class="fs-12 cor-cinza-600">Aplicados a cada carga do B.I.; a lista é mantida pela administração do sistema.</span></div>
+      <sc-if value="{{ parametros.semAjustes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhum ajuste de lotação cadastrado.</span></sc-if>
+      <sc-for list="{{ parametros.ajustes }}" as="ajuste" hint-placeholder-count="2">
+        <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(220px,2fr) minmax(180px,1.4fr) 140px">
+          <span class="cor-cinza-750 lh-1p45">{{ ajuste.regra }}</span><span class="fw-600 cor-ciano-850">{{ ajuste.destino }}</span><span class="fs-12 cor-cinza-600 texto-right">{{ ajuste.afetados }}</span>
+        </div>
+      </sc-for>
+    </section>
+    <details style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <summary class="cursor-pointer fs-15 fw-600">Carteira de cada unidade <span class="fs-12 fw-400 cor-cinza-600">· define qual analista vê e trata a escola</span></summary>
+      <div class="d-flex eixo-column gap-0 mt-10">
+        <sc-for list="{{ parametros.unidades }}" as="unidade" hint-placeholder-count="4">
+          <div class="d-grid gap-8 alinha-center fs-13 p-6-0 borda-t-cinza-75" style="grid-template-columns:minmax(220px,1fr) 160px">
+            <span class="cor-cinza-750">{{ unidade.nome }}</span>
+            <select aria-label="{{ unidade.aria }}" value="{{ unidade.carteira }}" onChange="{{ unidade.mudar }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ parametros.carteiras }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+          </div>
+        </sc-for>
+      </div>
+    </details>
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Constantes de regra</h3><span class="fs-12 cor-cinza-600">Fixas no sistema; podem virar parâmetros se a gestão quiser ajustá-las.</span></div>
+      <div class="rolagem-x-auto m-0-n4">
+        <div class="min-w-900 d-flex eixo-column p-0-4">
+          <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,1.2fr) minmax(220px,1.4fr) minmax(220px,1.4fr)"><span>Constante</span><span>Valor</span><span>Efeito</span></div>
+          <sc-for list="{{ parametros.constantes }}" as="constante" hint-placeholder-count="6">
+            <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,1.2fr) minmax(220px,1.4fr) minmax(220px,1.4fr)"><span class="fw-600">{{ constante.nome }}</span><span class="cor-cinza-750 lh-1p45">{{ constante.valor }}</span><span class="fs-12 cor-cinza-600 lh-1p45">{{ constante.efeito }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-6 fundo-branco">
+      <h3 class="m-0-0-6 fs-15">Como a Jornada classifica</h3>
+      <sc-for list="{{ regras }}" as="regra" hint-placeholder-count="6"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ regra }}</span></sc-for>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ abaAtiva.carga }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-base-acessos" contexto="{{ contextoDaCarga }}"></dc-import></sc-if>
+
 </sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -698,9 +771,32 @@ const STATUS_DA_ESCOLA = {
 const PERFIS = { A: 'Aluno', P: 'Professor', S: 'Servidor' };
 const PERFIS_NO_PLURAL = { A: 'Alunos', P: 'Professores', S: 'Servidores' };
 const SEMANAS_DO_PERIODO = 26;
-const META_SEMANAL = { A: 1, P: 3, S: 3 };
 const SEMANAS_NO_MES = 4;
 const DIAS_DA_JANELA = 182;
+const JANELA_DO_PERIODO = { mes: 0, '30d': 30, '6m': DIAS_DA_JANELA };
+const PERIODOS = {
+  auto: 'Automático',
+  mes: 'Mês da leitura',
+  '30d': 'Últimos 30 dias',
+  '6m': 'Últimos 6 meses'
+};
+const PARAMETROS = { aulas: 1, dias: 3, periodo: 'auto', janela: DIAS_DA_JANELA };
+const constantesDeRegra = () => [
+  ['Semanas do mês', '4', 'O mês fechado conta como 4 semanas; em andamento, proporcional aos dias passados'],
+  ['Limite "em evolução"', '1/3 da meta', 'Abaixo disso, o usuário que acessou no mês é baixo uso'],
+  ['Semáforo · crítico', 'Utilização < 40% ou sem uso ≥ 50%', 'Classificação da escola (sobre os criados)'],
+  [
+    'Semáforo · atenção',
+    'Utilização < 60%, sem uso ≥ 30% ou execução das aulas < 60%',
+    'Classificação da escola (sobre os criados)'
+  ],
+  ['Pesos da prioridade de visita', '40 / 25 / 15 / 10 / 10', 'Ordem das sugestões de visita'],
+  ['Visitas sugeridas por semana', String(VISITAS_SUGERIDAS), 'Quantidade de sugestões na carteira'],
+  ['Cores · engajados', 'Vermelho < 20%; verde ≥ 30%', 'Tabelas de escolas e turmas'],
+  ['Cores · aulas realizadas', 'Vermelho < 60%; verde ≥ 80%', 'Tabelas de escolas e turmas'],
+  ['Cores · presença na máquina', 'Vermelho < 50%; verde ≥ 75%', 'Tabelas de escolas e turmas'],
+  ['Temperatura', 'Quente ≤ 5 dias; morno 6–10; frio 11–30; sem uso > 30', 'Dias desde o último acesso']
+];
 const MINIMO_PARA_SEMAFORO = 10;
 const DIAS_DE_STATUS_CONCLUIDO = 14;
 const VISITAS_SUGERIDAS = 3;
@@ -720,11 +816,23 @@ const VISOES_DA_LISTA = {
   mes: ['Mês da leitura', 'Utilização por mês da leitura']
 };
 const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-const REGRAS = [
+const regrasDaJornada = () => [
   'Período de análise: o mês da data da leitura, do dia 1º ao último dia (30 ou 31). O mês conta como 4 semanas; com o mês em andamento, as metas são proporcionais aos dias já passados, arredondadas para cima.',
   'Implementados: já acessaram ao menos uma vez. Utilização: acessaram pelo menos 1 vez no mês. Sem uso no mês: implementados que não acessaram no mês.',
-  'Engajado: aluno com 1 acesso por semana (4 no mês fechado); professor e servidor com 3 dias por semana (12 no mês fechado). Em evolução: acessou no mês com pelo menos 1/3 da meta. Baixo uso: abaixo de 1/3 da meta. % de engajados sobre os implementados.',
-  'Acessos no mês: exatos quando o primeiro acesso foi no mês; senão, estimados pelo ritmo dos dias de acesso no período do arquivo (até 6 meses). Em uso, sem contagem: acessou no mês, mas o arquivo não trouxe os dias de acesso.',
+  'Engajado: aluno com ' +
+    PARAMETROS.aulas +
+    (PARAMETROS.aulas === 1 ? ' acesso' : ' acessos') +
+    ' por semana (' +
+    PARAMETROS.aulas * SEMANAS_NO_MES +
+    ' no mês fechado); professor e servidor com ' +
+    PARAMETROS.dias +
+    ' dias por semana (' +
+    PARAMETROS.dias * SEMANAS_NO_MES +
+    ' no mês fechado). Em evolução: acessou no mês com pelo menos 1/3 da meta. Baixo uso: abaixo de 1/3 da meta. % de engajados sobre os implementados.',
+  'Acessos no mês: exatos quando o arquivo Dias de Acesso vem filtrado no mês ou o primeiro acesso foi no mês; senão, estimados pelo ritmo dos dias de acesso no período do arquivo (hoje: ' +
+    PERIODOS[PARAMETROS.janela ? (PARAMETROS.janela === 30 ? '30d' : '6m') : 'mes'].toLowerCase() +
+    (PARAMETROS.periodo === 'auto' ? ', identificado automaticamente' : ', definido pelo gerente') +
+    '). Em uso, sem contagem: acessou no mês, mas o arquivo não trouxe os dias de acesso.',
   'Aulas da turma: previstas = aulas lançadas na agenda dos oficineiros para a turma no mês; realizadas = registradas como realizadas. Execução = realizadas ÷ previstas até a data da leitura. Presença na máquina = acessos dos alunos no mês (no máximo um por aula realizada) ÷ (alunos × aulas realizadas).',
   'Semáforo (todos os perfis, no mês): Crítico com utilização abaixo de 40% ou sem uso (sem uso no mês + nunca acessou) a partir de 50% dos criados; Atenção com utilização abaixo de 60%, sem uso a partir de 30% ou execução das aulas abaixo de 60%; os demais, Em dia.',
   'Prioridade de visita (0 a 100) = 40 × (1 − utilização) + 25 × sem uso + 15 × (1 − engajados ÷ medidos) + 10 × queda da utilização em 7 dias ÷ 10 pontos (até 1) + 10 × dias desde a última visita registrada ÷ 30 (até 1; sem registro conta 1); metade para unidades com menos de 10 usuários.',
@@ -779,7 +887,8 @@ const PADRAO = {
   tratarGrupo: 'nv',
   tratarForm: null,
   tratarLimite: 60,
-  copia: ''
+  copia: '',
+  paramForm: null
 };
 const EM_TRATATIVA = new Set(['pend_desat', 'em_analise', 'desativado']);
 const GRUPOS_DE_TRATAR = [
@@ -808,16 +917,41 @@ const faixaDe = dias => (dias < 0 ? 'N' : dias <= 5 ? 'Q' : dias <= 10 ? 'M' : d
 const diaDoMes = data => Number(data.slice(8, 10));
 const diasNoMes = data => new Date(Number(data.slice(0, 4)), Number(data.slice(5, 7)), 0).getDate();
 const semanasDoMes = data => SEMANAS_NO_MES * Math.min(1, diaDoMes(data) / diasNoMes(data));
-const metaDoMes = (perfil, data) => Math.ceil((META_SEMANAL[perfil] || 3) * semanasDoMes(data) - 1e-9);
+const metaSemanal = perfil => (perfil === 'A' ? PARAMETROS.aulas : PARAMETROS.dias);
+const metaDoMes = (perfil, data) => Math.ceil(metaSemanal(perfil) * semanasDoMes(data) - 1e-9);
 const acessouNoMes = (conta, data) => conta.diasSemAcesso >= 0 && conta.diasSemAcesso < diaDoMes(data);
 const usosNoMes = (conta, data) => {
   if (!acessouNoMes(conta, data) || !conta.diasDeUso) return 0;
   const inicio = data.slice(0, 8) + '01';
-  if (conta.primeiroAcesso && conta.primeiroAcesso >= inicio) return conta.diasDeUso;
-  const janela = Base.iso(Base.add(dataDe(data), -DIAS_DA_JANELA)),
+  if (!PARAMETROS.janela || (conta.primeiroAcesso && conta.primeiroAcesso >= inicio)) return conta.diasDeUso;
+  const janela = Base.iso(Base.add(dataDe(data), -PARAMETROS.janela)),
     desde = conta.primeiroAcesso && conta.primeiroAcesso > janela ? conta.primeiroAcesso : janela,
-    semanas = Math.min(SEMANAS_DO_PERIODO, Math.max(1, (dataDe(data) - dataDe(desde)) / 604800000));
+    semanas = Math.min(
+      PARAMETROS.janela / 7,
+      SEMANAS_DO_PERIODO,
+      Math.max(1, (dataDe(data) - dataDe(desde)) / 604800000)
+    );
   return Math.max(1, Math.min(conta.diasDeUso, Math.round(((conta.diasDeUso / semanas) * diaDoMes(data)) / 7)));
+};
+const periodoDoArquivo = (acessos, data) => {
+  const inicio = data.slice(0, 8) + '01';
+  let antigo = false,
+    maximo = 0;
+  acessos.forEach(p => {
+    if (p.base_ref !== data) return;
+    const dias = Number(p.dias_acesso) || 0;
+    if (dias > maximo) maximo = dias;
+    if (dias > 0 && p.ultimo_acesso && p.ultimo_acesso < inicio) antigo = true;
+  });
+  return !antigo ? 'mes' : maximo > 31 ? '6m' : '30d';
+};
+const usarParametros = (parametros, acessos, data) => {
+  const p = parametros || {};
+  PARAMETROS.aulas = Number(p.aulas_semana) || 1;
+  PARAMETROS.dias = Number(p.dias_semana) || 3;
+  PARAMETROS.periodo = PERIODOS[p.periodo] ? p.periodo : 'auto';
+  PARAMETROS.detectado = periodoDoArquivo(acessos, data);
+  PARAMETROS.janela = JANELA_DO_PERIODO[PARAMETROS.periodo === 'auto' ? PARAMETROS.detectado : PARAMETROS.periodo];
 };
 const estagioDe = (conta, data) => {
   if (conta.diasSemAcesso < 0) return 'nv';
@@ -1018,8 +1152,19 @@ class Component extends DCLogic {
     Object.assign(this.props.memoria, mudanca);
     this.forceUpdate();
   }
-  preparar(acessos, escolaDe, base) {
-    if (this.preparo && this.preparo.acessos === acessos && this.preparo.base === base) return this.preparo;
+  preparar(acessos, escolaDe, base, parametros) {
+    if (
+      this.preparo &&
+      this.preparo.acessos === acessos &&
+      this.preparo.base === base &&
+      this.preparo.parametros === parametros
+    )
+      return this.preparo;
+    usarParametros(
+      parametros,
+      acessos,
+      acessos.reduce((maior, p) => (p.base_ref > maior ? p.base_ref : maior), '')
+    );
     const porBase = {};
     let incompleto = false;
     acessos.forEach(p => {
@@ -1108,6 +1253,7 @@ class Component extends DCLogic {
     const preparo = {
       acessos,
       base,
+      parametros,
       porMes,
       dataDaBase,
       dataAnterior,
@@ -1265,6 +1411,77 @@ class Component extends DCLogic {
       ciente: () => jornada.cienteTratativas()
     };
   }
+  abaDeParametros(jornada, memoria) {
+    const salvo = jornada.parametros || {},
+      original = {
+        aulas: String(salvo.aulas_semana || 1),
+        dias: String(salvo.dias_semana || 3),
+        periodo: PERIODOS[salvo.periodo] ? salvo.periodo : 'auto'
+      },
+      form = { ...original, ...(memoria.paramForm || {}) },
+      temMudanca = ['aulas', 'dias', 'periodo'].some(campo => form[campo] !== original[campo]),
+      valido = n => /^[1-5]$/.test(String(n)),
+      mudar = campo => e => this.lembrar({ paramForm: { ...form, [campo]: String(e.target.value) } }),
+      aulas = Number(form.aulas) || 1,
+      dias = Number(form.dias) || 3,
+      detectado = PERIODOS[PARAMETROS.detectado] || '';
+    const carteiras = [{ valor: '', rotulo: 'Sem carteira' }].concat(
+      (jornada.carteiras || []).map(c => ({ valor: c.id, rotulo: c.id }))
+    );
+    const unidades = (jornada.escolas || [])
+      .filter(e => e.ativa !== false)
+      .slice()
+      .sort((a, b) => ehEscola(b.nome) - ehEscola(a.nome) || String(a.nome).localeCompare(String(b.nome), 'pt-BR'))
+      .map(e => ({
+        nome: e.nome,
+        aria: 'Carteira de ' + e.nome,
+        carteira: e.carteira_id || '',
+        mudar: ev => jornada.definirCarteira(e.id, ev.target.value || null)
+      }));
+    return {
+      nota: 'Valem para todos os perfis assim que salvos.',
+      form,
+      escreverAulas: mudar('aulas'),
+      escreverDias: mudar('dias'),
+      escolherPeriodo: mudar('periodo'),
+      ajudaAulas:
+        'Engajado com ' +
+        plural(aulas, 'acesso', 'acessos') +
+        ' por semana: ' +
+        aulas * SEMANAS_NO_MES +
+        ' no mês fechado.',
+      ajudaDias: 'Engajado com ' + dias + ' dias por semana: ' + dias * SEMANAS_NO_MES + ' no mês fechado.',
+      ajudaPeriodo:
+        'Define se a contagem do mês é exata ou estimada.' +
+        (detectado ? ' Arquivo atual: ' + detectado.toLowerCase() + '.' : ''),
+      periodos: Object.keys(PERIODOS).map(valor => ({
+        valor,
+        rotulo: valor === 'auto' && detectado ? 'Automático (' + detectado.toLowerCase() + ')' : PERIODOS[valor]
+      })),
+      temMudanca,
+      semMudanca: !temMudanca || !valido(form.aulas) || !valido(form.dias) || memoria.salvando,
+      descartar: () => this.lembrar({ paramForm: null }),
+      salvar: () => {
+        if (memoria.salvando) return;
+        this.lembrar({ salvando: true });
+        Promise.resolve(jornada.salvarParametros(Number(form.aulas), Number(form.dias), form.periodo)).then(ok =>
+          this.lembrar({ salvando: false, ...(ok ? { paramForm: null } : {}) })
+        );
+      },
+      autoria: salvo.atualizado_em
+        ? 'Última alteração: ' + (salvo.autor_nome || 'gerente') + ' em ' + dataDoRegistro(salvo.atualizado_em) + '.'
+        : 'Valores padrão do documento de parâmetros.',
+      ajustes: (jornada.ajustesLotacao || []).map(a => ({
+        regra: a.regra,
+        destino: 'Conta em ' + a.destino,
+        afetados: plural(Number(a.afetados) || 0, 'usuário', 'usuários') + ' na base'
+      })),
+      semAjustes: !(jornada.ajustesLotacao || []).length,
+      carteiras,
+      unidades,
+      constantes: constantesDeRegra().map(([nome, valor, efeito]) => ({ nome, valor, efeito }))
+    };
+  }
   abaDeTratativas(jornada, memoria) {
     const decidir = typeof jornada.decidirTratativas === 'function' ? jornada.decidirTratativas : null;
     const todas = jornada.tratativas || [];
@@ -1374,7 +1591,6 @@ class Component extends DCLogic {
       textos = TEXTOS[porCarteira ? 'gerente' : 'analista'],
       memoria = { ...PADRAO, ...this.props.memoria },
       acessos = contexto.acessos;
-    if (memoria.aba === 'escolas') memoria.aba = 'geral';
     if (!Array.isArray(acessos) || !acessos.length)
       return {
         carregando: contexto.carregandoAcessos || acessos == null,
@@ -1386,6 +1602,8 @@ class Component extends DCLogic {
         usuarios: {},
         avisoRecebidos: {},
         tratativas: {},
+        parametros: {},
+        contextoDaCarga: {},
         agendaDaSemana: {},
         listaDeEscolas: {},
         evolucao: {},
@@ -1395,7 +1613,8 @@ class Component extends DCLogic {
     const { porEscola, porMes, dataDaBase, dataAnterior, anterior, meses } = this.preparar(
       acessos,
       jornada.escolaDe,
-      contexto.baseJornada
+      contexto.baseJornada,
+      jornada.parametros || null
     );
     const statusPorEscola = {},
       historicoPorEscola = {};
@@ -1412,6 +1631,8 @@ class Component extends DCLogic {
     const hojeIso = Base.iso(hoje);
     const podeGravar = typeof jornada.registrarStatusEscola === 'function',
       gerenteDecide = typeof jornada.decidirTratativas === 'function',
+      podeParametrizar = typeof jornada.salvarParametros === 'function',
+      temCarga = !!jornada.carga,
       podeAgendar = typeof jornada.agendarVisita === 'function',
       podeDescartar = typeof jornada.descartarSugestao === 'function';
     const todosOsLocais = Object.values(porEscola);
@@ -2289,6 +2510,12 @@ class Component extends DCLogic {
           presencaDele = presencaDasAulas(somarAulas(aulasDosAnosDele));
         ranking.push({
           nome,
+          escolas: escolasDele.map(outra => outra.local.nome).join(', '),
+          turmas,
+          alunos: total.n,
+          implementados: total.n ? parcela(total.implementados, total.n) : -1,
+          utilizacao: total.n ? total.uso : -1,
+          presenca: presencaDele,
           previstas,
           realizadas,
           foraDaGrade,
@@ -2300,40 +2527,56 @@ class Component extends DCLogic {
             plural(turmas, 'turma', 'turmas') +
             ' · ' +
             plural(total.n, 'aluno', 'alunos') +
-            (total.n ? ' · ' + total.engajados + '% engajados' : '') +
             (presencaDele != null ? ' · presença na máquina ' + presencaDele + '%' : '')
         });
       })
     );
-    ranking.sort((a, b) => b.execucao - a.execucao || b.engajados - a.engajados || b.previstas - a.previstas);
+    ranking.sort((a, b) => b.engajados - a.engajados || b.execucao - a.execucao || b.previstas - a.previstas);
+    const pct = v => (v < 0 || v == null ? '—' : v + '%');
     const linhaDoRanking = (item, posicao) => ({
       posicao,
       nome: item.nome,
-      detalhe: item.detalhe,
-      execucao: item.execucao + '%',
-      execucaoCor: exC(item.execucao),
-      realizadas:
+      detalhe:
+        item.detalhe +
+        ' · realizou ' +
         item.realizadas +
         ' de ' +
-        plural(item.previstas, 'prevista', 'previstas') +
-        (item.foraDaGrade ? ' · +' + item.foraDaGrade + ' fora da grade' : '')
+        plural(item.previstas, 'aula prevista', 'aulas previstas') +
+        (item.foraDaGrade ? ' (+' + item.foraDaGrade + ' fora da grade)' : ''),
+      execucao: pct(item.engajados),
+      execucaoCor: item.engajados < 0 ? 'var(--cinza-600)' : corDosEngajados(item.engajados),
+      realizadas: 'engajados · execução ' + item.execucao + '%'
     });
+    const tabelaDeMediadores = ranking.map((item, i) => ({
+      posicao: String(i + 1),
+      nome: item.nome,
+      escolas: item.escolas,
+      turmas: String(item.turmas),
+      alunos: numero(item.alunos),
+      implementados: pct(item.implementados),
+      utilizacao: pct(item.utilizacao),
+      engajados: pct(item.engajados),
+      engajadosCor: item.engajados < 0 ? 'inherit' : corDosEngajados(item.engajados),
+      aulas: item.realizadas + '/' + item.previstas + ' · ' + item.execucao + '%',
+      aulasCor: exC(item.execucao),
+      presenca: item.presenca == null ? '—' : item.presenca + '%'
+    }));
     const mais = ranking.slice(0, 5).map((item, i) => linhaDoRanking(item, i + 1));
     const menos = ranking
       .slice(Math.max(5, ranking.length - 5))
       .map((item, i, lista) => linhaDoRanking(item, ranking.length - lista.length + i + 1))
       .reverse();
     const tituloDoRanking = (quantos, ponta) =>
-      quantos === 1 ? 'O oficineiro com ' + ponta + ' execução' : 'Os ' + quantos + ' com ' + ponta + ' execução';
+      quantos === 1 ? 'O mediador ' + ponta + ' engajado' : 'Os ' + quantos + ' ' + ponta + ' engajados';
     const rankings = [
       {
-        titulo: tituloDoRanking(mais.length, 'maior'),
-        nota: 'Atividades realizadas ÷ previstas no ciclo.',
+        titulo: tituloDoRanking(mais.length, 'mais'),
+        nota: '% de alunos engajados nas turmas do mediador.',
         linhas: mais
       }
     ].concat(
       menos.length
-        ? [{ titulo: tituloDoRanking(menos.length, 'menor'), nota: 'Do último para cima.', linhas: menos }]
+        ? [{ titulo: tituloDoRanking(menos.length, 'menos'), nota: 'Do último para cima.', linhas: menos }]
         : []
     );
     const buscaDeUsuario = normTxt(memoria.usuBusca);
@@ -2650,19 +2893,28 @@ class Component extends DCLogic {
       temMeses: totaisDoMes.length > 0,
       nota:
         totaisDoMes.length > 1
-          ? 'Usuários por mês, só nos meses com leitura salva (última leitura de cada mês), na mesma escala. Percentuais sobre os implementados.'
+          ? 'Usuários por mês, só nos meses com leitura salva (última leitura de cada mês), na mesma escala. Implementados em % dos criados; utilização e engajados em % dos implementados do mês.'
           : 'A evolução aparece a partir da segunda base mensal carregada; as bases anteriores ficam guardadas.',
       meses: totaisDoMes.map(({ data, total }) => ({
         rotulo: rotuloDoMes(data),
-        numeros: 'uso ' + total.usoDosImplementados + '% · eng. ' + total.engajados + '%',
+        numeros:
+          'impl. ' +
+          parcela(total.implementados, total.n) +
+          '% · uso ' +
+          total.usoDosImplementados +
+          '% · eng. ' +
+          total.engajados +
+          '%',
         barras: [
           barraDoMes(total.n, 'var(--destaque-ciano-880)', 'Criados'),
+          barraDoMes(total.implementados, 'var(--destaque-ciano-400)', 'Implementados'),
           barraDoMes(total.utilizacao, 'var(--destaque-azul-500)', 'Utilização'),
           barraDoMes(total.en, 'var(--texto-verde-700)', 'Engajados')
         ]
       })),
       legenda: [
         { rotulo: 'Criados', cor: 'var(--destaque-ciano-880)' },
+        { rotulo: 'Implementados', cor: 'var(--destaque-ciano-400)' },
         { rotulo: 'Utilização (acessaram no mês)', cor: 'var(--destaque-azul-500)' },
         { rotulo: 'Engajados', cor: 'var(--texto-verde-700)' }
       ]
@@ -2698,6 +2950,12 @@ class Component extends DCLogic {
       ),
       escolherComparacao: e => contexto.trocarComparacao(e.target.value),
       temResumoDaComparacao: !!(geralAnterior && geralAnterior.n),
+      temComparacaoVisivel:
+        retratos.length > 0 &&
+        typeof contexto.trocarComparacao === 'function' &&
+        !['parametros', 'carga', 'tratativas'].includes(memoria.aba),
+      temResumoVisivel:
+        !!(geralAnterior && geralAnterior.n) && !['parametros', 'carga', 'tratativas'].includes(memoria.aba),
       resumoDaComparacao:
         geralAnterior && geralAnterior.n
           ? 'Em relação a ' +
@@ -2760,24 +3018,33 @@ class Component extends DCLogic {
       ordem: memoria.ordem,
       temperatura: memoria.temperatura,
       escolaNome: escolhida ? escolhida.local.nome : '',
+      mostrarFiltros: !['parametros', 'carga', 'tratativas'].includes(memoria.aba),
       abaAtiva: {
         carteira: memoria.aba === 'carteira',
         geral: memoria.aba === 'geral',
+        escolas: memoria.aba === 'escolas',
         escola: memoria.aba === 'escola',
         oficineiros: memoria.aba === 'oficineiros',
         usuarios: memoria.aba === 'usuarios',
-        tratativas: memoria.aba === 'tratativas' && gerenteDecide
+        tratativas: memoria.aba === 'tratativas' && gerenteDecide,
+        parametros: memoria.aba === 'parametros' && podeParametrizar,
+        carga: memoria.aba === 'carga' && temCarga
       },
-      avisoRecebidos: memoria.aba === 'carteira' || memoria.aba === 'geral' ? this.avisoDeRecebidos(jornada) : {},
+      parametros: podeParametrizar && memoria.aba === 'parametros' ? this.abaDeParametros(jornada, memoria) : {},
+      contextoDaCarga: temCarga ? jornada.carga : {},
+      avisoRecebidos: memoria.aba === 'carteira' || memoria.aba === 'escolas' ? this.avisoDeRecebidos(jornada) : {},
       tratativas: gerenteDecide && memoria.aba === 'tratativas' ? this.abaDeTratativas(jornada, memoria) : {},
       abas: [
         ['carteira', textos.aba],
         ['geral', 'Visão geral'],
+        ['escolas', 'Escolas'],
         ['escola', 'Turmas'],
-        ['oficineiros', 'Oficineiros'],
+        ['oficineiros', 'Mediadores'],
         ['usuarios', 'Usuários']
       ]
         .concat(gerenteDecide ? [['tratativas', 'Tratativas']] : [])
+        .concat(podeParametrizar ? [['parametros', 'Parâmetros']] : [])
+        .concat(temCarga ? [['carga', 'Carga diária']] : [])
         .map(([aba, rotulo]) => ({
           rotulo,
           atual: memoria.aba === aba ? 'true' : 'false',
@@ -2864,7 +3131,7 @@ class Component extends DCLogic {
         valor: numero(geral[codigo]),
         parcela: decimal(geral[codigo], geral.n)
       })),
-      regras: REGRAS,
+      regras: regrasDaJornada(),
       barras,
       regua: FAIXAS.map(faixa => ({
         rotulo: TEMPERATURAS[faixa][0],
@@ -2891,9 +3158,14 @@ class Component extends DCLogic {
       rede,
       semAnosNaRede: !rede.anos.length,
       rankings: ranking.length ? rankings : [],
+      tabelaDeMediadores,
+      temTabelaDeMediadores: ranking.length > 0,
+      tituloDaTabelaDeMediadores: 'Ranking completo (' + plural(ranking.length, 'mediador', 'mediadores') + ')',
       semRanking: !ranking.length,
       temSemPrevistas: semPrevistas.length > 0 && aulasDoCiclo.length > 0,
-      semPrevistas: 'Sem atividades previstas no ciclo (fora do ranking): ' + semPrevistas.join(', ') + '.',
+      tituloSemPrevistas:
+        plural(semPrevistas.length, 'mediador', 'mediadores') + ' sem aulas previstas no ciclo (fora do ranking)',
+      semPrevistas: semPrevistas.join(', ') + '.',
       opcoesDeEstagio: ORDEM_DOS_ESTAGIOS.map(valor => ({ valor, rotulo: ESTAGIOS[valor][0] })),
       usuarios,
       buscarUsuario: e => this.lembrar({ usuBusca: e.target.value, usuLimite: 100 }),

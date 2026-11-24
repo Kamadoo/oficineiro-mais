@@ -64,7 +64,7 @@ async function planilhas() {
       [
         'serv.tres',
         'Servidor Tres',
-        'Em branco',
+        'Servidor',
         'AT1',
         'Secretaria de Teste',
         'tres@exemplo.test',
@@ -93,6 +93,18 @@ async function planilhas() {
         'Em branco',
         'c@exemplo.test',
         '5',
+        'Em branco',
+        '',
+        'Em branco'
+      ],
+      [
+        'sem.perfil',
+        'Sem Perfil',
+        'Em branco',
+        'AT1',
+        'Secretaria de Teste',
+        's@exemplo.test',
+        '6',
         'Em branco',
         '',
         'Em branco'
@@ -169,7 +181,7 @@ async function planilhas() {
 test('reconhece cada planilha pelo cabeçalho e ignora o rodapé de filtros', async () => {
   const lidos = await BA.ler(await planilhas());
   assert.deepEqual(js(lidos.map(l => [l.mapa.tipo, l.mapa.faixa || 0, l.total])), [
-    ['criados', 0, 5],
+    ['criados', 0, 6],
     ['implementados', 0, 2],
     ['dias', 0, 2],
     ['semAcesso', 60, 1]
@@ -196,7 +208,8 @@ test('consolida as pessoas, cruza pelo login e prepara as unidades', async () =>
     ['Unidade não informada AT1', 'AT1']
   ]);
   assert.deepEqual(js(c.ganhamCarteira.map(u => [u.escola, u.carteira])), [[3, 'AT1']]);
-  assert.ok(c.avisos.some(a => /perfil em branco/.test(a)));
+  assert.ok(c.avisos.some(a => /1 pessoa\(s\) com perfil em branco ficam fora/.test(a)));
+  assert.ok(!c.validas.some(l => l.login === 'sem.perfil'));
   const um = c.validas.find(l => l.login === 'aluno.um').registro;
   assert.deepEqual(js(um), {
     nome: 'Aluno Um',

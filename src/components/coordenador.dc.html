@@ -714,12 +714,13 @@ class Component extends DCLogic {
     this.setState({ carregandoAcessos: true });
     const hoje = this.hojeIso(),
       dia = n => Base.iso(Base.add(Base.dataDe(hoje), n));
-    const [statusEscolas, statusCarteiras, descartes, agenda, visitas] = await Promise.all([
+    const [statusEscolas, statusCarteiras, descartes, agenda, visitas, parametros] = await Promise.all([
       A.jornadaStatusEscolas().catch(() => []),
       A.jornadaStatusCarteiras().catch(() => []),
       A.jornadaDescartes().catch(() => []),
       A.agendaVisitas(dia(-60), dia(60)).catch(() => []),
-      A.visitasPeriodo(dia(-365), hoje).catch(() => [])
+      A.visitasPeriodo(dia(-365), hoje).catch(() => []),
+      A.jornadaParametros().catch(() => null)
     ]);
     this.setState({
       jornadaDados: {
@@ -727,7 +728,8 @@ class Component extends DCLogic {
         statusCarteiras: statusCarteiras || [],
         descartes: descartes || [],
         agenda: (agenda || []).filter(v => v.status !== 'cancelada'),
-        visitas: visitas || []
+        visitas: visitas || [],
+        parametros: parametros || null
       }
     });
     try {
@@ -762,6 +764,7 @@ class Component extends DCLogic {
         statusEscolas: dados.statusEscolas,
         statusCarteiras: dados.statusCarteiras,
         descartes: dados.descartes,
+        parametros: dados.parametros,
         carteiraPropria: '',
         escolaDe: id => escolaPorId[id],
         aulas: () => [],
