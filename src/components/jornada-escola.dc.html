@@ -66,6 +66,59 @@
     <sc-for list="{{ historico }}" as="item" hint-placeholder-count="2"><span class="fs-12 cor-cinza-600 lh-1p45 p-6-0 borda-t-cinza-70">{{ item }}</span></sc-for>
     <sc-if value="{{ semHistorico }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-cinza-600">Nenhum status registrado para esta escola.</span></sc-if>
   </div>
+  <sc-if value="{{ tratar.visivel }}" hint-placeholder-val="{{ false }}">
+    <div class="d-flex eixo-column gap-8">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><b class="fs-13">Usuários para tratar</b><span class="fs-12 cor-cinza-600">{{ tratar.nota }}</span></div>
+      <div class="d-flex quebra-wrap gap-6 alinha-center">
+        <sc-for list="{{ tratar.chips }}" as="chip" hint-placeholder-count="3"><button aria-pressed="{{ chip.pressionado }}" onClick="{{ chip.escolher }}" class="h-32 raio-999 p-0-12 fs-12 fw-600 {{ chip.classe }}" style="background:{{ chip.fundo }};color:{{ chip.cor }}">{{ chip.rotulo }} <b class="num-tabular-nums">{{ chip.n }}</b></button></sc-for>
+        <span class="ml-auto d-flex quebra-wrap gap-6">
+          <button onClick="{{ tratar.copiarEmails }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-12 fw-600 botao-secundario">Copiar e-mails da lista</button>
+          <button onClick="{{ tratar.copiarMatriculas }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-12 fw-600 botao-secundario">Copiar matrículas da lista</button>
+        </span>
+      </div>
+      <sc-if value="{{ tratar.temCopia }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-12 cor-verde-700">{{ tratar.copia }}</span></sc-if>
+      <sc-if value="{{ tratar.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">Nenhum usuário nesta situação.</span></sc-if>
+      <sc-if value="{{ tratar.temLinhas }}" hint-placeholder-val="{{ false }}">
+        <div class="rolagem-x-auto fundo-branco raio-10 borda-cinza-110 p-0-10">
+          <div class="min-w-1000 d-flex eixo-column">
+            <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-8-0" style="grid-template-columns:minmax(170px,1.6fr) 80px minmax(170px,1.4fr) 76px 100px 92px 60px 130px">
+              <span>Nome</span><span>Matrícula</span><span>E-mail institucional</span><span>Perfil</span><span>Turma ou função</span><span>Último acesso</span><span class="texto-right">Dias de uso</span><span>Estágio</span>
+            </div>
+            <sc-for list="{{ tratar.linhas }}" as="linha" hint-placeholder-count="5">
+              <div class="d-grid gap-8 alinha-center fs-13 p-6-0 borda-t-cinza-75" style="grid-template-columns:minmax(170px,1.6fr) 80px minmax(170px,1.4fr) 76px 100px 92px 60px 130px">
+                <span class="d-flex eixo-column gap-2 min-w-0">
+                  <sc-if value="{{ linha.clicavel }}" hint-placeholder-val="{{ false }}"><button aria-expanded="{{ linha.expandida }}" onClick="{{ linha.abrir }}" class="borda-0 fundo-branco p-0 texto-left fs-13 fw-600 cor-ciano-850 cursor-pointer">{{ linha.nome }}<span class="fs-11 fw-400 cor-cinza-600"> · {{ linha.acaoDoNome }}</span></button></sc-if>
+                  <sc-if value="{{ linha.fixo }}" hint-placeholder-val="{{ true }}"><span class="fw-600">{{ linha.nome }}</span></sc-if>
+                  <sc-if value="{{ linha.temNota }}" hint-placeholder-val="{{ false }}"><span class="fs-11 cor-cinza-600">{{ linha.nota }}</span></sc-if>
+                </span>
+                <sc-if value="{{ linha.temMatricula }}" hint-placeholder-val="{{ false }}"><button onClick="{{ linha.copiarMatricula }}" title="Copiar matrícula" class="borda-0 fundo-branco p-0 texto-left fs-12 num-tabular-nums cor-ciano-850 cursor-pointer">{{ linha.matricula }}</button></sc-if>
+                <sc-if value="{{ linha.semMatricula }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">não consta</span></sc-if>
+                <sc-if value="{{ linha.temEmail }}" hint-placeholder-val="{{ false }}"><button onClick="{{ linha.copiarEmail }}" title="Copiar e-mail" class="borda-0 fundo-branco p-0 texto-left fs-12 cor-ciano-850 cursor-pointer rolagem-hidden reticencias-ellipsis espaco-nowrap">{{ linha.email }}</button></sc-if>
+                <sc-if value="{{ linha.semEmail }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">não consta</span></sc-if>
+                <span class="fs-12 cor-cinza-750">{{ linha.perfil }}</span>
+                <span class="fs-12 cor-cinza-750 rolagem-hidden reticencias-ellipsis espaco-nowrap" title="{{ linha.turma }}">{{ linha.turma }}</span>
+                <span class="num-tabular-nums fs-12">{{ linha.ultimo }}</span>
+                <span class="num-tabular-nums fs-12 texto-right">{{ linha.dias }}</span>
+                <span class="fs-12 fw-600" style="color:{{ linha.estagioCor }}">{{ linha.estagio }}</span>
+              </div>
+              <sc-if value="{{ linha.aberta }}" hint-placeholder-val="{{ false }}">
+                <div class="d-grid gap-10 p-12 m-0-0-8 raio-10 fundo-ciano-40 borda-cinza-110" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+                  <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">O que aconteceu com este usuário?<select style="background:var(--fundo-branco)" onChange="{{ tratar.escolherAcao }}" value="{{ tratar.form.acao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="saiu">Saiu da rede</option><option value="transferido">Transferido para outra escola</option><option value="licenca">Licença sem vencimento</option></select><span class="fs-11 fw-400 cor-cinza-600 lh-1p45">{{ tratar.explicacao }}</span></label>
+                  <sc-if value="{{ tratar.pedeDestino }}" hint-placeholder-val="{{ false }}"><label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Nova escola<select style="background:var(--fundo-branco)" onChange="{{ tratar.escolherDestino }}" value="{{ tratar.form.destino }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="">Escolha a escola</option><sc-for list="{{ tratar.opcoesDeDestino }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label></sc-if>
+                  <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">{{ tratar.rotuloDaObservacao }}<textarea rows="2" value="{{ tratar.form.obs }}" onChange="{{ tratar.escreverObservacao }}" maxlength="500" placeholder="{{ tratar.dicaDaObservacao }}" class="borda-cinza-160 raio-8 p-8-10 fs-13"></textarea></label>
+                  <span class="d-flex gap-6 alinha-end">
+                    <button style="background:var(--destaque-ciano-660)" onClick="{{ tratar.salvar }}" disabled="{{ tratar.incompleto }}" class="h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600">Salvar</button>
+                    <button onClick="{{ tratar.cancelar }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario">Cancelar</button>
+                  </span>
+                </div>
+              </sc-if>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ tratar.temMais }}" hint-placeholder-val="{{ false }}"><span class="d-flex quebra-wrap alinha-center gap-8"><button onClick="{{ tratar.mostrarMais }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-12 fw-600 botao-secundario">Mostrar mais</button><span class="fs-12 cor-cinza-600">{{ tratar.textoMais }}</span></span></sc-if>
+    </div>
+  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -79,6 +132,7 @@ class Component extends DCLogic {
       historico: [],
       opcoesDeStatus: [],
       form: {},
+      tratar: { form: {}, chips: [], linhas: [], opcoesDeDestino: [] },
       ...detalhe
     };
   }

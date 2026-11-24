@@ -29,6 +29,13 @@
   </div>
   <sc-if value="{{ temResumoDaComparacao }}" hint-placeholder-val="{{ false }}"><p role="status" class="m-0 fs-12 cor-cinza-600">{{ resumoDaComparacao }}</p></sc-if>
 
+  <sc-if value="{{ avisoRecebidos.visivel }}" hint-placeholder-val="{{ false }}">
+    <section role="status" style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-8 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-center gap-8-12"><h3 class="m-0 fs-15 flex-1-1-240">{{ avisoRecebidos.titulo }}</h3><button onClick="{{ avisoRecebidos.ciente }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario">Ciente</button></div>
+      <sc-for list="{{ avisoRecebidos.linhas }}" as="aviso" hint-placeholder-count="2"><span class="fs-13 cor-cinza-750 lh-1p45 p-6-0 borda-t-cinza-75">{{ aviso.texto }} <span class="fs-12 cor-cinza-600">{{ aviso.autor }}</span></span></sc-for>
+    </section>
+  </sc-if>
+
   <sc-if value="{{ abaAtiva.carteira }}" hint-placeholder-val="{{ false }}">
     <sc-if value="{{ listaDeCarteiras }}" hint-placeholder-val="{{ false }}">
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
@@ -525,6 +532,101 @@
     </section>
   </sc-if>
 
+  <sc-if value="{{ abaAtiva.tratativas }}" hint-placeholder-val="{{ false }}">
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Tratativas</h3><span class="fs-12 cor-cinza-600">Casos que os analistas marcaram no detalhe das escolas e que dependem de você.</span></div>
+      <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
+        <sc-for list="{{ tratativas.kpis }}" as="kpi" hint-placeholder-count="4">
+          <div class="fundo-branco borda-cinza-110 raio-10 p-10-12 d-flex eixo-column gap-2"><span class="fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ kpi.titulo }}</span><span class="num-tabular-nums fs-18 fw-600 cor-ciano-850">{{ kpi.valor }}</span><span class="fs-12 cor-cinza-600">{{ kpi.nota }}</span></div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ tratativas.temCopia }}" hint-placeholder-val="{{ false }}"><span role="status" class="fs-12 cor-verde-700">{{ tratativas.copia }}</span></sc-if>
+    </section>
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Usuários para desativação</h3><span class="fs-12 cor-cinza-600">Copie para a OS de desativação e marque como desativado quando a OS for enviada.</span></div>
+      <sc-if value="{{ tratativas.temPendentes }}" hint-placeholder-val="{{ false }}">
+        <div class="d-flex quebra-wrap gap-6">
+          <button onClick="{{ tratativas.copiarMatriculas }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-12 fw-600 botao-secundario">Copiar matrículas</button>
+          <button onClick="{{ tratativas.copiarTabela }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-12 fw-600 botao-secundario">Copiar tabela para a OS (CSV)</button>
+          <button onClick="{{ tratativas.desativarTodos }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-12 fw-600 botao-secundario">Marcar todos como desativados</button>
+        </div>
+      </sc-if>
+        <sc-if value="{{ tratativas.desativacao.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">{{ tratativas.desativacao.textoVazio }}</span></sc-if>
+        <sc-if value="{{ tratativas.desativacao.temLinhas }}" hint-placeholder-val="{{ false }}">
+          <div class="rolagem-x-auto m-0-n4">
+            <div class="min-w-1000 d-flex eixo-column p-0-4">
+              <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(140px,1.3fr) 70px minmax(150px,1.2fr) 80px minmax(150px,1.3fr) minmax(130px,1.2fr) 120px 170px">
+                <span>Nome</span><span>Perfil</span><span>Escola</span><span>Matrícula</span><span>E-mail</span><span>Motivo</span><span>Informado por</span><span></span>
+              </div>
+              <sc-for list="{{ tratativas.desativacao.linhas }}" as="linha" hint-placeholder-count="3">
+                <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(140px,1.3fr) 70px minmax(150px,1.2fr) 80px minmax(150px,1.3fr) minmax(130px,1.2fr) 120px 170px">
+                  <span class="fw-600">{{ linha.nome }}</span><span class="fs-12 cor-cinza-750">{{ linha.perfil }}</span><span class="fs-12 cor-cinza-750">{{ linha.escola }}</span><span class="fs-12 num-tabular-nums">{{ linha.matricula }}</span><span class="fs-12 cor-cinza-750 rolagem-hidden reticencias-ellipsis espaco-nowrap" title="{{ linha.email }}">{{ linha.email }}</span>
+                  <span class="fs-12 cor-cinza-750 lh-1p45">{{ linha.observacao }}</span><span class="fs-12 cor-cinza-600">{{ linha.informado }}</span><span class="d-flex quebra-wrap gap-6"><sc-for list="{{ linha.botoes }}" as="botao" hint-placeholder-count="1"><button onClick="{{ botao.executar }}" disabled="{{ botao.bloqueado }}" class="h-30 borda-cinza-160 fundo-branco raio-8 p-0-10 fs-12 fw-600 botao-secundario">{{ botao.rotulo }}</button></sc-for></span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+    </section>
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Licença sem vencimento</h3><span class="fs-12 cor-cinza-600">Decida se o usuário continua ativo (volta para a lista do analista) ou vai para a desativação.</span></div>
+        <sc-if value="{{ tratativas.licencas.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">{{ tratativas.licencas.textoVazio }}</span></sc-if>
+        <sc-if value="{{ tratativas.licencas.temLinhas }}" hint-placeholder-val="{{ false }}">
+          <div class="rolagem-x-auto m-0-n4">
+            <div class="min-w-1000 d-flex eixo-column p-0-4">
+              <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(140px,1.3fr) 70px minmax(150px,1.2fr) 80px minmax(150px,1.3fr) minmax(130px,1.2fr) 120px 170px">
+                <span>Nome</span><span>Perfil</span><span>Escola</span><span>Matrícula</span><span>E-mail</span><span>Observação</span><span>Informado por</span><span></span>
+              </div>
+              <sc-for list="{{ tratativas.licencas.linhas }}" as="linha" hint-placeholder-count="3">
+                <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(140px,1.3fr) 70px minmax(150px,1.2fr) 80px minmax(150px,1.3fr) minmax(130px,1.2fr) 120px 170px">
+                  <span class="fw-600">{{ linha.nome }}</span><span class="fs-12 cor-cinza-750">{{ linha.perfil }}</span><span class="fs-12 cor-cinza-750">{{ linha.escola }}</span><span class="fs-12 num-tabular-nums">{{ linha.matricula }}</span><span class="fs-12 cor-cinza-750 rolagem-hidden reticencias-ellipsis espaco-nowrap" title="{{ linha.email }}">{{ linha.email }}</span>
+                  <span class="fs-12 cor-cinza-750 lh-1p45">{{ linha.observacao }}</span><span class="fs-12 cor-cinza-600">{{ linha.informado }}</span><span class="d-flex quebra-wrap gap-6"><sc-for list="{{ linha.botoes }}" as="botao" hint-placeholder-count="1"><button onClick="{{ botao.executar }}" disabled="{{ botao.bloqueado }}" class="h-30 borda-cinza-160 fundo-branco raio-8 p-0-10 fs-12 fw-600 botao-secundario">{{ botao.rotulo }}</button></sc-for></span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+    </section>
+    <details style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <summary class="fs-15 fw-600 cursor-pointer">{{ tratativas.tituloTransferencias }} <span class="fs-12 fw-400 cor-cinza-600">· só para consulta: o usuário já está na carteira de destino e o analista foi avisado</span></summary>
+        <sc-if value="{{ tratativas.transferencias.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">{{ tratativas.transferencias.textoVazio }}</span></sc-if>
+        <sc-if value="{{ tratativas.transferencias.temLinhas }}" hint-placeholder-val="{{ false }}">
+          <div class="rolagem-x-auto m-0-n4">
+            <div class="min-w-1000 d-flex eixo-column p-0-4">
+              <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(180px,1.6fr) 90px minmax(170px,1.4fr) minmax(170px,1.4fr) minmax(150px,1.4fr) 140px">
+                <span>Nome</span><span>Perfil</span><span>Escola</span><span>Para</span><span>Observação</span><span>Informado por</span>
+              </div>
+              <sc-for list="{{ tratativas.transferencias.linhas }}" as="linha" hint-placeholder-count="3">
+                <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(180px,1.6fr) 90px minmax(170px,1.4fr) minmax(170px,1.4fr) minmax(150px,1.4fr) 140px">
+                  <span class="fw-600">{{ linha.nome }}</span><span class="fs-12 cor-cinza-750">{{ linha.perfil }}</span><span class="fs-12 cor-cinza-750">{{ linha.escola }}</span><span class="fs-12 cor-cinza-750">{{ linha.destino }}</span>
+                  <span class="fs-12 cor-cinza-750 lh-1p45">{{ linha.observacao }}</span><span class="fs-12 cor-cinza-600">{{ linha.informado }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+    </details>
+    <details style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <summary class="fs-15 fw-600 cursor-pointer">{{ tratativas.tituloDesativados }} <span class="fs-12 fw-400 cor-cinza-600">· não contam mais em nenhum indicador</span></summary>
+        <sc-if value="{{ tratativas.desativados.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">{{ tratativas.desativados.textoVazio }}</span></sc-if>
+        <sc-if value="{{ tratativas.desativados.temLinhas }}" hint-placeholder-val="{{ false }}">
+          <div class="rolagem-x-auto m-0-n4">
+            <div class="min-w-1000 d-flex eixo-column p-0-4">
+              <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(140px,1.3fr) 70px minmax(150px,1.2fr) 80px minmax(150px,1.3fr) minmax(130px,1.2fr) 120px 170px">
+                <span>Nome</span><span>Perfil</span><span>Escola</span><span>Matrícula</span><span>E-mail</span><span>Motivo</span><span>Informado por</span><span></span>
+              </div>
+              <sc-for list="{{ tratativas.desativados.linhas }}" as="linha" hint-placeholder-count="3">
+                <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(140px,1.3fr) 70px minmax(150px,1.2fr) 80px minmax(150px,1.3fr) minmax(130px,1.2fr) 120px 170px">
+                  <span class="fw-600">{{ linha.nome }}</span><span class="fs-12 cor-cinza-750">{{ linha.perfil }}</span><span class="fs-12 cor-cinza-750">{{ linha.escola }}</span><span class="fs-12 num-tabular-nums">{{ linha.matricula }}</span><span class="fs-12 cor-cinza-750 rolagem-hidden reticencias-ellipsis espaco-nowrap" title="{{ linha.email }}">{{ linha.email }}</span>
+                  <span class="fs-12 cor-cinza-750 lh-1p45">{{ linha.observacao }}</span><span class="fs-12 cor-cinza-600">{{ linha.informado }}</span><span class="d-flex quebra-wrap gap-6"><sc-for list="{{ linha.botoes }}" as="botao" hint-placeholder-count="1"><button onClick="{{ botao.executar }}" disabled="{{ botao.bloqueado }}" class="h-30 borda-cinza-160 fundo-branco raio-8 p-0-10 fs-12 fw-600 botao-secundario">{{ botao.rotulo }}</button></sc-for></span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+    </details>
+  </sc-if>
+
 </sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -673,7 +775,34 @@ const PADRAO = {
   limiteLista: 60,
   semanaAgenda: 0,
   descarte: DESCARTE_VAZIO,
-  agendando: ''
+  agendando: '',
+  tratarGrupo: 'nv',
+  tratarForm: null,
+  tratarLimite: 60,
+  copia: ''
+};
+const EM_TRATATIVA = new Set(['pend_desat', 'em_analise', 'desativado']);
+const GRUPOS_DE_TRATAR = [
+  ['nv', 'Não implementados', c => c.estagio === 'nv'],
+  ['sr', 'Sem uso no mês', c => c.estagio === 'sr'],
+  ['ne', 'Não engajados', c => c.estagio === 'ev' || c.estagio === 'bx' || c.estagio === 'sm']
+];
+const ACOES_DE_TRATAR = {
+  saiu: [
+    'Sai da lista e vai para o gerente desativar.',
+    'Motivo da saída (obrigatório)',
+    'Ex.: pediu exoneração, confirmado com a secretaria'
+  ],
+  transferido: [
+    'O usuário passa na hora para a nova escola e para a carteira dela; o analista responsável recebe o aviso.',
+    'Observação',
+    'Opcional'
+  ],
+  licenca: [
+    'Sai da lista e vai para análise do gerente.',
+    'Observação',
+    'Ex.: licença desde agosto, sem data de retorno'
+  ]
 };
 const faixaDe = dias => (dias < 0 ? 'N' : dias <= 5 ? 'Q' : dias <= 10 ? 'M' : dias <= 30 ? 'F' : 'S');
 const diaDoMes = data => Number(data.slice(8, 10));
@@ -915,7 +1044,13 @@ class Component extends DCLogic {
         diasDeUso: p.dias_acesso || 0,
         responsavel: p.responsavel_turma || '',
         turma: p.turma || '',
-        primeiroAcesso: p.primeiro_acesso || ''
+        primeiroAcesso: p.primeiro_acesso || '',
+        id: p.id,
+        matricula: p.matricula || '',
+        email: p.email || '',
+        funcao: p.funcao || '',
+        situacao: p.situacao || '',
+        origem: p.escola_origem_id || null
       };
       conta.usos = usosNoMes(conta, p.base_ref);
       conta.estagio = estagioDe(conta, p.base_ref);
@@ -986,6 +1121,252 @@ class Component extends DCLogic {
     this.preparo = incompleto ? null : preparo;
     return preparo;
   }
+  copiar(texto, aviso) {
+    const pronto = () => this.lembrar({ copia: aviso });
+    const falhou = () => this.lembrar({ copia: 'Não foi possível copiar.' });
+    if (!texto) return this.lembrar({ copia: 'Nada para copiar nesta lista.' });
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(pronto, falhou);
+    else falhou();
+  }
+  tratarDaEscola(local, memoria, jornada, referencia) {
+    const podeTratar = typeof jornada.tratarUsuario === 'function';
+    const nomeDe = id => ((jornada.escolaDe(id) || {}).nome || 'outra escola').replace(/^\S+ - /, '');
+    const contas = local.contas.filter(
+      c => !EM_TRATATIVA.has(c.situacao) && (memoria.perfil === 'todos' || c.perfil === memoria.perfil)
+    );
+    const contagem = {};
+    GRUPOS_DE_TRATAR.forEach(([codigo, , regra]) => (contagem[codigo] = contas.filter(regra).length));
+    let grupo = memoria.tratarGrupo;
+    if (!contagem[grupo]) grupo = (GRUPOS_DE_TRATAR.find(([codigo]) => contagem[codigo]) || [grupo])[0];
+    const regra = (GRUPOS_DE_TRATAR.find(([codigo]) => codigo === grupo) || GRUPOS_DE_TRATAR[0])[2];
+    const lista = contas
+      .filter(regra)
+      .sort((a, b) => a.perfil.localeCompare(b.perfil) || a.nome.localeCompare(b.nome, 'pt-BR'));
+    const recebidos = contas.filter(c => c.origem && c.origem !== local.id).length;
+    const form = memoria.tratarForm && lista.some(c => c.id === memoria.tratarForm.pessoa) ? memoria.tratarForm : null;
+    const mudar = campo => e => this.lembrar({ tratarForm: { ...memoria.tratarForm, [campo]: e.target.value } });
+    const acao = form ? form.acao : 'saiu';
+    const textos = ACOES_DE_TRATAR[acao] || ACOES_DE_TRATAR.saiu;
+    const obs = form ? form.obs.trim() : '';
+    const incompleto =
+      !form || memoria.salvando || (acao === 'transferido' && !form.destino) || (acao === 'saiu' && obs.length < 3);
+    const salvar = () => {
+      if (incompleto || !podeTratar) return;
+      this.lembrar({ salvando: true });
+      Promise.resolve(jornada.tratarUsuario(form.pessoa, acao, acao === 'transferido' ? form.destino : null, obs)).then(
+        ok => this.lembrar({ salvando: false, ...(ok ? { tratarForm: null } : {}) })
+      );
+    };
+    const visiveis = lista.slice(0, memoria.tratarLimite);
+    const copiarCampo = (campo, um, varios) => () =>
+      this.copiar(
+        lista
+          .map(c => c[campo])
+          .filter(Boolean)
+          .join('\n'),
+        plural(lista.filter(c => c[campo]).length, um, varios)
+      );
+    return {
+      visivel: true,
+      nota:
+        (recebidos ? plural(recebidos, 'recebido', 'recebidos') + ' por transferência · ' : '') +
+        (podeTratar
+          ? 'Clique no nome para marcar se o usuário saiu da rede, foi transferido ou está de licença sem vencimento.'
+          : 'Usuários não implementados, sem uso no mês e não engajados.'),
+      chips: GRUPOS_DE_TRATAR.map(([codigo, rotulo]) => ({
+        rotulo,
+        n: numero(contagem[codigo]),
+        pressionado: codigo === grupo ? 'true' : 'false',
+        escolher: () => this.lembrar({ tratarGrupo: codigo, tratarForm: null, tratarLimite: 60, copia: '' }),
+        ...Base.segmento(codigo === grupo)
+      })),
+      copiarEmails: copiarCampo('email', 'e-mail copiado', 'e-mails copiados'),
+      copiarMatriculas: copiarCampo('matricula', 'matrícula copiada', 'matrículas copiadas'),
+      temCopia: !!memoria.copia,
+      copia: memoria.copia,
+      vazio: !lista.length,
+      temLinhas: !!lista.length,
+      temMais: lista.length > visiveis.length,
+      textoMais: 'Mostrando ' + visiveis.length + ' de ' + numero(lista.length),
+      mostrarMais: () => this.lembrar({ tratarLimite: memoria.tratarLimite + 100 }),
+      linhas: visiveis.map(c => {
+        const aberta = !!form && form.pessoa === c.id;
+        const notas = [];
+        if (c.origem && c.origem !== local.id) notas.push('veio de ' + nomeDe(c.origem));
+        if (c.situacao === 'mantido') notas.push('gerente manteve ativo');
+        return {
+          nome: c.nome,
+          clicavel: podeTratar,
+          fixo: !podeTratar,
+          acaoDoNome: aberta ? 'fechar' : 'marcar situação',
+          aberta,
+          expandida: aberta ? 'true' : 'false',
+          abrir: () =>
+            this.lembrar({ tratarForm: aberta ? null : { pessoa: c.id, acao: 'saiu', destino: '', obs: '' } }),
+          temNota: !!notas.length,
+          nota: notas.join(' · '),
+          matricula: c.matricula,
+          temMatricula: !!c.matricula,
+          semMatricula: !c.matricula,
+          copiarMatricula: () => this.copiar(c.matricula, 'Matrícula copiada'),
+          email: c.email,
+          temEmail: !!c.email,
+          semEmail: !c.email,
+          copiarEmail: () => this.copiar(c.email, 'E-mail copiado'),
+          perfil: PERFIS[c.perfil],
+          turma: c.turma || c.funcao || (c.perfil !== 'A' ? '—' : c.ano ? c.ano + 'º ano' : 'turma a definir'),
+          ultimo: c.diasSemAcesso < 0 ? 'nunca' : Base.dmy(Base.add(referencia, -Math.max(0, c.diasSemAcesso))),
+          dias: c.diasDeUso ? numero(c.diasDeUso) : '—',
+          estagio: ESTAGIOS[c.estagio][0],
+          estagioCor: ESTAGIOS[c.estagio][1]
+        };
+      }),
+      form: form || { acao: 'saiu', destino: '', obs: '' },
+      explicacao: textos[0],
+      rotuloDaObservacao: textos[1],
+      dicaDaObservacao: textos[2],
+      pedeDestino: acao === 'transferido',
+      opcoesDeDestino: (jornada.escolas || [])
+        .filter(e => e.id !== local.id)
+        .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+        .map(e => ({ valor: String(e.id), rotulo: e.nome + (e.carteira_id ? ' · ' + e.carteira_id : '') })),
+      escolherAcao: mudar('acao'),
+      escolherDestino: mudar('destino'),
+      escreverObservacao: mudar('obs'),
+      incompleto,
+      salvar,
+      cancelar: () => this.lembrar({ tratarForm: null })
+    };
+  }
+  avisoDeRecebidos(jornada) {
+    if (typeof jornada.cienteTratativas !== 'function') return { visivel: false, linhas: [] };
+    const nomeDe = id => ((jornada.escolaDe(id) || {}).nome || 'outra escola').replace(/^\S+ - /, '');
+    const lista = (jornada.tratativas || []).filter(
+      t =>
+        t.acao === 'transferido' &&
+        !t.ciente_em &&
+        (jornada.escolaDe(t.escola_destino) || {}).carteira_id === jornada.carteiraPropria
+    );
+    return {
+      visivel: !!lista.length,
+      titulo: plural(lista.length, 'usuário incluído', 'usuários incluídos') + ' na sua carteira',
+      linhas: lista.map(t => ({
+        texto:
+          t.nome +
+          ' (' +
+          PERFIS[t.tipo] +
+          ') foi transferido de ' +
+          nomeDe(t.escola_origem) +
+          ' para ' +
+          nomeDe(t.escola_destino) +
+          (t.observacao ? ' · ' + t.observacao : ''),
+        autor: 'por ' + t.autor_nome + ' em ' + dataDoRegistro(t.criado_em)
+      })),
+      ciente: () => jornada.cienteTratativas()
+    };
+  }
+  abaDeTratativas(jornada, memoria) {
+    const decidir = typeof jornada.decidirTratativas === 'function' ? jornada.decidirTratativas : null;
+    const todas = jornada.tratativas || [];
+    const nomeDe = id => ((jornada.escolaDe(id) || {}).nome || '—').replace(/^\S+ - /, '');
+    const carteiraDe = id => (jornada.escolaDe(id) || {}).carteira_id || '';
+    const doStatus = status => todas.filter(t => t.status === status);
+    const executar = (ids, decisao) => () => {
+      if (!decidir || memoria.salvando || !ids.length) return;
+      this.lembrar({ salvando: true });
+      Promise.resolve(decidir(ids, decisao)).then(() => this.lembrar({ salvando: false }));
+    };
+    const linhaDe = (t, botoes) => ({
+      nome: t.nome,
+      perfil: PERFIS[t.tipo],
+      escola: nomeDe(t.escola_origem) + ' · ' + (t.carteira_id || carteiraDe(t.escola_origem) || 'sem carteira'),
+      destino: t.escola_destino
+        ? nomeDe(t.escola_destino) + ' · ' + (carteiraDe(t.escola_destino) || 'sem carteira')
+        : '—',
+      matricula: t.matricula || '—',
+      email: t.email || '—',
+      observacao: t.observacao || '—',
+      informado: t.autor_nome + ' · ' + dataDoRegistro(t.criado_em),
+      botoes: botoes.map(([rotulo, decisao]) => ({
+        rotulo,
+        executar: executar([t.id], decisao),
+        bloqueado: !!memoria.salvando
+      }))
+    });
+    const pendentes = doStatus('pend_desat'),
+      licencas = doStatus('em_analise'),
+      transferidos = todas.filter(t => t.acao === 'transferido'),
+      desativados = doStatus('desativado');
+    const aspas = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+    const csv = [['Nome', 'Matrícula', 'E-mail', 'Perfil', 'Escola', 'Carteira', 'Motivo', 'Informado em']]
+      .concat(
+        pendentes.map(t => [
+          t.nome,
+          t.matricula,
+          t.email,
+          PERFIS[t.tipo],
+          nomeDe(t.escola_origem),
+          t.carteira_id || carteiraDe(t.escola_origem),
+          t.observacao,
+          dataDoRegistro(t.criado_em)
+        ])
+      )
+      .map(l => l.map(aspas).join(';'))
+      .join('\n');
+    const grupo = (linhas, vazio) => ({ linhas, temLinhas: !!linhas.length, vazio: !linhas.length, textoVazio: vazio });
+    return {
+      kpis: [
+        ['Usuários para desativação', pendentes.length, 'saíram da rede'],
+        ['Licença sem vencimento', licencas.length, 'aguardando sua decisão'],
+        ['Transferidos', transferidos.length, 'já na carteira de destino'],
+        ['Desativados', desativados.length, 'fora dos indicadores']
+      ].map(([titulo, valor, nota]) => ({ titulo, valor: numero(valor), nota })),
+      desativacao: grupo(
+        pendentes.map(t => linhaDe(t, decidir ? [['Marcar desativado', 'desativar']] : [])),
+        'Nenhum usuário para desativar.'
+      ),
+      temPendentes: !!pendentes.length && !!decidir,
+      copiarMatriculas: () =>
+        this.copiar(
+          pendentes
+            .map(t => t.matricula)
+            .filter(Boolean)
+            .join('\n'),
+          plural(pendentes.filter(t => t.matricula).length, 'matrícula copiada', 'matrículas copiadas')
+        ),
+      copiarTabela: () => this.copiar(csv, 'Tabela copiada para a OS'),
+      desativarTodos: executar(
+        pendentes.map(t => t.id),
+        'desativar'
+      ),
+      licencas: grupo(
+        licencas.map(t =>
+          linhaDe(
+            t,
+            decidir
+              ? [
+                  ['Manter ativo', 'manter'],
+                  ['Desativar', 'para_desativacao']
+                ]
+              : []
+          )
+        ),
+        'Nenhuma licença em análise.'
+      ),
+      transferencias: grupo(
+        transferidos.map(t => linhaDe(t, [])),
+        'Nenhuma transferência.'
+      ),
+      tituloTransferencias: 'Transferências (' + transferidos.length + ')',
+      desativados: grupo(
+        desativados.map(t => linhaDe(t, [])),
+        'Nenhum usuário desativado.'
+      ),
+      tituloDesativados: 'Desativados (' + desativados.length + ')',
+      temCopia: !!memoria.copia,
+      copia: memoria.copia
+    };
+  }
   renderVals() {
     const contexto = this.props.contexto,
       jornada = contexto.jornada,
@@ -1003,6 +1384,8 @@ class Component extends DCLogic {
         escola: {},
         minhaCarteira: {},
         usuarios: {},
+        avisoRecebidos: {},
+        tratativas: {},
         agendaDaSemana: {},
         listaDeEscolas: {},
         evolucao: {},
@@ -1028,6 +1411,7 @@ class Component extends DCLogic {
     const hoje = dataDe(Base.hojeIso());
     const hojeIso = Base.iso(hoje);
     const podeGravar = typeof jornada.registrarStatusEscola === 'function',
+      gerenteDecide = typeof jornada.decidirTratativas === 'function',
       podeAgendar = typeof jornada.agendarVisita === 'function',
       podeDescartar = typeof jornada.descartarSugestao === 'function';
     const todosOsLocais = Object.values(porEscola);
@@ -2008,6 +2392,8 @@ class Component extends DCLogic {
         [
           [
             'Nome',
+            'Matrícula',
+            'E-mail',
             'Perfil',
             'Escola',
             'Ano',
@@ -2023,6 +2409,8 @@ class Component extends DCLogic {
         ].concat(
           listaDeUsuarios.map(c => [
             c.nome,
+            c.matricula,
+            c.email,
             PERFIS[c.perfil],
             c.escola,
             c.ano ? c.ano + 'º ano' : '',
@@ -2135,6 +2523,7 @@ class Component extends DCLogic {
         statusIncompleto: !formEscola.status || memoria.salvando,
         salvarStatus: salvarStatusDa(local.id),
         historico: historico.slice(0, 6).map(registro => textoDoHistorico(registro, textoDoStatus)),
+        tratar: this.tratarDaEscola(local, memoria, jornada, referencia),
         semHistorico: !historico.length
       };
     }
@@ -2376,20 +2765,25 @@ class Component extends DCLogic {
         geral: memoria.aba === 'geral',
         escola: memoria.aba === 'escola',
         oficineiros: memoria.aba === 'oficineiros',
-        usuarios: memoria.aba === 'usuarios'
+        usuarios: memoria.aba === 'usuarios',
+        tratativas: memoria.aba === 'tratativas' && gerenteDecide
       },
+      avisoRecebidos: memoria.aba === 'carteira' || memoria.aba === 'geral' ? this.avisoDeRecebidos(jornada) : {},
+      tratativas: gerenteDecide && memoria.aba === 'tratativas' ? this.abaDeTratativas(jornada, memoria) : {},
       abas: [
         ['carteira', textos.aba],
         ['geral', 'Visão geral'],
         ['escola', 'Turmas'],
         ['oficineiros', 'Oficineiros'],
         ['usuarios', 'Usuários']
-      ].map(([aba, rotulo]) => ({
-        rotulo,
-        atual: memoria.aba === aba ? 'true' : 'false',
-        escolher: () => this.lembrar({ aba }),
-        ...Base.segmento(memoria.aba === aba)
-      })),
+      ]
+        .concat(gerenteDecide ? [['tratativas', 'Tratativas']] : [])
+        .map(([aba, rotulo]) => ({
+          rotulo,
+          atual: memoria.aba === aba ? 'true' : 'false',
+          escolher: () => this.lembrar({ aba }),
+          ...Base.segmento(memoria.aba === aba)
+        })),
       listaDeCarteiras,
       painelDaCarteira: !!carteiraAberta,
       podeVoltar: porCarteira && !!carteiraAberta,

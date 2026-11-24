@@ -61,8 +61,8 @@ select ok(not has_function_privilege('anon', 'public.carregar_base_acessos(date,
           'visitante não carrega a base');
 select is((select count(*)::int from information_schema.columns
             where table_schema = 'public' and table_name = 'jornada_pessoas'
-              and column_name in ('email', 'matricula', 'sag_id', 'imagem', 'login', 'cpf')), 0,
-          'a base não tem colunas de e-mail, matrícula, identificador externo, imagem ou login aberto');
+              and column_name in ('sag_id', 'imagem', 'login', 'cpf')), 0,
+          'a base não tem identificador externo, imagem, CPF nem login aberto');
 
 set local role authenticated;
 select pg_temp.como('00000000-0000-0000-0000-0000000b1a02');

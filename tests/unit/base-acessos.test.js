@@ -205,6 +205,9 @@ test('consolida as pessoas, cruza pelo login e prepara as unidades', async () =>
     turma: '9º A',
     ano: 9,
     responsavel: 'Prof Um',
+    email: 'um@exemplo.test',
+    matricula: '1',
+    funcao: null,
     primeiro: '2026-02-10',
     ultimo: '2026-11-20',
     dias: 40
@@ -213,12 +216,14 @@ test('consolida as pessoas, cruza pelo login e prepara as unidades', async () =>
   assert.equal(sem60.conferem, 1);
 });
 
-test('o envio leva só o resumo do login e nada de e-mail ou matrícula', async () => {
+test('o envio leva o resumo do login, a matrícula e o e-mail, nunca o login aberto', async () => {
   const lidos = await BA.ler(await planilhas());
   const c = await BA.consolidar(lidos, { escolas: ESCOLAS, carteiras: CARTEIRAS, baseRef: '2026-11-21' });
   const envio = await BA.montarEnvio(c);
   const texto = JSON.stringify(envio);
-  assert.ok(!/exemplo\.test|aluno\.um|prof\.dois/i.test(texto));
+  assert.ok(!/"aluno\.um"|"prof\.dois"|"serv\.tres"/i.test(texto));
+  assert.equal(envio.pessoas[0].email, 'um@exemplo.test');
+  assert.equal(envio.pessoas[0].matricula, '1');
   assert.equal(envio.pessoas.length, 5);
   assert.equal(envio.pessoas[0].h, await BA.resumoDoLogin(' Aluno.Um '));
   assert.match(envio.pessoas[0].h, /^[0-9a-f]{64}$/);
@@ -229,6 +234,22 @@ test('o envio leva só o resumo do login e nada de e-mail ou matrícula', async 
     { nome: 'Unidade não informada AT1', carteira: 'AT1' },
     { escola: 3, carteira: 'AT1' }
   ]);
+});
+
+test('a matrícula vem da coluna, do e-mail ou do login numérico, e o e-mail inválido fica de fora', async () => {
+  const arquivo = await xlsx('Arlequins_Criados.xlsx', [
+    ['login', 'nome', 'perfil', 'categoria', 'local', 'email', 'funcao'],
+    ['1234567', 'Prof Num', 'Professor', 'CS1', 'Ebv - Cei Bem-te-vi', 'sem-arroba', 'Regente'],
+    ['prof.mail', 'Prof Mail', 'Professor', 'CS1', 'Ebv - Cei Bem-te-vi', 'nome.98765@exemplo.test', 'Em branco'],
+    RODAPE
+  ]);
+  const c = await BA.consolidar(await BA.ler([arquivo]), { escolas: ESCOLAS, carteiras: CARTEIRAS });
+  const de = login => c.validas.find(l => l.login === login).registro;
+  assert.deepEqual([de('1234567').matricula, de('1234567').email, de('1234567').funcao], ['1234567', null, 'Regente']);
+  assert.deepEqual(
+    [de('prof.mail').matricula, de('prof.mail').email, de('prof.mail').funcao],
+    ['98765', 'nome.98765@exemplo.test', null]
+  );
 });
 
 test('acusa acesso depois da data da base escolhida', async () => {
