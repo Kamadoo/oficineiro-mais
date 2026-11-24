@@ -2,6 +2,15 @@
 
 ## Próxima versão
 
+### Tratativas de usuários na Jornada
+
+- O detalhe de cada escola mostra "Usuários para tratar", com filtros de não implementados, sem uso no mês e não engajados (respeitando o filtro de perfil), matrícula e e-mail institucional que se copiam com um clique e botões para copiar os e-mails e as matrículas da lista.
+- O analista da carteira (ou o gerente, em qualquer escola) clica no nome e marca se o usuário saiu da rede (com motivo), foi transferido para outra escola ou está de licença sem vencimento; o usuário sai da lista na hora.
+- Transferido passa na hora para a nova escola e a carteira dela, aparece com "veio de" e o aluno fica com turma a definir; o analista de destino vê o aviso "usuários incluídos na sua carteira" até clicar em Ciente.
+- Nova aba Tratativas, só do gerente: usuários para desativação (copiar matrículas, copiar tabela para a OS, marcar um ou todos como desativados), licenças sem vencimento (manter ativo ou enviar para a desativação), transferências e desativados.
+- Desativado sai de todos os indicadores, em todas as bases; transferências e decisões continuam valendo a cada nova carga do B.I.
+- A carga do B.I. passa a gravar a matrícula, o e-mail institucional e a função de cada pessoa (substitui a regra anterior de não guardar esses dados); a exportação da aba Usuários leva matrícula e e-mail.
+
 ### Jornada do Usuário no mês da leitura
 
 - Todos os percentuais usam o mês da data da leitura (dia 1º ao último dia, 4 semanas), com metas proporcionais aos dias já passados enquanto o mês está em andamento.

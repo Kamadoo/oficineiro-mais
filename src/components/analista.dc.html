@@ -312,6 +312,15 @@ const opcao = marcada =>
       };
 const segmento = Base.segmento;
 
+const TEXTO_DA_TRATATIVA = {
+  saiu: 'Usuário enviado ao gerente para desativação',
+  licenca: 'Usuário enviado para análise do gerente',
+  transferido: 'Usuário transferido; o analista da nova escola recebeu o aviso',
+  desativar: 'Usuários marcados como desativados',
+  manter: 'Usuário mantido ativo',
+  para_desativacao: 'Usuário enviado para a desativação',
+  ciente: 'Aviso de usuários recebidos marcado como ciente'
+};
 class Component extends DCLogic {
   state = {
     menuAberto: false,
@@ -344,6 +353,7 @@ class Component extends DCLogic {
     statusEscolas: [],
     statusCarteiras: [],
     descartesJornada: [],
+    tratativasJornada: [],
     presencaSalvando: false,
     visitaDaAgenda: null,
     alteracao: SEM_ALTERACAO,
@@ -587,16 +597,33 @@ class Component extends DCLogic {
   async carregarStatusJornada() {
     const A = window.FSM_AUTH;
     if (!A.jornadaStatusEscolas) return;
-    const [escolas, carteiras, descartes] = await Promise.all([
+    const [escolas, carteiras, descartes, tratativas] = await Promise.all([
       A.jornadaStatusEscolas().catch(() => []),
       A.jornadaStatusCarteiras().catch(() => []),
-      A.jornadaDescartes ? A.jornadaDescartes().catch(() => []) : Promise.resolve([])
+      A.jornadaDescartes ? A.jornadaDescartes().catch(() => []) : Promise.resolve([]),
+      A.jornadaTratativas ? A.jornadaTratativas().catch(() => []) : Promise.resolve([])
     ]);
     this.setState({
       statusEscolas: escolas || [],
       statusCarteiras: carteiras || [],
-      descartesJornada: descartes || []
+      descartesJornada: descartes || [],
+      tratativasJornada: tratativas || []
     });
+  }
+  async gravarTratativa(tipo, argumentos) {
+    const A = window.FSM_AUTH;
+    try {
+      if (tipo === 'tratar') await A.tratarUsuario(...argumentos);
+      else if (tipo === 'decidir') await A.decidirTratativas(...argumentos);
+      else await A.cienteTratativas();
+      if (tipo !== 'ciente') this.setState({ acessos: null }, () => this.carregarAcessos());
+      else await this.carregarStatusJornada();
+      this.avisar(TEXTO_DA_TRATATIVA[tipo === 'ciente' ? 'ciente' : argumentos[1]] || 'Situação registrada');
+      return true;
+    } catch (x) {
+      this.avisar(msgErro(x, 'Não foi possível registrar a situação do usuário.'));
+      return false;
+    }
   }
   async gravarStatusJornada(tipo, argumentos) {
     const A = window.FSM_AUTH;
@@ -1256,6 +1283,10 @@ class Component extends DCLogic {
         statusEscolas: this.state.statusEscolas,
         statusCarteiras: this.state.statusCarteiras,
         descartes: this.state.descartesJornada,
+        tratativas: this.state.tratativasJornada,
+        escolas: this.state.escolas,
+        tratarUsuario: (...argumentos) => this.gravarTratativa('tratar', argumentos),
+        cienteTratativas: () => this.gravarTratativa('ciente', []),
         descartarSugestao: (...argumentos) => this.gravarStatusJornada('descarte', argumentos),
         registrarStatusEscola: (...argumentos) => this.gravarStatusJornada('escola', argumentos),
         registrarStatusCarteira: (...argumentos) => this.gravarStatusJornada('carteira', argumentos),

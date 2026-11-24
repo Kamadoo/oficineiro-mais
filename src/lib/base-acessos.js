@@ -60,7 +60,10 @@ window.FSM_BASE_ACESSOS = (() => {
       perfil: coluna(c, 'perfil'),
       categoria: coluna(c, 'categoria'),
       local: coluna(c, 'local'),
-      turma: coluna(c, 'turma')
+      turma: coluna(c, 'turma'),
+      email: coluna(c, 'email', 'des_usu_email'),
+      matricula: coluna(c, 'matricula'),
+      funcao: coluna(c, 'funcao')
     };
     if (coluna(c, 'Dias de Acesso'))
       return {
@@ -111,6 +114,19 @@ window.FSM_BASE_ACESSOS = (() => {
     const bytes = new TextEncoder().encode(limpo(login).toLowerCase());
     const resumo = new Uint8Array(await crypto.subtle.digest('SHA-256', bytes));
     return Array.from(resumo, b => (b < 16 ? '0' : '') + b.toString(16)).join('');
+  }
+
+  function emailDe(valor) {
+    const email = limpo(valor).toLowerCase();
+    return email.length <= 160 && /^[^@\s]+@[^@\s]+$/.test(email) ? email : null;
+  }
+
+  function matriculaDe(p) {
+    const informada = limpo(p.matricula);
+    if (preenchido(informada) && /^[0-9A-Za-z.-]{1,20}$/.test(informada)) return informada;
+    const doEmail = (limpo(p.email).match(/^(?:[^@]*?\.)?(\d{3,20})@/) || [])[1];
+    if (doEmail) return doEmail;
+    return /^\d{4,7}$/.test(limpo(p.login)) ? limpo(p.login) : null;
   }
 
   function semSigla(nome) {
@@ -164,6 +180,9 @@ window.FSM_BASE_ACESSOS = (() => {
       completar('local', valor(linha, 'local', mapa));
       completar('turma', valor(linha, 'turma', mapa));
       completar('responsavel', valor(linha, 'responsavel', mapa));
+      completar('email', valor(linha, 'email', mapa));
+      completar('matricula', valor(linha, 'matricula', mapa));
+      completar('funcao', valor(linha, 'funcao', mapa));
       p.primeiro = menor(p.primeiro, dataDe(valor(linha, 'primeira', mapa)));
       p.ultimo = maior(p.ultimo, dataDe(valor(linha, 'ultima', mapa)));
       return p;
@@ -234,6 +253,9 @@ window.FSM_BASE_ACESSOS = (() => {
           turma,
           ano,
           responsavel: preenchido(p.responsavel) ? limpo(p.responsavel).slice(0, 160) : null,
+          email: emailDe(p.email),
+          matricula: matriculaDe(p),
+          funcao: !aluno && preenchido(p.funcao) ? limpo(p.funcao).slice(0, 80) : null,
           primeiro: p.primeiro || null,
           ultimo: p.ultimo || null,
           dias: p.dias == null ? null : p.dias
@@ -331,7 +353,7 @@ window.FSM_BASE_ACESSOS = (() => {
       const item = { h: await resumoDoLogin(l.login), nome: r.nome, tipo: r.tipo, carteira: r.carteira, ano: r.ano };
       if (l.unidade.escola) item.escola = l.unidade.escola.id;
       else item.unidade = l.unidade.nome;
-      ['turma', 'responsavel', 'primeiro', 'ultimo', 'dias'].forEach(k => {
+      ['turma', 'responsavel', 'primeiro', 'ultimo', 'dias', 'matricula', 'email', 'funcao'].forEach(k => {
         if (r[k] != null) item[k] = r[k];
       });
       pessoas.push(item);

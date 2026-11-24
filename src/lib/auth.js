@@ -988,7 +988,7 @@ window.FSM_AUTH =
       async jornadaPessoas(datas) {
         const validas = (Array.isArray(datas) ? datas : []).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(String(d)));
         const caminho =
-          '/rest/v1/jornada_pessoas?select=escola_id,nome,tipo,ano_escolar,dias_sem_acesso,dias_acesso,responsavel_turma,base_ref,carteira_id,turma,primeiro_acesso,ultimo_acesso';
+          '/rest/v1/jornada_pessoas?select=id,escola_id,nome,tipo,ano_escolar,dias_sem_acesso,dias_acesso,responsavel_turma,base_ref,carteira_id,turma,primeiro_acesso,ultimo_acesso,matricula,email,funcao,situacao,escola_origem_id';
         if (!validas.length) return chamarTudo(caminho + '&order=base_ref,escola_id,id', { token: token() });
         const partes = await Promise.all(
           validas
@@ -1033,6 +1033,34 @@ window.FSM_AUTH =
             p_resumo: resumo || null
           }
         });
+      },
+      jornadaTratativas() {
+        return chamarTudo(
+          '/rest/v1/jornada_tratativas?select=id,nome,tipo,matricula,email,acao,status,escola_origem,escola_destino,observacao,autor_nome,carteira_id,criado_em,decidido_nome,decidido_em,ciente_em&order=criado_em.desc,id.desc',
+          { token: token() }
+        );
+      },
+      tratarUsuario(pessoa, acao, destino, observacao) {
+        return chamar('/rest/v1/rpc/tratar_usuario', {
+          metodo: 'POST',
+          token: token(),
+          corpo: {
+            p_pessoa: Number(pessoa),
+            p_acao: String(acao || ''),
+            p_destino: destino ? Number(destino) : null,
+            p_observacao: observacao ? String(observacao) : null
+          }
+        });
+      },
+      decidirTratativas(ids, decisao) {
+        return chamar('/rest/v1/rpc/decidir_tratativas', {
+          metodo: 'POST',
+          token: token(),
+          corpo: { p_ids: (Array.isArray(ids) ? ids : []).map(Number), p_decisao: String(decisao || '') }
+        });
+      },
+      cienteTratativas() {
+        return chamar('/rest/v1/rpc/ciente_tratativas', { metodo: 'POST', token: token(), corpo: {} });
       },
       jornadaStatusEscolas() {
         return chamarTudo(
