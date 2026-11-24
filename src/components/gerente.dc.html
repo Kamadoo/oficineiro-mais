@@ -364,6 +364,9 @@ class Component extends DCLogic {
     statusCarteiras: [],
     descartesJornada: [],
     tratativasJornada: [],
+    parametrosJornada: null,
+    ajustesLotacao: [],
+    baseAcessos: {},
     ordensServico: null,
     onboardings: null,
     previaDaOs: null,
@@ -605,17 +608,21 @@ class Component extends DCLogic {
   async carregarStatusJornada() {
     const A = window.FSM_AUTH;
     if (!A.jornadaStatusEscolas) return;
-    const [escolas, carteiras, descartes, tratativas] = await Promise.all([
+    const [escolas, carteiras, descartes, tratativas, parametros, ajustes] = await Promise.all([
       A.jornadaStatusEscolas().catch(() => []),
       A.jornadaStatusCarteiras().catch(() => []),
       A.jornadaDescartes ? A.jornadaDescartes().catch(() => []) : Promise.resolve([]),
-      A.jornadaTratativas ? A.jornadaTratativas().catch(() => []) : Promise.resolve([])
+      A.jornadaTratativas ? A.jornadaTratativas().catch(() => []) : Promise.resolve([]),
+      A.jornadaParametros ? A.jornadaParametros().catch(() => null) : Promise.resolve(null),
+      A.jornadaAjustesLotacao ? A.jornadaAjustesLotacao().catch(() => []) : Promise.resolve([])
     ]);
     this.setState({
       statusEscolas: escolas || [],
       statusCarteiras: carteiras || [],
       descartesJornada: descartes || [],
-      tratativasJornada: tratativas || []
+      tratativasJornada: tratativas || [],
+      parametrosJornada: parametros || null,
+      ajustesLotacao: ajustes || []
     });
   }
   async gravarTratativa(tipo, argumentos) {
@@ -630,6 +637,24 @@ class Component extends DCLogic {
       return true;
     } catch (x) {
       this.avisar(msgErro(x, 'Não foi possível registrar a situação do usuário.'));
+      return false;
+    }
+  }
+  async gravarParametrosJornada(tipo, argumentos) {
+    const A = window.FSM_AUTH;
+    try {
+      if (tipo === 'parametros') await A.salvarParametrosJornada(...argumentos);
+      else await A.definirCarteiraDaUnidade(...argumentos);
+      if (tipo === 'carteira') {
+        const escolas = await A.escolas().catch(() => null);
+        if (Array.isArray(escolas)) this.setState({ escolas });
+        this.setState({ acessos: null }, () => this.carregarAcessos());
+      }
+      await this.carregarStatusJornada();
+      this.avisar(tipo === 'parametros' ? 'Parâmetros salvos' : 'Carteira da unidade alterada');
+      return true;
+    } catch (x) {
+      this.avisar(msgErro(x, 'Não foi possível salvar.'));
       return false;
     }
   }
@@ -2039,6 +2064,19 @@ class Component extends DCLogic {
         statusCarteiras: this.state.statusCarteiras,
         descartes: this.state.descartesJornada,
         tratativas: this.state.tratativasJornada,
+        parametros: this.state.parametrosJornada,
+        ajustesLotacao: this.state.ajustesLotacao,
+        carteiras: this.state.carteiras,
+        salvarParametros: (...argumentos) => this.gravarParametrosJornada('parametros', argumentos),
+        definirCarteira: (...argumentos) => this.gravarParametrosJornada('carteira', argumentos),
+        carga: {
+          baseAcessos: this.state.baseAcessos,
+          estado: () => this.state,
+          setState: parte => this.setState(parte),
+          hojeIso: () => hojeIso(),
+          conectado: true,
+          aposGravar: () => this.setState({ acessos: null }, () => this.carregarAcessos())
+        },
         escolas: this.state.escolas,
         tratarUsuario: (...argumentos) => this.gravarTratativa('tratar', argumentos),
         decidirTratativas: (...argumentos) => this.gravarTratativa('decidir', argumentos),

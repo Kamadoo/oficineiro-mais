@@ -220,8 +220,11 @@ window.FSM_BASE_ACESSOS = (() => {
     let perfilIndefinido = 0;
     let semCarteira = 0;
     for (const p of pessoas.values()) {
-      const tipo = PERFIS[chave(p.perfil)] || 'S';
-      if (!PERFIS[chave(p.perfil)]) perfilIndefinido++;
+      const tipo = PERFIS[chave(p.perfil)];
+      if (!tipo) {
+        perfilIndefinido++;
+        continue;
+      }
       const categoria = carteiras.has(limpo(p.categoria).toUpperCase()) ? limpo(p.categoria).toUpperCase() : null;
       if (!categoria) semCarteira++;
       const local = preenchido(p.local) ? limpo(p.local) : 'Unidade não informada' + (categoria ? ' ' + categoria : '');
@@ -293,7 +296,10 @@ window.FSM_BASE_ACESSOS = (() => {
       avisos.push('A unidade ' + u.nome + ' não tem carteira conhecida: ' + u.pessoas + ' pessoa(s) ficarão de fora.')
     );
     if (perfilIndefinido)
-      avisos.push(perfilIndefinido + ' pessoa(s) com perfil em branco serão contadas como Servidor.');
+      avisos.push(
+        perfilIndefinido +
+          ' pessoa(s) com perfil em branco ficam fora da Jornada (só entram aluno, professor e servidor).'
+      );
     if (semCarteira) avisos.push(semCarteira + ' pessoa(s) com categoria fora das carteiras do site.');
 
     const ultimoAcesso = lista.reduce((m, l) => maior(m, l.registro.ultimo), null);

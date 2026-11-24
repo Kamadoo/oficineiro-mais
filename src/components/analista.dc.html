@@ -354,6 +354,7 @@ class Component extends DCLogic {
     statusCarteiras: [],
     descartesJornada: [],
     tratativasJornada: [],
+    parametrosJornada: null,
     presencaSalvando: false,
     visitaDaAgenda: null,
     alteracao: SEM_ALTERACAO,
@@ -597,17 +598,19 @@ class Component extends DCLogic {
   async carregarStatusJornada() {
     const A = window.FSM_AUTH;
     if (!A.jornadaStatusEscolas) return;
-    const [escolas, carteiras, descartes, tratativas] = await Promise.all([
+    const [escolas, carteiras, descartes, tratativas, parametros] = await Promise.all([
       A.jornadaStatusEscolas().catch(() => []),
       A.jornadaStatusCarteiras().catch(() => []),
       A.jornadaDescartes ? A.jornadaDescartes().catch(() => []) : Promise.resolve([]),
-      A.jornadaTratativas ? A.jornadaTratativas().catch(() => []) : Promise.resolve([])
+      A.jornadaTratativas ? A.jornadaTratativas().catch(() => []) : Promise.resolve([]),
+      A.jornadaParametros ? A.jornadaParametros().catch(() => null) : Promise.resolve(null)
     ]);
     this.setState({
       statusEscolas: escolas || [],
       statusCarteiras: carteiras || [],
       descartesJornada: descartes || [],
-      tratativasJornada: tratativas || []
+      tratativasJornada: tratativas || [],
+      parametrosJornada: parametros || null
     });
   }
   async gravarTratativa(tipo, argumentos) {
@@ -1284,6 +1287,7 @@ class Component extends DCLogic {
         statusCarteiras: this.state.statusCarteiras,
         descartes: this.state.descartesJornada,
         tratativas: this.state.tratativasJornada,
+        parametros: this.state.parametrosJornada,
         escolas: this.state.escolas,
         tratarUsuario: (...argumentos) => this.gravarTratativa('tratar', argumentos),
         cienteTratativas: () => this.gravarTratativa('ciente', []),
