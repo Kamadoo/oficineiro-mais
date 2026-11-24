@@ -93,7 +93,7 @@ window.FSM_AUTH =
       if (c === 'mfa_verification_failed' || /invalid totp|invalid code/i.test(m))
         return 'Código do autenticador inválido ou vencido.';
       if (c === 'same_password' || /different from the old/i.test(m))
-        return 'A senha nova precisa ser diferente da atual.';
+        return 'Esta senha não pode ser usada. Escolha outra.';
       if (c === 'weak_password' || /weak|pwned|leaked/i.test(m)) return 'Senha fraca. Escolha outra.';
       if (c === 'reauthentication_needed' || /reauthenticat/i.test(m))
         return 'Por segurança, entre de novo antes de trocar a senha.';
