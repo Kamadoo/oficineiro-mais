@@ -68,9 +68,9 @@ set local role authenticated;
 select pg_temp.como('00000000-0000-0000-0000-0000000b1a02');
 select throws_ok($$ select public.carregar_base_acessos(date '2026-11-21', null, pg_temp.pessoas(pg_temp.esc('Jca'), pg_temp.esc('Jcb'))) $$,
                  '42501', null, 'coordenador não carrega a base');
-select pg_temp.como('00000000-0000-0000-0000-0000000b1a03', 'aal1');
+select pg_temp.como('00000000-0000-0000-0000-0000000b1a03');
 select throws_ok($$ select public.carregar_base_acessos(date '2026-11-21', null, pg_temp.pessoas(pg_temp.esc('Jca'), pg_temp.esc('Jcb'))) $$,
-                 '42501', null, 'gerente sem segundo fator não carrega a base');
+                 '42501', null, 'gerente não carrega a base');
 select pg_temp.como('00000000-0000-0000-0000-0000000b1a01', 'aal1');
 select throws_ok($$ select public.carregar_base_acessos(date '2026-11-21', null, pg_temp.pessoas(pg_temp.esc('Jca'), pg_temp.esc('Jcb'))) $$,
                  '42501', null, 'administrador sem MFA não carrega a base');

@@ -2,6 +2,12 @@
 
 ## Próxima versão
 
+### Jornada igual ao mockup (retorno de 24/11)
+
+- Data da leitura passa a ser o último acesso registrado na base, como diz o documento (antes era a data da carga); com a base de 21/11/2026, os estágios batem com o mockup: 631 engajados, 2.341 em evolução, 148 baixo uso, 1.419 sem uso no mês e 969 não implementados.
+- Estágio "Em uso, sem contagem de dias" sai das telas, como no mockup.
+- Abas Parâmetros e Carga diária saem da Jornada do gerente: os valores do documento ficam fixos e a carga continua só com o Administrador; ajustes de lotação e parâmetros só pelo administrador. A carteira de cada unidade continua na tela de escolas do Administrador.
+
 ### Abas da Jornada conforme o documento de parâmetros
 
 - Abas na ordem do documento: Minha carteira (ou Carteiras), Visão geral, Escolas, Turmas, Mediadores, Usuários e, só para o gerente, Tratativas, Parâmetros e Carga diária.

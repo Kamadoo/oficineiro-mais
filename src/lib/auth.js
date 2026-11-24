@@ -1064,23 +1064,6 @@ window.FSM_AUTH =
           token: token()
         }).then(r => (Array.isArray(r) && r[0]) || null);
       },
-      salvarParametrosJornada(aulas, dias, periodo) {
-        return chamar('/rest/v1/rpc/salvar_parametros_jornada', {
-          metodo: 'POST',
-          token: token(),
-          corpo: { p_aulas: Number(aulas), p_dias: Number(dias), p_periodo: String(periodo || '') }
-        });
-      },
-      definirCarteiraDaUnidade(escola, carteira) {
-        return chamar('/rest/v1/rpc/definir_carteira_da_unidade', {
-          metodo: 'POST',
-          token: token(),
-          corpo: { p_escola: Number(escola), p_carteira: carteira ? String(carteira) : null }
-        });
-      },
-      jornadaAjustesLotacao() {
-        return chamar('/rest/v1/rpc/jornada_ajustes_lotacao', { metodo: 'POST', token: token(), corpo: {} });
-      },
       cienteTratativas() {
         return chamar('/rest/v1/rpc/ciente_tratativas', { metodo: 'POST', token: token(), corpo: {} });
       },
