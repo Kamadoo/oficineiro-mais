@@ -16,6 +16,7 @@ window.FSM_AUTH =
     const CHAVE_LEMBRAR = 'fsm_lembrar';
     const CHAVE_PEDIDO = 'fsm_pedido_codigo';
     const PEDIDO_MS = 65 * 60 * 1000;
+    const CHAVE_RECUPERAR = 'fsm_recuperar_senha';
     const INATIVIDADE_MS = 30 * 60 * 1000;
     const CORTE_HORA_SP = 4;
     const CORTE_MIN_MS = 60 * 60 * 1000;
@@ -427,28 +428,47 @@ window.FSM_AUTH =
           corpo: { acao: 'entrar', usuario, senha: String(senha) }
         });
         guarda(r && r.sessao);
+        this.encerrarRecuperacao();
       },
 
-      async pedirCodigo(cpf) {
+      async pedirCodigo(cpf, recuperar) {
         const d = String(cpf || '').replace(/\D/g, '');
         if (d.length !== 11 && d.length !== 14) throw new Error('Digite o CPF (11 números) ou o CNPJ (14 números).');
-        const r = await chamar('/functions/v1/acesso', { metodo: 'POST', corpo: { acao: 'codigo', cpf: d } });
+        const r = await chamar('/functions/v1/acesso', {
+          metodo: 'POST',
+          corpo: { acao: 'codigo', cpf: d, recuperar: !!recuperar }
+        });
         try {
-          localStorage.setItem(CHAVE_PEDIDO, String(Date.now() + PEDIDO_MS));
+          const ate = String(Date.now() + PEDIDO_MS);
+          localStorage.setItem(CHAVE_PEDIDO, ate);
+          if (recuperar) localStorage.setItem(CHAVE_RECUPERAR, ate);
+          else localStorage.removeItem(CHAVE_RECUPERAR);
         } catch (e) {}
-        return (
-          (r && r.mensagem) ||
-          'Se o documento tiver um primeiro acesso pendente, enviamos um código para o e-mail institucional.'
-        );
+        if (r && r.mensagem) return r.mensagem;
+        return recuperar
+          ? 'Se o documento estiver cadastrado em uma conta ativa, enviamos um código para o e-mail institucional.'
+          : 'Se o documento tiver um primeiro acesso pendente, enviamos um código para o e-mail institucional.';
       },
-      async confirmarPrimeiroAcesso(cpf, codigo) {
+      recuperandoSenha() {
+        try {
+          return Date.now() < (Number(localStorage.getItem(CHAVE_RECUPERAR)) || 0);
+        } catch (e) {
+          return false;
+        }
+      },
+      encerrarRecuperacao() {
+        try {
+          localStorage.removeItem(CHAVE_RECUPERAR);
+        } catch (e) {}
+      },
+      async confirmarPrimeiroAcesso(cpf, codigo, recuperar) {
         const d = String(cpf || '').replace(/\D/g, '');
         const c = String(codigo || '').replace(/\D/g, '');
         if (c.length < 6) throw new Error('Digite o código recebido no e-mail.');
         limpa();
         const r = await chamar('/functions/v1/acesso', {
           metodo: 'POST',
-          corpo: { acao: 'confirmar', cpf: d, codigo: c }
+          corpo: { acao: 'confirmar', cpf: d, codigo: c, recuperar: !!recuperar }
         });
         try {
           localStorage.removeItem(CHAVE_PEDIDO);
@@ -461,6 +481,7 @@ window.FSM_AUTH =
       },
 
       sair() {
+        this.encerrarRecuperacao();
         encerrar('saiu');
       },
 
@@ -1670,6 +1691,7 @@ window.FSM_AUTH =
         if (falta.length) throw new Error('A senha precisa ter: ' + falta.join(', ') + '.');
         if (nova !== confirma) throw new Error('As duas senhas não são iguais.');
         await chamar('/auth/v1/user', { metodo: 'PUT', token: token(), corpo: { password: String(nova) } });
+        this.encerrarRecuperacao();
       }
     };
   })();

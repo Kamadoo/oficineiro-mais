@@ -80,6 +80,7 @@
             <span class="fsm-lembrar-textos"><span>Manter conectado neste aparelho até amanhã</span><span id="fsm-lembrar-dica" class="fsm-lembrar-dica">Não marque em computador compartilhado.</span></span>
           </label>
           <button class="fsm-btn fsm-btn-afastado" onClick="{{ entrar }}" disabled="{{ ocupado }}">{{ rotuloEntrar }}</button>
+          <button class="fsm-link" onClick="{{ irRecuperarSenha }}">Esqueceu sua senha?</button>
           <button class="fsm-link" onClick="{{ irPrimeiroAcesso }}">Primeiro acesso? Ative sua conta aqui</button>
         </sc-if>
 
@@ -770,10 +771,11 @@ class Component extends DCLogic {
       this.setState({ etapa: 'mfaCadastro', acesso: ac, mfa: novo });
       return;
     }
-    if (ac.precisa_criar_usuario || ac.precisa_trocar_senha) {
+    if (ac.precisa_criar_usuario || ac.precisa_trocar_senha || A.recuperandoSenha()) {
       const usuario = ac.precisa_criar_usuario ? await A.gerarMeuUsuario() : ac.usuario;
       this.setState({
         etapa: 'trocarSenha',
+        recuperar: A.recuperandoSenha(),
         acesso: { ...ac, usuario, precisa_criar_usuario: false },
         regraOk: false,
         forca: 0,
@@ -832,8 +834,13 @@ class Component extends DCLogic {
         'O Oficineiro+ exige o código de um aplicativo autenticador a cada acesso. Faça o cadastro uma única vez.'
       ],
       mfaCodigo: ['Confirme que é você', 'Digite o código que aparece agora no seu aplicativo autenticador.'],
-      trocarSenha: ['Crie seu acesso', 'Defina a senha que você vai usar daqui em diante.']
-    }[s.etapa] || ['Oficineiro+', ''];
+      trocarSenha: ['Crie seu acesso', 'Defina a senha que você vai usar daqui em diante.'],
+      recuperarCpf: [
+        'Esqueceu sua senha?',
+        'Digite o CPF ou o CNPJ da sua conta. Vamos enviar um código para o seu e-mail institucional para você criar uma senha nova.'
+      ],
+      recuperarSenha: ['Crie uma senha nova', 'Defina a senha que você vai usar daqui em diante.']
+    }[s.recuperar && s.etapa === 'primeiroCpf' ? 'recuperarCpf' : s.recuperar && s.etapa === 'trocarSenha' ? 'recuperarSenha' : s.etapa] || ['Oficineiro+', ''];
     const confirmarCodigo = () =>
       this.executa(async () => {
         const codigo = this.ler('fsm-codigo', true);
@@ -857,19 +864,19 @@ class Component extends DCLogic {
     const pedirCodigo = () =>
       this.executa(async () => {
         const cpf = this.ler('fsm-cpf', false);
-        const msg = await A.pedirCodigo(cpf);
+        const msg = await A.pedirCodigo(cpf, !!this.state.recuperar);
         this.cpf = cpf;
         this.setState({ etapa: 'primeiroCodigo', aviso: msg });
       });
     const reenviarCodigo = () =>
       this.executa(async () => {
-        const msg = await A.pedirCodigo(this.cpf || '');
+        const msg = await A.pedirCodigo(this.cpf || '', !!this.state.recuperar);
         this.setState({ aviso: msg });
       });
     const confirmarPrimeiroAcesso = () =>
       this.executa(async () => {
         const codigo = this.ler('fsm-codigo-email', true);
-        await A.confirmarPrimeiroAcesso(this.cpf || '', codigo);
+        await A.confirmarPrimeiroAcesso(this.cpf || '', codigo, !!this.state.recuperar);
         this.cpf = null;
         this.loginNovo = true;
         await this.avancar();
@@ -1068,7 +1075,8 @@ class Component extends DCLogic {
       temUsuarioGerado: !!(s.acesso && s.acesso.usuario),
       usuarioGerado: (s.acesso && s.acesso.usuario) || '',
       rotuloEnviar: s.ocupado ? 'Enviando…' : 'Enviar código',
-      irPrimeiroAcesso: () => this.setState({ etapa: 'primeiroCpf', erro: '', aviso: '' }),
+      irPrimeiroAcesso: () => this.setState({ etapa: 'primeiroCpf', recuperar: false, erro: '', aviso: '' }),
+      irRecuperarSenha: () => this.setState({ etapa: 'primeiroCpf', recuperar: true, erro: '', aviso: '' }),
       rotuloVerificar: s.ocupado ? 'Conferindo…' : 'Conferir',
       verificarDocumento: () => this.conferirDocumento(),
       enterVerificar: e => {
@@ -1080,7 +1088,8 @@ class Component extends DCLogic {
         this.cpf = null;
         if (/^#verificar/.test(window.location.hash || ''))
           window.history.replaceState(null, '', window.location.pathname + window.location.search);
-        this.setState({ etapa: 'login', conferencia: null, erro: '', aviso: '' });
+        A.encerrarRecuperacao();
+        this.setState({ etapa: 'login', recuperar: false, conferencia: null, erro: '', aviso: '' });
       },
       formatarCpf: e => {
         const d = (e.target.value || '').replace(/\D/g, '').slice(0, 14);
