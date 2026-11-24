@@ -1983,7 +1983,9 @@ class Component extends DCLogic {
   }
   contextoDasTelas(s, valores) {
     const {
+      agora,
       analistasAtivos,
+      anoAtual,
       atividadesDoCiclo,
       dadosDoCiclo,
       escolaAtualDe,
@@ -2016,6 +2018,16 @@ class Component extends DCLogic {
         escolaDe: id => escolaPorId[String(id)],
         aulas: () => atividadesDoCiclo(dadosDoCiclo(cicloDe(hoje, 0)), cicloDe(hoje, 0)),
         execucao: aulas => resumir(aulas).ex,
+        aulasDoMes: data => {
+          const ano = Number(String(data).slice(0, 4)),
+            grade =
+              ano === anoAtual
+                ? s.grade
+                : s.gradeAnterior.length && Number(s.gradeAnterior[0].ano_letivo) === ano
+                  ? s.gradeAnterior
+                  : [];
+          return Base.aulasDaJornada(grade, s.aulasRede, data, s.mudancasDeEscola, hoje, agora);
+        },
         oficineirosDaEscola: id => oficineirosAtivos.filter(o => escolaAtualDe(o) === id),
         visitaDaEscola: id => {
           const proxima = proximaVisitaDa(id);
