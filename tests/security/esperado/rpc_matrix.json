@@ -343,14 +343,6 @@
   "gerente": "recusado",
   "oficineiro": "recusado"
  },
- "definir_carteira_da_unidade(p_escola smallint, p_carteira text)": {
-  "administrador": "recusado",
-  "analista": "recusado",
-  "coordenador": "recusado",
-  "direcao": "recusado",
-  "gerente": "recusado",
-  "oficineiro": "recusado"
- },
  "definir_contratada(p_usuario uuid, p_documento text)": {
   "administrador": "aceito",
   "analista": "recusado",
@@ -488,11 +480,11 @@
   "oficineiro": "recusado"
  },
  "jornada_ajustes_lotacao()": {
-  "administrador": "recusado",
+  "administrador": "aceito",
   "analista": "recusado",
   "coordenador": "recusado",
   "direcao": "recusado",
-  "gerente": "aceito",
+  "gerente": "recusado",
   "oficineiro": "recusado"
  },
  "jornada_resumo_mensal()": {

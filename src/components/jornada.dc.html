@@ -647,59 +647,6 @@
     </details>
   </sc-if>
 
-  <sc-if value="{{ abaAtiva.parametros }}" hint-placeholder-val="{{ false }}">
-    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Parâmetros de engajamento</h3><span class="fs-12 cor-cinza-600">{{ parametros.nota }}</span></div>
-      <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
-        <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Aulas por turma na semana (meta do aluno)<input type="number" min="1" max="5" step="1" value="{{ parametros.form.aulas }}" onChange="{{ parametros.escreverAulas }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"></input><span class="fs-12 fw-400 cor-cinza-600 lh-1p45">{{ parametros.ajudaAulas }}</span></label>
-        <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Dias de uso por semana (professor e servidor)<input type="number" min="1" max="5" step="1" value="{{ parametros.form.dias }}" onChange="{{ parametros.escreverDias }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"></input><span class="fs-12 fw-400 cor-cinza-600 lh-1p45">{{ parametros.ajudaDias }}</span></label>
-        <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Período do arquivo Dias de Acesso<select value="{{ parametros.form.periodo }}" onChange="{{ parametros.escolherPeriodo }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ parametros.periodos }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select><span class="fs-12 fw-400 cor-cinza-600 lh-1p45">{{ parametros.ajudaPeriodo }}</span></label>
-      </div>
-      <div class="d-flex quebra-wrap alinha-center gap-8-12">
-        <button style="background:var(--destaque-ciano-660)" onClick="{{ parametros.salvar }}" disabled="{{ parametros.semMudanca }}" class="h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fundo-ciano-660">Salvar parâmetros</button>
-        <sc-if value="{{ parametros.temMudanca }}" hint-placeholder-val="{{ false }}"><button onClick="{{ parametros.descartar }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">Descartar</button></sc-if>
-        <span class="fs-12 cor-cinza-600">{{ parametros.autoria }}</span>
-      </div>
-    </section>
-    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Ajustes de lotação</h3><span class="fs-12 cor-cinza-600">Aplicados a cada carga do B.I.; a lista é mantida pela administração do sistema.</span></div>
-      <sc-if value="{{ parametros.semAjustes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhum ajuste de lotação cadastrado.</span></sc-if>
-      <sc-for list="{{ parametros.ajustes }}" as="ajuste" hint-placeholder-count="2">
-        <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(220px,2fr) minmax(180px,1.4fr) 140px">
-          <span class="cor-cinza-750 lh-1p45">{{ ajuste.regra }}</span><span class="fw-600 cor-ciano-850">{{ ajuste.destino }}</span><span class="fs-12 cor-cinza-600 texto-right">{{ ajuste.afetados }}</span>
-        </div>
-      </sc-for>
-    </section>
-    <details style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-      <summary class="cursor-pointer fs-15 fw-600">Carteira de cada unidade <span class="fs-12 fw-400 cor-cinza-600">· define qual analista vê e trata a escola</span></summary>
-      <div class="d-flex eixo-column gap-0 mt-10">
-        <sc-for list="{{ parametros.unidades }}" as="unidade" hint-placeholder-count="4">
-          <div class="d-grid gap-8 alinha-center fs-13 p-6-0 borda-t-cinza-75" style="grid-template-columns:minmax(220px,1fr) 160px">
-            <span class="cor-cinza-750">{{ unidade.nome }}</span>
-            <select aria-label="{{ unidade.aria }}" value="{{ unidade.carteira }}" onChange="{{ unidade.mudar }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco" style="background:var(--fundo-branco)"><sc-for list="{{ parametros.carteiras }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
-          </div>
-        </sc-for>
-      </div>
-    </details>
-    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Constantes de regra</h3><span class="fs-12 cor-cinza-600">Fixas no sistema; podem virar parâmetros se a gestão quiser ajustá-las.</span></div>
-      <div class="rolagem-x-auto m-0-n4">
-        <div class="min-w-900 d-flex eixo-column p-0-4">
-          <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,1.2fr) minmax(220px,1.4fr) minmax(220px,1.4fr)"><span>Constante</span><span>Valor</span><span>Efeito</span></div>
-          <sc-for list="{{ parametros.constantes }}" as="constante" hint-placeholder-count="6">
-            <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,1.2fr) minmax(220px,1.4fr) minmax(220px,1.4fr)"><span class="fw-600">{{ constante.nome }}</span><span class="cor-cinza-750 lh-1p45">{{ constante.valor }}</span><span class="fs-12 cor-cinza-600 lh-1p45">{{ constante.efeito }}</span></div>
-          </sc-for>
-        </div>
-      </div>
-    </section>
-    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-6 fundo-branco">
-      <h3 class="m-0-0-6 fs-15">Como a Jornada classifica</h3>
-      <sc-for list="{{ regras }}" as="regra" hint-placeholder-count="6"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ regra }}</span></sc-for>
-    </section>
-  </sc-if>
-
-  <sc-if value="{{ abaAtiva.carga }}" hint-placeholder-val="{{ false }}"><dc-import name="coordenador-base-acessos" contexto="{{ contextoDaCarga }}"></dc-import></sc-if>
-
 </sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -754,7 +701,8 @@ const ESTAGIOS = {
   sr: ['Sem uso no mês', 'var(--texto-cinza-600)'],
   nv: ['Não implementado', 'var(--texto-indigo-360)']
 };
-const ORDEM_DOS_ESTAGIOS = ['en', 'ev', 'bx', 'sm', 'sr', 'nv'];
+// Estágios exibidos, como no mockup; "em uso, sem contagem" (sm) só acontece sem o arquivo de dias de acesso.
+const ORDEM_DOS_ESTAGIOS = ['en', 'ev', 'bx', 'sr', 'nv'];
 const SEMAFOROS = {
   critico: ['Crítico', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)'],
   atencao: ['Atenção', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)'],
@@ -781,22 +729,6 @@ const PERIODOS = {
   '6m': 'Últimos 6 meses'
 };
 const PARAMETROS = { aulas: 1, dias: 3, periodo: 'auto', janela: DIAS_DA_JANELA };
-const constantesDeRegra = () => [
-  ['Semanas do mês', '4', 'O mês fechado conta como 4 semanas; em andamento, proporcional aos dias passados'],
-  ['Limite "em evolução"', '1/3 da meta', 'Abaixo disso, o usuário que acessou no mês é baixo uso'],
-  ['Semáforo · crítico', 'Utilização < 40% ou sem uso ≥ 50%', 'Classificação da escola (sobre os criados)'],
-  [
-    'Semáforo · atenção',
-    'Utilização < 60%, sem uso ≥ 30% ou execução das aulas < 60%',
-    'Classificação da escola (sobre os criados)'
-  ],
-  ['Pesos da prioridade de visita', '40 / 25 / 15 / 10 / 10', 'Ordem das sugestões de visita'],
-  ['Visitas sugeridas por semana', String(VISITAS_SUGERIDAS), 'Quantidade de sugestões na carteira'],
-  ['Cores · engajados', 'Vermelho < 20%; verde ≥ 30%', 'Tabelas de escolas e turmas'],
-  ['Cores · aulas realizadas', 'Vermelho < 60%; verde ≥ 80%', 'Tabelas de escolas e turmas'],
-  ['Cores · presença na máquina', 'Vermelho < 50%; verde ≥ 75%', 'Tabelas de escolas e turmas'],
-  ['Temperatura', 'Quente ≤ 5 dias; morno 6–10; frio 11–30; sem uso > 30', 'Dias desde o último acesso']
-];
 const MINIMO_PARA_SEMAFORO = 10;
 const DIAS_DE_STATUS_CONCLUIDO = 14;
 const VISITAS_SUGERIDAS = 3;
@@ -887,8 +819,7 @@ const PADRAO = {
   tratarGrupo: 'nv',
   tratarForm: null,
   tratarLimite: 60,
-  copia: '',
-  paramForm: null
+  copia: ''
 };
 const EM_TRATATIVA = new Set(['pend_desat', 'em_analise', 'desativado']);
 const GRUPOS_DE_TRATAR = [
@@ -933,8 +864,8 @@ const usosNoMes = (conta, data) => {
     );
   return Math.max(1, Math.min(conta.diasDeUso, Math.round(((conta.diasDeUso / semanas) * diaDoMes(data)) / 7)));
 };
-const periodoDoArquivo = (acessos, data) => {
-  const inicio = data.slice(0, 8) + '01';
+const periodoDoArquivo = (acessos, data, leitura) => {
+  const inicio = leitura.slice(0, 8) + '01';
   let antigo = false,
     maximo = 0;
   acessos.forEach(p => {
@@ -945,12 +876,12 @@ const periodoDoArquivo = (acessos, data) => {
   });
   return !antigo ? 'mes' : maximo > 31 ? '6m' : '30d';
 };
-const usarParametros = (parametros, acessos, data) => {
+const usarParametros = (parametros, acessos, data, leitura) => {
   const p = parametros || {};
   PARAMETROS.aulas = Number(p.aulas_semana) || 1;
   PARAMETROS.dias = Number(p.dias_semana) || 3;
   PARAMETROS.periodo = PERIODOS[p.periodo] ? p.periodo : 'auto';
-  PARAMETROS.detectado = periodoDoArquivo(acessos, data);
+  PARAMETROS.detectado = periodoDoArquivo(acessos, data, leitura || data);
   PARAMETROS.janela = JANELA_DO_PERIODO[PARAMETROS.periodo === 'auto' ? PARAMETROS.detectado : PARAMETROS.periodo];
 };
 const estagioDe = (conta, data) => {
@@ -1160,11 +1091,16 @@ class Component extends DCLogic {
       this.preparo.parametros === parametros
     )
       return this.preparo;
-    usarParametros(
-      parametros,
-      acessos,
-      acessos.reduce((maior, p) => (p.base_ref > maior ? p.base_ref : maior), '')
-    );
+    const leituraDe = {};
+    acessos.forEach(p => {
+      const ultimo = p.ultimo_acesso && p.ultimo_acesso <= p.base_ref ? p.ultimo_acesso : '';
+      if (!(p.base_ref in leituraDe) || ultimo > leituraDe[p.base_ref])
+        leituraDe[p.base_ref] = ultimo || leituraDe[p.base_ref] || '';
+    });
+    Object.keys(leituraDe).forEach(base => (leituraDe[base] = leituraDe[base] || base));
+    const atrasoDe = base => Math.round((dataDe(base) - dataDe(leituraDe[base])) / 86400000);
+    const ultimaBase = Object.keys(leituraDe).sort().pop() || '';
+    usarParametros(parametros, acessos, ultimaBase, leituraDe[ultimaBase] || ultimaBase);
     const porBase = {};
     let incompleto = false;
     acessos.forEach(p => {
@@ -1185,7 +1121,7 @@ class Component extends DCLogic {
         nome: p.nome,
         perfil: p.tipo,
         ano: p.ano_escolar || 0,
-        diasSemAcesso: p.dias_sem_acesso,
+        diasSemAcesso: p.dias_sem_acesso < 0 ? -1 : Math.max(0, p.dias_sem_acesso - atrasoDe(p.base_ref)),
         diasDeUso: p.dias_acesso || 0,
         responsavel: p.responsavel_turma || '',
         turma: p.turma || '',
@@ -1197,8 +1133,8 @@ class Component extends DCLogic {
         situacao: p.situacao || '',
         origem: p.escola_origem_id || null
       };
-      conta.usos = usosNoMes(conta, p.base_ref);
-      conta.estagio = estagioDe(conta, p.base_ref);
+      conta.usos = usosNoMes(conta, leituraDe[p.base_ref]);
+      conta.estagio = estagioDe(conta, leituraDe[p.base_ref]);
       local.contas.push(conta);
     });
     const datas = Object.keys(porBase).sort(),
@@ -1256,6 +1192,7 @@ class Component extends DCLogic {
       parametros,
       porMes,
       dataDaBase,
+      dataDaLeitura: leituraDe[dataDaBase] || dataDaBase,
       dataAnterior,
       porEscola: porBase[dataDaBase] || {},
       anterior: dataAnterior ? porBase[dataAnterior] : null,
@@ -1411,77 +1348,6 @@ class Component extends DCLogic {
       ciente: () => jornada.cienteTratativas()
     };
   }
-  abaDeParametros(jornada, memoria) {
-    const salvo = jornada.parametros || {},
-      original = {
-        aulas: String(salvo.aulas_semana || 1),
-        dias: String(salvo.dias_semana || 3),
-        periodo: PERIODOS[salvo.periodo] ? salvo.periodo : 'auto'
-      },
-      form = { ...original, ...(memoria.paramForm || {}) },
-      temMudanca = ['aulas', 'dias', 'periodo'].some(campo => form[campo] !== original[campo]),
-      valido = n => /^[1-5]$/.test(String(n)),
-      mudar = campo => e => this.lembrar({ paramForm: { ...form, [campo]: String(e.target.value) } }),
-      aulas = Number(form.aulas) || 1,
-      dias = Number(form.dias) || 3,
-      detectado = PERIODOS[PARAMETROS.detectado] || '';
-    const carteiras = [{ valor: '', rotulo: 'Sem carteira' }].concat(
-      (jornada.carteiras || []).map(c => ({ valor: c.id, rotulo: c.id }))
-    );
-    const unidades = (jornada.escolas || [])
-      .filter(e => e.ativa !== false)
-      .slice()
-      .sort((a, b) => ehEscola(b.nome) - ehEscola(a.nome) || String(a.nome).localeCompare(String(b.nome), 'pt-BR'))
-      .map(e => ({
-        nome: e.nome,
-        aria: 'Carteira de ' + e.nome,
-        carteira: e.carteira_id || '',
-        mudar: ev => jornada.definirCarteira(e.id, ev.target.value || null)
-      }));
-    return {
-      nota: 'Valem para todos os perfis assim que salvos.',
-      form,
-      escreverAulas: mudar('aulas'),
-      escreverDias: mudar('dias'),
-      escolherPeriodo: mudar('periodo'),
-      ajudaAulas:
-        'Engajado com ' +
-        plural(aulas, 'acesso', 'acessos') +
-        ' por semana: ' +
-        aulas * SEMANAS_NO_MES +
-        ' no mês fechado.',
-      ajudaDias: 'Engajado com ' + dias + ' dias por semana: ' + dias * SEMANAS_NO_MES + ' no mês fechado.',
-      ajudaPeriodo:
-        'Define se a contagem do mês é exata ou estimada.' +
-        (detectado ? ' Arquivo atual: ' + detectado.toLowerCase() + '.' : ''),
-      periodos: Object.keys(PERIODOS).map(valor => ({
-        valor,
-        rotulo: valor === 'auto' && detectado ? 'Automático (' + detectado.toLowerCase() + ')' : PERIODOS[valor]
-      })),
-      temMudanca,
-      semMudanca: !temMudanca || !valido(form.aulas) || !valido(form.dias) || memoria.salvando,
-      descartar: () => this.lembrar({ paramForm: null }),
-      salvar: () => {
-        if (memoria.salvando) return;
-        this.lembrar({ salvando: true });
-        Promise.resolve(jornada.salvarParametros(Number(form.aulas), Number(form.dias), form.periodo)).then(ok =>
-          this.lembrar({ salvando: false, ...(ok ? { paramForm: null } : {}) })
-        );
-      },
-      autoria: salvo.atualizado_em
-        ? 'Última alteração: ' + (salvo.autor_nome || 'gerente') + ' em ' + dataDoRegistro(salvo.atualizado_em) + '.'
-        : 'Valores padrão do documento de parâmetros.',
-      ajustes: (jornada.ajustesLotacao || []).map(a => ({
-        regra: a.regra,
-        destino: 'Conta em ' + a.destino,
-        afetados: plural(Number(a.afetados) || 0, 'usuário', 'usuários') + ' na base'
-      })),
-      semAjustes: !(jornada.ajustesLotacao || []).length,
-      carteiras,
-      unidades,
-      constantes: constantesDeRegra().map(([nome, valor, efeito]) => ({ nome, valor, efeito }))
-    };
-  }
   abaDeTratativas(jornada, memoria) {
     const decidir = typeof jornada.decidirTratativas === 'function' ? jornada.decidirTratativas : null;
     const todas = jornada.tratativas || [];
@@ -1602,20 +1468,21 @@ class Component extends DCLogic {
         usuarios: {},
         avisoRecebidos: {},
         tratativas: {},
-        parametros: {},
-        contextoDaCarga: {},
         agendaDaSemana: {},
         listaDeEscolas: {},
         evolucao: {},
         descarte: {},
         detalhe: {}
       };
-    const { porEscola, porMes, dataDaBase, dataAnterior, anterior, meses } = this.preparar(
-      acessos,
-      jornada.escolaDe,
-      contexto.baseJornada,
-      jornada.parametros || null
-    );
+    const {
+      porEscola,
+      porMes,
+      dataDaBase: dataDaCarga,
+      dataDaLeitura,
+      dataAnterior,
+      anterior,
+      meses
+    } = this.preparar(acessos, jornada.escolaDe, contexto.baseJornada, jornada.parametros || null);
     const statusPorEscola = {},
       historicoPorEscola = {};
     (jornada.statusEscolas || []).forEach(registro => {
@@ -1626,13 +1493,12 @@ class Component extends DCLogic {
     (jornada.statusCarteiras || []).forEach(registro =>
       (avaliacoesPorCarteira[registro.carteira_id] = avaliacoesPorCarteira[registro.carteira_id] || []).push(registro)
     );
+    const dataDaBase = dataDaLeitura || dataDaCarga;
     const referencia = dataDaBase ? dataDe(dataDaBase) : new Date();
     const hoje = dataDe(Base.hojeIso());
     const hojeIso = Base.iso(hoje);
     const podeGravar = typeof jornada.registrarStatusEscola === 'function',
       gerenteDecide = typeof jornada.decidirTratativas === 'function',
-      podeParametrizar = typeof jornada.salvarParametros === 'function',
-      temCarga = !!jornada.carga,
       podeAgendar = typeof jornada.agendarVisita === 'function',
       podeDescartar = typeof jornada.descartarSugestao === 'function';
     const todosOsLocais = Object.values(porEscola);
@@ -1784,7 +1650,7 @@ class Component extends DCLogic {
     const geralAnterior = anterior
       ? contar([].concat(...unidades.filter(u => anterior[u.local.id]).map(u => contasDe(anterior[u.local.id]))))
       : null;
-    const retratos = ((contexto.baseJornada || {}).retratos || []).filter(r => r.base_ref < dataDaBase).slice(0, 90);
+    const retratos = ((contexto.baseJornada || {}).retratos || []).filter(r => r.base_ref < dataDaCarga).slice(0, 90);
     const busca = normTxt(memoria.busca);
     const textoDoStatus = registro => (registro ? STATUS_DA_ESCOLA[registro.status] || registro.status : 'Sem ação');
     const linha = u => ({
@@ -2951,11 +2817,8 @@ class Component extends DCLogic {
       escolherComparacao: e => contexto.trocarComparacao(e.target.value),
       temResumoDaComparacao: !!(geralAnterior && geralAnterior.n),
       temComparacaoVisivel:
-        retratos.length > 0 &&
-        typeof contexto.trocarComparacao === 'function' &&
-        !['parametros', 'carga', 'tratativas'].includes(memoria.aba),
-      temResumoVisivel:
-        !!(geralAnterior && geralAnterior.n) && !['parametros', 'carga', 'tratativas'].includes(memoria.aba),
+        retratos.length > 0 && typeof contexto.trocarComparacao === 'function' && memoria.aba !== 'tratativas',
+      temResumoVisivel: !!(geralAnterior && geralAnterior.n) && memoria.aba !== 'tratativas',
       resumoDaComparacao:
         geralAnterior && geralAnterior.n
           ? 'Em relação a ' +
@@ -3018,7 +2881,7 @@ class Component extends DCLogic {
       ordem: memoria.ordem,
       temperatura: memoria.temperatura,
       escolaNome: escolhida ? escolhida.local.nome : '',
-      mostrarFiltros: !['parametros', 'carga', 'tratativas'].includes(memoria.aba),
+      mostrarFiltros: memoria.aba !== 'tratativas',
       abaAtiva: {
         carteira: memoria.aba === 'carteira',
         geral: memoria.aba === 'geral',
@@ -3026,12 +2889,8 @@ class Component extends DCLogic {
         escola: memoria.aba === 'escola',
         oficineiros: memoria.aba === 'oficineiros',
         usuarios: memoria.aba === 'usuarios',
-        tratativas: memoria.aba === 'tratativas' && gerenteDecide,
-        parametros: memoria.aba === 'parametros' && podeParametrizar,
-        carga: memoria.aba === 'carga' && temCarga
+        tratativas: memoria.aba === 'tratativas' && gerenteDecide
       },
-      parametros: podeParametrizar && memoria.aba === 'parametros' ? this.abaDeParametros(jornada, memoria) : {},
-      contextoDaCarga: temCarga ? jornada.carga : {},
       avisoRecebidos: memoria.aba === 'carteira' || memoria.aba === 'escolas' ? this.avisoDeRecebidos(jornada) : {},
       tratativas: gerenteDecide && memoria.aba === 'tratativas' ? this.abaDeTratativas(jornada, memoria) : {},
       abas: [
@@ -3043,8 +2902,6 @@ class Component extends DCLogic {
         ['usuarios', 'Usuários']
       ]
         .concat(gerenteDecide ? [['tratativas', 'Tratativas']] : [])
-        .concat(podeParametrizar ? [['parametros', 'Parâmetros']] : [])
-        .concat(temCarga ? [['carga', 'Carga diária']] : [])
         .map(([aba, rotulo]) => ({
           rotulo,
           atual: memoria.aba === aba ? 'true' : 'false',
