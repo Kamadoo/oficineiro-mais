@@ -41,11 +41,11 @@ jobs:
           deno-version: 2.9.6
       - run: deno fmt --check
       - run: deno lint
-      - run: deno check acesso/index.ts admin-usuarios/index.ts
+      - run: deno check acesso/index.ts admin-usuarios/index.ts convites/index.ts
       - run: deno test --allow-env --allow-read tests/
 
-  database:
-    name: Banco de dados
+  banco:
+    name: Testes do banco
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -68,6 +68,57 @@ jobs:
           python3 tests/security/rls_audit.py
           python3 tests/security/rpc_matrix.py
           python3 tests/security/scope_audit.py
+
+  mudancas:
+    name: Telas afetadas
+    runs-on: ubuntu-latest
+    outputs:
+      varrer: ${{ steps.decidir.outputs.varrer }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - id: decidir
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "varrer=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git diff --name-only "$BASE" "$GITHUB_SHA" > alterados.txt
+          cat alterados.txt
+          if grep -qvE '^(docs/|supabase/functions/|supabase/tests/|tests/security/|\.github/dependabot\.yml$|LICENSE$|[^/]*\.md$)' alterados.txt; then
+            echo "varrer=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "varrer=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  varredura:
+    name: Varredura (${{ matrix.grupo }})
+    needs: mudancas
+    if: needs.mudancas.outputs.varrer == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        grupo: [gerente, "coordenador,administrador", "analista,direcao,oficineiro"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: supabase/setup-cli@689adcfb80d947100a1eab127289b97d1fb07b13
+        with:
+          version: 3.1.0
+      - run: supabase db start
+      - run: supabase db reset --no-seed
+      - name: Dados de teste
+        env:
+          PGHOST: 127.0.0.1
+          PGPORT: 54322
+          PGUSER: postgres
+          PGPASSWORD: postgres
+        run: |
+          psql -d postgres -v ON_ERROR_STOP=1 -q -f supabase/seed.sql
+          psql -d postgres -v ON_ERROR_STOP=1 -q -f tests/fixtures/dados_teste.sql
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
           node-version: 22
@@ -83,4 +134,24 @@ jobs:
           PGUSER: postgres
           PGPASSWORD: postgres
           PGDATABASE: postgres
+          SO: ${{ matrix.grupo }}
+          TEMAS: ${{ github.event_name == 'pull_request' && 'claro' || 'claro,escuro' }}
+          CELULAR: ${{ github.event_name == 'pull_request' && '0' || '1' }}
         run: npm run test:ui
+
+  database:
+    name: Banco de dados
+    needs: [banco, mudancas, varredura]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resultado
+        run: |
+          echo "testes do banco: ${{ needs.banco.result }}"
+          echo "telas afetadas: ${{ needs.mudancas.result }} (varrer: ${{ needs.mudancas.outputs.varrer }})"
+          echo "varredura: ${{ needs.varredura.result }}"
+          test "${{ needs.banco.result }}" = "success"
+          test "${{ needs.mudancas.result }}" = "success"
+          if [ "${{ needs.mudancas.outputs.varrer }}" = "true" ]; then
+            test "${{ needs.varredura.result }}" = "success"
+          fi

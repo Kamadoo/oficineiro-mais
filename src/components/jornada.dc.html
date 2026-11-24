@@ -12,47 +12,230 @@
 <sc-if value="{{ semBase }}" hint-placeholder-val="{{ false }}"><div style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-24 d-flex eixo-column gap-6 alinha-center texto-center fundo-branco"><b class="fs-15">Base de acessos ainda não carregada</b></div></sc-if>
 <sc-if value="{{ pronto }}" hint-placeholder-val="{{ true }}">
   <div class="d-flex quebra-wrap gap-10 alinha-center">
-    <div class="d-flex gap-2 fundo-cinza-70 raio-10 p-3 quebra-wrap">
-      <sc-for list="{{ abas }}" as="aba" hint-placeholder-count="3"><button onClick="{{ aba.escolher }}" class="borda-0 raio-8 p-8-14 fs-13 fw-600 {{ aba.classe }}" style="background:{{ aba.fundo }};color:{{ aba.cor }}">{{ aba.rotulo }}</button></sc-for>
+    <div role="tablist" aria-label="Jornada do Usuário" class="d-flex gap-2 fundo-cinza-70 raio-10 p-3 quebra-wrap">
+      <sc-for list="{{ abas }}" as="aba" hint-placeholder-count="6"><button role="tab" aria-selected="{{ aba.atual }}" onClick="{{ aba.escolher }}" class="borda-0 raio-8 p-8-14 fs-13 fw-600 {{ aba.classe }}" style="background:{{ aba.fundo }};color:{{ aba.cor }}">{{ aba.rotulo }}</button></sc-for>
     </div>
 <sc-if value="{{ porCarteira }}" hint-placeholder-val="{{ false }}"><select style="background:var(--fundo-branco)"
   aria-label="Carteira" onChange="{{ escolherCarteira }}" value="{{ carteira }}"
   class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><sc-for list="{{ opcoesDeCarteira }}" as="opcao"
   hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
     <select style="background:var(--fundo-branco)" aria-label="Perfil" onChange="{{ escolherPerfil }}" value="{{ perfil }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todos">Todos os perfis</option><option value="A">Alunos</option><option value="P">Professores</option><option value="S">Servidores</option></select>
-    <select style="background:var(--fundo-branco)" aria-label="Lotação" onChange="{{ escolherLotacao }}" value="{{ lotacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="escolas">Escolas e CEIs</option><option value="todas">Todas as lotações</option></select>
+    <select style="background:var(--fundo-branco)" aria-label="Lotação" onChange="{{ escolherLotacao }}" value="{{ lotacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as lotações</option><option value="escolas">Escolas e CEIs</option></select>
+    <select style="background:var(--fundo-branco)" aria-label="Escola ou unidade" onChange="{{ escolherFiltroEscola }}" value="{{ filtroEscola }}" class="h-36 max-w-320 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as escolas e unidades</option><sc-for list="{{ opcoesDoFiltroEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <select style="background:var(--fundo-branco)" aria-label="Turma" onChange="{{ escolherFiltroAno }}" value="{{ filtroAno }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todos">Todas as turmas</option><sc-for list="{{ opcoesDoFiltroAno }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+    <sc-if value="{{ temFiltro }}" hint-placeholder-val="{{ false }}"><button onClick="{{ limparFiltros }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 botao-secundario">Limpar filtros</button></sc-if>
     <span class="ml-auto fs-12 cor-cinza-600">Base de acessos de <b class="cor-ciano-850">{{ dataDaBase }}</b></span>
+    <sc-if value="{{ temComparacao }}" hint-placeholder-val="{{ false }}"><select style="background:var(--fundo-branco)" aria-label="Comparar com a base de acessos de" onChange="{{ escolherComparacao }}" value="{{ comparacao }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><sc-for list="{{ opcoesDeComparacao }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></sc-if>
   </div>
+  <sc-if value="{{ temResumoDaComparacao }}" hint-placeholder-val="{{ false }}"><p role="status" class="m-0 fs-12 cor-cinza-600">{{ resumoDaComparacao }}</p></sc-if>
+
+  <sc-if value="{{ abaAtiva.carteira }}" hint-placeholder-val="{{ false }}">
+    <sc-if value="{{ listaDeCarteiras }}" hint-placeholder-val="{{ false }}">
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Carteiras</h3><span class="fs-12 cor-cinza-600">Semáforo calculado e avaliação do analista. Clique para ver a carteira como o analista vê.</span></div>
+        <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr))">
+          <sc-for list="{{ cartoesDeCarteira }}" as="cartao" hint-placeholder-count="4">
+            <button onClick="{{ cartao.abrir }}" class="fundo-branco borda-cinza-110 raio-12 p-16 d-flex eixo-column gap-8 cursor-pointer texto-left largura-fundo" style="background:var(--fundo-branco)">
+              <span class="d-flex alinha-center gap-8"><b class="fs-16 cor-ciano-850">{{ cartao.rotulo }}</b><span class="ml-auto fs-12 fw-700 p-3-10 raio-999 espaco-nowrap" style="color:{{ cartao.semaforoCor }};background:{{ cartao.semaforoFundo }}"><span aria-hidden="true">{{ cartao.semaforoIcone }} </span>{{ cartao.semaforo }}</span></span>
+              <span class="fs-13 cor-cinza-600">{{ cartao.base }}</span>
+              <span class="fs-14 cor-cinza-750">Utilização <b class="num-tabular-nums fs-17 cor-ciano-850">{{ cartao.utilizacao }}</b> · Engajados <b class="num-tabular-nums fs-17" style="color:{{ cartao.engajadosCor }}">{{ cartao.engajados }}</b></span>
+              <sc-if value="{{ cartao.temEscolas }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">{{ cartao.escolas }}</span></sc-if>
+              <span class="fs-13 cor-cinza-600 lh-1p45">Avaliação do analista: <b style="color:{{ cartao.avaliacaoCor }}">{{ cartao.avaliacao }}</b></span>
+              <sc-if value="{{ cartao.temResumo }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-750 lh-1p45 linhas-2">{{ cartao.avaliacaoResumo }}</span></sc-if>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+    <sc-if value="{{ painelDaCarteira }}" hint-placeholder-val="{{ true }}">
+      <sc-if value="{{ podeVoltar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ voltarCarteiras }}" class="alinha-si-flex-start h-34 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">← Todas as carteiras</button></sc-if>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-center gap-8-12"><h3 class="m-0 fs-15">Status geral da carteira {{ minhaCarteira.rotulo }}</h3><span class="fs-12 cor-cinza-600">Calculado:</span><span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ minhaCarteira.semaforoCor }};background:{{ minhaCarteira.semaforoFundo }}">{{ minhaCarteira.semaforo }}</span></div>
+        <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
+          <sc-for list="{{ minhaCarteira.indicadores }}" as="indicador" hint-placeholder-count="5">
+            <div class="fundo-branco raio-12 p-14-16 d-flex eixo-column gap-4 largura-fundo cartao-indicador" style="border-width:3px 1px 1px;border-style:solid;border-color:{{ indicador.cor }} var(--borda-cinza-110) var(--borda-cinza-110)">
+              <span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span>
+              <span class="num-tabular-nums fs-22 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.valorCor }}">{{ indicador.valor }}</span>
+              <span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div class="d-flex quebra-wrap alinha-center gap-6 fs-12"><span class="cor-cinza-600">Escolas por semáforo:</span><sc-for list="{{ minhaCarteira.porSemaforo }}" as="item" hint-placeholder-count="4"><span class="fw-600 p-3-8 raio-999 espaco-nowrap" style="color:{{ item.cor }};background:{{ item.fundo }}">{{ item.rotulo }} {{ item.valor }}</span></sc-for></div>
+        <div class="d-flex quebra-wrap alinha-center gap-6 fs-12"><span class="cor-cinza-600">Escolas por status:</span><sc-for list="{{ minhaCarteira.porStatus }}" as="item" hint-placeholder-count="3"><span class="fw-600 p-3-8 raio-999 espaco-nowrap fundo-cinza-70 cor-cinza-750">{{ item.rotulo }} {{ item.valor }}</span></sc-for></div>
+        <div class="d-flex eixo-column gap-8 p-12-0 borda-t-cinza-70">
+          <div class="d-flex quebra-wrap alinha-center gap-8-12">
+            <b class="fs-14">Avaliação do analista</b>
+            <sc-if value="{{ minhaCarteira.temAvaliacao }}" hint-placeholder-val="{{ false }}"><span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ minhaCarteira.avaliacaoCor }};background:{{ minhaCarteira.avaliacaoFundo }}">{{ minhaCarteira.avaliacao }}</span><span class="fs-12 cor-cinza-600">{{ minhaCarteira.avaliacaoAutor }}</span></sc-if>
+            <sc-if value="{{ podeAvaliar }}" hint-placeholder-val="{{ false }}"><button onClick="{{ alternarAvaliacao }}" class="ml-auto h-34 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">{{ textoDoBotaoAvaliar }}</button></sc-if>
+          </div>
+          <sc-if value="{{ minhaCarteira.temAvaliacao }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-750 lh-1p45">{{ minhaCarteira.avaliacaoResumo }}</span></sc-if>
+          <sc-if value="{{ minhaCarteira.semAvaliacao }}" hint-placeholder-val="{{ true }}"><span class="fs-13 cor-cinza-600">Nenhuma avaliação registrada para esta carteira.</span></sc-if>
+          <sc-if value="{{ formCarteiraAberto }}" hint-placeholder-val="{{ false }}">
+            <div class="d-flex eixo-column gap-8 p-14 raio-10 fundo-ciano-40">
+              <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Leitura da semana<select style="background:var(--fundo-branco)" onChange="{{ escolherAvaliacao }}" value="{{ formCarteira.status }}" class="h-36 max-w-520 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="em_dia">Em dia</option><option value="atencao">Atenção</option><option value="critico">Crítico</option></select></label>
+              <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Resumo da semana<textarea rows="3" value="{{ formCarteira.resumo }}" onChange="{{ escreverResumo }}" maxlength="2000" placeholder="O que está acontecendo na carteira e o que será feito" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+              <button style="background:var(--destaque-ciano-660)" onClick="{{ salvarAvaliacao }}" disabled="{{ salvando }}" class="alinha-si-flex-start h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fundo-ciano-660">Registrar avaliação</button>
+            </div>
+          </sc-if>
+          <sc-for list="{{ minhaCarteira.historico }}" as="item" hint-placeholder-count="2"><span class="fs-12 cor-cinza-600 lh-1p45">{{ item }}</span></sc-for>
+        </div>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-center gap-8-12">
+          <div class="flex-1-1-240 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">{{ agendaDaSemana.titulo }}</h3><span class="fs-12 cor-cinza-600">Visitas da agenda em destaque; horários sugeridos pela Jornada em tracejado.</span></div>
+          <div role="group" aria-label="Semana da agenda" class="d-flex alinha-center gap-6">
+            <button onClick="{{ agendaDaSemana.anterior }}" aria-label="Semana anterior" class="w-36 h-36 borda-cinza-160 fundo-branco raio-8 cor-ciano-850 fs-16 p-0 largura-fundo botao-secundario">‹</button>
+            <span class="fs-13 fw-600 min-w-170 texto-center">{{ agendaDaSemana.texto }}</span>
+            <button onClick="{{ agendaDaSemana.seguinte }}" aria-label="Próxima semana" class="w-36 h-36 borda-cinza-160 fundo-branco raio-8 cor-ciano-850 fs-16 p-0 largura-fundo botao-secundario">›</button>
+            <sc-if value="{{ agendaDaSemana.foraDaAtual }}" hint-placeholder-val="{{ false }}"><button onClick="{{ agendaDaSemana.atual }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 cor-ciano-850 botao-secundario">Esta semana</button></sc-if>
+          </div>
+        </div>
+        <div class="empilha-celular d-grid colunas-repeat-5-minmax-0-1fr gap-10">
+          <sc-for list="{{ agendaDaSemana.dias }}" as="dia" hint-placeholder-count="5">
+            <div class="raio-10 p-10 d-flex eixo-column gap-8 min-w-0 largura-fundo" style="background:{{ dia.fundo }};border:1px solid {{ dia.borda }}" aria-label="{{ dia.aria }}">
+              <div class="d-flex justifica-space-between alinha-baseline"><b class="fs-13">{{ dia.nome }}</b><span class="num-tabular-nums fs-12 cor-cinza-600">{{ dia.data }}</span></div>
+              <sc-if value="{{ dia.vazio }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-600">{{ dia.vazioTexto }}</span></sc-if>
+              <sc-for list="{{ dia.eventos }}" as="evento" hint-placeholder-count="2">
+                <div class="raio-8 p-10 d-flex eixo-column gap-2 min-w-0" style="border-left:3px {{ evento.traco }} {{ evento.cor }};background:{{ evento.fundo }}"><span class="num-tabular-nums fs-12 cor-cinza-600">{{ evento.hora }}</span><span class="fs-13 fw-600 cor-ciano-850 quebra-palavra-anywhere">{{ evento.escola }}</span><span class="fs-12 cor-cinza-750 quebra-palavra-anywhere">{{ evento.tipo }}</span><span class="fs-11 fw-600" style="color:{{ evento.situacaoCor }}">{{ evento.situacao }}</span></div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Sugestões de visita</h3><span class="fs-12 cor-cinza-600">Escolas de maior prioridade sem visita nos próximos 7 dias, em dia útil livre na agenda nos próximos 10 dias (a visita ocupa o dia).</span></div>
+        <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+          <sc-for list="{{ sugestoesDeVisita }}" as="sugestao" hint-placeholder-count="3">
+            <div class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-6">
+              <div class="d-flex alinha-center gap-8"><button onClick="{{ sugestao.abrir }}" class="largura-fundo cursor-pointer fs-14 cor-ciano-850" style="all:unset;font-weight:600">{{ sugestao.nome }}</button><span class="ml-auto fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ sugestao.semaforoCor }};background:{{ sugestao.semaforoFundo }}">{{ sugestao.semaforo }}</span></div>
+              <span class="fs-12 cor-cinza-600">Prioridade <b class="cor-ciano-850">{{ sugestao.prioridade }}</b> de 100</span>
+              <span class="fs-13 fw-600 cor-ciano-850 p-6-10 raio-8 fundo-ciano-40 alinha-si-flex-start">{{ sugestao.horario }}</span>
+              <sc-for list="{{ sugestao.motivos }}" as="motivo" hint-placeholder-count="3"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ motivo }}</span></sc-for>
+              <sc-if value="{{ sugestao.podeAgir }}" hint-placeholder-val="{{ false }}">
+                <div class="d-flex quebra-wrap gap-6">
+                  <button style="background:var(--destaque-ciano-660)" onClick="{{ sugestao.aceitar }}" disabled="{{ sugestao.ocupado }}" class="h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660">Aceitar e agendar</button>
+                  <button onClick="{{ sugestao.outroHorario }}" aria-haspopup="dialog" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap botao-secundario">Agendar em outro dia</button>
+                  <button onClick="{{ sugestao.alternarDescarte }}" class="h-32 borda-cinza-160 fundo-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap botao-secundario">{{ sugestao.textoDescartar }}</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ sugestao.descartando }}" hint-placeholder-val="{{ false }}">
+                <div class="d-flex eixo-column gap-8 p-12 raio-10 fundo-cinza-20">
+                  <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Motivo do descarte *<select style="background:var(--fundo-branco)" onChange="{{ escolherMotivoDoDescarte }}" value="{{ descarte.motivo }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="">Escolha o motivo</option><sc-for list="{{ motivosDeDescarte }}" as="opcao" hint-placeholder-count="4"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+                  <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">{{ descarte.rotuloDoDetalhe }}<textarea rows="2" value="{{ descarte.detalhe }}" onChange="{{ escreverDetalheDoDescarte }}" maxlength="500" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+                  <button style="background:var(--destaque-ciano-660)" onClick="{{ confirmarDescarte }}" disabled="{{ descarte.incompleto }}" class="alinha-si-flex-start h-34 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fundo-ciano-660">Descartar sugestão</button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ semSugestoesDeVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma escola pendente de visita nesta carteira.</span></sc-if>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Escolas da carteira</h3><span class="fs-12 cor-cinza-600">Ordenadas pela prioridade de visita. Clique na escola para ver o detalhe e registrar a ação.</span></div>
+        <div class="rolagem-x-auto m-0-n4">
+          <div class="min-w-900 d-flex eixo-column p-0-4">
+            <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,2fr) 100px 80px 80px 90px 80px 150px 130px">
+              <span>Escola</span><span>Semáforo</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Aulas realizadas</span><span class="texto-right">Prioridade</span><span>Status</span><span>Próxima visita</span>
+            </div>
+            <sc-for list="{{ escolasDaCarteira }}" as="linha" hint-placeholder-count="6">
+              <div class="d-grid gap-4 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,2fr) 100px 80px 80px 90px 80px 150px 130px">
+                <button onClick="{{ linha.detalhar }}" aria-expanded="{{ linha.expandida }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset" title="{{ linha.nome }}">{{ linha.nome }}</button>
+                <span><span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.semaforoCor }};background:{{ linha.semaforoFundo }}">{{ linha.semaforo }}</span></span>
+                <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.utilizacao }}</span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
+                <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.aulasCor }}" title="{{ linha.aulasTitulo }}">{{ linha.aulasRealizadas }}</span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.pontos }}</span>
+                <span class="fs-12 cor-cinza-750">{{ linha.status }}</span>
+                <span class="fs-12" style="color:{{ linha.agendaCor }}">{{ linha.agenda }}</span>
+              </div>
+              <sc-if value="{{ linha.aberta }}" hint-placeholder-val="{{ false }}"><dc-import name="jornada-escola" detalhe="{{ detalhe }}"></dc-import></sc-if>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+  </sc-if>
 
   <sc-if value="{{ abaAtiva.geral }}" hint-placeholder-val="{{ true }}">
-    <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
-      <sc-for list="{{ indicadores }}" as="indicador" hint-placeholder-count="7">
-        <div class="fundo-branco raio-12 p-14-16 d-flex eixo-column gap-4 largura-fundo cartao-indicador" style="border-width:3px 1px 1px;border-style:solid;border-color:{{ indicador.cor }} var(--borda-cinza-110) var(--borda-cinza-110)">
-          <span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span>
-          <span class="num-tabular-nums fs-24 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.valorCor }}">{{ indicador.valor }}</span>
-          <span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span>
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12 p-0-0-8"><h3 class="m-0 fs-15">Jornada do usuário</h3><span class="fs-12 cor-cinza-600">Da criação ao engajamento, no recorte dos filtros.</span></div>
+      <sc-for list="{{ funil }}" as="etapa" hint-placeholder-count="4">
+        <div class="empilha-celular d-grid gap-8-12 alinha-center p-10-0 borda-t-cinza-70" style="grid-template-columns:minmax(170px,1fr) minmax(170px,1fr) minmax(0,2.4fr)">
+          <div class="d-flex eixo-column gap-2"><b class="fs-14">{{ etapa.titulo }}</b><span class="fs-12 cor-cinza-600">{{ etapa.descricao }}</span></div>
+          <div class="d-flex eixo-column gap-2"><span class="num-tabular-nums fs-24 fw-600 cor-ciano-850" style="font-family:'Inter',system-ui,sans-serif">{{ etapa.valor }}</span><span class="fs-12 cor-cinza-600">{{ etapa.nota }}</span></div>
+          <div role="img" aria-label="{{ etapa.aria }}" class="d-flex h-36 raio-8 rolagem-hidden fundo-cinza-70"><div class="raio-8 largura-fundo" style="width:{{ etapa.largura }};background:{{ etapa.cor }}"></div></div>
         </div>
       </sc-for>
-    </div>
-    <div class="empilha-celular d-grid colunas-minmax-0-1p25fr-minmax-0-1fr gap-16 alinha-start">
+    </section>
+    <sc-if value="{{ porCarteira }}" hint-placeholder-val="{{ false }}">
       <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Escolas que precisam de reforço na adoção</h3><span class="fs-12 cor-cinza-600">{{ textos.ordem }}</span></div>
-        <sc-for list="{{ sugestoes }}" as="linha" hint-placeholder-count="5">
-          <div class="d-flex quebra-wrap alinha-center gap-8-12 p-12-0 borda-t-cinza-70">
-            <span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.prioridadeCor }};background:{{ linha.prioridadeFundo }}">{{ linha.prioridade }}</span>
-            <div class="flex-1-1-220 min-w-0 d-flex eixo-column gap-2">
-              <button onClick="{{ linha.abrir }}" class="largura-fundo cursor-pointer fs-14 cor-ciano-850" style="all:unset;font-weight:600">{{ linha.nome }}</button>
-              <span class="fs-12 cor-cinza-750 lh-1p45">{{ linha.diagnostico }}</span>
-            </div>
-            <sc-if value="{{ linha.temVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-verde-700 fundo-verde-80 p-4-10 raio-999 espaco-nowrap">Na agenda · {{ linha.visita }}</span></sc-if>
-            <sc-if value="{{ linha.semVisita }}" hint-placeholder-val="{{ true }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ linha.agendar }}" class="h-32 borda-0 cor-branco raio-8 p-0-12 fs-13 fw-600 espaco-nowrap fundo-ciano-660">{{ textos.agendar }}</button></sc-if>
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Por carteira de CS</h3><span class="fs-12 cor-cinza-600">Clique para filtrar.</span></div>
+        <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+          <sc-for list="{{ cartoesPorCarteira }}" as="cartao" hint-placeholder-count="3">
+            <button onClick="{{ cartao.escolher }}" aria-pressed="{{ cartao.marcado }}" class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-10 cursor-pointer texto-left largura-fundo" style="background:{{ cartao.fundo }}">
+              <span class="d-flex quebra-wrap alinha-baseline gap-8"><b class="fs-15 cor-ciano-850">{{ cartao.rotulo }}</b><span class="fs-12 cor-cinza-600">{{ cartao.total }}</span></span>
+              <span class="d-flex h-10 raio-4 rolagem-hidden fundo-cinza-90"><sc-for list="{{ cartao.faixas }}" as="faixa" hint-placeholder-count="6"><span title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></span></sc-for></span>
+              <sc-for list="{{ cartao.linhas }}" as="item" hint-placeholder-count="4"><span class="d-grid gap-8 alinha-baseline fs-13" style="grid-template-columns:minmax(0,1fr) auto 40px"><span class="cor-cinza-750">{{ item.titulo }}</span><b class="num-tabular-nums texto-right fs-14" style="font-family:'Inter',system-ui,sans-serif">{{ item.valor }}</b><span class="num-tabular-nums texto-right fs-12 cor-cinza-600">{{ item.parte }}</span></span></sc-for>
+            </button>
+          </sc-for>
+        </div>
+        <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ legendaDosEstagios }}" as="item" hint-placeholder-count="6"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
+      </section>
+    </sc-if>
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Por perfil</h3><span class="fs-12 cor-cinza-600">Clique para filtrar.</span></div>
+      <div class="d-grid gap-10" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <sc-for list="{{ cartoesPorPerfil }}" as="cartao" hint-placeholder-count="3">
+            <button onClick="{{ cartao.escolher }}" aria-pressed="{{ cartao.marcado }}" class="borda-cinza-110 raio-12 p-14-16 d-flex eixo-column gap-10 cursor-pointer texto-left largura-fundo" style="background:{{ cartao.fundo }}">
+              <span class="d-flex quebra-wrap alinha-baseline gap-8"><b class="fs-15 cor-ciano-850">{{ cartao.rotulo }}</b><span class="fs-12 cor-cinza-600">{{ cartao.total }}</span></span>
+              <span class="d-flex h-10 raio-4 rolagem-hidden fundo-cinza-90"><sc-for list="{{ cartao.faixas }}" as="faixa" hint-placeholder-count="6"><span title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></span></sc-for></span>
+              <sc-for list="{{ cartao.linhas }}" as="item" hint-placeholder-count="4"><span class="d-grid gap-8 alinha-baseline fs-13" style="grid-template-columns:minmax(0,1fr) auto 40px"><span class="cor-cinza-750">{{ item.titulo }}</span><b class="num-tabular-nums texto-right fs-14" style="font-family:'Inter',system-ui,sans-serif">{{ item.valor }}</b><span class="num-tabular-nums texto-right fs-12 cor-cinza-600">{{ item.parte }}</span></span></sc-for>
+            </button>
+          </sc-for>
+      </div>
+      <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ legendaDosEstagios }}" as="item" hint-placeholder-count="6"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
+    </section>
+    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+      <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Evolução mensal</h3><span class="fs-12 cor-cinza-600">{{ evolucao.nota }}</span></div>
+      <sc-if value="{{ evolucao.temMeses }}" hint-placeholder-val="{{ false }}">
+        <div class="rolagem-x-auto m-0-n4">
+          <div class="d-flex alinha-end gap-12 p-0-4" style="min-height:190px">
+            <sc-for list="{{ evolucao.meses }}" as="mes" hint-placeholder-count="6">
+              <div class="d-flex eixo-column alinha-center gap-6" style="min-width:76px;flex:1 1 0">
+                <div class="d-flex alinha-end gap-3" style="height:150px">
+                  <sc-for list="{{ mes.barras }}" as="barra" hint-placeholder-count="3"><div title="{{ barra.titulo }}" class="raio-3" style="width:16px;height:{{ barra.altura }};background:{{ barra.cor }}"></div></sc-for>
+                </div>
+                <span class="fs-12 fw-600 cor-cinza-750 espaco-nowrap">{{ mes.rotulo }}</span>
+                <span class="num-tabular-nums fs-11 cor-cinza-600 espaco-nowrap" style="font-family:'Inter',system-ui,sans-serif">{{ mes.numeros }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ evolucao.legenda }}" as="item" hint-placeholder-count="3"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
+      </sc-if>
+    </section>
+    <div class="empilha-celular d-grid colunas-1fr-1fr gap-16 alinha-start">
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15">Estágio da jornada</h3><span class="fs-12 cor-cinza-600">Cada usuário em um único estágio.</span></div>
+        <sc-for list="{{ estagios }}" as="estagio" hint-placeholder-count="6">
+          <div class="d-grid gap-10 alinha-center fs-12" style="grid-template-columns:minmax(120px,170px) minmax(0,1fr) auto">
+            <span class="d-flex alinha-center gap-6 fs-13 fw-600"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ estagio.cor }}"></span>{{ estagio.rotulo }}</span>
+            <div class="d-flex h-14 raio-4 rolagem-hidden fundo-cinza-90"><div class="largura-fundo" style="width:{{ estagio.largura }};background:{{ estagio.cor }}"></div></div>
+            <span class="num-tabular-nums espaco-nowrap texto-right" style="font-family:'Inter',system-ui,sans-serif"><b class="fs-13">{{ estagio.valor }}</b> <span class="cor-cinza-600">{{ estagio.parcela }}</span></span>
           </div>
         </sc-for>
-        <sc-if value="{{ semSugestoes }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600">Nenhuma escola com prioridade alta ou média neste filtro.</span></sc-if>
       </section>
-      <div class="d-flex eixo-column gap-16">
-        <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-          <h3 class="m-0 fs-15">{{ textos.barras }}</h3>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Temperatura de engajamento</h3><span class="fs-12 cor-cinza-600">Há quanto tempo foi o último acesso. Não é quantidade de acessos.</span></div>
+        <sc-for list="{{ temperaturas }}" as="faixa" hint-placeholder-count="5">
+          <div class="d-grid gap-10 alinha-center fs-12" style="grid-template-columns:minmax(120px,150px) minmax(0,1fr) auto">
+            <div class="d-flex eixo-column gap-2"><span class="d-flex alinha-center gap-6 fs-13 fw-600"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ faixa.cor }}"></span>{{ faixa.rotulo }}</span><span class="cor-cinza-600">{{ faixa.intervalo }}</span></div>
+            <div class="d-flex h-14 raio-4 rolagem-hidden fundo-cinza-90"><div class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></div></div>
+            <span class="num-tabular-nums espaco-nowrap texto-right" style="font-family:'Inter',system-ui,sans-serif"><b class="fs-13">{{ faixa.valor }}</b> <span class="cor-cinza-600">{{ faixa.parcela }}</span></span>
+          </div>
+        </sc-for>
+        <div class="d-flex eixo-column gap-10 p-12-0 borda-t-cinza-70">
+          <b class="fs-13">{{ textos.barras }}</b>
           <sc-for list="{{ barras }}" as="barra" hint-placeholder-count="7">
             <div class="d-grid colunas-44-minmax-0-1fr-48 gap-10 alinha-center fs-12">
               <span class="fw-600" style="color:{{ barra.cor }}">{{ barra.sigla }}</span>
@@ -60,122 +243,285 @@
               <span class="num-tabular-nums texto-right cor-cinza-600" style="font-family:'Inter',system-ui,sans-serif">{{ barra.engajados }}</span>
             </div>
           </sc-for>
-          <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ legenda }}" as="item" hint-placeholder-count="5"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
-          <span class="fs-12 cor-cinza-600">Número à direita: % engajados (quente + morno).</span>
-        </section>
-        <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco">
-          <h3 class="m-0-0-6 fs-15">Régua de temperatura</h3>
-          <sc-for list="{{ regua }}" as="faixa" hint-placeholder-count="5">
-            <div class="d-grid colunas-110-minmax-0-1fr gap-10 p-8-0 borda-t-cinza-70 fs-13">
-              <div class="d-flex eixo-column gap-2"><span class="d-flex alinha-center gap-6 fw-600"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ faixa.cor }}"></span>{{ faixa.rotulo }}</span><span class="fs-12 cor-cinza-600">{{ faixa.intervalo }}</span></div>
-              <span class="cor-cinza-750 lh-1p45">{{ faixa.acao }}</span>
-            </div>
-          </sc-for>
-        </section>
-      </div>
+          <span class="fs-12 cor-cinza-600">Mesmas cores da lista acima. Número à direita: % engajados.</span>
+        </div>
+      </section>
     </div>
-  </sc-if>
-
-  <sc-if value="{{ abaAtiva.mapa }}" hint-placeholder-val="{{ false }}">
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
       <div class="d-flex quebra-wrap alinha-center gap-8-14">
-        <div class="flex-1-1-300 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Mapa de calor por escola</h3><span class="fs-12 cor-cinza-600">% das contas em cada faixa · cor mais forte = maior concentração. Clique na escola para ver as turmas.</span></div>
-        <input onInput="{{ buscarEscola }}" placeholder="Buscar escola" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
-        <select style="background:var(--fundo-branco)" onChange="{{ escolherOrdem }}" value="{{ ordem }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="prio">Ordenar por prioridade</option><option value="contas">Ordenar por nº de contas</option><option value="eng">Ordenar por engajados</option></select>
+        <div class="flex-1-1-300 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Escolas</h3><span class="fs-12 cor-cinza-600">{{ listaDeEscolas.nota }}</span></div>
+        <div role="tablist" aria-label="Barra da escola" class="d-flex gap-2 fundo-cinza-70 raio-10 p-3 quebra-wrap">
+          <sc-for list="{{ listaDeEscolas.visoes }}" as="visao" hint-placeholder-count="3"><button role="tab" aria-selected="{{ visao.atual }}" onClick="{{ visao.escolher }}" class="borda-0 raio-8 p-6-12 fs-13 fw-600 {{ visao.classe }}" style="background:{{ visao.fundo }};color:{{ visao.cor }}">{{ visao.rotulo }}</button></sc-for>
+        </div>
+        <sc-if value="{{ porCarteira }}" hint-placeholder-val="{{ false }}"><label class="d-flex alinha-center gap-6 fs-13 fw-600 cor-cinza-750"><input type="checkbox" checked="{{ listaDeEscolas.agrupada }}" onChange="{{ listaDeEscolas.alternarGrupo }}"></input>Por carteira</label></sc-if>
+        <select style="background:var(--fundo-branco)" aria-label="Ordenar escolas" onChange="{{ listaDeEscolas.escolherOrdem }}" value="{{ listaDeEscolas.ordem }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="prio">Maior prioridade</option><option value="base">Maior base</option><option value="uso">Menor utilização</option><option value="eng">Menor engajamento</option></select>
       </div>
+      <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ listaDeEscolas.legenda }}" as="item" hint-placeholder-count="5"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
       <div class="rolagem-x-auto m-0-n4">
-        <div class="min-w-1080 d-flex eixo-column p-0-4">
-          <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 110px 130px 120px">
-            <span>Escola</span><span>CS</span><span class="texto-right">Contas</span><span
-              class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span
-              class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span
-              class="texto-right">Engajados</span><span
-              class="texto-right">Atividades oficineiros</span><span>Agenda</span><span>Prioridade</span>
+        <div class="min-w-900 d-flex eixo-column p-0-4">
+          <div class="d-grid gap-8 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,1.6fr) minmax(220px,2fr) 70px 80px 80px 70px 100px">
+            <span>Escola</span><span>{{ listaDeEscolas.tituloDaBarra }}</span><span class="texto-right">Contas</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Prioridade</span><span>Semáforo</span>
           </div>
-          <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="10">
-            <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 110px 130px 120px">
-              <button onClick="{{ linha.abrir }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset" title="{{ linha.nome }}">{{ linha.nome }}</button>
-              <span class="fs-12 cor-cinza-600">{{ linha.carteira }}</span>
-              <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
-              <sc-for list="{{ linha.celulas }}" as="celula" hint-placeholder-count="5"><span title="{{ celula.titulo }}" class="num-tabular-nums fs-12 texto-center p-8-0 raio-6" style="font-family:'Inter',system-ui,sans-serif;background:{{ celula.fundo }};color:{{ celula.cor }}">{{ celula.valor }}</span></sc-for>
-              <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
-              <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.execucaoCor }}">{{ linha.execucao }}</span>
-              <span class="fs-12" style="color:{{ linha.agendaCor }}">{{ linha.agenda }}</span>
-              <div class="d-flex alinha-center gap-6"><span class="fs-11 fw-700 p-3-8 raio-999"
-                style="color:{{ linha.prioridadeCor }};background:{{ linha.prioridadeFundo }}">{{ linha.prioridade }}</span><sc-if
-                value="{{ linha.semVisita }}" hint-placeholder-val="{{ false }}"><button onClick="{{ linha.agendar }}"
-                title="Agendar visita"
-                class="h-26 w-26 borda-ciano-150 fundo-ciano-40 cor-ciano-660 raio-6 fs-15 fw-700 lh-1 p-0 largura-fundo">+</button></sc-if></div>
-            </div>
+          <sc-for list="{{ listaDeEscolas.grupos }}" as="grupo" hint-placeholder-count="1">
+            <sc-if value="{{ grupo.temTitulo }}" hint-placeholder-val="{{ false }}"><div class="d-flex alinha-baseline gap-8 p-12-0 borda-t-cinza-75"><b class="fs-13 cor-ciano-850">{{ grupo.titulo }}</b><span class="fs-12 cor-cinza-600">{{ grupo.numeros }}</span></div></sc-if>
+            <sc-for list="{{ grupo.linhas }}" as="linha" hint-placeholder-count="6">
+              <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,1.6fr) minmax(220px,2fr) 70px 80px 80px 70px 100px">
+                <button onClick="{{ linha.detalhar }}" aria-expanded="{{ linha.expandida }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset" title="{{ linha.nome }}">{{ linha.nome }}</button>
+                <div class="d-flex alinha-end h-14 {{ linha.barraClasse }}">
+                  <sc-for list="{{ linha.faixas }}" as="faixa" hint-placeholder-count="5"><div title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};height:{{ faixa.altura }};background:{{ faixa.cor }};border-radius:{{ faixa.raio }}"></div></sc-for>
+                </div>
+                <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
+                <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.utilizacao }}</span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.pontos }}</span>
+                <span><span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.semaforoCor }};background:{{ linha.semaforoFundo }}">{{ linha.semaforo }}</span></span>
+              </div>
+              <sc-if value="{{ linha.aberta }}" hint-placeholder-val="{{ false }}"><dc-import name="jornada-escola" detalhe="{{ detalhe }}"></dc-import></sc-if>
+            </sc-for>
           </sc-for>
         </div>
       </div>
-      <span class="fs-12 cor-cinza-600">{{ textos.nota }}</span>
+      <sc-if value="{{ listaDeEscolas.temMais }}" hint-placeholder-val="{{ false }}"><button onClick="{{ listaDeEscolas.mostrarMais }}" class="alinha-si-flex-start h-34 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">Mostrar mais</button></sc-if>
     </section>
+    <div class="empilha-celular d-grid colunas-1fr-1fr gap-16 alinha-start">
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-4 fundo-branco">
+        <h3 class="m-0-0-6 fs-15">Régua de temperatura</h3>
+        <sc-for list="{{ regua }}" as="faixa" hint-placeholder-count="5">
+          <div class="d-grid colunas-110-minmax-0-1fr gap-10 p-8-0 borda-t-cinza-70 fs-13">
+            <div class="d-flex eixo-column gap-2"><span class="d-flex alinha-center gap-6 fw-600"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ faixa.cor }}"></span>{{ faixa.rotulo }}</span><span class="fs-12 cor-cinza-600">{{ faixa.intervalo }}</span></div>
+            <span class="cor-cinza-750 lh-1p45">{{ faixa.acao }}</span>
+          </div>
+        </sc-for>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-6 fundo-branco">
+        <h3 class="m-0-0-6 fs-15">Como a Jornada classifica</h3>
+        <sc-for list="{{ regras }}" as="regra" hint-placeholder-count="6"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ regra }}</span></sc-for>
+      </section>
+    </div>
   </sc-if>
 
   <sc-if value="{{ abaAtiva.escola }}" hint-placeholder-val="{{ false }}">
     <div class="d-flex quebra-wrap gap-10 alinha-center">
-      <select style="background:var(--fundo-branco)" onChange="{{ escolherEscola }}" value="{{ escolaNome }}" class="h-40 flex-1-1-320 max-w-520 borda-cinza-160 raio-8 p-0-10 fs-14 largura-fundo fundo-branco"><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
-      <span class="fs-11 fw-700 p-4-10 raio-999 segmentado" style="color:{{ escola.prioridadeCor }};background:{{ escola.prioridadeFundo }}">Prioridade {{ escola.prioridade }}</span>
+      <select style="background:var(--fundo-branco)" aria-label="Escola" onChange="{{ escolherEscola }}" value="{{ escolaNome }}" class="h-40 flex-1-1-320 max-w-520 borda-cinza-160 raio-8 p-0-10 fs-14 largura-fundo fundo-branco"><option value="">Toda a rede · por ano</option><sc-for list="{{ opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao }}">{{ opcao }}</option></sc-for></select>
+      <sc-if value="{{ temEscola }}" hint-placeholder-val="{{ true }}">
+      <span class="fs-11 fw-700 p-4-10 raio-999 segmentado" style="color:{{ escola.semaforoCor }};background:{{ escola.semaforoFundo }}">{{ escola.semaforo }} · prioridade {{ escola.pontos }}</span>
       <sc-if value="{{ escola.temVisita }}" hint-placeholder-val="{{ false }}"><span class="fs-12 fw-600 cor-verde-700 fundo-verde-80 p-4-10 raio-999">Na agenda · {{ escola.visita }}</span></sc-if>
       <sc-if value="{{ escola.semVisita }}" hint-placeholder-val="{{ true }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ escola.agendar }}" class="largura-total-celular h-38 borda-0 cor-branco raio-8 p-0-14 fs-14 fw-600 ml-auto fundo-ciano-660">{{ textos.agendar }}</button></sc-if>
+      </sc-if>
     </div>
-    <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
-      <sc-for list="{{ escola.indicadores }}" as="indicador" hint-placeholder-count="6">
-        <div class="fundo-branco raio-12 p-14-16 d-flex eixo-column gap-4 largura-fundo cartao-indicador" style="border-width:3px 1px 1px;border-style:solid;border-color:{{ indicador.cor }} var(--borda-cinza-110) var(--borda-cinza-110)">
-          <span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span>
-          <span class="num-tabular-nums fs-22 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.valorCor }}">{{ indicador.valor }}</span>
-          <span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span>
+    <sc-if value="{{ emRede }}" hint-placeholder-val="{{ false }}">
+      <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <sc-for list="{{ rede.indicadores }}" as="indicador" hint-placeholder-count="4">
+          <div class="fundo-branco raio-12 p-14-16 d-flex eixo-column gap-4 largura-fundo cartao-indicador" style="border-width:3px 1px 1px;border-style:solid;border-color:{{ indicador.cor }} var(--borda-cinza-110) var(--borda-cinza-110)">
+            <span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span>
+            <span class="num-tabular-nums fs-24 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.valorCor }}">{{ indicador.valor }}</span>
+            <span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15 flex-1-1-240">Por ano, em toda a rede</h3><span class="fs-12 cor-cinza-600">Escolha uma escola no seletor acima para ver turma por turma.</span></div>
+        <div class="rolagem-x-auto m-0-n4">
+          <div class="min-w-900 d-flex eixo-column p-0-4">
+            <div class="d-grid gap-8 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(150px,1fr) minmax(220px,2.2fr) 84px 84px 100px 90px 32px">
+              <span>Ano</span><span>Estágio da jornada</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Aulas realizadas</span><span class="texto-right">Presença na máquina</span><span></span>
+            </div>
+            <sc-for list="{{ rede.anos }}" as="linha" hint-placeholder-count="5">
+              <div class="d-grid gap-8 alinha-center fs-13 p-10-0 borda-t-cinza-75" style="grid-template-columns:minmax(150px,1fr) minmax(220px,2.2fr) 84px 84px 100px 90px 32px">
+                <span class="d-flex eixo-column gap-2"><button onClick="{{ linha.alternar }}" aria-expanded="{{ linha.expandido }}" class="largura-fundo cursor-pointer fs-14 cor-ciano-850" style="all:unset;font-weight:700;color:var(--texto-ciano-850)">{{ linha.ano }}</button><span class="fs-12 cor-cinza-600">{{ linha.numeros }}</span></span>
+                <span class="d-flex h-14 raio-4 rolagem-hidden fundo-cinza-90"><sc-for list="{{ linha.faixas }}" as="faixa" hint-placeholder-count="6"><span title="{{ faixa.titulo }}" class="largura-fundo" style="width:{{ faixa.largura }};background:{{ faixa.cor }}"></span></sc-for></span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.utilizacao }}</span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
+                <span class="num-tabular-nums texto-right fs-12 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.aulasCor }}" title="{{ linha.aulasTitulo }}">{{ linha.aulas }}</span>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.presencaCor }}">{{ linha.presenca }}</span>
+                <button onClick="{{ linha.alternar }}" aria-expanded="{{ linha.expandido }}" aria-label="{{ linha.rotuloDoBotao }}" class="w-26 h-26 borda-cinza-160 fundo-branco raio-6 cor-ciano-850 fs-15 p-0 largura-fundo botao-secundario">{{ linha.seta }}</button>
+              </div>
+              <sc-if value="{{ linha.aberto }}" hint-placeholder-val="{{ false }}">
+                <div class="d-flex eixo-column raio-10 fundo-cinza-20 p-10 m-0-0-8">
+                  <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,2fr) 70px 84px 84px 100px 90px"><span>Escola</span><span class="texto-right">Alunos</span><span class="texto-right">Utilização</span><span class="texto-right">Engajados</span><span class="texto-right">Aulas realizadas</span><span class="texto-right">Presença na máquina</span></div>
+                  <sc-for list="{{ linha.escolas }}" as="item" hint-placeholder-count="3">
+                    <div class="d-grid gap-8 alinha-center fs-13 p-6-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,2fr) 70px 84px 84px 100px 90px">
+                      <button onClick="{{ item.abrir }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset;font-weight:600;color:var(--texto-ciano-850)" title="{{ item.nome }}">{{ item.nome }}</button>
+                      <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ item.alunos }}</span>
+                      <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ item.utilizacao }}</span>
+                      <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ item.engajadosCor }}">{{ item.engajados }}</span>
+                      <span class="num-tabular-nums fs-12 texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ item.aulasCor }}">{{ item.aulas }}</span>
+                      <span class="num-tabular-nums fs-12 texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ item.presencaCor }}">{{ item.presenca }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </sc-for>
+            <sc-if value="{{ semAnosNaRede }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600 p-10-0">Nenhum aluno com ano escolar informado neste recorte.</span></sc-if>
+          </div>
         </div>
+        <div class="d-flex quebra-wrap gap-6-14 fs-12 cor-cinza-750"><sc-for list="{{ legendaDosEstagios }}" as="item" hint-placeholder-count="6"><span class="d-flex alinha-center gap-6"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ item.cor }}"></span>{{ item.rotulo }}</span></sc-for></div>
+        <span class="fs-12 cor-cinza-600">Só alunos. As turmas do mesmo ano (como 9º A e 9º B) somam-se na linha do ano. Aulas realizadas: registradas pelos oficineiros, de previstas na agenda até a data da leitura (vermelho abaixo de 60%, verde a partir de 80%; "sem agenda" quando a turma não tem aula lançada no mês). Presença na máquina: acessos dos alunos no mês, no máximo um por aula realizada, ÷ (alunos × aulas realizadas) (vermelho abaixo de 50%, verde a partir de 75%).</span>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-center gap-8-14">
+          <div class="flex-1-1-300 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Mapa de calor por escola</h3><span class="fs-12 cor-cinza-600">Só alunos · % em cada faixa de temperatura · cor mais forte = maior concentração. Clique na escola para ver as turmas.</span></div>
+          <input onInput="{{ buscarEscola }}" aria-label="Buscar escola" placeholder="Buscar escola" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
+          <select style="background:var(--fundo-branco)" aria-label="Ordenar" onChange="{{ escolherOrdem }}" value="{{ ordem }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="prio">Ordenar por prioridade</option><option value="contas">Ordenar por nº de contas</option><option value="eng">Ordenar por engajados</option><option value="uso">Ordenar por utilização</option></select>
+        </div>
+        <div class="rolagem-x-auto m-0-n4">
+          <div class="d-flex eixo-column p-0-4" style="min-width:1360px">
+            <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 100px 90px 130px 100px 90px">
+              <span>Escola</span><span>CS</span><span class="texto-right">Contas</span><span
+                class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span
+                class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span
+                class="texto-right">Engajados</span><span
+                class="texto-right">Aulas realizadas</span><span class="texto-right">Presença na máquina</span><span>Agenda</span><span>Semáforo</span><span>Prioridade</span>
+            </div>
+            <sc-for list="{{ linhas }}" as="linha" hint-placeholder-count="10">
+              <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:minmax(220px,2.2fr) 52px 64px repeat(5,72px) 82px 100px 90px 130px 100px 90px">
+                <button onClick="{{ linha.abrir }}" class="largura-fundo cursor-pointer fw-600 cor-ciano-850 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="all:unset" title="{{ linha.nome }}">{{ linha.nome }}</button>
+                <span class="fs-12 cor-cinza-600">{{ linha.carteira }}</span>
+                <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
+                <sc-for list="{{ linha.celulas }}" as="celula" hint-placeholder-count="5"><span title="{{ celula.titulo }}" class="num-tabular-nums fs-12 texto-center p-8-0 raio-6" style="font-family:'Inter',system-ui,sans-serif;background:{{ celula.fundo }};color:{{ celula.cor }}">{{ celula.valor }}</span></sc-for>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
+                <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.aulasCor }}" title="{{ linha.aulasTitulo }}">{{ linha.aulasRealizadas }}</span>
+                <span class="num-tabular-nums texto-right fs-12 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.presencaCor }}">{{ linha.presenca }}</span>
+                <span class="fs-12" style="color:{{ linha.agendaCor }}">{{ linha.agenda }}</span>
+                <span><span class="fs-11 fw-700 p-3-8 raio-999 espaco-nowrap" style="color:{{ linha.semaforoCor }};background:{{ linha.semaforoFundo }}">{{ linha.semaforo }}</span></span>
+                <div class="d-flex alinha-center gap-6"><span class="num-tabular-nums fw-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.pontos }}</span><sc-if
+                  value="{{ linha.semVisita }}" hint-placeholder-val="{{ false }}"><button onClick="{{ linha.agendar }}"
+                  title="Agendar visita"
+                  class="h-26 w-26 borda-ciano-150 fundo-ciano-40 cor-ciano-660 raio-6 fs-15 fw-700 lh-1 p-0 largura-fundo">+</button></sc-if></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <span class="fs-12 cor-cinza-600">{{ textos.nota }}</span>
+      </section>
+    </sc-if>
+    <sc-if value="{{ temEscola }}" hint-placeholder-val="{{ true }}">
+      <div class="d-grid gap-12" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+        <sc-for list="{{ escola.indicadores }}" as="indicador" hint-placeholder-count="6">
+          <div class="fundo-branco raio-12 p-14-16 d-flex eixo-column gap-4 largura-fundo cartao-indicador" style="border-width:3px 1px 1px;border-style:solid;border-color:{{ indicador.cor }} var(--borda-cinza-110) var(--borda-cinza-110)">
+            <span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">{{ indicador.titulo }}</span>
+            <span class="num-tabular-nums fs-22 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ indicador.valorCor }}">{{ indicador.valor }}</span>
+            <span class="fs-12 cor-cinza-600">{{ indicador.nota }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-10 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-center gap-8-12"><h3 class="m-0 fs-15">Status e ação</h3><span class="fs-12 fw-600 p-3-8 raio-999 fundo-cinza-70 cor-cinza-750">{{ escola.statusAtual }}</span></div>
+        <sc-for list="{{ escola.motivos }}" as="motivo" hint-placeholder-count="3"><span class="fs-12 cor-cinza-750 lh-1p45">· {{ motivo }}</span></sc-for>
+        <sc-if value="{{ podeRegistrarStatus }}" hint-placeholder-val="{{ false }}">
+          <div class="d-grid gap-10 p-14 raio-10 fundo-ciano-40" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+            <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Status<select style="background:var(--fundo-branco)" onChange="{{ escolherStatus }}" value="{{ formEscola.status }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="">Escolha o status</option><sc-for list="{{ opcoesDeStatus }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select></label>
+            <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Prazo<input type="date" value="{{ formEscola.prazo }}" onChange="{{ escolherPrazo }}" class="h-36 borda-cinza-160 raio-8 p-0-10 fs-13"></label>
+            <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Ação<textarea rows="2" value="{{ formEscola.acao }}" onChange="{{ escreverAcao }}" maxlength="1000" placeholder="O que será ou foi feito" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+            <label class="d-flex eixo-column gap-4 fs-12 fw-600 cor-cinza-750">Próximo passo<textarea rows="2" value="{{ formEscola.passo }}" onChange="{{ escreverPasso }}" maxlength="500" placeholder="Próxima etapa combinada" class="borda-cinza-160 raio-8 p-10-12 fs-14 redim-vertical"></textarea></label>
+            <button style="background:var(--destaque-ciano-660)" onClick="{{ salvarStatus }}" disabled="{{ statusIncompleto }}" class="alinha-si-flex-start h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fundo-ciano-660">Registrar status</button>
+          </div>
+        </sc-if>
+        <sc-for list="{{ escola.historico }}" as="item" hint-placeholder-count="2"><span class="fs-12 cor-cinza-600 lh-1p45 p-6-0 borda-t-cinza-70">{{ item }}</span></sc-for>
+        <sc-if value="{{ escola.semHistorico }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-cinza-600">Nenhum status registrado para esta escola.</span></sc-if>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Alunos por ano × aulas dos oficineiros</h3><span class="fs-12 cor-cinza-600">Temperatura de acesso dos alunos de cada ano cruzada com as aulas que os oficineiros lançaram na agenda para esse ano no mês da leitura. Aulas realizadas de previstas até a data da leitura; presença na máquina = acessos dos alunos, no máximo um por aula realizada, ÷ (alunos × aulas realizadas).</span></div>
+        <div class="rolagem-x-auto m-0-n4">
+          <div class="min-w-1000 d-flex eixo-column p-0-4">
+            <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:90px 60px repeat(5,68px) 80px 100px 90px minmax(200px,1fr)">
+              <span>Ano</span><span class="texto-right">Alunos</span><span class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span class="texto-right">Engajados</span><span class="texto-right">Aulas realizadas</span><span class="texto-right">Presença na máquina</span><span class="pl-10">Leitura</span>
+            </div>
+            <sc-for list="{{ escola.anos }}" as="linha" hint-placeholder-count="4">
+              <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:90px 60px repeat(5,68px) 80px 100px 90px minmax(200px,1fr)">
+                <span class="fw-600">{{ linha.ano }}</span>
+                <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
+                <sc-for list="{{ linha.celulas }}" as="celula" hint-placeholder-count="5"><span title="{{ celula.titulo }}" class="num-tabular-nums fs-12 texto-center p-8-0 raio-6" style="font-family:'Inter',system-ui,sans-serif;background:{{ celula.fundo }};color:{{ celula.cor }}">{{ celula.valor }}</span></sc-for>
+                <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
+                <span class="num-tabular-nums texto-right fs-12 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.aulasCor }}" title="{{ linha.aulasTitulo }}">{{ linha.aulas }}</span>
+                <span class="num-tabular-nums texto-right fs-12 fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.presencaCor }}">{{ linha.presenca }}</span>
+                <span class="fs-12 pl-10 lh-1p4" style="color:{{ linha.leituraCor }}">{{ linha.leitura }}</span>
+              </div>
+            </sc-for>
+            <sc-if value="{{ escola.semAnos }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600 p-10-0">Nenhum aluno com ano escolar informado nesta unidade.</span></sc-if>
+          </div>
+        </div>
+        <span class="fs-12 cor-cinza-600">A exportação traz a turma (ex.: 9º A), o responsável pela turma e as datas do primeiro e do último acesso.</span>
+      </section>
+      <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
+        <div class="d-flex quebra-wrap alinha-center gap-8-12">
+          <div class="flex-1-1-240 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Alunos da escola</h3><span class="fs-12 cor-cinza-600">{{ escola.contasTexto }}</span></div>
+          <input onInput="{{ buscarConta }}" aria-label="Buscar nome" placeholder="Buscar nome" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
+          <select style="background:var(--fundo-branco)" aria-label="Temperatura" onChange="{{ escolherTemperatura }}" value="{{ temperatura }}"
+            class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as temperaturas</option><option
+            value="Q">Quente</option><option value="M">Morno</option><option value="F">Frio</option><option
+            value="S">Sem uso</option><option value="N">Nunca acessou</option></select>
+        </div>
+        <div class="rolagem-x-auto m-0-n4">
+          <div class="min-w-900 d-flex eixo-column p-0-4">
+            <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,2fr) 90px 70px minmax(150px,1.2fr) 100px 90px 80px 120px">
+              <span>Nome</span><span>Perfil</span><span>Ano</span><span>Responsável pela turma</span><span>Último acesso</span><span class="texto-right">Dias sem acesso</span><span class="texto-right">Dias de uso</span><span>Temperatura</span>
+            </div>
+            <sc-for list="{{ escola.contas }}" as="conta" hint-placeholder-count="8">
+              <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,2fr) 90px 70px minmax(150px,1.2fr) 100px 90px 80px 120px">
+                <span class="rolagem-hidden reticencias-ellipsis espaco-nowrap">{{ conta.nome }}</span><span class="cor-cinza-750">{{ conta.perfil }}</span><span class="cor-cinza-750">{{ conta.ano }}</span><span class="fs-12 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="color:{{ conta.responsavelCor }}">{{ conta.responsavel }}</span>
+                <span class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ conta.ultimoAcesso }}</span><span class="num-tabular-nums fs-12 texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ conta.diasSemAcesso }}</span><span class="num-tabular-nums fs-12 texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ conta.diasDeUso }}</span>
+                <span class="d-flex alinha-center gap-6 fs-12 fw-600" style="color:{{ conta.cor }}"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ conta.marcaCor }}"></span>{{ conta.temperatura }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <sc-if value="{{ escola.temMais }}" hint-placeholder-val="{{ false }}"><button onClick="{{ mostrarMais }}" class="alinha-si-flex-start h-34 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">Mostrar mais</button></sc-if>
+      </section>
+
+    </sc-if>
+  </sc-if>
+
+  <sc-if value="{{ abaAtiva.oficineiros }}" hint-placeholder-val="{{ false }}">
+    <div class="empilha-celular d-grid colunas-1fr-1fr gap-16 alinha-start">
+      <sc-for list="{{ rankings }}" as="ranking" hint-placeholder-count="2">
+        <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-10 fundo-branco">
+          <div class="d-flex quebra-wrap alinha-baseline gap-6-12"><h3 class="m-0 fs-15 flex-1-1-240">{{ ranking.titulo }}</h3><span class="fs-12 cor-cinza-600">{{ ranking.nota }}</span></div>
+          <ol class="m-0 p-0 d-flex eixo-column gap-8" style="list-style:none">
+            <sc-for list="{{ ranking.linhas }}" as="linha" hint-placeholder-count="5">
+              <li class="d-grid colunas-40-minmax-0-1fr-auto gap-10 alinha-center borda-cinza-110 raio-10 p-12-14">
+                <span class="num-tabular-nums fs-16 fw-700 cor-cinza-600" style="font-family:'Inter',system-ui,sans-serif">{{ linha.posicao }}º</span>
+                <div class="min-w-0 d-flex eixo-column gap-2"><b class="fs-14 rolagem-hidden reticencias-ellipsis espaco-nowrap" title="{{ linha.nome }}">{{ linha.nome }}</b><span class="fs-12 cor-cinza-600 lh-1p45">{{ linha.detalhe }}</span></div>
+                <div class="d-flex eixo-column alinha-end gap-2 texto-right"><span class="num-tabular-nums fs-20 fw-700" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.execucaoCor }}">{{ linha.execucao }}</span><span class="fs-12 cor-cinza-600 espaco-nowrap">{{ linha.realizadas }}</span></div>
+              </li>
+            </sc-for>
+          </ol>
+        </section>
       </sc-for>
     </div>
-    <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
-      <div class="d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Alunos por ano × atividades dos oficineiros</h3><span class="fs-12 cor-cinza-600">Temperatura de acesso dos alunos de cada ano cruzada com as atividades que os oficineiros da escola deram para esse ano no mês.</span></div>
-      <div class="rolagem-x-auto m-0-n4">
-        <div class="min-w-900 d-flex eixo-column p-0-4">
-          <div class="d-grid gap-4 alinha-end fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:70px 60px repeat(5,68px) 80px 110px minmax(200px,1fr)">
-            <span>Ano</span><span class="texto-right">Alunos</span><span class="texto-center">Quente</span><span class="texto-center">Morno</span><span class="texto-center">Frio</span><span class="texto-center">Sem uso</span><span class="texto-center">Nunca</span><span class="texto-right">Engajados</span><span class="texto-right">Atividades no mês</span><span class="pl-10">Leitura</span>
-          </div>
-          <sc-for list="{{ escola.anos }}" as="linha" hint-placeholder-count="4">
-            <div class="d-grid gap-4 alinha-center fs-13 p-3-0 borda-t-cinza-75" style="grid-template-columns:70px 60px repeat(5,68px) 80px 110px minmax(200px,1fr)">
-              <span class="fw-600">{{ linha.ano }}</span>
-              <span class="num-tabular-nums texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ linha.total }}</span>
-              <sc-for list="{{ linha.celulas }}" as="celula" hint-placeholder-count="5"><span title="{{ celula.titulo }}" class="num-tabular-nums fs-12 texto-center p-8-0 raio-6" style="font-family:'Inter',system-ui,sans-serif;background:{{ celula.fundo }};color:{{ celula.cor }}">{{ celula.valor }}</span></sc-for>
-              <span class="num-tabular-nums texto-right fw-600" style="font-family:'Inter',system-ui,sans-serif;color:{{ linha.engajadosCor }}">{{ linha.engajados }}</span>
-              <span class="num-tabular-nums texto-right fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ linha.aulas }}</span>
-              <span class="fs-12 pl-10 lh-1p4" style="color:{{ linha.leituraCor }}">{{ linha.leitura }}</span>
-            </div>
-          </sc-for>
-          <sc-if value="{{ escola.semAnos }}" hint-placeholder-val="{{ false }}"><span class="fs-13 cor-cinza-600 p-10-0">Nenhum aluno com ano escolar informado nesta unidade.</span></sc-if>
-        </div>
-      </div>
-      <span class="fs-12 cor-cinza-600">A exportação traz o ano escolar (coluna turma, ex.: 5º ANO) e o responsável pela turma (coluna responsavel_turma). Quando a turma vier detalhada (5º A, 5º B), a tabela passa a agrupar por turma.</span>
-    </section>
+    <sc-if value="{{ semRanking }}" hint-placeholder-val="{{ false }}"><section style="background:var(--fundo-branco)" class="borda-cinza-110 raio-12 p-20 fundo-branco"><span class="fs-13 cor-cinza-600">Nenhum oficineiro com atividades previstas no ciclo neste filtro.</span></section></sc-if>
+    <sc-if value="{{ temSemPrevistas }}" hint-placeholder-val="{{ false }}"><span class="fs-12 cor-cinza-750 lh-1p45">{{ semPrevistas }}</span></sc-if>
+    <span class="fs-12 cor-cinza-600 lh-1p45">Ranking pela execução das atividades no ciclo: atividades realizadas ÷ atividades previstas na grade (feriados e recessos fora da conta; atividades fora da grade aparecem à parte e não entram no cálculo). Desempate: % de alunos engajados nos anos atendidos.</span>
+  </sc-if>
+
+  <sc-if value="{{ abaAtiva.usuarios }}" hint-placeholder-val="{{ false }}">
     <section style="background:var(--fundo-branco)" class="espaco-celular borda-cinza-110 raio-12 p-20 d-flex eixo-column gap-12 fundo-branco">
       <div class="d-flex quebra-wrap alinha-center gap-8-12">
-        <div class="flex-1-1-240 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Contas da escola</h3><span class="fs-12 cor-cinza-600">{{ escola.contasTexto }}</span></div>
-        <input onInput="{{ buscarConta }}" placeholder="Buscar nome" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
-        <select style="background:var(--fundo-branco)" onChange="{{ escolherTemperatura }}" value="{{ temperatura }}"
-          class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as temperaturas</option><option
-          value="Q">Quente</option><option value="M">Morno</option><option value="F">Frio</option><option
-          value="S">Sem uso</option><option value="N">Nunca acessou</option></select>
+        <div class="flex-1-1-240 d-flex eixo-column gap-2"><h3 class="m-0 fs-15">Usuários</h3><span class="fs-12 cor-cinza-600">{{ usuarios.texto }}</span></div>
+        <button onClick="{{ exportarUsuarios }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">Exportar planilha</button>
+      </div>
+      <div class="d-flex quebra-wrap gap-8 alinha-center">
+        <input onInput="{{ buscarUsuario }}" aria-label="Buscar nome" placeholder="Buscar nome" class="h-36 w-200 max-w-100pc borda-cinza-160 raio-8 p-0-10 fs-13"></input>
+        <select style="background:var(--fundo-branco)" aria-label="Escola" onChange="{{ escolherEscolaDoUsuario }}" value="{{ usuarios.escola }}" class="h-36 max-w-520 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as escolas</option><sc-for list="{{ usuarios.opcoesDeEscola }}" as="opcao" hint-placeholder-count="5"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+        <select style="background:var(--fundo-branco)" aria-label="Estágio" onChange="{{ escolherEstagio }}" value="{{ usuarios.estagio }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todos">Todos os estágios</option><sc-for list="{{ opcoesDeEstagio }}" as="opcao" hint-placeholder-count="6"><option value="{{ opcao.valor }}">{{ opcao.rotulo }}</option></sc-for></select>
+        <select style="background:var(--fundo-branco)" aria-label="Temperatura" onChange="{{ escolherTemperaturaDoUsuario }}" value="{{ usuarios.temperatura }}" class="h-36 borda-cinza-160 raio-8 p-0-8 fs-13 fundo-branco"><option value="todas">Todas as temperaturas</option><option value="Q">Quente</option><option value="M">Morno</option><option value="F">Frio</option><option value="S">Sem uso</option><option value="N">Nunca acessou</option></select>
       </div>
       <div class="rolagem-x-auto m-0-n4">
-        <div class="min-w-900 d-flex eixo-column p-0-4">
-          <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,2fr) 90px 70px minmax(150px,1.2fr) 100px 90px 80px 120px">
-            <span>Nome</span><span>Perfil</span><span>Ano</span><span>Responsável pela turma</span><span>Último acesso</span><span class="texto-right">Dias sem acesso</span><span class="texto-right">Dias de uso</span><span>Temperatura</span>
+        <div class="min-w-1000 d-flex eixo-column p-0-4">
+          <div class="d-grid gap-8 fs-11 fw-600 cor-cinza-600 caixa-uppercase ls-0p03em p-0-0-8" style="grid-template-columns:minmax(200px,2fr) 90px minmax(160px,1.4fr) 70px 100px 90px 80px 130px 110px">
+            <span>Nome</span><span>Perfil</span><span>Escola</span><span>Ano</span><span>Último acesso</span><span class="texto-right">Dias sem acesso</span><span class="texto-right">Dias de uso</span><span>Estágio</span><span>Temperatura</span>
           </div>
-          <sc-for list="{{ escola.contas }}" as="conta" hint-placeholder-count="8">
-            <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,2fr) 90px 70px minmax(150px,1.2fr) 100px 90px 80px 120px">
-              <span class="rolagem-hidden reticencias-ellipsis espaco-nowrap">{{ conta.nome }}</span><span class="cor-cinza-750">{{ conta.perfil }}</span><span class="cor-cinza-750">{{ conta.ano }}</span><span class="fs-12 rolagem-hidden reticencias-ellipsis espaco-nowrap" style="color:{{ conta.responsavelCor }}">{{ conta.responsavel }}</span>
+          <sc-for list="{{ usuarios.linhas }}" as="conta" hint-placeholder-count="8">
+            <div class="d-grid gap-8 alinha-center fs-13 p-8-0 borda-t-cinza-75" style="grid-template-columns:minmax(200px,2fr) 90px minmax(160px,1.4fr) 70px 100px 90px 80px 130px 110px">
+              <span class="rolagem-hidden reticencias-ellipsis espaco-nowrap">{{ conta.nome }}</span><span class="cor-cinza-750">{{ conta.perfil }}</span><span class="fs-12 cor-cinza-750 rolagem-hidden reticencias-ellipsis espaco-nowrap" title="{{ conta.escola }}">{{ conta.escola }}</span><span class="cor-cinza-750">{{ conta.ano }}</span>
               <span class="num-tabular-nums fs-12" style="font-family:'Inter',system-ui,sans-serif">{{ conta.ultimoAcesso }}</span><span class="num-tabular-nums fs-12 texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ conta.diasSemAcesso }}</span><span class="num-tabular-nums fs-12 texto-right" style="font-family:'Inter',system-ui,sans-serif">{{ conta.diasDeUso }}</span>
+              <span class="fs-12 fw-600" style="color:{{ conta.estagioCor }}">{{ conta.estagio }}</span>
               <span class="d-flex alinha-center gap-6 fs-12 fw-600" style="color:{{ conta.cor }}"><span class="w-10 h-10 raio-3 largura-fundo" style="background:{{ conta.marcaCor }}"></span>{{ conta.temperatura }}</span>
             </div>
           </sc-for>
         </div>
       </div>
-      <sc-if value="{{ escola.temMais }}" hint-placeholder-val="{{ false }}"><button onClick="{{ mostrarMais }}" class="alinha-si-flex-start h-34 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">Mostrar mais</button></sc-if>
+      <sc-if value="{{ usuarios.temMais }}" hint-placeholder-val="{{ false }}"><button onClick="{{ mostrarMaisUsuarios }}" class="alinha-si-flex-start h-34 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 botao-secundario">Mostrar mais</button></sc-if>
     </section>
   </sc-if>
 
@@ -183,30 +529,30 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 const Base = window.FSM_BASE;
-const { dataDe, dmyIso, exC, numero, plural, normTxt } = Base;
+const { dataDe, dmyIso, dmIso, exC, hmDe, numero, plural, normTxt, WDL: DIAS } = Base;
 const TEMPERATURAS = {
   Q: [
     'Quente',
     'var(--destaque-laranja-520)',
-    '0 a 5 dias sem acesso',
+    'acessou nos últimos 5 dias',
     'Ativos e engajados. Manter contato leve, reforçar valor e colher feedback.'
   ],
   M: [
     'Morno',
     'var(--destaque-ambar-510)',
-    '6 a 10 dias',
+    'último acesso há 6 a 10 dias',
     'Começando a se afastar. Lembrete, reforço de benefícios e oferta de ajuda.'
   ],
   F: [
     'Frio',
     'var(--destaque-azul-500)',
-    '11 a 30 dias',
+    'último acesso há 11 a 30 dias',
     'Risco de abandono. Abordagem direta: contato com a escola, apoio em atividade, incentivo.'
   ],
   S: [
     'Sem uso',
     'var(--destaque-cinza-540)',
-    'mais de 30 dias',
+    'mais de 30 dias sem acessar',
     'Praticamente em abandono. Entender o motivo, campanha de reingresso com a direção.'
   ],
   N: [
@@ -222,147 +568,528 @@ const COR_DO_TEXTO = {
   Q: 'var(--destaque-laranja-630)',
   M: 'var(--destaque-laranja-730)',
   F: 'var(--destaque-azul-645)',
-  S: 'var(--destaque-cinza-660)',
+  S: 'var(--texto-cinza-680)',
   N: 'var(--texto-indigo-510)'
 };
-const PRIORIDADES = {
-  Alta: ['var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)'],
-  Média: ['var(--texto-ambar-745)', 'var(--fundo-ambar-80)'],
-  Baixa: ['var(--texto-verde-700)', 'var(--fundo-verde-80)']
+const ESTAGIOS = {
+  en: ['Engajado', 'var(--texto-verde-700)'],
+  ev: ['Em evolução', 'var(--texto-ciano-660)'],
+  bx: ['Baixo uso', 'var(--texto-ambar-660)'],
+  sm: ['Em uso, sem contagem de dias', 'var(--texto-azul-640)'],
+  sr: ['Sem uso no mês', 'var(--texto-cinza-600)'],
+  nv: ['Não implementado', 'var(--texto-indigo-360)']
 };
-const ORDEM_DAS_PRIORIDADES = { Alta: 0, Média: 1, Baixa: 2 };
+const ORDEM_DOS_ESTAGIOS = ['en', 'ev', 'bx', 'sm', 'sr', 'nv'];
+const SEMAFOROS = {
+  critico: ['Crítico', 'var(--texto-vermelho-600)', 'var(--fundo-vermelho-50)'],
+  atencao: ['Atenção', 'var(--texto-ambar-745)', 'var(--fundo-ambar-80)'],
+  em_dia: ['Em dia', 'var(--texto-verde-700)', 'var(--fundo-verde-80)']
+};
+const STATUS_DA_ESCOLA = {
+  sem_acao: 'Sem ação',
+  acao_planejada: 'Ação planejada',
+  em_execucao: 'Em execução',
+  acompanhando: 'Acompanhando resultado',
+  concluida: 'Concluída',
+  bloqueada: 'Bloqueada'
+};
 const PERFIS = { A: 'Aluno', P: 'Professor', S: 'Servidor' };
+const PERFIS_NO_PLURAL = { A: 'Alunos', P: 'Professores', S: 'Servidores' };
+const SEMANAS_DO_PERIODO = 26;
+const META_SEMANAL = { A: 1, P: 3, S: 3 };
+const SEMANAS_NO_MES = 4;
+const DIAS_DA_JANELA = 182;
+const MINIMO_PARA_SEMAFORO = 10;
+const DIAS_DE_STATUS_CONCLUIDO = 14;
+const VISITAS_SUGERIDAS = 3;
+const DIAS_DE_DESCARTE = 14;
+const DIAS_SEM_VISITA_PROXIMA = 7;
+const DIAS_PARA_SUGERIR = 10;
+const MOTIVOS_DE_DESCARTE = {
+  visita_recente: 'Visitei recentemente',
+  acao_a_distancia: 'Vou agir à distância',
+  escola_fechada: 'Escola fechada',
+  outro: 'Outro'
+};
+const DESCARTE_VAZIO = { escola: '', motivo: '', detalhe: '' };
+const VISOES_DA_LISTA = {
+  jornada: ['Jornada', 'Estágio da jornada'],
+  temperatura: ['Temperatura', 'Temperatura de acesso'],
+  mes: ['Mês da leitura', 'Utilização por mês da leitura']
+};
+const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+const REGRAS = [
+  'Período de análise: o mês da data da leitura, do dia 1º ao último dia (30 ou 31). O mês conta como 4 semanas; com o mês em andamento, as metas são proporcionais aos dias já passados, arredondadas para cima.',
+  'Implementados: já acessaram ao menos uma vez. Utilização: acessaram pelo menos 1 vez no mês. Sem uso no mês: implementados que não acessaram no mês.',
+  'Engajado: aluno com 1 acesso por semana (4 no mês fechado); professor e servidor com 3 dias por semana (12 no mês fechado). Em evolução: acessou no mês com pelo menos 1/3 da meta. Baixo uso: abaixo de 1/3 da meta. % de engajados sobre os implementados.',
+  'Acessos no mês: exatos quando o primeiro acesso foi no mês; senão, estimados pelo ritmo dos dias de acesso no período do arquivo (até 6 meses). Em uso, sem contagem: acessou no mês, mas o arquivo não trouxe os dias de acesso.',
+  'Aulas da turma: previstas = aulas lançadas na agenda dos oficineiros para a turma no mês; realizadas = registradas como realizadas. Execução = realizadas ÷ previstas até a data da leitura. Presença na máquina = acessos dos alunos no mês (no máximo um por aula realizada) ÷ (alunos × aulas realizadas).',
+  'Semáforo (todos os perfis, no mês): Crítico com utilização abaixo de 40% ou sem uso (sem uso no mês + nunca acessou) a partir de 50% dos criados; Atenção com utilização abaixo de 60%, sem uso a partir de 30% ou execução das aulas abaixo de 60%; os demais, Em dia.',
+  'Prioridade de visita (0 a 100) = 40 × (1 − utilização) + 25 × sem uso + 15 × (1 − engajados ÷ medidos) + 10 × queda da utilização em 7 dias ÷ 10 pontos (até 1) + 10 × dias desde a última visita registrada ÷ 30 (até 1; sem registro conta 1); metade para unidades com menos de 10 usuários.',
+  'Sugestões de visita: escolas de maior prioridade sem visita nos próximos 7 dias e sem status Concluída ou descarte há menos de 14 dias, em dia útil dos próximos 10 dias sem outra visita agendada (a visita ocupa o dia inteiro), no máximo uma por dia.'
+];
 const TEXTOS = {
   analista: {
-    ordem: 'ordenadas por prioridade · cruzadas com a sua agenda',
+    aba: 'Minha carteira',
     agendar: 'Agendar visita',
     barras: 'Temperatura por escola',
-    nota: 'Atividades oficineiros = execução das atividades no mês (realizadas ÷ previstas). Prioridade: Alta com menos de 20% de engajados; Média de 20% a 39%; sobe um nível quando a execução das atividades está abaixo de 75%.'
+    nota: 'Aulas realizadas e presença na máquina: agenda dos oficineiros no mês da leitura. Semáforo e prioridade de visita seguem as regras da Visão geral (todos os perfis da escola).'
   },
   gerente: {
-    ordem: 'ordenadas por prioridade · cruzadas com a agenda dos analistas',
+    aba: 'Carteiras',
     agendar: 'Vincular visita',
     barras: 'Temperatura por grupo CS',
-    nota: 'Atividades oficineiros = execução das atividades no ciclo de cada oficineiro (realizadas ÷ previstas). Prioridade: Alta com menos de 20% de engajados; Média de 20% a 39%; sobe um nível quando a execução das atividades está abaixo de 75%.'
+    nota: 'Aulas realizadas e presença na máquina: agenda dos oficineiros no mês da leitura. Semáforo e prioridade de visita seguem as regras da Visão geral (todos os perfis da escola).'
   }
 };
+const FORM_ESCOLA_VAZIO = { status: '', acao: '', passo: '', prazo: '' };
 const PADRAO = {
-  aba: 'geral',
+  aba: 'carteira',
   carteira: 'todos',
+  carteiraVista: '',
   perfil: 'todos',
-  lotacao: 'escolas',
+  lotacao: 'todas',
   ordem: 'prio',
   busca: '',
   escola: '',
   buscaConta: '',
   temperatura: 'todas',
-  limite: 40
+  limite: 40,
+  formEscola: FORM_ESCOLA_VAZIO,
+  formCarteira: { aberto: false, status: 'em_dia', resumo: '' },
+  salvando: false,
+  usuBusca: '',
+  usuEscola: 'todas',
+  usuEstagio: 'todos',
+  usuTemperatura: 'todas',
+  usuLimite: 100,
+  filtroEscola: 'todas',
+  filtroAno: 'todos',
+  escolaAberta: '',
+  anoAberto: '',
+  visaoLista: 'jornada',
+  agrupada: false,
+  ordemLista: 'prio',
+  limiteLista: 60,
+  semanaAgenda: 0,
+  descarte: DESCARTE_VAZIO,
+  agendando: ''
 };
 const faixaDe = dias => (dias < 0 ? 'N' : dias <= 5 ? 'Q' : dias <= 10 ? 'M' : dias <= 30 ? 'F' : 'S');
+const diaDoMes = data => Number(data.slice(8, 10));
+const diasNoMes = data => new Date(Number(data.slice(0, 4)), Number(data.slice(5, 7)), 0).getDate();
+const semanasDoMes = data => SEMANAS_NO_MES * Math.min(1, diaDoMes(data) / diasNoMes(data));
+const metaDoMes = (perfil, data) => Math.ceil((META_SEMANAL[perfil] || 3) * semanasDoMes(data) - 1e-9);
+const acessouNoMes = (conta, data) => conta.diasSemAcesso >= 0 && conta.diasSemAcesso < diaDoMes(data);
+const usosNoMes = (conta, data) => {
+  if (!acessouNoMes(conta, data) || !conta.diasDeUso) return 0;
+  const inicio = data.slice(0, 8) + '01';
+  if (conta.primeiroAcesso && conta.primeiroAcesso >= inicio) return conta.diasDeUso;
+  const janela = Base.iso(Base.add(dataDe(data), -DIAS_DA_JANELA)),
+    desde = conta.primeiroAcesso && conta.primeiroAcesso > janela ? conta.primeiroAcesso : janela,
+    semanas = Math.min(SEMANAS_DO_PERIODO, Math.max(1, (dataDe(data) - dataDe(desde)) / 604800000));
+  return Math.max(1, Math.min(conta.diasDeUso, Math.round(((conta.diasDeUso / semanas) * diaDoMes(data)) / 7)));
+};
+const estagioDe = (conta, data) => {
+  if (conta.diasSemAcesso < 0) return 'nv';
+  if (!acessouNoMes(conta, data)) return 'sr';
+  if (!conta.diasDeUso) return 'sm';
+  const meta = metaDoMes(conta.perfil, data);
+  return conta.usos >= meta ? 'en' : conta.usos * 3 >= meta ? 'ev' : 'bx';
+};
 const parcela = (parte, todo) => (todo ? Math.round((parte / todo) * 100) : 0);
 const contar = contas => {
-  const total = { Q: 0, M: 0, F: 0, S: 0, N: 0, n: contas.length };
-  contas.forEach(conta => total[faixaDe(conta.diasSemAcesso)]++);
-  total.engajados = parcela(total.Q + total.M, total.n);
+  const total = { Q: 0, M: 0, F: 0, S: 0, N: 0, en: 0, ev: 0, bx: 0, sm: 0, sr: 0, nv: 0, n: contas.length };
+  contas.forEach(conta => {
+    total[faixaDe(conta.diasSemAcesso)]++;
+    total[conta.estagio]++;
+  });
+  total.implementados = total.n - total.nv;
+  total.utilizacao = total.n - total.nv - total.sr;
+  total.engajados = parcela(total.en, total.implementados);
+  total.uso = parcela(total.utilizacao, total.n);
+  total.usoDosImplementados = parcela(total.utilizacao, total.implementados);
+  total.risco = parcela(total.sr + total.nv, total.n);
   return total;
 };
+const contarGrupos = grupos => {
+  const total = { n: 0, nv: 0, sr: 0, en: 0 };
+  grupos.forEach(grupo => {
+    total.n += grupo.n;
+    total.nv += grupo.nv;
+    total.sr += grupo.sr;
+    total.en += grupo.en;
+  });
+  total.implementados = total.n - total.nv;
+  total.utilizacao = total.n - total.nv - total.sr;
+  total.uso = parcela(total.utilizacao, total.n);
+  total.usoDosImplementados = parcela(total.utilizacao, total.implementados);
+  total.engajados = parcela(total.en, total.implementados);
+  return total;
+};
+const AULAS_VAZIAS = { pm: 0, pa: 0, re: 0, sem: 0, turmas: 0, acessos: 0, base: 0 };
+const letraDaTurma = texto => {
+  const achado = /(?:^|[\s\dº°ª-])([A-Za-z])$/.exec(String(texto || '').trim());
+  return achado ? achado[1].toUpperCase() : '';
+};
+const somarAulas = lista =>
+  lista.reduce(
+    (soma, a) => ({
+      pm: soma.pm + a.pm,
+      pa: soma.pa + a.pa,
+      re: soma.re + a.re,
+      sem: soma.sem + a.sem,
+      turmas: soma.turmas + a.turmas,
+      acessos: soma.acessos + a.acessos,
+      base: soma.base + a.base
+    }),
+    AULAS_VAZIAS
+  );
+const aulasDoAno = (alunos, aulas) => {
+  const turmas = {},
+    letrasDasAulas = new Set(aulas.map(a => a.letra)),
+    porLetra = alunos.some(c => letrasDasAulas.has(letraDaTurma(c.turma)));
+  const daTurma = letra => (turmas[letra] = turmas[letra] || { alunos: [], aulas: [] });
+  alunos.forEach(c => daTurma(porLetra ? letraDaTurma(c.turma) : '').alunos.push(c));
+  aulas.forEach(a => daTurma(porLetra ? a.letra : '').aulas.push(a));
+  return somarAulas(
+    Object.values(turmas).map(t => {
+      const pm = t.aulas.length,
+        pa = t.aulas.filter(a => a.ateLeitura).length,
+        re = t.aulas.filter(a => a.realizada).length;
+      return {
+        pm,
+        pa,
+        re,
+        sem: t.alunos.length && !pm ? 1 : 0,
+        turmas: t.alunos.length ? 1 : 0,
+        acessos: re ? t.alunos.reduce((soma, c) => soma + Math.min(c.usos, re), 0) : 0,
+        base: t.alunos.length * re
+      };
+    })
+  );
+};
+const execucaoDasAulas = a => (a && a.pa ? Math.round((a.re * 100) / a.pa) : null);
+const textoDasAulas = a => (!a ? '—' : !a.pm ? 'sem agenda' : numero(a.re) + ' de ' + numero(a.pa));
+const corDasAulas = a =>
+  !a ? 'var(--texto-cinza-600)' : !a.pm ? 'var(--texto-vermelho-600)' : corDaExecucao(execucaoDasAulas(a));
+const textoDaPresenca = a => {
+  const p = presencaDasAulas(a);
+  return p == null ? '—' : p + '%';
+};
+const presencaDasAulas = a => (a && a.base ? Math.round((a.acessos * 100) / a.base) : null);
+const corDaExecucao = p =>
+  p == null
+    ? 'var(--texto-cinza-600)'
+    : p < 60
+      ? 'var(--texto-vermelho-600)'
+      : p >= 80
+        ? 'var(--texto-verde-700)'
+        : 'var(--texto-cinza-750)';
+const corDaPresenca = p =>
+  p == null
+    ? 'var(--texto-cinza-600)'
+    : p < 50
+      ? 'var(--texto-vermelho-600)'
+      : p >= 75
+        ? 'var(--texto-verde-700)'
+        : 'var(--texto-cinza-750)';
+const variacao = (valor, sufixo) =>
+  (valor > 0 ? '+' : valor < 0 ? '−' : '±') + Math.abs(valor).toLocaleString('pt-BR') + sufixo;
 const celula = (total, faixa) => {
   const p = parcela(total[faixa], total.n),
-    alfa = total.n ? 0.06 + (p / 100) * 0.9 : 0;
+    alfa = total.n ? 0.06 + (p / 100) * 0.5 : 0;
   return {
     valor: total.n ? p + '%' : '—',
     titulo: TEMPERATURAS[faixa][0] + ': ' + total[faixa] + ' de ' + total.n,
     fundo: 'rgba(' + RGB[faixa].join(',') + ',' + alfa.toFixed(2) + ')',
-    cor: alfa > 0.5 ? 'var(--destaque-branco)' : 'var(--texto-ciano-850)'
+    cor: 'var(--texto-ciano-850)'
   };
 };
 const corDosEngajados = engajados =>
-  engajados >= 40 ? 'var(--texto-verde-700)' : engajados >= 20 ? 'var(--texto-ambar-660)' : 'var(--texto-vermelho-600)';
-const prioridadeDe = (engajados, execucao) => {
-  let nivel = engajados < 20 ? 2 : engajados < 40 ? 1 : 0;
-  if (execucao != null && execucao < 75) nivel = Math.min(2, nivel + 1);
-  return ['Baixa', 'Média', 'Alta'][nivel];
+  engajados >= 30 ? 'var(--texto-verde-700)' : engajados >= 15 ? 'var(--texto-ambar-660)' : 'var(--texto-vermelho-600)';
+const semaforoDe = (total, aulas) => {
+  const uso = total.n ? (total.utilizacao * 100) / total.n : 0,
+    risco = total.n ? ((total.sr + total.nv) * 100) / total.n : 0;
+  if (uso < 40 || risco >= 50) return 'critico';
+  const execucao = aulas && aulas.pa ? (aulas.re * 100) / aulas.pa : null;
+  if (uso < 60 || risco >= 30 || (execucao != null && execucao < 60)) return 'atencao';
+  return 'em_dia';
 };
-const ehEscola = nome => /E\. ?M\.|CEI|Cei|Creche|Escola|EMEI|Centro de Educação/i.test(nome);
+const prioridadeDe = (total, diasSemVisita, queda) => {
+  if (!total.n) return 0;
+  const medidos = total.en + total.ev + total.bx,
+    engajamento = medidos ? total.en / medidos : 0.5,
+    visita = diasSemVisita == null ? 1 : Math.min(1, diasSemVisita / 30);
+  let pontos =
+    40 * (1 - total.utilizacao / total.n) +
+    25 * ((total.sr + total.nv) / total.n) +
+    15 * (1 - engajamento) +
+    10 * visita +
+    10 * Math.min(1, (queda || 0) / 10);
+  if (total.n < MINIMO_PARA_SEMAFORO) pontos *= 0.5;
+  return Math.round(pontos * 10) / 10;
+};
+const motivosDe = (total, aulas) => {
+  const motivos = [],
+    execucao = aulas && aulas.pa ? (aulas.re * 100) / aulas.pa : null;
+  if (total.nv) motivos.push(plural(total.nv, 'usuário nunca acessou', 'usuários nunca acessaram'));
+  if (total.sr) motivos.push(plural(total.sr, 'implementado sem uso no mês', 'implementados sem uso no mês'));
+  if (execucao != null && execucao < 60)
+    motivos.push(
+      'oficineiros realizaram ' +
+        numero(aulas.re) +
+        ' de ' +
+        plural(aulas.pa, 'aula prevista', 'aulas previstas') +
+        ' até hoje'
+    );
+  if (total.bx) motivos.push(numero(total.bx) + ' com baixo uso');
+  return motivos.slice(0, 3);
+};
+const rotuloDoMes = data => MESES[Number(data.slice(5, 7)) - 1] + '/' + data.slice(2, 4);
+const textoDoHistorico = (registro, textoDoStatus) =>
+  dataDoRegistro(registro.criado_em) +
+  ' · ' +
+  textoDoStatus(registro) +
+  (registro.acao ? ' · ' + registro.acao : '') +
+  (registro.proximo_passo ? ' · próximo passo: ' + registro.proximo_passo : '') +
+  (registro.prazo ? ' · prazo ' + dmyIso(registro.prazo) : '') +
+  ' · ' +
+  registro.autor_nome;
+const ICONES_DO_SEMAFORO = { critico: '▲', atencao: '!', em_dia: '✓' };
+const decimal = (parte, todo) => (todo ? (Math.round((parte * 1000) / todo) / 10).toLocaleString('pt-BR') + '%' : '0%');
+const pilula = codigo => ({
+  semaforoIcone: ICONES_DO_SEMAFORO[codigo],
+  semaforo: SEMAFOROS[codigo][0],
+  semaforoCor: SEMAFOROS[codigo][1],
+  semaforoFundo: SEMAFOROS[codigo][2]
+});
+const ehEscola = nome =>
+  /\bE\.? ?M\.?(?=\s|$)|\bCEI\b|\bCei\b|\bEMEI\b/.test(nome) || /creche|escola|centro de educa/i.test(nome);
 const alunosPorAno = contas => {
   const anos = {};
   contas.filter(c => c.perfil === 'A' && c.ano).forEach(c => (anos[c.ano] = anos[c.ano] || []).push(c));
   return anos;
 };
+const anoDaAula = aula => {
+  const turma = (aula.reg && aula.reg.turma) || '',
+    achado = turma.match(/(\d)º/);
+  const ano = aula.g ? String(aula.g.ano) : achado ? achado[1] : '';
+  return ano && ano !== '0' ? ano : '';
+};
+const dataDoRegistro = valor => (valor ? dmyIso(String(valor).slice(0, 10)) : '');
+const faixasDeEstagio = total =>
+  ORDEM_DOS_ESTAGIOS.map(codigo => ({
+    largura: parcela(total[codigo], total.n) + '%',
+    cor: ESTAGIOS[codigo][1],
+    titulo: ESTAGIOS[codigo][0] + ' ' + parcela(total[codigo], total.n) + '%'
+  }));
 class Component extends DCLogic {
   lembrar(mudanca) {
     Object.assign(this.props.memoria, mudanca);
     this.forceUpdate();
   }
-  renderVals() {
-    const contexto = this.props.contexto,
-      jornada = contexto.jornada,
-      porCarteira = this.props.perfil === 'gerente',
-      memoria = { ...PADRAO, ...this.props.memoria },
-      acessos = contexto.acessos;
-    if (!Array.isArray(acessos) || !acessos.length)
-      return {
-        carregando: contexto.carregandoAcessos || acessos == null,
-        semBase: !contexto.carregandoAcessos && Array.isArray(acessos) && acessos.length === 0,
-        pronto: false,
-        abaAtiva: {},
-        escola: {}
-      };
-    const porEscola = {};
-    let dataDaBase = '';
+  preparar(acessos, escolaDe, base) {
+    if (this.preparo && this.preparo.acessos === acessos && this.preparo.base === base) return this.preparo;
+    const porBase = {};
+    let incompleto = false;
     acessos.forEach(p => {
-      const escola = jornada.escolaDe(p.escola_id);
-      if (!escola) return;
-      const local = (porEscola[escola.id] = porEscola[escola.id] || {
+      const escola = escolaDe(p.escola_id);
+      if (!escola) {
+        incompleto = true;
+        return;
+      }
+      const daBase = (porBase[p.base_ref] = porBase[p.base_ref] || {});
+      const local = (daBase[escola.id] = daBase[escola.id] || {
         id: escola.id,
         nome: escola.nome,
         sigla: escola.sigla,
         carteira: escola.carteira_id || '',
         contas: []
       });
-      local.contas.push({
+      const conta = {
         nome: p.nome,
         perfil: p.tipo,
         ano: p.ano_escolar || 0,
         diasSemAcesso: p.dias_sem_acesso,
-        diasDeUso: p.dias_acesso,
-        responsavel: p.responsavel_turma || ''
-      });
-      if (p.base_ref > dataDaBase) dataDaBase = p.base_ref;
+        diasDeUso: p.dias_acesso || 0,
+        responsavel: p.responsavel_turma || '',
+        turma: p.turma || '',
+        primeiroAcesso: p.primeiro_acesso || ''
+      };
+      conta.usos = usosNoMes(conta, p.base_ref);
+      conta.estagio = estagioDe(conta, p.base_ref);
+      local.contas.push(conta);
     });
+    const datas = Object.keys(porBase).sort(),
+      dataDaBase = datas[datas.length - 1] || '',
+      limite = dataDaBase ? Base.iso(Base.add(dataDe(dataDaBase), -7)) : '',
+      escolhida =
+        base && base.comparacao && porBase[base.comparacao] && base.comparacao < dataDaBase ? base.comparacao : '',
+      dataAnterior = escolhida || datas.filter(data => data <= limite).pop() || '';
+    const porMes = {};
+    const localDoMes = (data, escola) => {
+      const daData = (porMes[data] = porMes[data] || {});
+      return (daData[escola.id] = daData[escola.id] || {
+        id: escola.id,
+        nome: escola.nome,
+        carteira: escola.carteira_id || '',
+        grupos: []
+      });
+    };
+    const resumos = (base && base.meses) || [];
+    if (resumos.length)
+      resumos.forEach(linha => {
+        const escola = escolaDe(linha.escola_id);
+        if (escola)
+          localDoMes(linha.base_ref, escola).grupos.push({
+            perfil: linha.tipo,
+            ano: linha.ano_escolar || 0,
+            n: linha.n,
+            nv: linha.nv,
+            sr: linha.sr,
+            en: linha.en
+          });
+      });
+    else
+      datas.forEach(data =>
+        Object.values(porBase[data]).forEach(local =>
+          local.contas.forEach(conta =>
+            localDoMes(data, escolaDe(local.id)).grupos.push({
+              perfil: conta.perfil,
+              ano: conta.ano,
+              n: 1,
+              nv: conta.estagio === 'nv' ? 1 : 0,
+              sr: conta.estagio === 'sr' ? 1 : 0,
+              en: conta.estagio === 'en' ? 1 : 0
+            })
+          )
+        )
+      );
+    const ultimaDoMes = {};
+    Object.keys(porMes)
+      .sort()
+      .forEach(data => (ultimaDoMes[data.slice(0, 7)] = data));
+    const preparo = {
+      acessos,
+      base,
+      porMes,
+      dataDaBase,
+      dataAnterior,
+      porEscola: porBase[dataDaBase] || {},
+      anterior: dataAnterior ? porBase[dataAnterior] : null,
+      meses: Object.keys(ultimaDoMes)
+        .sort()
+        .slice(-12)
+        .map(mes => ultimaDoMes[mes])
+    };
+    this.preparo = incompleto ? null : preparo;
+    return preparo;
+  }
+  renderVals() {
+    const contexto = this.props.contexto,
+      jornada = contexto.jornada,
+      porCarteira = this.props.perfil !== 'analista',
+      textos = TEXTOS[porCarteira ? 'gerente' : 'analista'],
+      memoria = { ...PADRAO, ...this.props.memoria },
+      acessos = contexto.acessos;
+    if (memoria.aba === 'escolas') memoria.aba = 'geral';
+    if (!Array.isArray(acessos) || !acessos.length)
+      return {
+        carregando: contexto.carregandoAcessos || acessos == null,
+        semBase: !contexto.carregandoAcessos && Array.isArray(acessos) && acessos.length === 0,
+        pronto: false,
+        abaAtiva: {},
+        escola: {},
+        minhaCarteira: {},
+        usuarios: {},
+        agendaDaSemana: {},
+        listaDeEscolas: {},
+        evolucao: {},
+        descarte: {},
+        detalhe: {}
+      };
+    const { porEscola, porMes, dataDaBase, dataAnterior, anterior, meses } = this.preparar(
+      acessos,
+      jornada.escolaDe,
+      contexto.baseJornada
+    );
+    const statusPorEscola = {},
+      historicoPorEscola = {};
+    (jornada.statusEscolas || []).forEach(registro => {
+      if (!statusPorEscola[registro.escola_id]) statusPorEscola[registro.escola_id] = registro;
+      (historicoPorEscola[registro.escola_id] = historicoPorEscola[registro.escola_id] || []).push(registro);
+    });
+    const avaliacoesPorCarteira = {};
+    (jornada.statusCarteiras || []).forEach(registro =>
+      (avaliacoesPorCarteira[registro.carteira_id] = avaliacoesPorCarteira[registro.carteira_id] || []).push(registro)
+    );
+    const referencia = dataDaBase ? dataDe(dataDaBase) : new Date();
+    const hoje = dataDe(Base.hojeIso());
+    const hojeIso = Base.iso(hoje);
+    const podeGravar = typeof jornada.registrarStatusEscola === 'function',
+      podeAgendar = typeof jornada.agendarVisita === 'function',
+      podeDescartar = typeof jornada.descartarSugestao === 'function';
     const todosOsLocais = Object.values(porEscola);
-    const locais = todosOsLocais.filter(local => memoria.lotacao === 'todas' || ehEscola(local.nome));
+    const naLotacao = local => memoria.lotacao === 'todas' || ehEscola(local.nome);
+    const noFiltro = local =>
+      naLotacao(local) && (memoria.filtroEscola === 'todas' || String(local.id) === memoria.filtroEscola);
+    const locais = todosOsLocais.filter(noFiltro);
     const contasDe = local =>
-      memoria.perfil === 'todos' ? local.contas : local.contas.filter(c => c.perfil === memoria.perfil);
+      memoria.filtroAno !== 'todos'
+        ? local.contas.filter(c => c.perfil === 'A' && String(c.ano) === memoria.filtroAno)
+        : memoria.perfil === 'todos'
+          ? local.contas
+          : local.contas.filter(c => c.perfil === memoria.perfil);
+    const gruposDe = local =>
+      memoria.filtroAno !== 'todos'
+        ? local.grupos.filter(g => g.perfil === 'A' && String(g.ano) === memoria.filtroAno)
+        : memoria.perfil === 'todos'
+          ? local.grupos
+          : local.grupos.filter(g => g.perfil === memoria.perfil);
+    const diasDesde = data => (data ? Math.max(0, Math.round((hoje - dataDe(data)) / 86400000)) : null);
     const aulasDoCiclo = jornada.aulas(),
       execucaoDe = id => jornada.execucao(aulasDoCiclo.filter(aula => aula.esc === id));
     const oficineirosDe = jornada.oficineirosDaEscola;
     const diagnostico = (local, total, execucao) => {
-      const anos = alunosPorAno(local.contas);
+      const anos = alunosPorAno(local.contas),
+        aulas = aulasDe(local);
       let pior = null;
       Object.keys(anos).forEach(ano => {
         const doAno = contar(anos[ano]);
         if (doAno.n >= 10 && (!pior || doAno.engajados < pior.engajados)) pior = { ano, engajados: doAno.engajados };
       });
       return (
-        'Engajados ' +
+        'Utilização ' +
+        total.uso +
+        '% · engajados ' +
         total.engajados +
         '% · ' +
         parcela(total.N, total.n) +
         '% nunca acessaram · ' +
-        parcela(total.S, total.n) +
-        '% sem uso há mais de 30 dias' +
+        parcela(total.sr, total.n) +
+        '% sem uso no mês' +
         (pior ? ' · ' + pior.ano + 'º ano com ' + pior.engajados + '% de alunos engajados' : '') +
-        (execucao != null
-          ? ' · execução das atividades dos oficineiros ' + execucao + '%'
-          : oficineirosDe(local.id).length
-            ? ' · sem atividades previstas no mês'
-            : ' · escola sem oficineiro')
+        (aulas && aulas.pa
+          ? ' · oficineiros realizaram ' +
+            aulas.re +
+            ' de ' +
+            aulas.pa +
+            ' aulas previstas até ' +
+            dmyIso(dataDaBase) +
+            (presencaDasAulas(aulas) != null ? ' · presença na máquina ' + presencaDasAulas(aulas) + '%' : '')
+          : aulas
+            ? ' · sem aulas na agenda dos oficineiros no mês'
+            : execucao != null
+              ? ' · execução das atividades dos oficineiros ' + execucao + '%'
+              : oficineirosDe(local.id).length
+                ? ' · sem atividades previstas no mês'
+                : ' · escola sem oficineiro')
       );
     };
-    const agendar = (local, total, execucao) => () => {
+    const pedidoDe = (local, total, execucao) => {
       const onboarding = total.N > total.S;
-      jornada.agendarVisita({
+      return {
         escola: String(local.id),
         carteira: local.carteira,
         origem: 'mapa_calor',
@@ -370,23 +1097,73 @@ class Component extends DCLogic {
         focos: onboarding ? ['Alunos', 'Professores'] : ['Professores'],
         orientacao: 'Diagnóstico da Jornada do Usuário: ' + diagnostico(local, total, execucao) + '.',
         diagnostico: local.nome + ' · ' + diagnostico(local, total, execucao)
-      });
+      };
     };
-    const abrir = local => () => this.lembrar({ aba: 'escola', escola: local.nome, limite: 40 });
+    const agendar = (local, total, execucao) => () => {
+      if (podeAgendar) jornada.agendarVisita(pedidoDe(local, total, execucao));
+    };
+    const abrir = local => () =>
+      this.lembrar({ aba: 'escola', escola: local.nome, limite: 40, formEscola: FORM_ESCOLA_VAZIO });
+    const detalhar = local => () =>
+      this.lembrar({
+        escolaAberta: memoria.escolaAberta === String(local.id) ? '' : String(local.id),
+        formEscola: FORM_ESCOLA_VAZIO
+      });
+    const aulasDaAgenda =
+      dataDaBase && typeof jornada.aulasDoMes === 'function' ? jornada.aulasDoMes(dataDaBase) : null;
+    const aulasPorEscola = {};
+    (aulasDaAgenda || []).forEach(a => {
+      const daEscola = (aulasPorEscola[a.esc] = aulasPorEscola[a.esc] || {});
+      (daEscola[a.ano] = daEscola[a.ano] || []).push({
+        letra: a.letra || '',
+        ateLeitura: a.iso <= dataDaBase,
+        realizada: !!a.realizada
+      });
+    });
+    const aulasPorAnoDe = local => {
+      if (!aulasDaAgenda) return null;
+      const anos = alunosPorAno(local.contas),
+        daEscola = aulasPorEscola[local.id] || {},
+        porAno = {};
+      Array.from(new Set(Object.keys(anos).concat(Object.keys(daEscola)))).forEach(
+        ano => (porAno[ano] = aulasDoAno(anos[ano] || [], daEscola[ano] || []))
+      );
+      return porAno;
+    };
+    const aulasDe = (local, ano) => {
+      const porAno = aulasPorAnoDe(local);
+      if (!porAno) return null;
+      return ano ? porAno[ano] || AULAS_VAZIAS : somarAulas(Object.values(porAno));
+    };
     const todasAsUnidades = locais
       .map(local => {
         const total = contar(contasDe(local)),
-          execucao = execucaoDe(local.id);
+          execucao = execucaoDe(local.id),
+          todosOsPerfis = memoria.perfil === 'todos' && memoria.filtroAno === 'todos' ? total : contar(local.contas),
+          aulasDaEscola = aulasDe(local),
+          aulas = memoria.filtroAno !== 'todos' ? aulasDe(local, memoria.filtroAno) : aulasDaEscola,
+          diasSemVisita = diasDesde(jornada.ultimaVisitaDaEscola ? jornada.ultimaVisitaDaEscola(local.id) : ''),
+          antes = anterior && anterior[local.id] ? contar(contasDe(anterior[local.id])) : null,
+          queda = antes && antes.n ? Math.max(0, antes.uso - total.uso) : 0;
         return {
           local,
           total,
           execucao,
-          prioridade: prioridadeDe(total.engajados, execucao),
+          aulas,
+          aulasDaEscola,
+          anosComAlunos: Object.keys(alunosPorAno(local.contas)).length,
+          diasSemVisita,
+          queda,
+          semaforo: semaforoDe(todosOsPerfis, aulasDaEscola),
+          pontos: prioridadeDe(total, diasSemVisita, queda),
+          motivos: motivosDe(todosOsPerfis, aulasDaEscola),
+          status: statusPorEscola[local.id] || null,
           visita: jornada.visitaDaEscola(local.id)
         };
       })
       .filter(u => u.total.n > 0);
     const unidades = todasAsUnidades.filter(u => memoria.carteira === 'todos' || u.local.carteira === memoria.carteira);
+    const porPrioridade = (a, b) => b.pontos - a.pontos || b.total.n - a.total.n;
     const ordenadas = unidades
       .slice()
       .sort((a, b) =>
@@ -394,13 +1171,17 @@ class Component extends DCLogic {
           ? b.total.n - a.total.n
           : memoria.ordem === 'eng'
             ? a.total.engajados - b.total.engajados
-            : ORDEM_DAS_PRIORIDADES[a.prioridade] - ORDEM_DAS_PRIORIDADES[b.prioridade] ||
-              a.total.engajados - b.total.engajados ||
-              b.total.n - a.total.n
+            : memoria.ordem === 'uso'
+              ? a.total.uso - b.total.uso
+              : porPrioridade(a, b)
       );
     const geral = contar([].concat(...unidades.map(u => contasDe(u.local))));
-    const implementadas = geral.n - geral.N;
+    const geralAnterior = anterior
+      ? contar([].concat(...unidades.filter(u => anterior[u.local.id]).map(u => contasDe(anterior[u.local.id]))))
+      : null;
+    const retratos = ((contexto.baseJornada || {}).retratos || []).filter(r => r.base_ref < dataDaBase).slice(0, 90);
     const busca = normTxt(memoria.busca);
+    const textoDoStatus = registro => (registro ? STATUS_DA_ESCOLA[registro.status] || registro.status : 'Sem ação');
     const linha = u => ({
       nome: u.local.nome,
       carteira: u.local.carteira || '—',
@@ -408,22 +1189,295 @@ class Component extends DCLogic {
       celulas: FAIXAS.map(faixa => celula(u.total, faixa)),
       engajados: u.total.engajados + '%',
       engajadosCor: corDosEngajados(u.total.engajados),
-      execucao:
-        u.execucao == null ? (oficineirosDe(u.local.id).length ? 'sem previstas' : 'sem oficineiro') : u.execucao + '%',
-      execucaoCor: u.execucao == null ? 'var(--texto-cinza-420)' : exC(u.execucao),
+      utilizacao: u.total.uso + '%',
+      aulasRealizadas: textoDasAulas(u.aulas),
+      aulasCor: corDasAulas(u.aulas),
+      aulasTitulo: u.aulas
+        ? 'Aulas realizadas de previstas até ' + dmyIso(dataDaBase) + ' · ' + numero(u.aulas.pm) + ' previstas no mês'
+        : 'Sem agenda dos oficineiros neste perfil',
+      presenca: textoDaPresenca(u.aulas),
+      presencaCor: corDaPresenca(presencaDasAulas(u.aulas)),
       agenda: u.visita || 'sem visita',
-      agendaCor: u.visita ? 'var(--texto-verde-700)' : 'var(--texto-cinza-420)',
-      prioridade: u.prioridade,
-      prioridadeCor: PRIORIDADES[u.prioridade][0],
-      prioridadeFundo: PRIORIDADES[u.prioridade][1],
-      semVisita: !u.visita,
+      agendaCor: u.visita ? 'var(--texto-verde-700)' : 'var(--texto-cinza-600)',
+      ...pilula(u.semaforo),
+      pontos: String(u.pontos).replace('.', ','),
+      status: textoDoStatus(u.status),
+      semVisita: !u.visita && podeAgendar,
       temVisita: !!u.visita,
       visita: u.visita,
+      aberta: memoria.escolaAberta === String(u.local.id),
+      expandida: memoria.escolaAberta === String(u.local.id) ? 'true' : 'false',
+      detalhar: detalhar(u.local),
       abrir: abrir(u.local),
       agendar: agendar(u.local, u.total, u.execucao),
       diagnostico: diagnostico(u.local, u.total, u.execucao)
     });
     const carteiras = Array.from(new Set(todosOsLocais.map(local => local.carteira).filter(Boolean))).sort();
+    const resumoDaCarteira = carteira => {
+      const dela = todasAsUnidades.filter(u => u.local.carteira === carteira),
+        total = contar([].concat(...dela.map(u => contasDe(u.local)))),
+        aulas = aulasDaAgenda ? somarAulas(dela.map(u => u.aulasDaEscola)) : null;
+      return { unidades: dela, total, aulas, semaforo: semaforoDe(total, aulas) };
+    };
+    const carteiraAberta = porCarteira ? memoria.carteiraVista : jornada.carteiraPropria || carteiras[0] || '';
+    const listaDeCarteiras = porCarteira && !carteiraAberta;
+    const cartoesDeCarteira = carteiras.map(carteira => {
+      const resumo = resumoDaCarteira(carteira),
+        avaliacao = (avaliacoesPorCarteira[carteira] || [])[0],
+        contagem = {};
+      resumo.unidades.forEach(u => (contagem[u.semaforo] = (contagem[u.semaforo] || 0) + 1));
+      const escolas = ['critico', 'atencao', 'em_dia']
+        .filter(codigo => contagem[codigo])
+        .map(codigo => SEMAFOROS[codigo][0].toLowerCase() + ' ' + contagem[codigo])
+        .join(' · ');
+      return {
+        rotulo: carteira,
+        ...pilula(resumo.semaforo),
+        base:
+          plural(resumo.unidades.length, 'unidade', 'unidades') + ' · ' + plural(resumo.total.n, 'usuário', 'usuários'),
+        utilizacao: resumo.total.uso + '%',
+        engajados: resumo.total.engajados + '%',
+        engajadosCor: corDosEngajados(resumo.total.engajados),
+        escolas: escolas ? 'Escolas por semáforo: ' + escolas : '',
+        temEscolas: !!escolas,
+        avaliacao: avaliacao
+          ? SEMAFOROS[avaliacao.status][0] + ' em ' + dataDoRegistro(avaliacao.criado_em)
+          : 'ainda não registrada',
+        avaliacaoCor: avaliacao ? SEMAFOROS[avaliacao.status][1] : 'var(--texto-cinza-600)',
+        avaliacaoResumo: avaliacao && avaliacao.resumo ? avaliacao.resumo : '',
+        temResumo: !!(avaliacao && avaliacao.resumo),
+        abrir: () => this.lembrar({ carteiraVista: carteira, formCarteira: PADRAO.formCarteira })
+      };
+    });
+    let minhaCarteira = {},
+      escolasDaCarteira = [],
+      sugestoesDeVisita = [],
+      agendaDaSemana = { dias: [] };
+    if (carteiraAberta) {
+      const resumo = resumoDaCarteira(carteiraAberta),
+        total = resumo.total,
+        avaliacoes = avaliacoesPorCarteira[carteiraAberta] || [],
+        avaliacao = avaliacoes[0],
+        contagemSemaforo = {},
+        contagemStatus = {};
+      resumo.unidades.forEach(u => {
+        contagemSemaforo[u.semaforo] = (contagemSemaforo[u.semaforo] || 0) + 1;
+        const rotulo = textoDoStatus(u.status);
+        contagemStatus[rotulo] = (contagemStatus[rotulo] || 0) + 1;
+      });
+      minhaCarteira = {
+        rotulo: carteiraAberta,
+        ...pilula(resumo.semaforo),
+        indicadores: [
+          [
+            'Criados',
+            numero(total.n),
+            plural(resumo.unidades.length, 'unidade', 'unidades'),
+            'var(--destaque-ciano-880)'
+          ],
+          [
+            'Implementados',
+            parcela(total.implementados, total.n) + '%',
+            numero(total.implementados) + ' já acessaram',
+            'var(--texto-ciano-660)'
+          ],
+          ['Utilização', total.uso + '%', numero(total.utilizacao) + ' acessaram no mês', 'var(--destaque-azul-500)'],
+          [
+            'Engajados',
+            total.engajados + '%',
+            numero(total.en) + ' dos implementados',
+            corDosEngajados(total.engajados)
+          ],
+          [
+            'Sem uso ou nunca',
+            total.risco + '%',
+            numero(total.sr) + ' sem uso no mês · ' + numero(total.nv) + ' nunca',
+            'var(--destaque-cinza-540)'
+          ]
+        ]
+          .concat(
+            resumo.aulas
+              ? [
+                  [
+                    'Aulas realizadas',
+                    execucaoDasAulas(resumo.aulas) == null ? '—' : execucaoDasAulas(resumo.aulas) + '%',
+                    numero(resumo.aulas.re) + ' de ' + numero(resumo.aulas.pa) + ' previstas até ' + dmyIso(dataDaBase),
+                    corDaExecucao(execucaoDasAulas(resumo.aulas))
+                  ],
+                  [
+                    'Presença na máquina',
+                    textoDaPresenca(resumo.aulas),
+                    'dos alunos nas aulas realizadas',
+                    corDaPresenca(presencaDasAulas(resumo.aulas))
+                  ]
+                ]
+              : []
+          )
+          .map(([titulo, valor, nota, cor]) => ({ titulo, valor, nota, cor, valorCor: 'var(--texto-ciano-850)' })),
+        porSemaforo: ['critico', 'atencao', 'em_dia']
+          .filter(codigo => contagemSemaforo[codigo])
+          .map(codigo => ({
+            rotulo: SEMAFOROS[codigo][0],
+            valor: contagemSemaforo[codigo],
+            cor: SEMAFOROS[codigo][1],
+            fundo: SEMAFOROS[codigo][2]
+          })),
+        porStatus: Object.keys(contagemStatus).map(rotulo => ({ rotulo, valor: contagemStatus[rotulo] })),
+        temAvaliacao: !!avaliacao,
+        semAvaliacao: !avaliacao,
+        avaliacao: avaliacao ? SEMAFOROS[avaliacao.status][0] : '',
+        avaliacaoCor: avaliacao ? SEMAFOROS[avaliacao.status][1] : '',
+        avaliacaoFundo: avaliacao ? SEMAFOROS[avaliacao.status][2] : '',
+        avaliacaoAutor: avaliacao ? avaliacao.autor_nome + ' · ' + dataDoRegistro(avaliacao.criado_em) : '',
+        avaliacaoResumo: avaliacao ? avaliacao.resumo : '',
+        historico: avaliacoes
+          .slice(1, 6)
+          .map(
+            registro =>
+              dataDoRegistro(registro.criado_em) +
+              ' · ' +
+              SEMAFOROS[registro.status][0] +
+              ' · ' +
+              registro.autor_nome +
+              ': ' +
+              registro.resumo
+          )
+      };
+      const ordenadasDaCarteira = resumo.unidades.slice().sort(porPrioridade);
+      escolasDaCarteira = ordenadasDaCarteira.map(linha);
+      const recemConcluida = u =>
+        u.status &&
+        u.status.status === 'concluida' &&
+        (hoje - dataDe(String(u.status.criado_em).slice(0, 10))) / 86400000 < DIAS_DE_STATUS_CONCLUIDO;
+      const agenda = (jornada.agendaDoAnalista ? jornada.agendaDoAnalista(carteiraAberta) : []) || [];
+      const limiteDaProxima = Base.iso(Base.add(hoje, DIAS_SEM_VISITA_PROXIMA));
+      const visitaProxima = id =>
+        agenda.some(
+          v => v.escola_id === id && v.status === 'agendada' && v.data >= hojeIso && v.data <= limiteDaProxima
+        );
+      const descartadaHaPouco = id =>
+        (jornada.descartes || []).some(
+          d => d.escola_id === id && diasDesde(String(d.criado_em).slice(0, 10)) < DIAS_DE_DESCARTE
+        );
+      const candidatas = ordenadasDaCarteira
+        .filter(
+          u =>
+            ehEscola(u.local.nome) && !visitaProxima(u.local.id) && !recemConcluida(u) && !descartadaHaPouco(u.local.id)
+        )
+        .slice(0, VISITAS_SUGERIDAS);
+      const horarios = [];
+      for (let k = 1; k <= DIAS_PARA_SUGERIR && horarios.length < candidatas.length; k++) {
+        const dia = Base.add(hoje, k);
+        if (!Base.letivo(dia)) continue;
+        const data = Base.iso(dia);
+        if (!agenda.some(v => v.status === 'agendada' && v.data === data)) horarios.push({ data });
+      }
+      const descarte = memoria.descarte;
+      sugestoesDeVisita = candidatas.map((u, i) => {
+        const horario = horarios[i],
+          id = String(u.local.id),
+          descartando = podeDescartar && descarte.escola === id,
+          pedido = pedidoDe(u.local, u.total, u.execucao);
+        return {
+          nome: u.local.nome,
+          ...pilula(u.semaforo),
+          prioridade: String(u.pontos).replace('.', ','),
+          motivos: u.motivos,
+          horario: horario
+            ? 'Sugerido: ' + DIAS[dataDe(horario.data).getDay()] + ' ' + dmIso(horario.data)
+            : 'Sem dia livre nos próximos ' + DIAS_PARA_SUGERIR + ' dias',
+          podeAgir: podeAgendar,
+          ocupado: !horario || !!memoria.agendando || typeof jornada.agendarSugestao !== 'function',
+          descartando,
+          textoDescartar: descartando ? 'Cancelar descarte' : 'Descartar',
+          abrir: detalhar(u.local),
+          aceitar: () => {
+            if (!horario || memoria.agendando) return;
+            this.lembrar({ agendando: id });
+            Promise.resolve(
+              jornada.agendarSugestao({
+                ...pedido,
+                data: horario.data,
+                hora: null,
+                orientacao: 'Sugestão da Jornada do Usuário: ' + u.motivos.join('; ') + '.'
+              })
+            ).then(() => this.lembrar({ agendando: '' }));
+          },
+          outroHorario: () =>
+            jornada.agendarVisita({
+              ...pedido,
+              ...(horario ? { data: horario.data } : {}),
+              conferirConflito: true
+            }),
+          alternarDescarte: () =>
+            this.lembrar({ descarte: descartando ? DESCARTE_VAZIO : { ...DESCARTE_VAZIO, escola: id } })
+        };
+      });
+      const segunda = Base.iso(Base.add(dataDe(Base.segDe(hojeIso)), memoria.semanaAgenda * 7));
+      const nomeDaEscola = id => {
+        const escola = jornada.escolaDe(id);
+        return escola ? escola.nome : 'Escola';
+      };
+      agendaDaSemana = {
+        titulo: porCarteira ? 'Agenda da semana do analista' : 'Agenda da semana',
+        texto: 'Semana de ' + dmIso(segunda) + ' a ' + dmIso(Base.iso(Base.add(dataDe(segunda), 4))),
+        anterior: () => this.lembrar({ semanaAgenda: memoria.semanaAgenda - 1 }),
+        seguinte: () => this.lembrar({ semanaAgenda: memoria.semanaAgenda + 1 }),
+        atual: () => this.lembrar({ semanaAgenda: 0 }),
+        foraDaAtual: memoria.semanaAgenda !== 0,
+        dias: [0, 1, 2, 3, 4].map(k => {
+          const dia = Base.iso(Base.add(dataDe(segunda), k)),
+            feriado = Base.feriado(dataDe(dia)),
+            ehHoje = dia === hojeIso;
+          const visitas = agenda
+            .filter(v => v.data === dia && v.status !== 'cancelada')
+            .sort((a, b) => String(a.hora || '').localeCompare(String(b.hora || '')))
+            .map(v => {
+              const realizada = v.status === 'realizada',
+                semRegistro = !realizada && v.data < hojeIso,
+                origem = (Base.ORIGEM_VISITA || {})[v.origem];
+              return {
+                hora: v.hora ? hmDe(v.hora) : 'sem horário',
+                escola: nomeDaEscola(v.escola_id),
+                tipo: v.tipo || 'Visita',
+                situacao: realizada ? 'Realizada' : semRegistro ? 'Sem registro' : 'Agendada',
+                situacaoCor: realizada
+                  ? 'var(--texto-verde-700)'
+                  : semRegistro
+                    ? 'var(--texto-vermelho-600)'
+                    : 'var(--texto-cinza-600)',
+                traco: 'solid',
+                cor: origem ? origem[1] : 'var(--destaque-ciano-660)',
+                fundo: realizada ? 'var(--fundo-verde-80)' : 'var(--fundo-ciano-40)'
+              };
+            });
+          const sugeridas = candidatas
+            .map((u, i) => ({ u, horario: horarios[i] }))
+            .filter(item => item.horario && item.horario.data === dia)
+            .map(item => ({
+              hora: 'dia inteiro',
+              escola: item.u.local.nome,
+              tipo: 'Sugestão da Jornada',
+              situacao: 'Sugerida',
+              situacaoCor: 'var(--texto-cinza-600)',
+              traco: 'dashed',
+              cor: 'var(--borda-cinza-160)',
+              fundo: 'var(--fundo-cinza-20)'
+            }));
+          const eventos = visitas.concat(sugeridas);
+          return {
+            nome: DIAS[dataDe(dia).getDay()],
+            data: dmIso(dia),
+            aria: DIAS[dataDe(dia).getDay()] + ', ' + dmIso(dia),
+            eventos,
+            vazio: !eventos.length,
+            vazioTexto: feriado ? 'Feriado · ' + feriado : 'Sem visitas',
+            fundo: ehHoje ? 'var(--fundo-ciano-40)' : 'var(--fundo-branco)',
+            borda: ehHoje ? 'var(--borda-ciano-120)' : 'var(--borda-cinza-110)'
+          };
+        })
+      };
+    }
     const barra = (rotulo, cor, doGrupo) => {
       const total = contar([].concat(...doGrupo.map(u => contasDe(u.local))));
       return {
@@ -457,44 +1511,213 @@ class Component extends DCLogic {
               unidades.filter(u => u.local.sigla === sigla)
             )
           );
+    const cartaoDeGrupo = (rotulo, contas, marcado, escolher, subtitulo) => {
+      const total = contar(contas);
+      return {
+        rotulo,
+        total: subtitulo || plural(total.n, 'usuário', 'usuários'),
+        marcado: marcado ? 'true' : 'false',
+        faixas: faixasDeEstagio(total),
+        linhas: [
+          ['Criados', total.n, ''],
+          ['Implementados', total.implementados, parcela(total.implementados, total.n) + '%'],
+          ['Utilização no mês', total.utilizacao, total.uso + '%'],
+          ['Engajados', total.en, total.engajados + '%']
+        ].map(([titulo, valor, parte]) => ({ titulo, valor: numero(valor), parte })),
+        fundo: marcado ? 'var(--fundo-ciano-40)' : 'var(--fundo-branco)',
+        escolher
+      };
+    };
+    const cartoesPorCarteira = porCarteira
+      ? carteiras.map(carteira =>
+          cartaoDeGrupo(
+            carteira,
+            [].concat(...todasAsUnidades.filter(u => u.local.carteira === carteira).map(u => contasDe(u.local))),
+            memoria.carteira === carteira,
+            () => this.lembrar({ carteira: memoria.carteira === carteira ? 'todos' : carteira }),
+            plural(todasAsUnidades.filter(u => u.local.carteira === carteira).length, 'unidade', 'unidades')
+          )
+        )
+      : [];
+    const contasSemFiltroDePerfil = [].concat(...unidades.map(u => u.local.contas));
+    const cartoesPorPerfil = ['A', 'P', 'S']
+      .map(codigo =>
+        cartaoDeGrupo(
+          PERFIS_NO_PLURAL[codigo],
+          contasSemFiltroDePerfil.filter(c => c.perfil === codigo),
+          memoria.perfil === codigo,
+          () => this.lembrar({ perfil: memoria.perfil === codigo ? 'todos' : codigo })
+        )
+      )
+      .filter(cartao => cartao.total !== plural(0, 'usuário', 'usuários'));
     const porNome = todasAsUnidades.slice().sort((a, b) => a.local.nome.localeCompare(b.local.nome, 'pt-BR'));
-    const escolhida = porNome.find(u => u.local.nome === memoria.escola) || ordenadas[0] || porNome[0];
+    const doFiltroDeEscola =
+      memoria.filtroEscola !== 'todas' ? porNome.find(u => String(u.local.id) === memoria.filtroEscola) : null;
+    const escolhida =
+      porNome.find(u => u.local.nome === memoria.escola) || (!memoria.escola && doFiltroDeEscola) || null;
+    const rede = { anos: [], indicadores: [] };
+    if (!escolhida) {
+      const porAno = {};
+      unidades.forEach(u => {
+        const anos = alunosPorAno(u.local.contas),
+          aulasDosAnos = aulasPorAnoDe(u.local);
+        Object.keys(anos)
+          .filter(ano => memoria.filtroAno === 'todos' || ano === memoria.filtroAno)
+          .forEach(ano =>
+            (porAno[ano] = porAno[ano] || []).push({
+              u,
+              total: contar(anos[ano]),
+              aulas: aulasDosAnos ? aulasDosAnos[ano] || AULAS_VAZIAS : null
+            })
+          );
+      });
+      const turmasDaRede = [].concat(...Object.values(porAno)),
+        alunosDaRede = turmasDaRede.reduce((soma, turma) => soma + turma.total.n, 0),
+        semAcessoNaRede = turmasDaRede.filter(turma => !turma.total.utilizacao).length,
+        aulasDaRede = aulasDaAgenda ? somarAulas(turmasDaRede.map(turma => turma.aulas)) : null,
+        execucaoDaRede = execucaoDasAulas(aulasDaRede),
+        presencaDaRede = presencaDasAulas(aulasDaRede);
+      rede.indicadores = aulasDaRede
+        ? [
+            {
+              titulo: 'Alunos previstos',
+              valor: numero(alunosDaRede),
+              nota: plural(aulasDaRede.turmas, 'turma', 'turmas') + ' com alunos criados',
+              cor: 'var(--destaque-ciano-880)',
+              valorCor: 'var(--texto-ciano-850)'
+            },
+            {
+              titulo: 'Aulas previstas no mês',
+              valor: numero(aulasDaRede.pm),
+              nota:
+                'lançadas na agenda · ' +
+                numero(aulasDaRede.pa) +
+                ' até ' +
+                dmyIso(dataDaBase) +
+                (aulasDaRede.sem ? ' · ' + plural(aulasDaRede.sem, 'turma sem agenda', 'turmas sem agenda') : ''),
+              cor: aulasDaRede.sem ? 'var(--destaque-vermelho-600)' : 'var(--destaque-ciano-400)',
+              valorCor: 'var(--texto-ciano-850)'
+            },
+            {
+              titulo: 'Aulas realizadas',
+              valor: numero(aulasDaRede.re),
+              nota: (execucaoDaRede == null ? '—' : execucaoDaRede + '%') + ' das previstas até hoje',
+              cor: corDaExecucao(execucaoDaRede),
+              valorCor: 'var(--texto-ciano-850)'
+            },
+            {
+              titulo: 'Presença na máquina',
+              valor: presencaDaRede == null ? '—' : presencaDaRede + '%',
+              nota: 'dos alunos nas aulas realizadas',
+              cor: corDaPresenca(presencaDaRede),
+              valorCor: 'var(--texto-ciano-850)'
+            }
+          ]
+        : [
+            {
+              titulo: 'Alunos criados',
+              valor: numero(alunosDaRede),
+              nota: plural(turmasDaRede.length, 'ano com alunos', 'anos com alunos') + ' nas escolas',
+              cor: 'var(--destaque-ciano-880)',
+              valorCor: 'var(--texto-ciano-850)'
+            },
+            {
+              titulo: 'Anos sem nenhum acesso no mês',
+              valor: numero(semAcessoNaRede),
+              nota: parcela(semAcessoNaRede, turmasDaRede.length) + '% dos anos nas escolas',
+              cor: semAcessoNaRede ? 'var(--destaque-vermelho-600)' : 'var(--destaque-cinza-300)',
+              valorCor: semAcessoNaRede ? 'var(--texto-vermelho-600)' : 'var(--texto-ciano-850)'
+            }
+          ];
+      rede.anos = Object.keys(porAno)
+        .sort((a, b) => Number(a) - Number(b))
+        .map(ano => {
+          const turmas = porAno[ano],
+            total = contar([].concat(...turmas.map(turma => alunosPorAno(turma.u.local.contas)[ano]))),
+            aulas = aulasDaAgenda ? somarAulas(turmas.map(turma => turma.aulas)) : null,
+            aberto = memoria.anoAberto === ano;
+          return {
+            ano: ano + 'º ano',
+            numeros:
+              plural(turmas.length, 'escola', 'escolas') +
+              (aulas ? ' · ' + plural(aulas.turmas, 'turma', 'turmas') : '') +
+              ' · ' +
+              plural(total.n, 'aluno', 'alunos'),
+            faixas: faixasDeEstagio(total),
+            utilizacao: total.uso + '%',
+            engajados: total.engajados + '%',
+            engajadosCor: corDosEngajados(total.engajados),
+            aulas: textoDasAulas(aulas),
+            aulasCor: corDasAulas(aulas),
+            aulasTitulo: aulas
+              ? numero(aulas.re) +
+                ' realizadas de ' +
+                numero(aulas.pa) +
+                ' previstas até ' +
+                dmyIso(dataDaBase) +
+                ' · ' +
+                numero(aulas.pm) +
+                ' no mês'
+              : '',
+            presenca: textoDaPresenca(aulas),
+            presencaCor: corDaPresenca(presencaDasAulas(aulas)),
+            aberto,
+            expandido: aberto ? 'true' : 'false',
+            seta: aberto ? '▾' : '▸',
+            rotuloDoBotao: (aberto ? 'Fechar' : 'Ver') + ' as escolas do ' + ano + 'º ano',
+            alternar: () => this.lembrar({ anoAberto: aberto ? '' : ano }),
+            escolas: turmas
+              .slice()
+              .sort((a, b) => a.total.engajados - b.total.engajados || b.total.n - a.total.n)
+              .map(turma => ({
+                nome: turma.u.local.nome,
+                abrir: abrir(turma.u.local),
+                alunos: numero(turma.total.n),
+                utilizacao: turma.total.uso + '%',
+                engajados: turma.total.engajados + '%',
+                engajadosCor: corDosEngajados(turma.total.engajados),
+                aulas: textoDasAulas(turma.aulas),
+                aulasCor: corDasAulas(turma.aulas),
+                presenca: textoDaPresenca(turma.aulas),
+                presencaCor: corDaPresenca(presencaDasAulas(turma.aulas))
+              }))
+          };
+        });
+    }
     let escola = {};
     if (escolhida) {
       const local = escolhida.local,
-        total = contar(local.contas),
-        oficineiros = oficineirosDe(local.id);
-      const anos = alunosPorAno(local.contas);
-      const aulasPorAno = {};
-      aulasDoCiclo
-        .filter(aula => aula.esc === local.id && aula.st !== 'canc')
-        .forEach(aula => {
-          const turma = (aula.reg && aula.reg.turma) || '',
-            ano = aula.g ? String(aula.g.ano) : turma.match(/(\d)º/) ? turma.match(/(\d)º/)[1] : '';
-          if (!ano || ano === '0') return;
-          const doAno = (aulasPorAno[ano] = aulasPorAno[ano] || { realizadas: 0, previstas: 0 });
-          if (!aula.extra) doAno.previstas++;
-          if (aula.st === 'real' || aula.extra) doAno.realizadas++;
-        });
-      const linhasDosAnos = Array.from(new Set(Object.keys(anos).concat(Object.keys(aulasPorAno))))
-        .sort()
+        alunos = local.contas.filter(c => c.perfil === 'A'),
+        total = contar(alunos),
+        anos = alunosPorAno(alunos),
+        aulasDosAnos = aulasPorAnoDe(local),
+        aulasDaEscola = aulasDosAnos ? somarAulas(Object.values(aulasDosAnos)) : null,
+        execucaoDaEscola = execucaoDasAulas(aulasDaEscola),
+        presencaDaEscola = presencaDasAulas(aulasDaEscola);
+      const linhasDosAnos = Array.from(new Set(Object.keys(anos).concat(Object.keys(aulasDosAnos || {}))))
+        .filter(ano => ano !== '0' || (anos[ano] || []).length)
+        .sort((a, b) => Number(a) - Number(b))
         .map(ano => {
           const doAno = contar(anos[ano] || []),
-            aulas = aulasPorAno[ano];
+            aulas = aulasDosAnos ? aulasDosAnos[ano] || AULAS_VAZIAS : null,
+            presenca = presencaDasAulas(aulas);
           let leitura, leituraCor;
           if (!doAno.n) {
-            leitura = 'Atividades sem alunos deste ano na base de acessos — conferir cadastro.';
+            leitura = 'Aulas sem alunos deste ano na base de acessos — conferir cadastro.';
             leituraCor = 'var(--texto-ambar-660)';
-          } else if (aulas && aulas.realizadas && doAno.engajados < 20) {
-            leitura = 'Há atividades, mas o uso não continua fora delas. Reforçar com professores.';
+          } else if (aulas && !aulas.pm) {
+            leitura = 'Sem aulas na agenda dos oficineiros no mês. Combinar a grade deste ano.';
             leituraCor = 'var(--texto-vermelho-600)';
-          } else if (!aulas && doAno.engajados < 20) {
-            leitura = 'Sem atividades dos oficineiros e uso baixo. Sugerir este ano na grade.';
+          } else if (presenca != null && presenca < 50) {
+            leitura = 'Há aulas, mas poucos alunos acessam a máquina nelas. Conferir senhas e presença.';
+            leituraCor = 'var(--texto-vermelho-600)';
+          } else if (aulas && aulas.re && doAno.engajados < 15) {
+            leitura = 'Há aulas, mas o uso não continua fora delas. Reforçar com professores.';
             leituraCor = 'var(--texto-vermelho-600)';
           } else if (parcela(doAno.N, doAno.n) >= 30) {
-            leitura = 'Muitos alunos sem primeiro acesso. Ativação assistida em atividade.';
+            leitura = 'Muitos alunos sem primeiro acesso. Ativação assistida em aula.';
             leituraCor = 'var(--texto-indigo-360)';
-          } else if (doAno.engajados >= 40) {
+          } else if (doAno.engajados >= 30) {
             leitura = 'Uso saudável. Manter.';
             leituraCor = 'var(--texto-verde-700)';
           } else {
@@ -502,19 +1725,33 @@ class Component extends DCLogic {
             leituraCor = 'var(--texto-cinza-750)';
           }
           return {
-            ano: ano + 'º ano',
+            ano: ano === '0' ? 'Ed. infantil' : ano + 'º ano',
             total: numero(doAno.n),
             celulas: FAIXAS.map(faixa => celula(doAno, faixa)),
             engajados: doAno.n ? doAno.engajados + '%' : '—',
             engajadosCor: corDosEngajados(doAno.engajados),
-            aulas: aulas ? aulas.realizadas + ' de ' + aulas.previstas : '—',
+            aulas: textoDasAulas(aulas),
+            aulasCor: corDasAulas(aulas),
+            aulasTitulo: aulas
+              ? numero(aulas.re) +
+                ' realizadas de ' +
+                numero(aulas.pa) +
+                ' previstas até ' +
+                dmyIso(dataDaBase) +
+                ' · ' +
+                numero(aulas.pm) +
+                ' no mês' +
+                (aulas.sem ? ' · ' + plural(aulas.sem, 'turma sem agenda', 'turmas sem agenda') : '')
+              : '',
+            presenca: textoDaPresenca(aulas),
+            presencaCor: corDaPresenca(presenca),
             leitura,
             leituraCor
           };
         });
       const buscaConta = normTxt(memoria.buscaConta);
       const semAcesso = conta => (conta.diasSemAcesso < 0 ? 9999 : conta.diasSemAcesso);
-      const contas = local.contas
+      const contas = alunos
         .filter(
           c =>
             (memoria.temperatura === 'todas' || faixaDe(c.diasSemAcesso) === memoria.temperatura) &&
@@ -522,65 +1759,82 @@ class Component extends DCLogic {
         )
         .sort((a, b) => semAcesso(b) - semAcesso(a));
       const limite = memoria.limite;
-      const referencia = dataDaBase ? dataDe(dataDaBase) : new Date();
-      const execucao = escolhida.execucao,
-        visita = escolhida.visita,
-        prioridade = prioridadeDe(total.engajados, execucao);
-      const doPerfil = perfil => numero(local.contas.filter(c => c.perfil === perfil).length);
+      const visita = escolhida.visita;
+      const historico = historicoPorEscola[local.id] || [];
       escola = {
-        prioridade,
-        prioridadeCor: PRIORIDADES[prioridade][0],
-        prioridadeFundo: PRIORIDADES[prioridade][1],
+        id: local.id,
+        ...pilula(escolhida.semaforo),
+        pontos: String(escolhida.pontos).replace('.', ','),
         temVisita: !!visita,
-        semVisita: !visita,
+        semVisita: !visita && podeAgendar,
         visita,
-        agendar: agendar(local, total, execucao),
+        agendar: agendar(local, escolhida.total, escolhida.execucao),
+        statusAtual: textoDoStatus(historico[0]),
+        motivos: escolhida.motivos,
+        historico: historico.slice(0, 6).map(registro => textoDoHistorico(registro, textoDoStatus)),
+        semHistorico: !historico.length,
         indicadores: [
           {
-            titulo: 'Contas',
+            titulo: 'Alunos',
             valor: numero(total.n),
-            nota: 'A ' + doPerfil('A') + ' · P ' + doPerfil('P') + ' · S ' + doPerfil('S'),
+            nota: aulasDaEscola
+              ? plural(aulasDaEscola.turmas, 'turma', 'turmas') + ' com alunos criados'
+              : plural(Object.keys(anos).length, 'ano com alunos', 'anos com alunos'),
             cor: 'var(--destaque-ciano-880)',
+            valorCor: 'var(--texto-ciano-850)'
+          },
+          {
+            titulo: 'Utilização',
+            valor: total.uso + '%',
+            nota: numero(total.utilizacao) + ' acessaram no mês',
+            cor: 'var(--destaque-azul-500)',
             valorCor: 'var(--texto-ciano-850)'
           },
           {
             titulo: 'Engajados',
             valor: total.engajados + '%',
-            nota: 'quente + morno',
+            nota: numero(total.en) + ' dos implementados',
             cor: corDosEngajados(total.engajados),
             valorCor: corDosEngajados(total.engajados)
           },
           {
-            titulo: 'Frio',
-            valor: parcela(total.F, total.n) + '%',
-            nota: numero(total.F) + ' contas · 11 a 30 dias',
-            cor: 'var(--destaque-azul-500)',
-            valorCor: 'var(--texto-ciano-850)'
-          },
-          {
-            titulo: 'Sem uso',
-            valor: parcela(total.S, total.n) + '%',
-            nota: numero(total.S) + ' contas · +30 dias',
+            titulo: 'Sem uso no mês',
+            valor: parcela(total.sr, total.n) + '%',
+            nota: plural(total.sr, 'implementado', 'implementados'),
             cor: 'var(--destaque-cinza-540)',
             valorCor: 'var(--texto-ciano-850)'
           },
           {
             titulo: 'Nunca acessou',
             valor: parcela(total.N, total.n) + '%',
-            nota: numero(total.N) + ' contas',
+            nota: plural(total.N, 'aluno', 'alunos'),
             cor: 'var(--texto-indigo-360)',
             valorCor: 'var(--texto-ciano-850)'
-          },
-          {
-            titulo: 'Atividades dos oficineiros',
-            valor: execucao == null ? '—' : execucao + '%',
-            nota: oficineiros.length
-              ? plural(oficineiros.length, 'oficineiro', 'oficineiros') + ' · execução no mês'
-              : 'escola sem oficineiro',
-            cor: execucao == null ? 'var(--borda-cinza-160)' : exC(execucao),
-            valorCor: 'var(--texto-ciano-850)'
           }
-        ],
+        ].concat(
+          aulasDaEscola
+            ? [
+                {
+                  titulo: 'Aulas realizadas',
+                  valor: textoDasAulas(aulasDaEscola),
+                  nota:
+                    (execucaoDaEscola == null ? '—' : execucaoDaEscola + '%') +
+                    ' das previstas até hoje · ' +
+                    numero(aulasDaEscola.pm) +
+                    ' no mês',
+                  cor: corDasAulas(aulasDaEscola),
+                  valorCor: 'var(--texto-ciano-850)'
+                },
+                {
+                  titulo: 'Presença na máquina',
+                  valor: presencaDaEscola == null ? '—' : presencaDaEscola + '%',
+                  nota: 'dos alunos nas aulas realizadas',
+                  cor: corDaPresenca(presencaDaEscola),
+                  valorCor: 'var(--texto-ciano-850)'
+                }
+              ]
+            : []
+        ),
         anos: linhasDosAnos,
         semAnos: linhasDosAnos.length === 0,
         contasTexto:
@@ -595,9 +1849,9 @@ class Component extends DCLogic {
           return {
             nome: c.nome,
             perfil: PERFIS[c.perfil],
-            ano: c.ano ? c.ano + 'º ano' : '—',
-            responsavel: c.responsavel || (c.perfil === 'A' ? 'não informado' : '—'),
-            responsavelCor: c.responsavel ? 'var(--texto-cinza-750)' : 'var(--texto-cinza-420)',
+            ano: c.turma || (c.ano ? c.ano + 'º ano' : '—'),
+            responsavel: c.responsavel || 'não informado',
+            responsavelCor: c.responsavel ? 'var(--texto-cinza-750)' : 'var(--texto-cinza-600)',
             ultimoAcesso: c.diasSemAcesso < 0 ? '—' : Base.dmy(ultimoAcesso),
             diasSemAcesso: c.diasSemAcesso < 0 ? '—' : String(c.diasSemAcesso),
             diasDeUso: String(c.diasDeUso),
@@ -609,81 +1863,651 @@ class Component extends DCLogic {
         temMais: contas.length > limite
       };
     }
+    const ranking = [],
+      semPrevistas = [];
+    const vistos = new Set();
+    unidades.forEach(u =>
+      oficineirosDe(u.local.id).forEach(oficineiro => {
+        if (vistos.has(oficineiro.id)) return;
+        vistos.add(oficineiro.id);
+        const escolasDele = unidades.filter(outra => oficineirosDe(outra.local.id).some(o => o.id === oficineiro.id)),
+          idsDele = new Set(escolasDele.map(outra => outra.local.id)),
+          aulasDele = aulasDoCiclo.filter(aula => aula.of === oficineiro.id && idsDele.has(aula.esc)),
+          previstas = aulasDele.filter(aula => !aula.extra && aula.st !== 'canc').length,
+          realizadas = aulasDele.filter(aula => !aula.extra && aula.st === 'real').length,
+          foraDaGrade = aulasDele.filter(aula => aula.extra).length,
+          nome = oficineiro.nome || 'Oficineiro';
+        if (!previstas) {
+          semPrevistas.push(nome);
+          return;
+        }
+        const anosDele = new Set(
+          aulasDele
+            .filter(aula => aula.st !== 'canc')
+            .map(anoDaAula)
+            .filter(Boolean)
+        );
+        let turmas = 0,
+          alunos = [];
+        const aulasDosAnosDele = [];
+        escolasDele.forEach(outra => {
+          const anos = alunosPorAno(outra.local.contas),
+            aulasDosAnos = aulasPorAnoDe(outra.local);
+          Object.keys(anos)
+            .filter(ano => !anosDele.size || anosDele.has(ano))
+            .forEach(ano => {
+              turmas++;
+              if (aulasDosAnos && aulasDosAnos[ano]) aulasDosAnosDele.push(aulasDosAnos[ano]);
+              alunos = alunos.concat(anos[ano]);
+            });
+        });
+        const total = contar(alunos),
+          presencaDele = presencaDasAulas(somarAulas(aulasDosAnosDele));
+        ranking.push({
+          nome,
+          previstas,
+          realizadas,
+          foraDaGrade,
+          execucao: parcela(realizadas, previstas),
+          engajados: total.n ? total.engajados : -1,
+          detalhe:
+            escolasDele.map(outra => outra.local.nome).join(', ') +
+            ' · ' +
+            plural(turmas, 'turma', 'turmas') +
+            ' · ' +
+            plural(total.n, 'aluno', 'alunos') +
+            (total.n ? ' · ' + total.engajados + '% engajados' : '') +
+            (presencaDele != null ? ' · presença na máquina ' + presencaDele + '%' : '')
+        });
+      })
+    );
+    ranking.sort((a, b) => b.execucao - a.execucao || b.engajados - a.engajados || b.previstas - a.previstas);
+    const linhaDoRanking = (item, posicao) => ({
+      posicao,
+      nome: item.nome,
+      detalhe: item.detalhe,
+      execucao: item.execucao + '%',
+      execucaoCor: exC(item.execucao),
+      realizadas:
+        item.realizadas +
+        ' de ' +
+        plural(item.previstas, 'prevista', 'previstas') +
+        (item.foraDaGrade ? ' · +' + item.foraDaGrade + ' fora da grade' : '')
+    });
+    const mais = ranking.slice(0, 5).map((item, i) => linhaDoRanking(item, i + 1));
+    const menos = ranking
+      .slice(Math.max(5, ranking.length - 5))
+      .map((item, i, lista) => linhaDoRanking(item, ranking.length - lista.length + i + 1))
+      .reverse();
+    const tituloDoRanking = (quantos, ponta) =>
+      quantos === 1 ? 'O oficineiro com ' + ponta + ' execução' : 'Os ' + quantos + ' com ' + ponta + ' execução';
+    const rankings = [
+      {
+        titulo: tituloDoRanking(mais.length, 'maior'),
+        nota: 'Atividades realizadas ÷ previstas no ciclo.',
+        linhas: mais
+      }
+    ].concat(
+      menos.length
+        ? [{ titulo: tituloDoRanking(menos.length, 'menor'), nota: 'Do último para cima.', linhas: menos }]
+        : []
+    );
+    const buscaDeUsuario = normTxt(memoria.usuBusca);
+    const listaDeUsuarios = []
+      .concat(
+        ...unidades
+          .filter(u => memoria.usuEscola === 'todas' || String(u.local.id) === memoria.usuEscola)
+          .map(u => contasDe(u.local).map(conta => ({ ...conta, escola: u.local.nome })))
+      )
+      .filter(
+        c =>
+          (memoria.usuEstagio === 'todos' || c.estagio === memoria.usuEstagio) &&
+          (memoria.usuTemperatura === 'todas' || faixaDe(c.diasSemAcesso) === memoria.usuTemperatura) &&
+          (!buscaDeUsuario || normTxt(c.nome).includes(buscaDeUsuario))
+      )
+      .sort((a, b) => a.escola.localeCompare(b.escola, 'pt-BR') || a.nome.localeCompare(b.nome, 'pt-BR'));
+    const ultimoAcessoDe = c =>
+      c.diasSemAcesso < 0 ? '—' : Base.dmy(Base.add(referencia, -Math.max(0, c.diasSemAcesso)));
+    const usuarios = {
+      texto:
+        'Mostrando ' +
+        Math.min(memoria.usuLimite, listaDeUsuarios.length) +
+        ' de ' +
+        numero(listaDeUsuarios.length) +
+        ' no filtro atual',
+      escola: memoria.usuEscola,
+      estagio: memoria.usuEstagio,
+      temperatura: memoria.usuTemperatura,
+      opcoesDeEscola: unidades
+        .slice()
+        .sort((a, b) => a.local.nome.localeCompare(b.local.nome, 'pt-BR'))
+        .map(u => ({ valor: String(u.local.id), rotulo: u.local.nome })),
+      linhas: listaDeUsuarios.slice(0, memoria.usuLimite).map(c => {
+        const faixa = faixaDe(c.diasSemAcesso);
+        return {
+          nome: c.nome,
+          perfil: PERFIS[c.perfil],
+          escola: c.escola,
+          ano: c.turma || (c.ano ? c.ano + 'º ano' : '—'),
+          ultimoAcesso: ultimoAcessoDe(c),
+          diasSemAcesso: c.diasSemAcesso < 0 ? '—' : String(c.diasSemAcesso),
+          diasDeUso: String(c.diasDeUso),
+          estagio: ESTAGIOS[c.estagio][0],
+          estagioCor: ESTAGIOS[c.estagio][1],
+          temperatura: TEMPERATURAS[faixa][0],
+          marcaCor: TEMPERATURAS[faixa][1],
+          cor: COR_DO_TEXTO[faixa]
+        };
+      }),
+      temMais: listaDeUsuarios.length > memoria.usuLimite
+    };
+    const exportarUsuarios = () =>
+      contexto.exportar(
+        'Jornada do Usuário - usuários',
+        'Usuários',
+        [
+          [
+            'Nome',
+            'Perfil',
+            'Escola',
+            'Ano',
+            'Turma',
+            'Responsável pela turma',
+            'Primeiro acesso',
+            'Último acesso',
+            'Dias sem acesso',
+            'Dias de uso',
+            'Estágio',
+            'Temperatura'
+          ]
+        ].concat(
+          listaDeUsuarios.map(c => [
+            c.nome,
+            PERFIS[c.perfil],
+            c.escola,
+            c.ano ? c.ano + 'º ano' : '',
+            c.turma,
+            c.responsavel,
+            c.primeiroAcesso ? dmyIso(c.primeiroAcesso) : '',
+            ultimoAcessoDe(c),
+            c.diasSemAcesso < 0 ? '' : c.diasSemAcesso,
+            c.diasDeUso,
+            ESTAGIOS[c.estagio][0],
+            TEMPERATURAS[faixaDe(c.diasSemAcesso)][0]
+          ])
+        )
+      );
+    const formEscola = memoria.formEscola,
+      formCarteira = memoria.formCarteira;
+    const mudarFormEscola = campo => e =>
+      this.lembrar({ formEscola: { ...memoria.formEscola, [campo]: e.target.value } });
+    const salvarStatusDa = id => () => {
+      if (!formEscola.status || memoria.salvando || !id) return;
+      this.lembrar({ salvando: true });
+      Promise.resolve(
+        jornada.registrarStatusEscola(id, formEscola.status, formEscola.acao, formEscola.passo, formEscola.prazo)
+      ).then(ok => this.lembrar({ salvando: false, ...(ok ? { formEscola: FORM_ESCOLA_VAZIO } : {}) }));
+    };
+    const opcoesDeStatus = Object.keys(STATUS_DA_ESCOLA).map(valor => ({ valor, rotulo: STATUS_DA_ESCOLA[valor] }));
+    const unidadeAberta = todasAsUnidades.find(u => String(u.local.id) === memoria.escolaAberta);
+    let detalhe = {};
+    if (unidadeAberta) {
+      const u = unidadeAberta,
+        local = u.local,
+        total = u.total,
+        historico = historicoPorEscola[local.id] || [];
+      const ultimaVisita = jornada.ultimaVisitaDaEscola ? jornada.ultimaVisitaDaEscola(local.id) : '';
+      detalhe = {
+        aria: 'Detalhe de ' + local.nome,
+        nome: local.nome,
+        ...pilula(u.semaforo),
+        prioridade: String(u.pontos).replace('.', ','),
+        statusAtual: textoDoStatus(u.status),
+        temVisita: !!u.visita,
+        visita: u.visita,
+        podeAgendar: podeAgendar && !u.visita,
+        textoAgendar: textos.agendar,
+        agendar: agendar(local, total, u.execucao),
+        verTurmas: () => this.lembrar({ aba: 'escola', escola: local.nome, limite: 40, formEscola: FORM_ESCOLA_VAZIO }),
+        verUsuarios: () => this.lembrar({ aba: 'usuarios', usuEscola: String(local.id), usuLimite: 100 }),
+        fechar: () => this.lembrar({ escolaAberta: '' }),
+        indicadores: [
+          [
+            'Contas',
+            numero(total.n),
+            plural(u.anosComAlunos, 'ano com alunos', 'anos com alunos'),
+            'var(--destaque-ciano-880)'
+          ],
+          ['Utilização', total.uso + '%', numero(total.utilizacao) + ' acessaram no mês', 'var(--destaque-azul-500)'],
+          [
+            'Engajados',
+            total.engajados + '%',
+            numero(total.en) + ' dos implementados',
+            corDosEngajados(total.engajados)
+          ],
+          [
+            'Sem uso ou nunca',
+            total.risco + '%',
+            numero(total.sr) + ' sem uso no mês · ' + numero(total.nv) + ' nunca',
+            'var(--destaque-cinza-540)'
+          ],
+          [
+            'Aulas realizadas',
+            textoDasAulas(u.aulasDaEscola),
+            u.aulasDaEscola
+              ? (execucaoDasAulas(u.aulasDaEscola) == null ? '—' : execucaoDasAulas(u.aulasDaEscola) + '%') +
+                ' das previstas · presença na máquina ' +
+                textoDaPresenca(u.aulasDaEscola)
+              : 'sem agenda dos oficineiros',
+            corDasAulas(u.aulasDaEscola)
+          ],
+          [
+            'Última visita',
+            ultimaVisita ? dmyIso(ultimaVisita) : '—',
+            ultimaVisita ? 'há ' + plural(u.diasSemVisita, 'dia', 'dias') : 'nenhuma registrada',
+            'var(--texto-ciano-660)'
+          ]
+        ].map(([titulo, valor, nota, cor]) => ({ titulo, valor, nota, cor })),
+        motivos: u.motivos,
+        semMotivos: !u.motivos.length,
+        perfis: ['A', 'P', 'S']
+          .map(codigo => {
+            const doPerfil = contar(local.contas.filter(c => c.perfil === codigo));
+            return doPerfil.n
+              ? {
+                  rotulo: PERFIS[codigo],
+                  total: numero(doPerfil.n),
+                  uso: doPerfil.uso + '%',
+                  engajados: doPerfil.engajados + '%',
+                  engajadosCor: corDosEngajados(doPerfil.engajados),
+                  nunca: parcela(doPerfil.nv, doPerfil.n) + '%'
+                }
+              : null;
+          })
+          .filter(Boolean),
+        podeRegistrar: podeGravar,
+        form: formEscola,
+        opcoesDeStatus,
+        escolherStatus: mudarFormEscola('status'),
+        escolherPrazo: mudarFormEscola('prazo'),
+        escreverAcao: mudarFormEscola('acao'),
+        escreverPasso: mudarFormEscola('passo'),
+        statusIncompleto: !formEscola.status || memoria.salvando,
+        salvarStatus: salvarStatusDa(local.id),
+        historico: historico.slice(0, 6).map(registro => textoDoHistorico(registro, textoDoStatus)),
+        semHistorico: !historico.length
+      };
+    }
+    const visao = VISOES_DA_LISTA[memoria.visaoLista] ? memoria.visaoLista : 'jornada';
+    const mesesDaLista = meses.slice(-6);
+    const faixasDaLinha = u => {
+      if (visao === 'mes')
+        return mesesDaLista.map(data => {
+          const daBase = porMes[data][u.local.id],
+            doMes = daBase ? contarGrupos(gruposDe(daBase)) : null;
+          return {
+            largura: Math.floor(100 / mesesDaLista.length) + '%',
+            altura: doMes && doMes.n ? Math.max(8, doMes.usoDosImplementados) + '%' : '8%',
+            cor: doMes && doMes.n ? 'var(--destaque-azul-500)' : 'var(--fundo-cinza-90)',
+            raio: '2px',
+            titulo:
+              rotuloDoMes(data) +
+              ': ' +
+              (doMes && doMes.n ? 'utilização ' + doMes.usoDosImplementados + '% dos implementados' : 'sem leitura')
+          };
+        });
+      const codigos = visao === 'jornada' ? ORDEM_DOS_ESTAGIOS : FAIXAS;
+      return codigos.map(codigo => {
+        const rotulo = visao === 'jornada' ? ESTAGIOS[codigo][0] : TEMPERATURAS[codigo][0],
+          p = parcela(u.total[codigo], u.total.n);
+        return {
+          largura: p + '%',
+          altura: '100%',
+          cor: visao === 'jornada' ? ESTAGIOS[codigo][1] : TEMPERATURAS[codigo][1],
+          raio: '0',
+          titulo: rotulo + ' ' + p + '%'
+        };
+      });
+    };
+    const ordemDaLista = (a, b) =>
+      memoria.ordemLista === 'base'
+        ? b.total.n - a.total.n
+        : memoria.ordemLista === 'uso'
+          ? a.total.uso - b.total.uso || porPrioridade(a, b)
+          : memoria.ordemLista === 'eng'
+            ? a.total.engajados - b.total.engajados || porPrioridade(a, b)
+            : porPrioridade(a, b);
+    const ordenadasDaLista = unidades.slice().sort(ordemDaLista),
+      visiveis = ordenadasDaLista.slice(0, memoria.limiteLista),
+      agrupada = porCarteira && memoria.agrupada;
+    const linhaDaLista = u => ({
+      ...linha(u),
+      faixas: faixasDaLinha(u),
+      barraClasse: visao === 'mes' ? 'gap-2' : 'raio-4 rolagem-hidden fundo-cinza-90'
+    });
+    const grupos = agrupada
+      ? Array.from(new Set(visiveis.map(u => u.local.carteira || '—')))
+          .sort()
+          .map(carteira => {
+            const dela = visiveis.filter(u => (u.local.carteira || '—') === carteira),
+              total = contar([].concat(...dela.map(u => contasDe(u.local))));
+            return {
+              temTitulo: true,
+              titulo: carteira,
+              numeros:
+                plural(dela.length, 'escola', 'escolas') +
+                ' · utilização ' +
+                total.uso +
+                '% · engajados ' +
+                total.engajados +
+                '%',
+              linhas: dela.map(linhaDaLista)
+            };
+          })
+      : [{ temTitulo: false, titulo: '', numeros: '', linhas: visiveis.map(linhaDaLista) }];
+    const listaDeEscolas = {
+      nota:
+        'Mostrando ' +
+        visiveis.length +
+        ' de ' +
+        numero(ordenadasDaLista.length) +
+        ' · clique na escola para ver o detalhe, os números por perfil e registrar a ação.',
+      visoes: Object.keys(VISOES_DA_LISTA).map(chave => ({
+        rotulo: VISOES_DA_LISTA[chave][0],
+        atual: visao === chave ? 'true' : 'false',
+        escolher: () => this.lembrar({ visaoLista: chave }),
+        ...Base.segmento(visao === chave)
+      })),
+      tituloDaBarra: VISOES_DA_LISTA[visao][1],
+      legenda:
+        visao === 'mes'
+          ? [
+              {
+                rotulo:
+                  'Utilização em ' +
+                  (mesesDaLista.length ? mesesDaLista.map(rotuloDoMes).join(', ') : 'nenhum mês') +
+                  ' (altura da barra, % dos implementados)',
+                cor: 'var(--destaque-azul-500)'
+              }
+            ]
+          : visao === 'jornada'
+            ? ORDEM_DOS_ESTAGIOS.map(codigo => ({ rotulo: ESTAGIOS[codigo][0], cor: ESTAGIOS[codigo][1] }))
+            : FAIXAS.map(faixa => ({ rotulo: TEMPERATURAS[faixa][0], cor: TEMPERATURAS[faixa][1] })),
+      agrupada: !!agrupada,
+      alternarGrupo: () => this.lembrar({ agrupada: !memoria.agrupada }),
+      ordem: memoria.ordemLista,
+      escolherOrdem: e => this.lembrar({ ordemLista: e.target.value }),
+      grupos,
+      temMais: ordenadasDaLista.length > memoria.limiteLista,
+      mostrarMais: () => this.lembrar({ limiteLista: memoria.limiteLista + 100 })
+    };
+    const totaisDoMes = meses.map(data => ({
+      data,
+      total: contarGrupos(
+        [].concat(
+          ...Object.values(porMes[data])
+            .filter(local => noFiltro(local) && (memoria.carteira === 'todos' || local.carteira === memoria.carteira))
+            .map(gruposDe)
+        )
+      )
+    }));
+    const maiorDoMes = Math.max(1, ...totaisDoMes.map(item => item.total.n));
+    const barraDoMes = (valor, cor, rotulo) => ({
+      altura: Math.max(2, Math.round((valor / maiorDoMes) * 100)) + '%',
+      cor,
+      titulo: rotulo + ': ' + numero(valor)
+    });
+    const evolucao = {
+      temMeses: totaisDoMes.length > 0,
+      nota:
+        totaisDoMes.length > 1
+          ? 'Usuários por mês, só nos meses com leitura salva (última leitura de cada mês), na mesma escala. Percentuais sobre os implementados.'
+          : 'A evolução aparece a partir da segunda base mensal carregada; as bases anteriores ficam guardadas.',
+      meses: totaisDoMes.map(({ data, total }) => ({
+        rotulo: rotuloDoMes(data),
+        numeros: 'uso ' + total.usoDosImplementados + '% · eng. ' + total.engajados + '%',
+        barras: [
+          barraDoMes(total.n, 'var(--destaque-ciano-880)', 'Criados'),
+          barraDoMes(total.utilizacao, 'var(--destaque-azul-500)', 'Utilização'),
+          barraDoMes(total.en, 'var(--texto-verde-700)', 'Engajados')
+        ]
+      })),
+      legenda: [
+        { rotulo: 'Criados', cor: 'var(--destaque-ciano-880)' },
+        { rotulo: 'Utilização (acessaram no mês)', cor: 'var(--destaque-azul-500)' },
+        { rotulo: 'Engajados', cor: 'var(--texto-verde-700)' }
+      ]
+    };
+    const opcoesDoFiltroEscola = todosOsLocais
+      .filter(naLotacao)
+      .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+      .map(local => ({ valor: String(local.id), rotulo: local.nome }));
+    const anosComAlunos = Array.from(
+      new Set(
+        [].concat(...todosOsLocais.map(local => local.contas.filter(c => c.perfil === 'A' && c.ano).map(c => c.ano)))
+      )
+    ).sort((a, b) => a - b);
+    const descarte = memoria.descarte;
+    const filtrosPadrao = {
+      carteira: 'todos',
+      perfil: 'todos',
+      lotacao: 'todas',
+      filtroEscola: 'todas',
+      filtroAno: 'todos'
+    };
+    const mudarFormCarteira = campo => e =>
+      this.lembrar({ formCarteira: { ...memoria.formCarteira, [campo]: e.target.value } });
     return {
       carregando: false,
       semBase: false,
       pronto: true,
       dataDaBase: dataDaBase ? dmyIso(dataDaBase) : '—',
-      textos: TEXTOS[this.props.perfil] || TEXTOS.analista,
+      temComparacao: retratos.length > 0 && typeof contexto.trocarComparacao === 'function',
+      comparacao: dataAnterior,
+      opcoesDeComparacao: (dataAnterior ? [] : [{ valor: '', rotulo: 'Sem comparação' }]).concat(
+        retratos.map(r => ({ valor: r.base_ref, rotulo: 'Comparar com ' + dmyIso(r.base_ref) }))
+      ),
+      escolherComparacao: e => contexto.trocarComparacao(e.target.value),
+      temResumoDaComparacao: !!(geralAnterior && geralAnterior.n),
+      resumoDaComparacao:
+        geralAnterior && geralAnterior.n
+          ? 'Em relação a ' +
+            dmyIso(dataAnterior) +
+            ': contas ' +
+            numero(geral.n) +
+            ' (' +
+            variacao(geral.n - geralAnterior.n, '') +
+            ') · utilização ' +
+            geral.uso +
+            '% (' +
+            variacao(geral.uso - geralAnterior.uso, ' p.p.') +
+            ') · engajados ' +
+            geral.engajados +
+            '% (' +
+            variacao(geral.engajados - geralAnterior.engajados, ' p.p.') +
+            ') · nunca acessaram ' +
+            numero(geral.nv) +
+            ' (' +
+            variacao(geral.nv - geralAnterior.nv, '') +
+            ')'
+          : '',
+      textos,
       porCarteira,
       carteira: memoria.carteira,
       opcoesDeCarteira: [{ valor: 'todos', rotulo: 'Toda a rede' }].concat(
         carteiras.map(carteira => ({ valor: carteira, rotulo: carteira }))
       ),
       escolherCarteira: e => this.lembrar({ carteira: e.target.value }),
+      filtroEscola: memoria.filtroEscola,
+      filtroAno: memoria.filtroAno,
+      opcoesDoFiltroEscola,
+      opcoesDoFiltroAno: anosComAlunos.map(ano => ({ valor: String(ano), rotulo: ano + 'º ano' })),
+      escolherFiltroEscola: e => this.lembrar({ filtroEscola: e.target.value, escolaAberta: '', limiteLista: 60 }),
+      escolherFiltroAno: e => this.lembrar({ filtroAno: e.target.value, limiteLista: 60 }),
+      temFiltro: Object.keys(filtrosPadrao).some(chave => memoria[chave] !== filtrosPadrao[chave]),
+      limparFiltros: () => this.lembrar({ ...filtrosPadrao, escolaAberta: '', limiteLista: 60 }),
+      agendaDaSemana,
+      detalhe,
+      listaDeEscolas,
+      evolucao,
+      motivosDeDescarte: Object.keys(MOTIVOS_DE_DESCARTE).map(valor => ({ valor, rotulo: MOTIVOS_DE_DESCARTE[valor] })),
+      descarte: {
+        motivo: descarte.motivo,
+        detalhe: descarte.detalhe,
+        rotuloDoDetalhe: descarte.motivo === 'outro' ? 'Detalhe *' : 'Detalhe (opcional)',
+        incompleto: !descarte.motivo || (descarte.motivo === 'outro' && !descarte.detalhe.trim()) || memoria.salvando
+      },
+      escolherMotivoDoDescarte: e => this.lembrar({ descarte: { ...descarte, motivo: e.target.value } }),
+      escreverDetalheDoDescarte: e => this.lembrar({ descarte: { ...descarte, detalhe: e.target.value } }),
+      confirmarDescarte: () => {
+        if (!descarte.escola || !descarte.motivo || memoria.salvando) return;
+        this.lembrar({ salvando: true });
+        Promise.resolve(jornada.descartarSugestao(descarte.escola, descarte.motivo, descarte.detalhe.trim())).then(ok =>
+          this.lembrar({ salvando: false, ...(ok ? { descarte: DESCARTE_VAZIO } : {}) })
+        );
+      },
       perfil: memoria.perfil,
       lotacao: memoria.lotacao,
       ordem: memoria.ordem,
       temperatura: memoria.temperatura,
       escolaNome: escolhida ? escolhida.local.nome : '',
-      abaAtiva: { geral: memoria.aba === 'geral', mapa: memoria.aba === 'mapa', escola: memoria.aba === 'escola' },
+      abaAtiva: {
+        carteira: memoria.aba === 'carteira',
+        geral: memoria.aba === 'geral',
+        escola: memoria.aba === 'escola',
+        oficineiros: memoria.aba === 'oficineiros',
+        usuarios: memoria.aba === 'usuarios'
+      },
       abas: [
+        ['carteira', textos.aba],
         ['geral', 'Visão geral'],
-        ['mapa', 'Mapa de calor'],
-        ['escola', 'Escola e turmas']
+        ['escola', 'Turmas'],
+        ['oficineiros', 'Oficineiros'],
+        ['usuarios', 'Usuários']
       ].map(([aba, rotulo]) => ({
         rotulo,
+        atual: memoria.aba === aba ? 'true' : 'false',
         escolher: () => this.lembrar({ aba }),
         ...Base.segmento(memoria.aba === aba)
       })),
+      listaDeCarteiras,
+      painelDaCarteira: !!carteiraAberta,
+      podeVoltar: porCarteira && !!carteiraAberta,
+      voltarCarteiras: () => this.lembrar({ carteiraVista: '' }),
+      cartoesDeCarteira,
+      minhaCarteira,
+      podeAvaliar: podeGravar,
+      textoDoBotaoAvaliar: formCarteira.aberto ? 'Cancelar' : 'Registrar avaliação da carteira',
+      alternarAvaliacao: () => this.lembrar({ formCarteira: { ...formCarteira, aberto: !formCarteira.aberto } }),
+      formCarteiraAberto: podeGravar && formCarteira.aberto,
+      formCarteira,
+      escolherAvaliacao: mudarFormCarteira('status'),
+      escreverResumo: mudarFormCarteira('resumo'),
+      salvando: memoria.salvando,
+      salvarAvaliacao: () => {
+        if (memoria.salvando || !carteiraAberta) return;
+        this.lembrar({ salvando: true });
+        Promise.resolve(jornada.registrarStatusCarteira(carteiraAberta, formCarteira.status, formCarteira.resumo)).then(
+          ok => this.lembrar({ salvando: false, ...(ok ? { formCarteira: PADRAO.formCarteira } : {}) })
+        );
+      },
+      sugestoesDeVisita,
+      semSugestoesDeVisita: !sugestoesDeVisita.length,
+      escolasDaCarteira,
       escolherPerfil: e => this.lembrar({ perfil: e.target.value }),
       escolherLotacao: e => this.lembrar({ lotacao: e.target.value }),
       escolherOrdem: e => this.lembrar({ ordem: e.target.value }),
       buscarEscola: e => this.lembrar({ busca: e.target.value }),
-      escolherEscola: e => this.lembrar({ escola: e.target.value, limite: 40 }),
+      escolherEscola: e =>
+        this.lembrar({ escola: e.target.value, anoAberto: '', limite: 40, formEscola: FORM_ESCOLA_VAZIO }),
       buscarConta: e => this.lembrar({ buscaConta: e.target.value, limite: 40 }),
       escolherTemperatura: e => this.lembrar({ temperatura: e.target.value, limite: 40 }),
       mostrarMais: () => this.lembrar({ limite: memoria.limite + 60 }),
-      indicadores: [
-        {
-          titulo: 'Contas criadas',
-          valor: numero(geral.n),
-          nota: plural(unidades.length, 'unidade', 'unidades'),
-          cor: 'var(--destaque-ciano-880)',
-          valorCor: 'var(--texto-ciano-850)'
-        },
-        {
-          titulo: 'Já acessaram',
-          valor: parcela(implementadas, geral.n) + '%',
-          nota: numero(implementadas) + ' contas implementadas',
-          cor: 'var(--texto-ciano-660)',
-          valorCor: 'var(--texto-ciano-850)'
-        }
-      ].concat(
-        FAIXAS.map(faixa => ({
-          titulo: TEMPERATURAS[faixa][0],
-          valor: numero(geral[faixa]),
-          nota: parcela(geral[faixa], geral.n) + '% · ' + TEMPERATURAS[faixa][2],
-          cor: TEMPERATURAS[faixa][1],
-          valorCor: 'var(--texto-ciano-850)'
-        }))
-      ),
-      sugestoes: ordenadas
-        .filter(u => u.prioridade !== 'Baixa' && u.total.n >= 20)
-        .slice(0, 6)
-        .map(linha),
-      semSugestoes: !ordenadas.some(u => u.prioridade !== 'Baixa' && u.total.n >= 20),
+      podeRegistrarStatus: podeGravar && !!escola.id,
+      opcoesDeStatus,
+      formEscola,
+      escolherStatus: mudarFormEscola('status'),
+      escolherPrazo: mudarFormEscola('prazo'),
+      escreverAcao: mudarFormEscola('acao'),
+      escreverPasso: mudarFormEscola('passo'),
+      statusIncompleto: !formEscola.status || memoria.salvando,
+      salvarStatus: salvarStatusDa(escola.id),
+      funil: [
+        ['Criados', 'Usuários com conta criada', geral.n, 'var(--destaque-cinza-300)'],
+        ['Implementados', 'Acessaram pelo menos uma vez', geral.implementados, 'var(--destaque-ciano-400)'],
+        ['Utilização', 'Acessaram pelo menos 1 vez no mês da leitura', geral.utilizacao, 'var(--destaque-ciano-660)'],
+        ['Engajados', 'Atingem a meta do perfil no mês', geral.en, 'var(--destaque-ciano-880)']
+      ].map(([titulo, descricao, valor, cor], i) => {
+        const base = i > 1 ? geral.implementados : geral.n,
+          rotuloDaBase = i > 1 ? ' dos implementados' : ' dos criados';
+        return {
+          titulo: i + 1 + '. ' + titulo,
+          descricao,
+          valor: numero(valor),
+          nota: i
+            ? decimal(valor, base) + rotuloDaBase
+            : 'base do recorte · ' + plural(unidades.length, 'unidade', 'unidades'),
+          largura: parcela(valor, geral.n) + '%',
+          cor,
+          aria: titulo + ': ' + numero(valor) + (i ? ', ' + decimal(valor, base) + rotuloDaBase : '')
+        };
+      }),
+      temperaturas: FAIXAS.map(faixa => ({
+        rotulo: TEMPERATURAS[faixa][0],
+        intervalo: TEMPERATURAS[faixa][2],
+        cor: TEMPERATURAS[faixa][1],
+        largura: parcela(geral[faixa], geral.n) + '%',
+        valor: numero(geral[faixa]),
+        parcela: decimal(geral[faixa], geral.n)
+      })),
+      legendaDosEstagios: ORDEM_DOS_ESTAGIOS.map(codigo => ({ rotulo: ESTAGIOS[codigo][0], cor: ESTAGIOS[codigo][1] })),
+      cartoesPorCarteira,
+      cartoesPorPerfil,
+      estagios: ORDEM_DOS_ESTAGIOS.map(codigo => ({
+        rotulo: ESTAGIOS[codigo][0],
+        cor: ESTAGIOS[codigo][1],
+        largura: parcela(geral[codigo], geral.n) + '%',
+        valor: numero(geral[codigo]),
+        parcela: decimal(geral[codigo], geral.n)
+      })),
+      regras: REGRAS,
       barras,
-      legenda: FAIXAS.map(faixa => ({ rotulo: TEMPERATURAS[faixa][0], cor: TEMPERATURAS[faixa][1] })),
       regua: FAIXAS.map(faixa => ({
         rotulo: TEMPERATURAS[faixa][0],
         intervalo: TEMPERATURAS[faixa][2],
         acao: TEMPERATURAS[faixa][3],
         cor: TEMPERATURAS[faixa][1]
       })),
-      linhas: ordenadas.filter(u => !busca || normTxt(u.local.nome).includes(busca)).map(linha),
-      opcoesDeEscola: porNome.map(u => u.local.nome),
-      escola
+      linhas: ordenadas
+        .filter(u => !busca || normTxt(u.local.nome).includes(busca))
+        .map(u => ({
+          ...u,
+          total: contar(
+            u.local.contas.filter(
+              c => c.perfil === 'A' && (memoria.filtroAno === 'todos' || String(c.ano) === memoria.filtroAno)
+            )
+          )
+        }))
+        .filter(u => u.total.n > 0)
+        .map(linha),
+      opcoesDeEscola: porNome.filter(u => u.local.contas.some(c => c.perfil === 'A')).map(u => u.local.nome),
+      escola,
+      temEscola: !!escolhida,
+      emRede: !escolhida,
+      rede,
+      semAnosNaRede: !rede.anos.length,
+      rankings: ranking.length ? rankings : [],
+      semRanking: !ranking.length,
+      temSemPrevistas: semPrevistas.length > 0 && aulasDoCiclo.length > 0,
+      semPrevistas: 'Sem atividades previstas no ciclo (fora do ranking): ' + semPrevistas.join(', ') + '.',
+      opcoesDeEstagio: ORDEM_DOS_ESTAGIOS.map(valor => ({ valor, rotulo: ESTAGIOS[valor][0] })),
+      usuarios,
+      buscarUsuario: e => this.lembrar({ usuBusca: e.target.value, usuLimite: 100 }),
+      escolherEscolaDoUsuario: e => this.lembrar({ usuEscola: e.target.value, usuLimite: 100 }),
+      escolherEstagio: e => this.lembrar({ usuEstagio: e.target.value, usuLimite: 100 }),
+      escolherTemperaturaDoUsuario: e => this.lembrar({ usuTemperatura: e.target.value, usuLimite: 100 }),
+      mostrarMaisUsuarios: () => this.lembrar({ usuLimite: memoria.usuLimite + 200 }),
+      exportarUsuarios
     };
   }
 }

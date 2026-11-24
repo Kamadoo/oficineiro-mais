@@ -74,7 +74,7 @@ As capturas abaixo usam apenas dados fictícios.
 flowchart LR
     N[Navegador] -->|HTTPS, CSP estrita| S[Site estático<br/>Cloudflare Pages]
     N -->|PostgREST e RPC| B[(PostgreSQL<br/>Supabase)]
-    N -->|login e primeiro acesso| F[Edge Functions<br/>acesso, admin-usuarios]
+    N -->|login e primeiro acesso| F[Edge Functions<br/>acesso, admin-usuarios, convites]
     F --> B
     B --> A[(Auditoria)]
 ```

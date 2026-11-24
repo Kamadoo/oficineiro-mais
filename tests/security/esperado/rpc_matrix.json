@@ -231,6 +231,14 @@
   "gerente": "aceito",
   "oficineiro": "recusado"
  },
+ "carregar_base_acessos(p_base_ref date, p_unidades jsonb, p_pessoas jsonb, p_substituir boolean, p_resumo jsonb)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
  "conferir_aula(p_id bigint, p_confirmar boolean, p_motivo text)": {
   "administrador": "recusado",
   "analista": "recusado",
@@ -271,6 +279,30 @@
   "gerente": "aceito",
   "oficineiro": "recusado"
  },
+ "convites_concluir(p_ator uuid, p_resultados jsonb)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "convites_pendentes()": {
+  "administrador": "aceito",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "convites_reservar(p_ator uuid, p_ids uuid[], p_reenviar boolean)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
  "copiar_semana_grade(p_origem date, p_destinos date[])": {
   "administrador": "recusado",
   "analista": "recusado",
@@ -304,6 +336,14 @@
   "oficineiro": "recusado"
  },
  "definir_raio_escola(p_escola smallint, p_raio smallint)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "descartar_sugestao_visita(p_escola smallint, p_motivo text, p_detalhe text)": {
   "administrador": "recusado",
   "analista": "recusado",
   "coordenador": "recusado",
@@ -422,6 +462,14 @@
   "direcao": "recusado",
   "gerente": "recusado",
   "oficineiro": "recusado"
+ },
+ "jornada_resumo_mensal()": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
  },
  "marcar_presenca(p_tipo text, p_lat double precision, p_lng double precision, p_precisao integer, p_quando timestamp with time zone)": {
   "administrador": "recusado",
@@ -566,6 +614,22 @@
   "direcao": "aceito",
   "gerente": "aceito",
   "oficineiro": "aceito"
+ },
+ "registrar_status_carteira(p_carteira text, p_status text, p_resumo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
+ "registrar_status_escola(p_escola smallint, p_status text, p_acao text, p_proximo_passo text, p_prazo date)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
  },
  "registrar_visita(p jsonb)": {
   "administrador": "recusado",

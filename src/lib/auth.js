@@ -94,8 +94,7 @@ window.FSM_AUTH =
         return 'Código do autenticador inválido ou vencido.';
       if (c === 'same_password' || /different from the old/i.test(m))
         return 'A senha nova precisa ser diferente da atual.';
-      if (c === 'weak_password' || /weak|pwned|leaked/i.test(m))
-        return 'Senha fraca ou já vazada na internet. Escolha outra.';
+      if (c === 'weak_password' || /weak|pwned|leaked/i.test(m)) return 'Senha fraca. Escolha outra.';
       if (c === 'reauthentication_needed' || /reauthenticat/i.test(m))
         return 'Por segurança, entre de novo antes de trocar a senha.';
       if (corpo && corpo.code === '22023' && m) return m.charAt(0).toUpperCase() + m.slice(1) + '.';
@@ -876,7 +875,7 @@ window.FSM_AUTH =
         if (!/^\d{4}-\d{2}-\d{2}$/.test(String(ini)) || !/^\d{4}-\d{2}-\d{2}$/.test(String(fim)))
           return Promise.reject(new Error('Período inválido.'));
         return chamarTudo(
-          '/rest/v1/visitas?select=id,analista_id,escola_id,data,tipo,subtipo,participantes,solucao,observacao,objetivo,engajamento,boas_praticas,dificuldades,ocorrencias,ocorrencia_obs,agenda_id,presenca_id,turma,oficineiro_id,criado_em,editado_em&order=data.desc,id.desc&data=gte.' +
+          '/rest/v1/visitas?select=id,analista_id,escola_id,data,tipo,subtipo,participantes,solucao,observacao,objetivo,engajamento,boas_praticas,dificuldades,ocorrencias,ocorrencia_obs,agenda_id,presenca_id,turma,turmas,oficineiro_id,criado_em,editado_em&order=data.desc,id.desc&data=gte.' +
             ini +
             '&data=lte.' +
             fim,
@@ -985,11 +984,103 @@ window.FSM_AUTH =
           corpo: { p_id: Number(id) }
         });
       },
-      jornadaPessoas() {
+      async jornadaPessoas(datas) {
+        const validas = (Array.isArray(datas) ? datas : []).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(String(d)));
+        const caminho =
+          '/rest/v1/jornada_pessoas?select=escola_id,nome,tipo,ano_escolar,dias_sem_acesso,dias_acesso,responsavel_turma,base_ref,carteira_id,turma,primeiro_acesso,ultimo_acesso';
+        if (!validas.length) return chamarTudo(caminho + '&order=base_ref,escola_id,id', { token: token() });
+        const partes = await Promise.all(
+          validas
+            .slice()
+            .sort()
+            .map(d => chamarTudo(caminho + '&base_ref=eq.' + d + '&order=escola_id,id', { token: token() }))
+        );
+        const falha = partes.find(p => !Array.isArray(p));
+        return falha !== undefined ? falha : [].concat(...partes);
+      },
+      jornadaRetratos() {
         return chamarTudo(
-          '/rest/v1/jornada_pessoas?select=escola_id,nome,tipo,ano_escolar,dias_sem_acesso,dias_acesso,responsavel_turma,base_ref&order=escola_id,id',
+          '/rest/v1/jornada_retratos?select=base_ref,pessoas,origem,autor_nome,carregado_em&order=base_ref.desc',
           { token: token() }
         );
+      },
+      jornadaResumoMensal() {
+        return chamarTudo('/rest/v1/rpc/jornada_resumo_mensal', { metodo: 'POST', token: token(), corpo: {} });
+      },
+      async jornadaBase(comparacao) {
+        const retratos = (await this.jornadaRetratos()) || [];
+        if (!retratos.length) return { acessos: [], retratos: [], comparacao: '', meses: [] };
+        const atual = retratos[0].base_ref;
+        const limite = new Date(Date.parse(atual) - 7 * 86400000).toISOString().slice(0, 10);
+        const escolhida = retratos.some(r => r.base_ref === comparacao && r.base_ref < atual) ? comparacao : '';
+        const anterior = escolhida || (retratos.find(r => r.base_ref <= limite) || {}).base_ref || '';
+        const [acessos, meses] = await Promise.all([
+          this.jornadaPessoas(anterior ? [atual, anterior] : [atual]),
+          this.jornadaResumoMensal().catch(() => [])
+        ]);
+        return { acessos: acessos || [], retratos, comparacao: anterior, meses: meses || [] };
+      },
+      carregarBaseAcessos(baseRef, unidades, pessoas, substituir, resumo) {
+        return chamar('/rest/v1/rpc/carregar_base_acessos', {
+          metodo: 'POST',
+          token: token(),
+          corpo: {
+            p_base_ref: String(baseRef || ''),
+            p_unidades: Array.isArray(unidades) ? unidades : [],
+            p_pessoas: Array.isArray(pessoas) ? pessoas : [],
+            p_substituir: !!substituir,
+            p_resumo: resumo || null
+          }
+        });
+      },
+      jornadaStatusEscolas() {
+        return chamarTudo(
+          '/rest/v1/jornada_escola_status?select=id,escola_id,status,acao,proximo_passo,prazo,autor_nome,criado_em&order=criado_em.desc,id.desc',
+          { token: token() }
+        );
+      },
+      jornadaStatusCarteiras() {
+        return chamarTudo(
+          '/rest/v1/jornada_carteira_status?select=id,carteira_id,status,resumo,autor_nome,criado_em&order=criado_em.desc,id.desc',
+          { token: token() }
+        );
+      },
+      registrarStatusEscola(escola, status, acao, proximoPasso, prazo) {
+        return chamar('/rest/v1/rpc/registrar_status_escola', {
+          metodo: 'POST',
+          token: token(),
+          corpo: {
+            p_escola: Number(escola),
+            p_status: String(status || ''),
+            p_acao: acao ? String(acao) : null,
+            p_proximo_passo: proximoPasso ? String(proximoPasso) : null,
+            p_prazo: prazo || null
+          }
+        });
+      },
+      jornadaDescartes() {
+        return chamarTudo(
+          '/rest/v1/jornada_sugestao_descarte?select=id,escola_id,motivo,detalhe,autor_nome,criado_em&order=criado_em.desc,id.desc',
+          { token: token() }
+        );
+      },
+      descartarSugestaoVisita(escola, motivo, detalhe) {
+        return chamar('/rest/v1/rpc/descartar_sugestao_visita', {
+          metodo: 'POST',
+          token: token(),
+          corpo: {
+            p_escola: Number(escola),
+            p_motivo: String(motivo || ''),
+            p_detalhe: detalhe ? String(detalhe) : null
+          }
+        });
+      },
+      registrarStatusCarteira(carteira, status, resumo) {
+        return chamar('/rest/v1/rpc/registrar_status_carteira', {
+          metodo: 'POST',
+          token: token(),
+          corpo: { p_carteira: String(carteira || ''), p_status: String(status || ''), p_resumo: String(resumo || '') }
+        });
       },
       ordensServico() {
         return chamarTudo(
@@ -1356,6 +1447,16 @@ window.FSM_AUTH =
       },
       feriados() {
         return chamar('/rest/v1/feriados?select=data,nome,tipo&order=data', { token: token() });
+      },
+      convitesPendentes() {
+        return chamar('/rest/v1/rpc/convites_pendentes', { metodo: 'POST', token: token(), corpo: {} });
+      },
+      enviarConvites(ids, reenviar) {
+        return chamar('/functions/v1/convites', {
+          metodo: 'POST',
+          token: token(),
+          corpo: { acao: 'enviar', ids: (ids || []).map(String), reenviar: reenviar === true }
+        });
       },
       adminSalvarConfiguracoes(c) {
         c = c || {};

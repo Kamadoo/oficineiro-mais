@@ -33,7 +33,7 @@ minimum_password_length = 12
 password_requirements = "lower_upper_letters_digits_symbols"
 
 [auth.sessions]
-timebox = "12h"
+timebox = "26h"
 
 [auth.rate_limit]
 email_sent = 10
@@ -73,5 +73,9 @@ enabled = true
 verify_jwt = false
 
 [functions.acesso]
+enabled = true
+verify_jwt = false
+
+[functions.convites]
 enabled = true
 verify_jwt = false

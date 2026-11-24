@@ -97,7 +97,7 @@ window.FSM_ONB = (() => {
     });
     return new TextDecoder().decode(out);
   }
-  async function unzip(buf) {
+  async function unzip(buf, lim) {
     const u = new Uint8Array(buf);
     const dv = new DataView(u.buffer);
     let e = u.length - 22;
@@ -108,7 +108,7 @@ window.FSM_ONB = (() => {
     let off = dv.getUint32(e + 16, true);
     const n = dv.getUint16(e + 10, true);
     const out = {};
-    if (n > LIM.entradas || off >= u.length) falha('estrutura do arquivo fora do esperado.');
+    if (n > lim.entradas || off >= u.length) falha('estrutura do arquivo fora do esperado.');
     for (let i = 0; i < n; i++) {
       if (off + 46 > u.length || dv.getUint32(off, true) !== 0x02014b50)
         falha('estrutura do arquivo fora do esperado.');
@@ -130,20 +130,20 @@ window.FSM_ONB = (() => {
           const data = u.slice(ini, ini + csz);
           let txt;
           if (m === 0) txt = new TextDecoder().decode(data);
-          else if (m === 8) txt = await inflar(data, LIM.descompactado - gasto);
+          else if (m === 8) txt = await inflar(data, lim.descompactado - gasto);
           else falha('compactação não suportada.');
           gasto += txt.length;
-          if (gasto > LIM.descompactado) falha('conteúdo descompactado grande demais.');
+          if (gasto > lim.descompactado) falha('conteúdo descompactado grande demais.');
           return txt;
         };
       })(m, lo, csz);
     }
     return out;
   }
-  async function linhasDaAba(file, escolher, oQue) {
+  async function linhasDaAba(file, escolher, oQue, lim = LIM) {
     if (!file || !/\.xlsx$/i.test(file.name || '')) falha('envie ' + oQue + ' em .xlsx.');
-    if (file.size > LIM.arquivo) falha('o arquivo passa de 5 MB.');
-    const z = await unzip(await file.arrayBuffer());
+    if (file.size > lim.arquivo) falha('o arquivo passa de ' + Math.round(lim.arquivo / 1048576) + ' MB.');
+    const z = await unzip(await file.arrayBuffer(), lim);
     if (!z['xl/workbook.xml'] || !z['xl/_rels/workbook.xml.rels']) falha('não é uma planilha do Excel.');
     const wb = await z['xl/workbook.xml']();
     const sheets = Array.from(wb.matchAll(/<sheet [^>]*name="([^"]+)"[^>]*r:id="([^"]+)"/g)).map(m => [
@@ -170,7 +170,7 @@ window.FSM_ONB = (() => {
     if (!z[path]) falha('aba da planilha não encontrada.');
     const x = await z[path]();
     const linhasXml = Array.from(x.matchAll(/<row[^>]*>([\s\S]*?)<\/row>/g));
-    if (linhasXml.length > LIM.linhas + 50) falha('mais de ' + LIM.linhas + ' linhas.');
+    if (linhasXml.length > lim.linhas + 50) falha('mais de ' + lim.linhas + ' linhas.');
     return linhasXml.map(r => {
       if (r[1].length > 20000) falha('linha da planilha grande demais.');
       const o = {};
@@ -208,6 +208,30 @@ window.FSM_ONB = (() => {
       });
     if (linhas.length > LIM.linhas) falha('mais de ' + LIM.linhas + ' linhas.');
     return { colunas: Object.values(cab).filter(Boolean), linhas };
+  }
+  async function lerTabela(file, opcoes) {
+    const o = opcoes || {};
+    const lim = { ...LIM, ...(o.limites || {}) };
+    const R = await linhasDaAba(
+      file,
+      sheets => (o.aba ? sheets.filter(s => norm(s[0]) === norm(o.aba))[0] : null),
+      'a planilha',
+      lim
+    );
+    const hi = R.findIndex(r => Object.values(r).filter(v => String(v || '').trim()).length >= 2);
+    if (hi < 0) throw new Error('A planilha ' + (file.name || '') + ' está vazia.');
+    const colunas = Object.keys(R[hi])
+      .map(k => [k, String(R[hi][k] || '').trim()])
+      .filter(c => c[1]);
+    const linhas = R.slice(hi + 1)
+      .filter(r => Object.values(r).some(v => String(v || '').trim()))
+      .map(r => {
+        const linha = {};
+        colunas.forEach(([k, nome]) => (linha[nome] = String(r[k] || '').trim()));
+        return linha;
+      });
+    if (linhas.length > lim.linhas) falha('mais de ' + lim.linhas + ' linhas.');
+    return { arquivo: file.name || '', colunas: colunas.map(c => c[1]), linhas };
   }
   async function lerOS(file) {
     const R = await linhasDaAba(
@@ -257,7 +281,9 @@ window.FSM_ONB = (() => {
 
   return {
     matchEscola,
+    norm,
     lerOS,
-    lerPlanilha
+    lerPlanilha,
+    lerTabela
   };
 })();

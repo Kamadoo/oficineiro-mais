@@ -597,6 +597,21 @@ window.FSM_BASE = (() => {
     );
     return { oc, extras, porId };
   }
+  function aulasDaJornada(grade, regs, data, mud, hoje, agora) {
+    if (!data) return [];
+    const inicio = String(data).slice(0, 8) + '01',
+      fim = iso(new Date(Number(String(data).slice(0, 4)), Number(String(data).slice(5, 7)), 0)),
+      doMes = regs.filter(r => r.data >= inicio && r.data <= fim);
+    return agregar(grade, doMes, inicio, fim, mud || [], hoje, agora)
+      .oc.filter(o => o.st !== 'canc' && o.g && o.g.tipo !== 'F' && o.g.ano != null)
+      .map(o => ({
+        esc: o.esc,
+        ano: String(Math.max(0, Number(o.g.ano))),
+        letra: String(o.g.turma || '').toUpperCase(),
+        iso: o.iso,
+        realizada: o.st === 'real'
+      }));
+  }
   const ANOS = [-2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   const TURMAS_PADRAO = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   function anoTxt(a) {
@@ -718,6 +733,7 @@ window.FSM_BASE = (() => {
     normTxt,
     proxUtil,
     agregar,
+    aulasDaJornada,
     ANOS,
     TURMAS_PADRAO,
     anoTxt,

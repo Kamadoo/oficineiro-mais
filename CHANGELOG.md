@@ -1,6 +1,31 @@
 # Histórico de mudanças
 
-## Não publicado
+## Próxima versão
+
+### Jornada do Usuário no mês da leitura
+
+- Todos os percentuais usam o mês da data da leitura (dia 1º ao último dia, 4 semanas), com metas proporcionais aos dias já passados enquanto o mês está em andamento.
+- Utilização passa a ser "acessou pelo menos 1 vez no mês"; "Sem uso no mês" substitui "sem uso há mais de 30 dias"; engajado é o aluno com 1 acesso por semana (4 no mês) e o professor ou servidor com 3 dias por semana (12 no mês), com o % de engajados sobre os implementados.
+- As aulas das turmas vêm da agenda dos oficineiros: aulas previstas no mês, realizadas, execução até a data da leitura e presença na máquina (cada aluno conta no máximo uma vez por aula realizada); turma sem aula lançada aparece como "sem agenda". Substitui o "Aula em 7 dias".
+- Semáforo sem "Base pequena": toda escola é Crítico, Atenção ou Em dia, com a execução das aulas abaixo de 60% levando a Atenção; motivos exibidos na ordem das novas regras.
+- A aba "Escola e turmas" passa a se chamar "Turmas" e mostra só alunos; a evolução mensal mostra a utilização em % dos implementados, só nos meses com leitura salva.
+
+### Base de acessos diária
+
+- Nova aba do Administrador recebe as planilhas do B.I. como vêm (usuários criados, implementados, dias de acesso e sem acesso por 30, 60, 90 e 120 dias), lê e confere tudo no navegador e mostra a prévia com contagens, unidades novas e conferência entre as planilhas antes de gravar.
+- Unidades administrativas sem cadastro entram como unidades da carteira da planilha (AT1), para que ninguém fique de fora; unidades já cadastradas sem carteira recebem a da planilha.
+- O banco guarda só nome, perfil, unidade, carteira, turma, responsável, datas e dias de acesso; o login fica apenas como resumo com chave, e e-mail, matrícula e demais colunas não saem do navegador.
+- Um retrato por dia: a Jornada do Usuário mostra o mais recente, permite escolher o dia de comparação e monta a evolução mensal pelo último retrato de cada mês; a gravação é só do Administrador com verificação em duas etapas e fica na auditoria.
+
+## 2.0.0 · 23/11/2026
+
+Versão oficial de lançamento: o projeto do Supabase passa a ser o de produção.
+
+### Convites de primeiro acesso
+
+- Nova aba do Administrador lista as contas que aguardam o primeiro acesso, com filtros por cargo, escola, carteira, situação do convite, data de criação e busca por nome ou e-mail, e envia por e-mail o convite que apresenta o sistema e pede o primeiro acesso.
+- Seleção uma a uma, das filtradas ou de todas; reenvio só com confirmação; cada envio fica registrado (quem enviou e quando) e na auditoria.
+- A criação de contas, individual ou em lote, continua sem enviar e-mail.
 
 ### Presença
 

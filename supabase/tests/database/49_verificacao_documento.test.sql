@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(8);
+select plan(10);
 
 insert into public.carteiras values ('VD1', 'VD1 - Teste');
 insert into public.escolas (sigla, nome, carteira_id) values ('Evd', 'Evd - Escola Verificação', 'VD1');
@@ -15,6 +15,8 @@ insert into public.relatorios_mensais (oficineiro_id, escola_id, competencia, st
 select ok((select codigo_verificacao ~ '^[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$' from public.relatorios_mensais
             where oficineiro_id = '00000000-0000-0000-0000-0000000005c1'), 'todo relatório recebe um código de verificação');
 select ok(has_function_privilege('anon', 'public.verificar_documento(text)', 'EXECUTE'), 'visitante consulta o código');
+select ok(not (select prosecdef from pg_proc where oid = 'public.verificar_documento(text)'::regprocedure), 'a função publicada não é SECURITY DEFINER');
+select ok((select prosecdef from pg_proc where oid = 'privado.verificar_documento(text)'::regprocedure), 'a consulta protegida fica no schema privado');
 select ok(not has_function_privilege('anon', 'privado.novo_codigo_verificacao()', 'EXECUTE'), 'visitante não gera códigos');
 
 create temp table codigo as

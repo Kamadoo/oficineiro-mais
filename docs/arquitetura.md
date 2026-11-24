@@ -92,8 +92,9 @@ As migrações em `supabase/migrations` são aplicadas em ordem pela CLI do Supa
 | --- | --- |
 | `acesso` | login por usuário e senha, primeiro acesso por CPF ou CNPJ com código enviado por e-mail, troca de senha e encerramento das outras sessões |
 | `admin-usuarios` | cadastro, desativação, reativação e remoção de contas, respeitando o que cada perfil pode administrar |
+| `convites` | envio, só pelo Administrador, do e-mail que apresenta o sistema e pede o primeiro acesso, com registro de cada envio e confirmação para reenviar |
 
-Ambas usam a chave de serviço apenas no servidor, aceitam requisições só da origem configurada em `FSM_ORIGEM_PERMITIDA` e compartilham as rotinas de `supabase/functions/_shared`.
+Todas usam a chave de serviço apenas no servidor, aceitam requisições só da origem configurada em `FSM_ORIGEM_PERMITIDA` e compartilham as rotinas de `supabase/functions/_shared`.
 
 ## Hospedagem
 
