@@ -135,6 +135,7 @@ window.FSM_AUTH =
             : traduz(r.status, corpo);
         const err = new Error(termos(msg));
         err.status = r.status;
+        err.codigo = String((corpo && (corpo.error_code || corpo.code)) || '');
         throw err;
       }
       return corpo;
@@ -1690,7 +1691,11 @@ window.FSM_AUTH =
         const falta = this.regraSenha(nova);
         if (falta.length) throw new Error('A senha precisa ter: ' + falta.join(', ') + '.');
         if (nova !== confirma) throw new Error('As duas senhas não são iguais.');
-        await chamar('/auth/v1/user', { metodo: 'PUT', token: token(), corpo: { password: String(nova) } });
+        try {
+          await chamar('/auth/v1/user', { metodo: 'PUT', token: token(), corpo: { password: String(nova) } });
+        } catch (e) {
+          if (!(e && e.codigo === 'same_password' && this.recuperandoSenha())) throw e;
+        }
         this.encerrarRecuperacao();
       }
     };

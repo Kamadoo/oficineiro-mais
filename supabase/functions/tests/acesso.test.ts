@@ -82,7 +82,7 @@ Deno.test('recuperação envia código para conta ativa sem revelar se o documen
   assertEquals(chamadas('/auth/v1/recover').length, 0);
 });
 
-Deno.test('confirmar recuperação exige senha nova; sem o pedido de recuperação a conta ativa é recusada', async () => {
+Deno.test('confirmar recuperação não altera a marcação de senha; sem o pedido de recuperação a conta ativa é recusada', async () => {
   const ativa = { ...CONTA, primeiro_acesso: false };
   padrao({ conta: ativa });
   const recusada = await atender(pedir({ acao: 'confirmar', cpf: '52998224725', codigo: '123456' }));
@@ -92,10 +92,7 @@ Deno.test('confirmar recuperação exige senha nova; sem o pedido de recuperaç�
   const r = await atender(pedir({ acao: 'confirmar', cpf: '52998224725', codigo: '123456', recuperar: true }));
   assertEquals(r.status, 200);
   assertEquals((chamadas('/auth/v1/verify')[0].corpo as { type: string }).type, 'recovery');
-  const marca = chamadas('/rest/v1/perfis');
-  assertEquals(marca.length, 1);
-  assertEquals(marca[0].corpo, { trocar_senha: true });
-  assertEquals(marca[0].busca.get('id'), 'eq.u1');
+  assertEquals(chamadas('/rest/v1/perfis').length, 0);
   assert((await r.json()).sessao);
 });
 
