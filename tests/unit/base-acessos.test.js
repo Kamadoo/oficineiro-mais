@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { carregar } = require('./carregar');
-const { arquivo } = require('./zip');
+const { arquivo, montar } = require('./zip');
 
 const janela = carregar(['planilha.js', 'onboarding.js', 'base-acessos.js']);
 const Planilha = janela.FSM_PLANILHA;
@@ -186,6 +186,44 @@ test('reconhece cada planilha pelo cabeçalho e ignora o rodapé de filtros', as
     ['dias', 0, 2],
     ['semAcesso', 60, 1]
   ]);
+});
+
+test('lê a planilha exportada pelo BI, com prefixo nos elementos e células sem referência', async () => {
+  const celula = texto => '<x:c t="inlineStr"><x:is><x:t>' + texto + '</x:t></x:is></x:c>';
+  const numero = valor => '<x:c s="1"><x:v>' + valor + '</x:v></x:c>';
+  const bytes = montar({
+    '[Content_Types].xml': '<?xml version="1.0" encoding="utf-8"?><Types/>',
+    'xl/workbook.xml':
+      '<?xml version="1.0" encoding="utf-8"?><x:workbook xmlns:x="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><x:sheets><x:sheet name="Export" sheetId="1" r:id="Rabc" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" /></x:sheets></x:workbook>',
+    'xl/_rels/workbook.xml.rels':
+      '<?xml version="1.0" encoding="utf-8"?><Relationships><Relationship Type="worksheet" Target="/xl/worksheets/sheet1.xml" Id="Rabc" /></Relationships>',
+    'xl/worksheets/sheet1.xml':
+      '<?xml version="1.0" encoding="utf-8"?><x:worksheet xmlns:x="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><x:sheetData>' +
+      '<x:row>' +
+      [
+        'des_cli_dominio_ad',
+        'des_usu_login',
+        'des_usu_nomecompleto',
+        'perfil',
+        'categoria',
+        'local',
+        'turma',
+        'primeira_data_acesso',
+        'ultima_data_acesso'
+      ]
+        .map(celula)
+        .join('') +
+      '</x:row><x:row>' +
+      ['dominio', 'prof.dois', 'Professor Dois', 'Professor', 'CS2', 'E. M. Jardim dos Ipês', 'Em branco']
+        .map(celula)
+        .join('') +
+      numero(serial('2026-01-05')) +
+      numero(serial('2026-09-01')) +
+      '</x:row></x:sheetData></x:worksheet>'
+  });
+  const lidos = await BA.ler([arquivo('Sem_Acesso_60.xlsx', bytes)]);
+  assert.deepEqual(js(lidos.map(l => [l.mapa.tipo, l.mapa.faixa, l.total])), [['semAcesso', 60, 1]]);
+  assert.equal(BA.dataDe(lidos[0].linhas[0][lidos[0].mapa.ultima]), '2026-09-01');
 });
 
 test('converte datas do Excel, texto e ISO', () => {
