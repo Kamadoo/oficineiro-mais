@@ -121,6 +121,22 @@
         class="m-0">{{ cliente.cidade }}</dd><dt class="cor-cinza-600">Coordenador</dt><dd
         class="m-0">Coordenador do núcleo</dd><dt class="cor-cinza-600">Gerente</dt><dd class="m-0">Gerente do projeto</dd></dl>
       <p class="m-0 fs-12 cor-cinza-600 lh-1p45">A pessoa ativa a conta em “Primeiro acesso”, na página de entrada, com o CPF ou CNPJ e o código enviado ao e-mail, e cria a própria senha.</p>
+      <fieldset id="ct-nv-convite" aria-describedby="{{ novaConta.descricaoDoConvite }}"
+        style="border:2px solid var(--destaque-ambar-450)" class="m-0 min-w-0 raio-10 p-12-14 fundo-ambar-55"><legend
+        class="p-0-6 fs-14 fw-700 cor-ambar-745">Enviar o convite de primeiro acesso agora? *</legend><div
+        class="d-flex quebra-wrap gap-8 m-0-0-8"><label
+        class="d-flex alinha-center gap-8 h-40 p-0-14 raio-8 fs-14 fw-600 cor-ciano-850 fundo-branco borda-cinza-160"><input
+        id="ct-nv-convite-sim" type="radio" name="ct-nv-convite" value="sim" checked="{{ novaConta.conviteSim }}"
+        onChange="{{ novaConta.escolherConvite }}" required="" aria-invalid="{{ novaConta.conviteInvalido }}"
+        class="w-18 h-18 m-0 destaque-ciano-660"></input>Sim</label><label
+        class="d-flex alinha-center gap-8 h-40 p-0-14 raio-8 fs-14 fw-600 cor-ciano-850 fundo-branco borda-cinza-160"><input
+        id="ct-nv-convite-nao" type="radio" name="ct-nv-convite" value="nao" checked="{{ novaConta.conviteNao }}"
+        onChange="{{ novaConta.escolherConvite }}" required="" aria-invalid="{{ novaConta.conviteInvalido }}"
+        class="w-18 h-18 m-0 destaque-ciano-660"></input>Não</label></div><span id="ct-nv-convite-dica"
+        class="d-block fs-12 cor-ambar-740 lh-1p45">Sim: o e-mail com o link do Primeiro acesso sai logo depois de criar a
+        conta. Não: a conta é criada sem e-mail, e o convite pode ser enviado depois.</span><sc-if
+        value="{{ novaConta.temErroDoConvite }}" hint-placeholder-val="{{ false }}"><span id="ct-nv-convite-erro"
+        role="alert" class="d-block m-8-0-0 fs-13 fw-600 cor-vermelho-720">{{ novaConta.erroDoConvite }}</span></sc-if></fieldset>
       <sc-if value="{{ temErroNovaConta }}" hint-placeholder-val="{{ false }}"><div role="alert" class="fundo-vermelho-50 cor-vermelho-720 raio-10 p-12-14 fs-13">{{ erroNovaConta }}</div></sc-if>
     </div>
     <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap rodape-gaveta"><button

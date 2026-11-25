@@ -263,7 +263,8 @@ window.FSM_GESTAO_CONTAS = (() => {
         escreverEmail: mudarNova('email'),
         escreverCpf: mudarNova('cpf'),
         escolherEscola: mudarNova('escola'),
-        escolherCarteira: mudarNova('carteira')
+        escolherCarteira: mudarNova('carteira'),
+        ...window.FSM_CONTAS.camposDoConvite.call(this, nova)
       },
       perfisDaNovaConta,
       dicaDePerfil: s.ehAdmin

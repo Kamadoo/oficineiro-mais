@@ -55,8 +55,8 @@ select throws_ok($$ select * from public.convites_pendentes() $$, '42501', null,
 reset role;
 
 set local role service_role;
-select throws_ok($$ select * from public.convites_reservar('00000000-0000-0000-0000-0000000c0c01', array['00000000-0000-0000-0000-0000000c0f01']::uuid[], false) $$,
-                 '42501', null, 'só administrador reserva');
+select is((select resultado from public.convites_reservar('00000000-0000-0000-0000-0000000c0c01', array['00000000-0000-0000-0000-0000000c0f01']::uuid[], false)),
+          'indisponivel', 'coordenador não reserva conta que não criou');
 select throws_ok($$ select * from public.convites_reservar('00000000-0000-0000-0000-0000000c0a02', array['00000000-0000-0000-0000-0000000c0f01']::uuid[], false) $$,
                  '42501', null, 'administrador sem primeiro acesso não reserva');
 select throws_ok($$ select * from public.convites_reservar('00000000-0000-0000-0000-0000000c0a01', (select array_agg(gen_random_uuid()) from generate_series(1, 51)), false) $$,

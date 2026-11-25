@@ -50,19 +50,48 @@ Deno.test('origem, método e login', async () => {
   assertEquals(await erro(await atender(pedir(corpo([A1]), { token: 'x.y.z' }))), [401, 'sessão inválida ou expirada']);
 });
 
-Deno.test('somente o Administrador com MFA envia', async () => {
+Deno.test('administrador, gerente e coordenador com MFA enviam; os demais não', async () => {
   padrao({ acesso: { acesso_ok: false, papel: 'administrador' } });
   assertEquals((await atender(pedir(corpo([A1]), { token: 'a.b.c' }))).status, 403);
-  for (const papel of ['gerente', 'coordenador', 'analista', 'direcao', 'oficineiro']) {
+  for (const papel of ['analista', 'direcao', 'oficineiro']) {
     padrao({ acesso: { acesso_ok: true, papel } });
     assertEquals(await erro(await atender(pedir(corpo([A1]), { token: 'a.b.c' }))), [
       403,
-      'somente o Administrador envia convites',
+      'sem permissão para enviar convites',
     ]);
     assertEquals(pedidos.filter((p) => p.caminho === '/emails/batch' || rpc(p) === 'convites_reservar').length, 0);
   }
   padrao({ acesso: null });
   assertEquals((await atender(pedir(corpo([A1]), { token: 'a.b.c' }))).status, 403);
+});
+
+Deno.test('gerente e coordenador enviam só o primeiro convite de uma conta', async () => {
+  for (const papel of ['gerente', 'coordenador']) {
+    padrao({ acesso: { acesso_ok: true, papel } });
+    for (const pedido of [corpo([A1], true), corpo([A1, A2])]) {
+      assertEquals(await erro(await atender(pedir(pedido, { token: 'a.b.c' }))), [
+        403,
+        'o reenvio e o envio em grupo são feitos pelo Administrador',
+      ]);
+    }
+    assertEquals(pedidos.filter((p) => rpc(p) === 'convites_reservar').length, 0);
+    padrao({
+      acesso: { acesso_ok: true, papel },
+      reservas: [{ usuario_id: A1, convite_id: 21, resultado: 'reservado', nome: 'Ana', email: 'a1@exemplo.test' }],
+    });
+    const r = await atender(pedir(corpo([A1]), { token: 'a.b.c' }));
+    assertEquals((await r.json()).enviados, 1);
+    assertEquals(pedidos.find((p) => rpc(p) === 'convites_reservar')!.corpo, {
+      p_ator: ATOR,
+      p_ids: [A1],
+      p_reenviar: false,
+    });
+    padrao({ acesso: { acesso_ok: true, papel }, erroReserva: '42501' });
+    assertEquals(await erro(await atender(pedir(corpo([A2]), { token: 'a.b.c' }))), [
+      403,
+      'sem permissão para enviar este convite',
+    ]);
+  }
 });
 
 Deno.test('valida o pedido', async () => {
