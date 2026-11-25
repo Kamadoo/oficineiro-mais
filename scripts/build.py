@@ -145,6 +145,7 @@ def construir():
 
     react = pub.arquivo(RAIZ / "vendor" / "react" / "react-18.3.1.production.min.js")
     react_dom = pub.arquivo(RAIZ / "vendor" / "react" / "react-dom-18.3.1.production.min.js")
+    busca = pub.arquivo(SRC / "lib" / "busca.js")
     runtime = pub.arquivo(RAIZ / "vendor" / "dc-runtime" / "dc-runtime.js")
 
     pagina = ENTRADA.read_text(encoding="utf-8")
@@ -157,6 +158,7 @@ def construir():
             "<script>%s</script>" % script_recursos,
             '<script src="%s" integrity="%s"></script>' % (react, REACT_SRI["vendor/react/react-18.3.1.production.min.js"]),
             '<script src="%s" integrity="%s"></script>' % (react_dom, REACT_SRI["vendor/react/react-dom-18.3.1.production.min.js"]),
+            '<script src="%s"></script>' % busca,
             '<script src="%s"></script>' % runtime,
         ]
     )
