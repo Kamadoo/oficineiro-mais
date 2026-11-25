@@ -145,13 +145,15 @@ window.FSM_ONB = (() => {
     if (file.size > lim.arquivo) falha('o arquivo passa de ' + Math.round(lim.arquivo / 1048576) + ' MB.');
     const z = await unzip(await file.arrayBuffer(), lim);
     if (!z['xl/workbook.xml'] || !z['xl/_rels/workbook.xml.rels']) falha('não é uma planilha do Excel.');
-    const wb = await z['xl/workbook.xml']();
-    const sheets = Array.from(wb.matchAll(/<sheet [^>]*name="([^"]+)"[^>]*r:id="([^"]+)"/g)).map(m => [
-      dec(m[1]),
-      m[2]
-    ]);
+    const semPrefixo = s => s.replace(/<(\/?)[A-Za-z_][\w.-]*:(?=[A-Za-z_])/g, '<$1');
+    const ler = async nome => semPrefixo(await z[nome]());
+    const wb = await ler('xl/workbook.xml');
+    const sheets = Array.from(wb.matchAll(/<sheet\b[^>]*>/g))
+      .map(m => [(m[0].match(/\bname="([^"]+)"/) || [])[1], (m[0].match(/\br:id="([^"]+)"/) || [])[1]])
+      .filter(s => s[0] && s[1])
+      .map(s => [dec(s[0]), s[1]]);
     if (!sheets.length) falha('a planilha não tem abas.');
-    const rels = await z['xl/_rels/workbook.xml.rels']();
+    const rels = await ler('xl/_rels/workbook.xml.rels');
     const alvo = escolher(sheets) || sheets[0];
     const tgt =
       (rels.match(new RegExp('Id="' + alvo[1] + '"[^>]*Target="([^"]+)"')) ||
@@ -160,31 +162,37 @@ window.FSM_ONB = (() => {
     const path = 'xl/' + tgt.replace(/^\/?xl\//, '').replace(/^\//, '');
     let ss = [];
     if (z['xl/sharedStrings.xml']) {
-      const t = await z['xl/sharedStrings.xml']();
-      ss = Array.from(t.matchAll(/<si>([\s\S]*?)<\/si>/g)).map(m =>
+      const t = await ler('xl/sharedStrings.xml');
+      ss = Array.from(t.matchAll(/<si\b[^>]*>([\s\S]*?)<\/si>/g)).map(m =>
         Array.from(m[1].matchAll(/<t[^>]*>([^<]*)</g))
           .map(x => x[1])
           .join('')
       );
     }
     if (!z[path]) falha('aba da planilha não encontrada.');
-    const x = await z[path]();
-    const linhasXml = Array.from(x.matchAll(/<row[^>]*>([\s\S]*?)<\/row>/g));
+    const x = await ler(path);
+    const linhasXml = Array.from(x.matchAll(/<row\b[^>]*?(?:\/>|>([\s\S]*?)<\/row>)/g));
     if (linhasXml.length > lim.linhas + 50) falha('mais de ' + lim.linhas + ' linhas.');
+    const numeroDa = letras => letras.split('').reduce((n, l) => n * 26 + l.charCodeAt(0) - 64, 0);
+    const letrasDo = n => (n > 26 ? letrasDo(Math.floor((n - 1) / 26)) : '') + String.fromCharCode(65 + ((n - 1) % 26));
     return linhasXml.map(r => {
-      if (r[1].length > 20000) falha('linha da planilha grande demais.');
+      const conteudo = r[1] || '';
+      if (conteudo.length > 20000) falha('linha da planilha grande demais.');
       const o = {};
-      r[1]
-        .split(/(?=<c\s)/)
-        .map(f => f.match(/^<c r="([A-Z]+)\d+"([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/))
+      let coluna = 0;
+      conteudo
+        .split(/(?=<c[\s>/])/)
+        .map(f => f.match(/^<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/))
         .filter(Boolean)
         .forEach(c => {
-          const ty = (c[2].match(/t="(\w+)"/) || [])[1];
-          const v = (c[3] || '').match(/<v>([^<]*)</);
-          const is = (c[3] || '').match(/<t[^>]*>([^<]*)</);
+          const ref = (c[1].match(/\br="([A-Z]+)\d*"/) || [])[1];
+          coluna = ref ? numeroDa(ref) : coluna + 1;
+          const ty = (c[1].match(/\bt="(\w+)"/) || [])[1];
+          const v = (c[2] || '').match(/<v>([^<]*)</);
+          const is = (c[2] || '').match(/<t[^>]*>([^<]*)</);
           let val = v ? v[1] : is ? is[1] : '';
           if (ty === 's') val = ss[+val];
-          o[c[1]] = dec(val);
+          o[letrasDo(coluna)] = dec(val);
         });
       return o;
     });
