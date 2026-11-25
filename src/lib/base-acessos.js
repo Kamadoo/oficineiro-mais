@@ -147,7 +147,7 @@ window.FSM_BASE_ACESSOS = (() => {
     const aproximada = window.FSM_ONB.matchEscola(local, lista);
     if (aproximada) {
       achada = escolas.find(e => e.sigla === aproximada.sig);
-      if (achada && (!achada.carteira_id || achada.carteira_id === categoria))
+      if (achada && (!categoria || !achada.carteira_id || achada.carteira_id === categoria))
         return { escola: achada, forma: 'aproximada' };
     }
     return null;

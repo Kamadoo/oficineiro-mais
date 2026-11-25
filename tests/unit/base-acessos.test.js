@@ -226,6 +226,20 @@ test('lê a planilha exportada pelo BI, com prefixo nos elementos e células sem
   assert.equal(BA.dataDe(lidos[0].linhas[0][lidos[0].mapa.ultima]), '2026-09-01');
 });
 
+test('unidade com nome aproximado entra na escola quando a categoria da planilha não é carteira do site', async () => {
+  const lidos = await BA.ler([
+    await xlsx('Arlequins_Criados.xlsx', [
+      ['login', 'nome', 'perfil', 'categoria', 'local', 'responsavel_turma'],
+      ['prof.cinco', 'Professor Cinco', 'Professor', 'CS5', 'Centro de Educação Jardim dos Ipês', ''],
+      ['prof.um', 'Professor Um', 'Professor', 'CS1', 'Escola Jardim dos Ipes', '']
+    ])
+  ]);
+  const c = await BA.consolidar(lidos, { escolas: ESCOLAS, carteiras: CARTEIRAS, baseRef: '2026-11-21' });
+  const escolaDe = login => (c.validas.find(l => l.login === login) || { unidade: {} }).unidade.escola;
+  assert.equal((escolaDe('prof.cinco') || {}).id, 2);
+  assert.equal(escolaDe('prof.um'), null);
+});
+
 test('converte datas do Excel, texto e ISO', () => {
   assert.equal(BA.dataDe(String(serial('2026-11-21') + 0.5)), '2026-11-21');
   assert.equal(BA.dataDe('21/11/2026'), '2026-11-21');
