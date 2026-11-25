@@ -2327,7 +2327,8 @@ class Component extends DCLogic {
         escreverEmail: definirNaConta('email'),
         escreverCpf: definirNaConta('cpf'),
         escolherEscola: definirNaConta('escola'),
-        escolherCarteira: definirNaConta('carteira')
+        escolherCarteira: definirNaConta('carteira'),
+        ...Contas.camposDoConvite.call(this, novaConta)
       },
       perfisDaNovaConta: perfisDaNovaConta,
       dicaDePerfil: 'Contas de coordenador e de gerente veem toda a rede. Crie só para quem precisa.',

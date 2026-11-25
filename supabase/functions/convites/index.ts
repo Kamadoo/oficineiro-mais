@@ -22,6 +22,7 @@ const CHAVE_ANON = chave('SUPABASE_PUBLISHABLE_KEYS', 'SUPABASE_ANON_KEY');
 const CHAVE_SERVICO = chave('SUPABASE_SECRET_KEYS', 'SUPABASE_SERVICE_ROLE_KEY');
 const URL_RESEND = 'https://api.resend.com/emails/batch';
 const MAXIMO = 50;
+const PODEM_ENVIAR: string[] = ['administrador', 'gerente', 'coordenador'];
 
 const semSessao = { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } };
 
@@ -85,7 +86,8 @@ Deno.serve(async (req) => {
     const { data: acesso, error: erroAcesso } = await comoUsuario.rpc('meu_acesso');
     if (erroAcesso || !acesso) throw new ErroPublico(403, 'sem permissão');
     if (!acesso.acesso_ok) throw new ErroPublico(403, 'confirme o login com o código do autenticador (MFA)');
-    if (acesso.papel !== 'administrador') throw new ErroPublico(403, 'somente o Administrador envia convites');
+    if (!PODEM_ENVIAR.includes(acesso.papel)) throw new ErroPublico(403, 'sem permissão para enviar convites');
+    const ehAdmin = acesso.papel === 'administrador';
 
     const corpo = await lerJson(req);
     if (corpo.acao !== 'enviar') throw new ErroPublico(400, 'ação desconhecida');
@@ -93,6 +95,9 @@ Deno.serve(async (req) => {
     if (corpo.ids.length > MAXIMO) throw new ErroPublico(400, `envie no máximo ${MAXIMO} convites por vez`);
     const ids = [...new Set(corpo.ids.map((v) => uuid(v, 'ids')))];
     const reenviar = corpo.reenviar === true;
+    if (!ehAdmin && (reenviar || ids.length !== 1)) {
+      throw new ErroPublico(403, 'o reenvio e o envio em grupo são feitos pelo Administrador');
+    }
 
     const chaveResend = Deno.env.get('RESEND_API_KEY') ?? '';
     const remetente = Deno.env.get('FSM_CONVITE_REMETENTE') ?? '';
@@ -108,7 +113,7 @@ Deno.serve(async (req) => {
       p_reenviar: reenviar,
     });
     if (erroReserva) {
-      if (erroReserva.code === '42501') throw new ErroPublico(403, 'somente o Administrador envia convites');
+      if (erroReserva.code === '42501') throw new ErroPublico(403, 'sem permissão para enviar este convite');
       if (erroReserva.code === '22023') throw new ErroPublico(400, erroReserva.message);
       throw new Error('falha ao reservar convites: ' + erroReserva.code);
     }

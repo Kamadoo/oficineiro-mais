@@ -353,6 +353,16 @@ window.FSM_CONTAS = (() => {
       this.setState({ erroConta: erro }, () => this.focar(campo));
       return;
     }
+    if (f.convite !== 'sim' && f.convite !== 'nao') {
+      this.setState(
+        {
+          erroConta: '',
+          novaConta: { ...f, erroDoConvite: 'Escolha Sim ou Não para o convite de primeiro acesso.' }
+        },
+        () => this.focar('ct-nv-convite-sim')
+      );
+      return;
+    }
     this.setState({ salvandoConta: true, erroConta: '' });
     try {
       const novo = await window.FSM_AUTH.cadastrarUsuario({
@@ -373,15 +383,30 @@ window.FSM_CONTAS = (() => {
             semContratada = true;
           }
       }
+      const falhaDoConvite = f.convite === 'sim' && novo && novo.id ? await enviarConviteDaNovaConta(novo.id) : '';
+      const reenvio = this.state.ehAdmin
+        ? 'reenvie pela aba Convites'
+        : 'peça ao Administrador o reenvio pela aba Convites';
+      const avisos = [
+        semContratada ? 'o CNPJ/CPF da contratada não foi salvo; abra a conta e confira o número' : '',
+        falhaDoConvite ? 'o convite não foi enviado (' + falhaDoConvite + '); ' + reenvio : ''
+      ].filter(Boolean);
       this.setState({ salvandoConta: false }, () => {
         this.fecharGavetaDeConta();
-        this.avisar(
-          semContratada
-            ? 'Usuário criado, mas o CNPJ/CPF da contratada não foi salvo · abra a conta e confira o número'
-            : 'Usuário criado · ' +
-                nome +
-                ' ativa a conta em “Primeiro acesso”, com o CPF ou CNPJ e o código enviado ao e-mail'
-        );
+        if (avisos.length) {
+          this.avisar('Usuário criado, mas ' + avisos.join(' · '));
+          if (falhaDoConvite) {
+            clearTimeout(this.temporizadorDoAviso);
+            this.temporizadorDoAviso = setTimeout(() => this.setState({ aviso: '' }), Base.DURACAO_DO_AVISO * 4);
+          }
+        } else
+          this.avisar(
+            f.convite === 'sim'
+              ? 'Usuário criado e convite enviado para ' + email
+              : 'Usuário criado · ' +
+                  nome +
+                  ' ativa a conta em “Primeiro acesso”, com o CPF ou CNPJ e o código enviado ao e-mail'
+          );
         this.contasMudaram();
       });
     } catch (x) {
@@ -529,6 +554,33 @@ window.FSM_CONTAS = (() => {
     };
   }
 
+  function camposDoConvite(nova) {
+    const erro = nova.erroDoConvite || '';
+    const escolher = e =>
+      this.setState({ novaConta: { ...this.state.novaConta, convite: e.target.value, erroDoConvite: '' } });
+    return {
+      conviteSim: nova.convite === 'sim',
+      conviteNao: nova.convite === 'nao',
+      escolherConvite: escolher,
+      conviteInvalido: erro ? 'true' : 'false',
+      temErroDoConvite: !!erro,
+      erroDoConvite: erro,
+      descricaoDoConvite: erro ? 'ct-nv-convite-dica ct-nv-convite-erro' : 'ct-nv-convite-dica'
+    };
+  }
+
+  async function enviarConviteDaNovaConta(id) {
+    try {
+      const r = await window.FSM_AUTH.enviarConvites([id], false);
+      if (r && Number(r.enviados) === 1) return '';
+      if (r && Number(r.ja_enviados) > 0) return 'o convite já tinha sido enviado';
+      if (r && Number(r.em_envio) > 0) return 'outro envio está em andamento';
+      return 'o serviço de e-mail não confirmou o envio';
+    } catch (x) {
+      return Base.msgErro(x, 'o envio falhou');
+    }
+  }
+
   function documentoMascarado(c) {
     const d = String(c || '').replace(/\D/g, '');
     if (d.length === 14) return '**.***.' + d.slice(5, 8) + '/' + d.slice(8, 12) + '-**';
@@ -551,6 +603,7 @@ window.FSM_CONTAS = (() => {
     salvarMudanca,
     cancelarMudanca,
     documentoMascarado,
+    camposDoConvite,
     detalharLote,
     chavesDasGavetas
   };
