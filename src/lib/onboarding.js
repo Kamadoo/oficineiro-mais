@@ -267,6 +267,7 @@ window.FSM_ONB = (() => {
       nome: col(/nome/),
       email: col(/mail/),
       login: col(/login/),
+      cpf: col(/^cpf/),
       mat: col(/matricula/),
       lot: col(/lotacao/),
       cargo: col(/cargo/)
@@ -280,6 +281,7 @@ window.FSM_ONB = (() => {
         nome: r[C.nome].replace(/\s+/g, ' '),
         email: (r[C.email] || '').toLowerCase(),
         login: r[C.login] || '',
+        cpf: (C.cpf && r[C.cpf]) || '',
         matricula: r[C.mat] || '',
         lotacao: (r[C.lot] || '').replace(/\s+/g, ' '),
         cargo: r[C.cargo] || ''
