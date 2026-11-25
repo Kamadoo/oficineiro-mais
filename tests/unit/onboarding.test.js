@@ -101,11 +101,27 @@ test('lê a OS: número, secretaria e colunas pelo cabeçalho', async () => {
       nome: 'Pessoa Um',
       email: 'um@exemplo.test',
       login: 'pum',
+      cpf: '',
       matricula: '123',
       lotacao: 'Ebv - Cei',
       cargo: 'Professor'
     }
   );
+});
+
+test('lê a coluna CPF da OS, separada da coluna LOGIN', async () => {
+  const cpf = '0' + '1'.repeat(10);
+  const f = await xlsx(
+    'OS 021.xlsx',
+    [
+      ['SEQ.', 'NOME DO USUÁRIO', 'E-MAIL', 'LOGIN', 'CPF', 'LOTAÇÃO'],
+      ['1', 'Pessoa Um', 'um@exemplo.test', cpf.slice(1), cpf, 'Ebv']
+    ],
+    'Relação de Usuários-Ativação'
+  );
+  const os = await Onb.lerOS(f);
+  assert.equal(os.rows[0].login, cpf.slice(1));
+  assert.equal(os.rows[0].cpf, cpf);
 });
 
 test('OS sem número no título usa o nome do arquivo e SEMED por padrão', async () => {

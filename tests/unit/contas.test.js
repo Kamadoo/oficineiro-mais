@@ -13,6 +13,28 @@ test('CPF válido e inválido', () => {
   assert.equal(Contas.documentoValido(''), false);
 });
 
+function cpfFicticio(base) {
+  const d = base.split('').map(Number);
+  [9, 10].forEach(n => d.push(((d.reduce((t, x, i) => t + x * (n + 1 - i), 0) * 10) % 11) % 10));
+  return d.join('');
+}
+
+test('documento da planilha recupera o zero à esquerda apagado pelo Excel', () => {
+  const um = cpfFicticio('012345678'),
+    dois = cpfFicticio('001234567');
+  assert.equal(Contas.documentoDaPlanilha(um.slice(1)), um);
+  assert.equal(Contas.documentoDaPlanilha(Number(um)), um);
+  assert.equal(Contas.documentoDaPlanilha(dois.slice(2)), dois);
+  assert.equal(Contas.documentoDaPlanilha('529.982.247-25'), '52998224725');
+  assert.equal(Contas.documentoDaPlanilha('11.222.333/0001-81'), '11222333000181');
+  assert.equal(Contas.documentoDaPlanilha('', um.slice(1)), um);
+  assert.equal(Contas.documentoDaPlanilha('52998224725', um.slice(1)), '52998224725');
+  assert.equal(Contas.documentoDaPlanilha('52998224724', '11144477735'), '11144477735');
+  assert.equal(Contas.documentoDaPlanilha('529.982.247-24', 'pum'), '52998224724');
+  assert.equal(Contas.documentoDaPlanilha('123'), '123');
+  assert.equal(Contas.documentoDaPlanilha('', null), '');
+});
+
 test('CNPJ válido e inválido', () => {
   assert.equal(Contas.documentoValido('11.222.333/0001-81'), true);
   assert.equal(Contas.documentoValido('11.222.333/0001-82'), false);

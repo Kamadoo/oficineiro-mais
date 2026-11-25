@@ -1013,7 +1013,7 @@ class Component extends DCLogic {
           tipo: r.tipo,
           matricula: r.matricula,
           lotacao: r.lotacao,
-          cpf: String(r.login || '').replace(/\D/g, ''),
+          cpf: Contas.documentoDaPlanilha(r.cpf, r.login),
           escola: escola ? String(escola.id) : '',
           cart: escola && escola.cs ? escola.cs : ''
         };

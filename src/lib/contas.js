@@ -149,7 +149,7 @@ window.FSM_CONTAS = (() => {
           email = String(r[C.email] || '')
             .trim()
             .toLowerCase(),
-          cpf = String(r[C.cpf] || '').replace(/\D/g, ''),
+          cpf = documentoDaPlanilha(r[C.cpf]),
           pn = Base.normTxt(r[C.perfil]),
           papel = /oficin/.test(pn)
             ? 'oficineiro'
@@ -300,6 +300,16 @@ window.FSM_CONTAS = (() => {
       return r === 10 ? 0 : r;
     };
     return dv(9) === Number(d[9]) && dv(10) === Number(d[10]);
+  }
+
+  function documentoDaPlanilha(...valores) {
+    const digitos = valores.map(v => String(v == null ? '' : v).replace(/\D/g, '')).filter(Boolean);
+    for (const d of digitos) {
+      if (documentoValido(d)) return d;
+      if (d.length >= 9 && d.length < 11 && documentoValido(d.padStart(11, '0'))) return d.padStart(11, '0');
+      if (d.length >= 12 && d.length < 14 && documentoValido(d.padStart(14, '0'))) return d.padStart(14, '0');
+    }
+    return digitos[0] || '';
   }
 
   async function criarConta() {
@@ -535,6 +545,7 @@ window.FSM_CONTAS = (() => {
     lerLote,
     criarLote,
     documentoValido,
+    documentoDaPlanilha,
     criarConta,
     ativarConta,
     salvarMudanca,
