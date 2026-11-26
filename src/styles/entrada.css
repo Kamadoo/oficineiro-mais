@@ -1013,9 +1013,9 @@ html[data-tema="escuro"] {
 }
 .nov-topo {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  padding: 14px 14px 10px 18px;
+  padding: 12px 14px 12px 18px;
   border-bottom: 1px solid var(--cfg-borda);
 }
 .nov-cab {
@@ -1027,11 +1027,6 @@ html[data-tema="escuro"] {
   font-size: 16px;
   font-weight: 700;
   outline: none;
-}
-.nov-sub {
-  margin: 2px 0 0;
-  font-size: 13px;
-  color: var(--cfg-sec);
 }
 .nov-fechar {
   flex: 0 0 auto;
