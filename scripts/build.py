@@ -16,8 +16,14 @@ DIST = RAIZ / "dist"
 ASSETS = DIST / "a"
 ENTRADA = SRC / "index.dc.html"
 RUNTIME = "../vendor/dc-runtime/dc-runtime.js"
-PAGINAS_PUBLICAS = ("ajuda.html",)
+PAGINAS_PUBLICAS = ("ajuda.html", "privacidade.html", "termos.html")
 MARCA_PRIVADA = pathlib.Path(os.environ["OFICINEIRO_MARCA"]) if os.environ.get("OFICINEIRO_MARCA") else None
+INSTITUCIONAL_PADRAO = {
+    "controlador": "Secretaria Municipal de Educação responsável pela rede municipal atendida",
+    "orgao": "Secretaria Municipal de Educação responsável pela rede municipal atendida",
+    "foro": "comarca da sede do controlador",
+}
+MARCADOR = re.compile(r"\[\[([a-z]+)\]\]")
 
 VENDOR_SHA256 = {
     "vendor/dc-runtime/dc-runtime.js": "3c7416fc787b8e244cbb8b5b9ec1d347237061ad13558875f5ab3a42622421ae",
@@ -176,8 +182,12 @@ def construir():
     for nome in ("favicon.svg", "png/favicon-32.png", "png/favicon-180.png", "png/favicon-192.png", "png/favicon-512.png"):
         shutil.copy2(PUBLIC / "brand" / nome, DIST / "brand" / nome)
     shutil.copy2(PUBLIC / "manifest.webmanifest", DIST / "manifest.webmanifest")
+    institucional = dict(INSTITUCIONAL_PADRAO)
+    privado = MARCA_PRIVADA / "institucional.json" if MARCA_PRIVADA else None
+    if privado and privado.exists():
+        institucional.update(json.loads(privado.read_text(encoding="utf-8")))
     for nome in PAGINAS_PUBLICAS:
-        texto = (PUBLIC / nome).read_text(encoding="utf-8")
+        texto = MARCADOR.sub(lambda m: institucional[m.group(1)], (PUBLIC / nome).read_text(encoding="utf-8"))
         exigir_limpo([("dist/" + nome, texto)])
         (DIST / nome).write_text(texto, encoding="utf-8", newline="\n")
     (DIST / "robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8", newline="\n")

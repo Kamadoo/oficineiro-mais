@@ -34,6 +34,10 @@ O escopo é calculado no banco a partir do perfil do usuário autenticado, nunca
 - Contas removidas têm nome, documento, e-mail e telefone apagados; os registros históricos permanecem anonimizados. Contas desativadas há mais de 30 dias são removidas automaticamente.
 - O build recusa a publicação de qualquer arquivo com CPF válido, e-mail real ou nome de uma base de referência.
 
+## Incidentes
+
+Um incidente que possa causar risco ou dano relevante às pessoas é comunicado ao controlador, que comunica a ANPD e as pessoas afetadas em até 3 dias úteis (Resolução CD/ANPD nº 15/2024). O registro do incidente (o que houve, dados e pessoas atingidas, medidas tomadas) é guardado por 5 anos.
+
 ## Auditoria
 
 Gatilhos em todas as tabelas de negócio registram quem alterou o quê e quando. O registro de atividades acrescenta entradas no sistema, consultas a dados de outras pessoas, exportações, impressões e tentativas de presença recusadas.

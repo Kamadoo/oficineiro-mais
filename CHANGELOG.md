@@ -77,6 +77,7 @@ Versão oficial de lançamento: o projeto do Supabase passa a ser o de produçã
 
 ### Entrada
 
+- Aviso de privacidade completo (controlador e foro preenchidos no build a partir da marca privada) e termos de uso publicados, com links no pé da entrada, em Configurações e no guia rápido; atendimento por `contato@oficineiromais.com.br`.
 - A tela de entrada mostra só o acesso e o primeiro acesso; o guia rápido fica em Configurações.
 - A página declara o idioma português, para leitores de tela.
 - O aviso de privacidade saiu do site até a revisão jurídica preencher os dados do controlador e do encarregado; o rascunho enxuto fica em `public/privacidade.html`.

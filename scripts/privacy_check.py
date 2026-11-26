@@ -8,6 +8,7 @@ import unicodedata
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 REFERENCIA = os.environ.get("OFICINEIRO_DADOS_REAIS")
 DOMINIOS_TESTE = ("exemplo.test", "example.com", "example.org", "w3.org")
+CONTATOS_PUBLICOS = ("contato@oficineiromais.com.br",)
 
 CPF = re.compile(r"(?<![\d.])(\d{3})\.?(\d{3})\.?(\d{3})-?(\d{2})(?![\d])")
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+)")
@@ -76,7 +77,7 @@ def verificar(texto, origem):
         dominio = m.group(1).lower()
         if re.search(r"\.(png|jpe?g|svg|webp|gif|js|css|woff2?)$", dominio) or re.fullmatch(r"\d+(\.\d+)*x?", dominio):
             continue
-        if not dominio.endswith(DOMINIOS_TESTE):
+        if not dominio.endswith(DOMINIOS_TESTE) and m.group(0).lower() not in CONTATOS_PUBLICOS:
             achados.append("%s: e-mail fora dos domínios de teste %s" % (origem, mascarar(m.group(0))))
     if _NOMES:
         base = sem_acento(texto).lower()
