@@ -3,7 +3,7 @@ const http = require('http');
 const path = require('path');
 const { chromium } = require('playwright');
 const { AxeBuilder } = require('@axe-core/playwright');
-const { atender } = require('./postgrest');
+const { atender, esquecerNovidades } = require('./postgrest');
 
 const DIST = path.resolve(__dirname, '..', '..', 'dist');
 const PORTA = Number(process.env.PORTA || 5199);
@@ -88,6 +88,43 @@ async function examinar(pagina, rotulo, falhas, celular) {
     const sobra = await pagina.evaluate(() => globalThis.document.documentElement.scrollWidth - globalThis.innerWidth);
     if (sobra > 1) falhas.push(rotulo + ': rolagem horizontal de ' + sobra + ' px');
   }
+}
+
+async function examinarNovidades(pagina, rotulo, falhas) {
+  const caixa = pagina.locator('#fsm-novidades [role=dialog]');
+  const abriu = await caixa.waitFor({ timeout: 8000 }).then(
+    () => true,
+    () => false
+  );
+  if (!abriu) {
+    falhas.push(rotulo + ': as novidades não apareceram');
+    return;
+  }
+  for (const violacao of await acessibilidade(pagina, '#fsm-novidades'))
+    falhas.push(rotulo + ': acessibilidade ' + violacao);
+  const dentro = await pagina.evaluate(() => !!globalThis.document.activeElement.closest('#fsm-novidades'));
+  if (!dentro) falhas.push(rotulo + ': o foco não foi para as novidades');
+  await pagina.keyboard.press('Tab');
+  await pagina.keyboard.press('Tab');
+  await pagina.keyboard.press('Tab');
+  await pagina.keyboard.press('Tab');
+  const preso = await pagina.evaluate(() => !!globalThis.document.activeElement.closest('#fsm-novidades'));
+  if (!preso) falhas.push(rotulo + ': o foco saiu das novidades');
+  await pagina.keyboard.press('Escape');
+  const fechou = await caixa.waitFor({ state: 'detached', timeout: 3000 }).then(
+    () => true,
+    () => false
+  );
+  if (!fechou) {
+    falhas.push(rotulo + ': Esc não fechou as novidades');
+    return;
+  }
+  await pagina.waitForTimeout(150);
+  const voltou = await pagina.evaluate(() => {
+    const ativo = globalThis.document.activeElement;
+    return !!ativo && ativo !== globalThis.document.body && !!ativo.closest('#area-logada');
+  });
+  if (!voltou) falhas.push(rotulo + ': o foco não voltou para a página ao fechar as novidades');
 }
 
 async function examinarGaveta(pagina, rotulo, falhas) {
@@ -182,8 +219,10 @@ async function varrerPerfil(navegador, usuario, tema, celular) {
   };
   const telas = [];
   let extras = 0;
+  esquecerNovidades(usuario);
   if (!(await abrir()) && !(await abrir())) falhas.push('o menu não apareceu');
   await esperarCarregar(pagina);
+  await examinarNovidades(pagina, (celular ? 'celular · ' : '') + 'novidades', falhas);
   const quantidade = await menu.count();
   try {
     for (let i = 0; i < quantidade; i++) {

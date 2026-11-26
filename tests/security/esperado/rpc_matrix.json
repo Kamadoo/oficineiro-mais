@@ -495,6 +495,14 @@
   "gerente": "aceito",
   "oficineiro": "aceito"
  },
+ "marcar_novidade_vista(p_novidade integer)": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
+  "oficineiro": "aceito"
+ },
  "marcar_presenca(p_tipo text, p_lat double precision, p_lng double precision, p_precisao integer, p_quando timestamp with time zone)": {
   "administrador": "recusado",
   "analista": "recusado",
@@ -565,6 +573,14 @@
   "coordenador": "recusado",
   "direcao": "recusado",
   "gerente": "recusado",
+  "oficineiro": "aceito"
+ },
+ "minha_novidade_vista()": {
+  "administrador": "aceito",
+  "analista": "aceito",
+  "coordenador": "aceito",
+  "direcao": "aceito",
+  "gerente": "aceito",
   "oficineiro": "aceito"
  },
  "minha_presenca_hoje()": {
