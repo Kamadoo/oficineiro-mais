@@ -354,15 +354,19 @@ class Component extends DCLogic {
           ? 'Esta escola ainda não tem localização cadastrada. Peça ao coordenador para cadastrar antes de registrar a presença.'
           : geo.situacao === 'erro'
             ? 'Ative a localização do aparelho para registrar a presença. A presença só pode ser registrada dentro do raio da escola.'
-            : foraDoRaio
-              ? 'Você está a ' +
-                numero(metros) +
-                ' m da escola, fora do raio de ' +
-                numero(escolaDoMapa.raio) +
-                ' m. Aproxime-se da escola para ' +
-                (presencaAberta ? 'encerrar' : 'registrar') +
-                ' a presença.'
-              : '';
+            : foraDoRaio && geo.precisao > Math.max(escolaDoMapa.raio, 100)
+              ? 'A localização do aparelho está aproximada (precisão de ' +
+                numero(geo.precisao) +
+                ' m) e não permite conferir o raio da escola. Ative a localização precisa (GPS) do aparelho e tente de novo perto de uma janela ou ao ar livre.'
+              : foraDoRaio
+                ? 'Você está a ' +
+                  numero(metros) +
+                  ' m da escola, fora do raio de ' +
+                  numero(escolaDoMapa.raio) +
+                  ' m. Aproxime-se da escola para ' +
+                  (presencaAberta ? 'encerrar' : 'registrar') +
+                  ' a presença.'
+                : '';
     const linhaDoGps =
       geo.situacao === 'ok'
         ? escolaDoMapa
