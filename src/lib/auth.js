@@ -1630,6 +1630,17 @@ window.FSM_AUTH =
           corpo: { p_preferencias: corpo }
         });
       },
+      async novidadeVista() {
+        const r = await chamar('/rest/v1/rpc/minha_novidade_vista', { metodo: 'POST', token: token(), corpo: {} });
+        return Number(r) || 0;
+      },
+      marcarNovidadeVista(id) {
+        return chamar('/rest/v1/rpc/marcar_novidade_vista', {
+          metodo: 'POST',
+          token: token(),
+          corpo: { p_novidade: id }
+        });
+      },
       async trocarSenhaAtual(atual, nova, confirma) {
         if (!atual) throw new Error('Digite a senha atual.');
         const falta = this.regraSenha(nova);

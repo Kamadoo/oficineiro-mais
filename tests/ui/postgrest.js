@@ -240,4 +240,12 @@ function atender(metodo, endereco, cabecalhos, texto) {
   }
 }
 
-module.exports = { atender };
+function esquecerNovidades(usuario) {
+  const r = consultar(
+    `update privado.conta_extras set novidade_vista = null where usuario_id = ${literal(usuario)}; select 'null'::json`,
+    null
+  );
+  if (r.erro) throw new Error(r.erro.message);
+}
+
+module.exports = { atender, esquecerNovidades };

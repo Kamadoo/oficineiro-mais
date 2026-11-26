@@ -2,6 +2,12 @@
 
 ## Próxima versão
 
+### Novidades por perfil
+
+- Ao entrar, cada pessoa vê uma vez um aviso com as melhorias recentes que valem para o seu perfil; quem está acima na hierarquia vê também as dos perfis abaixo (Gerente, Coordenador, Analista e Oficineiro; Direção abaixo do Gerente e do Coordenador; Administrador vê todas).
+- O aviso fecha pelo X, pelo botão Entendi, pela tecla Esc ou com um clique fora dele, e a última novidade vista fica guardada na conta, valendo em qualquer aparelho.
+- As novidades ficam em `src/lib/novidades.js`, com número, data, perfis e texto.
+
 ### Jornada igual ao mockup (retorno de 24/11)
 
 - Data da leitura passa a ser o último acesso registrado na base, como diz o documento (antes era a data da carga); com a base de 21/11/2026, os estágios batem com o mockup: 631 engajados, 2.341 em evolução, 148 baixo uso, 1.419 sem uso no mês e 969 não implementados.

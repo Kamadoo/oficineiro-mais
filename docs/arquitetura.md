@@ -38,6 +38,7 @@ As bibliotecas são scripts clássicos que publicam um objeto global (`window.FS
 | `lib/gestao-contas.js` | valores e chaves da Gestão de Contas do Coordenador e do Administrador |
 | `lib/mapa.js` | carregamento do Leaflet sob demanda |
 | `lib/sobre.js` | versão, data de geração e contato de suporte exibidos em Configurações |
+| `lib/novidades.js` | lista de novidades por perfil (número, data, perfis e texto) e o filtro pela hierarquia, mostrada uma vez ao entrar |
 
 ### Estilo
 
