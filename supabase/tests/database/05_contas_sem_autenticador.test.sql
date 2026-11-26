@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(9);
+select plan(13);
 
 insert into public.carteiras values ('CS1', 'CS1 - Teste');
 insert into public.escolas (sigla, nome, carteira_id) values ('Aaa', 'Aaa - Escola Teste', 'CS1');
@@ -10,7 +10,7 @@ insert into auth.users (id, email, encrypted_password) values
 insert into public.perfis (id, nome, papel, usuario, trocar_senha, sem_mfa) values
   ('00000000-0000-0000-0000-0000000000e1', 'Gerente Visual', 'gerente', 'gerente.visual', false, true),
   ('00000000-0000-0000-0000-0000000000e2', 'Gerente Normal', 'gerente', 'gerente.normal', false, false);
-delete from vault.secrets where name = 'fsm_ambiente_teste';
+delete from vault.secrets where name in ('fsm_ambiente_teste', 'fsm_demonstracao');
 
 create function pg_temp.como(p_uid text, p_aal text default 'aal2') returns void language sql as $$
   select set_config('request.jwt.claims', json_build_object('sub', p_uid, 'role', 'authenticated', 'aal', p_aal)::text, true);
@@ -23,6 +23,21 @@ select is((select count(*)::int from public.escolas), 0, 'fora do projeto de tes
 select is((public.meu_acesso() ->> 'precisa_mfa')::boolean, true, 'fora do projeto de teste, o site pede o autenticador');
 reset role;
 
+select vault.create_secret('sim', 'fsm_demonstracao', 'demonstração');
+
+select pg_temp.como('00000000-0000-0000-0000-0000000000e1', 'aal1');
+set local role authenticated;
+select is((select count(*)::int from public.escolas), 1, 'com a marca de demonstração, a conta marcada entra sem o autenticador');
+select is((public.meu_acesso() ->> 'precisa_mfa')::boolean, false, 'com a marca de demonstração, o site não pede o autenticador à conta marcada');
+reset role;
+
+select pg_temp.como('00000000-0000-0000-0000-0000000000e2', 'aal1');
+set local role authenticated;
+select is((select count(*)::int from public.escolas), 0, 'com a marca de demonstração, conta sem a marcação continua exigindo o autenticador');
+select is((public.meu_acesso() ->> 'precisa_mfa')::boolean, true, 'com a marca de demonstração, o site continua pedindo o autenticador às outras contas');
+reset role;
+
+delete from vault.secrets where name = 'fsm_demonstracao';
 select vault.create_secret('sim', 'fsm_ambiente_teste', 'teste');
 
 select pg_temp.como('00000000-0000-0000-0000-0000000000e1', 'aal1');
