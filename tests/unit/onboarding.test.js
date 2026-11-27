@@ -167,3 +167,32 @@ test('planilha vazia é recusada', async () => {
   const f = await xlsx('lote.xlsx', [['só uma coluna'], ['outra']]);
   await assert.rejects(Onb.lerPlanilha(f), /vazia/);
 });
+
+test('linha de aluno é reconhecida pelo cargo ou pelo tipo', () => {
+  assert.equal(Onb.ehAluno({ cargo: 'Aluno' }), true);
+  assert.equal(Onb.ehAluno({ cargo: 'ALUNA' }), true);
+  assert.equal(Onb.ehAluno({ tipo: 'Estudante' }), true);
+  assert.equal(Onb.ehAluno({ cargo: 'Professor' }), false);
+  assert.equal(Onb.ehAluno({ cargo: 'Alunado' }), false);
+});
+
+test('OS de alunos é lida pelo cabeçalho NOME DO ALUNO, sem CPF e com a escola como lotação', async () => {
+  const f = await xlsx(
+    'OS 021 ANEXO ALUNO.xlsx',
+    [
+      ['ORDEM DE SERVIÇO SEMED Nº 021'],
+      ['ALUNOS PARA ATIVAÇÃO'],
+      ['SEQ.', 'TIPO', 'LOGIN', 'NOME DO ALUNO', 'MATRÍCULA', 'ESCOLA', 'ANO/SÉRIE', 'TURMA', 'E-MAIL'],
+      ['1', 'Tipo 1', 'a1', 'Aluno Ficticio', '555', 'Ecl', '5º ano', 'A', 'a1@exemplo.test']
+    ],
+    'Relação de Alunos-Ativação'
+  );
+  const os = await Onb.lerOS(f);
+  assert.equal(os.num, '21');
+  assert.equal(os.rows.length, 1);
+  assert.equal(os.rows[0].cpf, '');
+  assert.equal(os.rows[0].lotacao, 'Ecl');
+  assert.equal(os.rows[0].matricula, '555');
+  assert.equal(os.rows[0].cargo, 'Aluno · 5º ano · Turma A');
+  assert.equal(Onb.ehAluno(os.rows[0]), true);
+});

@@ -49,7 +49,7 @@
           </sc-for>
         </div></div>
         <div class="d-flex quebra-wrap gap-10 justifica-flex-end alinha-center"><span
-          class="fs-12 cor-cinza-600 mr-auto">Usuários já importados em outra OS (mesmo CPF ou CNPJ) são ignorados pelo banco. Os analistas recebem a pendência na tela deles.</span><button
+          class="fs-12 cor-cinza-600 mr-auto">Usuários já importados em outra OS (mesmo CPF ou CNPJ; alunos sem CPF, mesmo e-mail ou matrícula) são ignorados pelo banco. Alunos podem vir sem CPF. Os analistas recebem a pendência na tela deles.</span><button
           onClick="{{ cancelarPrevia }}"
           class="h-40 borda-cinza-160 fundo-branco raio-8 p-0-16 fs-14 fw-600 botao-secundario">Cancelar</button><button
           style="background:var(--destaque-ciano-660)" onClick="{{ importar }}" disabled="{{ salvando }}"
@@ -160,7 +160,7 @@ class Component extends DCLogic {
     const pRows = P
       ? P.rows.map((p, i) => {
           const upd = ch => contexto.mudarLinhaDaPrevia(i, ch);
-          const cpfOk = documentoValido(p.cpf);
+          const cpfOk = p.aluno || documentoValido(p.cpf);
           return {
             numero: p.seq,
             nome: p.nome,
@@ -198,7 +198,7 @@ class Component extends DCLogic {
           };
         })
       : [];
-    const validas = P ? P.rows.filter(p => documentoValido(p.cpf)) : [];
+    const validas = P ? P.rows.filter(p => p.aluno || documentoValido(p.cpf)) : [];
     return {
       indicadores: [
         {
