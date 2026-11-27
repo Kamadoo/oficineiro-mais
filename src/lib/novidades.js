@@ -155,6 +155,13 @@ window.FSM_NOVIDADES =
         perfis: ['gerente', 'coordenador', 'administrador'],
         texto:
           'Ao criar uma conta, você escolhe se o convite de primeiro acesso já sai por e-mail; a escolha é obrigatória.'
+      },
+      {
+        id: 25,
+        data: '2026-11-27',
+        perfis: ['gerente'],
+        texto:
+          'No onboarding, as linhas de alunos da OS são importadas mesmo sem CPF; os demais cargos continuam exigindo CPF.'
       }
     ];
 

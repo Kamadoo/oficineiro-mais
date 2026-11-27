@@ -289,7 +289,12 @@ window.FSM_ONB = (() => {
     return { num, sec: sec.toUpperCase(), arquivo: file.name, rows };
   }
 
+  function ehAluno(linha) {
+    return /\b(alun[oa]s?|estudantes?)\b/.test(norm((linha.cargo || '') + ' ' + (linha.tipo || '')));
+  }
+
   return {
+    ehAluno,
     matchEscola,
     norm,
     lerOS,

@@ -167,3 +167,11 @@ test('planilha vazia é recusada', async () => {
   const f = await xlsx('lote.xlsx', [['só uma coluna'], ['outra']]);
   await assert.rejects(Onb.lerPlanilha(f), /vazia/);
 });
+
+test('linha de aluno é reconhecida pelo cargo ou pelo tipo', () => {
+  assert.equal(Onb.ehAluno({ cargo: 'Aluno' }), true);
+  assert.equal(Onb.ehAluno({ cargo: 'ALUNA' }), true);
+  assert.equal(Onb.ehAluno({ tipo: 'Estudante' }), true);
+  assert.equal(Onb.ehAluno({ cargo: 'Professor' }), false);
+  assert.equal(Onb.ehAluno({ cargo: 'Alunado' }), false);
+});

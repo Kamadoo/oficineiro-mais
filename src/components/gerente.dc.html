@@ -1003,7 +1003,9 @@ class Component extends DCLogic {
         .map(x => ({ sig: x.sigla, n: x.nome, cs: x.carteira_id, id: x.id }));
       const rows = os.rows.map((r, i) => {
         const m = window.FSM_ONB.matchEscola(r.lotacao, lista),
-          escola = m ? lista.find(x => x.sig === m.sig) : null;
+          escola = m ? lista.find(x => x.sig === m.sig) : null,
+          aluno = window.FSM_ONB.ehAluno(r),
+          cpf = Contas.documentoDaPlanilha(r.cpf, r.login);
         return {
           k: i,
           seq: r.seq || String(i + 1),
@@ -1013,7 +1015,8 @@ class Component extends DCLogic {
           tipo: r.tipo,
           matricula: r.matricula,
           lotacao: r.lotacao,
-          cpf: Contas.documentoDaPlanilha(r.cpf, r.login),
+          cpf: aluno && !documentoValido(cpf) ? '' : cpf,
+          aluno,
           escola: escola ? String(escola.id) : '',
           cart: escola && escola.cs ? escola.cs : ''
         };
@@ -1033,9 +1036,9 @@ class Component extends DCLogic {
   async importarOrdemDeServico() {
     const P = this.state.previaDaOs;
     if (!P || this.state.salvando) return;
-    const validas = P.rows.filter(r => documentoValido(r.cpf));
+    const validas = P.rows.filter(r => r.aluno || documentoValido(r.cpf));
     if (!validas.length) {
-      this.setState({ erroOnboarding: 'Nenhuma linha com CPF ou CNPJ válido nesta OS.' });
+      this.setState({ erroOnboarding: 'Nenhuma linha com CPF ou CNPJ válido nesta OS (alunos podem vir sem CPF).' });
       return;
     }
     const escPorId = Object.fromEntries(this.state.escolas.map(x => [String(x.id), x]));
