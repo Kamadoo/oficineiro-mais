@@ -125,6 +125,7 @@
 </sc-if>
 
 <dc-import name="analista-gavetas" gavetas="{{ gavetasDoPerfil }}"></dc-import>
+<dc-import name="analista-presenca-ajuda" ajuda="{{ ajudaPresenca }}"></dc-import>
 
 <sc-if value="{{ visita.aberta }}" hint-placeholder-val="{{ false }}">
   <div onClick="{{ fecharVisita }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
@@ -363,10 +364,19 @@ class Component extends DCLogic {
     erroNovaVisita: '',
     visitaAberta: null,
     baixa: null,
-    erroBaixa: ''
+    erroBaixa: '',
+    ajudaPresenca: null
   };
   memoria = {
-    inicio: { geo: { situacao: 'buscando' }, mapa: '', escola: '', observacao: '' },
+    inicio: {
+      geo: { situacao: 'buscando' },
+      mapa: '',
+      escola: '',
+      observacao: '',
+      confirmarFim: false,
+      teste: null,
+      tentarDeNovo: false
+    },
     agenda: { semana: 0 },
     visitas: { aba: 'registrar', registro: registroVazio(), erro: '', focar: '', mes: '', escola: '' },
     carteira: { periodo: '', escola: '', solucao: '', tipo: '' },
@@ -377,6 +387,7 @@ class Component extends DCLogic {
       if (e.key !== 'Escape') return;
       const s = this.state;
       if (s.notifAberto) return this.setState({ notifAberto: false });
+      if (s.ajudaPresenca) return this.fecharAjuda();
       if (s.baixa) return this.fecharBaixa();
       if (s.novaVisita) return this.fecharNovaVisita();
       if (s.visitaDaAgenda) return this.fecharVisitaDaAgenda();
@@ -402,7 +413,7 @@ class Component extends DCLogic {
     return A && A.usuarioId ? A.usuarioId() : '';
   }
   temGaveta(s) {
-    return !!(s.visitaDaAgenda || s.novaVisita || s.visitaAberta || s.baixa);
+    return !!(s.visitaDaAgenda || s.novaVisita || s.visitaAberta || s.baixa || s.ajudaPresenca);
   }
   travarFundo(travar) {
     document.querySelectorAll('.estrutura').forEach(el => {
@@ -853,6 +864,52 @@ class Component extends DCLogic {
   abrirVisitaDaAgenda(id) {
     this.abrirGaveta({ visitaDaAgenda: id, alteracao: SEM_ALTERACAO, erroAgenda: '' }, 'ag-titulo');
   }
+  abrirAjuda(situacao, modo) {
+    this.abrirGaveta({ ajudaPresenca: { situacao, modo: modo || 'passos' } }, 'aj-titulo');
+  }
+  fecharAjuda() {
+    this.fecharGaveta({ ajudaPresenca: null });
+  }
+  registrarRecusa(detalhes) {
+    const A = window.FSM_AUTH;
+    if (A && A.registrarAtividade) A.registrarAtividade('PRESENCA_RECUSADA', detalhes);
+  }
+  valoresDaAjuda() {
+    const ajuda = this.state.ajudaPresenca,
+      P = window.FSM_PRESENCA_AJUDA;
+    if (!ajuda || !P) return { aberta: false };
+    const tipo = P.aparelho(navigator),
+      celular = ajuda.modo === 'celular',
+      endereco = window.location.origin + window.location.pathname,
+      digitavel = window.location.host + window.location.pathname.replace(/\/(index\.html)?$/, ''),
+      desenho = celular && window.FSM_QR ? window.FSM_QR.desenho(endereco) : null;
+    const passos = celular
+      ? [
+          'Aponte a câmera do celular para o código ou digite ' + digitavel + ' no navegador do celular.',
+          'Se usou a câmera, toque no endereço que aparecer na tela.',
+          'Entre com o seu e-mail e a sua senha.',
+          'Em Início, escolha a escola e toque em "Iniciar atividades na escola".'
+        ]
+      : P.passos(tipo, ajuda.situacao);
+    return {
+      aberta: true,
+      titulo: celular ? 'Usar o celular' : P.titulo(ajuda.situacao),
+      subtitulo: celular ? 'Presença na escola' : 'Passo a passo · ' + P.nome(tipo),
+      passos: passos.map((texto, i) => ({ numero: String(i + 1), texto })),
+      mostrarQr: !!desenho,
+      qrCaixa: desenho ? '0 0 ' + desenho.tamanho + ' ' + desenho.tamanho : '0 0 1 1',
+      qrCaminho: desenho ? desenho.caminho : '',
+      endereco: endereco.replace(/^https?:\/\//, '').replace(/\/$/, ''),
+      podeUsarCelular: !celular && ajuda.situacao === 'aproximada' && !P.temGps(tipo),
+      podeTentar: !celular,
+      usarCelular: () => this.setState({ ajudaPresenca: { ...ajuda, modo: 'celular' } }, () => focar('aj-titulo')),
+      tentarDeNovo: () => {
+        this.memoria.inicio.tentarDeNovo = true;
+        this.fecharAjuda();
+      },
+      fechar: () => this.fecharAjuda()
+    };
+  }
   fecharVisitaDaAgenda() {
     if (this.state.salvando) return;
     this.fecharGaveta({ visitaDaAgenda: null, alteracao: SEM_ALTERACAO, erroAgenda: '' });
@@ -1277,6 +1334,9 @@ class Component extends DCLogic {
       turmasDaVisita,
       irPara: (tela, memoria) => this.irPara(tela, memoria),
       alternarPresenca: (visitaDaAgenda, comPosicao) => this.alternarPresenca(visitaDaAgenda, comPosicao),
+      abrirAjudaPresenca: (situacao, modo) => this.abrirAjuda(situacao, modo),
+      registrarRecusa: detalhes => this.registrarRecusa(detalhes),
+      avisar: texto => this.avisar(texto),
       abrirRegistro: origem => this.abrirRegistro(origem),
       enviarRegistro: () => this.enviarRegistro(),
       abrirVisitaDaAgenda: id => this.abrirVisitaDaAgenda(id),
@@ -1740,6 +1800,7 @@ class Component extends DCLogic {
       erroAgenda: s.erroAgenda,
       temErroAgenda: !!s.erroAgenda,
       fecharVisitaDaAgenda: () => this.fecharVisitaDaAgenda(),
+      ajudaPresenca: this.valoresDaAjuda(),
       novaVisitaAberta: !!s.novaVisita,
       ...this.novaVisitaDetalhada(),
       erroNovaVisita: s.erroNovaVisita,

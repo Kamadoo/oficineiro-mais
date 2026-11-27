@@ -155,6 +155,20 @@ window.FSM_NOVIDADES =
         perfis: ['gerente', 'coordenador', 'administrador'],
         texto:
           'Ao criar uma conta, você escolhe se o convite de primeiro acesso já sai por e-mail; a escolha é obrigatória.'
+      },
+      {
+        id: 22,
+        data: '2026-11-26',
+        perfis: ['analista'],
+        texto:
+          'Na Presença na Escola, quando o aparelho dá só a localização aproximada, o aviso explica como ativar a localização precisa.'
+      },
+      {
+        id: 23,
+        data: '2026-11-27',
+        perfis: ['analista'],
+        texto:
+          'A Presença na Escola busca a localização mais precisa, mostra como resolver cada aviso, permite testar a localização e abrir o site no celular, e pede confirmação antes de encerrar.'
       }
     ];
 

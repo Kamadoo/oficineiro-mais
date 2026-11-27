@@ -37,6 +37,8 @@ As bibliotecas são scripts clássicos que publicam um objeto global (`window.FS
 | `lib/atividades.js` | tipos de atividade e valores da tela de atividades dos oficineiros do Coordenador |
 | `lib/gestao-contas.js` | valores e chaves da Gestão de Contas do Coordenador e do Administrador |
 | `lib/mapa.js` | carregamento do Leaflet sob demanda |
+| `lib/qr.js` | geração local de QR Code (modo byte, nível M, versões 1 a 10) como caminho SVG, sem serviço externo |
+| `lib/presenca-ajuda.js` | detecção do aparelho e passo a passo da Presença na Escola do Analista para localização bloqueada, aproximada ou fora do raio |
 | `lib/sobre.js` | versão, data de geração e contato de suporte exibidos em Configurações |
 | `lib/novidades.js` | lista de novidades por perfil (número, data, perfis e texto) e o filtro pela hierarquia, mostrada uma vez ao entrar |
 
