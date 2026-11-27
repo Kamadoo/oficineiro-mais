@@ -1005,7 +1005,7 @@ class Component extends DCLogic {
         const m = window.FSM_ONB.matchEscola(r.lotacao, lista),
           escola = m ? lista.find(x => x.sig === m.sig) : null,
           aluno = window.FSM_ONB.ehAluno(r),
-          cpf = Contas.documentoDaPlanilha(r.cpf, r.login);
+          cpf = aluno ? Contas.documentoDaPlanilha(r.cpf) : Contas.documentoDaPlanilha(r.cpf, r.login);
         return {
           k: i,
           seq: r.seq || String(i + 1),

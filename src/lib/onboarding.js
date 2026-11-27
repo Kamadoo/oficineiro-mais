@@ -251,8 +251,9 @@ window.FSM_ONB = (() => {
     const num = (titulo.match(/N[º°o]\s*0*(\d+)/i) || file.name.match(/OS\s*0*(\d+)/i) || [])[1] || '?';
     const sec =
       (titulo.match(/\b(SEMED|SEMAD|SEMSA)\b/i) || file.name.match(/(SEMED|SEMAD|SEMSA)/i) || [])[1] || 'SEMED';
-    const hi = R.findIndex(r => Object.values(r).some(v => /NOME DO USU/i.test(v)));
-    if (hi < 0) throw new Error('Não encontrei a linha de cabeçalho (NOME DO USUÁRIO) no arquivo.');
+    const hi = R.findIndex(r => Object.values(r).some(v => /NOME DO (USU|ALUNO)/i.test(v)));
+    if (hi < 0) throw new Error('Não encontrei a linha de cabeçalho (NOME DO USUÁRIO ou NOME DO ALUNO) no arquivo.');
+    const deAlunos = Object.values(R[hi]).some(v => /NOME DO ALUNO/i.test(v));
     const H = {};
     Object.keys(R[hi]).forEach(k => {
       H[norm(R[hi][k])] = k;
@@ -269,9 +270,17 @@ window.FSM_ONB = (() => {
       login: col(/login/),
       cpf: col(/^cpf/),
       mat: col(/matricula/),
-      lot: col(/lotacao/),
-      cargo: col(/cargo/)
+      lot: col(/lotacao/) || col(/^escola/),
+      cargo: col(/cargo/),
+      ano: col(/^ano/),
+      turma: col(/^turma/)
     };
+    const cargoDoAluno = r =>
+      ['Aluno', r[C.ano] || '', r[C.turma] ? 'Turma ' + r[C.turma] : '']
+        .map(v => String(v).trim())
+        .filter(Boolean)
+        .join(' · ')
+        .slice(0, 80);
     if (R.length - hi - 1 > LIM.linhas) falha('mais de ' + LIM.linhas + ' linhas.');
     const rows = R.slice(hi + 1)
       .filter(r => C.nome && r[C.nome])
@@ -284,7 +293,7 @@ window.FSM_ONB = (() => {
         cpf: (C.cpf && r[C.cpf]) || '',
         matricula: r[C.mat] || '',
         lotacao: (r[C.lot] || '').replace(/\s+/g, ' '),
-        cargo: r[C.cargo] || ''
+        cargo: r[C.cargo] || (deAlunos ? cargoDoAluno(r) : '')
       }));
     return { num, sec: sec.toUpperCase(), arquivo: file.name, rows };
   }
