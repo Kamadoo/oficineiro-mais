@@ -451,6 +451,7 @@ const isoDaData = d =>
   d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 const PERFIS_DO_LOTE = {
   oficineiro: 'Oficineiro de Inclusão Digital',
+  tempo_integral: 'Oficineiro',
   analista: 'Analista',
   direcao: 'Direção da escola',
   coordenador: 'Coordenador',
@@ -571,6 +572,7 @@ class Component extends DCLogic {
       contaAberta: null,
       confirmandoDesativacao: false,
       confirmandoRemocao: false,
+      trocaDeCargo: null,
       emailRevelado: null,
       mudanca: null,
       erroMudanca: '',
@@ -1145,6 +1147,7 @@ class Component extends DCLogic {
         mudanca: null,
         confirmandoDesativacao: false,
         confirmandoRemocao: false,
+        trocaDeCargo: null,
         emailRevelado: null,
         erroConta: '',
         erroMudanca: '',
@@ -1170,6 +1173,7 @@ class Component extends DCLogic {
         mudanca: null,
         confirmandoDesativacao: false,
         confirmandoRemocao: false,
+        trocaDeCargo: null,
         emailRevelado: null,
         erroConta: '',
         erroMudanca: ''
@@ -1802,6 +1806,9 @@ class Component extends DCLogic {
   }
   ativarConta(c, ativa) {
     return Contas.ativarConta.call(this, c, ativa);
+  }
+  trocarCargo(c) {
+    return Contas.trocarCargo.call(this, c);
   }
   salvarMudanca() {
     return Contas.salvarMudanca.call(this);

@@ -75,3 +75,21 @@ test('texto das marcações feitas sem internet', () => {
   assert.equal(Base.textoSemInternet('saida', 2400), 'Saída feita sem internet, recebida 40 min depois');
   assert.equal(Base.textoSemInternet('outro', null), 'Marcação feita sem internet, recebida 0 min depois');
 });
+
+test('cargo do oficineiro define o perfil exibido e volta para papel e cargo', () => {
+  assert.equal(Base.perfilDaConta({ papel: 'oficineiro', cargo: 'tempo_integral' }), 'tempo_integral');
+  assert.equal(Base.perfilDaConta({ papel: 'oficineiro', cargo: 'inclusao_digital' }), 'oficineiro');
+  assert.equal(Base.perfilDaConta({ papel: 'oficineiro' }), 'oficineiro');
+  assert.equal(Base.perfilDaConta({ papel: 'direcao', cargo: 'tempo_integral' }), 'direcao');
+  assert.equal(Base.perfilDaConta(null), '');
+  assert.equal(
+    JSON.stringify(Base.contaDoPerfil('tempo_integral')),
+    JSON.stringify({ papel: 'oficineiro', cargo: 'tempo_integral' })
+  );
+  assert.equal(
+    JSON.stringify(Base.contaDoPerfil('oficineiro')),
+    JSON.stringify({ papel: 'oficineiro', cargo: 'inclusao_digital' })
+  );
+  assert.equal(JSON.stringify(Base.contaDoPerfil('analista')), JSON.stringify({ papel: 'analista', cargo: '' }));
+  assert.equal(Base.CARGOS_DE_OFICINEIRO.tempo_integral, 'Oficineiro');
+});

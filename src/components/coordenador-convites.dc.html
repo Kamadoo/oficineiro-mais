@@ -92,6 +92,7 @@ class Component extends DCLogic {
     const contexto = this.props.contexto;
     const PAPEIS = {
       oficineiro: 'Oficineiro de Inclusão Digital',
+      tempo_integral: 'Oficineiro',
       analista: 'Analista',
       direcao: 'Direção da escola',
       coordenador: 'Coordenador',
@@ -127,7 +128,7 @@ class Component extends DCLogic {
         .toLowerCase();
     const termo = semAcento(filtros.busca).trim();
     const filtradas = lista.filter(x => {
-      if (filtros.papel && x.papel !== filtros.papel) return false;
+      if (filtros.papel && window.FSM_BASE.perfilDaConta(x) !== filtros.papel) return false;
       if (filtros.escola && (filtros.escola === '-' ? x.escola_id != null : String(x.escola_id) !== filtros.escola))
         return false;
       if (filtros.carteira && (filtros.carteira === '-' ? !!x.carteira_id : x.carteira_id !== filtros.carteira))
@@ -220,7 +221,9 @@ class Component extends DCLogic {
         escolherSituacao: definirFiltro('situacao'),
         escolherCadastro: definirFiltro('cadastro')
       },
-      opcoesDePapel: unicos(lista.map(x => [x.papel, PAPEIS[x.papel] || x.papel])),
+      opcoesDePapel: unicos(
+        lista.map(x => [window.FSM_BASE.perfilDaConta(x), PAPEIS[window.FSM_BASE.perfilDaConta(x)] || x.papel])
+      ),
       opcoesDeEscola: unicos(lista.map(x => [x.escola_id, x.escola || ''])),
       opcoesDeCarteira: unicos(lista.map(x => [x.carteira_id, x.carteira_id])),
       temFiltro: Object.keys(padrao).some(k => filtros[k]),
@@ -275,7 +278,7 @@ class Component extends DCLogic {
         return {
           nome: x.nome,
           email: x.email || '',
-          papel: PAPEIS[x.papel] || x.papel,
+          papel: PAPEIS[window.FSM_BASE.perfilDaConta(x)] || x.papel,
           escola: x.escola || 'Sem escola',
           carteira: x.carteira_id ? 'Carteira ' + x.carteira_id : 'Sem carteira',
           situacao: st[0],

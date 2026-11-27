@@ -88,7 +88,7 @@ class Component extends DCLogic {
     const contasFiltradas = contexto.contas.filter(
       c =>
         (!termoDaBusca || normalizar(c.nome).includes(termoDaBusca) || normalizar(c.usuario).includes(termoDaBusca)) &&
-        (!contexto.perfilFiltro || c.papel === contexto.perfilFiltro) &&
+        (!contexto.perfilFiltro || window.FSM_BASE.perfilDaConta(c) === contexto.perfilFiltro) &&
         (!contexto.situacaoFiltro || situacaoDaConta(c) === contexto.situacaoFiltro) &&
         (!contexto.escolaFiltro ||
           String(c.escola_id) === contexto.escolaFiltro ||
@@ -115,7 +115,7 @@ class Component extends DCLogic {
         aria: 'Ver detalhes da conta de ' + c.nome,
         login: c.usuario || '',
         semLogin: !c.usuario,
-        perfil: NOMES_DE_PERFIL[c.papel] || c.papel,
+        perfil: NOMES_DE_PERFIL[window.FSM_BASE.perfilDaConta(c)] || c.papel,
         atuacao: atuacaoDaConta(c),
         nota: c.eu
           ? 'sua conta'
@@ -161,12 +161,13 @@ class Component extends DCLogic {
       escolherPerfil: e => contexto.setState({ perfilFiltro: e.target.value, limiteDeContas: 50 }),
       opcoesDePerfil: [
         ['oficineiro', 'Oficineiro de Inclusão Digital'],
+        ['tempo_integral', 'Oficineiro'],
         ['analista', 'Analista'],
         ['direcao', 'Direção da escola'],
         ['coordenador', 'Coordenador'],
         ['gerente', 'Gerente de Projetos']
       ]
-        .filter(([v]) => contexto.ehAdmin || v === 'oficineiro' || v === 'direcao')
+        .filter(([v]) => contexto.ehAdmin || v === 'oficineiro' || v === 'tempo_integral' || v === 'direcao')
         .map(([v, l]) => ({ valor: v, rotulo: l })),
       escola: contexto.escolaFiltro,
       escolherEscola: e => contexto.setState({ escolaFiltro: e.target.value, limiteDeContas: 50 }),

@@ -4,6 +4,7 @@ window.FSM_GESTAO_CONTAS = (() => {
   function valoresDasContas(s) {
     const NOMES_DE_PERFIL = {
       oficineiro: 'Oficineiro de Inclusão Digital',
+      tempo_integral: 'Oficineiro',
       analista: 'Analista',
       direcao: 'Direção da escola',
       coordenador: 'Coordenador',
@@ -83,7 +84,7 @@ window.FSM_GESTAO_CONTAS = (() => {
               ? 'Contas de administrador só são alteradas pelo painel do Supabase.'
               : 'O Coordenador do núcleo altera apenas contas de oficineiro e de direção escolar. As demais são alteradas pelo Gerente de Projetos.',
           itens: [
-            ['Perfil', NOMES_DE_PERFIL[contaAberta.papel] || contaAberta.papel],
+            ['Perfil', NOMES_DE_PERFIL[Base.perfilDaConta(contaAberta)] || contaAberta.papel],
             ['Login', contaAberta.usuario || 'gerado no primeiro acesso'],
             [contaAberta.papel === 'analista' ? 'Carteira' : 'Escola de atuação', atuacaoDaConta(contaAberta)],
             ...(contaAberta.papel === 'oficineiro'
@@ -123,6 +124,26 @@ window.FSM_GESTAO_CONTAS = (() => {
             : '',
           podeEscola: podeGerir(contaAberta) && contaAberta.papel === 'oficineiro' && contaAberta.ativo,
           podeJornada: podeGerir(contaAberta) && contaAberta.papel === 'oficineiro' && contaAberta.ativo,
+          podeCargo: podeGerir(contaAberta) && contaAberta.papel === 'oficineiro' && contaAberta.ativo,
+          cargoAtual: NOMES_DE_PERFIL[Base.perfilDaConta(contaAberta)],
+          cargoNovo:
+            contaAberta.cargo === 'tempo_integral' ? NOMES_DE_PERFIL.oficineiro : NOMES_DE_PERFIL.tempo_integral,
+          trocandoCargo: !!s.trocaDeCargo,
+          naoTrocandoCargo: !s.trocaDeCargo,
+          motivoDoCargo: (s.trocaDeCargo && s.trocaDeCargo.motivo) || '',
+          abrirTrocaDeCargo: () =>
+            this.setState({ trocaDeCargo: { motivo: '' }, erroConta: '' }, () => {
+              const c = document.getElementById('ct-det-cargo-motivo');
+              if (c) c.focus();
+            }),
+          escreverMotivoDoCargo: e => this.setState({ trocaDeCargo: { motivo: e.target.value } }),
+          voltarDoCargo: () =>
+            this.setState({ trocaDeCargo: null, erroConta: '' }, () => {
+              const b = document.getElementById('ct-det-cargo');
+              if (b) b.focus();
+            }),
+          salvarCargo: () => this.trocarCargo(contaAberta),
+          cargoBotao: s.salvandoConta ? 'Salvando…' : 'Confirmar troca de cargo',
           contratada: s.contratadaEditada != null ? s.contratadaEditada : '',
           escreverContratada: e => this.setState({ contratadaEditada: e.target.value }),
           contratadaMudou: s.contratadaEditada != null,
@@ -152,6 +173,7 @@ window.FSM_GESTAO_CONTAS = (() => {
     const mudarNova = k => e => this.setState({ novaConta: { ...this.state.novaConta, [k]: e.target.value } });
     const perfisDaNovaConta = [
       ['oficineiro', 'Oficineiro de Inclusão Digital'],
+      ['tempo_integral', 'Oficineiro'],
       ['direcao', 'Direção da escola'],
       ...(s.ehAdmin
         ? [
@@ -161,7 +183,7 @@ window.FSM_GESTAO_CONTAS = (() => {
           ]
         : [])
     ].map(([k, l], i) => {
-      const marcado = nova.papel === k,
+      const marcado = Base.perfilDaConta(nova) === k,
         off = k === 'coordenador' && !s.ehAdmin;
       return {
         rotulo: l,
@@ -174,21 +196,21 @@ window.FSM_GESTAO_CONTAS = (() => {
         fundo: marcado ? 'var(--fundo-ciano-60)' : 'var(--fundo-branco)',
         cor: off ? 'var(--texto-cinza-470)' : marcado ? 'var(--texto-ciano-740)' : 'var(--texto-ciano-850)',
         escolher: () => {
-          if (!off) this.setState({ novaConta: { ...this.state.novaConta, papel: k } });
+          if (!off) this.setState({ novaConta: { ...this.state.novaConta, ...Base.contaDoPerfil(k) } });
         }
       };
     });
     const teclaNosPerfis = e => {
       const perfis = s.ehAdmin
-        ? ['oficineiro', 'direcao', 'analista', 'coordenador', 'gerente']
-        : ['oficineiro', 'direcao'];
-      const i = perfis.indexOf(this.state.novaConta && this.state.novaConta.papel);
+        ? ['oficineiro', 'tempo_integral', 'direcao', 'analista', 'coordenador', 'gerente']
+        : ['oficineiro', 'tempo_integral', 'direcao'];
+      const i = perfis.indexOf(Base.perfilDaConta(this.state.novaConta));
       let j = -1;
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % perfis.length;
       else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + perfis.length) % perfis.length;
       else return;
       e.preventDefault();
-      this.setState({ novaConta: { ...this.state.novaConta, papel: perfis[j] } }, () => {
+      this.setState({ novaConta: { ...this.state.novaConta, ...Base.contaDoPerfil(perfis[j]) } }, () => {
         const b = document.getElementById(j === 0 ? 'ct-nv-perfil' : 'ct-nv-perfil-' + perfis[j]);
         if (b) b.focus();
       });

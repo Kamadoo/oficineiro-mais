@@ -163,7 +163,7 @@
 </helmet>
 <div id="app-main" class="estrutura d-grid colunas-236-minmax-0-1fr min-h-100vh">
   <dc-import name="menu" navCls="{{ menuClasse }}" closeNav="{{ fecharMenu }}"
-    perfilTitulo="Oficineiro de Inclusão Digital" perfilLinha="{{ perfilLinha }}" menu="{{ menu }}"
+    perfilTitulo="{{ perfilTitulo }}" perfilLinha="{{ perfilLinha }}" menu="{{ menu }}"
     abrirNotif="{{ abrirNotif }}" notifAria="{{ notifAria }}" temNotif="{{ temNotif }}" notifN="{{ notifN }}"
     temConfig="{{ temConfig }}" abrirConfig="{{ abrirConfig }}" temSair="{{ temSair }}"
     sairConta="{{ sairConta }}"></dc-import>
@@ -459,8 +459,24 @@ const OFICINAS = [
   'Tempo de Aula – Reforço Escolar',
   'Xadrez'
 ];
-const SOLUCOES = ['Matific', 'Minecraft Education', 'MS Reflect', 'Canva', 'MS Copilot Pro', 'Outra'];
-const solucoesDe = tipo => SOLUCOES.filter(solucao => solucao !== 'MS Copilot Pro' || tipo === 'F');
+const OFICINA_DE_TECNOLOGIA = 'Programa Construtores – Minecraft';
+const CARGOS = {
+  inclusao_digital: {
+    titulo: 'Oficineiro de Inclusão Digital',
+    tipos: ['R', 'P', 'F'],
+    tiposNaSemana: ['R', 'P'],
+    oficinas: [OFICINA_DE_TECNOLOGIA]
+  },
+  tempo_integral: {
+    titulo: 'Oficineiro',
+    tipos: ['P'],
+    tiposNaSemana: ['P'],
+    oficinas: OFICINAS.filter(oficina => oficina !== OFICINA_DE_TECNOLOGIA)
+  }
+};
+const SOLUCOES = ['Matific', 'Minecraft Education', 'MS Reflect', 'Canva', 'MS Copilot Pro', 'Eduminers', 'Outra'];
+const SO_NA_FORMACAO = ['MS Copilot Pro', 'Eduminers'];
+const solucoesDe = tipo => SOLUCOES.filter(solucao => !SO_NA_FORMACAO.includes(solucao) || tipo === 'F');
 const HORARIOS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const INICIO_DA_GRADE = 420,
   FIM_DA_GRADE = 1020;
@@ -565,6 +581,7 @@ class Component extends DCLogic {
     carregado: false,
     escola: { id: null, sigla: '', nome: '', latitude: null, longitude: null, raio: null },
     nomeDoUsuario: '',
+    cargo: 'inclusao_digital',
     documentoAberto: false,
     observacoes: {},
     contratada: null,
@@ -1012,6 +1029,9 @@ class Component extends DCLogic {
         }
       : atividade;
   }
+  cargo() {
+    return CARGOS[this.state.cargo] || CARGOS.inclusao_digital;
+  }
   semanaEditavel(semana) {
     return semana >= segundaDe(new Date());
   }
@@ -1021,7 +1041,7 @@ class Component extends DCLogic {
     const atual = this.efetiva(daGrade, semana),
       tipo = TIPOS_DA_GRADE.includes(atual.tipo) ? atual.tipo : 'P',
       outraSolucao = tipo !== 'P' && !!atual.solucao && !SOLUCOES.includes(atual.solucao),
-      outraOficina = tipo === 'P' && !!atual.oficina && !OFICINAS.includes(atual.oficina);
+      outraOficina = tipo === 'P' && !!atual.oficina && !this.cargo().oficinas.includes(atual.oficina);
     this.setState({
       gaveta: 'semana',
       edicaoDaSemana: {
@@ -1210,7 +1230,7 @@ class Component extends DCLogic {
         tipo = TIPOS_DA_GRADE.includes(daGrade.tipo) ? daGrade.tipo : 'P';
       const tempos = Math.max(1, Math.min(3, Math.round((minDeHora(daGrade.fim) - inicio) / 50)));
       const outraSolucao = tipo !== 'P' && !!daGrade.solucao && !SOLUCOES.includes(daGrade.solucao);
-      const outraOficina = tipo === 'P' && !!daGrade.oficina && !OFICINAS.includes(daGrade.oficina);
+      const outraOficina = tipo === 'P' && !!daGrade.oficina && !this.cargo().oficinas.includes(daGrade.oficina);
       return this.setState({
         gaveta: 'aula',
         edicao: {
@@ -1235,7 +1255,8 @@ class Component extends DCLogic {
         }
       });
     }
-    const minutos = horaValida(hora) ? minDeHora(hora) : null;
+    const minutos = horaValida(hora) ? minDeHora(hora) : null,
+      tipoInicial = this.cargo().tipos[0];
     this.setState({
       gaveta: 'aula',
       edicao: {
@@ -1244,10 +1265,10 @@ class Component extends DCLogic {
         horario: minutos == null ? '' : String(horarioDe(minutos)),
         hora: minutos == null ? '' : horaDe(minutos),
         tempos: 1,
-        tipo: 'R',
+        tipo: tipoInicial,
         ano: '',
         turma: '',
-        solucao: 'Matific',
+        solucao: tipoInicial === 'P' ? '' : 'Matific',
         outraSolucao: '',
         componente: '',
         oficina: '',
@@ -1369,17 +1390,25 @@ class Component extends DCLogic {
         longitude: daEscola.longitude,
         raio: daEscola.raio_m
       };
-      this.setState({ carregado: true, escola, nomeDoUsuario: (acesso && acesso.nome) || '' }, () => {
-        this.carregarPresencaDeHoje().then(() => this.enviarFilaDePresenca());
-        this.carregarEspelho();
-        this.carregarAjustes();
-        this.carregarTurmas();
-        this.carregarGrade();
-        this.carregarRegistros();
-        this.carregarRelatorio();
-        this.carregarLembretes();
-        this.carregarMudancaDeEscola();
-      });
+      this.setState(
+        {
+          carregado: true,
+          escola,
+          nomeDoUsuario: (acesso && acesso.nome) || '',
+          cargo: (acesso && acesso.cargo) || 'inclusao_digital'
+        },
+        () => {
+          this.carregarPresencaDeHoje().then(() => this.enviarFilaDePresenca());
+          this.carregarEspelho();
+          this.carregarAjustes();
+          this.carregarTurmas();
+          this.carregarGrade();
+          this.carregarRegistros();
+          this.carregarRelatorio();
+          this.carregarLembretes();
+          this.carregarMudancaDeEscola();
+        }
+      );
     } catch (x) {
       this.avisar((x && x.message) || 'Não foi possível carregar os dados da escola');
     }
@@ -2429,7 +2458,7 @@ class Component extends DCLogic {
       fimDaGrade: FIM_DA_GRADE,
       registrosDoDia: s.registrosDoDia || [],
       lembretesPendentes,
-      oficinas: OFICINAS,
+      oficinas: this.cargo().oficinas,
       componentes: COMPONENTES,
       engajamentoTexto: ENGAJAMENTO,
       relatorio,
@@ -2596,7 +2625,7 @@ class Component extends DCLogic {
       resumoDaSemana: resumo,
       semanaComErro: !!edicaoDaSemana.erro,
       semanaAlterada: !!(daGrade && this.efetiva(daGrade, semana).personalizada),
-      tiposNaSemana: (daGrade && daGrade.tipo === 'F' ? ['F'] : ['R', 'P']).map(chave => {
+      tiposNaSemana: (daGrade && daGrade.tipo === 'F' ? ['F'] : this.cargo().tiposNaSemana).map(chave => {
         const marcada = edicaoDaSemana.tipo === chave;
         return {
           rotulo: TIPOS_DE_ATIVIDADE[chave].nome,
@@ -2750,7 +2779,7 @@ class Component extends DCLogic {
         };
       }),
       termino: fimDaEdicao ? Base.hm(fimDaEdicao) : '—',
-      tipos: TIPOS_DA_GRADE.map(chave => {
+      tipos: this.cargo().tipos.map(chave => {
         const marcada = edicao.tipo === chave;
         return {
           rotulo: TIPOS_DE_ATIVIDADE[chave].nome,
@@ -2775,7 +2804,7 @@ class Component extends DCLogic {
       comTurma: edicao.tipo !== 'F',
       ehIntegral: edicao.tipo === 'P',
       mudarOficina: evento => this.preencherEdicao({ oficina: evento.target.value, outraOficina: '' }),
-      oficinas: [...OFICINAS, 'Outro'].map(item => ({ valor: item, rotulo: item })),
+      oficinas: [...this.cargo().oficinas, 'Outro'].map(item => ({ valor: item, rotulo: item })),
       temOutraOficina: edicao.tipo === 'P' && edicao.oficina === 'Outro',
       mudarOutraOficina: evento => this.preencherEdicao({ outraOficina: evento.target.value }),
       anos: ANOS.map(ano => ({ valor: String(ano), rotulo: anoTexto(ano) })),
@@ -2878,6 +2907,7 @@ class Component extends DCLogic {
       },
       semInternet: s.semInternet,
       sincronizadoTexto: 'hoje às ' + s.sincronizadoAs,
+      perfilTitulo: this.cargo().titulo,
       perfilLinha: (s.nomeDoUsuario ? s.nomeDoUsuario + ' · ' : '') + s.escola.sigla,
       escolaNome: s.escola.nome,
       contexto: this.contexto(relatorio, lembretesPendentes),

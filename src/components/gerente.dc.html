@@ -285,6 +285,7 @@ const {
 } = Base;
 const NOMES_DE_PERFIL = {
   oficineiro: 'Oficineiro de Inclusão Digital',
+  tempo_integral: 'Oficineiro',
   analista: 'Analista',
   direcao: 'Direção da escola',
   coordenador: 'Coordenador',
@@ -376,6 +377,7 @@ class Component extends DCLogic {
     contaAberta: null,
     mudanca: null,
     confirmandoDesativacao: false,
+    trocaDeCargo: null,
     erroConta: '',
     erroMudanca: '',
     contratadas: {},
@@ -731,6 +733,7 @@ class Component extends DCLogic {
         contaAberta: null,
         mudanca: null,
         confirmandoDesativacao: false,
+        trocaDeCargo: null,
         erroConta: '',
         erroMudanca: '',
         contratadaEditada: null,
@@ -746,6 +749,7 @@ class Component extends DCLogic {
       contaAberta: null,
       mudanca: null,
       confirmandoDesativacao: false,
+      trocaDeCargo: null,
       erroConta: '',
       erroMudanca: ''
     });
@@ -758,6 +762,9 @@ class Component extends DCLogic {
   }
   ativarConta(c, ativa) {
     return Contas.ativarConta.call(this, c, ativa);
+  }
+  trocarCargo(c) {
+    return Contas.trocarCargo.call(this, c);
   }
   carregarContratadas() {
     return Contas.carregarContratadas.call(this);
@@ -980,7 +987,7 @@ class Component extends DCLogic {
       [['Nome', 'Perfil', 'Escola / carteira', 'Conta criada em']].concat(
         g.pend.map(c => [
           c.nome,
-          NOMES_DE_PERFIL[c.papel] || c.papel,
+          NOMES_DE_PERFIL[Base.perfilDaConta(c)] || c.papel,
           g.atuacao(c),
           dmyIso(String(c.criado_em || '').slice(0, 10))
         ])
@@ -1885,7 +1892,7 @@ class Component extends DCLogic {
             ? 'Você não pode alterar a própria conta.'
             : 'Contas de administrador só são alteradas pelo painel do Supabase.',
           itens: [
-            ['Perfil', NOMES_DE_PERFIL[contaAberta.papel] || contaAberta.papel],
+            ['Perfil', NOMES_DE_PERFIL[Base.perfilDaConta(contaAberta)] || contaAberta.papel],
             ['Login', contaAberta.usuario || 'gerado no primeiro acesso'],
             [contaAberta.papel === 'analista' ? 'Carteira' : 'Escola de atuação', atuacaoDaConta(contaAberta)],
             ...(contaAberta.papel === 'oficineiro'
@@ -1925,6 +1932,19 @@ class Component extends DCLogic {
             : '',
           podeEscola: podeAlterarConta(contaAberta) && contaAberta.papel === 'oficineiro' && contaAberta.ativo,
           podeJornada: podeAlterarConta(contaAberta) && contaAberta.papel === 'oficineiro' && contaAberta.ativo,
+          podeCargo: podeAlterarConta(contaAberta) && contaAberta.papel === 'oficineiro' && contaAberta.ativo,
+          cargoAtual: NOMES_DE_PERFIL[Base.perfilDaConta(contaAberta)],
+          cargoNovo:
+            contaAberta.cargo === 'tempo_integral' ? NOMES_DE_PERFIL.oficineiro : NOMES_DE_PERFIL.tempo_integral,
+          trocandoCargo: !!s.trocaDeCargo,
+          naoTrocandoCargo: !s.trocaDeCargo,
+          motivoDoCargo: (s.trocaDeCargo && s.trocaDeCargo.motivo) || '',
+          abrirTrocaDeCargo: () =>
+            this.setState({ trocaDeCargo: { motivo: '' }, erroConta: '' }, () => this.focar('ct-det-cargo-motivo')),
+          escreverMotivoDoCargo: e => this.setState({ trocaDeCargo: { motivo: e.target.value } }),
+          voltarDoCargo: () => this.setState({ trocaDeCargo: null, erroConta: '' }, () => this.focar('ct-det-cargo')),
+          salvarCargo: () => this.trocarCargo(contaAberta),
+          cargoBotao: s.salvandoConta ? 'Salvando…' : 'Confirmar troca de cargo',
           contratada: s.contratadaEditada != null ? s.contratadaEditada : '',
           escreverContratada: e => this.setState({ contratadaEditada: e.target.value }),
           contratadaMudou: s.contratadaEditada != null,
@@ -1946,13 +1966,14 @@ class Component extends DCLogic {
     const definirNaConta = k => e => this.setState({ novaConta: { ...this.state.novaConta, [k]: e.target.value } });
     const PERFIS = [
       ['oficineiro', 'Oficineiro de Inclusão Digital'],
+      ['tempo_integral', 'Oficineiro'],
       ['analista', 'Analista'],
       ['direcao', 'Direção da escola'],
       ['coordenador', 'Coordenador'],
       ['gerente', 'Gerente de Projetos']
     ];
     const perfisDaNovaConta = PERFIS.map(([k, l], i) => {
-      const on = novaConta.papel === k;
+      const on = Base.perfilDaConta(novaConta) === k;
       return {
         rotulo: l,
         marcado: on ? 'true' : 'false',
@@ -1963,18 +1984,18 @@ class Component extends DCLogic {
         classe: on ? '' : 'fundo-branco botao-secundario',
         fundo: on ? 'var(--fundo-ciano-60)' : 'var(--fundo-branco)',
         cor: on ? 'var(--texto-ciano-740)' : 'var(--texto-ciano-850)',
-        escolher: () => this.setState({ novaConta: { ...this.state.novaConta, papel: k } })
+        escolher: () => this.setState({ novaConta: { ...this.state.novaConta, ...Base.contaDoPerfil(k) } })
       };
     });
     const teclaNosPerfis = e => {
       const perfis = PERFIS.map(p => p[0]);
-      const i = perfis.indexOf(this.state.novaConta && this.state.novaConta.papel);
+      const i = perfis.indexOf(Base.perfilDaConta(this.state.novaConta));
       let j = -1;
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % perfis.length;
       else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + perfis.length) % perfis.length;
       else return;
       e.preventDefault();
-      this.setState({ novaConta: { ...this.state.novaConta, papel: perfis[j] } }, () =>
+      this.setState({ novaConta: { ...this.state.novaConta, ...Base.contaDoPerfil(perfis[j]) } }, () =>
         this.focar(j === 0 ? 'ct-nv-perfil' : 'ct-nv-perfil-' + perfis[j])
       );
     };

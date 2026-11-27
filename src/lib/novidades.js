@@ -155,6 +155,13 @@ window.FSM_NOVIDADES =
         perfis: ['gerente', 'coordenador', 'administrador'],
         texto:
           'Ao criar uma conta, você escolhe se o convite de primeiro acesso já sai por e-mail; a escolha é obrigatória.'
+      },
+      {
+        id: 27,
+        data: '2026-11-27',
+        perfis: ['oficineiro', 'gerente', 'coordenador', 'administrador'],
+        texto:
+          'Novo cargo Oficineiro, só com projeto tempo integral. O de Inclusão Digital fica com Minecraft e Outro no tempo integral e ganha Eduminers na formação de professores.'
       }
     ];
 
