@@ -1019,7 +1019,12 @@ class Component extends DCLogic {
         ? [
             ['Nome', conta.nome],
             ['Usuário', conta.usuario || '—'],
-            ['Cargo', NOMES[conta.papel] || '—'],
+            [
+              'Cargo',
+              conta.papel === 'oficineiro' && s.acesso && s.acesso.cargo === 'tempo_integral'
+                ? window.FSM_BASE.CARGOS_DE_OFICINEIRO.tempo_integral
+                : NOMES[conta.papel] || '—'
+            ],
             conta.escola
               ? ['Escola', conta.escola.nome]
               : conta.carteira

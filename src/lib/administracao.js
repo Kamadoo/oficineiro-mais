@@ -19,6 +19,7 @@ window.FSM_ADMINISTRACAO = (() => {
       DESATIVAR_USUARIO: 'Conta desativada',
       REATIVAR_USUARIO: 'Conta reativada',
       ADMIN_ALTERAR_PERFIL: 'Perfil alterado pelo administrador',
+      ALTERAR_CARGO: 'Cargo de oficineiro alterado',
       ADMIN_EXIGIR_TROCA_SENHA: 'Troca de senha exigida',
       ADMIN_REDEFINIR_AUTENTICADOR: 'Autenticador redefinido',
       ADMIN_VER_EMAIL: 'E-mail consultado',
@@ -56,6 +57,7 @@ window.FSM_ADMINISTRACAO = (() => {
     const PAPEL_AUD = { ...NOMES_DE_PERFIL, administrador: 'Administrador' };
     const CAMPO = {
       papel: 'Perfil',
+      cargo: 'Cargo',
       escola_id: 'Escola',
       carteira_id: 'Carteira',
       motivo: 'Motivo',
@@ -177,6 +179,7 @@ window.FSM_ADMINISTRACAO = (() => {
       if (v === null || v === undefined || v === '') return '—';
       if (typeof v === 'boolean') return v ? 'Sim' : 'Não';
       if (k === 'papel') return PAPEL_AUD[v] || String(v);
+      if (k === 'cargo') return Base.CARGOS_DE_OFICINEIRO[v] || String(v);
       const VALS = {
         fechado: 'Fechado',
         devolvido: 'Devolvido',

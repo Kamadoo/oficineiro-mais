@@ -1142,7 +1142,7 @@ window.FSM_AUTH =
       },
       pessoasDaEscola() {
         const q = '&papel=in.(oficineiro,direcao)&order=nome';
-        return chamar('/rest/v1/perfis?select=id,nome,papel,escola_id,turno,ativo,documento_tipo' + q, {
+        return chamar('/rest/v1/perfis?select=id,nome,papel,cargo,escola_id,turno,ativo,documento_tipo' + q, {
           token: token()
         }).catch(() => chamar('/rest/v1/perfis?select=id,nome,papel,escola_id,turno,ativo' + q, { token: token() }));
       },
@@ -1151,9 +1151,9 @@ window.FSM_AUTH =
       },
       oficineiros() {
         const q = '&papel=eq.oficineiro&order=nome';
-        return chamar('/rest/v1/perfis?select=id,nome,escola_id,ativo,documento_tipo' + q, { token: token() }).catch(
-          () => chamar('/rest/v1/perfis?select=id,nome,escola_id,ativo' + q, { token: token() })
-        );
+        return chamar('/rest/v1/perfis?select=id,nome,cargo,escola_id,ativo,documento_tipo' + q, {
+          token: token()
+        }).catch(() => chamar('/rest/v1/perfis?select=id,nome,escola_id,ativo' + q, { token: token() }));
       },
       contratadasEscola() {
         return chamar('/rest/v1/rpc/contratadas_escola', { metodo: 'POST', token: token(), corpo: {} });
@@ -1327,6 +1327,7 @@ window.FSM_AUTH =
         if (d.telefone) corpo.telefone = String(d.telefone).replace(/\D/g, '');
         if (d.escola_sigla) corpo.escola_sigla = String(d.escola_sigla);
         if (d.carteira_id) corpo.carteira_id = String(d.carteira_id);
+        if (d.cargo) corpo.cargo = String(d.cargo);
         return chamar('/functions/v1/admin-usuarios', { metodo: 'POST', token: token(), corpo });
       },
       ativarConta(id, ativa) {
@@ -1372,6 +1373,13 @@ window.FSM_AUTH =
       turmasAdmin() {
         return chamarTudo('/rest/v1/turmas?select=id,escola_id,ano,turma,matriculados&order=escola_id,ano,turma', {
           token: token()
+        });
+      },
+      alterarCargo(id, cargo, motivo) {
+        return chamar('/rest/v1/rpc/alterar_cargo', {
+          metodo: 'POST',
+          token: token(),
+          corpo: { p_usuario: String(id), p_cargo: String(cargo), p_motivo: String(motivo || '') }
         });
       },
       adminAlterarPapel(id, papel, escola, carteira, motivo) {

@@ -18,6 +18,17 @@
       class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
     <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
       <dl class="m-0 d-grid colunas-auto-minmax-0-1fr gap-8-14 fs-14"><sc-for list="{{ conta.itens }}" as="item" hint-placeholder-count="6"><dt class="cor-cinza-600 fs-13">{{ item.rotulo }}</dt><dd class="m-0 quebra-palavra-anywhere">{{ item.valor }}</dd></sc-for></dl>
+      <sc-if value="{{ conta.podeCargo }}" hint-placeholder-val="{{ false }}">
+        <div role="group" aria-labelledby="ct-det-cargo-titulo" class="d-flex eixo-column gap-8 fundo-cinza-20 raio-10 p-12-14">
+          <span id="ct-det-cargo-titulo" class="fs-12 cor-cinza-600 fw-600">Cargo: {{ conta.cargoAtual }}</span>
+          <span class="fs-12 cor-cinza-600 lh-1p45">O Oficineiro registra só projeto tempo integral. O Oficineiro de Inclusão Digital registra também aulas regulares e formação de professores.</span>
+          <sc-if value="{{ conta.naoTrocandoCargo }}" hint-placeholder-val="{{ true }}"><button id="ct-det-cargo" onClick="{{ conta.abrirTrocaDeCargo }}" class="alinha-si-flex-start h-36 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Mudar para {{ conta.cargoNovo }}</button></sc-if>
+          <sc-if value="{{ conta.trocandoCargo }}" hint-placeholder-val="{{ false }}">
+            <label class="d-flex eixo-column gap-6"><span class="fs-12 cor-cinza-600 fw-600">Motivo da troca de cargo *</span><textarea id="ct-det-cargo-motivo" rows="2" value="{{ conta.motivoDoCargo }}" onChange="{{ conta.escreverMotivoDoCargo }}" maxlength="500" placeholder="Fica registrado na auditoria" class="borda-cinza-160 raio-8 p-10-12 fs-14 fonte-inherit redim-vertical lh-1p5"></textarea></label>
+            <div class="d-flex gap-8 quebra-wrap"><button style="background:var(--destaque-ciano-660)" onClick="{{ conta.salvarCargo }}" disabled="{{ salvandoConta }}" class="h-36 borda-0 cor-branco raio-8 p-0-14 fs-13 fw-600 fonte-inherit fundo-ciano-660">{{ conta.cargoBotao }}</button><button onClick="{{ conta.voltarDoCargo }}" class="h-36 borda-cinza-160 fundo-branco raio-8 p-0-14 fs-13 fw-600 fonte-inherit cor-ciano-850 botao-secundario">Voltar</button></div>
+          </sc-if>
+        </div>
+      </sc-if>
       <sc-if value="{{ conta.podeJornada }}" hint-placeholder-val="{{ false }}">
         <div class="d-flex eixo-column gap-8 fundo-cinza-20 raio-10 p-12-14">
           <label class="d-flex eixo-column gap-6"><span

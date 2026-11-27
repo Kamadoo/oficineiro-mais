@@ -657,6 +657,19 @@ window.FSM_BASE = (() => {
     }
     return iso(d);
   }
+  const CARGOS_DE_OFICINEIRO = {
+    inclusao_digital: 'Oficineiro de Inclusão Digital',
+    tempo_integral: 'Oficineiro'
+  };
+  function perfilDaConta(c) {
+    if (!c) return '';
+    return c.papel === 'oficineiro' && c.cargo === 'tempo_integral' ? 'tempo_integral' : c.papel || '';
+  }
+  function contaDoPerfil(perfil) {
+    return perfil === 'tempo_integral'
+      ? { papel: 'oficineiro', cargo: 'tempo_integral' }
+      : { papel: perfil, cargo: perfil === 'oficineiro' ? 'inclusao_digital' : '' };
+  }
   function cliente() {
     const c = (window.FSM_CONFIG && window.FSM_CONFIG.cliente) || {};
     const orgao = c.orgao || 'Prefeitura Municipal';
@@ -669,6 +682,9 @@ window.FSM_BASE = (() => {
   }
   return {
     cliente,
+    CARGOS_DE_OFICINEIRO,
+    perfilDaConta,
+    contaDoPerfil,
     ATEND_VISITA,
     ORIGEM_VISITA,
     ORIGENS_VISITA,

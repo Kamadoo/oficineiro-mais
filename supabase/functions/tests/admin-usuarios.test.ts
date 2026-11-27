@@ -80,6 +80,7 @@ Deno.test('cadastro valida papel, e-mail, documento, login e telefone antes de g
     [{ usuario: '1abc' }, 'login: use de 4 a 30 caracteres'],
     [{ usuario: 'a52998224725' }, 'o login não pode ser o CPF nem o CNPJ'],
     [{ telefone: '123' }, 'telefone inválido: use DDD e número'],
+    [{ cargo: 'gerente' }, 'cargo inválido'],
   ];
   for (const [troca, mensagem] of casos) {
     const [status, texto] = await erro(await atender(pedir({ ...base, ...troca }, { token: 'a.b.c' })));
@@ -87,6 +88,40 @@ Deno.test('cadastro valida papel, e-mail, documento, login e telefone antes de g
     assertEquals(String(texto).startsWith(mensagem), true, String(texto));
   }
   assertEquals(gravacoes().length, 0);
+});
+
+Deno.test('cadastro de oficineiro grava o cargo escolhido', async () => {
+  const NOVO = '00000000-0000-0000-0000-00000000a0f1';
+  responder((p: Pedido) => {
+    if (p.caminho === '/auth/v1/user') return json({ id: ATOR });
+    if (rpc(p) === 'meu_acesso') return json({ acesso_ok: true, papel: 'coordenador' });
+    if (p.caminho === '/rest/v1/escolas') return json({ id: 7 });
+    if (p.caminho === '/auth/v1/admin/users') return json({ user: { id: NOVO } });
+    if (p.caminho === '/rest/v1/perfis' && p.metodo === 'POST') return json(null, 201);
+    if (rpc(p) === 'fsm_definir_cpf') return json('***.982.247-**');
+    if (rpc(p) === 'registrar_acao_admin') return json(null);
+    return undefined;
+  });
+  const r = await atender(
+    pedir(
+      {
+        acao: 'cadastrar',
+        papel: 'oficineiro',
+        cargo: 'tempo_integral',
+        nome: 'Pessoa Dois',
+        email: 'p2@exemplo.test',
+        cpf: '52998224725',
+        escola_sigla: 'Abc',
+      },
+      { token: 'a.b.c' },
+    ),
+  );
+  assertEquals(r.status, 201);
+  const perfil = pedidos.find((p) => p.caminho === '/rest/v1/perfis' && p.metodo === 'POST');
+  assertEquals((perfil?.corpo as Record<string, unknown>).cargo, 'tempo_integral');
+  const auditoria = pedidos.find((p) => rpc(p) === 'registrar_acao_admin');
+  const detalhes = (auditoria?.corpo as Record<string, Record<string, unknown>>).p_detalhes;
+  assertEquals(detalhes.cargo, 'tempo_integral');
 });
 
 Deno.test('ninguém altera a própria conta e só o Administrador apaga', async () => {

@@ -14,6 +14,7 @@ const PAPEIS = ['gerente', 'coordenador', 'analista', 'direcao', 'oficineiro'] a
 type Papel = (typeof PAPEIS)[number];
 type PapelAtor = Papel | 'administrador';
 const DO_COORDENADOR: string[] = ['oficineiro', 'direcao'];
+const CARGOS: string[] = ['inclusao_digital', 'tempo_integral'];
 const PODEM_GERIR: string[] = ['gerente', 'coordenador', 'administrador'];
 
 function chave(nova: string, antiga: string): string {
@@ -94,6 +95,14 @@ Deno.serve(async (req) => {
 
       let escola_id: number | null = null;
       let carteira_id: string | null = null;
+      let cargo: string | null = null;
+      if (papel === 'oficineiro') {
+        const pedido = corpo.cargo === undefined || corpo.cargo === null || corpo.cargo === ''
+          ? 'inclusao_digital'
+          : corpo.cargo;
+        if (typeof pedido !== 'string' || !CARGOS.includes(pedido)) throw new ErroPublico(400, 'cargo inválido');
+        cargo = pedido;
+      }
       if (papel === 'oficineiro' || papel === 'direcao') {
         const sigla = texto(corpo.escola_sigla, 'escola_sigla', 1, 8);
         const { data: esc } = await admin
@@ -128,6 +137,7 @@ Deno.serve(async (req) => {
         id: novoId,
         nome,
         papel,
+        cargo,
         escola_id,
         carteira_id,
         ativo: true,
@@ -148,6 +158,7 @@ Deno.serve(async (req) => {
       }
       await auditar('CADASTRAR_USUARIO', novoId, {
         papel,
+        cargo,
         escola_id,
         carteira_id,
         cpf: mascara,

@@ -167,6 +167,14 @@
   "gerente": "aceito",
   "oficineiro": "aceito"
  },
+ "alterar_cargo(p_usuario uuid, p_cargo text, p_motivo text)": {
+  "administrador": "recusado",
+  "analista": "recusado",
+  "coordenador": "recusado",
+  "direcao": "recusado",
+  "gerente": "recusado",
+  "oficineiro": "recusado"
+ },
  "alterar_escola(p_usuario uuid, p_escola smallint, p_vale date, p_motivo text)": {
   "administrador": "recusado",
   "analista": "recusado",

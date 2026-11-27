@@ -11,7 +11,8 @@ insert into auth.users (id, email) values
   ('00000000-0000-0000-0000-00000000a004', 'analista@exemplo.test'),
   ('00000000-0000-0000-0000-00000000a005', 'direcao@exemplo.test'),
   ('00000000-0000-0000-0000-00000000a006', 'oficineiro@exemplo.test'),
-  ('00000000-0000-0000-0000-00000000a007', 'oficineiro2@exemplo.test');
+  ('00000000-0000-0000-0000-00000000a007', 'oficineiro2@exemplo.test'),
+  ('00000000-0000-0000-0000-00000000a008', 'oficineiro3@exemplo.test');
 
 insert into auth.users (id, email)
 select ('00000000-0000-0000-0000-0000000b' || lpad(n::text, 4, '0'))::uuid, 'extra' || n || '@exemplo.test'
@@ -24,7 +25,10 @@ insert into public.perfis (id, nome, papel, escola_id, carteira_id, turno, troca
   ('00000000-0000-0000-0000-00000000a004', 'Analista Teste', 'analista', null, 'CS1', 'integral', false),
   ('00000000-0000-0000-0000-00000000a005', 'Direção Teste', 'direcao', (select id from public.escolas where sigla = 'Ebv'), null, 'integral', false),
   ('00000000-0000-0000-0000-00000000a006', 'Oficineiro Teste', 'oficineiro', (select id from public.escolas where sigla = 'Ebv'), null, 'manha', false),
-  ('00000000-0000-0000-0000-00000000a007', 'Oficineira Dois', 'oficineiro', (select id from public.escolas where sigla = 'Ejp'), null, 'tarde', false);
+  ('00000000-0000-0000-0000-00000000a007', 'Oficineira Dois', 'oficineiro', (select id from public.escolas where sigla = 'Ejp'), null, 'tarde', false),
+  ('00000000-0000-0000-0000-00000000a008', 'Oficineiro Tempo Integral', 'oficineiro', (select id from public.escolas where sigla = 'Ejp'), null, 'integral', false);
+
+update public.perfis set cargo = 'tempo_integral' where id = '00000000-0000-0000-0000-00000000a008';
 
 insert into public.perfis (id, nome, papel, escola_id, carteira_id, turno, trocar_senha)
 select ('00000000-0000-0000-0000-0000000b' || lpad(n::text, 4, '0'))::uuid, 'Oficineiro Extra ' || n, 'oficineiro',
@@ -46,9 +50,11 @@ select e.id, a, t, 20 + a
 from public.escolas e, unnest(array[1, 2, 3, 4, 5]) a, unnest(array['A', 'B']) t
 where e.sigla in ('Ebv', 'Ejp');
 
-insert into public.grade_aulas (oficineiro_id, escola_id, ano_letivo, dia_semana, horario, inicio, fim, ano, turma, tipo, solucao, componente, professor, espaco)
+insert into public.grade_aulas (oficineiro_id, escola_id, ano_letivo, dia_semana, horario, inicio, fim, ano, turma, tipo, solucao, componente, oficina, professor, espaco)
 select o.id, o.escola_id, 2026, d, h, (time '07:00' + (h - 1) * interval '50 minutes'), (time '07:50' + (h - 1) * interval '50 minutes'),
-       ((d + h) % 5) + 1, case when h % 2 = 0 then 'A' else 'B' end, 'R', 'Robótica', 'Matemática', 'Professora Exemplo', 'Laboratório'
+       ((d + h) % 5) + 1, case when h % 2 = 0 then 'A' else 'B' end,
+       case when o.cargo = 'tempo_integral' then 'P' else 'R' end, 'Robótica', 'Matemática',
+       case when o.cargo = 'tempo_integral' then 'Artesanato' end, 'Professora Exemplo', 'Laboratório'
 from public.perfis o, generate_series(1, 5) d, generate_series(1, 3) h
 where o.papel = 'oficineiro';
 

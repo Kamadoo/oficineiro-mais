@@ -39,7 +39,7 @@
     <input id="ct-busca" type="search" class="largura-total-celular h-40 borda-cinza-160 raio-8 p-0-12 fs-14 min-w-240 max-w-340 flex-1-1-240" value="{{ busca }}" onChange="{{ buscar }}" placeholder="Buscar por nome ou login" aria-label="Buscar por nome ou login" autocomplete="off"></input>
     <select style="background:var(--fundo-branco)" value="{{ perfil }}" onChange="{{ escolherPerfil }}"
       aria-label="Perfil" class="h-40 borda-cinza-160 raio-8 p-0-10 fs-14 max-w-240 largura-fundo fundo-branco"><option
-      value="">Todos os perfis</option><option value="oficineiro">Oficineiro de Inclusão Digital</option><option
+      value="">Todos os perfis</option><option value="oficineiro">Oficineiro de Inclusão Digital</option><option value="tempo_integral">Oficineiro</option><option
       value="analista">Analista</option><option value="direcao">Direção da escola</option><option
       value="coordenador">Coordenador</option><option value="gerente">Gerente de Projetos</option></select>
     <select style="background:var(--fundo-branco)" value="{{ carteira }}" onChange="{{ escolherCarteira }}"
@@ -128,7 +128,7 @@ class Component extends DCLogic {
     const contasFiltradas = contexto.contas.filter(
       c =>
         (!termoDeContas || normTxt(c.nome).includes(termoDeContas) || normTxt(c.usuario).includes(termoDeContas)) &&
-        (!memoria.perfil || c.papel === memoria.perfil) &&
+        (!memoria.perfil || Base.perfilDaConta(c) === memoria.perfil) &&
         (!memoria.situacao || situacaoDaConta(c) === memoria.situacao) &&
         (!memoria.carteira || carteiraDaConta(c) === memoria.carteira) &&
         (!memoria.escola ||
@@ -158,7 +158,7 @@ class Component extends DCLogic {
           aria: 'Ver detalhes da conta de ' + c.nome,
           login: c.usuario || '',
           semLogin: !c.usuario,
-          perfil: NOMES_DE_PERFIL[c.papel] || c.papel,
+          perfil: NOMES_DE_PERFIL[Base.perfilDaConta(c)] || c.papel,
           perfilCor: pc[0],
           perfilFundo: pc[1],
           atuacao: atuacaoDaConta(c),

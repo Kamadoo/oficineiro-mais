@@ -178,7 +178,8 @@ window.FSM_CONTAS = (() => {
           hMatch = hTxt.match(/^\s*0?([78])(?:[:h.]?00)?\s*h?\s*$/i),
           jornada = hTxt && !hMatch ? '' : '07:00',
           tel = String((C.telefone && r[C.telefone]) || '').replace(/\D/g, ''),
-          contratada = String((C.contratada && r[C.contratada]) || '').replace(/\D/g, '');
+          contratada = String((C.contratada && r[C.contratada]) || '').replace(/\D/g, ''),
+          cargo = papel === 'oficineiro' ? (/inclus|digital/.test(pn) ? 'inclusao_digital' : 'tempo_integral') : '';
         let erro = '';
         if (nome.length < 3 || nome.length > 120) erro = 'Nome inválido';
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 160) erro = 'E-mail inválido';
@@ -202,6 +203,7 @@ window.FSM_CONTAS = (() => {
           email,
           cpf,
           papel,
+          cargo,
           escola: papel === 'oficineiro' || papel === 'direcao' ? esc : null,
           carteira: papel === 'analista' ? cart : null,
           jornada: papel === 'oficineiro' ? jornada : '',
@@ -247,6 +249,7 @@ window.FSM_CONTAS = (() => {
           email: l.email,
           cpf: l.cpf,
           papel: l.papel,
+          cargo: l.cargo,
           telefone: l.tel,
           escola_sigla: l.escola ? l.escola.sigla : '',
           carteira_id: l.carteira ? l.carteira.id : ''
@@ -370,6 +373,7 @@ window.FSM_CONTAS = (() => {
         email,
         cpf: f.cpf,
         papel: f.papel,
+        cargo: f.papel === 'oficineiro' ? f.cargo || 'inclusao_digital' : '',
         telefone: tel,
         escola_sigla: f.papel === 'oficineiro' || f.papel === 'direcao' ? f.escola : '',
         carteira_id: f.papel === 'analista' ? f.carteira : ''
@@ -531,7 +535,7 @@ window.FSM_CONTAS = (() => {
         nome: l.nome || '—',
         email: l.email || '—',
         documento: l.st === 'criada' ? 'apagado' : documentoMascarado(l.cpf),
-        perfil: nomesDePerfil[l.papel] || '—',
+        perfil: nomesDePerfil[Base.perfilDaConta(l)] || '—',
         vinculo: l.escola
           ? l.escola.sigla
           : l.carteira
@@ -587,6 +591,31 @@ window.FSM_CONTAS = (() => {
     return d.length === 11 ? '***.' + d.slice(3, 6) + '.' + d.slice(6, 9) + '-**' : d ? 'inválido' : '—';
   }
 
+  async function trocarCargo(c) {
+    const troca = this.state.trocaDeCargo;
+    if (!troca || this.state.salvandoConta) return;
+    if (troca.motivo.trim().length < 10) {
+      this.setState({ erroConta: 'Explique o motivo com pelo menos 10 caracteres.' }, () =>
+        this.focar('ct-det-cargo-motivo')
+      );
+      return;
+    }
+    const cargo = c.cargo === 'tempo_integral' ? 'inclusao_digital' : 'tempo_integral';
+    this.setState({ salvandoConta: true, erroConta: '' });
+    try {
+      await window.FSM_AUTH.alterarCargo(c.id, cargo, troca.motivo.trim());
+      this.setState({ salvandoConta: false, trocaDeCargo: null }, () => {
+        this.avisar('Cargo alterado · ' + c.nome + ' agora é ' + Base.CARGOS_DE_OFICINEIRO[cargo]);
+        this.contasMudaram();
+        this.focar('ct-det-titulo');
+      });
+    } catch (x) {
+      this.setState({
+        salvandoConta: false,
+        erroConta: Base.msgErro(x, 'Não foi possível trocar o cargo.')
+      });
+    }
+  }
   return {
     avisar,
     travarFundo,
@@ -600,6 +629,7 @@ window.FSM_CONTAS = (() => {
     documentoDaPlanilha,
     criarConta,
     ativarConta,
+    trocarCargo,
     salvarMudanca,
     cancelarMudanca,
     documentoMascarado,
