@@ -865,10 +865,39 @@ class Component extends DCLogic {
         formulario: {
           ...memoria.formulario,
           salvando: false,
-          erro: (x && x.message) || 'Não foi possível salvar o registro.'
+          erro: this.explicarRecusaDoRegistro((x && x.message) || 'Não foi possível salvar o registro.', data, atividade)
         }
       });
     }
+  }
+  explicarRecusaDoRegistro(mensagem, data, atividade) {
+    if (!/presença iniciada/i.test(mensagem)) return mensagem;
+    const s = this.state,
+      inicioDaAtividade = String(atividade.inicio).slice(0, 5),
+      deHoje = data === iso(new Date()),
+      entrada = deHoje
+        ? ((s.presencaDeHoje && s.presencaDeHoje.marcacoes) || []).find(m => m.tipo === 'entrada')
+        : null,
+      doDia = !deHoje ? (s.presencasDoCiclo || []).find(p => p.data === data && p.inicio) : null,
+      inicioDaPresenca = entrada ? horaDeBrasilia(entrada.em) : doDia ? horaDeBrasilia(doDia.inicio) : '',
+      ajuste =
+        ' Se você já estava na escola, peça o ajuste em Presença na Escola › Justificativas (Esquecimento de registro); depois da aprovação, o registro pode ser salvo.';
+    if (entrada && entrada.pendente)
+      return (
+        'A entrada das ' +
+        inicioDaPresenca +
+        ' está guardada neste aparelho e ainda não foi enviada. Salve o registro depois que a conexão voltar e a entrada for enviada.'
+      );
+    if (!inicioDaPresenca)
+      return 'Não há presença registrada na escola neste dia. A atividade só pode ser registrada como realizada com a presença iniciada.' + ajuste;
+    return (
+      'A presença deste dia começou às ' +
+      inicioDaPresenca +
+      ' e a atividade às ' +
+      inicioDaAtividade +
+      '. O registro é aceito quando a presença começa até 15 minutos depois do início da atividade.' +
+      ajuste
+    );
   }
   competenciaAtual() {
     return Base.iso(Base.cicloComp(new Date()));
