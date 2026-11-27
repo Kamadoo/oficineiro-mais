@@ -50,11 +50,37 @@
             <sc-if value="{{ visitaDaAgenda.temOrientacao }}" hint-placeholder-val="{{ true }}"><span class="fs-12 cor-cinza-750 texto-quebra-pretty">{{ visitaDaAgenda.orientacao }}</span></sc-if>
           </div>
         </sc-if>
+        <sc-if value="{{ temRegistro }}" hint-placeholder-val="{{ false }}">
+          <div role="status" class="raio-10 p-14 d-flex alinha-center gap-10" style="background:var(--fundo-verde-80);color:var(--texto-verde-760)"><svg
+            class="icone flex-none" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span
+            class="fs-16 fw-600">{{ registroTexto }}</span></div>
+        </sc-if>
         <sc-if value="{{ temBloqueio }}" hint-placeholder-val="{{ false }}">
-          <div role="status" class="fundo-vermelho-50 raio-10 p-12-14 cor-vermelho-690 fw-600 fs-14">{{ bloqueio }}</div>
+          <div id="an-bloqueio" tabindex="-1" class="fundo-vermelho-50 raio-10 p-12-14 d-flex eixo-column gap-10 contorno-none">
+            <span role="status" class="cor-vermelho-690 fw-600 fs-14 lh-1p5">{{ bloqueio }}</span>
+            <sc-if value="{{ temAjuda }}" hint-placeholder-val="{{ false }}">
+              <div class="d-flex gap-8 quebra-wrap">
+                <button onClick="{{ comoResolver }}" aria-haspopup="dialog" class="largura-total-celular h-44 borda-0 raio-10 p-0-16 fs-15 fw-600 cor-branco" style="background:var(--destaque-vermelho-600)">Como resolver</button>
+                <sc-if value="{{ podeUsarCelular }}" hint-placeholder-val="{{ false }}"><button onClick="{{ usarCelular }}" aria-haspopup="dialog" class="largura-total-celular h-44 borda-cinza-160 fundo-branco raio-10 p-0-16 fs-15 fw-600 cor-ciano-740 botao-secundario">Usar o celular</button></sc-if>
+              </div>
+            </sc-if>
+          </div>
         </sc-if>
         <label class="d-flex eixo-column gap-6"><span class="fs-12 fw-600 cor-cinza-600 caixa-uppercase ls-0p04em">Observação (opcional)</span><input value="{{ observacao }}" onChange="{{ escreverObservacao }}" maxlength="300" placeholder="ex.: reunião com a direção, sinal de GPS fraco" class="h-44 borda-cinza-160 raio-8 p-0-12 fs-14"></input></label>
-        <button onClick="{{ alternarPresenca }}" disabled="{{ presencaBloqueada }}" class="h-52 borda-0 raio-10 cor-branco fs-16 fw-600 {{ botao.classe }}" style="background:{{ botao.fundo }}">{{ botao.rotulo }}</button>
+        <sc-if value="{{ confirmandoFim }}" hint-placeholder-val="{{ false }}">
+          <div role="group" aria-labelledby="an-conf-fim" class="fundo-cinza-20 raio-10 p-14 d-flex eixo-column gap-12">
+            <span id="an-conf-fim" class="fs-16 fw-600">{{ perguntaDoFim }}</span>
+            <div class="empilha-celular d-grid colunas-1fr-1fr gap-10">
+              <button id="an-sim-fim" onClick="{{ confirmarFim }}" class="h-52 borda-0 raio-10 cor-branco fs-16 fw-600" style="background:var(--destaque-ciano-880)">Sim, encerrar</button>
+              <button onClick="{{ desistirDoFim }}" class="h-52 borda-cinza-160 fundo-branco raio-10 fs-16 fw-600 cor-ciano-850 botao-secundario">Voltar</button>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ semConfirmacao }}" hint-placeholder-val="{{ true }}">
+          <button id="an-botao-presenca" onClick="{{ alternarPresenca }}" disabled="{{ presencaOcupada }}" aria-disabled="{{ presencaTravada }}" class="h-52 borda-0 raio-10 cor-branco fs-16 fw-600 {{ botao.classe }}" style="background:{{ botao.fundo }}">{{ botao.rotulo }}</button>
+        </sc-if>
+        <button onClick="{{ testarLocal }}" disabled="{{ testando }}" class="h-44 borda-cinza-160 fundo-branco raio-10 fs-15 fw-600 cor-ciano-740 botao-secundario">{{ testeRotulo }}</button>
+        <sc-if value="{{ temTeste }}" hint-placeholder-val="{{ false }}"><p role="status" class="m-0 fs-14 fw-600 lh-1p5" style="color:{{ teste.cor }}">{{ teste.texto }}</p></sc-if>
         <p class="m-0 fs-12 cor-cinza-600 lh-1p5">A posição é conferida no início e no encerramento, e a hora é registrada pelo servidor. A presença só pode ser registrada dentro do raio da escola.</p>
       </div>
     </section>
@@ -117,6 +143,26 @@ const distancia = (latitude1, longitude1, latitude2, longitude2) => {
         Math.sin(radianos(longitude2 - longitude1) / 2) ** 2;
   return Math.round(12742000 * Math.asin(Math.sqrt(a)));
 };
+const TEMPO_DO_REFINO = 30000;
+const AJUDA_DE = { bloqueada: 'bloqueada', semSinal: 'aproximada', aproximada: 'aproximada', fora: 'fora' };
+const PRECISAO_BOA = 50;
+const erroDeLocalizacao = codigo => ({
+  situacao: 'erro',
+  codigo,
+  mensagem:
+    codigo === 0
+      ? 'Este aparelho não informa a localização'
+      : codigo === 1
+        ? 'Localização bloqueada · permita o acesso nas configurações do navegador'
+        : codigo === 3
+          ? 'O GPS demorou a responder · tente de novo'
+          : 'Não foi possível obter a localização'
+});
+const focar = id =>
+  setTimeout(() => {
+    const elemento = document.getElementById(id);
+    if (elemento) elemento.focus();
+  }, 30);
 const carregarLeaflet = () =>
   window.FSM_MAPA.carregarLeaflet('../vendor/leaflet/leaflet-1.9.4.css', '../vendor/leaflet/leaflet-1.9.4.js');
 class Component extends DCLogic {
@@ -129,12 +175,21 @@ class Component extends DCLogic {
   componentDidUpdate() {
     this.montarMapa();
     this.acompanhar();
+    if (this.props.memoria.tentarDeNovo) {
+      this.props.memoria.tentarDeNovo = false;
+      this.localizar();
+    }
   }
   componentWillUnmount() {
     this.desmontada = true;
     document.removeEventListener('visibilitychange', this.aoMudarVisibilidade);
     if (this.vigia != null && navigator.geolocation) navigator.geolocation.clearWatch(this.vigia);
     this.vigia = null;
+    clearTimeout(this.prazoDoRefino);
+    const memoria = this.props.memoria;
+    memoria.geo = { ...memoria.geo, refinando: false };
+    memoria.aguardando = false;
+    if (memoria.teste && memoria.teste.situacao === 'testando') memoria.teste = null;
     this.removerMapa();
   }
   lembrar(mudanca) {
@@ -153,28 +208,59 @@ class Component extends DCLogic {
       ? { latitude: escola.latitude, longitude: escola.longitude, raio: escola.raio_m || 150, sigla: escola.sigla }
       : null;
   }
+  precisaoBoa(precisao) {
+    const escola = this.escolaDoMapa();
+    return precisao <= PRECISAO_BOA || (!!escola && precisao < escola.raio);
+  }
+  entregar(geo) {
+    const fila = this.fila || [];
+    this.fila = [];
+    fila.forEach(funcao => funcao(geo));
+  }
+  concluirRefino(leitura) {
+    clearTimeout(this.prazoDoRefino);
+    this.prazoDoRefino = null;
+    const atual = leitura || this.props.memoria.geo;
+    const geo =
+      atual.situacao === 'ok'
+        ? { ...atual, refinando: false }
+        : atual.situacao === 'erro'
+          ? atual
+          : erroDeLocalizacao(this.ultimaFalha || 3);
+    this.lembrar({ geo });
+    this.entregar(geo);
+  }
   localizar(depois) {
     if (!navigator.geolocation) {
-      const geo = { situacao: 'erro', mensagem: 'Este aparelho não informa a localização' };
+      const geo = erroDeLocalizacao(0);
       this.lembrar({ geo });
       if (depois) depois(geo);
       return;
     }
     this.fila = [...(this.fila || []), ...(depois ? [depois] : [])];
     const anterior = this.props.memoria.geo;
-    this.lembrar({ geo: { ...anterior, situacao: anterior.situacao === 'ok' ? 'ok' : 'buscando' } });
+    this.ultimaFalha = null;
+    this.lembrar({
+      geo: { ...anterior, situacao: anterior.situacao === 'ok' ? 'ok' : 'buscando', refinando: true }
+    });
     if (this.vigia != null) navigator.geolocation.clearWatch(this.vigia);
-    const entregar = geo => {
-      const fila = this.fila || [];
-      this.fila = [];
-      fila.forEach(funcao => funcao(geo));
-    };
+    clearTimeout(this.prazoDoRefino);
+    this.prazoDoRefino = setTimeout(() => this.concluirRefino(), TEMPO_DO_REFINO);
+    const rodada = (this.rodada = (this.rodada || 0) + 1);
     this.vigia = navigator.geolocation.watchPosition(
       posicao => {
         const atual = this.props.memoria.geo,
           latitude = posicao.coords.latitude,
           longitude = posicao.coords.longitude,
           precisao = Math.round(posicao.coords.accuracy);
+        if (atual.refinando) {
+          const recente = atual.situacao === 'ok' && atual.rodada === rodada;
+          if (recente && precisao > atual.precisao) return;
+          const geo = { situacao: 'ok', latitude, longitude, precisao, refinando: true, rodada };
+          if (this.precisaoBoa(precisao)) return this.concluirRefino(geo);
+          this.lembrar({ geo });
+          return;
+        }
         if (
           atual.situacao === 'ok' &&
           !(this.fila || []).length &&
@@ -184,28 +270,25 @@ class Component extends DCLogic {
           return;
         const geo = { situacao: 'ok', latitude, longitude, precisao };
         this.lembrar({ geo });
-        entregar(geo);
+        this.entregar(geo);
       },
       falha => {
         const atual = this.props.memoria.geo;
+        if (atual.refinando) {
+          this.ultimaFalha = falha.code;
+          if (falha.code === 1) this.concluirRefino(erroDeLocalizacao(1));
+          return;
+        }
         if (atual.situacao === 'ok' && !(this.fila || []).length) return;
         if (atual.latitude != null && falha.code === 3) {
           const geo = { ...atual, situacao: 'ok' };
           this.lembrar({ geo });
-          entregar(geo);
+          this.entregar(geo);
           return;
         }
-        const geo = {
-          situacao: 'erro',
-          mensagem:
-            falha.code === 1
-              ? 'Localização bloqueada · permita o acesso nas configurações do navegador'
-              : falha.code === 3
-                ? 'O GPS demorou a responder · tente de novo'
-                : 'Não foi possível obter a localização'
-        };
+        const geo = erroDeLocalizacao(falha.code);
         this.lembrar({ geo });
-        entregar(geo);
+        this.entregar(geo);
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 }
     );
@@ -324,6 +407,140 @@ class Component extends DCLogic {
     if (centro) mapa.fitBounds(L.latLngBounds([centro, posicao]).pad(0.3), { maxZoom: 17, animate: false });
     else mapa.setView(posicao, 17, { animate: false });
   }
+  avaliar() {
+    const contexto = this.props.contexto,
+      memoria = this.props.memoria,
+      presencaAberta = contexto.presencaAberta,
+      geo = memoria.geo,
+      escolaId = presencaAberta
+        ? String(presencaAberta.escola_id)
+        : memoria.escola || (contexto.agendaDeHoje[0] ? String(contexto.agendaDeHoje[0].escola_id) : ''),
+      escolaDoMapa = this.escolaDoMapa(),
+      metros =
+        escolaDoMapa && geo.situacao === 'ok'
+          ? distancia(geo.latitude, geo.longitude, escolaDoMapa.latitude, escolaDoMapa.longitude)
+          : null,
+      foraDoRaio = metros != null && metros > escolaDoMapa.raio,
+      deOutroDia = !!(presencaAberta && presencaAberta.data < contexto.hoje);
+    const impedimento =
+      deOutroDia || (!presencaAberta && !escolaId)
+        ? ''
+        : !escolaDoMapa
+          ? 'semLocal'
+          : geo.situacao === 'erro'
+            ? geo.codigo === 0 || geo.codigo === 1
+              ? 'bloqueada'
+              : 'semSinal'
+            : geo.refinando
+              ? ''
+              : foraDoRaio && geo.precisao > Math.max(escolaDoMapa.raio, 100)
+                ? 'aproximada'
+                : foraDoRaio
+                  ? 'fora'
+                  : '';
+    const bloqueio =
+      impedimento === 'semLocal'
+        ? 'Esta escola ainda não tem localização cadastrada. Peça ao coordenador para cadastrar antes de registrar a presença.'
+        : impedimento === 'bloqueada'
+          ? 'A localização está desligada ou bloqueada neste aparelho. Sem ela, a presença não pode ser registrada.'
+          : impedimento === 'semSinal'
+            ? 'Não foi possível achar a sua localização. Sem ela, a presença não pode ser registrada.'
+            : impedimento === 'aproximada'
+              ? 'A localização está aproximada (precisão de ' +
+                numero(geo.precisao) +
+                ' m). Assim não dá para conferir se você está na escola.'
+              : impedimento === 'fora'
+                ? 'Você está a ' +
+                  numero(metros) +
+                  ' m da escola, fora do raio de ' +
+                  numero(escolaDoMapa.raio) +
+                  ' m. Aproxime-se da escola para ' +
+                  (presencaAberta ? 'encerrar' : 'registrar') +
+                  ' a presença.'
+                : '';
+    return { escolaId, escolaDoMapa, metros, impedimento, bloqueio };
+  }
+  recusar(evento) {
+    const { escolaId, metros, impedimento } = this.avaliar(),
+      geo = this.props.memoria.geo,
+      motivo =
+        'Barrada no aparelho: ' +
+        (impedimento === 'semLocal'
+          ? 'escola sem localização cadastrada'
+          : impedimento === 'bloqueada' || impedimento === 'semSinal'
+            ? geo.mensagem
+            : impedimento === 'aproximada'
+              ? 'localização aproximada'
+              : 'fora do raio da escola') +
+        (geo.situacao === 'ok' ? ' · precisão de ' + geo.precisao + ' m' : '');
+    this.lembrar({ confirmarFim: false });
+    this.props.contexto.registrarRecusa({
+      evento,
+      motivo,
+      distancia_m: metros,
+      escola_id: escolaId ? Number(escolaId) : null
+    });
+    this.props.contexto.avisar('Presença não registrada · veja o aviso em vermelho');
+    focar('an-bloqueio');
+  }
+  tocarPresenca(visitaDaAgenda) {
+    const contexto = this.props.contexto,
+      memoria = this.props.memoria,
+      aberta = contexto.presencaAberta;
+    if (contexto.presencaSalvando || memoria.aguardando) return;
+    if (!aberta && !this.avaliar().escolaId) return contexto.alternarPresenca(visitaDaAgenda, () => {});
+    const geo = memoria.geo;
+    if (geo.refinando || geo.situacao !== 'ok') {
+      const continuar = () => {
+        this.lembrar({ aguardando: false });
+        this.tocarPresenca(visitaDaAgenda);
+      };
+      this.lembrar({ aguardando: true });
+      if (geo.refinando && this.vigia != null) this.fila = [...(this.fila || []), continuar];
+      else this.localizar(continuar);
+      return;
+    }
+    if (this.avaliar().bloqueio) return this.recusar(aberta ? 'fim' : 'inicio');
+    if (aberta && !memoria.confirmarFim) {
+      this.lembrar({ confirmarFim: true });
+      focar('an-sim-fim');
+      return;
+    }
+    this.lembrar({ confirmarFim: false, teste: null });
+    contexto.alternarPresenca(visitaDaAgenda, enviar => enviar(this.props.memoria.geo));
+  }
+  testarLocal() {
+    this.lembrar({ teste: { situacao: 'testando' } });
+    this.localizar(geo => {
+      const { escolaDoMapa, metros, bloqueio } = this.avaliar();
+      const pronto = geo.situacao === 'ok' && !bloqueio;
+      const texto =
+        geo.situacao !== 'ok'
+          ? 'Ainda não está pronto: ' + geo.mensagem.toLowerCase() + '.'
+          : !escolaDoMapa
+            ? 'Localização obtida · precisão de ' +
+              numero(geo.precisao) +
+              ' m. Escolha a escola para conferir a distância.'
+            : pronto
+              ? 'Pronto. Você está a ' +
+                numero(metros) +
+                ' m da escola, dentro do raio. Precisão de ' +
+                numero(geo.precisao) +
+                ' m.'
+              : 'Ainda não está pronto. Veja o aviso em vermelho.';
+      this.lembrar({
+        teste: {
+          situacao: 'pronto',
+          texto,
+          cor: pronto
+            ? 'var(--texto-verde-700)'
+            : geo.situacao === 'ok' && !escolaDoMapa
+              ? 'var(--texto-cinza-750)'
+              : 'var(--texto-vermelho-600)'
+        }
+      });
+    });
+  }
   renderVals() {
     const contexto = this.props.contexto,
       memoria = this.props.memoria;
@@ -340,41 +557,18 @@ class Component extends DCLogic {
         : null
       : agendaDeHoje.find(v => String(v.escola_id) === escolaId);
     const escola = contexto.escolaDe(escolaId);
-    const escolaDoMapa = this.escolaDoMapa(),
-      metros =
-        escolaDoMapa && geo.situacao === 'ok'
-          ? distancia(geo.latitude, geo.longitude, escolaDoMapa.latitude, escolaDoMapa.longitude)
-          : null,
-      foraDoRaio = metros != null && metros > escolaDoMapa.raio;
-    const deOutroDia = !!(presencaAberta && presencaAberta.data < hoje);
-    const bloqueio =
-      deOutroDia || (!presencaAberta && !escolaId)
-        ? ''
-        : !escolaDoMapa
-          ? 'Esta escola ainda não tem localização cadastrada. Peça ao coordenador para cadastrar antes de registrar a presença.'
-          : geo.situacao === 'erro'
-            ? 'Ative a localização do aparelho para registrar a presença. A presença só pode ser registrada dentro do raio da escola.'
-            : foraDoRaio && geo.precisao > Math.max(escolaDoMapa.raio, 100)
-              ? 'A localização do aparelho está aproximada (precisão de ' +
-                numero(geo.precisao) +
-                ' m) e não permite conferir o raio da escola. Ative a localização precisa (GPS) do aparelho e tente de novo perto de uma janela ou ao ar livre.'
-              : foraDoRaio
-                ? 'Você está a ' +
-                  numero(metros) +
-                  ' m da escola, fora do raio de ' +
-                  numero(escolaDoMapa.raio) +
-                  ' m. Aproxime-se da escola para ' +
-                  (presencaAberta ? 'encerrar' : 'registrar') +
-                  ' a presença.'
-                : '';
+    const { escolaDoMapa, metros, impedimento, bloqueio } = this.avaliar();
+    const testando = !!(memoria.teste && memoria.teste.situacao === 'testando');
     const linhaDoGps =
-      geo.situacao === 'ok'
-        ? escolaDoMapa
-          ? 'Você está a ' + numero(metros) + ' m da escola · precisão de ' + numero(geo.precisao) + ' m'
-          : 'Localização obtida · precisão de ' + numero(geo.precisao) + ' m'
-        : geo.situacao === 'erro'
-          ? geo.mensagem
-          : 'Buscando sua localização…';
+      geo.situacao === 'ok' && geo.refinando
+        ? 'Melhorando a precisão… ' + numero(geo.precisao) + ' m'
+        : geo.situacao === 'ok'
+          ? escolaDoMapa
+            ? 'Você está a ' + numero(metros) + ' m da escola · precisão de ' + numero(geo.precisao) + ' m'
+            : 'Localização obtida · precisão de ' + numero(geo.precisao) + ' m'
+          : geo.situacao === 'erro'
+            ? geo.mensagem
+            : 'Buscando sua localização…';
     const visitaDe = presenca => (presenca.agenda_id ? contexto.agenda.find(v => v.id === presenca.agenda_id) : null);
     const presencasDeHoje = contexto.presencas
       .filter(p => p.data === hoje)
@@ -458,7 +652,7 @@ class Component extends DCLogic {
       },
       podeEscolher: !presencaAberta,
       escolaId: escolaId || '',
-      escolherEscola: e => this.lembrar({ escola: e.target.value }),
+      escolherEscola: e => this.lembrar({ escola: e.target.value, teste: null, confirmarFim: false }),
       opcoesDeEscola: agendaDeHoje
         .map(v => ({
           valor: String(v.escola_id),
@@ -483,7 +677,34 @@ class Component extends DCLogic {
         : {},
       temBloqueio: !!bloqueio,
       bloqueio,
-      presencaBloqueada: contexto.presencaSalvando || !!bloqueio,
+      temAjuda: !!AJUDA_DE[impedimento],
+      comoResolver: () => contexto.abrirAjudaPresenca(AJUDA_DE[impedimento]),
+      podeUsarCelular:
+        (impedimento === 'aproximada' || impedimento === 'semSinal') &&
+        !!window.FSM_PRESENCA_AJUDA &&
+        !window.FSM_PRESENCA_AJUDA.temGps(window.FSM_PRESENCA_AJUDA.aparelho(navigator)),
+      usarCelular: () => contexto.abrirAjudaPresenca('aproximada', 'celular'),
+      presencaOcupada: contexto.presencaSalvando || !!memoria.aguardando,
+      presencaTravada: bloqueio ? 'true' : 'false',
+      temRegistro: !!(presencaAberta && presencaAberta.data === hoje),
+      registroTexto: presencaAberta ? 'Presença registrada às ' + hmTs(presencaAberta.inicio) + ' · em andamento' : '',
+      confirmandoFim: !!(presencaAberta && memoria.confirmarFim),
+      semConfirmacao: !(presencaAberta && memoria.confirmarFim),
+      perguntaDoFim: presencaAberta ? 'Encerrar a presença iniciada às ' + hmTs(presencaAberta.inicio) + '?' : '',
+      confirmarFim: () => this.tocarPresenca(null),
+      desistirDoFim: () => {
+        this.lembrar({ confirmarFim: false });
+        focar('an-botao-presenca');
+      },
+      testarLocal: () => this.testarLocal(),
+      testando,
+      testeRotulo: testando
+        ? geo.situacao === 'ok'
+          ? 'Melhorando a precisão… ' + numero(geo.precisao) + ' m'
+          : 'Buscando sua localização…'
+        : 'Testar minha localização',
+      temTeste: !!(memoria.teste && memoria.teste.situacao === 'pronto'),
+      teste: memoria.teste && memoria.teste.situacao === 'pronto' ? memoria.teste : { texto: '', cor: '' },
       situacao: presencaAberta
         ? {
             rotulo: 'Em andamento',
@@ -507,23 +728,24 @@ class Component extends DCLogic {
       escreverObservacao: e => this.lembrar({ observacao: e.target.value }),
       botao: presencaAberta
         ? {
-            rotulo: contexto.presencaSalvando ? 'Encerrando…' : 'Encerrar atividades na escola',
+            rotulo: contexto.presencaSalvando
+              ? 'Encerrando…'
+              : memoria.aguardando
+                ? 'Melhorando a precisão…'
+                : 'Encerrar atividades na escola',
             fundo: bloqueio ? 'var(--destaque-cinza-600)' : 'var(--destaque-ciano-880)'
           }
         : {
-            rotulo: contexto.presencaSalvando ? 'Iniciando…' : 'Iniciar atividades na escola',
+            rotulo: contexto.presencaSalvando
+              ? 'Iniciando…'
+              : memoria.aguardando
+                ? 'Melhorando a precisão…'
+                : 'Iniciar atividades na escola',
             classe: escolaId && !bloqueio ? 'fundo-ciano-660' : '',
             fundo: escolaId && !bloqueio ? 'var(--destaque-ciano-660)' : 'var(--destaque-cinza-600)'
           },
       alternarPresenca: () =>
-        contexto.alternarPresenca(
-          visitaDaAgenda && visitaDaAgenda.status === 'agendada' ? visitaDaAgenda : null,
-          enviar => {
-            const atual = this.props.memoria.geo;
-            if (atual.situacao === 'ok') enviar(atual);
-            else this.localizar(enviar);
-          }
-        ),
+        this.tocarPresenca(visitaDaAgenda && visitaDaAgenda.status === 'agendada' ? visitaDaAgenda : null),
       pendencias,
       semPendencias: pendencias.length === 0,
       pendenciasResumo: pendencias.length

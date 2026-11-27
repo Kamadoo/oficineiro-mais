@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficineiro+ · Analista · Ajuda da presença</title>
+<script src="../vendor/dc-runtime/dc-runtime.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ aberta }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ fechar }}" aria-hidden="true" class="pos-fixed inset-0 fundo-ciano-880-a45 z-80"></div>
+  <aside role="dialog" aria-modal="true" aria-labelledby="aj-titulo" class="pos-fixed topo-0 direita-0 base-0 fundo-branco z-81 d-flex eixo-column sombra-n12-0-40-rgba-0-0-0-0p12 largura-fundo largura-460">
+    <div class="d-flex alinha-center p-16-20 borda-b-cinza-110 gap-12"><div
+      class="flex-1 d-flex eixo-column min-w-0"><span class="fs-12 cor-cinza-600">{{ subtitulo }}</span><h3
+      id="aj-titulo" tabindex="-1" class="m-0 fs-17 contorno-none">{{ titulo }}</h3></div><button
+      onClick="{{ fechar }}" aria-label="Fechar"
+      class="borda-0 fundo-cinza-55 raio-8 w-40 h-40 fs-18 cor-ciano-850 flex-none largura-fundo">×</button></div>
+    <div class="p-20 d-flex eixo-column gap-16 rolagem-auto flex-1">
+      <sc-if value="{{ mostrarQr }}" hint-placeholder-val="{{ false }}">
+        <div class="d-flex eixo-column alinha-center gap-10">
+          <svg role="img" aria-label="Código para abrir o site no celular" viewBox="{{ qrCaixa }}" width="220" height="220" class="raio-10 max-w-100pc" style="background:var(--destaque-branco)" shape-rendering="crispEdges"><path d="{{ qrCaminho }}" style="fill:var(--destaque-ciano-880)"></path></svg>
+          <span class="fs-13 cor-cinza-600 texto-center quebra-palavra-anywhere">Ou digite no navegador do celular: <b class="cor-cinza-750">{{ endereco }}</b></span>
+        </div>
+      </sc-if>
+      <ol class="m-0 p-0 lista-none d-flex eixo-column gap-12">
+        <sc-for list="{{ passos }}" as="passo" hint-placeholder-count="4">
+          <li class="d-flex alinha-flex-start gap-12"><span aria-hidden="true" class="w-26 h-26 raio-50pc flex-none d-flex alinha-center justifica-center fs-14 fw-600 cor-branco" style="background:var(--destaque-ciano-660)">{{ passo.numero }}</span><span class="fs-15 lh-1p5 cor-cinza-750">{{ passo.texto }}</span></li>
+        </sc-for>
+      </ol>
+      <sc-if value="{{ podeUsarCelular }}" hint-placeholder-val="{{ false }}">
+        <div class="fundo-cinza-20 raio-10 p-14 d-flex eixo-column gap-10">
+          <span class="fs-14 fw-600">Este computador não tem GPS</span>
+          <span class="fs-13 cor-cinza-750 lh-1p5">O celular costuma achar o local com mais precisão. Abra o site no celular e registre a presença por lá.</span>
+          <button onClick="{{ usarCelular }}" class="h-44 borda-cinza-160 fundo-branco raio-10 p-0-16 fs-15 fw-600 cor-ciano-740 botao-secundario">Usar o celular</button>
+        </div>
+      </sc-if>
+    </div>
+    <div class="borda-t-cinza-110 d-flex justifica-flex-end gap-8 quebra-wrap rodape-gaveta"><button
+      onClick="{{ fechar }}"
+      class="h-44 borda-cinza-160 fundo-branco raio-10 p-0-16 fs-15 fw-600 cor-ciano-850 botao-secundario">Fechar</button><sc-if
+      value="{{ podeTentar }}" hint-placeholder-val="{{ true }}"><button style="background:var(--destaque-ciano-660)" onClick="{{ tentarDeNovo }}"
+      class="h-44 borda-0 cor-branco raio-10 p-0-18 fs-15 fw-600 fundo-ciano-660">Atualizar local</button></sc-if></div>
+  </aside>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return this.props.ajuda;
+  }
+}
+</script>
+</body>
+</html>
