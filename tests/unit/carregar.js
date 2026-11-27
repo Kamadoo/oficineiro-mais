@@ -4,7 +4,7 @@ const vm = require('vm');
 
 const LIB = path.resolve(__dirname, '..', '..', 'src', 'lib');
 
-function carregar(arquivos, extras = {}) {
+function carregar(arquivos, extras = {}, globais = {}) {
   const armazenado = {};
   const localStorage = {
     getItem: chave => (chave in armazenado ? armazenado[chave] : null),
@@ -22,7 +22,8 @@ function carregar(arquivos, extras = {}) {
     TextEncoder,
     TextDecoder,
     DecompressionStream,
-    crypto: globalThis.crypto
+    crypto: globalThis.crypto,
+    ...globais
   });
   for (const arquivo of arquivos) {
     vm.runInContext(fs.readFileSync(path.join(LIB, arquivo), 'utf8'), contexto, { filename: arquivo });

@@ -98,13 +98,39 @@ window.FSM_AUTH =
       if (c === 'reauthentication_needed' || /reauthenticat/i.test(m))
         return 'Por segurança, entre de novo antes de trocar a senha.';
       if (corpo && corpo.code === '22023' && m) return m.charAt(0).toUpperCase() + m.slice(1) + '.';
-      if (status === 401 || status === 403) return 'Sessão expirada. Entre de novo.';
+      if (status === 401 || /^(bad_jwt|session_not_found|session_expired|no_authorization)$/.test(c))
+        return 'Sessão expirada. Entre de novo.';
+      if (status === 403) return 'Você não tem permissão para esta ação.';
       return 'Não foi possível concluir agora. Tente de novo.';
     }
 
     async function chamar(caminho, opcoes) {
-      if (!configurado()) throw new Error('O site ainda não foi ligado ao Supabase (arquivo fsm_config.js).');
       opcoes = opcoes || {};
+      if (!opcoes.token || !sessao || opcoes.token !== sessao.access_token) return chamarUmaVez(caminho, opcoes);
+      if (sessao.expires_at - Math.floor(Date.now() / 1000) < 60) {
+        try {
+          await renovar();
+        } catch (e) {
+          if (e && e.status && e.status < 500) throw new Error('Sessão expirada. Entre de novo.', { cause: e });
+        }
+      }
+      const usado = sessao ? sessao.access_token : opcoes.token;
+      try {
+        return await chamarUmaVez(caminho, Object.assign({}, opcoes, { token: usado }));
+      } catch (e) {
+        if (e.status !== 401 || !sessao) throw e;
+        try {
+          if (sessao.access_token === usado) await renovar();
+        } catch (r) {
+          throw r && !r.status && r.message !== 'prazo' ? r : e;
+        }
+        if (!sessao || sessao.access_token === usado) throw e;
+        return chamarUmaVez(caminho, Object.assign({}, opcoes, { token: sessao.access_token }));
+      }
+    }
+
+    async function chamarUmaVez(caminho, opcoes) {
+      if (!configurado()) throw new Error('O site ainda não foi ligado ao Supabase (arquivo fsm_config.js).');
       const cab = { apikey: chave(), 'Content-Type': 'application/json' };
       if (opcoes.token) cab['Authorization'] = 'Bearer ' + opcoes.token;
       if (opcoes.representacao) cab['Prefer'] = 'return=representation';
@@ -189,11 +215,32 @@ window.FSM_AUTH =
       clearTimeout(timerRenova);
       const ms = Math.max(30, sessao.expires_at - Math.floor(Date.now() / 1000) - 60) * 1000;
       timerRenova = setTimeout(() => {
-        renovar().catch(() => {
-          encerrar('expirou');
-        });
+        renovar().catch(falhaAoRenovar);
       }, ms);
       vigiaInatividade();
+    }
+
+    function falhaAoRenovar(e) {
+      if (!sessao) return;
+      if (e && e.message === 'prazo') return encerrar('prazo');
+      if (e && e.status && e.status < 500) return encerrar('expirou');
+      clearTimeout(timerRenova);
+      timerRenova = setTimeout(() => {
+        renovar().catch(falhaAoRenovar);
+      }, 30 * 1000);
+    }
+
+    function renovarSeVencendo() {
+      if (sessao && sessao.expires_at - Math.floor(Date.now() / 1000) < 120) renovar().catch(falhaAoRenovar);
+    }
+
+    if (typeof document !== 'undefined' && document.addEventListener)
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') renovarSeVencendo();
+      });
+    if (typeof window !== 'undefined' && window.addEventListener) {
+      window.addEventListener('pageshow', renovarSeVencendo);
+      window.addEventListener('online', renovarSeVencendo);
     }
 
     function limpa() {
@@ -253,6 +300,10 @@ window.FSM_AUTH =
       if (renovando) return renovando;
       renovando = (async () => {
         let rt = sessao && sessao.refresh_token;
+        if (rt && lembrarAte) {
+          const d = lerLembrar();
+          if (d && d.ate === lembrarAte && d.rt) rt = d.rt;
+        }
         if (!rt) {
           try {
             rt = sessionStorage.getItem(CHAVE_RT);

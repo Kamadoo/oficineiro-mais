@@ -155,6 +155,13 @@ window.FSM_NOVIDADES =
         perfis: ['gerente', 'coordenador', 'administrador'],
         texto:
           'Ao criar uma conta, você escolhe se o convite de primeiro acesso já sai por e-mail; a escolha é obrigatória.'
+      },
+      {
+        id: 24,
+        data: '2026-11-27',
+        perfis: TODOS,
+        texto:
+          'A entrada não cai mais ao voltar para o site depois de usar outro aplicativo ou apagar a tela, nem quando a internet oscila.'
       }
     ];
 
