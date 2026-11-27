@@ -155,6 +155,13 @@ window.FSM_NOVIDADES =
         perfis: ['gerente', 'coordenador', 'administrador'],
         texto:
           'Ao criar uma conta, você escolhe se o convite de primeiro acesso já sai por e-mail; a escolha é obrigatória.'
+      },
+      {
+        id: 26,
+        data: '2026-11-27',
+        perfis: ['oficineiro'],
+        texto:
+          'No registro de atividades, os matriculados da turma já vêm preenchidos e a atividade é aceita com a presença iniciada até 15 minutos depois do início.'
       }
     ];
 

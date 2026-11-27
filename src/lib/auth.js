@@ -747,6 +747,12 @@ window.FSM_AUTH =
           { token: token() }
         );
       },
+      ultimosMatriculados() {
+        return chamar(
+          '/rest/v1/aulas_registro?select=grade_aula_id,matriculados&matriculados=not.is.null&order=data.desc,id.desc&limit=300',
+          { token: token() }
+        );
+      },
       registrosPeriodo(ini, fim) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(String(ini)) || !/^\d{4}-\d{2}-\d{2}$/.test(String(fim)))
           return Promise.reject(new Error('Período inválido.'));

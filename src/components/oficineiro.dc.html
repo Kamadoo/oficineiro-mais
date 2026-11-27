@@ -588,6 +588,7 @@ class Component extends DCLogic {
     carregandoGrade: false,
     anoLetivo: new Date().getFullYear(),
     turmas: [],
+    matriculadosAnteriores: [],
     aviso: ''
   };
   memoria = {
@@ -763,7 +764,7 @@ class Component extends DCLogic {
             oficina: atividade.oficina || '',
             somenteLeitura: false,
             mudanca: '',
-            matriculados: '',
+            matriculados: this.matriculadosInformadosAntes(atividade),
             presentes: '',
             atividade: '',
             componente: atividade.componente || '',
@@ -856,6 +857,12 @@ class Component extends DCLogic {
           }
         });
       else if (this.rascunhos && this.rascunhos[formulario.chave]) delete this.rascunhos[formulario.chave];
+      if (dados.matriculados != null)
+        this.setState(estado => ({
+          matriculadosAnteriores: [{ grade_aula_id: atividade.id, matriculados: dados.matriculados }].concat(
+            estado.matriculadosAnteriores || []
+          )
+        }));
       this.avisar(formulario.id ? 'Registro atualizado' : 'Atividade registrada');
       this.carregarRegistros();
       this.carregarRelatorio();
@@ -865,7 +872,11 @@ class Component extends DCLogic {
         formulario: {
           ...memoria.formulario,
           salvando: false,
-          erro: this.explicarRecusaDoRegistro((x && x.message) || 'Não foi possível salvar o registro.', data, atividade)
+          erro: this.explicarRecusaDoRegistro(
+            (x && x.message) || 'Não foi possível salvar o registro.',
+            data,
+            atividade
+          )
         }
       });
     }
@@ -889,7 +900,10 @@ class Component extends DCLogic {
         ' está guardada neste aparelho e ainda não foi enviada. Salve o registro depois que a conexão voltar e a entrada for enviada.'
       );
     if (!inicioDaPresenca)
-      return 'Não há presença registrada na escola neste dia. A atividade só pode ser registrada como realizada com a presença iniciada.' + ajuste;
+      return (
+        'Não há presença registrada na escola neste dia. A atividade só pode ser registrada como realizada com a presença iniciada.' +
+        ajuste
+      );
     return (
       'A presença deste dia começou às ' +
       inicioDaPresenca +
@@ -1005,6 +1019,28 @@ class Component extends DCLogic {
     } catch (x) {
       this.avisar('Não foi possível carregar as turmas da escola');
     }
+    try {
+      const anteriores = await window.FSM_AUTH.ultimosMatriculados();
+      this.setState({ matriculadosAnteriores: anteriores || [] });
+    } catch (x) {
+      this.setState({ matriculadosAnteriores: [] });
+    }
+  }
+  matriculadosInformadosAntes(atividade) {
+    if (!atividade) return '';
+    const grade = this.state.grade || [],
+      mesmaTurma = id => {
+        const outra = grade.find(a => a.id === id);
+        return (
+          !!outra &&
+          String(outra.ano) === String(atividade.ano) &&
+          String(outra.turma || '') === String(atividade.turma || '')
+        );
+      },
+      anterior = (this.state.matriculadosAnteriores || []).find(
+        r => r.matriculados != null && (r.grade_aula_id === atividade.id || mesmaTurma(r.grade_aula_id))
+      );
+    return anterior ? String(anterior.matriculados) : '';
   }
   async carregarGrade() {
     if (!this.state.carregado) return;
@@ -2474,6 +2510,7 @@ class Component extends DCLogic {
       efetiva: (atividade, semana) => this.efetiva(atividade, semana),
       diaUtil: deslocamento => this.diaUtil(deslocamento),
       matriculadosDaTurma: atividade => this.matriculadosDaTurma(atividade),
+      matriculadosInformadosAntes: atividade => this.matriculadosInformadosAntes(atividade),
       avisar: texto => this.avisar(texto),
       irPara: tela => this.irPara(tela),
       lembrar: (tela, mudanca) => this.lembrar(tela, mudanca),
