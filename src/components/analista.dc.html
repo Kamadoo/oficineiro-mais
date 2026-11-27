@@ -881,11 +881,12 @@ class Component extends DCLogic {
     const tipo = P.aparelho(navigator),
       celular = ajuda.modo === 'celular',
       endereco = window.location.origin + window.location.pathname,
+      digitavel = window.location.host + window.location.pathname.replace(/\/(index\.html)?$/, ''),
       desenho = celular && window.FSM_QR ? window.FSM_QR.desenho(endereco) : null;
     const passos = celular
       ? [
-          'Abra a câmera do celular e aponte para o código.',
-          'Toque no endereço que aparecer na tela.',
+          'Aponte a câmera do celular para o código ou digite ' + digitavel + ' no navegador do celular.',
+          'Se usou a câmera, toque no endereço que aparecer na tela.',
           'Entre com o seu e-mail e a sua senha.',
           'Em Início, escolha a escola e toque em "Iniciar atividades na escola".'
         ]
